@@ -62,6 +62,10 @@ final class VoiceSearchViewModel {
         }
     }
 
+    func switchEngine(useNewAPI: Bool) async {
+        try? await service.switchEngine(useNewAPI: useNewAPI)
+    }
+
     private func searchVoiceResult(_ result: SpeechResult) async {
         onStateChange?(.loadingSearchResult)
         let searchResult = await service.search(text: result.text)
@@ -70,6 +74,13 @@ final class VoiceSearchViewModel {
             onStateChange?(.showSearchResult(result, nil))
         case .failure(let error):
             onStateChange?(.showSearchResult(.empty(), error))
+        }
+    }
+    
+    func startAndStopVoiceRecord() {
+        Task {
+            await stopRecordingVoice()
+            startRecordingVoice()
         }
     }
 }

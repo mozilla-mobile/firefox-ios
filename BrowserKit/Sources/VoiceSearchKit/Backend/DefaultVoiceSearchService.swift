@@ -6,14 +6,28 @@ import Foundation
 
 @MainActor
 final class DefaultVoiceSearchService: VoiceSearchService {
-    private let engine: TranscriptionEngine
+    private var engine: TranscriptionEngine
+    private var useNewAPI: Bool
 
-    init() {
-//        if #available(iOS 26.0, *) {
-//            self.engine = SpeechAnalyzerEngine()
-//        } else {
+    init(useNewAPI: Bool = false) {
+        self.useNewAPI = useNewAPI
+        if useNewAPI, #available(iOS 26.0, *) {
+            self.engine = SpeechAnalyzerEngine()
+        } else {
             self.engine = SFSpeechRecognizerEngine()
-//        }
+        }
+    }
+
+    func switchEngine(useNewAPI: Bool) async throws {
+        // Stop current engine if running
+        try? await engine.stop()
+
+        self.useNewAPI = useNewAPI
+        if useNewAPI, #available(iOS 26.0, *) {
+            self.engine = SpeechAnalyzerEngine()
+        } else {
+            self.engine = SFSpeechRecognizerEngine()
+        }
     }
 
     func record() async throws -> AsyncThrowingStream<SpeechResult, any Error> {

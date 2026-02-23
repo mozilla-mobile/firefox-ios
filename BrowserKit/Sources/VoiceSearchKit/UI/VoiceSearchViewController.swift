@@ -20,6 +20,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
         static let audioWaveformTopPadding: CGFloat = 37.0
         static let audioWaveformSize = CGSize(width: 18.0, height: 35)
+        static let engineToggleTopPadding: CGFloat = 16.0
+        static let engineToggleLabelSpacing: CGFloat = 8.0
         static let contentViewTopPadding: CGFloat = 16.0
     }
 
@@ -53,6 +55,23 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     let buttonsContainer: UIStackView = .build {
         $0.axis = .horizontal
         $0.spacing = UX.buttonsSpacing
+    }
+    private let engineToggleContainer: UIStackView = .build {
+        $0.axis = .horizontal
+        $0.spacing = UX.engineToggleLabelSpacing
+        $0.alignment = .center
+    }
+    private let engineToggleLabel: UILabel = .build {
+        $0.text = "Use New API (iOS 26+)"
+        $0.font = .preferredFont(forTextStyle: .subheadline)
+    }
+    private let engineToggleSwitch: UISwitch = .build {
+        if #available(iOS 26.0, *) {
+            $0.isOn = false
+        } else {
+            $0.isOn = false
+            $0.isEnabled = false
+        }
     }
     private let contentView: VoiceSearchContentView = .build()
     private let transitionAnimator: TransitionAnimator
@@ -116,7 +135,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         buttonsContainer.addArrangedSubview(recordButton)
         buttonsContainer.addArrangedSubview(closeButton)
         buttonsContainer.addArrangedSubview(trailingButtonContainerSpacer)
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, contentView, audioWaveform, buttonsContainer)
+
+        engineToggleContainer.addArrangedSubview(engineToggleLabel)
+        engineToggleContainer.addArrangedSubview(engineToggleSwitch)
+
+        view.addSubviews(backgroundRecordEffect, backgroundBlur, contentView, audioWaveform, engineToggleContainer, buttonsContainer)
 
         NSLayoutConstraint.activate([
             audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -131,7 +154,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
 
-            contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor, constant: UX.contentViewTopPadding),
+            engineToggleContainer.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
+                                                       constant: UX.engineToggleTopPadding),
+            engineToggleContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            contentView.topAnchor.constraint(equalTo: engineToggleContainer.bottomAnchor, constant: UX.contentViewTopPadding),
             contentView.bottomAnchor.constraint(equalTo: buttonsContainer.topAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -152,7 +179,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
             UIAction(
                 handler: { [weak self] _ in
                     self?.audioWaveform.startAnimating()
-                    self?.viewModel.startRecordingVoice()
+                    self?.viewModel.startAndStopVoiceRecord()
                 }),
             for: .touchUpInside
         )
@@ -165,6 +192,18 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
                     }
                 }),
             for: .touchUpInside
+        )
+        engineToggleSwitch.addAction(
+            UIAction(
+                handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    Task {
+                        await self.viewModel.stopRecordingVoice()
+                        self.audioWaveform.stopAnimating()
+                        await self.viewModel.switchEngine(useNewAPI: self.engineToggleSwitch.isOn)
+                    }
+                }),
+            for: .valueChanged
         )
     }
 
@@ -194,6 +233,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
+        engineToggleLabel.textColor = theme.colors.textPrimary
+        engineToggleSwitch.onTintColor = theme.colors.actionPrimary
         contentView.applyTheme(theme: theme)
     }
 }

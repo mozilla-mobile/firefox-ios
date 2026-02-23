@@ -33,6 +33,9 @@ protocol VoiceSearchService: Sendable {
 
     func stopRecording() async throws
 
+    /// Switches between the new and old transcription engine.
+    func switchEngine(useNewAPI: Bool) async throws
+
     /// Performs a search with the provided query text parameter.
     func search(text: String) async -> Result<SearchResult, SearchResultError>
 }

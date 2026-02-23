@@ -51,4 +51,6 @@ struct MockVoiceSearchService: VoiceSearchService {
             )
         )
     }
+    
+    func switchEngine(useNewAPI: Bool) async throws {}
 }
