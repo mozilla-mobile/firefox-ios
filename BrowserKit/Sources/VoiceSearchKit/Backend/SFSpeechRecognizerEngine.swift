@@ -78,8 +78,11 @@ final actor SFSpeechRecognizerEngine: TranscriptionEngine {
             let confidence = result.bestTranscription.segments[0].confidence
 
             let chunk = result.bestTranscription.formattedString
-
-            let shouldFinish = result.isFinal || result.speechRecognitionMetadata != nil || confidence > 0.0
+            let transcriptComponents = chunk.components(
+              separatedBy: .whitespacesAndNewlines
+            )
+            let formattedWords = transcriptComponents.filter { !$0.isEmpty }
+            let shouldFinish = result.isFinal || result.speechRecognitionMetadata != nil || confidence > 0.0 || formattedWords.count >= 50
 
             let speechResult = SpeechResult(
                 text: chunk,
