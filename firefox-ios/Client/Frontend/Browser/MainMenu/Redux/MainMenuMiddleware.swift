@@ -31,6 +31,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         static let nightModeTurnOff = "night_mode_turn_off"
         static let siteProtections = "site_protections"
         static let defaultBrowserSettings = "default_browser_settings"
+        static let webpageSummary = "webpage_summary"
     }
 
     private let logger: Logger
@@ -229,7 +230,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)
 
         case .webpageSummary: break
-            // TODO(FXIOS-12761): Add telemetry for summarizer MVP
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.webpageSummary)
         }
     }
 }
