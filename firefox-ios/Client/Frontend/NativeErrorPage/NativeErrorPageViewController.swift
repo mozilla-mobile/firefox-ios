@@ -342,6 +342,7 @@ final class NativeErrorPageViewController: UIViewController,
                 )
             )
         }
+    }
 
     @objc
     private func didTapViewCertificate() {
