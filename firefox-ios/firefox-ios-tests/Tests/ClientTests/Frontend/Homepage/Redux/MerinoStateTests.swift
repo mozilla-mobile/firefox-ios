@@ -27,7 +27,7 @@ final class MerinoStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.merinoData.stories, nil)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
 
     @MainActor
