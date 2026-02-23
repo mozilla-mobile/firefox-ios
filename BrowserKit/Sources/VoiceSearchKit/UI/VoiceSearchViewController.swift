@@ -139,7 +139,14 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
         engineToggleContainer.addArrangedSubview(engineToggleLabel)
         engineToggleContainer.addArrangedSubview(engineToggleSwitch)
 
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, contentView, audioWaveform, engineToggleContainer, buttonsContainer)
+        view.addSubviews(
+            backgroundRecordEffect,
+            backgroundBlur,
+            contentView,
+            audioWaveform,
+            engineToggleContainer,
+            buttonsContainer
+        )
 
         NSLayoutConstraint.activate([
             audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -158,7 +165,8 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
                                                        constant: UX.engineToggleTopPadding),
             engineToggleContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            contentView.topAnchor.constraint(equalTo: engineToggleContainer.bottomAnchor, constant: UX.contentViewTopPadding),
+            contentView.topAnchor.constraint(equalTo: engineToggleContainer.bottomAnchor,
+                                             constant: UX.contentViewTopPadding),
             contentView.bottomAnchor.constraint(equalTo: buttonsContainer.topAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
