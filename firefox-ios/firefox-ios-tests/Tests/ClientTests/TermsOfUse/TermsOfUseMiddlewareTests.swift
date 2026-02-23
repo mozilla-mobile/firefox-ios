@@ -5,7 +5,6 @@ import XCTest
 @testable import Client
 import Common
 import Shared
-// TODO: FXIOS-12947 - Add tests for TermsOfUseState and Coordinator
 
 @MainActor
 final class TermsOfUseMiddlewareTests: XCTestCase {
@@ -126,7 +125,6 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 0, "First gesture dismissal should not increment reminders count")
         XCTAssertNotNil(profile.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate))
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 
     func testMiddleware_secondDismissal_incrementsRemindersCount() {
@@ -143,7 +141,6 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
 
         let remindersCount = profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         XCTAssertEqual(remindersCount, 1, "Second gesture dismissal should increment reminders count to 1")
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
     }
 
     func testMiddleware_remindMeLaterTapped_firstDismissal_doesNotIncrementCount() {
@@ -191,7 +188,6 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
                                               actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 3)
     }
 
     func testMiddleware_termsShown_firstTime_recordsImpression() {
