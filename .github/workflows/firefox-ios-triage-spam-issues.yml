@@ -1,0 +1,47 @@
+name: Triage Spam Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage-spam:
+    if: github.event.issue.user.login != 'data-sync-user'
+    runs-on: ubuntu-latest
+    permissions:
+      models: read
+
+    steps:
+      - name: Classify issue
+        id: classify
+        uses: actions/ai-inference@v1
+        with:
+          token: ${{ github.token }}
+          model: openai/gpt-4o-mini
+          max-tokens: 120
+          system-prompt: |
+            You are a spam classifier for the Firefox iOS GitHub issue tracker.
+            Firefox iOS is an open-source iOS browser maintained by Mozilla.
+            Its issue tracker receives bug reports, crash reports, feature requests,
+            and UI issues from real users and contributors.
+
+            SPAM: Content unrelated to a mobile browser (marketing, SEO, crypto, job offers),
+            gibberish or auto-generated text, body is only external links, phishing URLs.
+            Lack of reproducible steps or details may not be spam.
+            Note that some Firefox fans may file desktop browser bugs here. Such issues aren't
+            spam if they seem genuine. Only allow issues written in English.
+
+            LEGITIMATE: bugs, crash reports (even if brief) or feature requests
+            about Firefox iOS, partially filled templates with genuine intent.
+
+            Reply with ONLY a raw JSON object — no markdown, no explanation.
+            Required keys: classification ("spam" or "legitimate"),
+            confidence ("high", "medium", or "low"), reason (one short sentence).
+          prompt: |
+            Issue title: ${{ github.event.issue.title }}
+            Issue body:
+            ${{ github.event.issue.body }}
+
+      - name: Print classification result
+        if: steps.classify.conclusion == 'success'
+        run: echo "${{ steps.classify.outputs.response }}"
