@@ -16,13 +16,15 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
     let mostRecentSyncedTab: JumpBackInSyncedTabConfiguration?
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .FirefoxHomeJumpBackInSectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .FirefoxHomeJumpBackInSectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(
         profile: Profile = AppContainer.shared.resolve(),

@@ -14,9 +14,11 @@ struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
-    let sectionHeaderState = initializeSectionHeaderState()
 
-    let footerURL = SupportUtils.URLForPocketLearnMore
+    struct Constants {
+        static let sectionHeaderConfiguration = MerinoState.initializeSectionHeaderConfiguration()
+        static let footerURL = SupportUtils.URLForPocketLearnMore
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let userPrefs = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
@@ -85,7 +87,7 @@ struct MerinoState: StateType, Equatable {
         return state.copyWithUpdates()
     }
 
-    private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
+    private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
          let isScrollDirectionCustomized = scrollDirection != .baseline

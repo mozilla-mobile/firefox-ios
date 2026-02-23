@@ -14,13 +14,15 @@ struct BookmarksSectionState: StateType, Equatable, Hashable {
     var bookmarks: [BookmarkConfiguration]
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .BookmarksSectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .BookmarksSectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         // TODO: FXIOS-11412 - Move profile dependency
