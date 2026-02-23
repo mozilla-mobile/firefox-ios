@@ -259,6 +259,7 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
         changeSearchEngine(searchEngine: "Google")
+        changeSearchEngine(searchEngine: "Perplexity")
         changeSearchEngine(searchEngine: "Wikipedia")
         changeSearchEngine(searchEngine: "eBay")
     }
@@ -272,6 +273,7 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine_TAE(searchEngine: "Bing")
         changeSearchEngine_TAE(searchEngine: "DuckDuckGo")
         changeSearchEngine_TAE(searchEngine: "Google")
+        changeSearchEngine_TAE(searchEngine: "Perplexity")
         changeSearchEngine_TAE(searchEngine: "Wikipedia")
         changeSearchEngine_TAE(searchEngine: "eBay")
     }
@@ -684,6 +686,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753105
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()
@@ -726,6 +729,7 @@ class SearchTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.tables["SiteTable"])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3374353
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
         addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
         app.launch()

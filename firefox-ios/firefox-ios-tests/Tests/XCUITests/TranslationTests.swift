@@ -21,6 +21,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         translationSettingScreen = TranslationSettingsScreen(app: app)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3211480
     func testTranslationFlow_withDifferentStates_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
@@ -64,6 +65,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3379185
     func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
@@ -80,7 +82,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         toolBarScreen.assertTranslateButtonDoesNotExist(with: .inactive)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/edit/3210769
+    // https://mozilla.testrail.io/index.php?/cases/view/3210769
     func testTranslationSettingsFromToggleOnToOff_translationExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()

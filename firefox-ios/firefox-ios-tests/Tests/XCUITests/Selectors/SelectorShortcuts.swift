@@ -382,6 +382,10 @@ extension Selector {
               groups: groups
           )
     }
+
+    static func pageIndicatorById(_ id: String, description: String, groups: [String] = []) -> Selector {
+         return Selector(strategy: .pageIndicatorById(id), value: id, description: description, groups: groups)
+     }
 }
 
 extension XCUIElement {

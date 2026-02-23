@@ -19,6 +19,7 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     private let data: Data?
     private let response: URLResponse?
     private let error: Error?
+    public private(set) var lastURLRequest: URLRequest?
 
     public init(
         with data: Data? = nil,
@@ -31,6 +32,8 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     }
 
     public func data(from url: URL) async throws -> (Data, URLResponse) {
+        lastURLRequest = URLRequest(url: url)
+
         if let error = error {
             throw error
         }
@@ -39,7 +42,13 @@ public final class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     }
 
     public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
-        try await data(from: urlRequest.url!)
+        lastURLRequest = urlRequest
+
+        if let error = error {
+            throw error
+        }
+
+        return (data ?? Data(), response ?? URLResponse())
     }
 
     public func dataTaskWith(

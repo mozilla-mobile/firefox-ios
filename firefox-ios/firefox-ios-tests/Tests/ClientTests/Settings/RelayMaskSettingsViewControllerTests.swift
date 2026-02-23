@@ -61,7 +61,8 @@ final class RelayMaskSettingsViewControllerTests: XCTestCase {
     private func createSubject() -> RelayMaskSettingsViewController {
         let subject = RelayMaskSettingsViewController(profile: profile,
                                                       windowUUID: .XCTestDefaultUUID,
-                                                      tabManager: tabManager)
+                                                      tabManager: tabManager,
+                                                      relayController: MockRelayController())
         trackForMemoryLeaks(subject)
         return subject
     }

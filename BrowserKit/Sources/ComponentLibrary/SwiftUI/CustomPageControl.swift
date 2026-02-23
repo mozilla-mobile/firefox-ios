@@ -41,6 +41,7 @@ public struct CustomPageControl: ThemeableView {
     let numberOfPages: Int
     let style: PageControlStyle
     let isBrandRefresh: Bool
+    let accessibilityIdentifier: String
 
     /// Creates a new page control.
     ///
@@ -51,13 +52,15 @@ public struct CustomPageControl: ThemeableView {
     ///   - themeManager: Provides theme info.
     ///   - style: Visual style (regular or compact). Defaults to `.regular`.
     ///   - isBrandRefresh: Whether this is for the brand refresh variant. Defaults to `false`.
+    ///   - accessibilityIdentifier: The accessibility identifier for the page control.
     public init(
         currentPage: Binding<Int>,
         numberOfPages: Int,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         style: PageControlStyle = .regular,
-        isBrandRefresh: Bool = false
+        isBrandRefresh: Bool = false,
+        accessibilityIdentifier: String
     ) {
         self._currentPage = currentPage
         self.numberOfPages = numberOfPages
@@ -65,6 +68,7 @@ public struct CustomPageControl: ThemeableView {
         self.themeManager = themeManager
         self.style = style
         self.isBrandRefresh = isBrandRefresh
+        self.accessibilityIdentifier = accessibilityIdentifier
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
 
@@ -82,6 +86,8 @@ public struct CustomPageControl: ThemeableView {
                     .animation(.easeInOut(duration: 0.2), value: currentPage)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier(accessibilityIdentifier)
         .listenToThemeChanges(
             theme: $theme,
             manager: themeManager,

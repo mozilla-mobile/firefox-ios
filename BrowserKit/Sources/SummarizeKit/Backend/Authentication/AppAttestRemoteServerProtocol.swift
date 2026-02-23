@@ -16,14 +16,11 @@ import Foundation
 /// For full details on how these steps fit together, See:
 /// - Secure API Access using App Attest: https://docs.google.com/document/d/1uI5pl2h60_9tjiAqEdKBZD9JANQdcHP7lXSe5uxCPrg/edit?usp=sharing
 /// - Apple Docs: https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
-public protocol AppAttestRemoteServerProtocol {
+public protocol AppAttestRemoteServerProtocol: Sendable {
     /// Fetches a server-generated challenge (nonce) for the given `keyId`.
     /// The challenge is used exactly once to prevent replay attacks.
     func fetchChallenge(for keyId: String) async throws -> String
     /// Sends the attestation object to the server for one-time trust establishment.
     /// The server validates Apple's certificate chain and persists the public key.
     func sendAttestation(keyId: String, attestationObject: Data, challenge: String) async throws
-    /// Sends an assertion-signed request to the server.
-    /// The server verifies the signature against the stored public key.
-    func sendAssertion(keyId: String, assertionObject: Data, payload: Data, challenge: String) async throws
 }

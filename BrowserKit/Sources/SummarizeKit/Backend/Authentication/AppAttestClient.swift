@@ -17,7 +17,7 @@ import DeviceCheck
 /// - Apple Docs: https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
 /// For concrete usage for MLPA (Mozilla LLM Proxy Auth), See:
 /// - https://docs.google.com/document/d/1xnCHRxNolNS25sKiAZPxtrovKahkYHZ3aVqc_FMyJv0/edit?usp=sharing
-public struct AppAttestClient {
+public struct AppAttestClient: Sendable {
     private let appAttestService: AppAttestServiceProtocol
     private let remoteServer: AppAttestRemoteServerProtocol
     private let keyStore: AppAttestKeyIDStore
@@ -71,15 +71,14 @@ public struct AppAttestClient {
         return keyID
     }
 
-    /// Performs a per-request assertion, meaning it signs the payload and sends it to the server.
+    /// Generates a per-request assertion, meaning it signs the payload.
     ///
     /// Steps:
     /// 1. Load the previously attested `keyId` from the store.
     /// 2. Fetch a fresh challenge from the server (prevents replay attacks).
     /// 3. Serialize the payload as sorted-key JSON and hash it with SHA-256.
     /// 4. Ask the Secure Enclave to sign the hash via `appAttestService.generateAssertion()`.
-    /// 5. Send the assertion + payload to the server for verification.
-    public func performAssertion(payload: [String: Any]) async throws {
+    public func generateAssertion(payload: [String: Any]) async throws -> AssertionResult {
         guard let keyId = keyStore.loadKeyID() else {
             throw AppAttestServiceError.missingKeyID
         }
@@ -93,13 +92,11 @@ public struct AppAttestClient {
         let clientDataHash = Data(SHA256.hash(data: clientData))
         let assertion = try await appAttestService.generateAssertion(keyId, clientDataHash: clientDataHash)
 
-        let payloadData = try JSONSerialization.data(withJSONObject: payload)
-
-        try await remoteServer.sendAssertion(
+        return AssertionResult(
             keyId: keyId,
-            assertionObject: assertion,
-            payload: payloadData,
-            challenge: challenge
+            assertion: assertion,
+            challenge: challenge,
+            payload: clientData
         )
     }
 
