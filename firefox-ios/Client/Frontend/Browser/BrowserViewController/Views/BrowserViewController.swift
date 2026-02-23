@@ -108,12 +108,14 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
+    // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
     let recordVisitManager: RecordVisitObserving
+    let relayController: RelayControllerProtocol
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -554,7 +556,8 @@ class BrowserViewController: UIViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
-        recordVisitManager: RecordVisitObserving? = nil
+        recordVisitManager: RecordVisitObserving? = nil,
+        relayController: RelayControllerProtocol = RelayController()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -576,6 +579,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
+        self.relayController = relayController
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -635,7 +639,6 @@ class BrowserViewController: UIViewController,
 
         crashTracker.updateData()
         ratingPromptManager.showRatingPromptIfNeeded()
-        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     private func didAddPendingBlobDownloadToQueue() {
@@ -2273,20 +2276,22 @@ class BrowserViewController: UIViewController,
 
         guard let searchController = self.searchController else { return }
 
-        // This needs to be added to ensure during animation of the keyboard,
-        // No content is showing in between the bottom search bar and the searchViewController
-        if isBottomSearchBar, keyboardBackdrop == nil {
-            keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
-            view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
-            if isSnapKitRemovalEnabled {
-                setupKeyboardBackdropConstraints(for: keyboardBackdrop)
-            } else {
-                keyboardBackdrop?.snp.makeConstraints { make in
-                    make.edges.equalTo(view)
+        if !isToolbarTranslucencyRefactorEnabled {
+            // This needs to be added to ensure during animation of the keyboard,
+            // No content is showing in between the bottom search bar and the searchViewController
+            if isBottomSearchBar, keyboardBackdrop == nil {
+                keyboardBackdrop = UIView()
+                keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
+                view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
+                if isSnapKitRemovalEnabled {
+                    setupKeyboardBackdropConstraints(for: keyboardBackdrop)
+                } else {
+                    keyboardBackdrop?.snp.makeConstraints { make in
+                        make.edges.equalTo(view)
+                    }
                 }
+                view.bringSubviewToFront(bottomContainer)
             }
-            view.bringSubviewToFront(bottomContainer)
         }
 
         addChild(searchController)
@@ -2328,8 +2333,10 @@ class BrowserViewController: UIViewController,
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
 
-        keyboardBackdrop?.removeFromSuperview()
-        keyboardBackdrop = nil
+        if !isToolbarTranslucencyRefactorEnabled {
+            keyboardBackdrop?.removeFromSuperview()
+            keyboardBackdrop = nil
+        }
 
         contentContainer.accessibilityElementsHidden = false
     }
@@ -2392,27 +2399,35 @@ class BrowserViewController: UIViewController,
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
             if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+                // Ensure the recentBookmarkFolderGuid exists in the places db
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                     .uponQueue(.main) { result in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
-                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else {
+                                self.showDefaultBookmarkToast(urlString: urlString, title: title)
+                                return
+                            }
                             let folderName = bookmarkFolder.title
                             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
                             self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                         }
                     }
-                // If recent bookmarks folder is nil or the mobile (default) folder
+            // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(
-                    urlString,
-                    title,
-                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
-                    toastAction: .bookmarkPage
-                )
+                showDefaultBookmarkToast(urlString: urlString, title: title)
             }
         default: break
         }
+    }
+
+    private func showDefaultBookmarkToast(urlString: String?, title: String?) {
+        showToast(
+            urlString,
+            title,
+            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+            toastAction: .bookmarkPage
+        )
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
@@ -3913,7 +3928,10 @@ class BrowserViewController: UIViewController,
         let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
-        keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+
+        if !isToolbarTranslucencyRefactorEnabled {
+            keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        }
 
         // to make sure on homepage with bottom search bar the status bar is hidden
         // we have to adjust the background color to match the homepage background color
@@ -4143,9 +4161,9 @@ class BrowserViewController: UIViewController,
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
-        if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
-            RelayController.shared.telemetry.showPrompt()
-            RelayController.shared.emailFieldFocused(in: tab)
+        if relayController.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            relayController.telemetry.showPrompt()
+            relayController.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
             Task { @MainActor [weak self] in
@@ -4166,7 +4184,7 @@ class BrowserViewController: UIViewController,
     private func handleUseRelayMaskTapped() {
         guard RelayController.isFeatureEnabled else { return }
         guard let currentTab = tabManager.selectedTab else { return }
-        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
+        relayController.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
             self?.handleRelayMaskResult(result)
         }
     }
@@ -4984,7 +5002,14 @@ extension BrowserViewController {
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
+
         if isSwipingTabsEnabled {
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -5019,7 +5044,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         keyboardState = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -5058,12 +5088,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,

@@ -998,10 +998,6 @@ final class BrowserViewController: UIViewController {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.load(URLRequest(url: url))
 
-        if urlBar.url != url {
-            urlBar.url = url
-        }
-
         onboardingEventsHandler.route = nil
         onboardingEventsHandler.send(.startBrowsing)
 
@@ -1468,11 +1464,17 @@ extension BrowserViewController: URLBarDelegate {
             .eraseToAnyPublisher()
 
         // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
-        let state: TrackingProtectionState = urlBar.inBrowsingMode
-        ? .browsing(status: SecureConnectionStatus(
-            url: webViewController.url!,
-            isSecureConnection: webViewController.connectionIsSecure))
-        : .homescreen
+        let state: TrackingProtectionState = if urlBar.inBrowsingMode,
+                                                let url = urlBar.url {
+            .browsing(
+                status: SecureConnectionStatus(
+                    url: url,
+                    isSecureConnection: webViewController.connectionIsSecure
+                )
+            )
+        } else {
+            .homescreen
+        }
 
         let trackingProtectionViewController = TrackingProtectionViewController(state: state, onboardingEventsHandler: onboardingEventsHandler, favIconPublisher: favIconPublisher)
         trackingProtectionViewController.delegate = self
@@ -1723,7 +1725,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
     }
 
     func webControllerDidFinishNavigation(_ controller: LegacyWebController) {
-        updateURLBar()
         urlBarViewModel.isLoading = false
         urlBarViewModel.loadingProgres = 1
         toggleURLBarBackground(isBright: !urlBar.isEditing)
@@ -1744,12 +1745,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
 
     func webControllerURLDidChange(_ controller: LegacyWebController, url: URL) {
         showToolbars()
-    }
-
-    func webControllerWillCancelNavigation(_ controller: any LegacyWebController) {
-        // Ensure the current location is refreshed after the web view has updated its URL
-        // for a navigation action cancelled within our delegate callback
-        DispatchQueue.main.async { self.urlBar.url = self.webViewController.url }
     }
 
     func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error) {

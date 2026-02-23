@@ -141,6 +141,7 @@
         "LibraryTestsIpad",
         "LoginTest",
         "MicrosurveyTests",
+        "ModernOnboardingTests",
         "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage_TAE()",

@@ -1,3 +1,30 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "ຂັ້ນສູງ";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ ບໍ່ໄວ້ວາງໃຈເວັບໄຊນີ້ ເພາະວ່າໃບຢັ້ງຢືນທີ່ພົບນັ້ນບໍ່ຖືກຕ້ອງສຳລັບ %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "ເວັບໄຊນີ້ບໍ່ອະນຸຍາດໃຫ້ມີການເຊື່ອມຕໍ່ທີ່ບໍ່ປອດໄພ.";
+
+/* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "ທ່ານອາດຈະຕ້ອງເຂົ້າສູ່ລະບົບເຄືອຂ່າຍ Wi-Fi ຂອງທ່ານ ຫຼື ກວດສອບການຕັ້ງຄ່າ VPN ຂອງທ່ານ.";
+
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "ເຊື່ອງຂັ້ນສູງ";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "ດຳເນີນການຕໍ່ໄປທີ່ %@ (ມີຄວາມສ່ຽງ)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "ລະວັງ. ມີບາງຢ່າງເບິ່ງຄືວ່າບໍ່ຖືກຕ້ອງ.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "ເບິ່ງໃບຢັ້ງຢືນຂອງເວັບໄຊທ໌";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "ໂຫລດຄືນໃຫມ່";
 
@@ -6,6 +33,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ລະມັດລະວັງ. ບາງສິ່ງບາງຢ່າງຜິດປົກະຕິ.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "ກັບຄືນ (ແນະນຳ)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "ລອງເຊື່ອມຕໍ່ໃນອຸປະກອນອື່ນ. ກວດເບິ່ງໂມເດັມ ຫຼື ເຣົາເຕີຂອງທ່ານ. ຕັດການເຊື່ອມຕໍ່ ແລະ ເຊື່ອມຕໍ່ Wi-Fi ຄືນໃໝ່.";

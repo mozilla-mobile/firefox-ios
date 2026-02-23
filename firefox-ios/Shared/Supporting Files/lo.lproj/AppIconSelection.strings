@@ -28,6 +28,15 @@
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a cartoony fox resting on a globe. */
 "Settings.AppIconSelection.AppIconNames.FromContributors.Momo.Title.v139" = "ໂມໂມ";
 
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with sunglasses. */
+"Settings.AppIconSelection.AppIconNames.Fun.Cool.Title.146" = "ເຢັນ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of a hand-drawn version of the Firefox for iOS app icon of a fox cuddling a globe. */
+"Settings.AppIconSelection.AppIconNames.Fun.Cuddling.Title.146" = "ກອດກັນ";
+
+/* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon of a fox outline with flames. */
+"Settings.AppIconSelection.AppIconNames.Fun.Flaming.Title.146" = "ກຳລັງລຸກໄໝ້";
+
 /* On the app icon customization screen where you can select an alternate icon for the app, this is the name of the Firefox for iOS app icon with a background gradient of yellow fading to orange. */
 "Settings.AppIconSelection.AppIconNames.GoldenHour.Title.v137" = "ສີເຫຼືອງຍາມແລງ";
 

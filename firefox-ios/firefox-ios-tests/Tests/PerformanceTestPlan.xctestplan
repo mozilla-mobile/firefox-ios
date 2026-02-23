@@ -104,6 +104,7 @@
         "LibraryTestsIpad",
         "LoginTest",
         "MicrosurveyTests",
+        "ModernOnboardingTests",
         "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest",

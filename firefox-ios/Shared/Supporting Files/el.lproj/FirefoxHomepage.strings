@@ -1,6 +1,9 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "Άρθρα";
 
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "Ενημερώσαμε τη %1$@ μας ώστε να περιέχει τις πιο πρόσφατες λειτουργίες του %2$@. %3$@";
+
 /* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
 "FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Μάθετε περισσότερα";
 

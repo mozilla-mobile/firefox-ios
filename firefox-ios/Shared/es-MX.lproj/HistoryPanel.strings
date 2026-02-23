@@ -16,3 +16,6 @@
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
 "LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Últimas 24 horas";
 
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Elimina el historial (incluido el historial sincronizado de otros dispositivos), las cookies y otros datos de navegación.";
+
