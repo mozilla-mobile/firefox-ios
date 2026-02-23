@@ -37,7 +37,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private var lastReplacement: String?
     private var hideCursor = false
     private var isSettingMarkedText = false
-    private var lastMarkedText: String = ""
+    private var lastMarkedText = ""
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
