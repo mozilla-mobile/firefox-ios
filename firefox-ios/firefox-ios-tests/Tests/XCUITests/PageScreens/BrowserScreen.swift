@@ -311,6 +311,7 @@ final class BrowserScreen {
             addressBar.swipeLeft()
         }
         assertAddressBarContains(value: value)
+    }
 
     func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {
         let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
