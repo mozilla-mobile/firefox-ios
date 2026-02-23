@@ -20,9 +20,9 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     override func tearDown() async throws {
-        tabManager = nil
         profile.shutdown()
         profile = nil
+        tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
