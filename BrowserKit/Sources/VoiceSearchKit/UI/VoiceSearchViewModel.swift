@@ -76,7 +76,7 @@ final class VoiceSearchViewModel {
             onStateChange?(.showSearchResult(.empty(), error))
         }
     }
-    
+
     func startAndStopVoiceRecord() {
         Task {
             await stopRecordingVoice()
