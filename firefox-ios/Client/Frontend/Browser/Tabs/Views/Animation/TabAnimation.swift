@@ -76,13 +76,13 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         let finalFrame = context.finalFrame(for: destinationController)
 
-            self.runPresentationAnimation(
-                context: context,
-                browserVC: bvc,
-                destinationController: destinationController,
-                finalFrame: finalFrame,
-                selectedTab: selectedTab
-            )
+        self.runPresentationAnimation(
+            context: context,
+            browserVC: bvc,
+            destinationController: destinationController,
+            finalFrame: finalFrame,
+            selectedTab: selectedTab
+        )
     }
 
     func animateDismissal(context: UIViewControllerContextTransitioning) {
@@ -339,7 +339,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             } completion: { _ in
                 contentContainer.isHidden = false
                 tabCell?.isHidden = false
-                toView.layer.shouldRasterize = false
                 self.view.removeFromSuperview()
                 tabSnapshot.removeFromSuperview()
                 toView.removeFromSuperview()
