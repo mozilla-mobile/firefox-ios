@@ -28,7 +28,7 @@ import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
-import struct MozillaAppServices.RemoteSettingsConfig2
+import struct MozillaAppServices.RemoteSettingsConfig
 
 // TODO: FXIOS-14225 - SyncManager shouldn't be Sendable
 public protocol SyncManager: Sendable {
@@ -659,7 +659,7 @@ open class BrowserProfile: Profile,
         let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
         let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
         let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
-        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
+        let config = RemoteSettingsConfig(server: remoteSettingsServer,
                                            bucketName: bucketName,
                                            appContext: remoteSettingsAppContext())
 
