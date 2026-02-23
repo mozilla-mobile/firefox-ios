@@ -56,7 +56,7 @@ struct SummarizerLanguageExpansionConfiguration {
         options.append((.deviceLanguage, .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel))
 
         return options + supportedLocales.compactMap {
-            guard let localizedLocale =  localeProvider.current.localizedString(
+            guard let localizedLocale = localeProvider.current.localizedString(
                 forIdentifier: $0.identifier
             ) else { return nil }
             return (.customLocale($0), localizedLocale)
