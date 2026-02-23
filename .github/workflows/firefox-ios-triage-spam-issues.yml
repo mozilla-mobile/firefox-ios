@@ -10,8 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       models: read
+      issues: write
 
     steps:
+      - name: Print issue details
+        run: |
+          echo "## Issue Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ github.event.issue.html_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Title**: ${{ github.event.issue.title }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Author**: ${{ github.event.issue.user.login }}" >> $GITHUB_STEP_SUMMARY
+
       - name: Classify issue
         id: classify
         uses: actions/ai-inference@v1
@@ -44,4 +52,20 @@ jobs:
 
       - name: Print classification result
         if: steps.classify.conclusion == 'success'
-        run: echo "${{ steps.classify.outputs.response }}"
+        run: |
+          RESPONSE='${{ steps.classify.outputs.response }}'
+          CLASSIFICATION=$(echo "$RESPONSE" | jq -r '.classification')
+          CONFIDENCE=$(echo "$RESPONSE" | jq -r '.confidence')
+          REASON=$(echo "$RESPONSE" | jq -r '.reason')
+          echo "## Classification Result" >> $GITHUB_STEP_SUMMARY
+          echo "- **Classification**: $CLASSIFICATION" >> $GITHUB_STEP_SUMMARY
+          echo "- **Confidence**: $CONFIDENCE" >> $GITHUB_STEP_SUMMARY
+          echo "- **Reason**: $REASON" >> $GITHUB_STEP_SUMMARY
+
+      - name: Label as spam
+        if: steps.classify.conclusion == 'success' && fromJson(steps.classify.outputs.response).classification == 'spam'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "spam" --color "F9A8A8" --repo ${{ github.repository }} --force
+          gh issue edit ${{ github.event.issue.number }} --add-label "spam" --repo ${{ github.repository }}
