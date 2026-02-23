@@ -18,6 +18,8 @@ protocol LocationTextFieldDelegate: AnyObject {
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+    private let notificationCenter: NotificationCenter
+
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
@@ -33,16 +35,20 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // The last string used as a replacement in shouldChangeCharactersInRange.
     private var lastReplacement: String?
-    var hideCursor = false
+    private var hideCursor = false
     private var isSettingMarkedText = false
-    var lastMarkedText: String? = ""
+    private var lastMarkedText: String = ""
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
     private let copyShortcutKey = "c"
 
     // MARK: - Init
-    override init(frame: CGRect) {
+    init(
+        frame: CGRect,
+        notificationCenter: NotificationCenter = .default
+    ) {
+        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
         super.addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
 
@@ -134,7 +140,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         isSettingMarkedText = true
-        lastMarkedText = markedText
+        lastMarkedText = markedText ?? ""
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
         isSettingMarkedText = false
@@ -160,13 +166,10 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     func handleInputModeDidChange() {
-        if let lastMarkedText, !lastMarkedText.isEmpty {
-            if let currentText = self.text {
-                self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
-                hideCursor = true
-                setMarkedText(lastMarkedText, selectedRange: NSRange())
-            }
-        }
+        guard !lastMarkedText.isEmpty, let currentText = self.text else { return }
+        self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
+        hideCursor = true
+        setMarkedText(lastMarkedText, selectedRange: NSRange())
     }
 
     // MARK: - Notifiable
