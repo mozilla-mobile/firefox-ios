@@ -38,11 +38,6 @@ Object.defineProperty(window.__firefox__, "download", {
 
         var blob = this.response;
         
-        // Checking if the blob is a pkpass (Passbook Pass) or a pdf, if not, continue navigation
-        if (blob.type != "application/vnd.apple.pkpass" && blob.type != "application/pdf") {
-          window.location.href = url;
-          return
-        }
         const header = xhr.getResponseHeader("Content-Disposition");
         const fileName = header ? header.split("filename=")?.[1] : getLastPathComponent(url);
       

@@ -11,7 +11,8 @@ import Speech
 /// - Managing permissions
 /// - Capturing microphone audio
 /// - Streaming transcription results
-final actor SFSpeechRecognizerEngine: TranscriptionEngine {
+@MainActor
+final class SFSpeechRecognizerEngine: TranscriptionEngine {
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
 

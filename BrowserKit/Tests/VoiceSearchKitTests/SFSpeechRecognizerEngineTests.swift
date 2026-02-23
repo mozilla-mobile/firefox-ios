@@ -8,6 +8,7 @@ import Testing
 @testable import VoiceSearchKit
 
 @Suite
+@MainActor
 struct SFSpeechRecognizerEngineTests {
     // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
     let session = MockAudioSession()

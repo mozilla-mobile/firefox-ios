@@ -13,12 +13,23 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
 
     func test_readerModeBar_bottomToolbar_withNativeConstraints() {
         let subject = createSubject(isFeatureFlagEnabled: true)
-        subject.isBottomSearchBar = true
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+
+        subject.showReaderModeBar(animated: false)
+        XCTAssertNotNil(subject.readerModeBar)
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 2)
+
+        // Remove reader mode bar
+        subject.hideReaderModeBar(animated: false)
+    }
+
+    func test_readerModeBar_TopToolbar_withNativeConstraints() {
+        let subject = createSubject(isFeatureFlagEnabled: true, isBottomSearchBar: false)
         XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 0)
 
         subject.showReaderModeBar(animated: false)
         XCTAssertNotNil(subject.readerModeBar)
-        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 0)
 
         // Remove reader mode bar
         subject.hideReaderModeBar(animated: false)
@@ -26,19 +37,18 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
 
     func test_readerModeBar_bottomToolbar_withSnapkitConstraints() {
         let subject = createSubject()
-        subject.isBottomSearchBar = true
-        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 0)
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
 
         subject.showReaderModeBar(animated: false)
         XCTAssertNotNil(subject.readerModeBar)
-        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 1)
+        XCTAssertEqual(subject.overKeyboardContainer.subviews.count, 2)
 
         // Remove reader mode bar
         subject.hideReaderModeBar(animated: false)
     }
 
     func test_readerModeBar_topToolbar_withNativeConstraints() {
-        let subject = createSubject(isFeatureFlagEnabled: true)
+        let subject = createSubject(isFeatureFlagEnabled: true, isBottomSearchBar: false)
         subject.isBottomSearchBar = false
         XCTAssertEqual(subject.header.subviews.count, 1)
 
@@ -53,11 +63,11 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     func test_readerModeBar_topToolbar_withSnapkitConstraints() {
         let subject = createSubject()
         subject.isBottomSearchBar = false
-        XCTAssertEqual(subject.header.subviews.count, 1)
+        XCTAssertEqual(subject.header.subviews.count, 0)
 
         subject.showReaderModeBar(animated: false)
         XCTAssertNotNil(subject.readerModeBar)
-        XCTAssertEqual(subject.header.subviews.count, 2)
+        XCTAssertEqual(subject.header.subviews.count, 1)
 
         // Remove reader mode bar
         subject.hideReaderModeBar(animated: false)
@@ -119,7 +129,7 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     }
 
     func test_readerModeBar_doesNotAccumulateConstraints_withSnapkitConstraints() {
-        let subject = createSubject()
+        let subject = createSubject(isBottomSearchBar: false)
         let initialConstraintCount = subject.view.constraints.count
 
         for _ in 0..<3 {
@@ -153,8 +163,7 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     // MARK: - Zoom Page Bar Tests
 
     func test_zoomPageBar_topToolbarHeight_withNativeConstraints() {
-        let subject = createSubject(isFeatureFlagEnabled: true)
-        subject.isBottomSearchBar = false
+        let subject = createSubject(isFeatureFlagEnabled: true, isBottomSearchBar: false)
 
         // Get initial overKeyboardContainer state
         let initialEqualHeightConstraint = subject.overKeyboardContainer.constraints.contains {
@@ -187,8 +196,7 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     }
 
     func test_zoomPageBar_topToolbarHeight_withSnapkitConstraints() {
-        let subject = createSubject()
-        subject.isBottomSearchBar = false
+        let subject = createSubject(isBottomSearchBar: false)
 
         // Get initial overKeyboardContainer state
         let initialEqualHeightConstraint = subject.overKeyboardContainer.constraints.contains {
@@ -221,8 +229,7 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     }
 
     func test_zoomPageBar_multipleCycles_maintainsLayout_withNativeConstraints() {
-        let subject = createSubject(isFeatureFlagEnabled: true)
-        subject.isBottomSearchBar = false
+        let subject = createSubject(isFeatureFlagEnabled: true, isBottomSearchBar: false)
         subject.view.layoutIfNeeded()
 
         let initialFrame = subject.overKeyboardContainer.frame
@@ -239,8 +246,7 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
     }
 
     func test_zoomPageBar_multipleCycles_maintainsLayout_withSnapkitConstraints() {
-        let subject = createSubject()
-        subject.isBottomSearchBar = false
+        let subject = createSubject(isBottomSearchBar: false)
         subject.view.layoutIfNeeded()
 
         let initialFrame = subject.overKeyboardContainer.frame

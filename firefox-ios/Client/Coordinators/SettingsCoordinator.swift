@@ -35,6 +35,7 @@ final class SettingsCoordinator: BaseCoordinator,
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let relayController: RelayControllerProtocol
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
@@ -46,6 +47,7 @@ final class SettingsCoordinator: BaseCoordinator,
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
+        relayController: RelayControllerProtocol,
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
@@ -55,6 +57,7 @@ final class SettingsCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.settingsTelemetry = SettingsTelemetry(gleanWrapper: gleanWrapper)
+        self.relayController = relayController
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -211,7 +214,10 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .relayMask:
-            return RelayMaskSettingsViewController(profile: profile, windowUUID: windowUUID, tabManager: tabManager)
+            return RelayMaskSettingsViewController(profile: profile,
+                                                   windowUUID: windowUUID,
+                                                   tabManager: tabManager,
+                                                   relayController: relayController)
 
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
@@ -301,7 +307,9 @@ final class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAutoFillsPasswords() {
-        let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        let viewController = AutoFillPasswordSettingsViewController(profile: profile,
+                                                                    relayController: relayController,
+                                                                    windowUUID: windowUUID)
         viewController.parentCoordinator = self
         router.push(viewController)
     }

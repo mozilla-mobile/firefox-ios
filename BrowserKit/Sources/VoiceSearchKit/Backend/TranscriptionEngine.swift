@@ -10,5 +10,5 @@ protocol TranscriptionEngine: Sendable {
     func start(continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation) async throws
 
     /// Stops speech recognition and releases audio resources.
-    func stop() async
+    func stop() async throws
 }

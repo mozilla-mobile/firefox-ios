@@ -1038,11 +1038,21 @@ extension String {
         }
 
         public struct Pocket {
+            public static let NewsSectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.NewsSectionTitle.v149",
+                tableName: "FirefoxHomepage",
+                value: "News",
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let PopularTodaySectionTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
                 tableName: "FirefoxHomepage",
                 value: "Popular Today",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
+            public static let NewsAffordanceLabel = MZLocalizedString(
+                key: "FirefoxHome.Stories.NewsAffordanceLabel.v149",
+                tableName: "FirefoxHomepage",
+                value: "News",
+                comment: "This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles")
             public static let AllStoriesButtonTitle = MZLocalizedString(
                 key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
                 tableName: "FirefoxHomepage",
@@ -2767,6 +2777,12 @@ extension String {
             tableName: "Summarizer",
             value: "Drag or tap the web page to close the summary",
             comment: "The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page."
+        )
+        public static let ToastLabel = MZLocalizedString(
+            key: "Summarizer.ToastLabel.v149",
+            tableName: "Summarizer",
+            value: "Summary not available",
+            comment: "The label for the toast that shows when shaking and the summary is not available for that page."
         )
     }
 }
@@ -5408,6 +5424,12 @@ extension String {
                 tableName: "MainMenu",
                 value: "Summarize Page",
                 comment: "On the main menu, the title for the action that will summarize the content of the webpage.")
+            public static let ReaderViewTitle = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderView.Title.v149",
+                tableName: "MainMenu",
+                value: "Reader View",
+                comment: "On the main menu, the title for the action that will show the reader view for the webpage."
+            )
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(

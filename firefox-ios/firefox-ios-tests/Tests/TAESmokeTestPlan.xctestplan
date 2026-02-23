@@ -353,6 +353,7 @@
         "MicrosurveyTests\/testCloseButtonDismissesSurveyAndPrompt_tabTrayExperimentOff()",
         "MicrosurveyTests\/testShowMicrosurvey_tabTrayExperimentOff()",
         "MicrosurveyTests\/testURLBorderHiddenWhenMicrosurveyPromptShown_tabTrayExperimentOff()",
+        "ModernOnboardingTests",
         "MultiWindowTests",
         "MultiWindowTests\/testMultiWindowNewTab()",
         "MultiWindowTests\/testMultiWindowSplitView()",

@@ -9,12 +9,17 @@ import ComponentLibrary
 
 class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     private lazy var linkButton: LinkButton = .build()
+    private let relayController: RelayControllerProtocol
 
     private struct UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 
-    init(profile: Profile, windowUUID: WindowUUID, tabManager: TabManager) {
+    init(profile: Profile,
+         windowUUID: WindowUUID,
+         tabManager: TabManager,
+         relayController: RelayControllerProtocol) {
+        self.relayController = relayController
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
         self.tabManager = tabManager
@@ -36,6 +41,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
                                                         prefs: profile.prefs,
                                                         windowUUID: windowUUID,
                                                         tabManager: tabManager,
+                                                        relayController: relayController,
                                                         navigationController: navigationController)
 
         return [SettingSection(footerTitle: NSAttributedString(string: .RelayMask.RelayEmailMaskSettingsDetailInfo),
@@ -78,7 +84,7 @@ class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlagg
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForRelayMaskLearnMoreArticle
         navigationController?.pushViewController(viewController, animated: true)
-        RelayController.shared.telemetry.learnMoreTapped()
+        relayController.telemetry.learnMoreTapped()
     }
 
     // MARK: - ThemeApplicable
@@ -93,16 +99,19 @@ final class ManageRelayMasksSetting: Setting {
     private let windowUUID: WindowUUID
     private let parentNav: UINavigationController?
     private let tabManager: TabManager
+    private let relayController: RelayControllerProtocol
     private(set) var manageMasksURL: URL?
 
     init(theme: Theme,
          prefs: Prefs,
          windowUUID: WindowUUID,
          tabManager: TabManager,
+         relayController: RelayControllerProtocol,
          navigationController: UINavigationController?) {
         self.parentNav = navigationController
         self.windowUUID = windowUUID
         self.tabManager = tabManager
+        self.relayController = relayController
         self.manageMasksURL = SupportUtils.URLForRelayAccountManagement
         let color = theme.colors.textPrimary
         let attributes = [NSAttributedString.Key.foregroundColor: color]
@@ -127,7 +136,7 @@ final class ManageRelayMasksSetting: Setting {
     override var style: UITableViewCell.CellStyle { return .default }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        RelayController.shared.telemetry.manageMasksTapped()
+        relayController.telemetry.manageMasksTapped()
         guard let url = manageMasksURL else { return }
         tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
         navigationController?.dismissVC()

@@ -303,4 +303,13 @@ final class BrowserScreen {
         let saveButton = sel.SAVE_BUTTON.element(in: app)
         saveButton.tapIfExists()
     }
+
+    func swipeToAndValidateAddressBarValue(swipeRight: Bool, _ value: String) {
+        if swipeRight {
+            addressBar.swipeRight()
+        } else {
+            addressBar.swipeLeft()
+        }
+        assertAddressBarContains(value: value)
+    }
  }
