@@ -123,9 +123,9 @@ final class AddCreditCardScreen {
 
     func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
         // https://github.com/mozilla-mobile/firefox-ios/issues/31079
-        /*if #available(iOS 26, *) {
+        if #available(iOS 26, *) {
             tapCreditCardForm()
-        }*/
+        }
         waitForCardFields()
 
         fillName(name)
