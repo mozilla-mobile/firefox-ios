@@ -837,7 +837,8 @@ class PickerSetting<Value: Equatable>: Setting {
     ///   - accessibilityIdentifier: The accessibility identifier for the setting cell.
     ///   - pickerButtonAccessibilityLabel: The accessibility label for the picker button control.
     ///   - pickerButtonAccessibilityIdentifier: The accessibility identifier for the picker button control.
-    ///   - onOptionSelected: A closure called when a new option is selected, receiving the selected value (not the display string).
+    ///   - onOptionSelected: A closure called when a new option is selected,
+    ///   receiving the selected value (not the display string).
     init(
         selectedValue: Value,
         pickerOptions: [(value: Value, displayString: String)],

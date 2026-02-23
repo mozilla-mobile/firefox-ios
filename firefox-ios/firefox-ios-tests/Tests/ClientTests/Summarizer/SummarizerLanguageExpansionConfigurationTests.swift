@@ -29,7 +29,8 @@ struct SummarizerLanguageExpansionConfigurationTests {
 
         subject.save(preference: .websiteLanguage, prefs: prefs)
 
-        #expect(prefs.stringForKey(PrefsKeys.Summarizer.selectedLanguage) == SummarizerLanguageExpansionConfiguration.UserPreference.websiteLanguage.saveValue)
+        #expect(prefs.stringForKey(PrefsKeys.Summarizer.selectedLanguage) ==
+                SummarizerLanguageExpansionConfiguration.UserPreference.websiteLanguage.saveValue)
     }
 
     @Test
