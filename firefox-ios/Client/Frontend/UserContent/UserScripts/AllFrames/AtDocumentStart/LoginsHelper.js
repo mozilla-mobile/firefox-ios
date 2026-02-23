@@ -19,6 +19,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   var gStoreWhenAutocompleteOff = true;
   var gAutofillForms = true;
   var gDebug = false;
+  var pendingEmailField = null;
 
   var KEYCODE_ARROW_DOWN = 40;
 
@@ -479,11 +480,13 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   }
 
   function fillRelayEmail(email) {
-      /* TODO: Do we need this fromFill set for Relay? */
       LoginManagerContent.fromFill = true
       this.yieldFocusBackToField();
-      const emailField = LoginManagerContent.activeField;
-      emailField?.setUserInput(email);
+      // Only fill if the pending field is still focused
+      if (pendingEmailField && pendingEmailField === LoginManagerContent.activeField) {
+          pendingEmailField.setUserInput(email);
+      }
+      pendingEmailField = null;
       LoginManagerContent.fromFill = false
   }
 
@@ -550,6 +553,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
           field === username ? FocusFieldType.username : FocusFieldType.password,
       });
     } else if (Logic.isInferredEmailField(field)) {
+        pendingEmailField = field;
         webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
             type: "fieldType",
             fieldType: FocusFieldType.email,
