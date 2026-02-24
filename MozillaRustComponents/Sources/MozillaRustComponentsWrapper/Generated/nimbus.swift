@@ -538,6 +538,333 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+public protocol MetricsHandler: AnyObject, Sendable {
+    
+    func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) 
+    
+    /**
+     * Feature activation is the pre-cursor to feature exposure: it is defined as the first time
+     * the feature configuration is asked for.
+     */
+    func recordFeatureActivation(event: FeatureExposureExtraDef) 
+    
+    func recordFeatureExposure(event: FeatureExposureExtraDef) 
+    
+    func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef) 
+    
+    func submitTargetingContext() 
+    
+}
+open class MetricsHandlerImpl: MetricsHandler, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_nimbus_fn_clone_metricshandler(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_nimbus_fn_free_metricshandler(handle, $0) }
+    }
+
+    
+
+    
+open func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef])  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_enrollment_statuses(
+            self.uniffiCloneHandle(),
+        FfiConverterSequenceTypeEnrollmentStatusExtraDef.lower(enrollmentStatusExtras),$0
+    )
+}
+}
+    
+    /**
+     * Feature activation is the pre-cursor to feature exposure: it is defined as the first time
+     * the feature configuration is asked for.
+     */
+open func recordFeatureActivation(event: FeatureExposureExtraDef)  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_feature_activation(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeFeatureExposureExtraDef_lower(event),$0
+    )
+}
+}
+    
+open func recordFeatureExposure(event: FeatureExposureExtraDef)  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_feature_exposure(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeFeatureExposureExtraDef_lower(event),$0
+    )
+}
+}
+    
+open func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef)  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_malformed_feature_config(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeMalformedFeatureConfigExtraDef_lower(event),$0
+    )
+}
+}
+    
+open func submitTargetingContext()  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_submit_targeting_context(
+            self.uniffiCloneHandle(),$0
+    )
+}
+}
+    
+
+    
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceMetricsHandler {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceMetricsHandler] = [UniffiVTableCallbackInterfaceMetricsHandler(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeMetricsHandler.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface MetricsHandler: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeMetricsHandler.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface MetricsHandler: handle missing in uniffiClone")
+            }
+        },
+        recordEnrollmentStatuses: { (
+            uniffiHandle: UInt64,
+            enrollmentStatusExtras: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordEnrollmentStatuses(
+                     enrollmentStatusExtras: try FfiConverterSequenceTypeEnrollmentStatusExtraDef.lift(enrollmentStatusExtras)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordFeatureActivation: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordFeatureActivation(
+                     event: try FfiConverterTypeFeatureExposureExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordFeatureExposure: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordFeatureExposure(
+                     event: try FfiConverterTypeFeatureExposureExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordMalformedFeatureConfig: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordMalformedFeatureConfig(
+                     event: try FfiConverterTypeMalformedFeatureConfigExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        submitTargetingContext: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.submitTargetingContext(
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        }
+    )]
+}
+
+private func uniffiCallbackInitMetricsHandler() {
+    uniffi_nimbus_fn_init_callback_vtable_metricshandler(UniffiCallbackInterfaceMetricsHandler.vtable)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMetricsHandler: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<MetricsHandler>()
+
+    typealias FfiType = UInt64
+    typealias SwiftType = MetricsHandler
+
+    public static func lift(_ handle: UInt64) throws -> MetricsHandler {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return MetricsHandlerImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
+    }
+
+    public static func lower(_ value: MetricsHandler) -> UInt64 {
+         if let rustImpl = value as? MetricsHandlerImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MetricsHandler {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: MetricsHandler, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMetricsHandler_lift(_ handle: UInt64) throws -> MetricsHandler {
+    return try FfiConverterTypeMetricsHandler.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMetricsHandler_lower(_ value: MetricsHandler) -> UInt64 {
+    return FfiConverterTypeMetricsHandler.lower(value)
+}
+
+
+
+
+
+
 public protocol NimbusClientProtocol: AnyObject, Sendable {
     
     /**
@@ -778,7 +1105,7 @@ public convenience init(appCtx: AppContext, recordedContext: RecordedContext?, c
         FfiConverterOptionTypeRecordedContext.lower(recordedContext),
         FfiConverterSequenceString.lower(coenrollingFeatureIds),
         FfiConverterString.lower(dbpath),
-        FfiConverterCallbackInterfaceMetricsHandler_lower(metricsHandler),
+        FfiConverterTypeMetricsHandler_lower(metricsHandler),
         FfiConverterOptionCallbackInterfaceGeckoPrefHandler.lower(geckoPrefHandler),
         FfiConverterOptionTypeNimbusServerSettings.lower(remoteSettingsInfo),$0
     )
@@ -3432,236 +3759,6 @@ public func FfiConverterCallbackInterfaceGeckoPrefHandler_lower(_ v: GeckoPrefHa
     return FfiConverterCallbackInterfaceGeckoPrefHandler.lower(v)
 }
 
-
-
-
-public protocol MetricsHandler: AnyObject, Sendable {
-    
-    func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) 
-    
-    /**
-     * Feature activation is the pre-cursor to feature exposure: it is defined as the first time
-     * the feature configuration is asked for.
-     */
-    func recordFeatureActivation(event: FeatureExposureExtraDef) 
-    
-    func recordFeatureExposure(event: FeatureExposureExtraDef) 
-    
-    func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef) 
-    
-    func submitTargetingContext() 
-    
-}
-
-
-// Put the implementation in a struct so we don't pollute the top-level namespace
-fileprivate struct UniffiCallbackInterfaceMetricsHandler {
-
-    // Create the VTable using a series of closures.
-    // Swift automatically converts these into C callback functions.
-    //
-    // This creates 1-element array, since this seems to be the only way to construct a const
-    // pointer that we can pass to the Rust code.
-    static let vtable: [UniffiVTableCallbackInterfaceMetricsHandler] = [UniffiVTableCallbackInterfaceMetricsHandler(
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            do {
-                try FfiConverterCallbackInterfaceMetricsHandler.handleMap.remove(handle: uniffiHandle)
-            } catch {
-                print("Uniffi callback interface MetricsHandler: handle missing in uniffiFree")
-            }
-        },
-        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
-            do {
-                return try FfiConverterCallbackInterfaceMetricsHandler.handleMap.clone(handle: uniffiHandle)
-            } catch {
-                fatalError("Uniffi callback interface MetricsHandler: handle missing in uniffiClone")
-            }
-        },
-        recordEnrollmentStatuses: { (
-            uniffiHandle: UInt64,
-            enrollmentStatusExtras: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.recordEnrollmentStatuses(
-                     enrollmentStatusExtras: try FfiConverterSequenceTypeEnrollmentStatusExtraDef.lift(enrollmentStatusExtras)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        recordFeatureActivation: { (
-            uniffiHandle: UInt64,
-            event: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.recordFeatureActivation(
-                     event: try FfiConverterTypeFeatureExposureExtraDef_lift(event)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        recordFeatureExposure: { (
-            uniffiHandle: UInt64,
-            event: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.recordFeatureExposure(
-                     event: try FfiConverterTypeFeatureExposureExtraDef_lift(event)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        recordMalformedFeatureConfig: { (
-            uniffiHandle: UInt64,
-            event: RustBuffer,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.recordMalformedFeatureConfig(
-                     event: try FfiConverterTypeMalformedFeatureConfigExtraDef_lift(event)
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        },
-        submitTargetingContext: { (
-            uniffiHandle: UInt64,
-            uniffiOutReturn: UnsafeMutableRawPointer,
-            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
-        ) in
-            let makeCall = {
-                () throws -> () in
-                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
-                    throw UniffiInternalError.unexpectedStaleHandle
-                }
-                return uniffiObj.submitTargetingContext(
-                )
-            }
-
-            
-            let writeReturn = { () }
-            uniffiTraitInterfaceCall(
-                callStatus: uniffiCallStatus,
-                makeCall: makeCall,
-                writeReturn: writeReturn
-            )
-        }
-    )]
-}
-
-private func uniffiCallbackInitMetricsHandler() {
-    uniffi_nimbus_fn_init_callback_vtable_metricshandler(UniffiCallbackInterfaceMetricsHandler.vtable)
-}
-
-// FfiConverter protocol for callback interfaces
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterCallbackInterfaceMetricsHandler {
-    fileprivate static let handleMap = UniffiHandleMap<MetricsHandler>()
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-extension FfiConverterCallbackInterfaceMetricsHandler : FfiConverter {
-    typealias SwiftType = MetricsHandler
-    typealias FfiType = UInt64
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lift(_ handle: UInt64) throws -> SwiftType {
-        try handleMap.get(handle: handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        let handle: UInt64 = try readInt(&buf)
-        return try lift(handle)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func lower(_ v: SwiftType) -> UInt64 {
-        return handleMap.insert(obj: v)
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(v))
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceMetricsHandler_lift(_ handle: UInt64) throws -> MetricsHandler {
-    return try FfiConverterCallbackInterfaceMetricsHandler.lift(handle)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterCallbackInterfaceMetricsHandler_lower(_ v: MetricsHandler) -> UInt64 {
-    return FfiConverterCallbackInterfaceMetricsHandler.lower(v)
-}
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -4363,6 +4460,21 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_func_validate_event_queries() != 42746) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_activation() != 33978) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_exposure() != 52324) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 28930) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_submit_targeting_context() != 53590) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_nimbus_checksum_method_nimbusclient_advance_event_time() != 56101) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -4480,7 +4592,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_recordedcontext_to_json() != 52035) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 32755) {
+    if (uniffi_nimbus_checksum_constructor_nimbusclient_new() != 38342) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_geckoprefhandler_get_prefs_with_state() != 27063) {
@@ -4492,25 +4604,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_nimbus_checksum_method_geckoprefhandler_set_gecko_prefs_original_values() != 37179) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_activation() != 33978) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_feature_exposure() != 52324) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 28930) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_nimbus_checksum_method_metricshandler_submit_targeting_context() != 53590) {
-        return InitializationResult.apiChecksumMismatch
-    }
 
+    uniffiCallbackInitMetricsHandler()
     uniffiCallbackInitRecordedContext()
     uniffiCallbackInitGeckoPrefHandler()
-    uniffiCallbackInitMetricsHandler()
     uniffiEnsureRemoteSettingsInitialized()
     return InitializationResult.ok
 }()
