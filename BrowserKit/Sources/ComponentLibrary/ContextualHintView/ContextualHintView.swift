@@ -13,8 +13,7 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
-        static let maxCloseButtonSize = CGSize(width: closeButtonSize.width * 2.0,
-                                               height: closeButtonSize.height * 2.0)
+        static let maxCloseButtonSize = CGSize(width: closeButtonSize.width * 2.0, height: closeButtonSize.height * 2.0)
         static let closeButtonTrailing: CGFloat = 5
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
