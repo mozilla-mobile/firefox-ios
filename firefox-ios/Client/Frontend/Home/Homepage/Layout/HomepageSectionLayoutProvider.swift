@@ -219,18 +219,31 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let section = createSingleItemSectionLayout(
-            for: environment.traitCollection,
-            bottomInsets: UX.spacingBetweenSections
-        )
-
-        let containerWidth = environment.container.contentSize.width
         let showiPadSetup = UIDevice.current.userInterfaceIdiom == .pad
                             && environment.traitCollection.horizontalSizeClass != .compact
         let headerWidth = HomepageHeaderCell.contentWidth(isiPadSetup: showiPadSetup)
-        let horizontalInset = max(0, (containerWidth - headerWidth) / 2)
-        section.contentInsets.leading = horizontalInset
-        section.contentInsets.trailing = horizontalInset
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(headerWidth),
+                                              heightDimension: .estimated(UX.standardSingleItemHeight))
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(headerWidth),
+                                               heightDimension: .estimated(UX.standardSingleItemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        let containerWidth = environment.container.contentSize.width
+        let effectiveInsets = environment.container.effectiveContentInsets
+        let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
+        let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
+
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: horizontalInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: horizontalInset)
 
         return section
     }
