@@ -49,6 +49,10 @@ final class WebsiteDataScreen {
     func waitUntilListIsReady(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.TABLE_WEBSITE_DATA.element(in: app), timeout: timeout)
 
+        // Wait for activity indicator to disappear before checking for data
+        // Use longer timeout when running in parallel as iOS takes longer to persist website data
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+
         if #available(iOS 17, *) {
             let circleInCells = sel.circleImageInsideCells(app)
             BaseTestCase().mozWaitForElementToExist(circleInCells, timeout: timeout)
