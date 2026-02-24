@@ -1914,7 +1914,21 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func updateSnapkitConstraintsForKeyboard() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            scrollController.hideToolbars(animated: false)
+        } else {
+            adjustBottomSearchBarForKeyboard()
+        }
+    }
+
     func updateConstraintsForKeyboard() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapkitConstraintsForKeyboard()
+            return
+        }
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             adjustBottomSearchBarForKeyboard()
         }
