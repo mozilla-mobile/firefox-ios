@@ -43,23 +43,43 @@ struct SummarizerLanguageExpansionConfiguration {
             }
         }
     }
+    struct SettingOption {
+        let value: UserPreference
+        let displayName: String
+
+        /// Returns a tuple with value and display name, suitable for constructing setting options.
+        func toOption() -> (UserPreference, String) {
+            return (value, displayName)
+        }
+    }
 
     let isFeatureEnabled: Bool
     /// The supported Locales for the language expansion experiment
     let supportedLocales: [Locale]
     private let localeProvider: LocaleProvider
 
-    /// Returns available language options as tuples of (preference value, localized display string).
-    var settingOptions: [(UserPreference, String)] {
-        var options = [(UserPreference, String)]()
-        options.append((.websiteLanguage, .Settings.Summarize.LanguageSection.WebsiteLanguageLabel))
-        options.append((.deviceLanguage, .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel))
+    /// Returns available language setting options
+    var settingOptions: [SettingOption] {
+        var options = [SettingOption]()
+        options.append(
+            SettingOption(
+                value: .websiteLanguage,
+                displayName: .Settings.Summarize.LanguageSection.WebsiteLanguageLabel
+            )
+        )
+        options.append(
+            SettingOption(
+                value: .deviceLanguage,
+                displayName: .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel
+            )
+        )
 
         return options + supportedLocales.compactMap {
             guard let localizedLocale = localeProvider.current.localizedString(
                 forIdentifier: $0.identifier
             ) else { return nil }
-            return (.customLocale($0), localizedLocale)
+
+            return SettingOption(value: .customLocale($0), displayName: localizedLocale)
         }
     }
 
@@ -84,6 +104,11 @@ struct SummarizerLanguageExpansionConfiguration {
         guard let savedValue else {
             return .websiteLanguage
         }
-        return UserPreference.from(savedValue: savedValue)
+        let preference = UserPreference.from(savedValue: savedValue)
+        // in case the locale is not in the supported once return the default preference
+        if case .customLocale(let locale) = preference, !supportedLocales.contains(locale) {
+            return .websiteLanguage
+        }
+        return preference
     }
 }

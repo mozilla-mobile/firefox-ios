@@ -17,9 +17,9 @@ struct SummarizerLanguageExpansionConfigurationTests {
 
         let options = subject.settingOptions
         #expect(options.count == 3)
-        #expect(options[0] == (.websiteLanguage, .Settings.Summarize.LanguageSection.WebsiteLanguageLabel))
-        #expect(options[1] == (.deviceLanguage, .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel))
-        #expect(options[2] == (.customLocale(enLocale),
+        #expect(options[0].toOption() == (.websiteLanguage, .Settings.Summarize.LanguageSection.WebsiteLanguageLabel))
+        #expect(options[1].toOption() == (.deviceLanguage, .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel))
+        #expect(options[2].toOption() == (.customLocale(enLocale),
                                localeProvider.current.localizedString(forIdentifier: enLocale.identifier)))
     }
 
@@ -45,12 +45,24 @@ struct SummarizerLanguageExpansionConfigurationTests {
     @Test
     func test_selectedPreference_whenValidPreferenceIsSet_returnsThatValue() {
         let enLocale = Locale(identifier: "en")
-        let subject = createSubject()
+        let subject = createSubject(supportedLocales: [enLocale])
         prefs.setString(enLocale.identifier, forKey: PrefsKeys.Summarizer.selectedLanguage)
 
         let savedPreference = subject.selectedPreference(prefs: prefs)
 
         #expect(savedPreference == .customLocale(enLocale))
+    }
+
+    @Test
+    func test_selectedPreference_withLocaleNotInSupportedLocales_returnsDefaultValue() {
+        let enLocale = Locale(identifier: "en")
+        let subject = createSubject(supportedLocales: [enLocale])
+        // save a not supported locale
+        prefs.setString("it-IT", forKey: PrefsKeys.Summarizer.selectedLanguage)
+
+        let savedPreference = subject.selectedPreference(prefs: prefs)
+
+        #expect(savedPreference == .websiteLanguage)
     }
 
     @Test

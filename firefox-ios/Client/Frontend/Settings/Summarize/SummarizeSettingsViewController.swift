@@ -106,7 +106,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
             children: [
                 PickerSetting(
                     selectedValue: configuration.selectedPreference(prefs: prefs),
-                    pickerOptions: configuration.settingOptions,
+                    pickerOptions: configuration.settingOptions.map({ $0.toOption() }),
                     accessibilityIdentifier: AccessibilityIdentifiers.Settings.Summarize.languageCell,
                     pickerButtonAccessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
                     pickerButtonAccessibilityIdentifier:
