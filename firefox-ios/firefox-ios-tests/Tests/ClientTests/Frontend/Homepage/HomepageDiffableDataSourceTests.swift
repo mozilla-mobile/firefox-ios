@@ -263,8 +263,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
         let expectedSections: [HomepageSection] = [
-            .privacyNotice,
-            .header
+            .header,
+            .privacyNotice
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
