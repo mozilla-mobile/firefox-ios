@@ -1933,8 +1933,8 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
-        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+        let isKeyboardVisible = keyboardHeight > 0
 
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
