@@ -197,7 +197,7 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
     }
 
     func testMiddleware_termsShown_recordsImpressionAfterReminder() {
-        // First display: one impression recorded
+        // First display - one impression recorded
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
