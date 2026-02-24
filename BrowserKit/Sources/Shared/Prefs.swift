@@ -30,6 +30,7 @@ public struct PrefsKeys {
     public static let TermsOfUseAcceptedVersion = "TermsOfUseAcceptedVersion"
     public static let TermsOfUseAcceptedDate = "TermsOfUseAcceptedDate"
     public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
+    public static let TermsOfUseShownRecorded = "TermsOfUseShownRecorded"
     public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"

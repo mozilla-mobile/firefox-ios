@@ -190,37 +190,29 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
     }
 
-    func testMiddleware_termsShown_firstTime_recordsImpression() {
+    func testMiddleware_termsShown_firstAppearance_incrementsShownCountOnce() {
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
+
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 
-    func testMiddleware_termsShown_recordsImpressionAfterReminder() {
-        // First display - one impression recorded
-        let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .termsShown)
+    func testMiddleware_termsShown_whenReminderIsShown_incrementsShownCountAgain() {
+        let dismissAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        middleware.termsOfUseProvider(AppState(), dismissAction)
+
+        let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
-
-        // First dismiss - no extra impression (dismissedCount recorded)
-        let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction1)
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
-
-        // Second dismiss recorded after reminder - second impression recorded
-        let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .gestureDismiss)
-        middleware.termsOfUseProvider(AppState(), dismissAction2)
-        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 4)
     }
 
-    func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotRecordAgain() {
+    func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotIncrementShownCount() {
         let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction1)
 
         let shownAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction2)
 
-        // Repeated terms shown without dismiss - only one impression recorded
         XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 }

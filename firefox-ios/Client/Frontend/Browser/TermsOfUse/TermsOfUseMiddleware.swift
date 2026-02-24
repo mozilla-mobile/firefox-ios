@@ -33,16 +33,19 @@ final class TermsOfUseMiddleware {
 
         switch type {
         case TermsOfUseActionType.termsShown:
-            self.recordImpression()
+            self.recordImpressionIfNeeded()
         case TermsOfUseActionType.termsAccepted:
+            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.recordAcceptance()
         case TermsOfUseActionType.remindMeLaterTapped:
-            self.countReminderPresentation()
+            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.incrementRemindersCount()
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseRemindMeLaterTapDate)
             self.telemetry.termsOfUseRemindMeLaterButtonTapped()
         case TermsOfUseActionType.gestureDismiss:
-            self.countReminderPresentation()
+            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.incrementRemindersCount()
             self.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.TermsOfUseDismissedDate)
             self.telemetry.termsOfUseDismissed()
         case TermsOfUseActionType.learnMoreLinkTapped:
@@ -80,22 +83,30 @@ final class TermsOfUseMiddleware {
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: acceptedDate)
     }
 
-    private func recordImpression() {
+    private func recordImpressionIfNeeded() {
         let hasShownFirstTime = self.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
-        guard !hasShownFirstTime else { return }
-        self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+        let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
+        let shownHasBeenRecorded = self.prefs.boolForKey(PrefsKeys.TermsOfUseShownRecorded) ?? false
 
-        // Record telemetry for ToU first impression
-        telemetry.termsOfUseDisplayed()
+        if !hasShownFirstTime {
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.telemetry.termsOfUseDisplayed()
+            return
+        }
+
+        if hasBeenDismissedBefore, !shownHasBeenRecorded {
+            self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
+            self.telemetry.termsOfUseDisplayed()
+        }
     }
 
-    private func countReminderPresentation() {
-        // Increment presentation counter after first dismissal
+    private func incrementRemindersCount() {
+        // Only increment for reminders - after the first dismissal
         let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
         guard hasBeenDismissedBefore else { return }
 
         let currentCount = self.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0
         self.prefs.setInt(Int32(currentCount + 1), forKey: PrefsKeys.TermsOfUseRemindersCount)
-        telemetry.termsOfUseDisplayed()
     }
 }
