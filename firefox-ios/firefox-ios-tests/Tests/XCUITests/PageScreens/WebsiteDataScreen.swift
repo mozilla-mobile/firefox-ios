@@ -62,6 +62,27 @@ final class WebsiteDataScreen {
         }
     }
 
+    /// Checks if website data has loaded without failing the test
+    /// Returns true if data is loaded, false otherwise
+    func checkIfDataLoaded(timeout: TimeInterval = TIMEOUT) -> Bool {
+        // Wait for table to exist
+        guard sel.TABLE_WEBSITE_DATA.element(in: app).waitForExistence(timeout: timeout) else {
+            return false
+        }
+
+        // Wait for activity indicator to disappear
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+
+        // Check if data cells exist
+        if #available(iOS 17, *) {
+            let circleInCells = sel.circleImageInsideCells(app)
+            return circleInCells.waitForExistence(timeout: timeout)
+        } else {
+            let anyBtn = sel.anyTableButton(app)
+            return anyBtn.waitForExistence(timeout: timeout)
+        }
+    }
+
     func expandShowMoreIfNeeded() {
         let showMore = sel.CELL_SHOW_MORE.element(in: app)
         if showMore.exists {

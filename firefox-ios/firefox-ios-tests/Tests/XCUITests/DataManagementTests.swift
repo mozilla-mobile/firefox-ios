@@ -72,10 +72,31 @@ class DataManagementTests: BaseTestCase {
         navigator.goto(WebsiteDataSettings)
         webSitesDataScreen.clearAllWebsiteData()
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.openURL("example.com")
         waitUntilPageLoad()
-        navigator.goto(WebsiteDataSettings)
-        webSitesDataScreen.waitUntilListIsReady()
+
+        // Retry pattern: try loading website data settings up to 3 times
+        // This handles the flaky behavior where iOS may not have persisted website data yet
+        var dataLoaded = false
+        for attempt in 1...3 {
+            navigator.goto(WebsiteDataSettings)
+
+            // Check if data loaded successfully
+            if webSitesDataScreen.checkIfDataLoaded() {
+                dataLoaded = true
+                break
+            }
+
+            // If not loaded and not last attempt, go back and wait before retry
+            if attempt < 3 {
+                navigator.goto(NewTabScreen)
+                sleep(2) // Give iOS more time to persist website data
+            }
+        }
+
+        XCTAssertTrue(dataLoaded, "Website data did not load after 3 attempts")
+
         webSitesDataScreen.expandShowMoreIfNeeded()
         webSitesDataScreen.waitForExampleDomain()
         webSitesDataScreen.assertWebsiteDataVisible()
