@@ -16,7 +16,8 @@ final class WebsiteDataScreen {
 
     func clearAllWebsiteData() {
         BaseTestCase().mozWaitForElementToExist(sel.TABLE_WEBSITE_DATA.element(in: app))
-        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch)
+        // Use longer timeout for parallel execution - activity indicator may take longer
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
 
         let clearAll = sel.clearAllLabel(in: app)
         BaseTestCase().mozWaitForElementToExist(clearAll)

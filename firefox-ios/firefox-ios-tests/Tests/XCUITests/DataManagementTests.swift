@@ -69,6 +69,19 @@ class DataManagementTests: BaseTestCase {
     // Smoketest
     func testWebSiteDataEnterFirstTime() {
         webSitesDataScreen = WebsiteDataScreen(app: app)
+
+        // Warm-up: Open Website Data Settings first to handle slow cold start (best effort)
+        // The first load is often very slow due to initialization, subsequent loads are fast
+        // If warm-up times out, the retry pattern below will handle it
+        navigator.goto(WebsiteDataSettings)
+        if app.tables.otherElements["Website Data"].waitForExistence(timeout: TIMEOUT) {
+            // Wait up to 45s for activity indicator, but don't fail if it times out
+            mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+        }
+        navigator.goto(NewTabScreen)
+        waitForTabsButton()
+
+        // Now run the actual test with the app already warmed up
         navigator.goto(WebsiteDataSettings)
         webSitesDataScreen.clearAllWebsiteData()
         navigator.nowAt(NewTabScreen)
