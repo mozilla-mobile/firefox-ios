@@ -54,7 +54,14 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
         ])
     }
 
-    func makeAttributedDescription(with text: String, linkedText: String, url: URL?, and theme: Theme) {
+    func configure(
+        with text: String,
+        linkedText: String,
+        url: URL?,
+        theme: Theme,
+        and delegate: UITextViewDelegate? = nil
+    ) {
+        trackersBlockedInfoTextView.delegate = delegate
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
 

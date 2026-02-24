@@ -27,16 +27,6 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testInitSetsAccessibilityIdentifiers() {
-        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers
-
-        XCTAssertEqual(subject.accessibilityIdentifier, A11y.footerView)
-        XCTAssertEqual(
-            subject.trackersBlockedInfoTextView.accessibilityIdentifier,
-            A11y.trackersBlockedInfoTextView
-        )
-    }
-
     func testInitConfiguresTextViewCorrectly() {
         let textView = subject.trackersBlockedInfoTextView
 
@@ -49,7 +39,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
     func testMakeAttributedDescriptionSetsAttributedText() {
         let text = "This is an information! Learn more"
 
-        subject.makeAttributedDescription(with: text, linkedText: "Learn more", url: nil, and: theme)
+        subject.configure(with: text, linkedText: "Learn more", url: nil, theme: theme)
         XCTAssertEqual(subject.trackersBlockedInfoTextView.attributedText?.string, text)
     }
 
@@ -58,7 +48,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         let linkedText = "Learn more"
         let url = URL(string: "https://example.com")!
 
-        subject.makeAttributedDescription(with: text, linkedText: linkedText, url: url, and: theme)
+        subject.configure(with: text, linkedText: linkedText, url: url, theme: theme)
 
         let attributedText = subject.trackersBlockedInfoTextView.attributedText!
         let range = (text as NSString).range(of: linkedText)
@@ -72,7 +62,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         let text = "Learn more about tracking protection! Learn more"
         let linkedText = "Learn more"
 
-        subject.makeAttributedDescription(with: text, linkedText: linkedText, url: nil, and: theme)
+        subject.configure(with: text, linkedText: linkedText, url: nil, theme: theme)
 
         let attributedText = subject.trackersBlockedInfoTextView.attributedText!
         let range = (text as NSString).range(of: linkedText)

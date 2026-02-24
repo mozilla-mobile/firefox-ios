@@ -14,7 +14,7 @@ import SwiftASN1
 
 class TrackingProtectionModel {
     // MARK: - Constants
-    let userDefaults: UserDefaultsInterface?
+    private let userDefaults: UserDefaultsInterface?
     let contentBlockerStatus: BlockerStatus
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()

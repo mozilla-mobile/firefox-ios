@@ -192,12 +192,12 @@ class BlockedTrackersTableViewController: UIViewController,
             withIdentifier: BlockedTrackersFooterView.cellIdentifier
         ) as? BlockedTrackersFooterView else { return nil }
 
-        footerView.trackersBlockedInfoTextView.delegate = self
-        footerView.makeAttributedDescription(
+        footerView.configure(
             with: model.getTrackersBlockedModeText(),
             linkedText: .Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink,
             url: SupportUtils.URLForTopic("tracking-protection-ios"),
-            and: currentTheme()
+            theme: currentTheme(),
+            and: self
         )
         footerView.applyTheme(theme: currentTheme())
         return footerView
