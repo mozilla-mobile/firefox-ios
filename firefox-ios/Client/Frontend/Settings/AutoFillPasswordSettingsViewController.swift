@@ -8,9 +8,12 @@ import Glean
 
 class AutoFillPasswordSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     weak var parentCoordinator: PrivacySettingsDelegate?
+    private let relayController: RelayControllerProtocol
 
     init(profile: Profile,
+         relayController: RelayControllerProtocol,
          windowUUID: WindowUUID) {
+        self.relayController = relayController
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
         self.title = .Settings.AutofillAndPassword.Title
@@ -33,7 +36,7 @@ class AutoFillPasswordSettingsViewController: SettingsTableViewController, Featu
                                                        settingsDelegate: parentCoordinator))
         }
 
-        if RelayController.shared.shouldDisplayRelaySettings() {
+        if relayController.shouldDisplayRelaySettings() {
             sectionItems.append(AutofillRelayMaskSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 

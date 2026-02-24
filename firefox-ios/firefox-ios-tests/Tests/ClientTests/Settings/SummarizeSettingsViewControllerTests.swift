@@ -76,11 +76,19 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
     var hostedSummarizerEnabled = false
     var shakeGestureFeatureFlagEnabled = false
     var appAttestAuthEnabled = false
+    var isLanguageExpansionEnabled = false
 
     private(set) var isAppleSummarizerEnabledCallCount = 0
     private(set) var isHostedSummarizerEnabledCallCount = 0
     private(set) var isShakeGestureFeatureFlagEnabledCallCount = 0
     private(set) var isAppAttestAuthEnabledCallCount = 0
+    private(set) var languageExpansionConfigurationCallCount = 0
+    var languageExpansionConfiguration = SummarizerLanguageExpansionConfiguration(
+        isFeatureEnabled: true,
+        isWebsiteDeviceLanguageSupported: true,
+        isDeviceLanguageSupported: true,
+        supportedLocales: []
+    )
 
     func isAppleSummarizerEnabled() -> Bool {
         isAppleSummarizerEnabledCallCount += 1
@@ -100,5 +108,12 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
     func isAppAttestAuthEnabled() -> Bool {
         isAppAttestAuthEnabledCallCount += 1
         return appAttestAuthEnabled
+    }
+
+    func languageExpansionConfiguration(
+        from nimbusFeature: Client.SummarizerLanguageExpansionFeature
+    ) -> Client.SummarizerLanguageExpansionConfiguration {
+        languageExpansionConfigurationCallCount += 1
+        return languageExpansionConfiguration
     }
 }

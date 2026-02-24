@@ -11,6 +11,8 @@ protocol OnboardingSelectorsSet {
     func secondaryButton(rootId: String) -> Selector
     func betaPrimaryButton(screenIndex: Int) -> Selector
     func betaSecondaryButton(screenIndex: Int) -> Selector
+    func multipleChoiceButton(rootId: String) -> Selector
+    func modernTosPrimaryButton() -> Selector
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
@@ -139,6 +141,22 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         description: "Close button to dismiss onboarding tour",
         groups: ["onboarding"]
     )
+
+    func multipleChoiceButton(rootId: String) -> Selector {
+        Selector.buttonId(
+            "\(rootId)MultipleChoiceButton",
+            description: "Multiple choice button for onboarding screen \(rootId)",
+            groups: ["onboarding", "modern"]
+        )
+    }
+
+    func modernTosPrimaryButton() -> Selector {
+        Selector.buttonId(
+            "\(AccessibilityIdentifiers.TermsOfService.root)PrimaryButton",
+            description: "Modern Terms of Service primary button",
+            groups: ["onboarding", "modern"]
+        )
+    }
 
     let PAGE_CONTROL = Selector.pageIndicatorById(
         IDs.pageControl,

@@ -13,7 +13,7 @@ public struct KeyboardState: Sendable {
     public let animationCurve: UIView.AnimationCurve
     private let keyboardEndFrame: CGRect?
 
-    fileprivate init(
+    public init(
         keyboardEndFrame: CGRect?,
         keyboardAnimationDuration: Double?,
         keyboardAnimationCurveValue: Int?

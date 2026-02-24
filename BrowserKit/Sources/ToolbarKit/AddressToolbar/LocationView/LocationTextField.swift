@@ -51,6 +51,8 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         keyboardType = .webSearch
         autocorrectionType = .no
         autocapitalizationType = .none
+        smartQuotesType = .no
+        smartDashesType = .no
         returnKeyType = .go
         tintAdjustmentMode = .normal
 

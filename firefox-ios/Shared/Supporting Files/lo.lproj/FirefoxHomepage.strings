@@ -1,6 +1,15 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "ເລື່ອງລາວ";
 
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "ພວກເຮົາໄດ້ອັບເດດ %1$@ ຂອງພວກເຮົາເພື່ອສະທ້ອນຄຸນສົມບັດລ່າສຸດໃນ %2$@. %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "ແຈ້ງການຄວາມເປັນສ່ວນຕົວ";
+
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "ຫນ້າທຳອິດ";
 
@@ -27,6 +36,9 @@
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "ບໍ່​ໃຫ້​ມີ​ຮ່ອງ​ຮອຍໃດໆລົງເລືອ​ຢູ່​ໃນ​ອຸ​ປະ​ກອນ​ນີ້​";
+
+/* Accessibility label for the page reload button in the navigation toolbar of the stories webview */
+"FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146" = "ໂຫຼດໜ້າຄືນໃໝ່";
 
 /* This is the placeholder text that is at the center of the search bar on the Firefox Homepage. */
 "FirefoxHomepage.SearchBar.PlaceholderTitle.v142" = "ຄົ້ນຫາ ຫລື ປ້ອນທີ່ຢູ່ໃສ່";

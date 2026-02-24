@@ -130,6 +130,9 @@
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Ενεργοποίηση ειδοποιήσεων";
 
+/* Description for the sync card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Λάβετε αστραπιαία σελιδοδείκτες, κωδικούς πρόσβασης και πολλά άλλα σε οποιαδήποτε συσκευή. Τα προσωπικά σας δεδομένα παραμένουν ασφαλή με την κρυπτογράφηση.";
+
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Έναρξη συγχρονισμού";
 
@@ -144,6 +147,9 @@
 
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Συνέχεια";
+
+/* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Είναι γρήγορο, ασφαλές και δεν θα σας ξεπουλήσει. Η περιήγηση μόλις έγινε καλύτερη.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Διαχείριση ρυθμίσεων";
@@ -163,8 +169,14 @@
 /* The text for the Terms of Use link button in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Όρους χρήσης του %@";
 
+/* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Ετοιμαστείτε για ελεύθερη περιήγηση";
+
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Ορισμός ως προεπιλογή";
+
+/* Description for the welcome card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Προστατεύουμε τα δεδομένα σας και εμποδίζουμε αυτόματα τις εταιρείες από το να κατασκοπεύουν τα κλικ σας.";
 
 /* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Όχι τώρα";
@@ -174,6 +186,9 @@
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Ανοίξτε τους συνδέσμους σας με ενσωματωμένο απόρρητο";
+
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Ανοίξτε όλους τους συνδέσμους σας με ενσωματωμένο απόρρητο";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Αυτόματο";

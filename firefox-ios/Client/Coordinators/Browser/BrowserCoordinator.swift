@@ -445,7 +445,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let settingsCoordinator = SettingsCoordinator(
             router: settingsRouter,
-            tabManager: tabManager
+            tabManager: tabManager,
+            relayController: browserViewController.relayController,
         )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)

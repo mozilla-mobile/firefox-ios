@@ -16,16 +16,22 @@ protocol SummarizerNimbusUtils {
     var isSummarizeFeatureEnabled: Bool { get }
     var isShakeGestureEnabled: Bool { get }
     var isToolbarButtonEnabled: Bool { get }
+    var isLanguageExpansionEnabled: Bool { get }
 
     func isAppleSummarizerEnabled() -> Bool
     func isHostedSummarizerEnabled() -> Bool
     func isAppAttestAuthEnabled() -> Bool
     func isShakeGestureFeatureFlagEnabled() -> Bool
+    func languageExpansionConfiguration(
+        from nimbusFeature: SummarizerLanguageExpansionFeature
+    ) -> SummarizerLanguageExpansionConfiguration
 }
 
 /// Tiny utility to simplify checking for availability of the summarizers
 struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
-    let prefs: Prefs
+    private let prefs: Prefs
+    private let localeProvider: LocaleProvider
+    private let appleIntelligenceUtil: AppleIntelligenceUtil
 
     var isSummarizeFeatureToggledOn: Bool {
         return isSummarizeFeatureEnabled && didUserEnableSummarizeFeature
@@ -41,6 +47,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         return summarizeFeatureOn && isToolbarFeatureEnabled
     }
 
+    var isLanguageExpansionEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.summarizerLanguageExpansion, checking: .buildOnly)
+    }
+
     /// Takes into consideration that summarize feature is on,
     /// shake feature flag is enabled, and user setting for shake is enabled
     var isShakeGestureEnabled: Bool {
@@ -50,8 +60,14 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         return summarizeFeatureOn && isShakeFlagEnabled && userSettingEnabled
     }
 
-    init(profile: Profile = AppContainer.shared.resolve()) {
+    init(
+        profile: Profile = AppContainer.shared.resolve(),
+        localeProvider: LocaleProvider = SystemLocaleProvider(),
+        appleIntelligenceUtil: AppleIntelligenceUtil = AppleIntelligenceUtil()
+    ) {
         self.prefs = profile.prefs
+        self.localeProvider = localeProvider
+        self.appleIntelligenceUtil = appleIntelligenceUtil
     }
 
     /// Retrieves user preference for enabling the summarize content feature from settings
@@ -66,8 +82,12 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
-            let isEngLang = NSLocale.current.languageCode == "en"
-            return isEngLang && AppleIntelligenceUtil().isAppleIntelligenceAvailable
+            // if the language expansion is enabled don't check the en locale cause we support multiple locales
+            if languageExpansionConfiguration().isFeatureEnabled {
+                return appleIntelligenceUtil.isAppleIntelligenceAvailable
+            }
+            let isEngLang = localeProvider.current.languageCode == "en"
+            return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
         #else
             return false
         #endif
@@ -77,9 +97,12 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
     }
 
+    func isAppAttestAuthEnabled() -> Bool {
+        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+    }
+
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
-        let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled()
+        return isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
@@ -88,8 +111,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isAppleSummarizerShakeGestureEnabled() -> Bool {
-        let isEngLang = NSLocale.current.languageCode == "en"
-        return isEngLang && isAppleSummarizerEnabled()
+        return isAppleSummarizerEnabled()
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
@@ -101,7 +123,17 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         return isAppleSummarizerShakeGestureEnabled() || isHostedSummarizerShakeGestureEnabled()
     }
 
-    func isAppAttestAuthEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+    func languageExpansionConfiguration(
+        from nimbusFeature: SummarizerLanguageExpansionFeature =
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
+    ) -> SummarizerLanguageExpansionConfiguration {
+        return SummarizerLanguageExpansionConfiguration(
+            isFeatureEnabled: nimbusFeature.enabled,
+            isWebsiteDeviceLanguageSupported: nimbusFeature.supportWebsiteLanguage,
+            isDeviceLanguageSupported: nimbusFeature.supportDeviceLanguage,
+            supportedLocales: nimbusFeature.supportedLocales.map({
+                return Locale(identifier: $0)
+            })
+        )
     }
 }

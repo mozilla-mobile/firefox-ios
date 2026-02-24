@@ -203,10 +203,10 @@
 "Settings.Search.PageTitle.v121" = "Vyhledávání";
 
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Description.v125" = "Zobrazovat návrhy z vyhledávačů v anonymním prohlížení";
+"Settings.Search.PrivateSession.Description.v125" = "Zobrazovat návrhy od vyhledávačů při anonymním prohlížení";
 
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v124" = "Zobrazovat v anonymním prohlížení";
+"Settings.Search.PrivateSession.Setting.v124" = "Zobrazovat při anonymním prohlížení";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Povolit našeptávání";

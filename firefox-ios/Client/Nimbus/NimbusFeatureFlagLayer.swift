@@ -139,6 +139,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .summarizerAppAttestAuth:
             return checkSummarizerAppAttestAuthFeature(from: nimbus)
 
+        case .summarizerLanguageExpansion:
+            return checkSummarizerLanguageExpansionFeature(from: nimbus)
+
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -500,6 +503,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
+    }
+
+    private func checkSummarizerLanguageExpansionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerLanguageExpansionFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {

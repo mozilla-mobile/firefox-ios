@@ -21,7 +21,12 @@ enum SelectorStrategy {
     case tableCellButtonById(String)
     case navigationBarByIdOrLabel(String)
     case linkStaticTextById(String)
-    case pageIndicatorById(String)}
+    case pageIndicatorById(String)
+    case buttonStaticTextByLabel(String)
+    case otherElementsButtonStaticTextByLabel(String)
+    case collectionViewLinkById(String)
+    case cellButtonById(String)
+}
 
 // Selector model (with metadata)
 struct Selector {
@@ -84,6 +89,14 @@ extension Selector {
             return app.links.staticTexts[id]
         case .pageIndicatorById:
             return app.pageIndicators[value]
+        case .buttonStaticTextByLabel(let label):
+            return app.buttons.staticTexts[label]
+        case .otherElementsButtonStaticTextByLabel(let label):
+            return app.otherElements.buttons.staticTexts[label]
+        case .collectionViewLinkById(let id):
+            return app.collectionViews.links[id]
+        case .cellButtonById(let id):
+            return app.cells.buttons[id]
         }
     }
 
@@ -127,6 +140,14 @@ extension Selector {
             return app.links.staticTexts.matching(identifier: id)
         case .pageIndicatorById:
             return app.pageIndicators.matching(identifier: value)
+        case .buttonStaticTextByLabel(let label):
+            return app.buttons.staticTexts.matching(NSPredicate(format: "label == %@", label))
+        case .otherElementsButtonStaticTextByLabel(let label):
+            return app.otherElements.buttons.staticTexts.matching(NSPredicate(format: "label == %@", label))
+        case .collectionViewLinkById(let id):
+            return app.collectionViews.links.matching(identifier: id)
+        case .cellButtonById(let id):
+            return app.cells.buttons.matching(identifier: id)
         }
     }
 

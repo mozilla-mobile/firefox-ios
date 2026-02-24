@@ -83,6 +83,11 @@ final class AppLaunchUtil: Sendable {
         /// and backfill accept date/version if needed - after telemetry set up
         TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfService()
 
+        // Enable cache_not_ready_for_feature metric (disabled by default in application-services)
+        Glean.shared.applyServerKnobsConfig(
+            "{\"metrics_enabled\":{\"nimbus_health.cache_not_ready_for_feature\":true}}"
+        )
+
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()

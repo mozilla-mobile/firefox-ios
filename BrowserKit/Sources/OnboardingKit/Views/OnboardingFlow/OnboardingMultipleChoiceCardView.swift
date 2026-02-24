@@ -57,15 +57,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
                 Spacer(minLength: UX.CardView.minContentSpacing)
-                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
-                    theme: theme,
-                    variant: variant,
-                    selection: $selectedAction,
-                    items: viewModel.multipleChoiceButtons
-                )
-                .onChange(of: selectedAction) { newAction in
-                    onMultipleChoiceAction(newAction, viewModel.name)
-                }
+                segmentedControl
                 Spacer(minLength: UX.CardView.minContentSpacing)
                 if !viewModel.body.isEmpty {
                     bodyView
@@ -116,6 +108,19 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
             .multilineTextAlignment(UX.CardView.textAlignment())
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
+    }
+
+    var segmentedControl: some View {
+        OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+            theme: theme,
+            variant: variant,
+            selection: $selectedAction,
+            items: viewModel.multipleChoiceButtons,
+            a11yIdRoot: viewModel.a11yIdRoot
+        )
+        .onChange(of: selectedAction) { newAction in
+            onMultipleChoiceAction(newAction, viewModel.name)
+        }
     }
 
     var primaryButton: some View {

@@ -190,7 +190,7 @@ final class BrowserScreen {
     }
 
     func tapCancelButtonIfExist() {
-        sel.CANCEL_BUTTON.element(in: app).tapIfExists()
+        sel.CANCEL_BUTTON_URL_BAR.element(in: app).tapIfExists()
     }
 
     func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
@@ -302,5 +302,19 @@ final class BrowserScreen {
     func tapSaveButtonIfExist() {
         let saveButton = sel.SAVE_BUTTON.element(in: app)
         saveButton.tapIfExists()
+    }
+
+    func swipeToAndValidateAddressBarValue(swipeRight: Bool, _ value: String) {
+        if swipeRight {
+            addressBar.swipeRight()
+        } else {
+            addressBar.swipeLeft()
+        }
+        assertAddressBarContains(value: value)
+    }
+
+    func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {
+        let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(clipboardToast, timeout: timeout)
     }
  }

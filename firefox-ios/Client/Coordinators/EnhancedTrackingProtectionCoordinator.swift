@@ -95,9 +95,9 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 enhancedTrackingProtectionMenuVC.asPopover = true
                 guard let trackingProtectionNavController = trackingProtectionNavController else { return }
                 trackingProtectionNavController.sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
-                router.present(trackingProtectionNavController, animated: true) {
+                router.present(trackingProtectionNavController, animated: true) { [weak self] in
                     // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
-                    self.didFinish()
+                    self?.didFinish()
                 }
             } else {
                 guard let trackingProtectionNavController = trackingProtectionNavController else { return }
@@ -105,9 +105,9 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 trackingProtectionNavController.modalPresentationStyle = .popover
                 trackingProtectionNavController.popoverPresentationController?.sourceView = sourceView
                 trackingProtectionNavController.popoverPresentationController?.permittedArrowDirections = .up
-                router.present(trackingProtectionNavController, animated: true) {
+                router.present(trackingProtectionNavController, animated: true) { [weak self] in
                     // Ensures the VC gets deinit when we dismiss through `UIAdaptivePresentationControllerDelegate`
-                    self.didFinish()
+                    self?.didFinish()
                 }
             }
         } else if let legacyEnhancedTrackingProtectionMenuVC {
