@@ -6,6 +6,7 @@ import Foundation
 import Common
 import ComponentLibrary
 import Redux
+import Shared
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
