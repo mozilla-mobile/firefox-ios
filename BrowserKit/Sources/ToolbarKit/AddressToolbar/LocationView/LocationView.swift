@@ -56,7 +56,6 @@ final class LocationView: UIView,
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
     private var longPressGestureRecognizer: UILongPressGestureRecognizer?
-    private var locationViewTapGestureRecognizer: UITapGestureRecognizer?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
