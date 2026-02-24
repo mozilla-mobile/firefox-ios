@@ -33,7 +33,7 @@ final class TermsOfUseMiddleware {
 
         switch type {
         case TermsOfUseActionType.termsShown:
-            self.recordImpressionIfNeeded()
+            self.recordImpression()
         case TermsOfUseActionType.termsAccepted:
             self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.recordAcceptance()
@@ -83,7 +83,7 @@ final class TermsOfUseMiddleware {
         telemetry.termsOfUseAcceptButtonTapped(surface: .bottomSheet, acceptedDate: acceptedDate)
     }
 
-    private func recordImpressionIfNeeded() {
+    private func recordImpression() {
         let hasShownFirstTime = self.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
         let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
         let shownHasBeenRecorded = self.prefs.boolForKey(PrefsKeys.TermsOfUseShownRecorded) ?? false
