@@ -566,6 +566,10 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidTapSearchEngine(searchEngineView)
     }
 
+    func addressToolbarDidTapLocationView() {
+        onContainerTap?()
+    }
+
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)

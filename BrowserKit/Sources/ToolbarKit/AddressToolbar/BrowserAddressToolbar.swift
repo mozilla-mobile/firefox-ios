@@ -483,6 +483,10 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.addressToolbarDidTapSearchEngine(searchEngine)
     }
 
+    func locationViewDidTap() {
+        toolbarDelegate?.addressToolbarDidTapLocationView()
+    }
+
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }

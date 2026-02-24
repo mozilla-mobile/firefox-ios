@@ -56,6 +56,7 @@ final class LocationView: UIView,
 
     private var tapGestureRecognizer: UITapGestureRecognizer?
     private var longPressGestureRecognizer: UILongPressGestureRecognizer?
+    private var locationViewTapGestureRecognizer: UITapGestureRecognizer?
 
     /// Determines if the URL text field's content is wider than the visible area, accounting for a safe offset.
     /// An additional offset (default is 0) used when reader mode is available,
@@ -449,7 +450,10 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-                self.urlTextField.isUserInteractionEnabled = false
+            }, completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = false
+                locationViewTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleContainerTap))
+                addGestureRecognizer(locationViewTapGestureRecognizer!)
             })
     }
 
@@ -463,6 +467,7 @@ final class LocationView: UIView,
             },
             completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
+                if let locationViewTapGestureRecognizer { removeGestureRecognizer(locationViewTapGestureRecognizer) }
             }
         )
     }
@@ -649,6 +654,11 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
+    }
+
+    @objc
+    private func handleContainerTap() {
+        delegate?.locationViewDidTap()
     }
 
     @objc

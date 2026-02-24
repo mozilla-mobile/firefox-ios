@@ -27,5 +27,7 @@ public protocol AddressToolbarDelegate: AnyObject {
     @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
     @MainActor
+    func addressToolbarDidTapLocationView()
+    @MainActor
     func addressToolbarNeedsSearchReset()
 }
