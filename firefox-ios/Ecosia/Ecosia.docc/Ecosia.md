@@ -74,18 +74,35 @@ We use [Tuist](https://tuist.dev) to generate the Xcode project and manage the b
 
 We use [SwiftLint](https://github.com/realm/SwiftLint) to enforce Swift style and conventions. Make sure to install it so that linting runs correctly when building.
 
+#### Installation & Version Pinning
+
+We pin SwiftLint to **version 0.63.2** to ensure consistent linting behavior across all developers and CI. This version is specified in [`.github/workflows/swift_lint.yml`](/.github/workflows/swift_lint.yml).
+
 ```shell
 brew install swiftlint
+brew pin swiftlint
 ```
 
-We have a baseline. We will attempt to not add new swiftlint violations. Some violations may be in the firefox base.
+The `brew pin` command prevents SwiftLint from being automatically upgraded when you run `brew upgrade`. This ensures everyone on the team uses version 0.63.2.
 
-here is is how you update the baseline (please only commit the pretty printed version):
+**To verify the pinned version:**
+```shell
+swiftlint version
+brew list --pinned
 ```
-rm swiftlint_baseline.json
-swiftlint --write-baseline swiftlint_baseline.json
-python3 -m json.tool --sort-keys swiftlint_baseline.json > swiftlint_baseline.tmp && mv swiftlint_baseline.tmp swiftlint_baseline.json
-````
+
+#### Baseline Approach
+
+SwiftLint's baseline feature (`swiftlint_baseline.json`) is used **temporarily** during Firefox upstream merges when SwiftLint version updates introduce new violations. Key principles:
+- ✅ **Main branch must have an empty baseline** — all violations must be fixed before the upgrade is complete
+- ⚠️ The baseline is only for Ecosia files during the transition period when updating SwiftLint versions
+- 🔄 New code you write must always be lint-clean, regardless of baseline state
+
+#### Version Updates
+
+SwiftLint version is evaluated during upstream Firefox merges. Since Firefox doesn't pin versions (they use the latest), we assess whether to upgrade when merging their changes.
+
+**For more details on baseline workflow and version updates**, see the Architecture Decision Record: [SwiftLint Configuration for Upstream Firefox Fork](../../../docs/decisions/0001-swiftlint-configuration-for-upstream-fork.md)
 
 ### First-time setup and building
 
