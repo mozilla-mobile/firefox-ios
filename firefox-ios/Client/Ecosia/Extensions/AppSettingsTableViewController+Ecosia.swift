@@ -141,7 +141,7 @@ extension AppSettingsTableViewController {
             privacySettings.insert(EcosiaSendAnonymousUsageDataSetting(prefs: profile.prefs, theme: theme), at: 2)
             privacySettings.insert(BoolSetting(prefs: profile.prefs,
                                                theme: theme,
-                                               refKey: PrefsKeys.Settings.closePrivateTabs,
+                                               prefKey: PrefsKeys.Settings.closePrivateTabs,
                                                // Ecosia: Default value is different from Firefox
                                                defaultValue: PrefsKeysDefaultValues.Settings.closePrivateTabs,
                                                titleText: .AppSettingsClosePrivateTabsTitle,
