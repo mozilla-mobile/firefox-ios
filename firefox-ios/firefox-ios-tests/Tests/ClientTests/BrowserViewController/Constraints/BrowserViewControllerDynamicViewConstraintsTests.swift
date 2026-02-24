@@ -64,23 +64,12 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         XCTAssertEqual(subject.header.subviews.count, 1)
     }
 
-    func test_showReaderModeBar_hasHeightConstraint() {
-        for isFeatureFlagEnabled in [true, false] {
-            let subject = createSubject(isFeatureFlagEnabled: isFeatureFlagEnabled)
+    func test_showReaderModeBar_hasHeightConstraint_withSnapkit() {
+        checkReaderModeHeightConstraint(isFeatureFlagEnabled: false)
+    }
 
-            subject.showReaderModeBar(animated: false)
-
-            guard let readerModeBar = subject.readerModeBar else {
-                XCTFail("Reader mode bar should exist")
-                return
-            }
-
-            let hasHeightConstraint = readerModeBar.constraints.contains { constraint in
-                constraint.firstAttribute == .height &&
-                constraint.constant == UIConstants.ToolbarHeight
-            }
-            XCTAssertTrue(hasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
-        }
+    func test_showReaderModeBar_hasHeightConstraint_withNative() {
+        checkReaderModeHeightConstraint(isFeatureFlagEnabled: true)
     }
 
     func test_readerModeBar_doesNotAccumulateConstraints_withNativeConstraints() {
@@ -109,7 +98,6 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         // Test with SnapKit
         let subjectSnapKit = createSubject()
         subjectSnapKit.showReaderModeBar(animated: false)
-        subjectSnapKit.view.layoutIfNeeded()
         let snapKitFrame = subjectSnapKit.readerModeBar?.frame
 
         // Test with Native
@@ -124,36 +112,12 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
 
     // MARK: - Zoom Page Bar Tests
 
-    func test_zoomPageBar_topToolbarHeight() {
-        for isFeatureFlagEnabled in [true, false] {
-            let subject = createSubject(isFeatureFlagEnabled: isFeatureFlagEnabled, isBottomSearchBar: false)
+    func test_zoomPageBar_topToolbarHeight_withSnapkit() {
+        checkZoomPageBarHeightConstraint(isFeatureFlagEnabled: false)
+    }
 
-            // Only height constraint is expected and set to equal
-            let initialEqualHeightConstraint = subject.overKeyboardContainer.constraints.contains {
-                $0.firstAttribute == .height && $0.relation == .equal
-            }
-            XCTAssertTrue(initialEqualHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
-            XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 1)
-
-            subject.updateZoomPageBarVisibility(visible: true)
-            subject.view.layoutIfNeeded()
-
-            // Height constraint should change to greaterThanOrEqual
-            // plus horizontal and vertical constraints for a total of 5
-            let afterAddHasHeightConstraint = subject.overKeyboardContainer.constraints.contains {
-                $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
-            }
-            XCTAssertTrue(afterAddHasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
-            XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 5)
-
-            // After removal constraint should be back to initial constraint
-            subject.updateZoomPageBarVisibility(visible: false)
-            let afterRemoveHasHeightConstraint = subject.overKeyboardContainer.constraints.contains {
-                $0.firstAttribute == .height && $0.relation == .equal
-            }
-            XCTAssertTrue(afterRemoveHasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
-            XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 1)
-        }
+    func test_zoomPageBar_topToolbarHeight_withNative() {
+        checkZoomPageBarHeightConstraint(isFeatureFlagEnabled: true)
     }
 
     func test_zoomPageBar_multipleCycles_maintainsLayout_withNativeConstraints() {
@@ -178,5 +142,54 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
 
         let finalFrame = subject.overKeyboardContainer.frame
         XCTAssertEqual(initialFrame, finalFrame)
+    }
+
+    // MARK: - Private
+
+    private func checkReaderModeHeightConstraint(isFeatureFlagEnabled: Bool) {
+        let subject = createSubject(isFeatureFlagEnabled: isFeatureFlagEnabled)
+
+        subject.showReaderModeBar(animated: false)
+
+        guard let readerModeBar = subject.readerModeBar else {
+            XCTFail("Reader mode bar should exist")
+            return
+        }
+
+        let hasHeightConstraint = readerModeBar.constraints.contains { constraint in
+            constraint.firstAttribute == .height &&
+            constraint.constant == UIConstants.ToolbarHeight
+        }
+        XCTAssertTrue(hasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
+    }
+
+    private func checkZoomPageBarHeightConstraint(isFeatureFlagEnabled: Bool) {
+        let subject = createSubject(isFeatureFlagEnabled: isFeatureFlagEnabled, isBottomSearchBar: false)
+
+        // Only height constraint is expected and set to equal
+        let initialEqualHeightConstraint = subject.overKeyboardContainer.constraints.contains {
+            $0.firstAttribute == .height && $0.relation == .equal
+        }
+        XCTAssertTrue(initialEqualHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
+        XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 1)
+
+        subject.updateZoomPageBarVisibility(visible: true)
+        subject.view.layoutIfNeeded()
+
+        // Height constraint should change to greaterThanOrEqual
+        // plus horizontal and vertical constraints for a total of 5
+        let afterAddHasHeightConstraint = subject.overKeyboardContainer.constraints.contains {
+            $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
+        }
+        XCTAssertTrue(afterAddHasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
+        XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 5)
+
+        // After removal constraint should be back to initial constraint
+        subject.updateZoomPageBarVisibility(visible: false)
+        let afterRemoveHasHeightConstraint = subject.overKeyboardContainer.constraints.contains {
+            $0.firstAttribute == .height && $0.relation == .equal
+        }
+        XCTAssertTrue(afterRemoveHasHeightConstraint, "Failed for isFeatureFlagEnabled: \(isFeatureFlagEnabled)")
+        XCTAssertEqual(subject.overKeyboardContainer.constraints.count, 1)
     }
 }
