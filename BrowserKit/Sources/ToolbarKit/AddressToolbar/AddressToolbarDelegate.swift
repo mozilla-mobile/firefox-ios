@@ -26,7 +26,6 @@ public protocol AddressToolbarDelegate: AnyObject {
     func addressToolbarDidProvideItemsForDragInteraction()
     @MainActor
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
-
     @MainActor
     func addressToolbarNeedsSearchReset()
 }
