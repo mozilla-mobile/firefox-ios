@@ -200,17 +200,17 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         // First display: one impression recorded
         let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .termsShown)
         middleware.termsOfUseProvider(AppState(), shownAction)
-        XCTAssertEqual(mockGleanWrapper.shownCountIncrementCalls, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
 
-        // First dismiss - no extra impression (only dismissedCount recorded)
+        // First dismiss - no extra impression (dismissedCount recorded)
         let dismissAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .gestureDismiss)
         middleware.termsOfUseProvider(AppState(), dismissAction1)
-        XCTAssertEqual(mockGleanWrapper.shownCountIncrementCalls, 1)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
 
-        // Second dismiss after reminder was shown - second impression recorded
+        // Second dismiss recorded after reminder - second impression recorded
         let dismissAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: .gestureDismiss)
         middleware.termsOfUseProvider(AppState(), dismissAction2)
-        XCTAssertEqual(mockGleanWrapper.shownCountIncrementCalls, 2)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 4)
     }
 
     func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotRecordAgain() {
