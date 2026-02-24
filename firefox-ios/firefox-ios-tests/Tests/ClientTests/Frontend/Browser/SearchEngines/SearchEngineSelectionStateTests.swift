@@ -21,6 +21,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
     func testInitialization() {
         let initialState = createSubject()
 
+        XCTAssertFalse(initialState.shouldDismiss)
         XCTAssertEqual(initialState.searchEngines, [])
     }
 

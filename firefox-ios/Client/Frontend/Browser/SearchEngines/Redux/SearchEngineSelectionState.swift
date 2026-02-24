@@ -3,13 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
 import Redux
 
-@CopyWithUpdates
 struct SearchEngineSelectionState: ScreenState {
     var windowUUID: WindowUUID
-
+    var shouldDismiss: Bool
     // Default search engine should appear in position 0
     var searchEngines: [SearchEngineModel]
     // The currently selected search engine, if different from the default. Nil means the user hasn't changed the default.
@@ -25,7 +23,12 @@ struct SearchEngineSelectionState: ScreenState {
             return
         }
 
-        self = state.copyWithUpdates()
+        self.init(
+            windowUUID: state.windowUUID,
+            searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine,
+            shouldDismiss: state.shouldDismiss
+        )
     }
 
     init(windowUUID: WindowUUID) {
@@ -36,15 +39,18 @@ struct SearchEngineSelectionState: ScreenState {
         windowUUID: WindowUUID,
         searchEngines: [SearchEngineModel],
         selectedSearchEngine: SearchEngineModel?,
+        shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.searchEngines = searchEngines
         self.selectedSearchEngine = selectedSearchEngine
+        self.shouldDismiss = shouldDismiss
     }
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
             return defaultState(from: state)
         }
 
@@ -56,17 +62,21 @@ struct SearchEngineSelectionState: ScreenState {
                 return defaultState(from: state)
             }
 
-            // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
-            return state.copyWithUpdates(
-                searchEngines: searchEngines
+            return SearchEngineSelectionState(
+                windowUUID: state.windowUUID,
+                searchEngines: searchEngines,
+                // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
+                selectedSearchEngine: state.selectedSearchEngine
             )
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
             guard let action = action as? SearchEngineSelectionAction,
-                let selectedSearchEngine = action.selectedSearchEngine
+                  let selectedSearchEngine = action.selectedSearchEngine
             else { return defaultState(from: state) }
 
-            return state.copyWithUpdates(
+            return SearchEngineSelectionState(
+                windowUUID: state.windowUUID,
+                searchEngines: state.searchEngines,
                 selectedSearchEngine: selectedSearchEngine
             )
 
@@ -76,6 +86,10 @@ struct SearchEngineSelectionState: ScreenState {
     }
 
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
-        return state.copyWithUpdates()
+        return SearchEngineSelectionState(
+            windowUUID: state.windowUUID,
+            searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine
+        )
     }
 }
