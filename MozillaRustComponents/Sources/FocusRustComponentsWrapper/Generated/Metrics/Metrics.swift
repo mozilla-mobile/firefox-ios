@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 18, hour: 5, minute: 19, second: 36))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 23, hour: 5, minute: 16, second: 26))
     }
 
     enum NimbusEvents {
@@ -292,7 +292,7 @@ extension GleanMetrics {
             CommonMetricData(
                 category: "nimbus_events",
                 name: "enrollment_status",
-                sendInPings: ["events"],
+                sendInPings: ["nimbus-targeting-context"],
                 lifetime: .ping,
                 disabled: true
             )
@@ -418,6 +418,29 @@ extension GleanMetrics {
                 disabled: false
             )
             , .millisecond
+        )
+
+    }
+
+    final class Pings: Sendable {
+        public static let shared = Pings()
+        private init() {
+            // Intentionally left private, no external user can instantiate a new global object.
+        }
+
+        /// This ping is submitted by Nimbus each time the enrollment workflow has
+        /// completed.
+        let nimbusTargetingContext = Ping<NoReasonCodes>(
+            name: "nimbus-targeting-context",
+            includeClientId: true,
+            sendIfEmpty: true,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
         )
 
     }

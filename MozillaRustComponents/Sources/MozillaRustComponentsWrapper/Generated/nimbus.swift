@@ -3449,6 +3449,8 @@ public protocol MetricsHandler: AnyObject, Sendable {
     
     func recordMalformedFeatureConfig(event: MalformedFeatureConfigExtraDef) 
     
+    func submitTargetingContext() 
+    
 }
 
 
@@ -3560,6 +3562,28 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
                 }
                 return uniffiObj.recordMalformedFeatureConfig(
                      event: try FfiConverterTypeMalformedFeatureConfigExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        submitTargetingContext: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterCallbackInterfaceMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.submitTargetingContext(
                 )
             }
 
@@ -4478,6 +4502,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_malformed_feature_config() != 28930) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_submit_targeting_context() != 53590) {
         return InitializationResult.apiChecksumMismatch
     }
 

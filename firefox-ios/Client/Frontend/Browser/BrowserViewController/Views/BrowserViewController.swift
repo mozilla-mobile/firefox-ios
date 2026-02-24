@@ -992,7 +992,7 @@ class BrowserViewController: UIViewController,
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            if !isMinimalAddressBarEnabled { scrollController.showToolbars(animated: false) }
+            scrollController.showToolbars(animated: false)
         }
 
         navigationHandler?.showTermsOfUse(context: .appBecameActive)

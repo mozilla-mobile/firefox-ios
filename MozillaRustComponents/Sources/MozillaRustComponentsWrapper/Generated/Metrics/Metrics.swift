@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 18, hour: 5, minute: 19, second: 33))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 23, hour: 5, minute: 16, second: 23))
     }
 
     enum AdsClient {
@@ -409,7 +409,7 @@ extension GleanMetrics {
             CommonMetricData(
                 category: "nimbus_events",
                 name: "enrollment_status",
-                sendInPings: ["events"],
+                sendInPings: ["nimbus-targeting-context"],
                 lifetime: .ping,
                 disabled: true
             )
@@ -535,6 +535,144 @@ extension GleanMetrics {
                 disabled: false
             )
             , .millisecond
+        )
+
+    }
+
+    final class Pings: Sendable {
+        public static let shared = Pings()
+        private init() {
+            // Intentionally left private, no external user can instantiate a new global object.
+        }
+
+        /// This ping is submitted by Nimbus each time the enrollment workflow has
+        /// completed.
+        let nimbusTargetingContext = Ping<NoReasonCodes>(
+            name: "nimbus-targeting-context",
+            includeClientId: true,
+            sendIfEmpty: true,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every Addresses engine sync. It doesn't include the `client_id`
+        /// because it reports a hashed version of the user's Firefox Account ID.
+        let addressesSync = Ping<NoReasonCodes>(
+            name: "addresses-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every bookmarks sync. It doesn't include the `client_id`
+        /// because it reports a hashed version of the user's Firefox Account ID.
+        let bookmarksSync = Ping<NoReasonCodes>(
+            name: "bookmarks-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every Credit Cards engine sync. It doesn't include the
+        /// `client_id` because it reports a hashed version of the user's Firefox Account
+        /// ID.
+        let creditcardsSync = Ping<NoReasonCodes>(
+            name: "creditcards-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every history sync. It doesn't include the `client_id` because
+        /// it reports a hashed version of the user's Firefox Account ID.
+        let historySync = Ping<NoReasonCodes>(
+            name: "history-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every logins/passwords sync. It doesn't include the `client_id`
+        /// because it reports a hashed version of the user's Firefox Account ID.
+        let loginsSync = Ping<NoReasonCodes>(
+            name: "logins-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A summary ping, sent every time a sync is performed. During each Sync one or
+        /// more data types could be synchronized, depending on which data types user
+        /// configured to sync. Alongside with 'sync' ping one or more individual data type
+        /// specific pings will be sent. For example, if history and bookmarks data types
+        /// are configured to be synchronized, the following pings will be sent: 'sync',
+        /// 'history-sync' and 'bookmarks-sync'. Alternatively, if only history is
+        /// configured to be synchronized then 'sync' and 'history-sync' pings will be
+        /// sent. In case of a "global failure" where none of the data type syncs could
+        /// even start, e.g. device is offline, only the 'sync' ping will be sent. This
+        /// ping doesn't include the `client_id` because it reports a hashed version of the
+        /// user's Firefox Account ID.
+        let sync = Ping<NoReasonCodes>(
+            name: "sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
+        )
+
+        /// A ping sent for every Tabs engine sync. It doesn't include the `client_id`
+        /// because it reports a hashed version of the user's Firefox Account ID.
+        let tabsSync = Ping<NoReasonCodes>(
+            name: "tabs-sync",
+            includeClientId: false,
+            sendIfEmpty: false,
+            preciseTimestamps: true,
+            includeInfoSections: true,
+            enabled: true,
+            schedulesPings: [],
+            reasonCodes: [],
+            followsCollectionEnabled: true,
+            uploaderCapabilities: []
         )
 
     }
@@ -1507,129 +1645,6 @@ extension GleanMetrics {
                 lifetime: .ping,
                 disabled: false
             )
-        )
-
-    }
-
-    final class Pings: Sendable {
-        public static let shared = Pings()
-        private init() {
-            // Intentionally left private, no external user can instantiate a new global object.
-        }
-
-        /// A ping sent for every Addresses engine sync. It doesn't include the `client_id`
-        /// because it reports a hashed version of the user's Firefox Account ID.
-        let addressesSync = Ping<NoReasonCodes>(
-            name: "addresses-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A ping sent for every bookmarks sync. It doesn't include the `client_id`
-        /// because it reports a hashed version of the user's Firefox Account ID.
-        let bookmarksSync = Ping<NoReasonCodes>(
-            name: "bookmarks-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A ping sent for every Credit Cards engine sync. It doesn't include the
-        /// `client_id` because it reports a hashed version of the user's Firefox Account
-        /// ID.
-        let creditcardsSync = Ping<NoReasonCodes>(
-            name: "creditcards-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A ping sent for every history sync. It doesn't include the `client_id` because
-        /// it reports a hashed version of the user's Firefox Account ID.
-        let historySync = Ping<NoReasonCodes>(
-            name: "history-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A ping sent for every logins/passwords sync. It doesn't include the `client_id`
-        /// because it reports a hashed version of the user's Firefox Account ID.
-        let loginsSync = Ping<NoReasonCodes>(
-            name: "logins-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A summary ping, sent every time a sync is performed. During each Sync one or
-        /// more data types could be synchronized, depending on which data types user
-        /// configured to sync. Alongside with 'sync' ping one or more individual data type
-        /// specific pings will be sent. For example, if history and bookmarks data types
-        /// are configured to be synchronized, the following pings will be sent: 'sync',
-        /// 'history-sync' and 'bookmarks-sync'. Alternatively, if only history is
-        /// configured to be synchronized then 'sync' and 'history-sync' pings will be
-        /// sent. In case of a "global failure" where none of the data type syncs could
-        /// even start, e.g. device is offline, only the 'sync' ping will be sent. This
-        /// ping doesn't include the `client_id` because it reports a hashed version of the
-        /// user's Firefox Account ID.
-        let sync = Ping<NoReasonCodes>(
-            name: "sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
-        )
-
-        /// A ping sent for every Tabs engine sync. It doesn't include the `client_id`
-        /// because it reports a hashed version of the user's Firefox Account ID.
-        let tabsSync = Ping<NoReasonCodes>(
-            name: "tabs-sync",
-            includeClientId: false,
-            sendIfEmpty: false,
-            preciseTimestamps: true,
-            includeInfoSections: true,
-            enabled: true,
-            schedulesPings: [],
-            reasonCodes: [],
-            followsCollectionEnabled: true,
-            uploaderCapabilities: []
         )
 
     }
