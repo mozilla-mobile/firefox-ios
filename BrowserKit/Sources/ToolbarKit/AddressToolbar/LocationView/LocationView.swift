@@ -452,8 +452,7 @@ final class LocationView: UIView,
                 self.transform = scaledTransformation
             }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = false
-                locationViewTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleContainerTap))
-                addGestureRecognizer(locationViewTapGestureRecognizer!)
+                isUserInteractionEnabled = false
             })
     }
 
@@ -464,10 +463,9 @@ final class LocationView: UIView,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            },
-            completion: { [unowned self] _ in
+            }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
-                if let locationViewTapGestureRecognizer { removeGestureRecognizer(locationViewTapGestureRecognizer) }
+                isUserInteractionEnabled = true
             }
         )
     }
@@ -654,11 +652,6 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
-    }
-
-    @objc
-    private func handleContainerTap() {
-        delegate?.locationViewDidTap()
     }
 
     @objc
