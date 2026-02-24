@@ -1869,8 +1869,8 @@ class BrowserViewController: UIViewController,
 
         updateOverKeyboardContainerConstraints()
         updateSnapKitBottomContainerConstraints()
-        updateBottomContentStackViewConstraints()
         updateConstraintsForKeyboard()
+        updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
     }
@@ -1929,8 +1929,10 @@ class BrowserViewController: UIViewController,
             updateSnapkitConstraintsForKeyboard()
             return
         }
-        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+
+        guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
             adjustBottomSearchBarForKeyboard()
+            return
         }
     }
 
@@ -5046,6 +5048,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
 
         if isSwipingTabsEnabled {
@@ -5087,6 +5090,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
 
         UIView.animate(
@@ -5131,6 +5135,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
     }
 

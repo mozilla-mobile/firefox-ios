@@ -38,6 +38,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
 
         // Trigger view loading and constraint setup
         // SnapKit constraints are created in updateViewConstraints(), so we need to explicitly trigger it
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
         subject.view.setNeedsUpdateConstraints()
         subject.view.updateConstraintsIfNeeded()

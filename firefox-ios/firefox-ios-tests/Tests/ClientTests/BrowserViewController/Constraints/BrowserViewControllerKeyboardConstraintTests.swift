@@ -14,32 +14,28 @@ import XCTest
 final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerConstraintTestsBase {
     // MARK: - keyboardWillShow Tests
 
-    func test_keyboardWillShow_withSnapKit_BottomToolbar_viewsHaveRightHeight() throws {
-        throw XCTSkip("Temporary disable until tests are fixed in #32198")
-//        let subject = createSubject()
-//        subject.isBottomSearchBar = true
-//        let keyboardHelper = createKeyboardHelper()
-//        let state = createKeyboardState()
-//        let initialFrame = subject.overKeyboardContainer.frame
-//
-//        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
-//        let showFrame = subject.overKeyboardContainer.frame
-//
-//        XCTAssertNotEqual(initialFrame, showFrame)
+    func test_keyboardWillShow_withSnapKit_BottomToolbar_viewsHaveRightHeight() {
+        let subject = createSubject()
+        let keyboardHelper = createKeyboardHelper()
+        let state = createKeyboardState()
+        let initialFrame = subject.overKeyboardContainer.frame
+
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
+        let showFrame = subject.overKeyboardContainer.frame
+
+        XCTAssertNotEqual(initialFrame, showFrame)
     }
 
-    func test_keyboardWillShow_withNative_BottomToolbar_viewsHaveRightHeight() throws {
-        throw XCTSkip("Temporary disable until tests are fixed in #32198")
-//        let subject = createSubject(isFeatureFlagEnabled: true)
-//        subject.isBottomSearchBar = true
-//        let keyboardHelper = createKeyboardHelper()
-//        let state = createKeyboardState()
-//        let initialFrame = subject.overKeyboardContainer.frame
-//
-//        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
-//        let showFrame = subject.overKeyboardContainer.frame
-//
-//        XCTAssertNotEqual(initialFrame, showFrame)
+    func test_keyboardWillShow_withNative_BottomToolbar_viewsHaveRightHeight() {
+        let subject = createSubject(isFeatureFlagEnabled: true)
+        let keyboardHelper = createKeyboardHelper()
+        let state = createKeyboardState()
+        let initialFrame = subject.overKeyboardContainer.frame
+
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
+        let showFrame = subject.overKeyboardContainer.frame
+
+        XCTAssertNotEqual(initialFrame, showFrame)
     }
 
     func test_keyboardWillShow_withSnapKit_TopToolbar_viewsHaveRightHeight() {
@@ -141,26 +137,24 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 //        XCTAssertNotEqual(hideHeight, showHeight)
     }
 
-    func test_keyboardWillHide_withNative_BottomToolbar_viewsHaveRightHeight() throws {
-        throw XCTSkip("Temporary disable until tests are fixed in #32198")
-//        let subject = createSubject(isFeatureFlagEnabled: true)
-//        let keyboardHelper = createKeyboardHelper()
-//        subject.view.layoutSubviews()
-//
-//        let initialPosition = subject.overKeyboardContainer.frame.minY
-//
-//        // Show keyboard first
-//        let showState = createKeyboardState()
-//        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: showState)
-//        let showPosition = subject.overKeyboardContainer.frame.minY
-//        XCTAssertNotEqual(initialPosition, showPosition)
-//
-//        // Hide keyboard
-//        let hideState = createKeyboardState(keyboardHeight: 0)
-//        subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: hideState)
-//        let hidePosition = subject.overKeyboardContainer.frame.minY
-//
-//        XCTAssertNotEqual(hidePosition, showPosition)
+    func test_keyboardWillHide_withNative_BottomToolbar_viewsHaveRightHeight() {
+        let subject = createSubject(isFeatureFlagEnabled: true)
+        let keyboardHelper = createKeyboardHelper()
+
+        let initialHeight = subject.overKeyboardContainer.frame.height
+
+        // Show keyboard first
+        let showState = createKeyboardState()
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: showState)
+        let showHeight = subject.overKeyboardContainer.frame.height
+        XCTAssertNotEqual(initialHeight, showHeight)
+
+        // Hide keyboard
+        let hideState = createKeyboardState(keyboardHeight: 0)
+        subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: hideState)
+        let hideHeight = subject.overKeyboardContainer.frame.height
+
+        XCTAssertNotEqual(hideHeight, showHeight)
     }
 
     func test_keyboardWillHide_withSnapKit_TopToolbar_viewsHaveRightHeight() {
@@ -195,25 +189,25 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
 
     // MARK: - keyboardWillChange Tests
 
-    func test_keyboardWillChange_withSnapKit_BottomToolbar_viewsHaveRightHeight() throws {
-        throw XCTSkip("Temporary disable until tests are fixed in #32198")
-//        let subject = createSubject()
-//        let keyboardHelper = createKeyboardHelper()
-//
-//        // Show keyboard first
-//        let showState = createKeyboardState(keyboardHeight: 300)
-//        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: showState)
-//        let initialFrame = subject.overKeyboardContainer.frame
-//
-//        // Change keyboard size
-//        let changeState = createKeyboardState(keyboardHeight: 250)
-//        subject.keyboardHelper(keyboardHelper, keyboardWillChangeWithState: changeState)
-//        let changedFrame = subject.overKeyboardContainer.frame
-//
-//        // Container should still have non-zero height
-//        XCTAssertFalse(subject.overKeyboardContainer.frame.height.isZero)
-//        // Frame should have changed due to different keyboard size
-//        XCTAssertNotEqual(initialFrame, changedFrame)
+    func test_keyboardWillChange_withSnapKit_BottomToolbar_viewsHaveRightHeight() {
+        _ = XCTSkip("Skipping for now until we figure out how to handle keyboard size changes")
+        let subject = createSubject()
+        let keyboardHelper = createKeyboardHelper()
+
+        // Show keyboard first
+        let showState = createKeyboardState(keyboardHeight: 300)
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: showState)
+        let initialFrame = subject.overKeyboardContainer.frame
+
+        // Change keyboard size
+        let changeState = createKeyboardState(keyboardHeight: 250)
+        subject.keyboardHelper(keyboardHelper, keyboardWillChangeWithState: changeState)
+        let changedFrame = subject.overKeyboardContainer.frame
+
+        // Container should still have non-zero height
+        XCTAssertFalse(subject.overKeyboardContainer.frame.height.isZero)
+        // Frame should have changed due to different keyboard size
+        XCTAssertNotEqual(initialFrame, changedFrame)
     }
 
     func test_keyboardWillChange_withNative_BottomToolbar_viewsHaveRightHeight() throws {
