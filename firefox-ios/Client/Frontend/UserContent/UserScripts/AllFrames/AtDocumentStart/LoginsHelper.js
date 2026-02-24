@@ -483,7 +483,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       LoginManagerContent.fromFill = true
       this.yieldFocusBackToField();
       // Only fill if the pending field is still focused
-      if (pendingRelayEmailField && pendingRelayEmailField === LoginManagerContent.activeField) {
+      if (pendingRelayEmailField?.isConnected && pendingRelayEmailField === LoginManagerContent.activeField) {
           pendingRelayEmailField.setUserInput(email);
       }
       LoginManagerContent.fromFill = false
