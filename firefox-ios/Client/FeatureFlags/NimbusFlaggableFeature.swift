@@ -89,6 +89,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .downloadLiveActivities,
                 .homepageSearchBar,
                 .hostedSummarizer,
+                .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
