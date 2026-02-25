@@ -11,42 +11,16 @@ import Shared
 // Contains the firefox logo and the private browsing shortcut button
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
-        static let iPadTopConstant: CGFloat = 54
-        static let circleSize = CGRect(width: 40, height: 40)
+        static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
+        static let firefoxTextImageSize = CGSize(width: 140, height: 40)
+        static let interImageSpacing: CGFloat = 10
 
-        struct Logo {
-            static let iPhoneImageSize: CGFloat = 40
-            static let iPadImageSize: CGFloat = 75
-
-            static func logoSizeConstant(for iPadSetup: Bool) -> CGFloat {
-                iPadSetup ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
-            }
-        }
-
-        struct TextImage {
-            static let iPhoneWidth: CGFloat = 90
-            static let iPadWidth: CGFloat = 133
-            static let iPhoneLeadingConstant: CGFloat = 10
-            static let iPadLeadingConstant: CGFloat = 17
-            static let trailingConstant: CGFloat = -15
-
-            static func textImageWidthConstant(for iPadSetup: Bool) -> CGFloat {
-                iPadSetup ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth
-            }
-
-            static func textImageSpacing(for iPadSetup: Bool) -> CGFloat {
-                iPadSetup ? UX.TextImage.iPadLeadingConstant : UX.TextImage.iPhoneLeadingConstant
-            }
+        static func contentWidth() -> CGFloat {
+            return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
         }
     }
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
-
-    static func contentWidth(isiPadSetup: Bool) -> CGFloat {
-        return UX.Logo.logoSizeConstant(for: isiPadSetup)
-        + UX.TextImage.textImageSpacing(for: isiPadSetup)
-        + UX.TextImage.textImageWidthConstant(for: isiPadSetup)
-    }
 
     private var headerState: HeaderState?
     private var hasConfiguredView = false
@@ -103,20 +77,19 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             hasConfiguredView = true
         }
 
-        logoStackView.spacing = UX.TextImage.textImageSpacing(for: showiPadSetup)
+        logoStackView.spacing = UX.interImageSpacing
 
-        setupConstraints(for: showiPadSetup)
-        setupLogoConstraints(for: showiPadSetup)
+        setupConstraints()
+        setupLogoConstraints()
     }
 
     private var headerConstraints = [NSLayoutConstraint]()
     private var logoConstraints = [NSLayoutConstraint]()
 
-    private func setupConstraints(for iPadSetup: Bool) {
+    private func setupConstraints() {
         NSLayoutConstraint.deactivate(headerConstraints)
-        let topAnchorConstant = iPadSetup ? UX.iPadTopConstant : 0
         headerConstraints = [
-            stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topAnchorConstant),
+            stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
             stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
@@ -127,24 +100,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         NSLayoutConstraint.activate(headerConstraints)
     }
 
-    private func setupLogoConstraints(for iPadSetup: Bool) {
+    private func setupLogoConstraints() {
         NSLayoutConstraint.deactivate(logoConstraints)
         logoConstraints = [
-            logoImage.widthAnchor.constraint(equalToConstant: UX.Logo.logoSizeConstant(for: iPadSetup)),
-            logoImage.heightAnchor.constraint(equalToConstant: UX.Logo.logoSizeConstant(for: iPadSetup)),
-            logoTextImage.widthAnchor.constraint(equalToConstant: UX.TextImage.textImageWidthConstant(for: iPadSetup)),
-            logoTextImage.heightAnchor.constraint(equalTo: logoImage.heightAnchor)
+            logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
+            logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
+            logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
+            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height)
         ]
 
-        if iPadSetup {
-            logoConstraints.append(
-                logoStackView.centerXAnchor.constraint(equalTo: logoContainerView.centerXAnchor)
-            )
-        } else {
-            logoConstraints.append(
-                logoStackView.leadingAnchor.constraint(equalTo: logoContainerView.leadingAnchor)
-            )
-        }
         NSLayoutConstraint.activate(logoConstraints)
     }
 

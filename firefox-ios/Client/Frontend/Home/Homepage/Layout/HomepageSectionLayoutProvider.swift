@@ -37,6 +37,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct HeaderConstants {
+            static let estimatedHeight: CGFloat = 40
             static let bottomSpacing: CGFloat = 30
         }
 
@@ -219,16 +220,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let showiPadSetup = UIDevice.current.userInterfaceIdiom == .pad
-                            && environment.traitCollection.horizontalSizeClass != .compact
-        let headerWidth = HomepageHeaderCell.contentWidth(isiPadSetup: showiPadSetup)
-
-        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(headerWidth),
+        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
                                               heightDimension: .estimated(UX.standardSingleItemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(headerWidth),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
                                                heightDimension: .estimated(UX.standardSingleItemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
@@ -236,6 +233,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let containerWidth = environment.container.contentSize.width
         let effectiveInsets = environment.container.effectiveContentInsets
+        let headerWidth = HomepageHeaderCell.UX.contentWidth()
         let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
         let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
 
