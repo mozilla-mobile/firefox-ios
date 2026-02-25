@@ -57,7 +57,7 @@ struct TabTraySelectors: TabTraySelectorsSet {
         groups: ["tabtray"]
     )
 
-    let UNDO_BUTTON = Selector.staticTextByExactLabel(
+    let UNDO_BUTTON = Selector.otherElementsButtonStaticTextByLabel(
         "Undo",
         description: "Undo button displayed after removing all tabs",
         groups: ["tabtray"]

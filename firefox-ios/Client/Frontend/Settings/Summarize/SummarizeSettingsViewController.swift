@@ -30,14 +30,21 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
 
     override func generateSettings() -> [SettingSection] {
         let summarizeContentEnabled = prefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) ?? true
-        let shakeFeatureFlag = nimbusUtils.isShakeGestureFeatureFlagEnabled()
 
         // Shows and hides the gesture section
-        // based on the summarize feature being enabled
-        // and shake gesture feature flag is true
-        guard summarizeContentEnabled && shakeFeatureFlag else { return [summarizeSection] }
+        // based on the summarize feature being enabled.
+        guard summarizeContentEnabled else {
+            return [summarizeSection]
+        }
+        var sections = [summarizeSection]
+        if nimbusUtils.isShakeGestureFeatureFlagEnabled() {
+            sections.append(gesturesSection)
+        }
+        if nimbusUtils.isLanguageExpansionEnabled {
+            sections.append(languageSection)
+        }
 
-        return [summarizeSection, gesturesSection]
+        return sections
     }
 
     private var summarizeSection: SettingSection {
@@ -87,6 +94,30 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
                 string: .Settings.Summarize.GesturesSection.FooterTitle
             ),
             children: [shakeGestureSetting]
+        )
+    }
+
+    private var languageSection: SettingSection {
+        let configuration = nimbusUtils.languageExpansionConfiguration(
+            from: FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
+        )
+        return SettingSection(
+            title: NSAttributedString(string: .Settings.Summarize.LanguageSection.Title),
+            children: [
+                PickerSetting(
+                    selectedValue: configuration.selectedPreference(prefs: prefs),
+                    pickerOptions: configuration.settingOptions.map({ $0.toOption() }),
+                    accessibilityIdentifier: AccessibilityIdentifiers.Settings.Summarize.languageCell,
+                    pickerButtonAccessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
+                    pickerButtonAccessibilityIdentifier:
+                        AccessibilityIdentifiers.Settings.Summarize.languageCellPickerButton,
+                    onOptionSelected: { [weak self] selectedOption in
+                        guard let self else { return }
+                        configuration.save(preference: selectedOption, prefs: prefs)
+                        tableView.reloadData()
+                    }
+                )
+            ]
         )
     }
 }

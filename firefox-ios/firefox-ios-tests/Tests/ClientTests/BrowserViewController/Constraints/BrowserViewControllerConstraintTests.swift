@@ -122,7 +122,15 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
 
     // MARK: - Constraint Count Baseline Tests
 
-    func test_bottomContainer_constraintCount() {
+    func test_bottomContainer_TopToolbar_constraintCount() {
+        let subject = createSubject(isBottomSearchBar: false)
+        // Record baseline constraint count for future comparison
+        let constraintsCount = countRelevantConstraints(for: subject.bottomContainer)
+
+        XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_bottomContainer_bottomToolbar_constraintCount() {
         let subject = createSubject()
         // Record baseline constraint count for future comparison
         let constraintsCount = countRelevantConstraints(for: subject.bottomContainer)
@@ -130,20 +138,36 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         XCTAssertEqual(constraintsCount, 3)
     }
 
-    func test_overKeyboardContainer_constraintCount() {
-        let subject = createSubject()
+    func test_overKeyboardContainer_topToolbar_constraintCount() {
+        let subject = createSubject(isBottomSearchBar: false)
         // Record baseline constraint count for future comparison
         let constraintsCount = countRelevantConstraints(for: subject.overKeyboardContainer)
 
         XCTAssertEqual(constraintsCount, 1)
     }
 
-    func test_header_constraintCount() {
+    func test_overKeyboardContainer_bottomToolbar_constraintCount() {
         let subject = createSubject()
+        // Record baseline constraint count for future comparison
+        let constraintsCount = countRelevantConstraints(for: subject.overKeyboardContainer)
+
+        XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_header_topToolbar_constraintCount() {
+        let subject = createSubject(isBottomSearchBar: false)
         // Record baseline constraint count for future comparison
         let constraintsCount = countRelevantConstraints(for: subject.header)
 
         XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_header_bottomToolbar_constraintCount() {
+        let subject = createSubject()
+        // Record baseline constraint count for future comparison
+        let constraintsCount = countRelevantConstraints(for: subject.header)
+
+        XCTAssertEqual(constraintsCount, 1)
     }
 
     // MARK: - Constraint Activation Tests
@@ -170,7 +194,7 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     }
 
     func test_multipleLayoutPasses_producesConsistentResults() {
-        let subject = createSubject()
+        let subject = createSubject(isBottomSearchBar: false)
         // Multiple layout passes should be stable (no constraint conflicts)
         subject.view.layoutIfNeeded()
         let frame1 = subject.bottomContainer.frame
@@ -185,7 +209,7 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     // MARK: - Frame/Layout Verification Tests
 
     func test_bottomContainer_isAtBottomOfScreen() {
-        let subject = createSubject()
+        let subject = createSubject(isBottomSearchBar: false)
         subject.view.layoutIfNeeded()
 
         let bottomContainer = subject.bottomContainer
@@ -222,7 +246,7 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     // MARK: - Height Constraint Tests
 
     func test_overKeyboardContainer_hasHeightConstraint() {
-        let subject = createSubject()
+        let subject = createSubject(isBottomSearchBar: false)
 
         let overKeyboard = subject.overKeyboardContainer
         let hasHeightConstraint = overKeyboard.constraints.contains {

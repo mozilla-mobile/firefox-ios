@@ -5,23 +5,25 @@ import XCTest
 @testable import Client
 import Common
 import Shared
-// TODO: FXIOS-12947 - Add tests for TermsOfUseState and Coordinator
 
 @MainActor
 final class TermsOfUseMiddlewareTests: XCTestCase {
     private var profile: MockProfile!
+    private var mockGleanWrapper: MockGleanWrapper!
     private var middleware: TermsOfUseMiddleware!
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        middleware = TermsOfUseMiddleware(profile: profile)
+        mockGleanWrapper = MockGleanWrapper()
+        middleware = TermsOfUseMiddleware(profile: profile, telemetry: TermsOfUseTelemetry(gleanWrapper: mockGleanWrapper))
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
         profile = nil
+        mockGleanWrapper = nil
         middleware = nil
         try await super.tearDown()
     }
@@ -186,5 +188,31 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
                                               actionType: TermsOfUseActionType.gestureDismiss)
         middleware.termsOfUseProvider(AppState(), gestureAction2)
         XCTAssertEqual(profile.prefs.intForKey(PrefsKeys.TermsOfUseRemindersCount) ?? 0, 2)
+    }
+
+    func testMiddleware_termsShown_firstAppearance_incrementsShownCountOnce() {
+        let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction)
+
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
+    }
+
+    func testMiddleware_termsShown_whenReminderIsShown_incrementsShownCountAgain() {
+        let dismissAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.gestureDismiss)
+        middleware.termsOfUseProvider(AppState(), dismissAction)
+
+        let shownAction = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction)
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 2)
+    }
+
+    func testMiddleware_termsShown_onResumeFromBackgroundOrLinks_doesNotIncrementShownCount() {
+        let shownAction1 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction1)
+
+        let shownAction2 = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsShown)
+        middleware.termsOfUseProvider(AppState(), shownAction2)
+
+        XCTAssertEqual(mockGleanWrapper.incrementCounterCalled, 1)
     }
 }

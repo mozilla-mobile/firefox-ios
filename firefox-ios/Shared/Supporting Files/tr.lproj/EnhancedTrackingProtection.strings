@@ -89,7 +89,7 @@
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Sertifikayı göster";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
-"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ kapalı. Korumaları yeniden açmanızı öneririz.";
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ korumaları kapalı. Korumaları yeniden açmanızı öneririz.";
 
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Korumaları kapattınız";

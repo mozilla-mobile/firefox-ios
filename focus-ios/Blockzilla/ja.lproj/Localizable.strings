@@ -322,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "これはブラウザーの問題を診断して修正するのに役立ちます。";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "%@ は、更新間で機能、パフォーマンス、安定性を向上させます。変更はリモートで適用されます。";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Mozilla は皆さんに %@ を提供し改善するのに必要な情報だけを収集するよう努めています。";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Mozilla は皆さんに %@ を提供し改善するのに必要な情報だけを収集するよう努めています。";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "%@ が調査をインストールして実行することがあります。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "%@ がユーザーをランダムに選択して機能をテストし、全体の品質を向上させます。";
 
 /* Title for section in settings menu */
 "Settings.general" = "一般";
@@ -439,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "ホーム画面にヒントを表示";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "リモートの機能向上を許可する";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -447,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "調査";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "機能の使用調査を許可する";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "アプリのロック解除に Touch ID を使用";

@@ -568,6 +568,7 @@ final class SettingsCoordinatorTests: XCTestCase {
             router: mockRouter,
             wallpaperManager: wallpaperManager,
             tabManager: MockTabManager(),
+            relayController: MockRelayController(),
             gleanUsageReportingMetricsService: MockGleanUsageReportingMetricsService(
                 profile: MockProfile()
             )

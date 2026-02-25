@@ -258,13 +258,10 @@ class BaseTestCase: XCTestCase {
     }
 
     func bookmark() {
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
-            timeout: TIMEOUT
-        )
-        app.buttons["Save"].tapIfExists()
+        let browserScreen = BrowserScreen(app: app)
+        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.tapSaveButtonIfExist()
         navigator.goto(BrowserTabMenu)
-        // navigator.goto(SaveBrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
 
@@ -340,15 +337,8 @@ class BaseTestCase: XCTestCase {
     }
 
     func enterReaderMode() {
-        if isFirefoxBeta {
-            // For Firefox Beta, use long press on summarize button to access reader mode
-            let summarizeButton = app.buttons["TabLocationView.summarizeButton"].firstMatch
-            summarizeButton.press(forDuration: 1.2)
-        } else {
-            // For non-Beta, use direct buttons
-            app.buttons["Reader View"].waitAndTap()
-            waitUntilPageLoad()
-        }
+        app.buttons["Reader View"].waitAndTap()
+        waitUntilPageLoad()
     }
 
     func addContentToReaderView(isHomePageOn: Bool = true) {
@@ -361,19 +351,9 @@ class BaseTestCase: XCTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
 
-        if isFirefoxBeta {
-            // For Firefox Beta, use long press on summarize button to access reader mode and add to list
-            let summarizeButton = app.buttons["TabLocationView.summarizeButton"].firstMatch
-            summarizeButton.press(forDuration: 1.2)
-            app.buttons["TabLocationView.readerModeButton"].firstMatch.tap()
-            summarizeButton.press(forDuration: 1.0)
-            app.buttons["ReaderModeBarView.listStatusButton"].firstMatch.tap()
-        } else {
-            // For non-Beta, use direct buttons
-            app.buttons["Reader View"].waitAndTap()
-            waitUntilPageLoad()
-            app.buttons["Add to Reading List"].waitAndTap()
-        }
+        app.buttons["Reader View"].waitAndTap()
+        waitUntilPageLoad()
+        app.buttons["Add to Reading List"].waitAndTap()
     }
 
     func removeContentFromReaderView() {

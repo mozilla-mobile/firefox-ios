@@ -188,7 +188,7 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
 
     var titleView: some View {
         Text(viewModel.configuration.title)
-            .font(UX.CardView.titleFontForCurrentLocale)
+            .font(UX.CardView.titleFont())
             .foregroundColor(Color(theme.colors.textPrimary))
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)TitleLabel")
@@ -201,8 +201,8 @@ public struct TermsOfUseView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             .fixedSize(horizontal: false, vertical: true)
             .font(UX.CardView.bodyFont)
             .foregroundColor(Color(theme.colors.textSecondary))
-            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
-            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignmentForCurrentLocale)
+            .multilineTextAlignment(UX.CardView.textAlignment())
+            .frame(maxWidth: .infinity, alignment: UX.CardView.frameAlignment())
             .accessibility(identifier: "\(viewModel.configuration.a11yIdRoot)DescriptionLabel")
             .accessibilityLabel(viewModel.configuration.body)
     }

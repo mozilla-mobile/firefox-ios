@@ -120,7 +120,8 @@ class CodeCoverageGate {
             !$0.contains("/Generated/") &&
             !$0.contains("MozillaRustComponents/") &&
             !$0.contains("/Strings.swift") &&
-            !$0.contains("/AccessibilityIdentifiers.swift")
+            !$0.contains("/AccessibilityIdentifiers.swift") &&
+            !$0.contains("Protocol.swift")
         }
 
         guard !candidates.isEmpty else {

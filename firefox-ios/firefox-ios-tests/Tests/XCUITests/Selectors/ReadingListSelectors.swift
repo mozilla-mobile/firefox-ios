@@ -105,13 +105,13 @@ struct ReadingListSelectors: ReadingListSelectorsSet {
         groups: ["reader"]
     )
 
-    let MARK_AS_UNREAD_BUTTON = Selector.staticTextByLabel(
+    let MARK_AS_UNREAD_BUTTON = Selector.buttonStaticTextByLabel(
         IDs.markUnread,
         description: "Mark as Unread button in Reading List swipe actions",
         groups: ["reader"]
     )
 
-    let REMOVE_BUTTON = Selector.staticTextByLabel(
+    let REMOVE_BUTTON = Selector.buttonStaticTextByLabel(
         IDs.removeButton,
         description: "Remove button in Reading List swipe actions",
         groups: ["reader"]
