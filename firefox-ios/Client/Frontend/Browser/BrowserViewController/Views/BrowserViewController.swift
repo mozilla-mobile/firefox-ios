@@ -2176,7 +2176,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        print("LM ### SHOW EMBEDDED WEBVIEW CALLED")
+        logger.log("LM ### SHOW EMBEDDED WEBVIEW CALLED", level: .debug, category: .webview)
 
         // FXIOS-14783: Experimentation on removing this code
         if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
@@ -4866,7 +4866,12 @@ extension BrowserViewController: TabManagerDelegate {
             // FXIOS-14783: Experimentation on removing this code
             if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
                 if selectedTab.isFxHomeTab {
-                    print("LM ### We are the homepage and force reloading the webview; \(selectedTab.webView?.url?.absoluteString ?? "nil")")
+                    let value = selectedTab.webView?.url?.absoluteString ?? "nil"
+                    logger.log(
+                        "LM ### We are the homepage and force reloading the webview; \(value)",
+                        level: .debug,
+                        category: .webview
+                    )
                     // Added as initial fix for WKWebView memory leak. Needs further investigation.
                     // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
                     // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
@@ -4874,7 +4879,11 @@ extension BrowserViewController: TabManagerDelegate {
                 }
 
                 if webView.url == nil {
-                    print("LM ### The webview URL is nil; \(selectedTab.webView?.url?.absoluteString ?? "nil")")
+                    logger.log(
+                        "LM ### The webview URL is nil; \(selectedTab.webView?.url?.absoluteString ?? "nil")",
+                        level: .debug,
+                        category: .webview
+                    )
                     // The webView can go gray if it was zombified due to memory pressure.
                     // When this happens, the URL is nil, so try restoring the page upon selection.
                     needsReload = true
@@ -4928,21 +4937,35 @@ extension BrowserViewController: TabManagerDelegate {
            let internalUrl = InternalURL(url),
            internalUrl.isErrorPage {
             // TODO: Laurie - Is this needed for the new native error pages?
-            print("LM ### NEEDS RELOAD true for error page")
+            logger.log(
+                "LM ### NEEDS RELOAD true for error page",
+                level: .debug,
+                category: .webview
+            )
             needsReload = true
         }
 
         // FXIOS-14783: Experimentation on removing this code
         if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
             if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
-                print("LM ### NEEDS RELOAD false,temporaryDocument, about blank \(String(describing: selectedTab.temporaryDocument)), \(selectedTab.url?.absoluteString != "about:blank")")
+                let value1 = String(describing: selectedTab.temporaryDocument)
+                let value2 = selectedTab.url?.absoluteString != "about:blank"
+                logger.log(
+                    "LM ### NEEDS RELOAD false,temporaryDocument, about blank \(value1), \(value2)",
+                    level: .debug,
+                    category: .webview
+                )
                 needsReload = false
             }
         }
 
         if needsReload {
-            print("LM ### NEEDS RELOAD for webview; \(selectedTab.webView?.url?.absoluteString ?? "nil")")
-            logger.log("NEEDS RELOAD", level: .info, category: .webview)
+            let value1 = selectedTab.webView?.url?.absoluteString ?? "nil"
+            logger.log(
+                "LM ### NEEDS RELOAD for webview; \(value1)",
+                level: .debug,
+                category: .webview
+            )
             selectedTab.reloadPage()
         }
     }
