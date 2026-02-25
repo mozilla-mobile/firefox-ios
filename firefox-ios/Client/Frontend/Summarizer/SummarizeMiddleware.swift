@@ -11,18 +11,25 @@ final class SummarizerMiddleware {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerLanguageProvider: SummarizerLanguageProvider
     private let logger: Logger
     private let windowManager: WindowManager
+    private let profile: Profile
+    private var summarizerType: SummarizerModel {
+        return summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
+    }
 
     init(
         logger: Logger = DefaultLogger.shared,
         windowManager: WindowManager = AppContainer.shared.resolve(),
+        profile: Profile = AppContainer.shared.resolve(),
         summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker()
     ) {
         self.logger = logger
         self.windowManager = windowManager
+        self.profile = profile
         self.summarizerNimbusUtils = summarizerNimbusUtility
         self.summarizationChecker = summarizationChecker
         self.summarizerServiceFactory = summarizerServiceFactory
@@ -37,14 +44,6 @@ final class SummarizerMiddleware {
         default:
             break
         }
-    }
-
-    func getConfig(for contentType: SummarizationContentType) -> SummarizerConfig {
-        let summarizerType: SummarizerModel =
-            summarizerNimbusUtils.isAppleSummarizerEnabled()
-                ? .appleSummarizer
-                : .liteLLMSummarizer
-        return SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
     }
 
     @MainActor
@@ -67,11 +66,22 @@ final class SummarizerMiddleware {
         let result = await checkSummarizationResult(tab)
         let contentType = result?.contentType ?? .generic
         guard result?.canSummarize == true else { return }
+        let summarizerConfig: SummarizerConfig
+        if summarizerNimbusUtils.isLanguageExpansionEnabled {
+            let userPreference = summarizerNimbusUtils.languageExpansionConfiguration(
+                from: FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
+            ).selectedPreference(prefs: profile.prefs)
+            let locale = await summarizerLanguageProvider.getLanguage(for: userPreference)
+            summarizerConfig = SummarizerConfigManager().getConfig(summarizerType, contentType: contentType, locale: locale)
+        } else {
+            summarizerConfig = SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
+        }
+        
         store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
                 actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-                summarizerConfig: getConfig(for: contentType)
+                summarizerConfig: summarizerConfig
             )
         )
     }

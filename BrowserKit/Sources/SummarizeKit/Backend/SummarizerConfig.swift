@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Foundation
+
 /// A configuration container for a summarizer.
 public struct SummarizerConfig: Equatable, Sendable {
     public let instructions: String
@@ -27,6 +29,12 @@ public struct SummarizerConfig: Equatable, Sendable {
         let mergedInstructions = self.instructions.isEmpty ? other.instructions : self.instructions
         let mergedOptions = self.options.merging(other.options) { current, _ in current }
         return SummarizerConfig(instructions: mergedInstructions, options: mergedOptions)
+    }
+    
+    /// Returns a new config by injecting the provided `Locale` into the instructions.
+    public func injecting(locale: Locale) -> SummarizerConfig {
+        let instructionsWithLocale = instructions.replacingOccurrences(of: "${locale}", with: locale.identifier)
+        return SummarizerConfig(instructions: instructionsWithLocale, options: options)
     }
 }
 

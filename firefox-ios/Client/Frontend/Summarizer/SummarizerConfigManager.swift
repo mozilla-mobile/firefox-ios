@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SummarizeKit
+import WebKit
 
 /// A wrapper to Manage the configuration sources for the summarizer. 
 /// This class is responsible for loading and merging configurations from multiple sources.
@@ -29,5 +30,41 @@ final class SummarizerConfigManager {
         return sources
             .compactMap { $0.load(summarizer, contentType: contentType) }
             .reduce(initialConfig) { $0.merging(with: $1) }
+    }
+    
+    func getConfig(
+        _ summarizer: SummarizerModel,
+        contentType: SummarizationContentType,
+        locale: Locale
+    ) -> SummarizerConfig {
+        let config = getConfig(summarizer, contentType: contentType)
+        return config.injecting(locale: locale)
+    }
+}
+
+protocol SummarizerLanguageProvider: Sendable {
+    func getLanguage(for userPreference: SummarizerLanguageExpansionConfiguration.UserPreference) async -> Locale
+}
+
+struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
+    let appLanguageProvider: LocaleProvider
+    let websiteLanguageProvider: LanguageDetectorProvider
+    let websiteLanguageSource: LanguageSampleSource
+    
+    func getLanguage(
+        for userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
+    ) async -> Locale {
+        switch userPreference {
+        case .websiteLanguage:
+            let languageIdentifier = try? await websiteLanguageProvider.detectLanguage(from: websiteLanguageSource)
+            guard let languageIdentifier else {
+                return appLanguageProvider.current
+            }
+            return Locale(identifier: languageIdentifier)
+        case .deviceLanguage:
+            return appLanguageProvider.current
+        case .customLocale(let locale):
+            return locale
+        }
     }
 }
