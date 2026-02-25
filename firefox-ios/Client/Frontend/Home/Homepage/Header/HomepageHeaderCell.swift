@@ -12,7 +12,7 @@ import Shared
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
-        static let firefoxTextImageSize = CGSize(width: 140, height: 40)
+        static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
 
         static func contentWidth() -> CGFloat {
@@ -24,6 +24,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private var headerState: HeaderState?
     private var hasConfiguredView = false
+    private var headerConstraints = [NSLayoutConstraint]()
+    private var logoConstraints = [NSLayoutConstraint]()
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -82,9 +84,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         setupConstraints()
         setupLogoConstraints()
     }
-
-    private var headerConstraints = [NSLayoutConstraint]()
-    private var logoConstraints = [NSLayoutConstraint]()
 
     private func setupConstraints() {
         NSLayoutConstraint.deactivate(headerConstraints)
