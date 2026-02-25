@@ -170,10 +170,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 itemHeight: UX.MessageCardConstants.height,
                 bottomInsets: UX.spacingBetweenSections
             )
-        case .topSites(_, let numberOfTilesPerRow):
+        case .topSites(_, let numberOfTilesPerRow, let shouldShowSectionHeader):
             return createTopSitesSectionLayout(
                 for: traitCollection,
-                numberOfTilesPerRow: numberOfTilesPerRow
+                numberOfTilesPerRow: numberOfTilesPerRow,
+                shouldShowSectionHeader: shouldShowSectionHeader
             )
         case .jumpBackIn(_, let configuration):
             return createJumpBackInSectionLayout(
@@ -349,21 +350,24 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
-        numberOfTilesPerRow: Int
+        numberOfTilesPerRow: Int,
+        shouldShowSectionHeader: Bool
     ) -> NSCollectionLayoutSection {
         let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(for: traitCollection,
                                                                                 numberOfTilesPerRow: numberOfTilesPerRow)
 
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        section.boundarySupplementaryItems = [header]
+        if shouldShowSectionHeader {
+            let headerSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(UX.sectionHeaderHeight)
+            )
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top
+            )
+            section.boundarySupplementaryItems = [header]
+        }
 
         let bottomInset = UX.spacingBetweenSections
         section.contentInsets.top = 0
@@ -675,7 +679,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Add header height
-        totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+        if topSitesState.shouldShowSectionHeader {
+            totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+        }
 
         // Build array of configured cells for the data being displayed on the homepage
         let allCells = cellsData.map { data in

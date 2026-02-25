@@ -656,7 +656,7 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .topSites(let textColor, _):
+        case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
                 state: homepageState.topSitesState.sectionHeaderState,
                 moreButtonAction: { [weak self] _ in
