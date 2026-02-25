@@ -27,7 +27,7 @@ final class PickerSettingTests: XCTestCase {
         XCTAssertTrue(pickerButton.adjustsImageSizeForAccessibilityContentSizeCategory)
         XCTAssertNotNil(pickerButton.menu)
         XCTAssertEqual(pickerButton.menu?.children.count, pickerOptions.count)
-        XCTAssertEqual(pickerButton.tintColor, theme.colors.iconPrimary)
+        XCTAssertEqual(pickerButton.tintColor, theme.colors.iconSecondary)
     }
 
     private func createSubject(
