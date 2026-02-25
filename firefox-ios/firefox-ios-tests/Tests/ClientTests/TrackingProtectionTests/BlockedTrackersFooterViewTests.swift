@@ -9,25 +9,23 @@ import Common
 @MainActor
 final class BlockedTrackersFooterViewTests: XCTestCase {
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
-    private var subject: BlockedTrackersFooterView!
     private var mockThemeManager: MockThemeManager!
     private var theme: Theme!
 
     override func setUp() async throws {
         try await super.setUp()
-        subject = BlockedTrackersFooterView(reuseIdentifier: "test reuse identifier")
         mockThemeManager = MockThemeManager()
         theme = mockThemeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func tearDown() async throws {
-        subject = nil
         mockThemeManager = nil
         theme = nil
         try await super.tearDown()
     }
 
     func testInitConfiguresTextViewCorrectly() {
+        let subject = createSubject()
         let textView = subject.trackersBlockedInfoTextView
 
         XCTAssertFalse(textView.isEditable)
@@ -37,6 +35,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
     }
 
     func testMakeAttributedDescriptionSetsAttributedText() {
+        let subject = createSubject()
         let text = "This is an information! Learn more"
 
         subject.configure(with: text, linkedText: "Learn more", url: nil, theme: theme)
@@ -44,6 +43,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
     }
 
     func testMakeAttributedDescriptionAddsLinkAttribute_whenURLProvided() {
+        let subject = createSubject()
         let text = "Learn more about tracking protection! Learn more"
         let linkedText = "Learn more"
         let url = URL(string: "https://example.com")!
@@ -59,6 +59,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
     }
 
     func testMakeAttributedDescription_doesNotAddLink_whenURLIsNil() {
+        let subject = createSubject()
         let text = "Learn more about tracking protection! Learn more"
         let linkedText = "Learn more"
 
@@ -73,11 +74,18 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
     }
 
     func testApplyThemeSetsLinkTextAttributes() {
+        let subject = createSubject()
         subject.applyTheme(theme: theme)
 
         let attributes = subject.trackersBlockedInfoTextView.linkTextAttributes
         let color = attributes?[.foregroundColor] as? UIColor
 
         XCTAssertEqual(color, theme.colors.textAccent)
+    }
+
+    private func createSubject() -> BlockedTrackersFooterView {
+        let subject = BlockedTrackersFooterView(reuseIdentifier: "test reuse identifier")
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
