@@ -6,7 +6,15 @@ import Foundation
 import Redux
 import Common
 
+enum PrivatePanelLockState: Equatable {
+    case unlocked
+    case lockedPrompt
+    case authenticating
+    case failed
+}
+
 struct TabsPanelState: ScreenState, Equatable {
+    
     struct ScrollState: Equatable {
         let toIndex: Int
         let withAnimation: Bool
@@ -18,6 +26,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
+    var privateLockState: PrivatePanelLockState
 
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return true }
@@ -39,7 +48,8 @@ struct TabsPanelState: ScreenState, Equatable {
                   tabs: panelState.tabs,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
-                  urlRequest: panelState.urlRequest)
+                  urlRequest: panelState.urlRequest,
+                  privateLockState: panelState.privateLockState)
     }
 
     init(windowUUID: WindowUUID, isPrivateMode: Bool = false) {
@@ -59,13 +69,15 @@ struct TabsPanelState: ScreenState, Equatable {
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
-         urlRequest: URLRequest? = nil) {
+         urlRequest: URLRequest? = nil,
+         privateLockState: PrivatePanelLockState = .unlocked) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
         self.urlRequest = urlRequest
+        self.privateLockState = privateLockState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -90,7 +102,8 @@ struct TabsPanelState: ScreenState, Equatable {
 
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
-                                  tabs: tabsModel.tabs)
+                                  tabs: tabsModel.tabs,
+                                  privateLockState: state.privateLockState)
 
         case TabPanelMiddlewareActionType.willAppearTabPanel:
             let scrollModel = createTabScrollBehavior(
@@ -100,13 +113,15 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
-                                  scrollState: scrollModel)
+                                  scrollState: scrollModel,
+                                  privateLockState: state.privateLockState)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             guard let tabModel = action.tabDisplayModel else { return defaultState(from: state) }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
-                                  tabs: tabModel.tabs)
+                                  tabs: tabModel.tabs,
+                                  privateLockState: state.privateLockState)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
@@ -114,8 +129,13 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
-                                  scrollState: scrollModel)
-
+                                  scrollState: scrollModel,
+                                  privateLockState: state.privateLockState)
+        case TabPanelMiddlewareActionType.setPrivatePanelLockState:
+            guard state.isPrivateMode, let lock = action.privatePanelLockState else { return state }
+            var state = state
+            state.privateLockState = lock
+            return state
         default:
             return defaultState(from: state)
         }
@@ -124,7 +144,8 @@ struct TabsPanelState: ScreenState, Equatable {
     static func defaultState(from state: TabsPanelState) -> TabsPanelState {
         return TabsPanelState(windowUUID: state.windowUUID,
                               isPrivateMode: state.isPrivateMode,
-                              tabs: state.tabs)
+                              tabs: state.tabs,
+                              privateLockState: state.privateLockState)
     }
 
     static func createTabScrollBehavior(

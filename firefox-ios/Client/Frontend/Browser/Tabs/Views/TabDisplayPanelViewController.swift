@@ -5,6 +5,7 @@
 import Common
 import Redux
 import UIKit
+import LocalAuthentication
 
 protocol TabTrayThemeable {
     @MainActor
@@ -122,6 +123,9 @@ final class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
+        if panelType == .privateTabs {
+            store.dispatch(PrivatePanelLockAction(windowUUID: windowUUID, actionType: PrivatePanelLockActionType.enteredPrivatePanel))
+        }
         updateInsets()
     }
 
@@ -164,6 +168,14 @@ final class TabDisplayPanelViewController: UIViewController,
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
         setupFadeView()
+        
+        view.addSubview(privateLockOverlay)
+        NSLayoutConstraint.activate([
+            privateLockOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            privateLockOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            privateLockOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            privateLockOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func setupEmptyView() {
@@ -193,6 +205,101 @@ final class TabDisplayPanelViewController: UIViewController,
         view.removeConstraints(view.constraints)
         view.subviews.forEach { $0.removeFromSuperview() }
         view.removeFromSuperview()
+    }
+    
+    private lazy var privateLockOverlay: PrivateTabsLockOverlayView = {
+        let overlay = PrivateTabsLockOverlayView()
+        overlay.isHidden = true
+        overlay.onUnlockTapped = { [weak self] in self?.startPrivateAuthFlow() }
+        overlay.onRetryTapped = { [weak self] in self?.startPrivateAuthFlow() }
+        return overlay
+    }()
+    
+    private func startPrivateAuthFlow() {
+        store.dispatch(
+            PrivatePanelLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivatePanelLockActionType.requestAuth
+            )
+        )
+
+        let context = LAContext()
+        context.localizedCancelTitle = "Cancel"
+
+        var error: NSError?
+
+        // ВАЖЛИВО: перевіряємо ту саму policy
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
+            store.dispatch(
+                PrivatePanelLockAction(
+                    windowUUID: windowUUID,
+                    actionType: PrivatePanelLockActionType.authFailed
+                )
+            )
+            return
+        }
+
+        context.evaluatePolicy(
+            .deviceOwnerAuthentication,
+            localizedReason: "Unlock your private tabs."
+        ) { [weak self] success, authError in
+            guard let self else { return }
+
+            Task { @MainActor in
+                if success {
+                    store.dispatch(
+                        PrivatePanelLockAction(
+                            windowUUID: self.windowUUID,
+                            actionType: PrivatePanelLockActionType.authSucceeded
+                        )
+                    )
+                } else {
+                    if let laError = authError as? LAError {
+                        switch laError.code {
+
+                        case .userCancel, .systemCancel, .appCancel:
+                            store.dispatch(
+                                PrivatePanelLockAction(
+                                    windowUUID: self.windowUUID,
+                                    actionType: PrivatePanelLockActionType.authFailed
+                                )
+                            )
+
+                        case .authenticationFailed:
+                            store.dispatch(
+                                PrivatePanelLockAction(
+                                    windowUUID: self.windowUUID,
+                                    actionType: PrivatePanelLockActionType.authFailed
+                                )
+                            )
+
+                        case .biometryLockout:
+                            store.dispatch(
+                                PrivatePanelLockAction(
+                                    windowUUID: self.windowUUID,
+                                    actionType: PrivatePanelLockActionType.authFailed
+                                )
+                            )
+
+                        default:
+                            store.dispatch(
+                                PrivatePanelLockAction(
+                                    windowUUID: self.windowUUID,
+                                    actionType: PrivatePanelLockActionType.authFailed
+                                )
+                            )
+                        }
+                    } else {
+                        store.dispatch(
+                            PrivatePanelLockAction(
+                                windowUUID: self.windowUUID,
+                                actionType: PrivatePanelLockActionType.authFailed
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Themeable
@@ -344,11 +451,29 @@ final class TabDisplayPanelViewController: UIViewController,
         if panelType == .privateTabs, tabsState.isPrivateMode {
             // Only adjust the empty view if we are in private mode
             shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+            applyPrivateLockUI(tabsState.privateLockState)
         }
         shouldShowFadeView()
 
         if shouldUsePrivateOverride {
             applyTheme()
+        }
+    }
+    
+    private func applyPrivateLockUI(_ lock: PrivatePanelLockState) {
+        switch lock {
+        case .unlocked:
+            privateLockOverlay.isHidden = true
+            privateLockOverlay.apply(mode: .prompt)
+        case .lockedPrompt:
+            privateLockOverlay.isHidden = false
+            privateLockOverlay.apply(mode: .prompt)
+        case .authenticating:
+            privateLockOverlay.isHidden = false
+            privateLockOverlay.apply(mode: .authenticating)
+        case .failed:
+            privateLockOverlay.isHidden = false
+            privateLockOverlay.apply(mode: .failed)
         }
     }
 

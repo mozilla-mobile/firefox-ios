@@ -72,17 +72,20 @@ struct TabPanelMiddlewareAction: Action {
     let tabDisplayModel: TabDisplayModel?
     let toastType: ToastType??
     let scrollBehavior: TabScrollBehavior?
+    let privatePanelLockState: PrivatePanelLockState?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
          toastType: ToastType? = nil,
          scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
-         actionType: ActionType) {
+         actionType: ActionType,
+         privatePanelLockState: PrivatePanelLockState? = nil) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.tabDisplayModel = tabDisplayModel
         self.toastType = toastType
         self.scrollBehavior = scrollBehavior
+        self.privatePanelLockState = privatePanelLockState
     }
 }
 
@@ -93,6 +96,7 @@ enum TabPanelMiddlewareActionType: ActionType {
     case refreshTabs
     case showToast
     case scrollToTab
+    case setPrivatePanelLockState
 }
 
 struct ScreenshotAction: Action {
