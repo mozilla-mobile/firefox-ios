@@ -84,17 +84,16 @@ final class TermsOfUseMiddleware {
 
     private func recordImpression() {
         let hasShownFirstTime = self.prefs.boolForKey(PrefsKeys.TermsOfUseFirstShown) ?? false
-        let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
-        let shownHasBeenRecorded = self.prefs.boolForKey(PrefsKeys.TermsOfUseShownRecorded) ?? false
-
-        if !hasShownFirstTime {
+        guard hasShownFirstTime else {
             self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseFirstShown)
             self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.telemetry.termsOfUseDisplayed()
             return
         }
 
-        if hasBeenDismissedBefore, !shownHasBeenRecorded {
+        let hasBeenDismissedBefore = self.prefs.timestampForKey(PrefsKeys.TermsOfUseDismissedDate) != nil
+        let hasSeenTermsOfUse = self.prefs.boolForKey(PrefsKeys.TermsOfUseShownRecorded) ?? false
+        if hasBeenDismissedBefore, !hasSeenTermsOfUse {
             self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.telemetry.termsOfUseDisplayed()
         }
