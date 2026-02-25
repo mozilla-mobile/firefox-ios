@@ -188,7 +188,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
     }
 
     private func resolveTabPrivatePanelLockActions(action: PrivatePanelLockAction, state: AppState) {
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: action.windowUUID),
+        let shouldLock = profile.prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
+        guard shouldLock, let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: action.windowUUID),
               tabsState.isPrivateMode else { return }
         
         switch action.actionType {

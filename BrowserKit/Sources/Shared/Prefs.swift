@@ -165,6 +165,7 @@ public struct PrefsKeys {
     // Firefox settings
     public struct Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
+        public static let lockPrivateTabs = "LockPrivateTabs"
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
