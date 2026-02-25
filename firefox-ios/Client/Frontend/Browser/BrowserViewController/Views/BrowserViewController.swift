@@ -5048,7 +5048,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
-            updateBottomContentStackViewConstraints()
         }
 
         if isSwipingTabsEnabled {
@@ -5090,7 +5089,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
-            updateBottomContentStackViewConstraints()
         }
 
         UIView.animate(
@@ -5135,7 +5133,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         } else {
             updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
-            updateBottomContentStackViewConstraints()
         }
     }
 
