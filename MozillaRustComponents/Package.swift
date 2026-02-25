@@ -30,7 +30,8 @@ let package = Package(
             ],
             path: "Sources/MozillaRustComponentsWrapper",
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
+                .enableExperimentalFeature("StrictConcurrency"),
+                .unsafeFlags(["-enable-testing"]),
             ],
         ),
         .target(

@@ -333,6 +333,13 @@
         "identifier" : "WebEngineTests",
         "name" : "WebEngineTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/MozillaRustComponents",
+        "identifier" : "MozillaRustComponentsTests",
+        "name" : "MozillaRustComponentsTests"
+      }
     }
   ],
   "version" : 1
