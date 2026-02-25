@@ -4796,6 +4796,8 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
+        logger.log("LM ### didSelectedTabChange CALLED", level: .debug, category: .webview)
+
         if selectedTab.isDownloadingDocument() {
             navigationHandler?.showDocumentLoading()
         } else {

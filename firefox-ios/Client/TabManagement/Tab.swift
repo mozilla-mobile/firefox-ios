@@ -616,6 +616,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func close() {
+        logger.log("LM ### close on TAB \(self)", level: .debug, category: .webview)
+        webView?.pauseAllMediaPlayback {}
+        webView?.closeAllMediaPresentations {}
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
