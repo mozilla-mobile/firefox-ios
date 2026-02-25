@@ -94,6 +94,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageStoryCategories,
+                titleText: format(string: "Homepage Story Categories"),
+                statusText: format(string: "Toggle to enable homepage story categories")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .improvedAppStoreReviewTriggerFeature,
                 titleText: format(string: "Improved App Store Review Trigger"),
                 statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
