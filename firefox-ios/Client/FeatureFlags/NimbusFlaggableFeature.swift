@@ -52,6 +52,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case tabScrollRefactorFeature
@@ -164,6 +165,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
+                .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,

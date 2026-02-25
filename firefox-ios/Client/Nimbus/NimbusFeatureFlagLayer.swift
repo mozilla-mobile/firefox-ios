@@ -127,6 +127,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
+        case .improvedAppStoreReviewTriggerFeature:
+            return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
+
         case .relayIntegration:
             return checkRelayIntegration(from: nimbus)
 
@@ -470,6 +473,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkOtherErrorPagesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
+    }
+
+    private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature
