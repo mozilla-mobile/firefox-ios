@@ -44,17 +44,18 @@ protocol TabManager: AnyObject {
     /// Add tabs for a list of URLs
     /// - Parameters:
     ///   - urls: The list of URL to create tabs with
-    ///   - zombie: Whether the webviews should be created right away or not, only set to false if you need to select the tab right away
+    ///   - zombie: Whether the webviews should be created right away or not,
+    ///   only set to false if you need to select the tab right away
     ///   - shouldSelectTab: Whether the most recent tab should be selected or not
     ///   - isPrivate: Whether the tabs should be created in private mode or not
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
-
 
     /// Add a tab in the tabs array
     /// - Parameters:
     ///   - request: The request created
     ///   - afterTab: Place the new tab after this tab, can be nil to create the tab at the end of the tabs array
-    ///   - zombie: Whether the webview should be created right away or not, only set to false if you need to select the tab right away
+    ///   - zombie: Whether the webview should be created right away or not,
+    ///   only set to false if you need to select the tab right away
     ///   - isPrivate: whether the tabs should be created in private mode or not
     /// - Returns: The newly created tab
     @discardableResult
