@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 import WebKit
 import Shared
 import Storage
