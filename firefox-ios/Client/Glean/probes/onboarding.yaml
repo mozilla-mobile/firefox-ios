@@ -301,12 +301,6 @@ onboarding:
     type: event
     description: |
       User viewed the terms of service onboarding card.
-    extra_keys:
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -321,12 +315,6 @@ onboarding:
     type: event
     description: |
       User clicked accept button on the terms of service onboarding card.
-    extra_keys:
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -341,12 +329,6 @@ onboarding:
     type: event
     description: |
       User clicked the terms of service link on the onboarding card.
-    extra_keys:
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -361,12 +343,6 @@ onboarding:
     type: event
     description: |
       User clicked the manage link on the terms of service onboarding card.
-    extra_keys:
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -381,12 +357,6 @@ onboarding:
     type: event
     description: |
       User clicked the privacy policy link on the terms of service onboarding card.
-    extra_keys:
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -406,11 +376,6 @@ onboarding:
         type: boolean
         description: |
           The value of the technical interaction data switch.
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding
@@ -430,11 +395,6 @@ onboarding:
         type: boolean
         description: |
           The value of the automatic crash reports switch.
-      onboarding_reason:
-        type: string
-        description: |
-          Whether this is a new_user (first install) or show_tour (returning user via Settings).
-          Always "new_user" for ToS events.
     send_in_pings:
       - events
       - onboarding

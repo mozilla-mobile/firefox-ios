@@ -13,50 +13,33 @@ struct TermsOfServiceTelemetry {
     }
 
     func termsOfServiceScreenDisplayed() {
-        let extra = GleanMetrics.Onboarding.TermsOfServiceCardExtra(onboardingReason: OnboardingReason.newUser.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceCard, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceCard)
     }
 
     func technicalInteractionDataSwitched(to value: Bool) {
-        let extra = GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra(
-            changedTo: value,
-            onboardingReason: OnboardingReason.newUser.rawValue
-        )
+        let extra = GleanMetrics.Onboarding.ToggleTechnicalInteractionDataExtra(changedTo: value)
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.toggleTechnicalInteractionData, extras: extra)
     }
 
     func automaticCrashReportsSwitched(to value: Bool) {
-        let extra = GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra(
-            changedTo: value,
-            onboardingReason: OnboardingReason.newUser.rawValue
-        )
+        let extra = GleanMetrics.Onboarding.ToggleAutomaticCrashReportsExtra(changedTo: value)
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.toggleAutomaticCrashReports, extras: extra)
     }
 
     func termsOfServiceLinkTapped() {
-        let extra = GleanMetrics.Onboarding.TermsOfServiceLinkClickedExtra(
-            onboardingReason: OnboardingReason.newUser.rawValue
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceLinkClicked, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceLinkClicked)
     }
 
     func termsOfServicePrivacyNoticeLinkTapped() {
-        let extra = GleanMetrics.Onboarding.TermsOfServicePrivacyNoticeLinkClickedExtra(
-            onboardingReason: OnboardingReason.newUser.rawValue
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServicePrivacyNoticeLinkClicked)
     }
 
     func termsOfServiceManageLinkTapped() {
-        let extra = GleanMetrics.Onboarding.TermsOfServiceManageLinkClickedExtra(
-            onboardingReason: OnboardingReason.newUser.rawValue
-        )
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceManageLinkClicked, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceManageLinkClicked)
     }
 
     func termsOfServiceAcceptButtonTapped(acceptedDate: Date) {
-        let extra = GleanMetrics.Onboarding.TermsOfServiceAcceptedExtra(onboardingReason: OnboardingReason.newUser.rawValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceAccepted, extras: extra)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.termsOfServiceAccepted)
         recordDateAndVersion(acceptedDate: acceptedDate)
     }
 
