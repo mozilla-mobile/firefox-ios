@@ -12,7 +12,7 @@ final class PickerSettingTests: XCTestCase {
     private lazy var pickerOptions = [(selectedValue, "Label 1")]
     private let accessibilityIdentifier = "test"
 
-    @available(iOS 17.4 ,*)
+    @available(iOS 17.4, *)
     func test_onConfigureCell_whenPickerMenuIsAvailable() throws {
         let subject = createSubject()
         let theme = DarkTheme()
