@@ -103,7 +103,6 @@ final class BrowserViewControllerDynamicViewConstraintsTests: BrowserViewControl
         // Test with Native
         let subjectNative = createSubject(isFeatureFlagEnabled: true)
         subjectNative.showReaderModeBar(animated: false)
-        subjectNative.view.layoutIfNeeded()
         let nativeFrame = subjectNative.readerModeBar?.frame
 
         // Heights should match
