@@ -35,7 +35,6 @@ final class TermsOfUseMiddleware {
         case TermsOfUseActionType.termsShown:
             self.recordImpression()
         case TermsOfUseActionType.termsAccepted:
-            self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
             self.recordAcceptance()
         case TermsOfUseActionType.remindMeLaterTapped:
             self.prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
