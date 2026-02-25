@@ -815,7 +815,7 @@ class WithoutAccountSetting: AccountSetting {
 
 /// A setting that displays a picker menu allowing users to select from multiple predefined options.
 ///
-/// Note: on iOS 17.4 less devices the setting shows an `UIAlertController` on cell tap instead of an `UIMenu`.
+/// Note: on pre iOS 17.4 devices the setting shows an `UIAlertController` on cell tap instead of an `UIMenu`.
 class PickerSetting<Value: Equatable>: Setting {
     private let pickerOptions: [(value: Value, displayString: String)]
     private let onOptionSelected: (Value) -> Void
@@ -855,8 +855,9 @@ class PickerSetting<Value: Equatable>: Setting {
         super.onConfigureCell(cell, theme: theme)
         cell.textLabel?.text = selectedDisplayString
 
-        // We show the picker button with the attached UIMenu only in iOS 17.4 more cause on previous
-        // version there is no possibility to trigger menu on cell tap using button.performPrimaryAction()
+        // We show the picker button with the attached UIMenu only in iOS 17.4 more devices cause on previous
+        // version there is no possibility to trigger the menu programmatically on cell tap, given missing
+        // button.performPrimaryAction() API.
         if #available(iOS 17.4, *) {
             let pickerButton = makePickerButton(theme: theme)
             cell.accessoryView = pickerButton
