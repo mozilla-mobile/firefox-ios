@@ -3077,12 +3077,6 @@ extension String {
                     value: "Preferred App Language",
                     comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
                 )
-                public static let PickerButtonAccessibilityLabel = MZLocalizedString(
-                    key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
-                    tableName: "Settings",
-                    value: "Pick a language",
-                    comment: "The accessibility label for the language picker button in the Summarize settings."
-                )
             }
         }
 
@@ -8897,6 +8891,14 @@ extension String {
                 tableName: "Onboarding",
                 value: "Say goodbye to creepy trackers",
                 comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+        }
+        struct v149 {
+            public static let PickerButtonAccessibilityLabel = MZLocalizedString(
+                key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
+                tableName: "Settings",
+                value: "Pick a language",
+                comment: "The accessibility label for the language picker button in the Summarize settings."
+            )
         }
     }
 }

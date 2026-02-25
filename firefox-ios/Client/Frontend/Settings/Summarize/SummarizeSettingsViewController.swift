@@ -108,9 +108,7 @@ final class SummarizeSettingsViewController: SettingsTableViewController, Featur
                     selectedValue: configuration.selectedPreference(prefs: prefs),
                     pickerOptions: configuration.settingOptions.map({ $0.toOption() }),
                     accessibilityIdentifier: AccessibilityIdentifiers.Settings.Summarize.languageCell,
-                    pickerButtonAccessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
-                    pickerButtonAccessibilityIdentifier:
-                        AccessibilityIdentifiers.Settings.Summarize.languageCellPickerButton,
+                    accessibilityLabel: .Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel,
                     onOptionSelected: { [weak self] selectedOption in
                         guard let self else { return }
                         configuration.save(preference: selectedOption, prefs: prefs)
