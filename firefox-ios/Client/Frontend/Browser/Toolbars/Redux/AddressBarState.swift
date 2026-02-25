@@ -1141,12 +1141,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
               !isEditing
         else { return actions }
 
-        let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
-        if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
-            actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if readerModeState == .active || readerModeState == .available {
-            actions.append(readerModeAction(isSelected: readerModeState == .active,
-                                            hasAlternativeLocationColor: hasAlternativeLocationColor))
+        let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
+        if readerModeState == .active || readerModeState == .available {
+            let isSummaryAvailable = canSummarize && isSummarizeFeatureForToolbarOn
+            actions.append(
+                readerModeAction(
+                    actionType: isSummaryAvailable ? .readerModeWithSummarizer : .readerMode,
+                    isSelected: readerModeState == .active,
+                    badeImageName: isSummaryAvailable ? ImageIdentifiers.lightingBadge : nil,
+                    hasAlternativeLocationColor: hasAlternativeLocationColor
+                )
+            )
         }
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
@@ -1339,22 +1344,15 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
     }
 
-    private static func summaryAction(hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
-        return ToolbarActionConfiguration(
-            actionType: .summarizer,
-            iconName: StandardImageIdentifiers.Medium.lightning,
-            isEnabled: true,
-            hasCustomColor: !hasAlternativeLocationColor,
-            contextualHintType: ContextualHintType.summarizeToolbarEntry.rawValue,
-            a11yLabel: .Toolbars.SummarizeButtonAccessibilityLabel,
-            a11yId: AccessibilityIdentifiers.Toolbar.summarizeButton)
-    }
-
-    private static func readerModeAction(isSelected: Bool,
+    private static func readerModeAction(actionType: ToolbarActionConfiguration.ActionType,
+                                         isSelected: Bool,
+                                         badeImageName: String? = nil,
                                          hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
         return ToolbarActionConfiguration(
-            actionType: .readerMode,
+            actionType: actionType,
             iconName: StandardImageIdentifiers.Medium.readerView,
+            badgeImageName: StandardImageIdentifiers.Large.lightning,
+            maskImageName: StandardImageIdentifiers.Large.lightning,
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,

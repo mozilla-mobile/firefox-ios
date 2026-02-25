@@ -20,7 +20,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case trackingProtection
         case locationView
         case readerMode
-        case summarizer
+        case readerModeWithSummarizer
         case translate
         case dataClearance
         case cancelEdit
@@ -52,7 +52,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .reload ||
                actionType == .newTab ||
                actionType == .readerMode ||
-               actionType == .summarizer ||
+               actionType == .readerModeWithSummarizer ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }
