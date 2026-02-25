@@ -884,7 +884,7 @@ class PickerSetting<Value: Equatable>: Setting {
         button.menu = UIMenu(children: menuItems)
         return button
     }
-    
+
     private func makeAccessoryImageView(theme: any Theme) -> UIImageView {
         let imageView = UIImageView(
             image: UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
