@@ -892,6 +892,7 @@ class PickerSetting<Value: Equatable>: Setting {
         )
         imageView.tintColor = theme.colors.iconSecondary
         imageView.contentMode = .scaleAspectFit
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
         return imageView
     }
 
