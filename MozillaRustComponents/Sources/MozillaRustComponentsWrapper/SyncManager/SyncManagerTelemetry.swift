@@ -75,8 +75,13 @@ func processSyncTelemetry(syncTelemetry: RustSyncTelemetryPing,
                                        engineInfo: engineInfo)
                 submitTabsPing(nil)
             default:
-                let message = "Ignoring telemetry for engine \(engineInfo.name)"
-                throw TelemetryReportingError.UnsupportedEngine(message: message)
+                // Previously when we encountered an unsupported engine we threw an error.
+                // This was problematic because it prevented other engines queued after the
+                // unsupported engine from reporting metrics. For now we will do nothing.
+                // See FXIOS-14438
+                assertionFailure(
+                    "Error: attempting to process telemetry for unsupported sync engine")
+                break
             }
         }
         submitGlobalPing(nil)

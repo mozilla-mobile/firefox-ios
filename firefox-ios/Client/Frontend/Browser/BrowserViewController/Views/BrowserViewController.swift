@@ -160,7 +160,7 @@ class BrowserViewController: UIViewController,
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
     var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
+    var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
@@ -1768,6 +1768,8 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+
+            setupBottomContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1802,6 +1804,24 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
+
+    private func setupBottomContainerConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        NSLayoutConstraint.activate([
+            bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        constraint.isActive = true
+        let constraintReference = ConstraintReference(native: constraint)
+
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.bottomContainerConstraint = constraintReference
+        }
+        bottomContainerConstraint = constraintReference
+    }
+
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
             browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
@@ -1848,19 +1868,24 @@ class BrowserViewController: UIViewController,
         }
 
         updateOverKeyboardContainerConstraints()
-        updateBottomContainerConstraints()
-        updateBottomContentStackViewConstraints()
+        updateSnapKitBottomContainerConstraints()
         updateConstraintsForKeyboard()
+        updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
     }
 
-    private func updateBottomContainerConstraints() {
+    private func updateSnapKitBottomContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
+
             if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                scrollController.bottomContainerConstraint = constraintReference
             } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                bottomContainerConstraint = constraintReference
             }
             make.leading.trailing.equalTo(view)
         }
@@ -1889,11 +1914,25 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func updateConstraintsForKeyboard() {
+    private func updateSnapkitConstraintsForKeyboard() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true)
+            scrollController.hideToolbars(animated: false)
         } else {
             adjustBottomSearchBarForKeyboard()
+        }
+    }
+
+    func updateConstraintsForKeyboard() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapkitConstraintsForKeyboard()
+            return
+        }
+
+        guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
+            adjustBottomSearchBarForKeyboard()
+            return
         }
     }
 

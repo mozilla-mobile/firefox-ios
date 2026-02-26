@@ -17,6 +17,7 @@ final class HomepageDiffableDataSource:
 
     enum HomeSection: Hashable {
         case privacyNotice
+        case header
         case messageCard
         case topSites(TextColor?, NumberOfTilesPerRow)
         case searchBar
@@ -36,6 +37,7 @@ final class HomepageDiffableDataSource:
     }
 
     enum HomeItem: Hashable, Sendable {
+        case header(HeaderState)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
@@ -49,6 +51,7 @@ final class HomepageDiffableDataSource:
 
         static var cellTypes: [ReusableCell.Type] {
             return [
+                HomepageHeaderCell.self,
                 PrivacyNoticeCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteCell.self,
@@ -88,6 +91,9 @@ final class HomepageDiffableDataSource:
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+
+        snapshot.appendSections([.header])
+        snapshot.appendItems([.header(state.headerState)], toSection: .header)
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])

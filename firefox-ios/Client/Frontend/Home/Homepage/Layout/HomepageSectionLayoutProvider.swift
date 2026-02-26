@@ -16,7 +16,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     struct UX {
-        static let topSpacing: CGFloat = 24
+        static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
         static let standardSpacing: CGFloat = 16
         static let interGroupSpacing: CGFloat = 8
@@ -37,6 +37,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct HeaderConstants {
+            static let estimatedHeight: CGFloat = 40
             static let bottomSpacing: CGFloat = 30
         }
 
@@ -150,16 +151,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         switch section {
+        case .header:
+            return createHeaderSectionLayout(for: environment)
+        case .privacyNotice:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                bottomInsets: UX.PrivacyNoticeConstants.bottomInsets
+            )
         case .searchBar:
             return createSingleItemSectionLayout(
                 for: traitCollection,
                 topInsets: UX.standardInset,
                 bottomInsets: UX.HeaderConstants.bottomSpacing
-            )
-        case .privacyNotice:
-            return createSingleItemSectionLayout(
-                for: traitCollection,
-                bottomInsets: UX.PrivacyNoticeConstants.bottomInsets
             )
         case .messageCard:
             return createSingleItemSectionLayout(
@@ -210,6 +213,35 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             leading: leadingInset,
             bottom: bottomInsets,
             trailing: leadingInset)
+
+        return section
+    }
+
+    private func createHeaderSectionLayout(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+                                              heightDimension: .estimated(UX.standardSingleItemHeight))
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+                                               heightDimension: .estimated(UX.standardSingleItemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        let containerWidth = environment.container.contentSize.width
+        let effectiveInsets = environment.container.effectiveContentInsets
+        let headerWidth = HomepageHeaderCell.UX.contentWidth()
+        let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
+        let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
+
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: horizontalInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: horizontalInset)
 
         return section
     }
@@ -522,6 +554,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Calculate each individual sections height
         // Note: If showing vertical stories, no need to calculate stories height, since that is handled by
         // storiesPeakOffset to create the peak-above-the-fold effect
+        let headerLogoHeight = getHeaderLogoHeight(environment: environment)
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
@@ -532,6 +565,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // Calculate the spacer height, which is determined by the total height available minus the height of each section
         let rawSpacerHeight = availableContentHeight
             - UX.topSpacing
+            - headerLogoHeight
             - privacyNoticeHeight
             - topSitesHeight
             - jumpBackInHeight
@@ -568,6 +602,19 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)]
         )
         return NSCollectionLayoutSection(group: emptyGroup)
+    }
+
+    private func getHeaderLogoHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+
+        var totalHeight: CGFloat = 0
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+
+        let headerLogoCell = HomepageHeaderCell()
+        headerLogoCell.configure(headerState: state.headerState)
+        totalHeight += HomepageDimensionCalculator.fittingHeight(for: headerLogoCell, width: containerWidth)
+        totalHeight += UX.spacingBetweenSections
+        return totalHeight
     }
 
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
