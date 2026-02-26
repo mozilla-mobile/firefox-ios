@@ -10,16 +10,6 @@ features:
           Whether the feature is enabled or not.
         type: Boolean
         default: false
-      supportWebsiteLanguage:
-        description: >
-          Whether to support the website language for summarization.
-        type: Boolean
-        default: false
-      supportDeviceLanguage:
-        description: >
-          Whether to support the device language for summarization.
-        type: Boolean
-        default: false
       supportedLocales:
         description: >
           The list of supported locale identifiers for the summarizer language expansion according to BCP47 standard.

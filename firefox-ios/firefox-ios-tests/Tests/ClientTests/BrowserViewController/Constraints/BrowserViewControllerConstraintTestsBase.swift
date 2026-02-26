@@ -20,9 +20,9 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     override func tearDown() async throws {
-        tabManager = nil
         profile.shutdown()
         profile = nil
+        tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -38,6 +38,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
 
         // Trigger view loading and constraint setup
         // SnapKit constraints are created in updateViewConstraints(), so we need to explicitly trigger it
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
         subject.view.setNeedsUpdateConstraints()
         subject.view.updateConstraintsIfNeeded()

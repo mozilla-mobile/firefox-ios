@@ -512,6 +512,65 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    private func configureCell(
+        for item: HomepageDiffableDataSource.HomeItem,
+        at indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        switch item {
+        case .header(let state):
+            return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
+                cell.configure(headerState: state)
+                cell.applyTheme(theme: currentTheme)
+            }
+        case .privacyNotice:
+            return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in
+                configurePrivacyNoticeCell(cell: cell)
+            }
+        case .messageCard(let config):
+            return configuredCell(cellType: HomepageMessageCardCell.self, at: indexPath) { cell in
+                cell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
+            }
+        case .topSite(let site, let textColor):
+            return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
+                cell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
+            }
+        case .topSiteEmpty:
+            return configuredCell(cellType: EmptyTopSiteCell.self, at: indexPath) { cell in
+                cell.applyTheme(theme: currentTheme)
+            }
+        case .searchBar:
+            return configuredCell(cellType: SearchBarCell.self, at: indexPath) { cell in
+                cell.applyTheme(theme: currentTheme)
+            }
+        case .jumpBackIn(let tab):
+            return configuredCell(cellType: JumpBackInCell.self, at: indexPath) { cell in
+                cell.configure(config: tab, theme: currentTheme)
+            }
+        case .jumpBackInSyncedTab(let config):
+            return configureSyncedTabCell(config, item: item, at: indexPath)
+        case .bookmark(let item):
+            return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
+                cell.configure(config: item, theme: currentTheme)
+            }
+        case .merino(let story):
+            return configureMerinoCell(story, at: indexPath)
+        case .spacer:
+            return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
+        }
+    }
+
+    private func configuredCell<T: UICollectionViewCell & ReusableCell>(
+        cellType: T.Type,
+        at indexPath: IndexPath,
+        configure: (T) -> Void
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+            return UICollectionViewCell()
+        }
+        configure(cell)
+        return cell
+    }
+
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
         cell.configure(theme: currentTheme,
                        closeButtonAction: { [weak self] in
@@ -523,80 +582,13 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func configureCell(
-        for item: HomepageDiffableDataSource.HomeItem,
+    private func configureSyncedTabCell(
+        _ config: JumpBackInSyncedTabConfiguration,
+        item: HomepageItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        switch item {
-        case .privacyNotice:
-            guard let privacyNoticeCell = collectionView?.dequeueReusableCell(
-                cellType: PrivacyNoticeCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            configurePrivacyNoticeCell(cell: privacyNoticeCell)
-
-            return privacyNoticeCell
-        case .messageCard(let config):
-            guard let messageCardCell = collectionView?.dequeueReusableCell(
-                cellType: HomepageMessageCardCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            messageCardCell.configure(with: config, windowUUID: windowUUID, theme: currentTheme)
-            return messageCardCell
-        case .topSite(let site, let textColor):
-            let cellType: ReusableCell.Type = TopSiteCell.self
-
-            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
-                return UICollectionViewCell()
-            }
-
-            if let topSiteCell = topSiteCell as? TopSiteCell {
-                topSiteCell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
-                return topSiteCell
-            }
-
-            return UICollectionViewCell()
-
-        case .topSiteEmpty:
-            guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
-                return UICollectionViewCell()
-            }
-
-            emptyCell.applyTheme(theme: currentTheme)
-            return emptyCell
-
-        case .searchBar:
-            guard let searchBar = collectionView?.dequeueReusableCell(
-                cellType: SearchBarCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-            searchBar.applyTheme(theme: currentTheme)
-            return searchBar
-
-        case .jumpBackIn(let tab):
-            guard let cell = collectionView?.dequeueReusableCell(cellType: JumpBackInCell.self, for: indexPath) else {
-                return UICollectionViewCell()
-            }
-
-            cell.configure(config: tab, theme: currentTheme)
-            return cell
-
-        case .jumpBackInSyncedTab(let config):
-            guard let syncedTabCell = collectionView?.dequeueReusableCell(
-                cellType: SyncedTabCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-            syncedTabCell.configure(
+        return configuredCell(cellType: SyncedTabCell.self, at: indexPath) { cell in
+            cell.configure(
                 configuration: config,
                 theme: currentTheme,
                 onTapShowAllAction: { [weak self] in
@@ -608,50 +600,28 @@ final class HomepageViewController: UIViewController,
                     self.sendItemActionWithTelemetryExtras(item: item, actionType: .didSelectItem)
                 }
             )
-            prepareSyncedTabContextualHint(onCell: syncedTabCell)
-            return syncedTabCell
+            prepareSyncedTabContextualHint(onCell: cell)
+        }
+    }
 
-        case .bookmark(let item):
-            guard let cell = collectionView?.dequeueReusableCell(cellType: BookmarksCell.self, for: indexPath) else {
-                return UICollectionViewCell()
+    private func configureMerinoCell(
+        _ story: MerinoStoryConfiguration,
+        at indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
+            && UIDevice.current.userInterfaceIdiom == .phone
+        let position = indexPath.item + 1
+        let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
+        let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
+
+        if shouldShowStoriesFeedCell {
+            return configuredCell(cellType: StoriesFeedCell.self, at: indexPath) { cell in
+                cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
             }
+        }
 
-            cell.configure(config: item, theme: currentTheme)
-            return cell
-
-        case .merino(let story):
-            let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
-                && UIDevice.current.userInterfaceIdiom == .phone
-            let cellType: ReusableCell.Type = shouldShowStoriesFeedCell ? StoriesFeedCell.self
-                                                                        : StoryCell.self
-
-            guard let cell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
-                return UICollectionViewCell()
-            }
-
-            let position = indexPath.item + 1
-            let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
-            let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
-
-            if let storiesFeedCell = cell as? StoriesFeedCell {
-                storiesFeedCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-                return storiesFeedCell
-            } else if let storyCell = cell as? StoryCell {
-                storyCell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-                return storyCell
-            }
-
-            return UICollectionViewCell()
-
-        case .spacer:
-            guard let spacerCell = collectionView?.dequeueReusableCell(
-                cellType: HomepageSpacerCell.self,
-                for: indexPath
-            ) else {
-                return UICollectionViewCell()
-            }
-
-            return spacerCell
+        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
+            cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
 

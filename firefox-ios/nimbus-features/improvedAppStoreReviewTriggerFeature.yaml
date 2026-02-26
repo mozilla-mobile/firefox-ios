@@ -1,0 +1,18 @@
+# The configuration for the improved app store review trigger feature.
+features:
+  improved-app-store-review-trigger-feature:
+    description: >
+      The feature flag to manage the App Store review request trigger.
+    variables:
+      enabled:
+        description: >
+          Enables the feature.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

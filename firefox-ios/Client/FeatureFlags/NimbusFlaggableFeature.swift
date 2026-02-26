@@ -28,6 +28,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
     case homepageStoriesScrollDirection
+    case homepageStoryCategories
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -52,6 +53,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case tabScrollRefactorFeature
@@ -87,7 +89,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageSearchBar,
+                .homepageStoryCategories,
                 .hostedSummarizer,
+                .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -164,6 +168,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
+                .homepageStoryCategories,
+                .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,

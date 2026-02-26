@@ -22,6 +22,7 @@ protocol BrowserSelectorsSet {
     var MICROSURVEY_CLOSE_BUTTON: Selector { get }
     var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
     var SAVE_BUTTON: Selector { get }
+    var CLIPBOARD_TOAST: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -43,6 +44,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
         static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         static let saveButton = "Save"
+        static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -147,6 +149,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "bookmarks"]
     )
 
+    let CLIPBOARD_TOAST = Selector.staticTextByLabel(
+        IDs.clipboardToast,
+        description: "Clipboard paste notification toast from simulator",
+        groups: ["browser", "system"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -175,6 +183,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW,
-                           MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE, SAVE_BUTTON]
+                           MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE, SAVE_BUTTON, CLIPBOARD_TOAST]
     }
 }

@@ -449,7 +449,9 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-                self.urlTextField.isUserInteractionEnabled = false
+            }, completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = false
+                isUserInteractionEnabled = false
             })
     }
 
@@ -460,9 +462,9 @@ final class LocationView: UIView,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            },
-            completion: { [unowned self] _ in
+            }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
+                isUserInteractionEnabled = true
             }
         )
     }
@@ -530,8 +532,9 @@ final class LocationView: UIView,
 
         DispatchQueue.main.async { [unowned self] in
             if shouldShowKeyboard && config.shouldSelectSearchTerm {
-                urlTextField.text = text
-                urlTextField.selectAll(nil)
+                let start = urlTextField.beginningOfDocument
+                let end = urlTextField.endOfDocument
+                urlTextField.selectedTextRange = urlTextField.textRange(from: start, to: end)
             }
         }
     }

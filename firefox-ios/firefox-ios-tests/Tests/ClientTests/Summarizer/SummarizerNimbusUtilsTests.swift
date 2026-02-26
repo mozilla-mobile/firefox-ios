@@ -215,16 +215,12 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         let testLocales = ["en-US", "zh-Latn-HK"]
         setLanguageExpansionFeature(
             isEnabled: false,
-            supportWebsiteLanguage: false,
-            supportDeviceLanguage: false,
             supportedLocaleIdentifiers: testLocales
         )
 
         let config = subject.languageExpansionConfiguration()
 
         XCTAssertFalse(config.isFeatureEnabled)
-        XCTAssertFalse(config.isDeviceLanguageSupported)
-        XCTAssertFalse(config.isWebsiteDeviceLanguageSupported)
         XCTAssertEqual(config.supportedLocales.count, testLocales.count)
         XCTAssertEqual(config.supportedLocales[0].identifier, testLocales[0])
         XCTAssertEqual(config.supportedLocales[1].identifier, testLocales[1])
@@ -272,15 +268,11 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
 
     private func setLanguageExpansionFeature(
         isEnabled: Bool = true,
-        supportWebsiteLanguage: Bool = true,
-        supportDeviceLanguage: Bool = true,
         supportedLocaleIdentifiers: [String] = []
     ) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(
                 enabled: isEnabled,
-                supportDeviceLanguage: supportDeviceLanguage,
-                supportWebsiteLanguage: supportWebsiteLanguage,
                 supportedLocales: supportedLocaleIdentifiers
             )
         }

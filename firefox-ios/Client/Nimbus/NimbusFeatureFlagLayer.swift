@@ -55,6 +55,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault(from: nimbus)
 
+        case .homepageStoryCategories:
+            return checkHomepageStoriesCaterogiesFeature(from: nimbus)
+
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault(from: nimbus)
 
@@ -126,6 +129,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
+
+        case .improvedAppStoreReviewTriggerFeature:
+            return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
 
         case .relayIntegration:
             return checkRelayIntegration(from: nimbus)
@@ -243,6 +249,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageBookmarksSectionDefault(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().bookmarksSectionDefault
+    }
+
+    private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
     }
 
     private func checkHomepageJumpBackInSectionDefault(from nimbus: FxNimbus) -> Bool {
@@ -470,6 +480,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkOtherErrorPagesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
+    }
+
+    private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
     }
 
     // MARK: - Summarizer Feature

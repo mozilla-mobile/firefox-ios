@@ -14,7 +14,7 @@ protocol ToolbarViewProtocol: AnyObject {
     var overKeyboardContainer: BaseAlphaStackView { get }
     var isBottomSearchBar: Bool { get }
     var headerTopConstraint: Constraint? { get }
-    var bottomContainerConstraint: Constraint? { get }
+    var bottomContainerConstraint: ConstraintReference? { get }
     var overKeyboardContainerConstraint: Constraint? { get }
 }
 

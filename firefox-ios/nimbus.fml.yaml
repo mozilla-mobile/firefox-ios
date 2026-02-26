@@ -28,6 +28,7 @@ include:
   - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
+  - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
