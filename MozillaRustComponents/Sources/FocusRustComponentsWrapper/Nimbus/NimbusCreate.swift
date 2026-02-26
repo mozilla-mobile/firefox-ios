@@ -20,6 +20,27 @@ public let defaultErrorReporter: NimbusErrorReporter = { err in
 }
 
 class GleanMetricsHandler: MetricsHandler {
+    func recordDatabaseLoad(event: DatabaseLoadExtraDef) {
+        GleanMetrics.NimbusEvents.databaseLoad
+            .record(GleanMetrics.NimbusEvents.DatabaseLoadExtra(
+                corrupt: event.corrupt,
+                initialVersion: event.initialVersion,
+                error: event.error,
+                migratedVersion: event.migratedVersion,
+                migrationError: event.migrationError,
+            ))
+    }
+
+    func recordDatabaseMigration(event: DatabaseMigrationExtraDef) {
+        GleanMetrics.NimbusEvents.databaseMigration
+            .record(GleanMetrics.NimbusEvents.DatabaseMigrationExtra(
+                reason: event.reason,
+                fromVersion: event.fromVersion,
+                toVersion: event.toVersion,
+                error: event.error,
+            ))
+    }
+
     func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) {
         for extra in enrollmentStatusExtras {
             GleanMetrics.NimbusEvents.enrollmentStatus
