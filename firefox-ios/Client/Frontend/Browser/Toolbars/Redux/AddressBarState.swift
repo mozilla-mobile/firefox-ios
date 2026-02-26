@@ -1148,7 +1148,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 readerModeAction(
                     actionType: isSummaryAvailable ? .readerModeWithSummarizer : .readerMode,
                     isSelected: readerModeState == .active,
-                    badeImageName: isSummaryAvailable ? ImageIdentifiers.lightingBadge : nil,
+                    badeImageName: isSummaryAvailable ? ImageIdentifiers.lightningBadge : nil,
                     hasAlternativeLocationColor: hasAlternativeLocationColor
                 )
             )
@@ -1351,8 +1351,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return ToolbarActionConfiguration(
             actionType: actionType,
             iconName: StandardImageIdentifiers.Medium.readerView,
-            badgeImageName: StandardImageIdentifiers.Large.lightning,
-            maskImageName: StandardImageIdentifiers.Large.lightning,
+            bottomBadgeImage: UIImage(named: ImageIdentifiers.lightningBadge),
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,

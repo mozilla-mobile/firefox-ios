@@ -30,6 +30,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var actionLabel: String?
     var iconName: String?
     var badgeImageName: String?
+    /// The image for the bottom badge in a `ToolbarButton`.
+    var bottomBadgeImage: UIImage?
     var maskImageName: String?
     var templateModeForImage = true
     var loadingConfig: LoadingConfig?

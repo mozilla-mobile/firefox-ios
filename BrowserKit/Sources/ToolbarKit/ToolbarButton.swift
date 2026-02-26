@@ -127,6 +127,10 @@ class ToolbarButton: UIButton,
         largeContentImage = image
 
         configuration = config
+        if let buttonBadgeImage = element.bottomBadgeImage {
+            addBottomBadgeImage(buttonBadgeImage)
+        }
+            
         if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
             if let maskImageName = element.maskImageName {
@@ -134,10 +138,10 @@ class ToolbarButton: UIButton,
             }
         } else {
             // Remove badge & mask icons
-            imageView?.subviews.forEach { view in
-                guard view is UIImageView else { return }
-                view.removeFromSuperview()
-            }
+//            imageView?.subviews.forEach { view in
+//                guard view is UIImageView else { return }
+//                view.removeFromSuperview()
+//            }
         }
         layoutIfNeeded()
     }
@@ -164,6 +168,20 @@ class ToolbarButton: UIButton,
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+    
+    private func addBottomBadgeImage(_ image: UIImage) {
+        guard configuration?.image != nil else { return }
+        let badgeImageView = UIImageView(image: image)
+        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        imageView?.addSubview(badgeImageView)
+        NSLayoutConstraint.activate([
+            badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            badgeImageView.topAnchor.constraint(equalTo: centerYAnchor),
+            badgeImageView.widthAnchor.constraint(equalToConstant: 10.0),
+            badgeImageView.heightAnchor.constraint(equalToConstant: 10.0)
+        ])
     }
 
     private func addBadgeIcon(imageName: String) {
