@@ -5,7 +5,7 @@
 "TermsOfUse.BackButton.v142" = "Retro";
 
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Description.v142" = "Nos ha introducite un Conditiones de uso de %@ e actualisate nostre Aviso de confidentialitate.";
+"TermsOfUse.Description.v142" = "Nos ha introducite Conditiones de uso de %@ e actualisate nostre Aviso de confidentialitate.";
 
 /* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
 "TermsOfUse.LearnMoreHere.v147" = "Pro saper plus %@.";
