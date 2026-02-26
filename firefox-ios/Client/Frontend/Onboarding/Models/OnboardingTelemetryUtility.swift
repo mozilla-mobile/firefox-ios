@@ -18,7 +18,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Initializer (Legacy)
     init(
         with model: OnboardingKitViewModel,
-        onboardingReason: OnboardingReason = .newUser,
+        onboardingReason: OnboardingReason,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
@@ -32,7 +32,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     init(
         with model: OnboardingKitViewModel,
         onboardingVariant: OnboardingVariant,
-        onboardingReason: OnboardingReason = .newUser,
+        onboardingReason: OnboardingReason,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
@@ -147,6 +147,52 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         )
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.dismissed, extras: extras)
         gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
+    }
+
+    func sendWallpaperSelectorViewTelemetry() {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorViewExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorView, extras: extras)
+    }
+
+    func sendWallpaperSelectorCloseTelemetry() {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorCloseExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorClose, extras: extras)
+    }
+
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(
+            onboardingReason: onboardingReason.rawValue,
+            wallpaperName: wallpaperName,
+            wallpaperType: wallpaperType
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorSelected, extras: extras)
+    }
+
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectedExtra(
+            onboardingReason: onboardingReason.rawValue,
+            wallpaperName: wallpaperName,
+            wallpaperType: wallpaperType
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelected, extras: extras)
+    }
+
+    func sendEngagementNotificationTappedTelemetry() {
+        let extras = GleanMetrics.Onboarding.EngagementNotificationTappedExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.engagementNotificationTapped, extras: extras)
+    }
+
+    func sendEngagementNotificationCancelTelemetry() {
+        let extras = GleanMetrics.Onboarding.EngagementNotificationCancelExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.engagementNotificationCancel, extras: extras)
     }
 
     private struct BaseExtras {

@@ -166,7 +166,7 @@ class IntroViewModelTests: XCTestCase {
         line: UInt = #line
     ) -> IntroViewModel {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel, onboardingReason: .newUser)
         let subject = IntroViewModel(
             profile: MockProfile(databasePrefix: "introViewModelTests_"),
             model: onboardingViewModel,

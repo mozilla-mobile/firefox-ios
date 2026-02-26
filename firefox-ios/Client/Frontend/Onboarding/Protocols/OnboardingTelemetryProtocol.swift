@@ -26,4 +26,10 @@ protocol OnboardingTelemetryProtocol: AnyObject {
     func sendOnboardingShownTelemetry()
     /// Records `onboarding.dismissed` with the given method and submits the `onboarding` ping.
     func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome)
+    func sendWallpaperSelectorViewTelemetry()
+    func sendWallpaperSelectorCloseTelemetry()
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String)
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String)
+    func sendEngagementNotificationTappedTelemetry()
+    func sendEngagementNotificationCancelTelemetry()
 }

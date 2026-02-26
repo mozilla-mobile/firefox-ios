@@ -148,6 +148,13 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         sendOnboardingDismissedTelemetryCalled = true
         lastDismissedOutcome = outcome
     }
+
+    func sendWallpaperSelectorViewTelemetry() {}
+    func sendWallpaperSelectorCloseTelemetry() {}
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
+    func sendEngagementNotificationTappedTelemetry() {}
+    func sendEngagementNotificationCancelTelemetry() {}
 }
 
 class MockActivityEventHelper: ActivityEventHelper {
