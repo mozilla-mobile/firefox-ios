@@ -212,6 +212,14 @@ struct AccessibilityIdentifiers {
             static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
         }
 
+        struct BlockedTrackersLearnMore {
+            static let headerView = "BlockedTrackersLearnMore.HeaderView"
+            static let containerView = "BlockedTrackersLearnMore.containerView"
+            static let closeButton = "BlockedTrackersLearnMore.CloseButton"
+            static let backButton = "BlockedTrackersLearnMore.BackButton"
+            static let titleLabel = "BlockedTrackersLearnMore.TitleLabel"
+        }
+
         struct CertificatesScreen {
             static let headerView = "CertificatesViewController.HeaderView"
         }

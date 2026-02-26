@@ -214,9 +214,13 @@ class BlockedTrackersTableViewController: UIViewController,
                   shouldInteractWith URL: URL,
                   in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
-        let viewController = SettingsContentViewController(windowUUID: windowUUID)
-        viewController.url = URL
-        navigationController?.present(viewController, animated: true)
+        let viewController = BlockedTrackersLearnMoreViewController(
+            windowUUID: windowUUID,
+            notificationCenter: notificationCenter,
+            themeManager: themeManager,
+            url: URL
+        )
+        navigationController?.pushViewController(viewController, animated: true)
         return false
     }
 

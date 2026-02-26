@@ -24,7 +24,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func testMakeAttributedDescriptionSetsAttributedText() {
+    func testGetAttributedText_setsAttributedText() {
         let subject = createSubject()
         let text = "This is an information! Learn more"
 
@@ -32,7 +32,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         XCTAssertEqual(attributedText.string, text)
     }
 
-    func testMakeAttributedDescriptionAddsLinkAttribute_whenURLProvided() {
+    func testGetAttributedText_addsLinkAttribute_whenURLProvided() {
         let subject = createSubject()
         let text = "Learn more about tracking protection! Learn more"
         let linkedText = "Learn more"
@@ -45,7 +45,7 @@ final class BlockedTrackersFooterViewTests: XCTestCase {
         XCTAssertEqual(link, url)
     }
 
-    func testMakeAttributedDescription_doesNotAddLink_whenURLIsNil() {
+    func testGetAttributedText_doesNotAddLink_whenURLIsNil() {
         let subject = createSubject()
         let text = "Learn more about tracking protection! Learn more"
         let linkedText = "Learn more"
