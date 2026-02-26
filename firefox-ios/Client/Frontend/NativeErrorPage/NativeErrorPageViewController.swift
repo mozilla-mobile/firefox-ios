@@ -7,12 +7,13 @@ import Common
 import ComponentLibrary
 import Redux
 import Shared
-import X509
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
                                            ContentContainable,
-                                           StoreSubscriber {
+                                           StoreSubscriber,
+                                           NativeErrorRegularContentViewDelegate,
+                                           NativeErrorBadCertContentViewDelegate {
     typealias SubscriberStateType = NativeErrorPageState
     private let windowUUID: WindowUUID
 
@@ -31,7 +32,6 @@ final class NativeErrorPageViewController: UIViewController,
     private var nativeErrorPageState: NativeErrorPageState
 
     // MARK: UI Elements
-    /// Layout-only constants (no-internet and bad cert). Typography and colors come from FXFontStyles + theme.
     private struct UX {
         static let logoSizeWidth: CGFloat = 221
         static let logoSizeWidthiPad: CGFloat = 240
@@ -49,27 +49,10 @@ final class NativeErrorPageViewController: UIViewController,
             bottom: -16,
             trailing: -64
         )
-        // Advanced section (bad cert) – layout only; typography/colors from FXFontStyles + theme
-        static let advancedSectionBorderWidth: CGFloat = 1
-        static let advancedSectionCornerRadius: CGFloat = 12
-        static let advancedSectionPadding: CGFloat = 11
-        static let advancedSectionPaddingBottom: CGFloat = 10
-        static let advancedSectionListItemPadding: CGFloat = 6.5
-        static let advancedSectionListItemHorizontalPadding: CGFloat = 16
-        static let advancedSectionHeaderHeight: CGFloat = 24
-        static let advancedSectionChevronSize: CGFloat = 24
-        static let advancedSectionLinkRowHeight: CGFloat = 44
-        static let buttonCornerRadius: CGFloat = 12
-        static let buttonHeight: CGFloat = 45
-        static let buttonPaddingVertical: CGFloat = 12
-        static let buttonPaddingHorizontal: CGFloat = 16
         static let badCertContentWidth: CGFloat = 311
         static let badCertContentGap: CGFloat = 16
         static let badCertImageSize: CGFloat = 160
         static let badCertGapBetweenImageAndContent: CGFloat = 40
-        // Proceed button container 
-        static let badCertProceedContainerPadding: CGFloat = 8
-        static let badCertProceedContainerGap: CGFloat = 10
     }
 
     private lazy var scrollView: UIScrollView = .build()
@@ -113,80 +96,26 @@ final class NativeErrorPageViewController: UIViewController,
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
 
-    private lazy var reloadButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapReload), for: .touchUpInside)
-        button.isEnabled = true
-    }
+    // MARK: Content Views
 
-    // Bad cert: advanced section + buttons 
-    private var isAdvancedSectionExpanded = false
-    private lazy var advancedSectionContainer: UIView = .build { view in
-        view.layer.borderWidth = UX.advancedSectionBorderWidth
-        view.layer.cornerRadius = UX.advancedSectionCornerRadius
-        view.clipsToBounds = true
-    }
+    private var currentActionView: UIView?
 
-    private lazy var advancedSectionStack: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 0
-    }
+    private lazy var regularContentView: NativeErrorRegularContentView = {
+        let view = NativeErrorRegularContentView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.delegate = self
+        view.configure()
+        return view
+    }()
 
-    private lazy var advancedSectionHeader: UIView = .build()
-    private lazy var advancedSectionHeaderButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.toggleAdvancedSection), for: .touchUpInside)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.advancedSectionHeader
-    }
+    private lazy var badCertContentView: NativeErrorBadCertContentView = {
+        let view = NativeErrorBadCertContentView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.delegate = self
+        return view
+    }()
 
-    private lazy var advancedSectionTitleLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Bold.subheadline.scaledFont()
-    }
-
-    private lazy var advancedSectionChevron: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-    }
-
-    private lazy var advancedSectionContent: UIView = .build()
-    private lazy var advancedSectionContentStack: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 0
-    }
-
-    private lazy var goBackButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapGoBack), for: .touchUpInside)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
-        button.titleLabel?.textAlignment = .center
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.buttonPaddingVertical,
-            leading: UX.buttonPaddingHorizontal,
-            bottom: UX.buttonPaddingVertical,
-            trailing: UX.buttonPaddingHorizontal
-        )
-        button.configuration = config
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.goBackButton
-    }
-
-    private lazy var proceedButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapProceed), for: .touchUpInside)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.font = FXFontStyles.Bold.callout.scaledFont()
-        button.titleLabel?.textAlignment = .center
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.buttonPaddingVertical,
-            leading: UX.buttonPaddingHorizontal,
-            bottom: UX.buttonPaddingVertical,
-            trailing: UX.buttonPaddingHorizontal
-        )
-        button.configuration = config
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.proceedButton
-    }
+    // MARK: Constraints
 
     private var commonConstraintsList = [NSLayoutConstraint]()
     private var portraitConstraintsList = [NSLayoutConstraint]()
@@ -199,7 +128,6 @@ final class NativeErrorPageViewController: UIViewController,
         return UIDevice.current.isIphoneLandscape
     }
 
-    // Helper function to switch layout to 'portrait' is ContentSizeCategory is large or more
     private var isLargeContentSizeCategory: Bool {
         switch traitCollection.preferredContentSizeCategory {
         case .accessibilityExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge:
@@ -229,6 +157,7 @@ final class NativeErrorPageViewController: UIViewController,
 
    init(
         windowUUID: WindowUUID,
+        tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -236,6 +165,7 @@ final class NativeErrorPageViewController: UIViewController,
         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.tabManager = tabManager
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
@@ -249,76 +179,60 @@ final class NativeErrorPageViewController: UIViewController,
         )
 
         subscribeToRedux()
-        configureUI()
         setupLayout()
         adjustConstraints()
         showViewForCurrentOrientation()
     }
 
     // MARK: Redux
+
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-
-        if state.title.isEmpty {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                guard let self = self else { return }
-                store.dispatch(NativeErrorPageAction(windowUUID: self.windowUUID,
-                                                     actionType: NativeErrorPageActionType.errorPageLoaded))
-            }
-            return
-        }
+        guard !state.title.isEmpty else { return }
 
         let isBadCert = state.advancedSection != nil && state.showGoBackButton
         if isBadCert {
-            setupBadCertDomainUI()
-            updateBadCertDomainContent()
+            showBadCertUI()
         } else {
-            setupRegularErrorPageUI()
-            titleLabel.text = state.title
-            foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
-            if let validURL = state.url {
-                errorDescriptionLabel.attributedText = getDescriptionWithHostName(
-                    errorURL: validURL,
-                    description: state.description
-                )
-            } else {
-                errorDescriptionLabel.text = state.description
-            }
+            showRegularUI()
         }
     }
 
-    private func setupRegularErrorPageUI() {
-        reloadButton.isHidden = false
-        advancedSectionContainer.isHidden = true
-        goBackButton.isHidden = true
+    private func showRegularUI() {
+        setActionView(regularContentView)
         scrollContainer.spacing = UX.mainStackSpacing
         contentStack.spacing = UX.textStackSpacing
         contentStackWidthConstraint?.isActive = false
         foxImageWidthConstraint?.constant = UX.logoSizeWidth
         foxImageHeightConstraint?.isActive = false
+
+        titleLabel.text = nativeErrorPageState.title
+        foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
+        if let validURL = nativeErrorPageState.url {
+            errorDescriptionLabel.attributedText = getDescriptionWithHostName(
+                errorURL: validURL,
+                description: nativeErrorPageState.description
+            )
+        } else {
+            errorDescriptionLabel.text = nativeErrorPageState.description
+        }
         applyTheme()
     }
 
-    private func setupBadCertDomainUI() {
-        reloadButton.isHidden = true
-        advancedSectionContainer.isHidden = false
-        goBackButton.isHidden = false
+    private func showBadCertUI() {
+        setActionView(badCertContentView)
         scrollContainer.spacing = UX.badCertGapBetweenImageAndContent
         contentStack.spacing = UX.badCertContentGap
+        contentStack.setCustomSpacing(UX.badCertContentGap, after: errorDescriptionLabel)
         contentStackWidthConstraint?.constant = UX.badCertContentWidth
         contentStackWidthConstraint?.isActive = true
         foxImageWidthConstraint?.constant = UX.badCertImageSize
         foxImageHeightConstraint?.isActive = true
-        applyTheme()
-    }
-
-    private func updateBadCertDomainContent() {
-        guard let state = nativeErrorPageState.advancedSection else { return }
 
         foxImage.image = !nativeErrorPageState.foxImage.isEmpty
             ? UIImage(named: nativeErrorPageState.foxImage)
             : UIImage(named: ImageIdentifiers.NativeErrorPage.securityError)
-        // Title on two lines (e.g. "Be careful." / "Something doesn't look right.")
+
         let titleString: String
         if let range = nativeErrorPageState.title.range(of: ". ") {
             titleString = nativeErrorPageState.title.replacingCharacters(in: range, with: ".\n")
@@ -328,10 +242,23 @@ final class NativeErrorPageViewController: UIViewController,
         titleLabel.text = titleString
         titleLabel.font = FXFontStyles.Bold.title2.scaledFont()
         errorDescriptionLabel.text = nativeErrorPageState.description
-        errorDescriptionLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
+        errorDescriptionLabel.font = FXFontStyles.Regular.body.scaledFont()
 
-        updateAdvancedSection(state: state)
-        goBackButton.setTitle(String.NativeErrorPage.GoBackButton, for: .normal)
+        applyTheme()
+
+        if let advancedSection = nativeErrorPageState.advancedSection {
+            badCertContentView.configure(
+                advancedSection: advancedSection,
+                url: nativeErrorPageState.url,
+                goBackTitle: String.NativeErrorPage.GoBackButton
+            )
+        }
+    }
+
+    private func setActionView(_ view: UIView) {
+        currentActionView?.removeFromSuperview()
+        currentActionView = view
+        contentStack.addArrangedSubview(view)
     }
 
     func subscribeToRedux() {
@@ -376,13 +303,9 @@ final class NativeErrorPageViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        // Dispatch errorPageLoaded to trigger initialization
-        // Use a small delay to ensure receivedError has been processed first
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            store.dispatch(NativeErrorPageAction(windowUUID: self.windowUUID,
-                                                 actionType: NativeErrorPageActionType.errorPageLoaded))
-        }
+        // TODO: Refactor to dispatch errorPageLoaded from middleware (or equivalent) per Redux best practices
+        store.dispatch(NativeErrorPageAction(windowUUID: windowUUID,
+                                             actionType: NativeErrorPageActionType.errorPageLoaded))
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -402,104 +325,29 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
-    private func configureUI() {
-        let viewModel = PrimaryRoundedButtonViewModel(
-            title: .NativeErrorPage.ButtonLabel,
-            a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.reloadButton
-        )
-        reloadButton.configure(
-            viewModel: viewModel
-        )
-    }
-
     private func setupLayout() {
-        // Single content area for both no internet and bad cert (same format: image, title, description, then action)
         contentStack.addArrangedSubview(titleLabel)
         contentStack.addArrangedSubview(errorDescriptionLabel)
         contentStack.setCustomSpacing(UX.mainStackSpacing, after: errorDescriptionLabel)
-        contentStack.addArrangedSubview(reloadButton)
-        contentStack.addArrangedSubview(advancedSectionContainer)
-        contentStack.addArrangedSubview(goBackButton)
         scrollContainer.addArrangedSubview(foxImage)
         scrollContainer.addArrangedSubview(contentStack)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
 
-        setupAdvancedSectionLayout()
-        contentStackWidthConstraint = contentStack.widthAnchor.constraint(equalToConstant: UX.badCertContentWidth)
+        contentStackWidthConstraint = contentStack.widthAnchor.constraint(
+            equalToConstant: UX.badCertContentWidth
+        )
         contentStackWidthConstraint?.isActive = false
-        foxImageWidthConstraint = foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+
+        foxImageWidthConstraint = foxImage.widthAnchor.constraint(
+            equalToConstant: UX.logoSizeWidth
+        )
         foxImageWidthConstraint?.isActive = true
-        foxImageHeightConstraint = foxImage.heightAnchor.constraint(equalToConstant: UX.badCertImageSize)
+
+        foxImageHeightConstraint = foxImage.heightAnchor.constraint(
+            equalToConstant: UX.badCertImageSize
+        )
         foxImageHeightConstraint?.isActive = false
-        advancedSectionContainer.widthAnchor.constraint(equalTo: contentStack.widthAnchor).isActive = true
-        goBackButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight).isActive = true
-
-        advancedSectionContainer.isHidden = true
-        goBackButton.isHidden = true
-    }
-
-    private func setupAdvancedSectionLayout() {
-        advancedSectionContainer.addSubview(advancedSectionStack)
-        advancedSectionStack.translatesAutoresizingMaskIntoConstraints = false
-
-        advancedSectionHeader.addSubview(advancedSectionHeaderButton)
-        advancedSectionHeaderButton.translatesAutoresizingMaskIntoConstraints = false
-        advancedSectionHeaderButton.addSubview(advancedSectionTitleLabel)
-        advancedSectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        advancedSectionHeaderButton.addSubview(advancedSectionChevron)
-        advancedSectionChevron.translatesAutoresizingMaskIntoConstraints = false
-        let chevronConfig = UIImage.SymbolConfiguration(pointSize: UX.advancedSectionChevronSize, weight: .regular)
-        advancedSectionChevron.image = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)
-
-        advancedSectionContent.addSubview(advancedSectionContentStack)
-        advancedSectionContentStack.translatesAutoresizingMaskIntoConstraints = false
-        advancedSectionStack.addArrangedSubview(advancedSectionHeader)
-        advancedSectionStack.addArrangedSubview(advancedSectionContent)
-
-        let padding = UX.advancedSectionPadding
-        let listPadding = UX.advancedSectionListItemHorizontalPadding
-        NSLayoutConstraint.activate([
-            advancedSectionStack.topAnchor.constraint(
-                equalTo: advancedSectionContainer.topAnchor, constant: padding),
-            advancedSectionStack.leadingAnchor.constraint(
-                equalTo: advancedSectionContainer.leadingAnchor),
-            advancedSectionStack.trailingAnchor.constraint(
-                equalTo: advancedSectionContainer.trailingAnchor),
-            advancedSectionStack.bottomAnchor.constraint(
-                equalTo: advancedSectionContainer.bottomAnchor,
-                constant: -UX.advancedSectionPaddingBottom),
-            advancedSectionHeaderButton.topAnchor.constraint(
-                equalTo: advancedSectionHeader.topAnchor),
-            advancedSectionHeaderButton.leadingAnchor.constraint(
-                equalTo: advancedSectionHeader.leadingAnchor),
-            advancedSectionHeaderButton.trailingAnchor.constraint(
-                equalTo: advancedSectionHeader.trailingAnchor),
-            advancedSectionHeaderButton.bottomAnchor.constraint(
-                equalTo: advancedSectionHeader.bottomAnchor),
-            advancedSectionHeaderButton.heightAnchor.constraint(
-                equalToConstant: UX.advancedSectionHeaderHeight),
-            advancedSectionTitleLabel.leadingAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.leadingAnchor, constant: listPadding),
-            advancedSectionTitleLabel.centerYAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.centerYAnchor),
-            advancedSectionChevron.trailingAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.trailingAnchor, constant: -listPadding),
-            advancedSectionChevron.centerYAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.centerYAnchor),
-            advancedSectionChevron.widthAnchor.constraint(
-                equalToConstant: UX.advancedSectionChevronSize),
-            advancedSectionChevron.heightAnchor.constraint(
-                equalToConstant: UX.advancedSectionChevronSize),
-            advancedSectionContentStack.topAnchor.constraint(
-                equalTo: advancedSectionContent.topAnchor),
-            advancedSectionContentStack.leadingAnchor.constraint(
-                equalTo: advancedSectionContent.leadingAnchor),
-            advancedSectionContentStack.trailingAnchor.constraint(
-                equalTo: advancedSectionContent.trailingAnchor),
-            advancedSectionContentStack.bottomAnchor.constraint(
-                equalTo: advancedSectionContent.bottomAnchor)
-        ])
     }
 
     func adjustConstraints() {
@@ -536,14 +384,8 @@ final class NativeErrorPageViewController: UIViewController,
             ),
         ]
 
-        portraitConstraintsList = [
-            goBackButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor)
-        ]
-
         landscapeConstraintsList = [
             foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
-            reloadButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor),
-            goBackButton.widthAnchor.constraint(equalTo: contentStack.widthAnchor)
         ]
 
         NSLayoutConstraint.activate(commonConstraintsList)
@@ -551,8 +393,6 @@ final class NativeErrorPageViewController: UIViewController,
 
         if shouldUseHorizontalLayout {
             NSLayoutConstraint.activate(landscapeConstraintsList)
-        } else {
-            NSLayoutConstraint.activate(portraitConstraintsList)
         }
     }
 
@@ -561,20 +401,13 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     // MARK: ThemeApplicable
+
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         errorDescriptionLabel.textColor = theme.colors.textPrimary
-        reloadButton.applyTheme(theme: theme)
-        goBackButton.backgroundColor = theme.colors.actionPrimary
-        goBackButton.setTitleColor(theme.colors.textInverted, for: .normal)
-        proceedButton.backgroundColor = theme.colors.actionSecondary
-        proceedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
-        advancedSectionContainer.backgroundColor = theme.colors.layer2
-        advancedSectionContainer.layer.borderColor = theme.colors.borderPrimary.cgColor
-        advancedSectionTitleLabel.textColor = theme.colors.textPrimary
-        advancedSectionChevron.tintColor = theme.colors.actionPrimary
+        (currentActionView as? ThemeApplicable)?.applyTheme(theme: theme)
     }
 
     private func dispatchBrowserAction(
@@ -592,8 +425,28 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
-    @objc
-    private func didTapViewCertificate() {
+    // MARK: - NativeErrorRegularContentViewDelegate
+
+    func regularContentViewDidTapReload() {
+        dispatchBrowserAction(actionType: .reloadWebsite, isNativeErrorPage: true)
+    }
+
+    // MARK: - NativeErrorBadCertContentViewDelegate
+
+    func badCertContentViewDidTapGoBack() {
+        dispatchBrowserAction(actionType: .navigateBack, isNativeErrorPage: true)
+    }
+
+    func badCertContentViewDidTapProceed() {
+        store.dispatch(
+            NativeErrorPageAction(
+                windowUUID: windowUUID,
+                actionType: NativeErrorPageActionType.bypassCertificateWarning
+            )
+        )
+    }
+
+    func badCertContentViewDidTapViewCertificate() {
         guard let selectedTab = tabManager.selectedTab,
               let errorURL = selectedTab.webView?.url,
               let internalURL = InternalURL(errorURL),
@@ -602,10 +455,11 @@ final class NativeErrorPageViewController: UIViewController,
         guard !CertificateHelper.certificatesFromErrorURL(errorURL, logger: logger).isEmpty else { return }
 
         let destination = NavigationDestination(
-            .certificatesFromErrorPage,
-            url: originalURL,
-            errorPageURL: errorURL,
-            certificateTitle: nativeErrorPageState.title
+            .certificatesFromErrorPage(
+                originalURL: originalURL,
+                errorPageURL: errorURL,
+                certificateTitle: nativeErrorPageState.title
+            )
         )
         store.dispatch(
             NavigationBrowserAction(
@@ -616,8 +470,7 @@ final class NativeErrorPageViewController: UIViewController,
         )
     }
 
-    @objc
-    private func didTapLearnMore() {
+    func badCertContentViewDidTapLearnMore() {
         guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else {
             logger.log(
                 "NativeErrorPage: Unable to create Learn More support URL",
@@ -627,7 +480,7 @@ final class NativeErrorPageViewController: UIViewController,
             return
         }
 
-        let destination = NavigationDestination(.nativeErrorPageLearnMore, url: url)
+        let destination = NavigationDestination(.nativeErrorPageLearnMore(url))
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: destination,
@@ -642,7 +495,7 @@ final class NativeErrorPageViewController: UIViewController,
 
         let errDescription = String(format: description, validHostName)
         let attributedString = errDescription.attributedText(
-            style: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
+            style: [.font: FXFontStyles.Regular.body.scaledFont()],
             highlightedText: validHostName,
             highlightedTextStyle: [.font: FXFontStyles.Bold.body.scaledFont()]
         )
