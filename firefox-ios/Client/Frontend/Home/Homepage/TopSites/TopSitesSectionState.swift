@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
@@ -10,6 +11,7 @@ import Shared
 /// State for the top sites section that is used in the homepage
 /// The state does not only contain the top sites list, but needs to also know about the number of rows
 /// and tiles per row in order to only show a specific amount of the top sites data.
+@CopyWithUpdates
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     let topSitesData: [TopSiteConfiguration]
@@ -17,13 +19,15 @@ struct TopSitesSectionState: StateType, Equatable {
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .FirefoxHomepage.Shortcuts.SectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .FirefoxHomepage.Shortcuts.SectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
@@ -81,12 +85,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: sites,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+        return state.copyWithUpdates(
+            topSitesData: sites
         )
     }
 
@@ -97,12 +97,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+        return state.copyWithUpdates(
+            numberOfRows: numberOfRows
         )
     }
 
@@ -113,12 +109,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+        return state.copyWithUpdates(
+            numberOfTilesPerRow: numberOfTilesPerRow
         )
     }
 
@@ -129,22 +121,12 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 }

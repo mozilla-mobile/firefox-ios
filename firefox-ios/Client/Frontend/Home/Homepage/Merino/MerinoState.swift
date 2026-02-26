@@ -3,18 +3,22 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
 
 /// State for the Merino stories section that is used in the homepage
+@CopyWithUpdates
 struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: [MerinoStoryConfiguration]
     let shouldShowSection: Bool
-    let sectionHeaderState = initializeSectionHeaderState()
 
-    let footerURL = SupportUtils.URLForPocketLearnMore
+    struct Constants {
+        static let sectionHeaderConfiguration = MerinoState.initializeSectionHeaderConfiguration()
+        static let footerURL = SupportUtils.URLForPocketLearnMore
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let userPrefs = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
@@ -61,8 +65,7 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             merinoData: pocketStories,
             shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
         )
@@ -75,22 +78,16 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: MerinoState) -> MerinoState {
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 
-    private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
+    private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
          let isScrollDirectionCustomized = scrollDirection != .baseline
