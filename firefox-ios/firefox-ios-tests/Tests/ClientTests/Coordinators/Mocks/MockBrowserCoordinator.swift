@@ -47,6 +47,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showShortcutsLibraryCalled = 0
     var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
+    var showCertificatesFromErrorPageCalled = 0
+    var showNativeErrorPageLearnMoreCalled = 0
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
     var showCertificatesFromErrorPageCalled = 0

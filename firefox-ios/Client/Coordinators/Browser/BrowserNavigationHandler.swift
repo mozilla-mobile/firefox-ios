@@ -123,6 +123,13 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     @MainActor
     func showPrivacyNoticeLink(url: URL)
 
+    // Minimal fix for this PR: full protocol (e.g. openLearnMoreFromNativeErrorPage) in cert modal PR #31930 (FXIOS-14595).
+    @MainActor
+    func showCertificatesFromErrorPage(originalURL: URL, errorPageURL: URL, certificateTitle: String)
+
+    @MainActor
+    func showNativeErrorPageLearnMore(url: URL)
+
     @MainActor
     func showTermsOfUse(context: TriggerContext)
 
