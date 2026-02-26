@@ -2122,7 +2122,6 @@
 		ED4294852CF1286E0077D7CB /* ShareManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4294842CF1286E0077D7CB /* ShareManagerTests.swift */; };
 		ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */; };
 		ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */; };
-		ED4F77E02F364BF800E7A7FB /* CopyWithUpdates in Frameworks */ = {isa = PBXBuildFile; productRef = ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
 		ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */; };
 		ED5835FD2D2D98C6000C188A /* SponsoredSiteInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredSiteInfo.swift */; };
@@ -11126,7 +11125,6 @@
 		ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTelemetry.swift; sourceTree = "<group>"; };
 		ED264785844AD63AD616A882 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ED26BFD62DE5260700FB2B3F /* glean_index.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = glean_index.yaml; sourceTree = "<group>"; };
-		ED27142C2F1EBE17008070C2 /* CopyWithUpdatesMacro */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CopyWithUpdatesMacro; path = ../CopyWithUpdatesMacro; sourceTree = SOURCE_ROOT; };
 		ED287B722E4D4C0500527204 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollBehaviorModel.swift; sourceTree = "<group>"; };
 		ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLActivityItemProviderTests.swift; sourceTree = "<group>"; };
@@ -11436,7 +11434,6 @@
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
-				ED4F77E02F364BF800E7A7FB /* CopyWithUpdates in Frameworks */,
 				8AF2D0FC2A5F272A00C7DD69 /* ComponentLibrary in Frameworks */,
 				5A871490292EA3910039A5BD /* SiteImageView in Frameworks */,
 				C877037A25222F30006E38EB /* Localizations.framework in Frameworks */,
@@ -16237,20 +16234,18 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
-				ED27142C2F1EBE17008070C2 /* CopyWithUpdatesMacro */,
 				C2F335362ECE339F0071588A /* TranslationsEngine.html */,
-				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
-				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
-				962C6C39297054A700354BE8 /* Package.swift */,
-				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
-				45D5EDC1292D636000311934 /* nimbus.fml.yaml */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
+				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F8324A082649A188007E4BFA /* CredentialProvider */,
+				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				D4AFA84B2AFA4FC6000BFEAA /* firefox-ios-tests */,
+				E17EFC2E2CD16F5A00169A1F /* Sticker */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
+				45D5EDC1292D636000311934 /* nimbus.fml.yaml */,
+				962C6C39297054A700354BE8 /* Package.swift */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				39F99FC71E3A6DB700F353B4 /* Push */,
@@ -16258,11 +16253,12 @@
 				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				7B3632E71C29879300D12AF9 /* Snapshot */,
 				962C6C3B297054EC00354BE8 /* Sources */,
-				E17EFC2E2CD16F5A00169A1F /* Sticker */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
+				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
+				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
 			);
 			sourceTree = "<group>";
 		};
@@ -17096,7 +17092,6 @@
 				0BF802E12CFF0937005633E5 /* Shared */,
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
-				ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */,
 				C209316F2F3CA5E200F0B05C /* VoiceSearchKit */,
 			);
 			productName = Client;
@@ -31980,10 +31975,6 @@
 		E5C2C1562EA9138D001E3DEF /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
-		};
-		ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CopyWithUpdates;
 		};
 		ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
