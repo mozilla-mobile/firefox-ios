@@ -187,8 +187,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard section == 0 else { return nil }
-        guard let footerView = tableView.dequeueReusableHeaderFooterView(
+        guard section == 0, let footerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: BlockedTrackersFooterView.cellIdentifier
         ) as? BlockedTrackersFooterView else { return nil }
 
@@ -209,6 +208,16 @@ class BlockedTrackersTableViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    func textView(_ textView: UITextView,
+                  shouldInteractWith URL: URL,
+                  in characterRange: NSRange,
+                  interaction: UITextItemInteraction) -> Bool {
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
+        viewController.url = URL
+        navigationController?.present(viewController, animated: true)
+        return false
     }
 
     @objc

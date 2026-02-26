@@ -12,7 +12,7 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
         static let footerLeadingAnchorMultiplier: CGFloat = 1.7
     }
 
-    let trackersBlockedInfoTextView: UITextView = .build { textView in
+    private let trackersBlockedInfoTextView: UITextView = .build { textView in
         textView.isEditable = false
         textView.isScrollEnabled = false
         textView.backgroundColor = .clear
@@ -62,6 +62,19 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
         and delegate: UITextViewDelegate? = nil
     ) {
         trackersBlockedInfoTextView.delegate = delegate
+        let attributedText = getAttributedText(
+            with: text,
+            linkedText: linkedText,
+            url: url,
+            theme: theme
+        )
+        trackersBlockedInfoTextView.attributedText = attributedText
+    }
+
+    func getAttributedText(with text: String,
+                           linkedText: String,
+                           url: URL?,
+                           theme: Theme) -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
 
@@ -81,7 +94,7 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
             attributed.addAttribute(.link, value: url, range: learnMoreRange)
         }
 
-        trackersBlockedInfoTextView.attributedText = attributed
+        return attributed
     }
 
     func applyTheme(theme: Theme) {
