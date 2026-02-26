@@ -27,7 +27,7 @@ enum FlaggableFeatureCheckOptions {
 }
 
 // FIXME: FXIOS-13986 Make truly thread safe
-class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
+class LegacyFeatureFlagsManager: HasNimbusFeatureFlagLayer, @unchecked Sendable {
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the

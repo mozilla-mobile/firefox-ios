@@ -12,7 +12,7 @@ protocol MozAdsClientFactory {
 
 final class DefaultMozAdsClientFactory: MozAdsClientFactory, FeatureFlaggable {
     func createClient() -> MozAdsClientProtocol {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return RustAdsClient.staging
         }
         return RustAdsClient.production

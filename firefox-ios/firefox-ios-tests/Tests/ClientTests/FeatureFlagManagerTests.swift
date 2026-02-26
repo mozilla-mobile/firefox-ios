@@ -19,9 +19,9 @@ final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Tests
     func testExpectedCoreFeatures() {
-        let adjustSetting = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
-        let mockDataSetting = featureFlags.isCoreFeatureEnabled(.useMockData)
-        let unifiedAdsAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI)
+        let adjustSetting = CoreBuildFlags.isAdjustEnvironmentProd
+        let mockDataSetting = CoreBuildFlags.isUsingMockData
+        let unifiedAdsAPISetting = CoreBuildFlags.isUsingStagingUnifiedAdsAPI
 
         XCTAssertFalse(adjustSetting)
         XCTAssertTrue(mockDataSetting)

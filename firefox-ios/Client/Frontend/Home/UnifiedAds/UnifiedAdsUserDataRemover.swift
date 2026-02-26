@@ -61,7 +61,7 @@ struct UnifiedAdsUserDataRemover: FeatureFlaggable {
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if  CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return URL(string: UnifiedAdsUserDataRemover.stagingResourceEndpoint)
         }
         return URL(string: UnifiedAdsUserDataRemover.prodResourceEndpoint)

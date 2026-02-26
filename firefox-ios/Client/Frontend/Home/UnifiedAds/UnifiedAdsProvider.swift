@@ -184,7 +184,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return URL(string: UnifiedAdsProvider.stagingResourceEndpoint)
         }
         return URL(string: UnifiedAdsProvider.prodResourceEndpoint)

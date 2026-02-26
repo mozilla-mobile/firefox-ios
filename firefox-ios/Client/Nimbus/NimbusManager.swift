@@ -4,9 +4,9 @@
 
 import Foundation
 
-protocol HasNimbusFeatureFlags { }
+protocol HasNimbusFeatureFlagLayer { }
 
-extension HasNimbusFeatureFlags {
+extension HasNimbusFeatureFlagLayer {
     var nimbusFlags: NimbusFeatureFlagLayer {
         return NimbusManager.shared.featureFlagLayer
     }
