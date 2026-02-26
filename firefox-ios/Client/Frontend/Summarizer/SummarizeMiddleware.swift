@@ -5,6 +5,7 @@
 import Common
 import Redux
 import SummarizeKit
+import WebKit
 
 @MainActor
 final class SummarizerMiddleware {
@@ -33,6 +34,10 @@ final class SummarizerMiddleware {
         self.summarizerNimbusUtils = summarizerNimbusUtility
         self.summarizationChecker = summarizationChecker
         self.summarizerServiceFactory = summarizerServiceFactory
+        self.summarizerLanguageProvider = DefaultSummarizerLanguageProvider(
+            appLanguageProvider: SystemLocaleProvider(),
+            websiteLanguageProvider: LanguageDetector()
+        )
     }
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
@@ -62,20 +67,8 @@ final class SummarizerMiddleware {
 
     @MainActor
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
-        guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
-        let result = await checkSummarizationResult(tab)
-        let contentType = result?.contentType ?? .generic
-        guard result?.canSummarize == true else { return }
-        let summarizerConfig: SummarizerConfig
-        if summarizerNimbusUtils.isLanguageExpansionEnabled {
-            let userPreference = summarizerNimbusUtils.languageExpansionConfiguration(
-                from: FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
-            ).selectedPreference(prefs: profile.prefs)
-            let locale = await summarizerLanguageProvider.getLanguage(for: userPreference)
-            summarizerConfig = SummarizerConfigManager().getConfig(summarizerType, contentType: contentType, locale: locale)
-        } else {
-            summarizerConfig = SummarizerConfigManager().getConfig(summarizerType, contentType: contentType)
-        }
+        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+        guard let summarizerConfig = await getSummarizerConfiguration(webView) else { return }
         
         store.dispatch(
             SummarizeAction(
@@ -84,5 +77,46 @@ final class SummarizerMiddleware {
                 summarizerConfig: summarizerConfig
             )
         )
+    }
+    
+    func getSummarizerConfiguration(_ webView: WKWebView) async -> SummarizerConfig? {
+        guard summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
+        
+        let preSummarizationCheckResults = await summarizationChecker.check(on: webView, maxWords: maxWords)
+        guard preSummarizationCheckResults.canSummarize else { return nil }
+        
+        if summarizerNimbusUtils.isLanguageExpansionEnabled {
+            let langExpansionConfiguration = summarizerNimbusUtils.languageExpansionConfiguration()
+            guard let summarizerLocale = await summarizerLanguageProvider.getLanguage(
+                userPreference: langExpansionConfiguration.selectedPreference(
+                    prefs: profile.prefs
+                ),
+                supportedLocales: langExpansionConfiguration.supportedLocales,
+                languageSampleSource: WebViewLanguageSampleSource(webView: webView)
+            ) else {
+                return nil
+            }
+            // TODO: inject local locale config
+            return SummarizerConfigManager(sources: [SummarizerConfigSourceLanguageAware()]).getConfig(
+                summarizerType,
+                contentType: preSummarizationCheckResults.contentType ?? .generic,
+                locale: summarizerLocale
+            )
+        }
+        if summarizerNimbusUtils.isSummarizeFeatureEnabled {
+            // For previous experiments where lang is default to en we need to check just if web site language
+            // is en otherwise no configuration for the summarizer can be built.
+            let isSupportedLocale = await summarizerLanguageProvider.getLanguage(
+                userPreference: .websiteLanguage,
+                supportedLocales: [Locale(identifier: "en")],
+                languageSampleSource: WebViewLanguageSampleSource(webView: webView)
+            ) != nil
+            guard isSupportedLocale else { return nil }
+            return SummarizerConfigManager().getConfig(
+                summarizerType,
+                contentType: preSummarizationCheckResults.contentType ?? .generic,
+            )
+        }
+        return nil
     }
 }

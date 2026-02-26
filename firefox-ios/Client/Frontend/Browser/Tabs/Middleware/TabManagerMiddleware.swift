@@ -778,16 +778,16 @@ final class TabManagerMiddleware: FeatureFlaggable,
             assert(Thread.isMainThread)
             if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
+                    guard let webView = selectedTab.webView else { return }
                     let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let contentType = summarizationCheckResult?.contentType ?? .generic
+                    let summarizerConfig = await summarizeMiddleware.getSummarizerConfiguration(webView)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        canSummarize: summarizerConfig != nil,
+                        summarizerConfig: summarizerConfig
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
@@ -825,7 +825,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             windowUUID: windowUUID,
             accountData: accountData,
             canSummarize: false,
-            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
+            summarizerConfig: nil
         )
     }
 

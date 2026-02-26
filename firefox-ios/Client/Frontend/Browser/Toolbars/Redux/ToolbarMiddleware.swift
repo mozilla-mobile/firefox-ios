@@ -19,7 +19,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -35,7 +34,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
          profile: Profile = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
          summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
          recentSearchProvider: RecentSearchProvider? = nil,
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -43,7 +41,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.manager = manager
         self.summarizationChecker = summarizationChecker
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
         self.prefs = profile.prefs
@@ -305,11 +302,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
         case .summarizer:
             Task { @MainActor in
-                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
                 let summarizeMiddleware = SummarizerMiddleware()
-                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
-                let contentType = summarizationCheckResult?.contentType ?? .generic
-                let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
+                let summarizerConfig = await summarizeMiddleware.getSummarizerConfiguration(webView)
+                let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
@@ -468,16 +464,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
               isSummarizerOn
         else { return }
-        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
+
         Task { @MainActor in
-            let result = await summarizationChecker.check(
-                on: webView,
-                maxWords: maxWords
-            )
+            let summarizerMiddleware = SummarizerMiddleware()
+            let canSummarize = await summarizerMiddleware.getSummarizerConfiguration(webView) != nil
             store.dispatch(
                 ToolbarAction(
-                    canSummarize: result.canSummarize,
+                    canSummarize: canSummarize,
                     readerModeState: action.readerModeState,
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.readerModeStateChanged

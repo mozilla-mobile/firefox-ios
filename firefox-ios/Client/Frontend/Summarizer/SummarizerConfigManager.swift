@@ -43,28 +43,38 @@ final class SummarizerConfigManager {
 }
 
 protocol SummarizerLanguageProvider: Sendable {
-    func getLanguage(for userPreference: SummarizerLanguageExpansionConfiguration.UserPreference) async -> Locale
+    func getLanguage(
+        userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
+        supportedLocales: [Locale],
+        languageSampleSource: LanguageSampleSource,
+    ) async -> Locale?
 }
 
 struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
     let appLanguageProvider: LocaleProvider
     let websiteLanguageProvider: LanguageDetectorProvider
-    let websiteLanguageSource: LanguageSampleSource
     
     func getLanguage(
-        for userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
-    ) async -> Locale {
+        userPreference: SummarizerLanguageExpansionConfiguration.UserPreference,
+        supportedLocales: [Locale],
+        languageSampleSource: any LanguageSampleSource
+    ) async -> Locale? {
+        let locale: Locale
         switch userPreference {
         case .websiteLanguage:
-            let languageIdentifier = try? await websiteLanguageProvider.detectLanguage(from: websiteLanguageSource)
-            guard let languageIdentifier else {
-                return appLanguageProvider.current
+            let languageIdentifier = try? await websiteLanguageProvider.detectLanguage(from: languageSampleSource)
+            if let languageIdentifier {
+                locale = Locale(identifier: languageIdentifier)
+            } else {
+                locale = appLanguageProvider.current
             }
-            return Locale(identifier: languageIdentifier)
         case .deviceLanguage:
-            return appLanguageProvider.current
-        case .customLocale(let locale):
-            return locale
+            locale = appLanguageProvider.current
+        case .customLocale(let customLocale):
+            locale = customLocale
         }
+        
+        let localeIsSupported = supportedLocales.contains(locale)
+        return localeIsSupported ? locale : nil
     }
 }
