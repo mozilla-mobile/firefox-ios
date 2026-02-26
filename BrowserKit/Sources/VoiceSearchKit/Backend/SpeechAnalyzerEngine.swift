@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // TODO: FXIOS-14934 - remove preconcurrency
-@preconcurrency import AVFoundation
+@preconcurrency import AVFAudio
 import Speech
 import Common
 import CoreMedia
+import UIKit
 
 /// A transcription engine built on iOS 26's `SpeechAnalyzer` + `SpeechTranscriber`.
 ///
@@ -18,7 +19,8 @@ import CoreMedia
 ///
 /// This type is an `@MainActor` class to keep audio/transcription state safe across concurrent calls.
 @available(iOS 26.0, *)
-final actor SpeechAnalyzerEngine: TranscriptionEngine {
+@MainActor
+final class SpeechAnalyzerEngine: TranscriptionEngine {
     // TODO: FXIOS-14882 - Refactor audio portion to be in its own manager
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
@@ -95,7 +97,7 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
         try await analyzer.start(inputSequence: stream)
 
         resultsTask = Task { [weak self] in
-            guard let self, let transcriber = await self.transcriber else { return }
+            guard let self, let transcriber = self.transcriber else { return }
             do {
                 for try await result in transcriber.results {
                     let chunk = String(result.text.characters)
@@ -114,7 +116,7 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
         }
 
         // Start microphone capture and feed `AnalyzerInput(buffer:)` into the stream.
-        try startAudioCapture(with: targetFormat)
+        try await startAudioCapture(with: targetFormat)
     }
 
     func stop() async throws {
@@ -148,10 +150,10 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
     /// Starts microphone capture and yields buffers into the analyzer input stream.
     ///
     /// If the microphone format differs from the analyzer format, audio is converted before being sent.
-    private func startAudioCapture(with targetFormat: AVAudioFormat) throws {
+    nonisolated private func startAudioCapture(with targetFormat: AVAudioFormat) async throws {
         let inputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
 
-        guard let continuation = inputContinuation else {
+        guard let continuation = await inputContinuation else {
             throw SpeechError.noInputContinuation
         }
 
@@ -164,6 +166,7 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
 
         audioEngine.inputNode.removeTap(onBus: 0)
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { [weak self] buffer, time in
+            print("UI Device \(UIDevice.current.orientation.isPortrait ? "portrait" : "landscape")")
             guard let self else { return }
             do {
                 let converted = try self.convertIfNeeded(buffer, to: targetFormat, with: converter)
@@ -191,12 +194,11 @@ final actor SpeechAnalyzerEngine: TranscriptionEngine {
         }
 
         var error: NSError?
-        let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
+
+        converter.convert(to: outBuffer, error: &error) { _, outStatus in
             outStatus.pointee = .haveData
             return buffer
         }
-
-        converter.convert(to: outBuffer, error: &error, withInputFrom: inputBlock)
         if let error { throw error }
 
         return outBuffer

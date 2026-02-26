@@ -55,7 +55,7 @@ final actor SFSpeechRecognizerEngine: TranscriptionEngine {
 
         // Remove any previous input from microphone and capture audio
         inputNode.removeTap(onBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
+        inputNode.installTap(onBus: 0, bufferSize: 4096, format: format) { buffer, _ in
             recognitionRequest.append(buffer)
         }
 
