@@ -55,6 +55,7 @@ final class HomepageViewController: UIViewController,
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
     private var didFinishFirstLayout = false
+    private var wallpaperHeightConstraint: NSLayoutConstraint?
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -369,6 +370,7 @@ final class HomepageViewController: UIViewController,
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             )
+            updateWallpaperConstraints(availableContentHeight: state.availableContentHeight)
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
@@ -396,20 +398,31 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Layout
 
-    func configureWallpaperView() {
+    private func configureWallpaperView() {
         view.addSubview(wallpaperView)
 
         // Constraint so wallpaper appears under the status bar
         let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
 
+        let heightConstraint = wallpaperView.heightAnchor.constraint(
+             equalToConstant: homepageState.availableContentHeight + wallpaperTopConstant
+         )
+
+        wallpaperHeightConstraint = heightConstraint
+
         NSLayoutConstraint.activate([
             wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            heightConstraint
         ])
 
         view.sendSubviewToBack(wallpaperView)
+    }
+
+    private func updateWallpaperConstraints(availableContentHeight: CGFloat) {
+        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+        wallpaperHeightConstraint?.constant = availableContentHeight + wallpaperTopConstant
     }
 
     private func setupLayout() {
