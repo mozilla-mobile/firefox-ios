@@ -180,6 +180,7 @@ extension AppSettingsTableViewController {
             ResetSearchCount(settings: self),
             ResetDefaultBrowserNudgeCard(settings: self),
             AnalyticsIdentifierSetting(settings: self),
+            RefreshStatisticsSetting(settings: self),
         ]
 
         if EcosiaEnvironment.current == .staging {

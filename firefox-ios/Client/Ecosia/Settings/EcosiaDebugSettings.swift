@@ -673,3 +673,68 @@ final class DebugAddCustomSeeds: HiddenSetting {
         }
     }
 }
+
+// MARK: - Statistics Refresh
+
+@MainActor
+final class RefreshStatisticsSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        NSAttributedString(string: "Debug: Refresh Statistics (Tree Counter)", attributes: [:])
+    }
+
+    override var status: NSAttributedString? {
+        let trees = Int(Statistics.shared.treesPlanted)
+        let formatted = NumberFormatter.localizedString(from: NSNumber(value: trees), number: .decimal)
+        return NSAttributedString(string: "Current: \(formatted) trees", attributes: [:])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let trees = Int(Statistics.shared.treesPlanted)
+        let formatted = NumberFormatter.localizedString(from: NSNumber(value: trees), number: .decimal)
+
+        let confirmAlert = AlertController(
+            title: "Refresh Statistics?",
+            message: "Current trees planted: \(formatted)\n\nFetch latest data from CloudFront?",
+            preferredStyle: .alert
+        )
+
+        confirmAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        confirmAlert.addAction(UIAlertAction(title: "Refresh", style: .default) { [weak self] _ in
+            self?.performFetch(navigationController: navigationController)
+        })
+
+        navigationController?.topViewController?.present(confirmAlert, animated: true)
+    }
+
+    private func performFetch(navigationController: UINavigationController?) {
+        Task {
+            do {
+                try await Statistics.shared.fetchAndUpdate()
+                let newTrees = Int(Statistics.shared.treesPlanted)
+                let formatted = NumberFormatter.localizedString(from: NSNumber(value: newTrees), number: .decimal)
+
+                let successAlert = AlertController(
+                    title: "Statistics Refreshed ✅",
+                    message: "Trees planted: \(formatted)",
+                    preferredStyle: .alert
+                )
+                navigationController?.topViewController?.present(successAlert, animated: true) {
+                    // Ecosia: Task + sleep instead of DispatchQueue for strict concurrency
+                    Task { @MainActor in
+                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                        successAlert.dismiss(animated: true)
+                    }
+                }
+                self.settings.tableView.reloadData()
+            } catch {
+                let errorAlert = AlertController(
+                    title: "Refresh Failed ❌",
+                    message: error.localizedDescription,
+                    preferredStyle: .alert
+                )
+                errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                navigationController?.topViewController?.present(errorAlert, animated: true)
+            }
+        }
+    }
+}
