@@ -474,6 +474,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
+    var isAppStoreReviewTriggerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -638,6 +642,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
+        guard !isAppStoreReviewTriggerEnabled else { return }
         ratingPromptManager.showRatingPromptIfNeeded()
     }
 
