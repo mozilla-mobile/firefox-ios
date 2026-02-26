@@ -44,13 +44,24 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private let copyShortcutKey = "c"
 
     // MARK: - Init
-    init(
-        frame: CGRect,
-        notificationCenter: NotificationCenter = .default
-    ) {
+    override init(frame: CGRect) {
+        self.notificationCenter = .default
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    init(frame: CGRect, notificationCenter: NotificationCenter = .default) {
         self.notificationCenter = notificationCenter
-        super.init(frame: .zero)
-        super.addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func commonInit() {
+        addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
 
         font = FXFontStyles.Regular.body.scaledFont()
         adjustsFontForContentSizeCategory = true
@@ -89,10 +100,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
             forObserver: self,
             observing: [UITextInputMode.currentInputModeDidChangeNotification]
         )
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     weak var accessibilityActionsSource: AccessibilityActionsSource?
