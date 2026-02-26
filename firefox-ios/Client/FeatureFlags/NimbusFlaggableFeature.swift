@@ -98,6 +98,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,

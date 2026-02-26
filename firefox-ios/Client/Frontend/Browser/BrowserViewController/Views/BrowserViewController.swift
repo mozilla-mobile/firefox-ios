@@ -4938,7 +4938,6 @@ extension BrowserViewController: TabManagerDelegate {
            let url = selectedTab.url,
            let internalUrl = InternalURL(url),
            internalUrl.isErrorPage {
-            // TODO: Laurie - Is this needed for the new native error pages?
             logger.log(
                 "LM ### NEEDS RELOAD true for error page",
                 level: .debug,
