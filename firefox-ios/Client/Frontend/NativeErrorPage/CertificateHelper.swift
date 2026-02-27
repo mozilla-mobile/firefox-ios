@@ -13,6 +13,10 @@ import X509
 /// Kept as a dedicated struct: certificate logic is separate from general error-page handling.
 struct CertificateHelper {
     private static let badCertQueryParam = "badcert"
+    private static let certErrorQueryParam = "certerror"
+
+    /// Name of the certificate error used for domain mismatch (bad cert domain) error pages.
+    static let badCertDomainErrorName = "SSL_ERROR_BAD_CERT_DOMAIN"
 
     /// Extracts the raw certificate data (DER) from an internal error page URL.
     static func certificateDataFromErrorURL(_ url: URL) -> Data? {
@@ -69,5 +73,25 @@ struct CertificateHelper {
             )
             return []
         }
+    }
+
+    /// Returns whether the URL is a native error page for the bad-cert-domain (domain mismatch) case.
+    /// Used to decide when to show the certificate exception / "visit once" flow.
+    static func isBadCertDomainErrorPage(url: URL) -> Bool {
+        let urlToCheck: URL? = {
+            if InternalURL(url)?.isErrorPage == true {
+                return url
+            }
+            if let internalUrl = InternalURL(url), let extracted = internalUrl.extractedUrlParam {
+                return InternalURL(extracted)?.isErrorPage == true ? extracted : nil
+            }
+            return nil
+        }()
+        guard let target = urlToCheck,
+              let components = URLComponents(url: target, resolvingAgainstBaseURL: false),
+              let certError = components.queryItems?.first(where: { $0.name == certErrorQueryParam })?.value else {
+            return false
+        }
+        return certError == badCertDomainErrorName
     }
 }
