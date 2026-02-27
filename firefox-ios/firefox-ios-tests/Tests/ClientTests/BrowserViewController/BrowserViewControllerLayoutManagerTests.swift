@@ -55,21 +55,14 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         let hasTrailing = parentView.constraints.contains {
             $0.firstItem === headerView && $0.firstAttribute == .trailing
         }
-
-        XCTAssertTrue(hasLeading)
-        XCTAssertTrue(hasTrailing)
-    }
-
-    func test_setupHeaderConstraints_topToolbar_createsTopConstraint() {
-        let subject = createSubject()
-        subject.setupHeaderConstraints(isBottomSearchBar: false)
-
-        let hasTopConstraint = parentView.constraints.contains {
+        let hasTop = parentView.constraints.contains {
             ($0.firstItem === headerView && $0.firstAttribute == .top) ||
             ($0.secondItem === headerView && $0.secondAttribute == .top)
         }
 
-        XCTAssertTrue(hasTopConstraint)
+        XCTAssertTrue(hasLeading)
+        XCTAssertTrue(hasTrailing)
+        XCTAssertTrue(hasTop)
     }
 
     func test_setupHeaderConstraints_bottomToolBar_heightIsZero() {
@@ -217,7 +210,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     // MARK: - Setup Bottom Container Constraints
 
-    func test_setupBottomContainerConstraints_createsHorizontalConstraints() {
+    func test_setupBottomContainerConstraints_createsConstraints() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
 
@@ -228,20 +221,19 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
             $0.firstItem === bottomContainer && $0.firstAttribute == .trailing
         }
 
+        let hasBottom = parentView.constraints.contains {
+            $0.firstItem === bottomContainer && $0.firstAttribute == .bottom
+        }
+
         XCTAssertTrue(hasLeading)
         XCTAssertTrue(hasTrailing)
-    }
-
-    func test_setupBottomContainerConstraints_storesConstraintReference() {
-        let subject = createSubject()
-        subject.setupBottomContainerConstraints()
-
+        XCTAssertTrue(hasBottom)
         XCTAssertNotNil(subject.bottomContainerConstraint)
     }
 
     // MARK: - Setup OverKeyboard Container Constraints
 
-    func test_setupOverKeyboardContainerConstraints_createsHorizontalConstraints() {
+    func test_setupOverKeyboardContainerConstraints_createsConstraints() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
         subject.setupOverKeyboardContainerConstraints()
@@ -253,16 +245,20 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
             $0.firstItem === overKeyboardContainer && $0.firstAttribute == .trailing
         }
 
+        let hasBottom = parentView.constraints.contains {
+            $0.firstItem === overKeyboardContainer && $0.firstAttribute == .bottom
+        }
+
         XCTAssertTrue(hasLeading)
         XCTAssertTrue(hasTrailing)
+        XCTAssertTrue(hasBottom)
+        XCTAssertNotNil(subject.overKeyboardContainerConstraint)
     }
 
     func test_setupOverKeyboardContainerConstraints_storesConstraintReference() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
         subject.setupOverKeyboardContainerConstraints()
-
-        XCTAssertNotNil(subject.overKeyboardContainerConstraint)
     }
 
     // MARK: - Setup BottomContent StackView Constraints
@@ -369,6 +365,42 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertNotNil(basicConstraint)
     }
 
+    // MARK: - Constraint Count Baseline Tests
+
+    func test_bottomContainer_bottomToolbar_constraintCount() {
+        let subject = createSubject()
+        subject.setupBottomContainerConstraints()
+        bottomContainer.layoutIfNeeded()
+
+        let constraintsCount = countRelevantConstraints(for: parentView)
+        XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_overKeyboardContainer_bottomToolbar_constraintCount() {
+        let subject = createSubject()
+        subject.setupOverKeyboardContainerConstraints()
+
+        let constraintsCount = countRelevantConstraints(for: parentView)
+        XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_header_topToolbar_constraintCount() {
+        let subject = createSubject()
+        subject.setupHeaderConstraints(isBottomSearchBar: false)
+
+        let constraintsCount = countRelevantConstraints(for: parentView)
+        XCTAssertEqual(constraintsCount, 3)
+    }
+
+    func test_header_bottomToolbar_constraintCount() {
+        let subject = createSubject()
+        subject.setupHeaderConstraints(isBottomSearchBar: true)
+
+        // Header view has zero height constraint
+        let constraintsCount = countRelevantConstraints(for: headerView)
+        XCTAssertEqual(constraintsCount, 1)
+    }
+
     // MARK: - Private helpers
 
     private func createSubject() -> BrowserViewControllerLayoutManager {
@@ -376,16 +408,21 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
             $0.translatesAutoresizingMaskIntoConstraints = false
             parentView.addSubview($0)
         }
-        let subject = BrowserViewControllerLayoutManager(
-            parentView: parentView,
-            headerView: headerView,
-            bottomContainer: bottomContainer,
-            overKeyboardContainer: overKeyboardContainer,
-            bottomContentStackView: bottomContentStackView,
-            navigationToolbarContainer: navigationToolbarContainer,
-            toolbarHelper: toolbarHelper
-        )
+        let subject = BrowserViewControllerLayoutManager(parentView: parentView,
+                                                         headerView: headerView,
+                                                         bottomContainer: bottomContainer,
+                                                         overKeyboardContainer: overKeyboardContainer,
+                                                         bottomContentStackView: bottomContentStackView,
+                                                         navigationToolbarContainer: navigationToolbarContainer,
+                                                         toolbarHelper: toolbarHelper)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func countRelevantConstraints(for view: UIView) -> Int {
+        let relevantConstraints = view.constraints.filter {
+            [.leading, .trailing, .bottom, .height].contains($0.firstAttribute)
+        }
+        return relevantConstraints.count
     }
 }

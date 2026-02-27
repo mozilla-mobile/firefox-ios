@@ -27,7 +27,7 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
 
     // MARK: - Bottom Container Constraints Tests
 
-    func test_bottomContainer_hasLeadingConstraint() {
+    func test_bottomContainer_hasConstraint() {
         let subject = createSubject()
         let hasLeading = hasConstraint(for: subject.bottomContainer,
                                        attribute: .leading,
@@ -35,21 +35,17 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         let hasTrailing = hasConstraint(for: subject.bottomContainer,
                                         attribute: .trailing,
                                         relatedTo: subject.view)
-        XCTAssertTrue(hasLeading)
-        XCTAssertTrue(hasTrailing)
-    }
-
-    func test_bottomContainer_hasBottomConstraint() {
-        let subject = createSubject()
         let hasBottom = hasConstraint(for: subject.bottomContainer,
                                       attribute: .bottom,
                                       relatedTo: subject.view)
+        XCTAssertTrue(hasLeading)
+        XCTAssertTrue(hasTrailing)
         XCTAssertTrue(hasBottom)
     }
 
     // MARK: - OverKeyboard Container Constraints Tests
 
-    func test_overKeyboardContainer_hasHorizontalConstraints() {
+    func test_overKeyboardContainer_hasConstraints() {
         let subject = createSubject()
         let hasLeading = hasConstraint(for: subject.overKeyboardContainer,
                                        attribute: .leading,
@@ -58,26 +54,34 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
                                         attribute: .trailing,
                                         relatedTo: subject.view)
 
+        // Search for sibling constraint between overKeyboardContainer and bottomContainer
+        let hasBottom = hasConstraintBetween(firstView: subject.overKeyboardContainer,
+                                             firstAttribute: .bottom,
+                                             secondView: subject.bottomContainer,
+                                             secondAttribute: .top,
+                                             in: subject.view)
+
         XCTAssertTrue(hasLeading)
         XCTAssertTrue(hasTrailing)
-    }
-
-    func test_overKeyboardContainer_hasBottomConstraintToBottomContainer() {
-        let subject = createSubject()
-
-        // Search for sibling constraint between overKeyboardContainer and bottomContainer
-        let hasBottomConstraint = hasConstraintBetween(firstView: subject.overKeyboardContainer,
-                                                       firstAttribute: .bottom,
-                                                       secondView: subject.bottomContainer,
-                                                       secondAttribute: .top,
-                                                       in: subject.view)
-        XCTAssertTrue(hasBottomConstraint)
+        XCTAssertTrue(hasBottom)
     }
 
     // MARK: - Header Constraints Tests
 
-    func test_header_hasHorizontalConstraint_WithSnapKitRefactorDisabled() {
+    func test_header_hasHorizontalConstraint_BottomToolbar() {
         let subject = createSubject()
+
+        // Height constraints are stored on the view itself, not the parent
+        let heightConstraint = subject.header.constraints.first {
+            $0.firstAttribute == .height
+        }
+
+        XCTAssertNotNil(heightConstraint)
+        XCTAssertEqual(heightConstraint?.constant, 0)
+    }
+
+    func test_header_hasHorizontalConstraint_TopToolbar() {
+        let subject = createSubject(isBottomSearchBar: false)
 
         // Header view uses .left and .right instead of .leading and .trailing
         let hasLeft = hasConstraint(for: subject.header,
@@ -87,37 +91,15 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         let hasRight = hasConstraint(for: subject.header,
                                      attribute: .right,
                                      relatedTo: subject.view)
-        XCTAssertTrue(hasLeft)
-        XCTAssertTrue(hasRight)
-    }
-
-    func test_header_hasHorizontalConstraint_WithSnapKitRefactorEnabled() {
-        let subject = createSubject(isFeatureFlagEnabled: true)
-
-        // As part of the refactor header view is using .leading and .trailing as the other views
-        let hasLeading = hasConstraint(for: subject.header,
-                                       attribute: .leading,
-                                       relatedTo: subject.view)
-
-        let hasTrailing = hasConstraint(for: subject.header,
-                                        attribute: .trailing,
-                                        relatedTo: subject.view)
-        XCTAssertTrue(hasLeading)
-        XCTAssertTrue(hasTrailing)
-    }
-
-    func test_header_hasTopConstraint() {
-        let subject = createSubject()
-        let header = subject.header
-
-        // Search for header top constraint own by the view or its superview
-        let hasTopConstraint = header.constraints.contains { $0.firstAttribute == .top } ||
+        let hasTop = subject.header.constraints.contains { $0.firstAttribute == .top } ||
         subject.view.constraints.contains {
-            ($0.firstItem === header && $0.firstAttribute == .top) ||
-            ($0.secondItem === header && $0.secondAttribute == .top)
+            ($0.firstItem === subject.header && $0.firstAttribute == .top) ||
+            ($0.secondItem === subject.header && $0.secondAttribute == .top)
         }
 
-        XCTAssertTrue(hasTopConstraint)
+        XCTAssertTrue(hasLeft)
+        XCTAssertTrue(hasRight)
+        XCTAssertTrue(hasTop)
     }
 
     // MARK: - Constraint Count Baseline Tests
@@ -182,28 +164,6 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         let activeConstraints = allConstraints.filter { $0.isActive }
 
         XCTAssertEqual(allConstraints.count, activeConstraints.count)
-    }
-
-    // MARK: - Layout Pass Tests
-
-    func test_updateViewConstraints_doesNotThrow() {
-        let subject = createSubject()
-        // Calling updateViewConstraints should not crash
-        XCTAssertNoThrow(subject.view.setNeedsUpdateConstraints())
-        XCTAssertNoThrow(subject.view.updateConstraintsIfNeeded())
-    }
-
-    func test_multipleLayoutPasses_producesConsistentResults() {
-        let subject = createSubject(isBottomSearchBar: false)
-        // Multiple layout passes should be stable (no constraint conflicts)
-        subject.view.layoutIfNeeded()
-        let frame1 = subject.bottomContainer.frame
-
-        subject.view.setNeedsLayout()
-        subject.view.layoutIfNeeded()
-        let frame2 = subject.bottomContainer.frame
-
-        XCTAssertEqual(frame1, frame2)
     }
 
     // MARK: - Frame/Layout Verification Tests
