@@ -45,7 +45,7 @@ struct TermsOfUseMigration {
         let installationDate = InstallationUtils.inferredDateInstalledOn ?? Date()
         prefs.setTimestamp(installationDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
-        // Record date and version telemetry for legacy users who just got migrated
-        TermsOfServiceTelemetry().recordDateAndVersion(acceptedDate: installationDate)
+        // Record date metric for legacy users who just got migrated
+        TermsOfServiceTelemetry().recordToUAcceptDate(acceptedDate: installationDate)
     }
 }
