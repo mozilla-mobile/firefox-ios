@@ -143,7 +143,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
                 await waitForUnblockSummarization()
                 revealed = true
                 try Task.checkCancellation()
-                
+            
                 let now = dateProvider.currentDate()
                 // debounce updates of new chunks to avoid calling onNewData too frequently.
                 if now.timeIntervalSince(lastUpdateTime) >= Constants.showSummaryChunksDelay {
