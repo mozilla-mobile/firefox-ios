@@ -8,14 +8,10 @@ struct SummarizerLanguageExpansionConfiguration {
     /// Represents the user's language preference for summarization.
     enum UserPreference: Equatable {
         case websiteLanguage
-        case deviceLanguage
         case customLocale(Locale)
 
         static var websiteLanguageSaveKey: String {
             return "websiteLanguage"
-        }
-        static var deviceLanguageSaveKey: String {
-            return "deviceLanguage"
         }
 
         /// Converts the preference to a string value suitable for persistence.
@@ -23,8 +19,6 @@ struct SummarizerLanguageExpansionConfiguration {
             switch self {
             case .websiteLanguage:
                 return Self.websiteLanguageSaveKey
-            case .deviceLanguage:
-                return Self.deviceLanguageSaveKey
             case .customLocale(let locale):
                 return locale.identifier
             }
@@ -35,8 +29,6 @@ struct SummarizerLanguageExpansionConfiguration {
             switch savedValue {
             case websiteLanguageSaveKey:
                 return .websiteLanguage
-            case deviceLanguageSaveKey:
-                return .deviceLanguage
             default:
                 let locale = Locale(identifier: savedValue)
                 return .customLocale(locale)

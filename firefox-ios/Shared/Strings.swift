@@ -3071,12 +3071,6 @@ extension String {
                     value: "Website Language",
                     comment: "The label for the picker option to select the website language for the summarizer inside the Summarize settings."
                 )
-                public static let PreferredAppLanguageLabel = MZLocalizedString(
-                    key: "Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149",
-                    tableName: "Settings",
-                    value: "Preferred App Language",
-                    comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
-                )
                 public static let PickerButtonAccessibilityLabel = MZLocalizedString(
                     key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
                     tableName: "Settings",
