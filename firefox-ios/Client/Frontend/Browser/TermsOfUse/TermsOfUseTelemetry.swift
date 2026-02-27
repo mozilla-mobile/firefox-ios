@@ -20,7 +20,7 @@ struct TermsOfUseTelemetry {
     }
 
     func termsOfUseDisplayed(surface: Surface = .bottomSheet) {
-        var shownExtra = GleanMetrics.TermsOfUse.ShownExtra(surface: surface.rawValue)
+        let shownExtra = GleanMetrics.TermsOfUse.ShownExtra(surface: surface.rawValue)
 
         if surface != .privacyNotice {
             gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.shownCount)
@@ -67,7 +67,7 @@ struct TermsOfUseTelemetry {
     }
 
     func termsOfUseDismissed(surface: Surface = .bottomSheet) {
-        var dismissExtra = GleanMetrics.TermsOfUse.DismissedExtra(surface: surface.rawValue)
+        let dismissExtra = GleanMetrics.TermsOfUse.DismissedExtra(surface: surface.rawValue)
 
         if surface != .privacyNotice {
             gleanWrapper.incrementCounter(for: GleanMetrics.UserTermsOfUse.dismissedCount)
