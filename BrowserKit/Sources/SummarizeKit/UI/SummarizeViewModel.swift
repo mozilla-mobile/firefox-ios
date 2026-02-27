@@ -74,7 +74,7 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
         static let summaryDelay: CGFloat = 4.0
         static let minWordsAcceptedToShow = 2000
         /// 100 ms delay
-        static let showSummaryChunksDelayInNanoseconds = UInt64(0.1 * 1_000_000_000)
+        static let showSummaryChunksDelay: TimeInterval = 0.1
     }
     private let summarizerService: SummarizerService
     private var semaphoreContinuation: CheckedContinuation<Void, Never>?
@@ -136,15 +136,20 @@ public final class DefaultSummarizeViewModel: SummarizeViewModel {
             // We don't need to accumulate them.
             // NOTE2: Wait for the specified delay before revealing the summary.
             // This is done to provide a smoother user experience and avoid sudden changes.
+            var lastUpdateTime = dateProvider.currentDate()
             for try await aggregatedChunk in stream {
                 lastChunk = aggregatedChunk
                 guard dateProvider.currentDate() >= startRevealingAt || enoughWords(aggregatedChunk) else { continue }
                 await waitForUnblockSummarization()
                 revealed = true
                 try Task.checkCancellation()
-                // Add delay for repeated chunks to avoid polluting the main thread with new updates
-                try await Task.sleep(nanoseconds: Constants.showSummaryChunksDelayInNanoseconds)
-                onNewData(.success(aggregatedChunk))
+                
+                let now = dateProvider.currentDate()
+                // debounce updates of new chunks to avoid calling onNewData too frequently.
+                if now.timeIntervalSince(lastUpdateTime) >= Constants.showSummaryChunksDelay {
+                    onNewData(.success(aggregatedChunk))
+                    lastUpdateTime = now
+                }
             }
             // NOTE: Streaming especially from a request that was cached can be faster than `delay`.
             // This is to make sure when that happens we show the summary immediately.
