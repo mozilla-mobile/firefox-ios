@@ -358,6 +358,7 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
+
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
