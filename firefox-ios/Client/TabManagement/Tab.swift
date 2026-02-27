@@ -616,7 +616,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func close() {
-        logger.log("LM ### close on TAB \(self)", level: .debug, category: .webview)
         webView?.pauseAllMediaPlayback {}
         webView?.closeAllMediaPresentations {}
         webView?.stopLoading()
@@ -706,8 +705,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
 
         if let webView, webView.url != nil {
-            // FXIOS-14783: Experimentation on removing isAboutHome
-            // isAboutHome: Do not reload from origin for homepage internal URLs
+            // FXIOS-14783: Experimentation on removing the isAboutHome check
+            // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
             let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
             let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
 

@@ -29,7 +29,7 @@ class TabManagerImplementation: NSObject,
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
-    // FXIOS-TODO: Laurie - `backupCloseTab` is never niled when the undo toast is cleared,
+    // FXIOS-15007 - `backupCloseTab` is never niled when the undo toast is cleared,
     // causing us to retain the tab object indefinitely
     var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
