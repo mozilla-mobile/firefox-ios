@@ -13,7 +13,7 @@ struct TermsOfUseMigration {
     }
 
     /// Migrate TermsOfService prefs to TermsOfUse
-    /// and add missing ToU date/version if needed
+    /// and add missing ToU date if needed
     func migrateTermsOfService() {
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
