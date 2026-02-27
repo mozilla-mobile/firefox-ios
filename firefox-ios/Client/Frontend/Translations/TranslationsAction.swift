@@ -18,6 +18,25 @@ struct TranslationsAction: Action {
     }
 }
 
+/// Carries the user-selected target language from the UIMenu picker.
+/// `targetLanguage` is always known — the user just picked it from the menu.
+struct TranslationLanguageSelectedAction: Action {
+    let windowUUID: WindowUUID
+    let actionType: ActionType
+    let targetLanguage: String
+
+    init(
+        windowUUID: WindowUUID,
+        targetLanguage: String,
+        actionType: any ActionType
+    ) {
+        self.windowUUID = windowUUID
+        self.targetLanguage = targetLanguage
+        self.actionType = actionType
+    }
+}
+
 enum TranslationsActionType: ActionType {
     case didTapRetryFailedTranslation
+    case didSelectTargetLanguage
 }
