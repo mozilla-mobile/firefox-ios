@@ -44,17 +44,12 @@ struct TermsOfServiceTelemetry {
     }
 
     func recordDateAndVersion(acceptedDate: Date) {
-        // Record the ToU version and date metrics with onboarding surface
+        // Record the ToU acceptance date metric with onboarding surface
         let acceptedExtra = GleanMetrics.TermsOfUse.AcceptedExtra(
-            surface: TermsOfUseTelemetry.Surface.onboarding.rawValue,
-            touVersion: String(TermsOfUseTelemetry().termsOfUseVersion)
+            surface: TermsOfUseTelemetry.Surface.onboarding.rawValue
         )
 
         gleanWrapper.recordEvent(for: GleanMetrics.TermsOfUse.accepted, extras: acceptedExtra)
-        gleanWrapper.recordQuantity(
-            for: GleanMetrics.UserTermsOfUse.versionAccepted,
-            value: TermsOfUseTelemetry().termsOfUseVersion
-        )
         gleanWrapper.recordDatetime(for: GleanMetrics.UserTermsOfUse.dateAccepted, value: acceptedDate)
     }
 }
