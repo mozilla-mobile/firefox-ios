@@ -50,12 +50,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         commonInit()
     }
 
-    init(frame: CGRect, notificationCenter: NotificationCenter = .default) {
-        self.notificationCenter = notificationCenter
-        super.init(frame: frame)
-        commonInit()
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -96,7 +90,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         })
 
         startObservingNotifications(
-            withNotificationCenter: NotificationCenter.default,
+            withNotificationCenter: notificationCenter,
             forObserver: self,
             observing: [UITextInputMode.currentInputModeDidChangeNotification]
         )
