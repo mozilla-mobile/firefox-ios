@@ -37,7 +37,7 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
 /// A configuration source that provided hard coded llm configuration with language aware support.
 public struct SummarizerConfigSourceLanguageAware: SummarizerConfigSourceProtocol {
     public init() {}
-    
+
     // FIXME: FXIOS-13417 We should strongly type options in the future so they can be any Sendable & Hashable
     nonisolated(unsafe) private static let appleBaseOptions: [String: AnyHashable] = [ "temperature": 0.1 ]
     nonisolated(unsafe) private static let liteLLMBaseOptions: [String: AnyHashable] = [
@@ -47,7 +47,7 @@ public struct SummarizerConfigSourceLanguageAware: SummarizerConfigSourceProtoco
         "model": LiteLLMConfig.apiModel,
         "stream": true
     ]
-    
+
     public func load(_ summarizer: SummarizerModel, contentType: SummarizationContentType) -> SummarizerConfig? {
         switch (contentType, summarizer) {
         case (.generic, .appleSummarizer):

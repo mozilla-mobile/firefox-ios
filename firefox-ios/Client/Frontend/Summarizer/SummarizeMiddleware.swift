@@ -13,12 +13,10 @@ final class SummarizerMiddleware {
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
     private let summarizerLanguageProvider: SummarizerLanguageProvider
+    private let summarizerConfigProvider: SummarizerConfigProvider
     private let logger: Logger
     private let windowManager: WindowManager
     private let profile: Profile
-    private var summarizerType: SummarizerModel {
-        return summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
-    }
 
     init(
         logger: Logger = DefaultLogger.shared,
@@ -26,7 +24,11 @@ final class SummarizerMiddleware {
         profile: Profile = AppContainer.shared.resolve(),
         summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-        summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker()
+        summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+        summarizerLanguageProvider: SummarizerLanguageProvider = DefaultSummarizerLanguageProvider(
+            websiteLanguageProvider: LanguageDetector()
+        ),
+        summarizerConfigProvider: SummarizerConfigProvider = DefaultSummarizerConfigProvider()
     ) {
         self.logger = logger
         self.windowManager = windowManager
@@ -34,10 +36,8 @@ final class SummarizerMiddleware {
         self.summarizerNimbusUtils = summarizerNimbusUtility
         self.summarizationChecker = summarizationChecker
         self.summarizerServiceFactory = summarizerServiceFactory
-        self.summarizerLanguageProvider = DefaultSummarizerLanguageProvider(
-            appLanguageProvider: SystemLocaleProvider(),
-            websiteLanguageProvider: LanguageDetector()
-        )
+        self.summarizerLanguageProvider = summarizerLanguageProvider
+        self.summarizerConfigProvider = summarizerConfigProvider
     }
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
@@ -51,13 +51,6 @@ final class SummarizerMiddleware {
         }
     }
 
-    @MainActor
-    func checkSummarizationResult(_ tab: Tab) async -> SummarizationCheckResult? {
-        guard let webView = tab.webView else { return nil }
-        let result = await summarizationChecker.check(on: webView, maxWords: maxWords)
-        return result
-    }
-
     private var maxWords: Int {
         summarizerServiceFactory.maxWords(
             isAppleSummarizerEnabled: summarizerNimbusUtils.isAppleSummarizerEnabled(),
@@ -69,7 +62,7 @@ final class SummarizerMiddleware {
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
         guard let summarizerConfig = await getSummarizerConfiguration(webView) else { return }
-        
+
         store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
@@ -78,13 +71,16 @@ final class SummarizerMiddleware {
             )
         )
     }
-    
+
     func getSummarizerConfiguration(_ webView: WKWebView) async -> SummarizerConfig? {
         guard summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
-        
+
         let preSummarizationCheckResults = await summarizationChecker.check(on: webView, maxWords: maxWords)
         guard preSummarizationCheckResults.canSummarize else { return nil }
-        
+        let contentType = preSummarizationCheckResults.contentType ?? .generic
+        let summarizerModel: SummarizerModel =
+            summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
+
         if summarizerNimbusUtils.isLanguageExpansionEnabled {
             let langExpansionConfiguration = summarizerNimbusUtils.languageExpansionConfiguration()
             guard let summarizerLocale = await summarizerLanguageProvider.getLanguage(
@@ -96,10 +92,11 @@ final class SummarizerMiddleware {
             ) else {
                 return nil
             }
-            // TODO: inject local locale config
-            return SummarizerConfigManager(sources: [SummarizerConfigSourceLanguageAware()]).getConfig(
-                summarizerType,
-                contentType: preSummarizationCheckResults.contentType ?? .generic,
+
+            return summarizerConfigProvider.getConfig(
+                from: [SummarizerConfigSourceLanguageAware()],
+                summarizerModel: summarizerModel,
+                contentType: contentType,
                 locale: summarizerLocale
             )
         }
@@ -112,9 +109,10 @@ final class SummarizerMiddleware {
                 languageSampleSource: WebViewLanguageSampleSource(webView: webView)
             ) != nil
             guard isSupportedLocale else { return nil }
-            return SummarizerConfigManager().getConfig(
-                summarizerType,
-                contentType: preSummarizationCheckResults.contentType ?? .generic,
+            return summarizerConfigProvider.getConfig(
+                summarizerModel: summarizerModel,
+                contentType: contentType,
+                locale: nil
             )
         }
         return nil

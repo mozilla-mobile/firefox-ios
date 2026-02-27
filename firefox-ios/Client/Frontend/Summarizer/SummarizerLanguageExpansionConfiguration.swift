@@ -45,7 +45,6 @@ struct SummarizerLanguageExpansionConfiguration {
         }
     }
 
-    let isFeatureEnabled: Bool
     /// The supported Locales for the language expansion experiment
     let supportedLocales: [Locale]
     private let localeProvider: LocaleProvider
@@ -59,12 +58,6 @@ struct SummarizerLanguageExpansionConfiguration {
                 displayName: .Settings.Summarize.LanguageSection.WebsiteLanguageLabel
             )
         )
-        options.append(
-            SettingOption(
-                value: .deviceLanguage,
-                displayName: .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel
-            )
-        )
 
         return options + supportedLocales.compactMap {
             guard let localizedLocale = localeProvider.current.localizedString(
@@ -76,11 +69,9 @@ struct SummarizerLanguageExpansionConfiguration {
     }
 
     init(
-        isFeatureEnabled: Bool,
         supportedLocales: [Locale],
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
-        self.isFeatureEnabled = isFeatureEnabled
         self.supportedLocales = supportedLocales
         self.localeProvider = localeProvider
     }

@@ -30,7 +30,7 @@ public struct SummarizerConfig: Equatable, Sendable {
         let mergedOptions = self.options.merging(other.options) { current, _ in current }
         return SummarizerConfig(instructions: mergedInstructions, options: mergedOptions)
     }
-    
+
     /// Returns a new config by injecting the provided `Locale` into the instructions.
     public func injecting(locale: Locale) -> SummarizerConfig {
         let instructionsWithLocale = instructions.replacingOccurrences(of: "${locale}", with: locale.identifier)

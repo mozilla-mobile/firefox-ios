@@ -89,8 +89,8 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
             // if the language expansion is enabled don't check the en locale cause we support multiple locales
-            if languageExpansionConfiguration().isFeatureEnabled {
-                return appleIntelligenceUtil.isAppleIntelligenceAvailable
+            if isLanguageExpansionEnabled {
+                return false // appleIntelligenceUtil.isAppleIntelligenceAvailable
             }
             let isEngLang = localeProvider.current.languageCode == "en"
             return isEngLang && appleIntelligenceUtil.isAppleIntelligenceAvailable
@@ -134,7 +134,6 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
     ) -> SummarizerLanguageExpansionConfiguration {
         return SummarizerLanguageExpansionConfiguration(
-            isFeatureEnabled: nimbusFeature.enabled,
             supportedLocales: nimbusFeature.supportedLocales.map({
                 return Locale(identifier: $0)
             })

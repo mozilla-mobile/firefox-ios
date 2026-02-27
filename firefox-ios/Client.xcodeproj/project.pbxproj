@@ -1510,6 +1510,7 @@
 		C26B96D72F29188100D4B140 /* TestKit in Frameworks */ = {isa = PBXBuildFile; productRef = C26B96D62F29188100D4B140 /* TestKit */; };
 		C27470A22F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */; };
 		C27470A42F4C8EBB00920313 /* PickerSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */; };
+		C27481492F51939700920313 /* SummarizerLanguageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27481482F51939700920313 /* SummarizerLanguageProvider.swift */; };
 		C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */; };
 		C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */; };
 		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
@@ -1518,7 +1519,7 @@
 		C28094312ECF877D0083BC16 /* TranslationsServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28094302ECF87780083BC16 /* TranslationsServiceError.swift */; };
 		C283EECC2E4D2C02008EB540 /* ASSummarizerRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */; };
 		C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */; };
-		C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */; };
+		C283EED02E4D4FE7008EB540 /* SummarizerConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigProvider.swift */; };
 		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
 		C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */; };
@@ -9982,6 +9983,7 @@
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfigurationTests.swift; sourceTree = "<group>"; };
 		C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSettingTests.swift; sourceTree = "<group>"; };
+		C27481482F51939700920313 /* SummarizerLanguageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProvider.swift; sourceTree = "<group>"; };
 		C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
 		C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetectorTests.swift; sourceTree = "<group>"; };
 		C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSampleSource.swift; sourceTree = "<group>"; };
@@ -9990,7 +9992,7 @@
 		C28094302ECF87780083BC16 /* TranslationsServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceError.swift; sourceTree = "<group>"; };
 		C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSummarizerRemoteConfig.swift; sourceTree = "<group>"; };
 		C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSummarizerConfigSource.swift; sourceTree = "<group>"; };
-		C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManager.swift; sourceTree = "<group>"; };
+		C283EECF2E4D4FDE008EB540 /* SummarizerConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigProvider.swift; sourceTree = "<group>"; };
 		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouter.swift; sourceTree = "<group>"; };
@@ -11688,8 +11690,9 @@
 		0B78DC6C2E3C9CDA00804872 /* Summarizer */ = {
 			isa = PBXGroup;
 			children = (
+				C27481482F51939700920313 /* SummarizerLanguageProvider.swift */,
 				C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */,
-				C283EECF2E4D4FDE008EB540 /* SummarizerConfigManager.swift */,
+				C283EECF2E4D4FDE008EB540 /* SummarizerConfigProvider.swift */,
 				C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */,
 				BC129A2E2E4558FD004A6875 /* SummarizeAction.swift */,
 				BC129A2C2E45207F004A6875 /* SummarizeMiddleware.swift */,
@@ -18572,7 +18575,7 @@
 				8A2F21CB2DEDC2AB00C9F4DE /* StartAtHomeAction.swift in Sources */,
 				602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */,
 				7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */,
-				C283EED02E4D4FE7008EB540 /* SummarizerConfigManager.swift in Sources */,
+				C283EED02E4D4FE7008EB540 /* SummarizerConfigProvider.swift in Sources */,
 				4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */,
 				1DCEC3F22D5D1FEC00129966 /* ASSearchEngineSelector.swift in Sources */,
 				E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */,
@@ -19405,6 +19408,7 @@
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				0BD049CE2DFC4AAE00614E61 /* PopupHTMLSetting.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
+				C27481492F51939700920313 /* SummarizerLanguageProvider.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
 				2140995F2DCBEC32004881E1 /* PageZoomSettingView.swift in Sources */,
 				213B7AF02D779D2400DF0123 /* Download.swift in Sources */,
