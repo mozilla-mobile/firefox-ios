@@ -75,6 +75,16 @@ protocol TabManager: AnyObject {
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
+    /// Persists the current tab state to disk.
+    ///
+    /// Should only be called after tab restore has finished. When `immediate` is `true`,
+    /// the save is forced synchronously — use this for time-sensitive cases such as
+    /// backgrounding the app or switching to another app. When `false`, the save may
+    /// be deferred, suitable for llower-priority updates such as opening, closing,
+    /// or switching between tabs during normal browsing.
+    ///
+    /// - Parameter immediate: Whether the tab data should be saved immediately (`true`)
+    ///   or can be deferred (`false`).
     func preserveTabs(immediate: Bool)
 
     /// Commits the pending changes to the persistent store.
