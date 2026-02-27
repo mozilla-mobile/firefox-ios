@@ -549,7 +549,11 @@ class BrowserViewController: UIViewController,
     lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
         return BrowserViewControllerLayoutManager(
             parentView: view,
-            headerView: header
+            headerView: header,
+            bottomContainer: bottomContainer,
+            overKeyboardContainer: overKeyboardContainer,
+            bottomContentStackView: bottomContentStackView,
+            navigationToolbarContainer: navigationToolbarContainer,
         )
     }()
 
@@ -1780,10 +1784,9 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
-
-            setupBottomContainerConstraints()
-            setupBottomContentStackViewConstraints()
-            setupOverKeyboardContainerConstraints()
+            browserLayoutManager.setupBottomContainerConstraints()
+            browserLayoutManager.setupBottomContentStackViewConstraints()
+            browserLayoutManager.setupOverKeyboardContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1818,76 +1821,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
-
-    private func setupBottomContainerConstraints() {
-        guard isSnapKitRemovalEnabled else { return }
-
-        NSLayoutConstraint.activate([
-            bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
-
-        if let scrollController = scrollController as? LegacyTabScrollProvider {
-            scrollController.bottomContainerConstraint = constraintReference
-        }
-        bottomContainerConstraint = constraintReference
-    }
-
-    private func setupOverKeyboardContainerConstraints() {
-        guard isSnapKitRemovalEnabled else { return }
-
-        NSLayoutConstraint.activate([
-            overKeyboardContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            overKeyboardContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-
-        let constraint = overKeyboardContainer.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
-        constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
-
-        if let scrollController = scrollController as? LegacyTabScrollProvider {
-            scrollController.overKeyboardContainerConstraint = constraintReference
-        }
-        overKeyboardContainerConstraint = constraintReference
-
-        overKeyboardContainerTopZoomHeightConstraint = overKeyboardContainer.heightAnchor.constraint(
-            greaterThanOrEqualToConstant: 0
-        )
-        overKeyboardContainerTopHeightConstraint = overKeyboardContainer.heightAnchor.constraint(
-            equalToConstant: 0
-        )
-    }
-
-    private func setupBottomContentStackViewConstraints() {
-        guard isSnapKitRemovalEnabled else { return }
-
-        NSLayoutConstraint.activate([
-            bottomContentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomContentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-
-            // Height is set by content - this removes run time error
-            bottomContentStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0),
-        ])
-
-        // caps with less than equals bounds above the toolbar/safeArea
-        bottomContentMaxBottomConstraints = [
-            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: overKeyboardContainer.topAnchor),
-            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ]
-        // pins the view with equal exactly above the keyboard when it is visible.
-        bottomContentStackViewKeyboardConstraint = bottomContentStackView.bottomAnchor.constraint(
-            equalTo: view.bottomAnchor
-        )
-        // This is the fallback, pins the view with equal to safeArea bottom when keyboard and navigation toolbar is hidden
-        bottomContentStackViewBasicConstraint = bottomContentStackView.bottomAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.bottomAnchor
-        )
-
-        bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    }
 
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
@@ -1934,6 +1867,7 @@ class BrowserViewController: UIViewController,
             }
         }
 
+        // TODO: Yoana after call updateSnapKit Overkeyboard directly no need to update anything native
         updateOverKeyboardContainerConstraints()
         updateSnapKitBottomContainerConstraints()
         updateConstraintsForKeyboard()
@@ -1942,40 +1876,17 @@ class BrowserViewController: UIViewController,
         super.updateViewConstraints()
     }
 
-    private func updateSnapKitBottomContainerConstraints() {
-        guard !isSnapKitRemovalEnabled else { return }
-
-        bottomContainer.snp.remakeConstraints { make in
-            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
-            let constraintReference = ConstraintReference(snapKit: constraint)
-
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = constraintReference
-            } else {
-                bottomContainerConstraint = constraintReference
-            }
-            make.leading.trailing.equalTo(view)
-        }
-    }
-
     func updateOverKeyboardContainerConstraints() {
         guard isSnapKitRemovalEnabled else {
             updateSnapKitOverKeyboardContainerConstraints()
             return
         }
 
-        if !isBottomSearchBar, zoomPageBar != nil {
-            overKeyboardContainerTopZoomHeightConstraint?.isActive = true
-            overKeyboardContainerTopHeightConstraint?.isActive = false
-        } else if !isBottomSearchBar {
-            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
-            overKeyboardContainerTopHeightConstraint?.isActive = true
-        } else {
-            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
-            overKeyboardContainerTopHeightConstraint?.isActive = false
-        }
+        browserLayoutManager.updateOverKeyboardContainerConstraints(isBottomSearchBar: isBottomSearchBar,
+                                                                    hasZoomPageBar: zoomPageBar != nil)
     }
 
+    // TODO: SnapKit removal clean up
     private func updateSnapKitOverKeyboardContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
@@ -1997,47 +1908,20 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateSnapKitBottomContentStackViewConstraints() {
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitBottomContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        bottomContentStackView.snp.remakeConstraints { remake in
-            adjustSnapKitBottomContentStackView(remake)
-        }
-    }
+        bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
 
-    private func updateBottomContentStackViewConstraints() {
-        guard isSnapKitRemovalEnabled else {
-            updateSnapKitBottomContentStackViewConstraints()
-            return
-        }
-
-        // Deactivate all mutually exclusive constraints before activating the appropriate one.
-        NSLayoutConstraint.deactivate(bottomContentMaxBottomConstraints)
-        bottomContentStackViewKeyboardConstraint?.isActive = false
-        bottomContentStackViewBasicConstraint?.isActive = false
-
-        if isBottomSearchBar {
-            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
-            if !isToolbarTranslucencyRefactorEnabled {
-                view.layoutIfNeeded()
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = constraintReference
+            } else {
+                bottomContainerConstraint = constraintReference
             }
-        } else if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
-            bottomContentStackViewKeyboardConstraint?.constant = -keyboardHeight
-            bottomContentStackViewKeyboardConstraint?.isActive = true
-        } else if !navigationToolbarContainer.isHidden {
-            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
-        } else {
-            bottomContentStackViewBasicConstraint?.isActive = true
-        }
-    }
-
-    private func updateSnapkitConstraintsForKeyboard() {
-        guard !isSnapKitRemovalEnabled else { return }
-
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
-            adjustBottomSearchBarForKeyboard()
+            make.leading.trailing.equalTo(view)
         }
     }
 
@@ -2050,6 +1934,37 @@ class BrowserViewController: UIViewController,
         guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
             adjustBottomSearchBarForKeyboard()
             return
+        }
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapkitConstraintsForKeyboard() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            scrollController.hideToolbars(animated: false)
+        } else {
+            adjustBottomSearchBarForKeyboard()
+        }
+    }
+
+    private func updateBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitBottomContentStackViewConstraints()
+            return
+        }
+
+        browserLayoutManager.updateBottomContentStackViewConstraints(isSnapKitRemovalEnabled: isSnapKitRemovalEnabled,
+                                                                     isBottomSearchBar: isBottomSearchBar,
+                                                                     keyboardState: keyboardState)
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitBottomContentStackViewConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustSnapKitBottomContentStackView(remake)
         }
     }
 
