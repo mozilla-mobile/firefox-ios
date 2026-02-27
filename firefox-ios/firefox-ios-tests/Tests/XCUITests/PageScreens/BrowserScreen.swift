@@ -304,13 +304,51 @@ final class BrowserScreen {
         saveButton.tapIfExists()
     }
 
-    func swipeToAndValidateAddressBarValue(swipeRight: Bool, _ value: String) {
-        if swipeRight {
-            addressBar.swipeRight()
-        } else {
-            addressBar.swipeLeft()
+    func swipeToAndValidateAddressBarValue(swipeRight: Bool,
+                                           _ value: String,
+                                           durations: [TimeInterval] = [0.06, 0.02],
+                                           maxAttempts: Int = 2,
+                                           checkTimeout: TimeInterval = 2.0) {
+        // Ensure address bar exists and is hittable
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        let waitUntil = Date().addingTimeInterval(2)
+        while !addressBar.isHittable && Date() < waitUntil {
+            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
         }
-        assertAddressBarContains(value: value)
+        guard addressBar.isHittable else {
+            XCTFail("Address bar not hittable, cannot perform swipe")
+            return
+        }
+
+        // Coordinates with margins to avoid edge gestures
+        let leftPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.12, dy: 0.5))
+        let rightPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.88, dy: 0.5))
+        let startPoint = swipeRight ? leftPoint : rightPoint
+        let endPoint = swipeRight ? rightPoint : leftPoint
+
+        for attempt in 0..<maxAttempts {
+            let duration = durations[min(attempt, durations.count - 1)]
+            // Press-and-drag; varying `duration` changes the feel/velocity of the gesture
+            startPoint.press(forDuration: duration, thenDragTo: endPoint)
+
+            // Let UI settle briefly
+            RunLoop.current.run(until: Date().addingTimeInterval(0.35))
+
+            // Poll address bar value for the expected substring
+            let deadline = Date().addingTimeInterval(checkTimeout)
+            var success = false
+            while Date() < deadline {
+                if let val = (addressBar.value as? String), val.contains(value) {
+                    success = true
+                    break
+                }
+                RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+            }
+            assertAddressBarContains(value: value)
+            if success { return }
+        }
+
+        XCTFail("Failed to achieve expected address bar value '\(value)' after \(maxAttempts) attempts")
     }
 
     func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {

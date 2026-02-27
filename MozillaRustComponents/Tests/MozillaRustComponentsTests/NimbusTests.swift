@@ -100,16 +100,16 @@ class NimbusTests: XCTestCase {
 
     func testNimbusCreate() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbusEnabled = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath())
+        let nimbusEnabled = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath())
         XCTAssert(nimbusEnabled is Nimbus)
 
-        let nimbusDisabled = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath(), enabled: false)
+        let nimbusDisabled = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath(), enabled: false)
         XCTAssert(nimbusDisabled is NimbusDisabled, "Nimbus is disabled if a feature flag disables it")
     }
 
     func testSmokeTest() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         try nimbus.setExperimentsLocallyOnThisThread(minimalExperimentJSON())
         try nimbus.applyPendingExperimentsOnThisThread()
@@ -137,7 +137,7 @@ class NimbusTests: XCTestCase {
 
     func testSmokeTestAsync() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // We do the same tests as `testSmokeTest` but with the actual calls that
         // the client app will make.
@@ -166,7 +166,7 @@ class NimbusTests: XCTestCase {
 
     func testApplyLocalExperimentsTimedOut() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         let job = nimbus.applyLocalExperiments {
             Thread.sleep(forTimeInterval: 5.0)
@@ -182,7 +182,7 @@ class NimbusTests: XCTestCase {
 
     func testApplyLocalExperiments() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         let job = nimbus.applyLocalExperiments {
             Thread.sleep(forTimeInterval: 0.1)
@@ -211,7 +211,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordExperimentTelemetry() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         let enrolledExperiments = [EnrolledExperiment(
             featureIds: [],
@@ -235,7 +235,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordExperimentEvents() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Create a list of events to record, one of each type, all associated with the same
         // experiment
@@ -292,7 +292,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordFeatureActivation() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -321,7 +321,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordExposureFromFeature() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -364,7 +364,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordExposureFromExperiment() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -407,7 +407,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordMalformedConfiguration() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -434,7 +434,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordDisqualificationOnOptOut() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -462,7 +462,7 @@ class NimbusTests: XCTestCase {
 
     func testRecordDisqualificationOnGlobalOptOut() throws {
         let appSettings = NimbusAppSettings(appName: "NimbusUnitTest", channel: "test")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath()) as! Nimbus
 
         // Load an experiment in nimbus that we will record an event in. The experiment bucket configuration
         // is set so that it will be guaranteed to be active. This is necessary because the SDK checks for
@@ -491,7 +491,7 @@ class NimbusTests: XCTestCase {
 
     func testNimbusCreateWithJson() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly", customTargetingAttributes: ["is_first_run": false, "is_test": true])
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath())
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath())
         let helper = try nimbus.createMessageHelper()
 
         XCTAssertTrue(try helper.evalJexl(expression: "is_test"))
@@ -541,7 +541,7 @@ class NimbusTests: XCTestCase {
     func testNimbusRecordsRecordedContextObject() throws {
         let recordedContext = TestRecordedContext()
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath(), recordedContext: recordedContext) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath(), recordedContext: recordedContext) as! Nimbus
 
         try nimbus.setExperimentsLocallyOnThisThread(minimalExperimentJSON())
         try nimbus.applyPendingExperimentsOnThisThread()
@@ -554,7 +554,7 @@ class NimbusTests: XCTestCase {
     func testNimbusRecordedContextEventQueriesAreRunAndTheValueIsWrittenBackIntoTheObject() throws {
         let recordedContext = TestRecordedContext(eventQueries: ["TEST_QUERY": "'event'|eventSum('Days', 1, 0)"])
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
-        let nimbus = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath(), recordedContext: recordedContext) as! Nimbus
+        let nimbus = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath(), recordedContext: recordedContext) as! Nimbus
 
         try nimbus.setExperimentsLocallyOnThisThread(minimalExperimentJSON())
         try nimbus.applyPendingExperimentsOnThisThread()
@@ -573,7 +573,7 @@ class NimbusTests: XCTestCase {
     func testNimbusCanObtainCalculatedAttributes() throws {
         let appSettings = NimbusAppSettings(appName: "test", channel: "nightly")
         let databasePath = createDatabasePath()
-        _ = try Nimbus.create(nil, appSettings: appSettings, dbPath: databasePath) as! Nimbus
+        _ = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: databasePath) as! Nimbus
 
         let calculatedAttributes = try getCalculatedAttributes(installationDate: Int64(Date().timeIntervalSince1970 * 1000) - (86_400_000 * 5), dbPath: databasePath, locale: getLocaleTag())
 

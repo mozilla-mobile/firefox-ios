@@ -1847,12 +1847,14 @@ workflows:
             #!/usr/bin/env bash
             set -e
             
-            # Get Xcode version
-            XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g)
+            # Get Xcode version and build version
+            XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g')
+            BUILD_VER=$(xcodebuild -version | grep "Build version" | sed 's/Build version //g')
             echo "Xcode Version: $XCODE_VER"
+            echo "Build Version: $BUILD_VER"
 
             # Export to environment for Slack notification
-            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER"
+            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER ($BUILD_VER)"
     - slack@4.2.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS

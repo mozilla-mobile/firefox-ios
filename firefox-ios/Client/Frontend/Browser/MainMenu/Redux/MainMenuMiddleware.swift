@@ -229,7 +229,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)
 
-        case .webpageSummary: break
+        case .webpageSummary:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.webpageSummary)
         }
     }

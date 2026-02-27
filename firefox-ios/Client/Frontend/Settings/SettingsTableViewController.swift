@@ -814,6 +814,8 @@ class WithoutAccountSetting: AccountSetting {
 }
 
 /// A setting that displays a picker menu allowing users to select from multiple predefined options.
+///
+/// Note: on pre iOS 17.4 devices the setting shows an `UIAlertController` on cell tap instead of an `UIMenu`.
 class PickerSetting<Value: Equatable>: Setting {
     private let pickerOptions: [(value: Value, displayString: String)]
     private let onOptionSelected: (Value) -> Void
@@ -825,9 +827,8 @@ class PickerSetting<Value: Equatable>: Setting {
             }
         }
     }
-    private let pickerButtonAccessibilityLabel: String
-    private let pickerButtonAccessibilityIdentifier: String
     private var selectedDisplayString: String
+    private var pickerButton: UIButton?
 
     /// Initializes a new picker setting with the specified configuration.
     ///
@@ -835,23 +836,17 @@ class PickerSetting<Value: Equatable>: Setting {
     ///   - selectedValue: The currently selected value that determines which option appears as selected.
     ///   - pickerOptions: An array of tuples pairing each selectable value with its localized display string.
     ///   - accessibilityIdentifier: The accessibility identifier for the setting cell.
-    ///   - pickerButtonAccessibilityLabel: The accessibility label for the picker button control.
-    ///   - pickerButtonAccessibilityIdentifier: The accessibility identifier for the picker button control.
     ///   - onOptionSelected: A closure called when a new option is selected,
     ///   receiving the selected value (not the display string).
     init(
         selectedValue: Value,
         pickerOptions: [(value: Value, displayString: String)],
         accessibilityIdentifier: String,
-        pickerButtonAccessibilityLabel: String,
-        pickerButtonAccessibilityIdentifier: String,
         onOptionSelected: @escaping (Value) -> Void
     ) {
         self.selectedDisplayString = pickerOptions.first(where: { $0.value == selectedValue })?.displayString ?? ""
         self.pickerOptions = pickerOptions
         self.onOptionSelected = onOptionSelected
-        self.pickerButtonAccessibilityLabel = pickerButtonAccessibilityLabel
-        self.pickerButtonAccessibilityIdentifier = pickerButtonAccessibilityIdentifier
         super.init()
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -860,20 +855,75 @@ class PickerSetting<Value: Equatable>: Setting {
         super.onConfigureCell(cell, theme: theme)
         cell.textLabel?.text = selectedDisplayString
 
-        let pickerButton = UIButton()
-        pickerButton.showsMenuAsPrimaryAction = true
-        pickerButton.setImage(
+        // We show the picker button with the attached UIMenu only in iOS 17.4 more devices cause on previous
+        // version there is no possibility to trigger the menu programmatically on cell tap, given missing
+        // button.performPrimaryAction() API.
+        if #available(iOS 17.4, *) {
+            let pickerButton = makePickerButton(theme: theme)
+            cell.accessoryView = pickerButton
+            self.pickerButton = pickerButton
+        } else {
+            // Use UIImageView for older iOS to avoid button tint color flickering issue when tapping the cell.
+            let accessoryImageView = makeAccessoryImageView(theme: theme)
+            cell.accessoryView = accessoryImageView
+        }
+
+        cell.selectionStyle = .none
+    }
+
+    private func makePickerButton(theme: any Theme) -> UIButton {
+        let button = UIButton()
+        button.setImage(
             UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
             for: .normal
         )
-        pickerButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        pickerButton.sizeToFit()
-        pickerButton.menu = UIMenu(children: menuItems)
-        pickerButton.tintColor = theme.colors.iconPrimary
-        pickerButton.accessibilityLabel = pickerButtonAccessibilityLabel
-        pickerButton.accessibilityIdentifier = pickerButtonAccessibilityIdentifier
-        cell.selectionStyle = .none
-        cell.accessoryView = pickerButton
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.sizeToFit()
+        button.tintColor = theme.colors.iconSecondary
+        button.isAccessibilityElement = false
+        button.showsMenuAsPrimaryAction = true
+        button.menu = UIMenu(children: menuItems)
+        return button
+    }
+
+    private func makeAccessoryImageView(theme: any Theme) -> UIImageView {
+        let imageView = UIImageView(
+            image: UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
+        )
+        imageView.tintColor = theme.colors.iconSecondary
+        imageView.contentMode = .scaleAspectFit
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        return imageView
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        if #available(iOS 17.4, *) {
+            pickerButton?.performPrimaryAction()
+        } else {
+            presentActionSheet(from: navigationController)
+        }
+    }
+
+    private func presentActionSheet(from navigationController: UINavigationController?) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        for option in pickerOptions {
+            let action = UIAlertAction(
+                title: option.displayString,
+                style: .default
+            ) { [weak self] _ in
+                self?.selectedDisplayString = option.displayString
+                self?.onOptionSelected(option.value)
+            }
+            alertController.addAction(action)
+        }
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+
+        navigationController?.present(alertController, animated: true)
     }
 }
 

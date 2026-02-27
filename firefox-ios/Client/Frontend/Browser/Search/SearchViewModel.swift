@@ -56,7 +56,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private let maxNumOfFirefoxSuggestions: Int32 = 1
     weak var delegate: SearchViewDelegate?
     private let isPrivate: Bool
-    let isBottomSearchBar: Bool
+    public private(set) var isBottomSearchBar: Bool
     var savedQuery = ""
     @MainActor
     var searchQuery = "" {
@@ -222,6 +222,10 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         self.logger = logger
         self.searchFeature = featureConfig
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
+    }
+
+    func updateBottomSearchBarState(isBottomSearchBar: Bool) {
+        self.isBottomSearchBar = isBottomSearchBar
     }
 
     @MainActor

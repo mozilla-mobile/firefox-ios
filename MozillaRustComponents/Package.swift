@@ -1,14 +1,14 @@
 // swift-tools-version: 5.10
 import PackageDescription
 
-let checksum = "2a26eb761177742491de2037bdf0ea982f68083c891c8258583efaa3dae3f94a"
-let version = "150.0.20260224050419"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260224050419/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let checksum = "7474716436ecf1555bb675d50dc7917de368a3f111c967ea744a94612df28cab"
+let version = "150.0.20260226050232"
+let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260226050232/artifacts/public/build/MozillaRustComponents.xcframework.zip"
     "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
-let focusChecksum = "66ced544a3898b24cf7dba196be0e3c575d6a4c08194948fddefb58194d5f4f7"
-let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260224050419/artifacts/public/build/FocusRustComponents.xcframework.zip"
+let focusChecksum = "1353432210cc0bb6a875fcd2666468c8dd9d3e33f5854efa8399f39b17fd106f"
+let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260226050232/artifacts/public/build/FocusRustComponents.xcframework.zip"
     "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
@@ -30,7 +30,8 @@ let package = Package(
             ],
             path: "Sources/MozillaRustComponentsWrapper",
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
+                .enableExperimentalFeature("StrictConcurrency"),
+                .unsafeFlags(["-enable-testing"]),
             ],
         ),
         .target(

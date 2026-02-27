@@ -8,17 +8,20 @@
 "NSCameraUsageDescription" = "កម្មវិធី Firefox ប្រើប្រាស់កាមេរ៉ារបស់លោកអ្នក ដើម្បីស្កេនកូដ QR ព្រមទាំងថតរូបភាព និងវីដេអូ។";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox តម្រូវឱ្យ​មាន​​លេខសម្គាល់​មុខ ដើម្បី​អាចចូលប្រើប្រាស់​​ព័ត៌មានការចូល​ដែល​បាន​រក្សាទុក​របស់​អ្នក។";
+"NSFaceIDUsageDescription" = "Firefox តម្រូវឱ្យមាន Face ID ដើម្បីអាក់សេសពាក្យសម្ងាត់ និងវិធីបង់ប្រាក់ដែលអ្នកបានរក្សាទុក។";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "វិបសាយ​ដែល​អ្នក​ចូល​មើល​អាច​ស្នើ​សុំ​ទីតាំង​របស់​អ្នក។";
+"NSLocationWhenInUseUsageDescription" = "វេបសាយដែលអ្នកទស្សនាប្រហែលជាស្នើសុំទីតាំងរបស់អ្នក។";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "វា​អនុញ្ញាតឱ្យអ្នកថត និង​បង្ហោះ​វីដេអូ។";
+"NSMicrophoneUsageDescription" = "Firefox ប្រើប្រាស់ម៉ាយក្រូផូនរបស់អ្នក ដើម្បីថតនិងអាប់ឡូដនូវអូឌីយោ។";
 
 /* Privacy - Photo Library Additions Usage Description */
-"NSPhotoLibraryAddUsageDescription" = "វា​អនុញ្ញាតឱ្យអ្នករក្សាទុកថត។";
+"NSPhotoLibraryAddUsageDescription" = "វាអនុញ្ញាតឱ្យអ្នករក្សាទុករូបថតបាន។";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox ប្រើ​ការ​សម្គាល់​សំឡេង ដើម្បី​បម្លែង​សំឡេង​របស់​អ្នក​ទៅ​ជា​អត្ថបទ ​សម្រាប់​ការ​ស្វែងរក​ដោយ​សំឡេង។";
 
 /* (No Comment) */
-"Scan QR Code" = "ស្កេនកូដ QR";
+"Scan QR Code" = "ស្គែនឃ្យូអ៝កូដ";
 

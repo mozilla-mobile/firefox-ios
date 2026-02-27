@@ -1,3 +1,12 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "കൂടുതൽ";
+
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "പിഴവടയാളം: %@";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "കൂടുതല്‍ അറിയുക";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "വീണ്ടും ലഭ്യമാക്കുക";
 

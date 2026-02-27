@@ -11,7 +11,7 @@
 "LibraryPanel.History.LastHourOption.v138" = "ម៉ោង​ចុងក្រោយ";
 
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
-"LibraryPanel.History.LastSevenDaysOption.v138" = " 7 ថ្ងៃចុងក្រោយ";
+"LibraryPanel.History.LastSevenDaysOption.v138" = "7 ថ្ងៃចុងក្រោយ";
 
 /* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
 "LibraryPanel.History.LastTwentyFourHoursOption.v138" = "24 ម៉ោងចុងក្រោយ";

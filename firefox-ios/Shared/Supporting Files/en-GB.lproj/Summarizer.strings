@@ -43,6 +43,9 @@
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
 "Summarizer.TabSnapshot.Accessibility.Label.v145" = "Drag or tap the web page to close the summary";
 
+/* The label for the toast that shows when shaking and the summary is not available for that page. */
+"Summarizer.ToastLabel.v149" = "Summary not available";
+
 /* The label for the allow button on the Terms of Service alert. */
 "Summarizer.ToS.Alert.AllowButton.Label.v142" = "Allow";
 

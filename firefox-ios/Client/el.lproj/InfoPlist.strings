@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Επιτρέπει την αποθήκευση φωτογραφιών.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Το Firefox χρησιμοποιεί την αναγνώριση ομιλίας για να μετατρέψει τη φωνή σας σε κείμενο για φωνητική αναζήτηση.";
+
 /* (No Comment) */
 "Scan QR Code" = "Σάρωση κωδικού QR";
 

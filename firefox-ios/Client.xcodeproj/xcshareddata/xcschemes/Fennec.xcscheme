@@ -329,6 +329,20 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MozillaAppServices"
+               BuildableName = "MozillaAppServices"
+               BlueprintName = "MozillaAppServices"
+               ReferencedContainer = "container:../MozillaRustComponents">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -524,6 +538,13 @@
             BuildableName = "WebEngine"
             BlueprintName = "WebEngine"
             ReferencedContainer = "container:../BrowserKit">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "MozillaAppServices"
+            BuildableName = "MozillaAppServices"
+            BlueprintName = "MozillaAppServices"
+            ReferencedContainer = "container:../MozillaRustComponents">
          </BuildableReference>
       </CodeCoverageTargets>
       <TestPlans>
@@ -779,6 +800,16 @@
                BuildableName = "ToolbarKitTests"
                BlueprintName = "ToolbarKitTests"
                ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MozillaRustComponentsTests"
+               BuildableName = "MozillaRustComponentsTests"
+               BlueprintName = "MozillaRustComponentsTests"
+               ReferencedContainer = "container:../MozillaRustComponents">
             </BuildableReference>
          </TestableReference>
       </Testables>
