@@ -52,6 +52,10 @@ public struct SupportUtils {
         return URL(string: "https://support.mozilla.org/en-US/kb/relay-masks-ios")
     }
 
+    public static var URLForConnectionNotSecureLearnMore: URL? {
+        return URL(string: "https://support.mozilla.org/en-US/kb/what-does-your-connection-is-not-secure-mean")
+    }
+
     public static func URLForTopic(_ topic: String, useMobilePath: Bool = true) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.

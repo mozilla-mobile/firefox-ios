@@ -471,7 +471,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func badCertContentViewDidTapLearnMore() {
-        guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else {
+        guard let url = SupportUtils.URLForConnectionNotSecureLearnMore else {
             logger.log(
                 "NativeErrorPage: Unable to create Learn More support URL",
                 level: .warning,
