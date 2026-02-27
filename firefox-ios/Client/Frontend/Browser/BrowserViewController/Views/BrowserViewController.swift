@@ -1931,9 +1931,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
+        if tabManager.selectedTab?.isFindInPageMode == true {
             adjustBottomSearchBarForKeyboard()
-            return
         }
     }
 
