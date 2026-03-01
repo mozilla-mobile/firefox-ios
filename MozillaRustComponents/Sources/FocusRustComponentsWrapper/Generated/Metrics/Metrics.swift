@@ -23,7 +23,7 @@ extension GleanMetrics {
             // Intentionally left private, no external user can instantiate a new global object.
         }
 
-        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 26, hour: 5, minute: 29, second: 32))
+        public static let info = BuildInfo(buildDate: DateComponents(calendar: Calendar.current, timeZone: TimeZone(abbreviation: "UTC"), year: 2026, month: 2, day: 28, hour: 5, minute: 29, second: 31))
     }
 
     enum NimbusEvents {
@@ -43,6 +43,62 @@ extension GleanMetrics {
                 }
                 if let featureId = self.featureId {
                     record["feature_id"] = String(featureId)
+                }
+
+                return record
+            }
+        }
+
+        struct DatabaseLoadExtra: EventExtras {
+            var corrupt: Bool?
+            var error: String?
+            var initialVersion: Int32?
+            var migratedVersion: Int32?
+            var migrationError: String?
+
+            func toExtraRecord() -> [String: String] {
+                var record = [String: String]()
+
+                if let corrupt = self.corrupt {
+                    record["corrupt"] = String(corrupt)
+                }
+                if let error = self.error {
+                    record["error"] = String(error)
+                }
+                if let initialVersion = self.initialVersion {
+                    record["initial_version"] = String(initialVersion)
+                }
+                if let migratedVersion = self.migratedVersion {
+                    record["migrated_version"] = String(migratedVersion)
+                }
+                if let migrationError = self.migrationError {
+                    record["migration_error"] = String(migrationError)
+                }
+
+                return record
+            }
+        }
+
+        struct DatabaseMigrationExtra: EventExtras {
+            var error: String?
+            var fromVersion: Int32?
+            var reason: String?
+            var toVersion: Int32?
+
+            func toExtraRecord() -> [String: String] {
+                var record = [String: String]()
+
+                if let error = self.error {
+                    record["error"] = String(error)
+                }
+                if let fromVersion = self.fromVersion {
+                    record["from_version"] = String(fromVersion)
+                }
+                if let reason = self.reason {
+                    record["reason"] = String(reason)
+                }
+                if let toVersion = self.toVersion {
+                    record["to_version"] = String(toVersion)
                 }
 
                 return record
@@ -244,6 +300,30 @@ extension GleanMetrics {
                 disabled: true
             )
             , ["branch", "experiment", "feature_id"]
+        )
+
+        /// An event recorded when the Nimbus database is loaded.
+        static let databaseLoad = EventMetricType<DatabaseLoadExtra>( // generated from nimbus_events.database_load
+            CommonMetricData(
+                category: "nimbus_events",
+                name: "database_load",
+                sendInPings: ["events"],
+                lifetime: .ping,
+                disabled: false
+            )
+            , ["corrupt", "error", "initial_version", "migrated_version", "migration_error"]
+        )
+
+        /// An event recorded when a database migration occurs.
+        static let databaseMigration = EventMetricType<DatabaseMigrationExtra>( // generated from nimbus_events.database_migration
+            CommonMetricData(
+                category: "nimbus_events",
+                name: "database_migration",
+                sendInPings: ["events"],
+                lifetime: .ping,
+                disabled: false
+            )
+            , ["error", "from_version", "reason", "to_version"]
         )
 
         /// Recorded when a user becomes ineligible to continue receiving the treatment for
