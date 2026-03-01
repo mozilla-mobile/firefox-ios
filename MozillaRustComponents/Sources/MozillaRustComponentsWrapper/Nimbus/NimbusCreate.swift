@@ -24,8 +24,8 @@ final class GleanMetricsHandler: MetricsHandler {
         GleanMetrics.NimbusEvents.databaseLoad
             .record(GleanMetrics.NimbusEvents.DatabaseLoadExtra(
                 corrupt: event.corrupt,
-                initialVersion: event.initialVersion,
                 error: event.error,
+                initialVersion: event.initialVersion,
                 migratedVersion: event.migratedVersion,
                 migrationError: event.migrationError,
             ))
@@ -34,10 +34,10 @@ final class GleanMetricsHandler: MetricsHandler {
     func recordDatabaseMigration(event: DatabaseMigrationExtraDef) {
         GleanMetrics.NimbusEvents.databaseMigration
             .record(GleanMetrics.NimbusEvents.DatabaseMigrationExtra(
-                reason: event.reason,
-                fromVersion: event.fromVersion,
-                toVersion: event.toVersion,
                 error: event.error,
+                fromVersion: event.fromVersion,
+                reason: event.reason,
+                toVersion: event.toVersion,
             ))
     }
 
