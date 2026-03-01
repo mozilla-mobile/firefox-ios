@@ -25,8 +25,8 @@ final class GleanMetricsHandler: MetricsHandler {
             .record(GleanMetrics.NimbusEvents.DatabaseLoadExtra(
                 corrupt: event.corrupt,
                 error: event.error,
-                initialVersion: event.initialVersion,
-                migratedVersion: event.migratedVersion,
+                initialVersion: event.initialVersion.map(Int32.init),
+                migratedVersion: event.migratedVersion.map(Int32.init),
                 migrationError: event.migrationError,
             ))
     }
@@ -35,9 +35,9 @@ final class GleanMetricsHandler: MetricsHandler {
         GleanMetrics.NimbusEvents.databaseMigration
             .record(GleanMetrics.NimbusEvents.DatabaseMigrationExtra(
                 error: event.error,
-                fromVersion: event.fromVersion,
+                fromVersion: Int32(event.fromVersion),
                 reason: event.reason,
-                toVersion: event.toVersion,
+                toVersion: Int32(event.toVersion),
             ))
     }
 
