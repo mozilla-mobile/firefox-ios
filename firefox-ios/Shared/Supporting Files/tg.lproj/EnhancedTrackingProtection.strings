@@ -82,11 +82,20 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Васоити пайгирии манъшуда: %@";
 
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Муҳофизати «Стандартӣ» васоити пайгирии маълумро пас аз оғози боршавии саҳифа дарҳол манъ мекунад, бинобар ин шумо метавонед шумораи зиёди васоити пайгириро мушоҳида намоед. %@";
+
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Муҳофизати «Ҷиддӣ» васоити пайгирии маълумро пеш аз оғози боршавии саҳифа қатъ мекунад, бинобар ин шумо метавонед шумораи камтари васоити пайгириро мушоҳида намоед. %@";
+
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Аз ҷониби «%@» тасдиқ карда шудааст";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Дидани гувоҳнома";
+
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "Маълумоти бештар";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "«%@» хомӯш аст. Мо тавсия медиҳем, ки шумо муҳофизатҳоро аз нав фаъол созед.";

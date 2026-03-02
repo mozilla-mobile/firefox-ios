@@ -1,3 +1,21 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Cuir comharran-lìn ris fhad ’s a nì thu brabhsadh is faigh cothrom orra a-rithist gun duilgheadas.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Tha am pasgan seo falamh";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Body.v135" = "Sàbhail làraichean is tu ri brabhsadh. Gheibh sinn greim cuideachd air na comharran-lìn a th’ agad air uidheaman sioncronaichte eile.";
+
+/* The body text for the placeholder screen shown when the user is signed out and there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.BodySignedOut.v135" = "Sàbhail làraichean is tu ri brabhsadh. Clàraich a-steach is faigh greim air comharran-lìn a th’ agad air uidheaman sioncronaichte eile.";
+
+/* The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data. In this string, "Sync" is used as a verb, and is capitalized as per convention to title case text for buttons in iOS */
+"Bookmarks.EmptyState.Root.ButtonTitle.v136" = "Clàraich a-steach a shioncronachadh";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. */
+"Bookmarks.EmptyState.Root.Title.v135" = "Chan eil comharra-lìn sam bith agad fhathast";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "A h-uile";
 
