@@ -172,7 +172,9 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnHomepageSearchBar,
             NavigationBrowserActionType.tapOnShortcutsShowAllButton,
             NavigationBrowserActionType.tapOnAllStoriesButton,
-            NavigationBrowserActionType.tapOnPrivacyNoticeLink:
+            NavigationBrowserActionType.tapOnPrivacyNoticeLink,
+            NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage,
+            NavigationBrowserActionType.tapOnNativeErrorPageLearnMore:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,

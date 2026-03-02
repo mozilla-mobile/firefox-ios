@@ -1713,8 +1713,11 @@ extension BrowserViewController: LegacyWebControllerDelegate {
     }
 
     func webControllerDidStartNavigation(_ controller: LegacyWebController) {
-        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
-            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        if !SearchHistoryUtils.isFromURLBar &&
+            !SearchHistoryUtils.isNavigating &&
+            !SearchHistoryUtils.isReload,
+           let urlString = urlBar.url?.absoluteString {
+            SearchHistoryUtils.pushSearchToStack(with: urlString)
         }
         SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false

@@ -4,6 +4,13 @@
 
 import SwiftUI
 
+public enum OnboardingFlowOutcome: String {
+    /// User advanced through every card to the natural end of the flow.
+    case completed
+    /// User tapped the skip button before reaching the last card.
+    case skipped
+}
+
 @MainActor
 public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     @Published public var pageCount = 0
@@ -25,13 +32,12 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
         case none
     }
 
-    public let onComplete: @MainActor (String) -> Void
+    public let onComplete: @MainActor (String, OnboardingFlowOutcome) -> Void
     public private(set) var multipleChoiceSelections: [String: ViewModel.OnboardingMultipleChoiceActionType] = [:]
 
     public var onCardView: (@MainActor (String) -> Void)?
     public var onButtonTap: (@MainActor (String, ViewModel.OnboardingActionType, Bool) -> Void)?
     public var onMultipleChoiceTap: (@MainActor (String, ViewModel.OnboardingMultipleChoiceActionType) -> Void)?
-    public var onDismiss: (@MainActor (String) -> Void)?
 
     public init(
         onboardingCards: [ViewModel],
@@ -45,7 +51,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
             ViewModel.OnboardingMultipleChoiceActionType,
             String
         ) -> Void,
-        onComplete: @MainActor @escaping (String) -> Void
+        onComplete: @MainActor @escaping (String, OnboardingFlowOutcome) -> Void
     ) {
         self.onboardingCards = onboardingCards
         self.skipText = skipText
@@ -91,8 +97,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
                 pageCount = nextIndex
             }
         } else {
-            onDismiss?(cardName)
-            onComplete(cardName)
+            onComplete(cardName, .completed)
         }
     }
 
@@ -109,8 +114,7 @@ public final class OnboardingFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
         let currentIndex = min(max(pageCount, 0), onboardingCards.count - 1)
         let currentCardName = onboardingCards[currentIndex].name
-        onDismiss?(currentCardName)
-        onComplete(currentCardName)
+        onComplete(currentCardName, .skipped)
     }
 
     func scrollToNextPage() {

@@ -254,6 +254,32 @@ final class BrowserViewControllerKeyboardConstraintTests: BrowserViewControllerC
         subject.keyboardHelper(keyboardHelper, keyboardWillHideWithState: hideState)
     }
 
+    // MARK: - bottomContentStackView Position Tests
+
+    func test_keyboardWillShow_withSnapKit_TopToolbar_bottomContentNoUpdate() {
+        let subject = createSubject(isBottomSearchBar: false)
+        let keyboardHelper = createKeyboardHelper()
+        let state = createKeyboardState()
+        let initialPosition = subject.bottomContentStackView.frame.maxY
+
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
+        let showPosition = subject.bottomContentStackView.frame.maxY
+
+        XCTAssertEqual(initialPosition, showPosition)
+    }
+
+    func test_keyboardWillShow_withNative_TopToolbar_bottomContentNoUpdate() {
+        let subject = createSubject(isFeatureFlagEnabled: true, isBottomSearchBar: false)
+        let keyboardHelper = createKeyboardHelper()
+        let state = createKeyboardState()
+        let initialPosition = subject.bottomContentStackView.frame.maxY
+
+        subject.keyboardHelper(keyboardHelper, keyboardWillShowWithState: state)
+        let showPosition = subject.bottomContentStackView.frame.maxY
+
+        XCTAssertEqual(initialPosition, showPosition)
+    }
+
     // MARK: - Feature Flag Comparison Tests
 
     func test_constraintBehavior_snapKitVsNative_produceSimilarLayout() {

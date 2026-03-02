@@ -200,9 +200,11 @@ final class LaunchCoordinator: BaseCoordinator,
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
+        let onboardingReason: OnboardingReason = manager.shouldShowIntroScreen ? .newUser : .showTour
         let telemetryUtility = OnboardingTelemetryUtility(
             with: onboardingModel,
-            onboardingVariant: manager.onboardingVariant
+            onboardingVariant: manager.onboardingVariant,
+            onboardingReason: onboardingReason
         )
 
         // Create onboardingService and store it directly - don't create local variable
@@ -239,8 +241,12 @@ final class LaunchCoordinator: BaseCoordinator,
                     from: cardName
                 )
             },
-            onComplete: { [weak self] currentCardName in
+            onComplete: { [weak self] currentCardName, outcome in
                 guard let self = self else { return }
+                if outcome == .skipped {
+                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
+                }
+                telemetryUtility.sendOnboardingDismissedTelemetry(outcome: outcome)
                 manager.didSeeIntroScreen()
                 SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
                 self.onboardingService = nil
@@ -267,12 +273,6 @@ final class LaunchCoordinator: BaseCoordinator,
             )
         }
 
-        flowViewModel.onDismiss = { [weak self] cardName in
-            guard let self = self else { return }
-            telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
-            self.onboardingService = nil
-        }
-
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -289,14 +289,19 @@ final class LaunchCoordinator: BaseCoordinator,
         hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
+        telemetryUtility.sendOnboardingShownTelemetry()
     }
 
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingReason: OnboardingReason = manager.shouldShowIntroScreen ? .newUser : .showTour
 
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(
+            with: onboardingModel,
+            onboardingReason: onboardingReason
+        )
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
                                             model: onboardingModel,
@@ -311,6 +316,7 @@ final class LaunchCoordinator: BaseCoordinator,
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
             router.present(introViewController, animated: false)
+            telemetryUtility.sendOnboardingShownTelemetry()
         } else {
             introViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
@@ -324,6 +330,7 @@ final class LaunchCoordinator: BaseCoordinator,
             router.present(introViewController, animated: true) {
                 introViewController.closeOnboarding()
             }
+            telemetryUtility.sendOnboardingShownTelemetry()
         }
     }
 

@@ -53,6 +53,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card1")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withMiddlePageCount_callsOnCompleteWithCorrectCard() {
@@ -66,6 +67,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card2")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withLastPageCount_callsOnCompleteWithLastCard() {
@@ -79,6 +81,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card3")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withPageCountExceedingCardsCount_callsOnCompleteWithLastCard() {
@@ -92,6 +95,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card3") // Should clamp to last card
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withNegativePageCount_callsOnCompleteWithFirstCard() {
@@ -105,6 +109,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card1") // Should clamp to first card
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withSingleCard_callsOnCompleteWithThatCard() {
@@ -118,6 +123,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
         XCTAssertEqual(testHelper.lastCompletedCardName, "onlyCard")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_calledMultipleTimes_callsOnCompleteMultipleTimes() {
@@ -132,6 +138,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 3)
         XCTAssertEqual(testHelper.lastCompletedCardName, "card1") // All calls should use same pageCount
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_withDifferentCardNames_callsOnCompleteWithCorrectNames() {
@@ -148,16 +155,19 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         viewModel.pageCount = 0
         viewModel.skipOnboarding()
         XCTAssertEqual(testHelper.lastCompletedCardName, "welcome")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
 
         testHelper.reset()
         viewModel.pageCount = 2
         viewModel.skipOnboarding()
         XCTAssertEqual(testHelper.lastCompletedCardName, "feature2")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
 
         testHelper.reset()
         viewModel.pageCount = 3
         viewModel.skipOnboarding()
         XCTAssertEqual(testHelper.lastCompletedCardName, "completion")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
     }
 
     func testSkipOnboarding_doesNotTriggerOtherCallbacks() {
@@ -171,6 +181,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         XCTAssertEqual(testHelper.onActionTapCallCount, 0)
         XCTAssertEqual(testHelper.onMultipleChoiceActionTapCallCount, 0)
         XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
         XCTAssertNil(testHelper.lastActionTapped)
         XCTAssertNil(testHelper.lastMultipleChoiceAction)
     }
@@ -186,6 +197,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(testHelper.onCompleteCallCount, 0)
         XCTAssertNil(testHelper.lastCompletedCardName) // Should be nil string for empty cards
+        XCTAssertNil(testHelper.lastCompletionOutcome)
     }
 
     func testSkipOnboarding_boundaryConditions() {
@@ -196,6 +208,7 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         viewModel.pageCount = 3 // Equal to array count
         viewModel.skipOnboarding()
         XCTAssertEqual(testHelper.lastCompletedCardName, "card3")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
 
         testHelper.reset()
 
@@ -203,5 +216,80 @@ final class OnboardingFlowViewModelTests: XCTestCase {
         viewModel.pageCount = 0
         viewModel.skipOnboarding()
         XCTAssertEqual(testHelper.lastCompletedCardName, "card1")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
+    }
+
+    // MARK: - Tests for handleBottomButtonAction() / .completed outcome
+
+    func testHandleBottomButtonAction_onLastCard_callsOnCompleteWithCompleted() {
+        // Given
+        let viewModel = createViewModel()
+
+        // When — the test helper's handleActionTap always returns .advance(numberOfPages: 1),
+        // so tapping on card3 (index 2) tries to advance to index 3, which is past the end.
+        viewModel.handleBottomButtonAction(action: .next, cardName: "card3")
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "card3")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .completed)
+    }
+
+    func testHandleBottomButtonAction_onNonLastCard_doesNotCallOnComplete() {
+        // Given
+        let viewModel = createViewModel()
+
+        // When — advancing from card1 (index 0) moves to index 1, which is still within bounds.
+        viewModel.handleBottomButtonAction(action: .next, cardName: "card1")
+
+        // Then — onComplete must NOT fire; only pageCount advances.
+        XCTAssertEqual(testHelper.onCompleteCallCount, 0)
+        XCTAssertNil(testHelper.lastCompletionOutcome)
+        XCTAssertEqual(viewModel.pageCount, 1)
+    }
+
+    func testHandleBottomButtonAction_onSingleCard_callsOnCompleteWithCompleted() {
+        // Given — a single-card deck has no "next" card to advance to.
+        let singleCard = [MockOnboardingCardInfoModel.create(name: "onlyCard", order: 0)]
+        let viewModel = createViewModel(cards: singleCard)
+
+        // When
+        viewModel.handleBottomButtonAction(action: .next, cardName: "onlyCard")
+
+        // Then
+        XCTAssertEqual(testHelper.onCompleteCallCount, 1)
+        XCTAssertEqual(testHelper.lastCompletedCardName, "onlyCard")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .completed)
+    }
+
+    func testHandleBottomButtonAction_completedOutcomePassesCurrentCardName() {
+        // Given — verify the card name at the point of completion is reported correctly.
+        let customCards = [
+            MockOnboardingCardInfoModel.create(name: "welcome", order: 0),
+            MockOnboardingCardInfoModel.create(name: "final", order: 1)
+        ]
+        let viewModel = createViewModel(cards: customCards)
+
+        // When
+        viewModel.handleBottomButtonAction(action: .next, cardName: "final")
+
+        // Then
+        XCTAssertEqual(testHelper.lastCompletedCardName, "final")
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .completed)
+    }
+
+    func testHandleBottomButtonAction_skippedAndCompleted_OutcomesAreDistinct() {
+        // Given
+        let viewModel = createViewModel()
+
+        // When — skip first, then complete via the last card.
+        viewModel.skipOnboarding()
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .skipped)
+
+        testHelper.reset()
+        viewModel.handleBottomButtonAction(action: .next, cardName: "card3")
+
+        // Then — outcome for natural completion must differ from skip.
+        XCTAssertEqual(testHelper.lastCompletionOutcome, .completed)
     }
 }
