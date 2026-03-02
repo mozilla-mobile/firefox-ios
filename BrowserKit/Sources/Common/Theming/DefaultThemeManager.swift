@@ -252,8 +252,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
                 type: type,
                 colors: TintedThemeColourPalette(
                     base: baseTheme.colors,
-                    accent: accent,
-                    baseThemeType: type
+                    accent: accent.color(for: type),
+                    themeType: type
                 )
             )
         }

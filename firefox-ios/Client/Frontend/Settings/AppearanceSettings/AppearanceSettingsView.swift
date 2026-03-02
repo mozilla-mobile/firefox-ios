@@ -20,6 +20,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     var themeManager
 
     @State private var currentTheme: Theme?
+    @State private var showColorPicker = false
 
     var shouldShowPageZoom: Bool {
         return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
@@ -60,6 +61,14 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     cornerRadius: UX.cornerRadius
                 )
 
+                // Section for selecting accent color.
+                AccentColorSectionView(
+                    theme: currentTheme,
+                    themeManager: themeManager,
+                    cornerRadius: UX.cornerRadius,
+                    showColorPicker: $showColorPicker
+                )
+
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
@@ -80,6 +89,9 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             currentTheme = themeManager.getCurrentTheme(for: windowUUID)
+        }
+        .sheet(isPresented: $showColorPicker) {
+            ColorPickerSheet(themeManager: themeManager)
         }
     }
 

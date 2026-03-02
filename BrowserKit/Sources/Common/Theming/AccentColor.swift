@@ -90,7 +90,7 @@ public enum AccentColor: Equatable, Sendable {
 
 extension UIColor {
     /// Initialize from a hex string like "#FF5733" or "FF5733".
-    convenience init?(accentHex hex: String) {
+    public convenience init?(accentHex hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
         guard hexSanitized.count == 6,
@@ -105,7 +105,7 @@ extension UIColor {
     }
 
     /// Convert this color to a hex string like "#RRGGBB".
-    func accentHexString() -> String {
+    public func accentHexString() -> String {
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         getRed(&r, green: &g, blue: &b, alpha: &a)
         return String(format: "#%02X%02X%02X",
@@ -115,7 +115,7 @@ extension UIColor {
     }
 
     /// Lightens a color for dark mode readability if its brightness is too low.
-    func accentAdjustedForDarkMode() -> UIColor {
+    public func accentAdjustedForDarkMode() -> UIColor {
         var hue: CGFloat = 0, saturation: CGFloat = 0
         var brightness: CGFloat = 0, alpha: CGFloat = 0
         getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
@@ -131,7 +131,7 @@ extension UIColor {
     }
 
     /// Returns a darker variant of this color.
-    func accentDarker(by percentage: CGFloat = 0.1) -> UIColor {
+    public func accentDarker(by percentage: CGFloat = 0.1) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         getHue(&h, saturation: &s, brightness: &b, alpha: &a)
         return UIColor(hue: h, saturation: s,
@@ -139,7 +139,7 @@ extension UIColor {
     }
 
     /// Returns a lighter variant of this color.
-    func accentLighter(by percentage: CGFloat = 0.1) -> UIColor {
+    public func accentLighter(by percentage: CGFloat = 0.1) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         getHue(&h, saturation: &s, brightness: &b, alpha: &a)
         return UIColor(hue: h, saturation: s,

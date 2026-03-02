@@ -3112,6 +3112,13 @@ extension String {
                     value: "Reset Site Settings",
                     comment: "Button to reset specific zoom site levels back to default")
             }
+            public struct AccentColor {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.AccentColor.SectionHeader.v148",
+                    tableName: "Settings",
+                    value: "Accent Color",
+                    comment: "Header for the accent color selection section in Appearance settings")
+            }
             public struct NavigationToolbar {
                 public static let SectionHeader = MZLocalizedString(
                     key: "Settings.Appearance.NavigationToolbar.SectionHeader.v145",
