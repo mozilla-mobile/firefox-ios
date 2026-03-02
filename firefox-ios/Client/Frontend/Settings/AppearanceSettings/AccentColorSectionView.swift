@@ -26,27 +26,37 @@ struct AccentColorSectionView: View {
         themeManager.accentColor
     }
 
+    private var isCustomSelected: Bool {
+        if case .custom = selectedAccent { return true }
+        return false
+    }
+
     var body: some View {
         GenericSectionView(
             theme: theme,
             title: .Settings.Appearance.AccentColor.SectionHeader,
             identifier: AccessibilityIdentifiers.Settings.Appearance.accentColorSectionTitle
         ) {
-            HStack(spacing: UX.spacing) {
-                ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
-                    swatchView(
-                        color: Color(accent.swatchColor),
-                        isSelected: selectedAccent == accent,
-                        accessibilityLabel: accent.persistenceValue
-                    ) {
-                        themeManager.setAccentColor(accent)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: UX.spacing) {
+                    ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
+                        swatchView(
+                            color: Color(accent.swatchColor),
+                            isSelected: selectedAccent == accent,
+                            accessibilityLabel: accent.persistenceValue
+                        ) {
+                            themeManager.setAccentColor(accent)
+                        }
                     }
+
+                    // Show custom color swatch when a custom color is active
+                    if isCustomSelected {
+                        customColorSwatch()
+                    }
+
+                    // Plus button — always visible
+                    addButton()
                 }
-
-                // Custom swatch
-                customSwatchView()
-
-                Spacer()
             }
             .padding(.horizontal, UX.horizontalPadding)
             .padding(.vertical, UX.verticalPadding)
@@ -79,37 +89,40 @@ struct AccentColorSectionView: View {
         .onTapGesture { onTap() }
     }
 
+    /// The selected custom color shown as a regular swatch with checkmark.
     @ViewBuilder
-    private func customSwatchView() -> some View {
-        let isCustomSelected: Bool = {
-            if case .custom = selectedAccent { return true }
-            return false
-        }()
-
-        let swatchColor: Color = {
+    private func customColorSwatch() -> some View {
+        let color: Color = {
             if case .custom(let hex) = selectedAccent {
                 return Color(UIColor(accentHex: hex) ?? .systemGray)
             }
-            return Color(UIColor.systemGray4)
+            return Color.gray
         }()
 
+        swatchView(
+            color: color,
+            isSelected: true,
+            accessibilityLabel: "Custom color"
+        ) {
+            // Tapping the custom swatch re-opens the picker to change it
+            showColorPicker = true
+        }
+    }
+
+    /// Plus button that always stays on the right to add/change a custom color.
+    @ViewBuilder
+    private func addButton() -> some View {
         ZStack {
             Circle()
-                .fill(swatchColor)
+                .fill(Color(UIColor.systemGray3))
                 .frame(width: UX.swatchSize, height: UX.swatchSize)
 
-            if isCustomSelected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: UX.checkmarkSize, weight: .bold))
-                    .foregroundColor(.white)
-            } else {
-                Image(systemName: "plus")
-                    .font(.system(size: UX.customIconSize, weight: .medium))
-                    .foregroundColor(Color(theme?.colors.iconPrimary ?? .label))
-            }
+            Image(systemName: "plus")
+                .font(.system(size: UX.customIconSize, weight: .semibold))
+                .foregroundColor(.white)
         }
-        .accessibilityLabel("Custom")
-        .accessibilityAddTraits(isCustomSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityLabel("Add custom color")
+        .accessibilityAddTraits(.isButton)
         .onTapGesture { showColorPicker = true }
     }
 }

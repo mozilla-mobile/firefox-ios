@@ -26,27 +26,35 @@ struct BackgroundTintSectionView: View {
         themeManager.backgroundTintColor
     }
 
+    private var isCustomSelected: Bool {
+        if case .custom = selectedTint { return true }
+        return false
+    }
+
     var body: some View {
         GenericSectionView(
             theme: theme,
             title: .Settings.Appearance.BackgroundTint.SectionHeader,
             identifier: AccessibilityIdentifiers.Settings.Appearance.backgroundTintSectionTitle
         ) {
-            HStack(spacing: UX.spacing) {
-                ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
-                    swatchView(
-                        color: Color(accent.swatchColor),
-                        isSelected: selectedTint == accent,
-                        accessibilityLabel: accent.persistenceValue
-                    ) {
-                        themeManager.setBackgroundTintColor(accent)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: UX.spacing) {
+                    ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
+                        swatchView(
+                            color: Color(accent.swatchColor),
+                            isSelected: selectedTint == accent,
+                            accessibilityLabel: accent.persistenceValue
+                        ) {
+                            themeManager.setBackgroundTintColor(accent)
+                        }
                     }
+
+                    if isCustomSelected {
+                        customColorSwatch()
+                    }
+
+                    addButton()
                 }
-
-                // Custom swatch
-                customSwatchView()
-
-                Spacer()
             }
             .padding(.horizontal, UX.horizontalPadding)
             .padding(.vertical, UX.verticalPadding)
@@ -80,36 +88,36 @@ struct BackgroundTintSectionView: View {
     }
 
     @ViewBuilder
-    private func customSwatchView() -> some View {
-        let isCustomSelected: Bool = {
-            if case .custom = selectedTint { return true }
-            return false
-        }()
-
-        let swatchColor: Color = {
+    private func customColorSwatch() -> some View {
+        let color: Color = {
             if case .custom(let hex) = selectedTint {
                 return Color(UIColor(accentHex: hex) ?? .systemGray)
             }
-            return Color(UIColor.systemGray4)
+            return Color.gray
         }()
 
+        swatchView(
+            color: color,
+            isSelected: true,
+            accessibilityLabel: "Custom color"
+        ) {
+            showColorPicker = true
+        }
+    }
+
+    @ViewBuilder
+    private func addButton() -> some View {
         ZStack {
             Circle()
-                .fill(swatchColor)
+                .fill(Color(UIColor.systemGray3))
                 .frame(width: UX.swatchSize, height: UX.swatchSize)
 
-            if isCustomSelected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: UX.checkmarkSize, weight: .bold))
-                    .foregroundColor(.white)
-            } else {
-                Image(systemName: "plus")
-                    .font(.system(size: UX.customIconSize, weight: .medium))
-                    .foregroundColor(Color(theme?.colors.iconPrimary ?? .label))
-            }
+            Image(systemName: "plus")
+                .font(.system(size: UX.customIconSize, weight: .semibold))
+                .foregroundColor(.white)
         }
-        .accessibilityLabel("Custom")
-        .accessibilityAddTraits(isCustomSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityLabel("Add custom color")
+        .accessibilityAddTraits(.isButton)
         .onTapGesture { showColorPicker = true }
     }
 }
