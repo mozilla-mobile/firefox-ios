@@ -1867,7 +1867,6 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        // TODO: Yoana after call updateSnapKit Overkeyboard directly no need to update anything native
         updateOverKeyboardContainerConstraints()
         updateSnapKitBottomContainerConstraints()
         updateConstraintsForKeyboard()
@@ -1931,7 +1930,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        if tabManager.selectedTab?.isFindInPageMode == true {
+        if tabManager.selectedTab?.isFindInPageMode == false {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -5121,7 +5120,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
 
@@ -5162,7 +5160,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
 
@@ -5206,7 +5203,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
     }
