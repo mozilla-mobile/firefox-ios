@@ -483,6 +483,7 @@ struct AccessibilityIdentifiers {
             static let accentColorSectionTitle = "AccentColorSectionTitle"
             static let backgroundTintSectionTitle = "BackgroundTintSectionTitle"
             static let toolbarTintSectionTitle = "ToolbarTintSectionTitle"
+            static let unsplashWallpaperSectionTitle = "UnsplashWallpaperSectionTitle"
         }
 
         struct AppIconSelection {

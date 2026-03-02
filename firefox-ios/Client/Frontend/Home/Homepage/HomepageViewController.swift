@@ -149,6 +149,7 @@ final class HomepageViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         configureWallpaperView()
+        configureUnsplashWallpaper()
         configureCollectionView()
         setupLayout()
         configureDataSource()
@@ -432,6 +433,35 @@ final class HomepageViewController: UIViewController,
         // Height is authoritative from state and already includes the window-relative content offset.
         wallpaperHeightConstraint?.constant = availableWallpaperHeight
         wallpaperTopConstraint?.constant = -viewTopOffset
+    }
+
+    /// Sets up Unsplash wallpaper: loads saved selection and listens for changes.
+    private func configureUnsplashWallpaper() {
+        // Load previously saved Unsplash wallpaper if any
+        if let photoId = UserDefaults.standard.string(forKey: UnsplashWallpaperKeys.currentPhotoId),
+           let image = UnsplashService.shared.loadSavedWallpaper(photoId: photoId) {
+            wallpaperView.unsplashImage = image
+        }
+
+        // Listen for Unsplash wallpaper changes from the Appearance settings
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(unsplashWallpaperDidChange(_:)),
+            name: .UnsplashWallpaperDidChange,
+            object: nil
+        )
+    }
+
+    @objc
+    private func unsplashWallpaperDidChange(_ notification: Notification) {
+        if let clear = notification.userInfo?["clear"] as? Bool, clear {
+            wallpaperView.unsplashImage = nil
+            return
+        }
+
+        if let image = notification.userInfo?["image"] as? UIImage {
+            wallpaperView.unsplashImage = image
+        }
     }
 
     private func setupLayout() {

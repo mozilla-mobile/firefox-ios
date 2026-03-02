@@ -3133,6 +3133,18 @@ extension String {
                     value: "Toolbar Color",
                     comment: "Header for the toolbar tint color selection section in Appearance settings")
             }
+            public struct UnsplashWallpaper {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.UnsplashWallpaper.SectionHeader.v148",
+                    tableName: "Settings",
+                    value: "Wallpaper",
+                    comment: "Header for the Unsplash wallpaper selection section in Appearance settings")
+                public static let SearchPlaceholder = MZLocalizedString(
+                    key: "Settings.Appearance.UnsplashWallpaper.SearchPlaceholder.v148",
+                    tableName: "Settings",
+                    value: "Search wallpapers…",
+                    comment: "Placeholder text for the wallpaper search field in Appearance settings")
+            }
             public struct NavigationToolbar {
                 public static let SectionHeader = MZLocalizedString(
                     key: "Settings.Appearance.NavigationToolbar.SectionHeader.v145",

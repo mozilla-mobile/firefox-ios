@@ -87,6 +87,12 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     showColorPicker: $showToolbarTintPicker
                 )
 
+                // Section for browsing and selecting Unsplash wallpapers.
+                UnsplashWallpaperSectionView(
+                    theme: currentTheme,
+                    cornerRadius: UX.cornerRadius
+                )
+
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 

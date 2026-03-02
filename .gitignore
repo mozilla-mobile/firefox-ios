@@ -145,3 +145,5 @@ shavar-*
 
 # Licenses.html generation
 LicensePlistTemp
+# Unsplash API config (contains secrets)
+firefox-ios/UnsplashConfig.json

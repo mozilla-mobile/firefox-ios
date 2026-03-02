@@ -20,6 +20,13 @@ class WallpaperBackgroundView: UIView {
         }
     }
 
+    /// When set, this Unsplash image takes priority over the Redux wallpaper state.
+    var unsplashImage: UIImage? {
+        didSet {
+            updateImageToCurrentWallpaper()
+        }
+    }
+
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,8 +56,16 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateImageToCurrentWallpaper() {
-        guard let state = wallpaperState else { return }
         ensureMainThread {
+            // Unsplash wallpaper takes priority if set
+            if let unsplash = self.unsplashImage {
+                UIView.animate(withDuration: 0.3) {
+                    self.pictureView.image = unsplash
+                }
+                return
+            }
+
+            guard let state = self.wallpaperState else { return }
             let currentWallpaperImage = self.currentWallpaperImage(from: state)
             UIView.animate(withDuration: 0.3) {
                 self.pictureView.image = currentWallpaperImage
