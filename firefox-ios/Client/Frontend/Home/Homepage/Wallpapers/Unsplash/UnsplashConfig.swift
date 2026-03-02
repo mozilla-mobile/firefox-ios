@@ -4,37 +4,20 @@
 
 import Foundation
 
-/// Reads Unsplash API credentials from a local JSON file that is not committed to source control.
-/// The file `UnsplashConfig.json` should be placed at the root of the `firefox-ios` directory.
+/// Reads Unsplash API credentials from a bundled JSON file.
+/// The file `UnsplashConfig.json` must be added to the Xcode project's
+/// Copy Bundle Resources build phase. It is gitignored and never committed.
 struct UnsplashConfig: Codable {
     let appId: String
     let accessKey: String
     let secretKey: String
 
-    /// Loads the config from the bundled `UnsplashConfig.json` file.
+    /// Loads the config from the bundled `UnsplashConfig.json`.
     /// Returns nil if the file is missing or malformed.
     static func load() -> UnsplashConfig? {
-        // Try loading from main bundle first (for when it's added to the Xcode project resources)
-        if let url = Bundle.main.url(forResource: "UnsplashConfig", withExtension: "json") {
-            return loadFrom(url: url)
+        guard let url = Bundle.main.url(forResource: "UnsplashConfig", withExtension: "json") else {
+            return nil
         }
-
-        // Fallback: try loading from the app's documents or project directory
-        // This handles development scenarios where the file is at the project root
-        let fileManager = FileManager.default
-        let possiblePaths = [
-            // In the app bundle's resource directory
-            Bundle.main.bundlePath + "/UnsplashConfig.json"
-        ]
-
-        for path in possiblePaths where fileManager.fileExists(atPath: path) {
-            return loadFrom(url: URL(fileURLWithPath: path))
-        }
-
-        return nil
-    }
-
-    private static func loadFrom(url: URL) -> UnsplashConfig? {
         guard let data = try? Data(contentsOf: url) else { return nil }
         return try? JSONDecoder().decode(UnsplashConfig.self, from: data)
     }

@@ -16344,6 +16344,7 @@
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
+				30A1B2C374E5F60718293041 /* UnsplashConfig.json */,
 				45D5EDC1292D636000311934 /* nimbus.fml.yaml */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -17575,6 +17576,7 @@
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
 				8A1F6C332BC5A6D100DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
+				071829307074E5F607182930 /* UnsplashConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
