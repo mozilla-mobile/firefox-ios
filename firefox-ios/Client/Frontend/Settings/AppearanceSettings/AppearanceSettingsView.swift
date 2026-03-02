@@ -21,6 +21,8 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
 
     @State private var currentTheme: Theme?
     @State private var showColorPicker = false
+    @State private var showBackgroundTintPicker = false
+    @State private var showToolbarTintPicker = false
 
     var shouldShowPageZoom: Bool {
         return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
@@ -69,6 +71,22 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                     showColorPicker: $showColorPicker
                 )
 
+                // Section for selecting background tint color.
+                BackgroundTintSectionView(
+                    theme: currentTheme,
+                    themeManager: themeManager,
+                    cornerRadius: UX.cornerRadius,
+                    showColorPicker: $showBackgroundTintPicker
+                )
+
+                // Section for selecting toolbar tint color.
+                ToolbarTintSectionView(
+                    theme: currentTheme,
+                    themeManager: themeManager,
+                    cornerRadius: UX.cornerRadius,
+                    showColorPicker: $showToolbarTintPicker
+                )
+
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
@@ -92,6 +110,12 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
         .sheet(isPresented: $showColorPicker) {
             ColorPickerSheet(themeManager: themeManager)
+        }
+        .sheet(isPresented: $showBackgroundTintPicker) {
+            BackgroundTintColorPickerSheet(themeManager: themeManager)
+        }
+        .sheet(isPresented: $showToolbarTintPicker) {
+            ToolbarTintColorPickerSheet(themeManager: themeManager)
         }
     }
 

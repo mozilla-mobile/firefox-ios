@@ -481,6 +481,8 @@ struct AccessibilityIdentifiers {
             static let darkThemeView = "DarkThemeView"
             static let darkModeToggle = "DarkModeToggle"
             static let accentColorSectionTitle = "AccentColorSectionTitle"
+            static let backgroundTintSectionTitle = "BackgroundTintSectionTitle"
+            static let toolbarTintSectionTitle = "ToolbarTintSectionTitle"
         }
 
         struct AppIconSelection {

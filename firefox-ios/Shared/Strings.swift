@@ -3119,6 +3119,20 @@ extension String {
                     value: "Accent Color",
                     comment: "Header for the accent color selection section in Appearance settings")
             }
+            public struct BackgroundTint {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.BackgroundTint.SectionHeader.v148",
+                    tableName: "Settings",
+                    value: "Background Color",
+                    comment: "Header for the background tint color selection section in Appearance settings")
+            }
+            public struct ToolbarTint {
+                public static let SectionHeader = MZLocalizedString(
+                    key: "Settings.Appearance.ToolbarTint.SectionHeader.v148",
+                    tableName: "Settings",
+                    value: "Toolbar Color",
+                    comment: "Header for the toolbar tint color selection section in Appearance settings")
+            }
             public struct NavigationToolbar {
                 public static let SectionHeader = MZLocalizedString(
                     key: "Settings.Appearance.NavigationToolbar.SectionHeader.v145",

@@ -1464,6 +1464,8 @@
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */; };
 		54019C4F91898C0D5C43D6F3 /* AccentColorSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* BackgroundTintSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */; };
+		B2C3D4E5F6071829A1B2C3D4 /* ToolbarTintSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */; };
 		BA4BB99E2D7FB38B006BD137 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */; };
 		BA4BB9A02D7FB3C9006BD137 /* ThemeOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */; };
 		BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */; };
@@ -9921,6 +9923,8 @@
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorSectionView.swift; sourceTree = "<group>"; };
+		D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTintSectionView.swift; sourceTree = "<group>"; };
+		E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTintSectionView.swift; sourceTree = "<group>"; };
 		BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionView.swift; sourceTree = "<group>"; };
 		BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeOptionView.swift; sourceTree = "<group>"; };
 		BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkModeToggleView.swift; sourceTree = "<group>"; };
@@ -14540,6 +14544,8 @@
 				214099602DCBF4DB004881E1 /* Zoom */,
 				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 				4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */,
+				D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */,
+				E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */,
 				BA1237C22DAE6D5100BB6333 /* AddressBarSettingsView.swift */,
 				BA1237C02DAE6D2500BB6333 /* AddressBarSelectionView.swift */,
 				BA1237BE2DAE675400BB6333 /* GenericImageOption.swift */,
@@ -19151,6 +19157,8 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */,
 				54019C4F91898C0D5C43D6F3 /* AccentColorSectionView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* BackgroundTintSectionView.swift in Sources */,
+				B2C3D4E5F6071829A1B2C3D4 /* ToolbarTintSectionView.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				21F422662E315E5C004FF994 /* LegacyTabScrollController.swift in Sources */,
 				E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */,
