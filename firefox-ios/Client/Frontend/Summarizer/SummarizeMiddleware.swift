@@ -7,8 +7,12 @@ import Redux
 import SummarizeKit
 import WebKit
 
+protocol SummarizerConfigFactory: Sendable {
+    func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig?
+}
+
 @MainActor
-final class SummarizerMiddleware {
+final class SummarizerMiddleware: SummarizerConfigFactory {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let summarizationChecker: SummarizationCheckerProtocol
     private let summarizerServiceFactory: SummarizerServiceFactory
@@ -40,11 +44,11 @@ final class SummarizerMiddleware {
         self.summarizerConfigProvider = summarizerConfigProvider
     }
 
-    lazy var summarizerProvider: Middleware<AppState> = { state, action in
+    lazy var summarizerProvider: Middleware<AppState> = { [weak self] state, action in
         switch action.actionType {
         case GeneralBrowserActionType.shakeMotionEnded:
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(for: action)
+            Task { [weak self] in
+                await self?.dispatchSummarizeConfigurationAction(for: action)
             }
         default:
             break
@@ -61,7 +65,7 @@ final class SummarizerMiddleware {
     @MainActor
     private func dispatchSummarizeConfigurationAction(for action: Action) async {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
-        guard let summarizerConfig = await getSummarizerConfiguration(webView) else { return }
+        guard let summarizerConfig = await makeConfiguration(from: webView) else { return }
 
         store.dispatch(
             SummarizeAction(
@@ -72,7 +76,7 @@ final class SummarizerMiddleware {
         )
     }
 
-    func getSummarizerConfiguration(_ webView: WKWebView) async -> SummarizerConfig? {
+    func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig? {
         guard summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
 
         let preSummarizationCheckResults = await summarizationChecker.check(on: webView, maxWords: maxWords)
@@ -110,6 +114,11 @@ final class SummarizerMiddleware {
             ) != nil
             guard isSupportedLocale else { return nil }
             return summarizerConfigProvider.getConfig(
+                from: [
+                    UserSummarizerConfigSource(),
+                    RemoteSummarizerConfigSource(),
+                    DefaultSummarizerConfigSource()
+                ],
                 summarizerModel: summarizerModel,
                 contentType: contentType,
                 locale: nil

@@ -16,20 +16,20 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
-    var summarizationChecker: MockSummarizationChecker!
     var mockRecentSearchProvider: MockRecentSearchProvider!
     var windowManager: MockWindowManager!
     var tabManager: MockTabManager!
     var profile: MockProfile!
+    var summarizerConfigFactory: MockSummarizerConfigFactory!
 
     override func setUp() async throws {
         try await super.setUp()
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
-        summarizationChecker = MockSummarizationChecker()
         mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
         profile = MockProfile()
+        summarizerConfigFactory = MockSummarizerConfigFactory()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
@@ -42,11 +42,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         mockGleanWrapper = nil
-        summarizationChecker = nil
         mockRecentSearchProvider = nil
         tabManager = nil
         profile = nil
         windowManager = nil
+        summarizerConfigFactory = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -170,11 +170,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
+        summarizerConfigFactory.returnedConfig = .defaultConfig
 
         let action = ToolbarMiddlewareAction(readerModeState: .active,
                                              windowUUID: .XCTestDefaultUUID,
                                              actionType: ToolbarMiddlewareActionType.loadSummaryState)
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
@@ -549,10 +549,22 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
-    // TODO(FXIOS-13126): Fix and uncomment this test
-//    func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
-//        try didTapButton(buttonType: .summarizer, expectedActionType: .showSummarizer)
-//    }
+
+    func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
+        summarizerConfigFactory.returnedConfig = .defaultConfig
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+
+        let expectation = XCTestExpectation(
+            description: "GeneralBrowserActionType.showSummarizer should have been dispatched"
+        )
+        try didTapButton(
+            buttonType: .summarizer,
+            expectedActionType: .showSummarizer,
+            expectation: expectation
+        )
+    }
 
     func testDidTapButton_longPressOnBackButton_dispatchesShowBackForwardList() throws {
         try didLongPressButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.showBackForwardList)
@@ -831,14 +843,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
-            summarizationChecker: summarizationChecker,
+            summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
-            windowManager: windowManager
+            windowManager: windowManager,
         )
     }
 
     private func didTapButton(buttonType: ToolbarActionConfiguration.ActionType,
-                              expectedActionType: GeneralBrowserActionType) throws {
+                              expectedActionType: GeneralBrowserActionType,
+                              expectation: XCTestExpectation? = nil) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
@@ -846,7 +859,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton)
 
+        mockStore.dispatchCalled = {
+            expectation?.fulfill()
+        }
+
         subject.toolbarProvider(mockStore.state, action)
+
+        if let expectation {
+            wait(for: [expectation], timeout: 1.0)
+        }
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)

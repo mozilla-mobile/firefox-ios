@@ -5,6 +5,7 @@
 import SummarizeKit
 import WebKit
 
+// TODO: - FXIOS-15016 move SummarizerConfigProvider and default implementation to SummarizeKit
 protocol SummarizerConfigProvider {
     func getConfig(
         from sources: [any SummarizerConfigSourceProtocol],
@@ -14,35 +15,10 @@ protocol SummarizerConfigProvider {
     ) -> SummarizerConfig
 }
 
-extension SummarizerConfigProvider {
-    /// The order of sources determines their priority.
-    /// User overrides take precedence, followed by remote config, and then defaults.
-    var defaultSources: [SummarizerConfigSourceProtocol] {
-        return [
-            UserSummarizerConfigSource(),
-            RemoteSummarizerConfigSource(),
-            DefaultSummarizerConfigSource()
-        ]
-    }
-
-    func getConfig(
-        summarizerModel: SummarizerModel,
-        contentType: SummarizationContentType,
-        locale: Locale?
-    ) -> SummarizerConfig {
-        return getConfig(
-            from: defaultSources,
-            summarizerModel: summarizerModel,
-            contentType: contentType,
-            locale: locale
-        )
-    }
-}
-
 /// A wrapper to Manage the configuration sources for the summarizer.
 /// This class is responsible for loading and merging configurations from multiple sources.
 /// We should never access the sources directly.
-final class DefaultSummarizerConfigProvider: SummarizerConfigProvider {
+struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
     func getConfig(
         from sources: [any SummarizerConfigSourceProtocol],
         summarizerModel: SummarizeKit.SummarizerModel,

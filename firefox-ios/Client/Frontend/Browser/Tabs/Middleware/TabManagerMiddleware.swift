@@ -21,8 +21,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
     var bookmarksHandler: BookmarksHandler
 
@@ -44,17 +43,15 @@ final class TabManagerMiddleware: FeatureFlaggable,
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.profile = profile
         self.bookmarksHandler = profile.places
-        self.summarizationChecker = summarizationChecker
         self.logger = logger
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
@@ -779,8 +776,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
                     guard let webView = selectedTab.webView else { return }
-                    let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizerConfig = await summarizeMiddleware.getSummarizerConfiguration(webView)
+                    let summarizerConfig = await self?.summarizerConfigFactory.makeConfiguration(from: webView)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,

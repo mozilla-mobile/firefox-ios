@@ -33,7 +33,9 @@ public struct SummarizerConfig: Equatable, Sendable {
 
     /// Returns a new config by injecting the provided `Locale` into the instructions.
     public func injecting(locale: Locale) -> SummarizerConfig {
-        let instructionsWithLocale = instructions.replacingOccurrences(of: "${locale}", with: locale.identifier)
+        let instructionsWithLocale = instructions
+            .replacingOccurrences(of: "{locale}", with: locale.identifier)
+            .replacingOccurrences(of: "{lang}", with: locale.languageCode ?? "en")
         return SummarizerConfig(instructions: instructionsWithLocale, options: options)
     }
 }

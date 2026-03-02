@@ -18,7 +18,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let prefs: Prefs
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -34,13 +34,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
          profile: Profile = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.manager = manager
-        self.summarizationChecker = summarizationChecker
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
         self.prefs = profile.prefs
@@ -303,8 +303,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .summarizer:
             Task { @MainActor in
                 guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
-                let summarizeMiddleware = SummarizerMiddleware()
-                let summarizerConfig = await summarizeMiddleware.getSummarizerConfiguration(webView)
+                let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
@@ -466,8 +465,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         Task { @MainActor in
-            let summarizerMiddleware = SummarizerMiddleware()
-            let canSummarize = await summarizerMiddleware.getSummarizerConfiguration(webView) != nil
+            let canSummarize = await summarizerConfigFactory.makeConfiguration(from: webView) != nil
             store.dispatch(
                 ToolbarAction(
                     canSummarize: canSummarize,

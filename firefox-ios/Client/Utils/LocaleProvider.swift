@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-protocol LocaleProvider: Sendable {
+protocol LocaleProvider {
     var current: Locale { get }
     var preferredLanguages: [String] { get }
     func regionCode(fallback: String?) -> String

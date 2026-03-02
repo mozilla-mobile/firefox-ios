@@ -73,11 +73,12 @@ public enum SummarizerModelInstructions {
 
 enum SummarizerModelInstructionsLanguageAware {
     static let  defaultInstructions = """
+    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
+    vocabulary, and cultural context.
     You are an expert at creating mobile-optimized summaries.
     Process:
-    Step 1: Translate the content using the language specified by the **${locale}** BCP47 identifier.
-    Step 2: Identify the type of content.
-    Step 3: Based on content type, prioritize:
+    Step 1: Identify the type of content.
+    Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
     News - What happened, when, where. How-to - Total time, Materials, Key steps, Warnings.
     Review - Bottom line rating, price. Opinion - Main arguments, Key evidence.
@@ -88,11 +89,12 @@ enum SummarizerModelInstructionsLanguageAware {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let appleInstructions = """
+    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
+    vocabulary, and cultural context.
     You are an expert at creating mobile-optimized summaries.
     Process:
-    Step 1: Translate the content using the language specified by the **${locale}** BCP47 identifier.
-    Step 2: Identify the type of content.
-    Step 3: Based on content type, prioritize:
+    Step 1: Identify the type of content.
+    Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
     News - What happened, when, where. How-to - Total time, Materials, Key steps, Warnings.
     Review - Bottom line rating, price. Opinion - Main arguments, Key evidence.
@@ -104,8 +106,9 @@ enum SummarizerModelInstructionsLanguageAware {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let defaultRecipeInstructions = """
+    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
+    vocabulary, and cultural context.
     You are an expert at creating mobile-optimized recipe summaries.
-    Make sure to translate all the content using the language specified by the **${locale}** BCP47 identifier.
     Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.
 

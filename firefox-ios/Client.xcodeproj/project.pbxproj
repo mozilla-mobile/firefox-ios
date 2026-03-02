@@ -1511,6 +1511,10 @@
 		C27470A22F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */; };
 		C27470A42F4C8EBB00920313 /* PickerSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */; };
 		C27481492F51939700920313 /* SummarizerLanguageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27481482F51939700920313 /* SummarizerLanguageProvider.swift */; };
+		C27484DE2F558BD000920313 /* MockSummarizerNimbusUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484DD2F558BD000920313 /* MockSummarizerNimbusUtils.swift */; };
+		C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */; };
+		C27484E22F558DDD00920313 /* MockSummarizerConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */; };
+		C27484E42F55C4B600920313 /* MockSummarizerConfigFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */; };
 		C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */; };
 		C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */; };
 		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
@@ -1520,7 +1524,7 @@
 		C283EECC2E4D2C02008EB540 /* ASSummarizerRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */; };
 		C283EECE2E4D4DC7008EB540 /* RemoteSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */; };
 		C283EED02E4D4FE7008EB540 /* SummarizerConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EECF2E4D4FDE008EB540 /* SummarizerConfigProvider.swift */; };
-		C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */; };
+		C283EED22E4D5356008EB540 /* SummarizerConfigProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED12E4D534F008EB540 /* SummarizerConfigProviderTests.swift */; };
 		C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */; };
 		C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */; };
 		C2886BAC2EC4A5C4007AE6C3 /* TinyHTTPReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886BAB2EC4A5BC007AE6C3 /* TinyHTTPReply.swift */; };
@@ -9984,6 +9988,10 @@
 		C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfigurationTests.swift; sourceTree = "<group>"; };
 		C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSettingTests.swift; sourceTree = "<group>"; };
 		C27481482F51939700920313 /* SummarizerLanguageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageProvider.swift; sourceTree = "<group>"; };
+		C27484DD2F558BD000920313 /* MockSummarizerNimbusUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerNimbusUtils.swift; sourceTree = "<group>"; };
+		C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerLanguageProvider.swift; sourceTree = "<group>"; };
+		C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigProvider.swift; sourceTree = "<group>"; };
+		C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigFactory.swift; sourceTree = "<group>"; };
 		C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
 		C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetectorTests.swift; sourceTree = "<group>"; };
 		C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSampleSource.swift; sourceTree = "<group>"; };
@@ -9993,7 +10001,7 @@
 		C283EECB2E4D2BFB008EB540 /* ASSummarizerRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASSummarizerRemoteConfig.swift; sourceTree = "<group>"; };
 		C283EECD2E4D4DBB008EB540 /* RemoteSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C283EECF2E4D4FDE008EB540 /* SummarizerConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigProvider.swift; sourceTree = "<group>"; };
-		C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigManagerTests.swift; sourceTree = "<group>"; };
+		C283EED12E4D534F008EB540 /* SummarizerConfigProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerConfigProviderTests.swift; sourceTree = "<group>"; };
 		C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigSource.swift; sourceTree = "<group>"; };
 		C2886BA92EC4A42D007AE6C3 /* TinyRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyRouter.swift; sourceTree = "<group>"; };
 		C2886BAB2EC4A5BC007AE6C3 /* TinyHTTPReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyHTTPReply.swift; sourceTree = "<group>"; };
@@ -14521,7 +14529,7 @@
 		C27470A02F4C6B7600920313 /* Summarizer */ = {
 			isa = PBXGroup;
 			children = (
-				C283EED12E4D534F008EB540 /* SummarizerConfigManagerTests.swift */,
+				C283EED12E4D534F008EB540 /* SummarizerConfigProviderTests.swift */,
 				C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */,
 				C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */,
 			);
@@ -15031,6 +15039,10 @@
 				5A3A7DDB2889EC5D0065F81A /* MockBookmarksHandler.swift */,
 				2154A0FC2F115EEE0067EA43 /* MockPasswordGeneratorScriptEvaluator.swift */,
 				C283EED32E4E0F25008EB540 /* MockSummarizerConfigSource.swift */,
+				C27484DD2F558BD000920313 /* MockSummarizerNimbusUtils.swift */,
+				C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */,
+				C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */,
+				C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -19599,6 +19611,7 @@
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				C7F538D52E5E66120089DEC7 /* ShortcutsLibraryMiddlewareTests.swift in Sources */,
+				C27484E22F558DDD00920313 /* MockSummarizerConfigProvider.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				8A44D3612DB7DFD700B7D80B /* MockThrottler.swift in Sources */,
 				8A7892072CF9228700490CA4 /* UnifiedAdsCallbackTelemetryTests.swift in Sources */,
@@ -19631,9 +19644,11 @@
 				8AE80BB62891AEA100BC12EA /* MockDispatchGroup.swift in Sources */,
 				8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */,
 				21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */,
+				C27484E42F55C4B600920313 /* MockSummarizerConfigFactory.swift in Sources */,
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
+				C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */,
 				C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */,
 				8CFBC18A2ECF44C400E5B22B /* ActionExtensionTelemetryTests.swift in Sources */,
 				21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */,
@@ -19761,7 +19776,7 @@
 				94AEF1552D690043003E2623 /* DownloadLiveActivityTest.swift in Sources */,
 				ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */,
 				0A80C4262F3CD45900DB85AE /* MockLAContext.swift in Sources */,
-				C283EED22E4D5356008EB540 /* SummarizerConfigManagerTests.swift in Sources */,
+				C283EED22E4D5356008EB540 /* SummarizerConfigProviderTests.swift in Sources */,
 				C8C3FEA129F973C40038E3BA /* MockBrowserViewController.swift in Sources */,
 				8A93F86B29D39BDA004159D9 /* BaseCoordinatorTests.swift in Sources */,
 				8AF3B15A2AF99B86009BB262 /* HistoryPanelTests.swift in Sources */,
@@ -19902,6 +19917,7 @@
 				8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */,
 				C25020822ECDE3240071506F /* TranslationsEngineTests.swift in Sources */,
 				2173326829CCDA8E007F20C7 /* LegacyTabScrollControllerTests.swift in Sources */,
+				C27484DE2F558BD000920313 /* MockSummarizerNimbusUtils.swift in Sources */,
 				1D3564542D9329FA00F52F12 /* SearchPrefsMigrationTests.swift in Sources */,
 				BA1C68BA2B7E9EA0000D9397 /* SecurityContextManagerTests.swift in Sources */,
 				BC129A322E461F96004A6875 /* SummarizerMiddlewareTests.swift in Sources */,
