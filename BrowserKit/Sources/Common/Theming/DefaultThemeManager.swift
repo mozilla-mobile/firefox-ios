@@ -12,6 +12,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         static let themeName = "prefKeyThemeName"
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
         static let hasMigratedToNewAppearanceMenu = "prefKeyhasMigratedToNewAppearanceMenu"
+        static let accentColor = "prefKeyAccentColor"
 
         enum AutomaticBrightness {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
@@ -58,6 +59,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var hasMigratedToNewAppearanceMenu: Bool {
         return userDefaults.bool(forKey: ThemeKeys.hasMigratedToNewAppearanceMenu)
+    }
+
+    public var accentColor: AccentColor {
+        guard let value = userDefaults.string(forKey: ThemeKeys.accentColor) else { return .blue }
+        return AccentColor.from(persistenceValue: value)
     }
 
     // MARK: - Initializers
@@ -157,6 +163,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
+    // MARK: - Accent color functions
+    public func setAccentColor(_ color: AccentColor) {
+        userDefaults.set(color.persistenceValue, forKey: ThemeKeys.accentColor)
+        applyThemeUpdatesToWindows()
+    }
+
     private func getThemeTypeBasedOnBrightness() -> ThemeType {
         return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
     }
@@ -220,16 +232,32 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func getThemeFrom(type: ThemeType) -> Theme {
+        let baseTheme: Theme
         switch type {
         case .light:
-            return LightTheme()
+            baseTheme = LightTheme()
         case .dark:
-            return DarkTheme()
+            baseTheme = DarkTheme()
         case .nightMode:
-            return NightModeTheme()
+            baseTheme = NightModeTheme()
         case .privateMode:
-            return PrivateModeTheme()
+            baseTheme = PrivateModeTheme()
         }
+
+        // Only apply accent tinting to light and dark themes.
+        // Private mode and night mode retain their hardcoded palettes.
+        let accent = accentColor
+        if !accent.isDefault && (type == .light || type == .dark) {
+            return TintedTheme(
+                type: type,
+                colors: TintedThemeColourPalette(
+                    base: baseTheme.colors,
+                    accent: accent,
+                    baseThemeType: type
+                )
+            )
+        }
+        return baseTheme
     }
 
     // MARK: - Notifiable

@@ -30,6 +30,11 @@ public protocol ThemeManager {
     var automaticBrightnessIsOn: Bool { get }
     var automaticBrightnessValue: Float { get }
 
+    // Accent color
+    var accentColor: AccentColor { get }
+    @MainActor
+    func setAccentColor(_ color: AccentColor)
+
     @MainActor
     func setSystemTheme(isOn: Bool)
     @MainActor
