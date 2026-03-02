@@ -24,13 +24,11 @@ struct UnsplashConfig: Codable {
         let fileManager = FileManager.default
         let possiblePaths = [
             // In the app bundle's resource directory
-            Bundle.main.bundlePath + "/UnsplashConfig.json",
+            Bundle.main.bundlePath + "/UnsplashConfig.json"
         ]
 
-        for path in possiblePaths {
-            if fileManager.fileExists(atPath: path) {
-                return loadFrom(url: URL(fileURLWithPath: path))
-            }
+        for path in possiblePaths where fileManager.fileExists(atPath: path) {
+            return loadFrom(url: URL(fileURLWithPath: path))
         }
 
         return nil

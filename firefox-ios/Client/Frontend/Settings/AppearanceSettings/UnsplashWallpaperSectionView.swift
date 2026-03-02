@@ -5,6 +5,17 @@
 import SwiftUI
 import Common
 
+// MARK: - Constants & Notification
+
+enum UnsplashWallpaperKeys {
+    static let currentPhotoId = "prefKeyUnsplashWallpaperPhotoId"
+    static let currentPhotoJSON = "prefKeyUnsplashWallpaperPhotoJSON"
+}
+
+extension Notification.Name {
+    static let UnsplashWallpaperDidChange = Notification.Name("UnsplashWallpaperDidChange")
+}
+
 /// A section in Appearance settings that lets users browse and select Unsplash wallpapers
 /// for their homepage background.
 struct UnsplashWallpaperSectionView: View {
@@ -19,9 +30,9 @@ struct UnsplashWallpaperSectionView: View {
     @State private var selectedPhotoId: String?
     @State private var isDownloading = false
 
-    private let service = UnsplashService.shared
+    let service = UnsplashService.shared
 
-    private struct UX {
+    struct UX {
         static let thumbnailWidth: CGFloat = 100
         static let thumbnailHeight: CGFloat = 160
         static let thumbnailCornerRadius: CGFloat = 12
@@ -38,40 +49,45 @@ struct UnsplashWallpaperSectionView: View {
             title: .Settings.Appearance.UnsplashWallpaper.SectionHeader,
             identifier: AccessibilityIdentifiers.Settings.Appearance.unsplashWallpaperSectionTitle
         ) {
-            VStack(alignment: .leading, spacing: UX.spacing) {
-                // Search bar
-                searchBar
-
-                // Content
-                if !service.isConfigured {
-                    notConfiguredView
-                } else if isLoading && photos.isEmpty {
-                    loadingView
-                } else if let error = errorMessage, photos.isEmpty {
-                    errorView(error)
-                } else if photos.isEmpty {
-                    emptyView
-                } else {
-                    photoGrid
-                }
-
-                // Attribution
-                if !photos.isEmpty {
-                    attributionView
-                }
-            }
-            .padding(.horizontal, UX.horizontalPadding)
-            .padding(.vertical, UX.verticalPadding)
-            .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            sectionContent
         }
         .task {
             await loadCuratedPhotos()
         }
     }
 
-    // MARK: - Subviews
+    @ViewBuilder
+    private var sectionContent: some View {
+        VStack(alignment: .leading, spacing: UX.spacing) {
+            searchBar
+            contentArea
+            if !photos.isEmpty { attributionView }
+        }
+        .padding(.horizontal, UX.horizontalPadding)
+        .padding(.vertical, UX.verticalPadding)
+        .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+    }
 
-    private var searchBar: some View {
+    @ViewBuilder
+    private var contentArea: some View {
+        if !service.isConfigured {
+            notConfiguredView
+        } else if isLoading && photos.isEmpty {
+            loadingView
+        } else if let error = errorMessage, photos.isEmpty {
+            errorView(error)
+        } else if photos.isEmpty {
+            emptyView
+        } else {
+            photoGrid
+        }
+    }
+}
+
+// MARK: - Search Bar
+
+extension UnsplashWallpaperSectionView {
+    var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(Color(theme?.colors.iconSecondary ?? .secondaryLabel))
@@ -106,18 +122,18 @@ struct UnsplashWallpaperSectionView: View {
         .background(Color(theme?.colors.layer2 ?? .secondarySystemBackground))
         .cornerRadius(UX.searchBarHeight / 2)
     }
+}
 
-    private var photoGrid: some View {
+// MARK: - Photo Grid & Thumbnails
+
+extension UnsplashWallpaperSectionView {
+    var photoGrid: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: UX.spacing) {
-                // "None" option to remove wallpaper
                 noneOption
-
                 ForEach(photos) { photo in
                     photoThumbnail(photo)
                 }
-
-                // Load more indicator
                 if isLoading {
                     ProgressView()
                         .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
@@ -127,7 +143,7 @@ struct UnsplashWallpaperSectionView: View {
         .frame(height: UX.thumbnailHeight)
     }
 
-    private var noneOption: some View {
+    var noneOption: some View {
         let isNone = selectedPhotoId == nil && !isCurrentWallpaperUnsplash()
         return ZStack {
             RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
@@ -143,9 +159,7 @@ struct UnsplashWallpaperSectionView: View {
                     .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
             }
 
-            if isNone {
-                selectionOverlay
-            }
+            if isNone { selectionOverlay }
         }
         .onTapGesture {
             Task { await clearWallpaper() }
@@ -153,39 +167,14 @@ struct UnsplashWallpaperSectionView: View {
     }
 
     @ViewBuilder
-    private func photoThumbnail(_ photo: UnsplashPhoto) -> some View {
+    func photoThumbnail(_ photo: UnsplashPhoto) -> some View {
         let isSelected = selectedPhotoId == photo.id || isCurrentUnsplashWallpaper(photo.id)
         let isDownloadingThis = isDownloading && selectedPhotoId == photo.id
 
         ZStack {
-            if let image = thumbnails[photo.id] {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
-                    .clipped()
-                    .cornerRadius(UX.thumbnailCornerRadius)
-            } else {
-                // Placeholder with dominant color
-                RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
-                    .fill(dominantColor(for: photo))
-                    .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
-                    .overlay(
-                        ProgressView()
-                            .tint(.white)
-                    )
-                    .task {
-                        await loadThumbnail(for: photo)
-                    }
-            }
-
-            if isSelected {
-                selectionOverlay
-            }
-
-            if isDownloadingThis {
-                downloadOverlay
-            }
+            thumbnailImage(photo)
+            if isSelected { selectionOverlay }
+            if isDownloadingThis { downloadOverlay }
         }
         .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
         .onTapGesture {
@@ -193,11 +182,32 @@ struct UnsplashWallpaperSectionView: View {
         }
     }
 
-    private var selectionOverlay: some View {
+    @ViewBuilder
+    private func thumbnailImage(_ photo: UnsplashPhoto) -> some View {
+        if let image = thumbnails[photo.id] {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
+                .clipped()
+                .cornerRadius(UX.thumbnailCornerRadius)
+        } else {
+            RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
+                .fill(dominantColor(for: photo))
+                .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
+                .overlay(ProgressView().tint(.white))
+                .task { await loadThumbnail(for: photo) }
+        }
+    }
+}
+
+// MARK: - Overlay Views
+
+extension UnsplashWallpaperSectionView {
+    var selectionOverlay: some View {
         ZStack {
             RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
                 .stroke(Color.accentColor, lineWidth: 3)
-
             Circle()
                 .fill(Color.accentColor)
                 .frame(width: 28, height: 28)
@@ -209,25 +219,21 @@ struct UnsplashWallpaperSectionView: View {
         }
     }
 
-    private var downloadOverlay: some View {
+    var downloadOverlay: some View {
         RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
             .fill(Color.black.opacity(0.4))
-            .overlay(
-                ProgressView()
-                    .tint(.white)
-            )
+            .overlay(ProgressView().tint(.white))
     }
 
-    private var loadingView: some View {
+    var loadingView: some View {
         HStack {
             Spacer()
-            ProgressView()
-                .frame(height: UX.thumbnailHeight)
+            ProgressView().frame(height: UX.thumbnailHeight)
             Spacer()
         }
     }
 
-    private var notConfiguredView: some View {
+    var notConfiguredView: some View {
         HStack {
             Spacer()
             Text("Unsplash API not configured")
@@ -239,13 +245,12 @@ struct UnsplashWallpaperSectionView: View {
     }
 
     @ViewBuilder
-    private func errorView(_ message: String) -> some View {
+    func errorView(_ message: String) -> some View {
         VStack(spacing: 8) {
             Text(message)
                 .font(.system(size: 13))
-                .foregroundColor(Color(theme?.colors.textWarning ?? .systemRed))
+                .foregroundColor(Color(.systemRed))
                 .multilineTextAlignment(.center)
-
             Button {
                 Task { await loadCuratedPhotos() }
             } label: {
@@ -258,7 +263,7 @@ struct UnsplashWallpaperSectionView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private var emptyView: some View {
+    var emptyView: some View {
         HStack {
             Spacer()
             Text("No photos found")
@@ -269,44 +274,39 @@ struct UnsplashWallpaperSectionView: View {
         }
     }
 
-    private var attributionView: some View {
+    var attributionView: some View {
         Text("Photos by [Unsplash](https://unsplash.com/?utm_source=firefox_ios&utm_medium=referral)")
             .font(.system(size: 10))
             .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
     }
+}
 
-    // MARK: - Data Loading
+// MARK: - Data Loading & Selection
 
+extension UnsplashWallpaperSectionView {
     @MainActor
-    private func loadCuratedPhotos() async {
+    func loadCuratedPhotos() async {
         guard service.isConfigured else { return }
         isLoading = true
         errorMessage = nil
-
         do {
-            let fetched = try await service.fetchCuratedPhotos(page: 1, perPage: 30)
-            photos = fetched
+            photos = try await service.fetchCuratedPhotos(page: 1, perPage: 30)
             selectedPhotoId = loadSavedUnsplashPhotoId()
         } catch {
             errorMessage = error.localizedDescription
         }
-
         isLoading = false
     }
 
     @MainActor
-    private func performSearch() async {
+    func performSearch() async {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty, service.isConfigured else {
-            if query.isEmpty {
-                await loadCuratedPhotos()
-            }
+            if query.isEmpty { await loadCuratedPhotos() }
             return
         }
-
         isLoading = true
         errorMessage = nil
-
         do {
             let result = try await service.searchPhotos(query: query, page: 1, perPage: 30)
             photos = result.results
@@ -314,114 +314,81 @@ struct UnsplashWallpaperSectionView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
-
         isLoading = false
     }
 
     @MainActor
-    private func loadThumbnail(for photo: UnsplashPhoto) async {
+    func loadThumbnail(for photo: UnsplashPhoto) async {
         guard thumbnails[photo.id] == nil else { return }
         if let image = try? await service.downloadThumbnail(for: photo) {
             thumbnails[photo.id] = image
         }
     }
 
-    // MARK: - Selection
-
     @MainActor
-    private func selectPhoto(_ photo: UnsplashPhoto) async {
+    func selectPhoto(_ photo: UnsplashPhoto) async {
         guard !isDownloading else { return }
-
         selectedPhotoId = photo.id
         isDownloading = true
-
         do {
-            // Download the full-size image
             let fileURL = try await service.downloadWallpaperImage(for: photo)
-
-            // Load as UIImage
             guard let image = UIImage(contentsOfFile: fileURL.path) else {
                 errorMessage = "Failed to load downloaded image"
                 isDownloading = false
                 return
             }
-
-            // Save the selection to UserDefaults
             saveUnsplashSelection(photo: photo)
-
-            // Post notification so the homepage picks up the change
-            await MainActor.run {
-                NotificationCenter.default.post(
-                    name: .UnsplashWallpaperDidChange,
-                    object: nil,
-                    userInfo: [
-                        "image": image,
-                        "photoId": photo.id,
-                        "photographerName": photo.user.name,
-                    ]
-                )
-            }
+            NotificationCenter.default.post(
+                name: .UnsplashWallpaperDidChange,
+                object: nil,
+                userInfo: ["image": image, "photoId": photo.id, "photographerName": photo.user.name]
+            )
         } catch {
             errorMessage = "Download failed: \(error.localizedDescription)"
             selectedPhotoId = nil
         }
-
         isDownloading = false
     }
 
     @MainActor
-    private func clearWallpaper() async {
-        // Remove saved Unsplash selection
+    func clearWallpaper() async {
         UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.currentPhotoId)
         UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.currentPhotoJSON)
         selectedPhotoId = nil
-
-        // Post notification to clear
         NotificationCenter.default.post(
             name: .UnsplashWallpaperDidChange,
             object: nil,
             userInfo: ["clear": true]
         )
     }
+}
 
-    // MARK: - Persistence Helpers
+// MARK: - Persistence Helpers
 
-    private func saveUnsplashSelection(photo: UnsplashPhoto) {
+extension UnsplashWallpaperSectionView {
+    func saveUnsplashSelection(photo: UnsplashPhoto) {
         UserDefaults.standard.set(photo.id, forKey: UnsplashWallpaperKeys.currentPhotoId)
         if let data = try? JSONEncoder().encode(photo) {
             UserDefaults.standard.set(data, forKey: UnsplashWallpaperKeys.currentPhotoJSON)
         }
     }
 
-    private func loadSavedUnsplashPhotoId() -> String? {
+    func loadSavedUnsplashPhotoId() -> String? {
         UserDefaults.standard.string(forKey: UnsplashWallpaperKeys.currentPhotoId)
     }
 
-    private func isCurrentWallpaperUnsplash() -> Bool {
+    func isCurrentWallpaperUnsplash() -> Bool {
         loadSavedUnsplashPhotoId() != nil
     }
 
-    private func isCurrentUnsplashWallpaper(_ photoId: String) -> Bool {
+    func isCurrentUnsplashWallpaper(_ photoId: String) -> Bool {
         loadSavedUnsplashPhotoId() == photoId
     }
 
-    private func dominantColor(for photo: UnsplashPhoto) -> Color {
+    func dominantColor(for photo: UnsplashPhoto) -> Color {
         if let hex = photo.color, let uiColor = UIColor(accentHex: hex) {
             return Color(uiColor)
         }
         return Color(UIColor.systemGray4)
     }
-}
-
-// MARK: - Constants
-
-enum UnsplashWallpaperKeys {
-    static let currentPhotoId = "prefKeyUnsplashWallpaperPhotoId"
-    static let currentPhotoJSON = "prefKeyUnsplashWallpaperPhotoJSON"
-}
-
-// MARK: - Notification Name
-
-extension Notification.Name {
-    static let UnsplashWallpaperDidChange = Notification.Name("UnsplashWallpaperDidChange")
 }

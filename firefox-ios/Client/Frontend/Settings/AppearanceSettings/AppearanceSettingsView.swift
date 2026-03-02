@@ -54,56 +54,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: UX.spacingCurrentOS) {
-                // Section for selecting the browser theme.
-                BrowserThemeSection(
-                    theme: currentTheme,
-                    themeOption: themeOption,
-                    onThemeSelected: updateBrowserTheme,
-                    cornerRadius: UX.cornerRadius
-                )
-
-                // Section for selecting accent color.
-                AccentColorSectionView(
-                    theme: currentTheme,
-                    themeManager: themeManager,
-                    cornerRadius: UX.cornerRadius,
-                    showColorPicker: $showColorPicker
-                )
-
-                // Section for selecting background tint color.
-                BackgroundTintSectionView(
-                    theme: currentTheme,
-                    themeManager: themeManager,
-                    cornerRadius: UX.cornerRadius,
-                    showColorPicker: $showBackgroundTintPicker
-                )
-
-                // Section for selecting toolbar tint color.
-                ToolbarTintSectionView(
-                    theme: currentTheme,
-                    themeManager: themeManager,
-                    cornerRadius: UX.cornerRadius,
-                    showColorPicker: $showToolbarTintPicker
-                )
-
-                // Section for browsing and selecting Unsplash wallpapers.
-                UnsplashWallpaperSectionView(
-                    theme: currentTheme,
-                    cornerRadius: UX.cornerRadius
-                )
-
-                // Section for toggling website appearance (e.g., dark mode).
-                WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
-
-                if shouldShowPageZoom {
-                    PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
-                        delegate?.pressedPageZoom()
-                    }
-                }
-
-                Spacer()
-            }
+            settingsContent
         }
         .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))
         .background(viewBackground)
@@ -122,6 +73,68 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
         .sheet(isPresented: $showToolbarTintPicker) {
             ToolbarTintColorPickerSheet(themeManager: themeManager)
+        }
+    }
+
+    // MARK: - Settings Content
+
+    @ViewBuilder
+    private var settingsContent: some View {
+        VStack(spacing: UX.spacingCurrentOS) {
+            themeSections
+            customizationSections
+            Spacer()
+        }
+    }
+
+    @ViewBuilder
+    private var themeSections: some View {
+        BrowserThemeSection(
+            theme: currentTheme,
+            themeOption: themeOption,
+            onThemeSelected: updateBrowserTheme,
+            cornerRadius: UX.cornerRadius
+        )
+
+        AccentColorSectionView(
+            theme: currentTheme,
+            themeManager: themeManager,
+            cornerRadius: UX.cornerRadius,
+            showColorPicker: $showColorPicker
+        )
+
+        BackgroundTintSectionView(
+            theme: currentTheme,
+            themeManager: themeManager,
+            cornerRadius: UX.cornerRadius,
+            showColorPicker: $showBackgroundTintPicker
+        )
+
+        ToolbarTintSectionView(
+            theme: currentTheme,
+            themeManager: themeManager,
+            cornerRadius: UX.cornerRadius,
+            showColorPicker: $showToolbarTintPicker
+        )
+    }
+
+    @ViewBuilder
+    private var customizationSections: some View {
+        UnsplashWallpaperSectionView(
+            theme: currentTheme,
+            cornerRadius: UX.cornerRadius
+        )
+
+        WebsiteAppearanceSection(
+            theme: currentTheme,
+            onChange: setWebsiteDarkMode,
+            cornerRadius: UX.cornerRadius
+        )
+
+        if shouldShowPageZoom {
+            PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                delegate?.pressedPageZoom()
+            }
         }
     }
 
