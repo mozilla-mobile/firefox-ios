@@ -5,7 +5,6 @@
 import Common
 import ToolbarKit
 import Shared
-import UIKit
 
 final class AddressToolbarContainerModel: Equatable {
     let toolbarHelper: ToolbarHelperInterface
@@ -288,69 +287,9 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
                 onSelected: getOnSelected(action: action, windowUUID: windowUUID),
-                onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs),
-                menu: makeTranslateMenu(for: action, windowUUID: windowUUID)
+                onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
             )
         }
-    }
-
-    /// Builds a UIMenu for the translate toolbar button when it is in the inactive state.
-    /// Returns `nil` for all other actions or states.
-    @MainActor
-    private static func makeTranslateMenu(for action: ToolbarActionConfiguration, windowUUID: UUID) -> UIMenu? {
-        // Only build the menu for the translate button in its inactive (un-translated) state.
-        guard action.actionType == .translate,
-              !action.isSelected,
-              action.loadingConfig?.isLoading != true else { return nil }
-
-        let deferredElement = UIDeferredMenuElement.uncached { completion in
-            Task {
-                let modelsFetcher = ASTranslationModelsFetcher.shared
-                let profile: Profile = AppContainer.shared.resolve()
-                let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
-                let supported = await modelsFetcher.fetchSupportedTargetLanguages()
-                let languages = await manager.preferredLanguages(supportedTargetLanguages: supported)
-
-                let langActions = languages.map { code -> UIAction in
-                    UIAction(title: Self.translationLanguageDisplayName(for: code)) { _ in
-                        store.dispatch(TranslationLanguageSelectedAction(
-                            windowUUID: windowUUID,
-                            targetLanguage: code,
-                            actionType: TranslationsActionType.didSelectTargetLanguage
-                        ))
-                    }
-                }
-
-                let settingsAction = UIAction(
-                    title: .Translations.LanguagePicker.PreferredLanguagesTitle
-                ) { _ in
-                    store.dispatch(NavigationBrowserAction(
-                        navigationDestination: NavigationDestination(.settings(.translation)),
-                        windowUUID: windowUUID,
-                        actionType: NavigationBrowserActionType.tapOnSettingsSection
-                    ))
-                }
-
-                // Two explicit inline sections so "Preferred Languages..." is always
-                // visually separated and last, regardless of menu rendering direction.
-                let languagesSection = UIMenu(title: "", options: .displayInline, children: langActions)
-                let settingsSection = UIMenu(title: "", options: .displayInline, children: [settingsAction])
-                completion([languagesSection, settingsSection])
-            }
-        }
-
-        return UIMenu(
-            title: .Translations.LanguagePicker.Title,
-            children: [deferredElement]
-        )
-    }
-
-    /// Returns a display name for a language code combining the native and localized names
-    /// when they differ (e.g. "Deutsch (German)"), otherwise just the native name.
-    private static func translationLanguageDisplayName(for code: String) -> String {
-        let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-        let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
-        return native == localized ? native : "\(native) (\(localized))"
     }
 
     @MainActor

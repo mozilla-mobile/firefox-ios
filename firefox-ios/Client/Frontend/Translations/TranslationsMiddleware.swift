@@ -13,6 +13,7 @@ final class TranslationsMiddleware {
     private let windowManager: WindowManager
     private let translationsService: TranslationsServiceProtocol
     private let translationsTelemetry: TranslationsTelemetryProtocol
+    private let modelsFetcher: TranslationModelsFetcherProtocol
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -26,12 +27,14 @@ final class TranslationsMiddleware {
          windowManager: WindowManager = AppContainer.shared.resolve(),
          translationsService: TranslationsServiceProtocol = TranslationsService(),
          translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
+         modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared
     ) {
         self.profile = profile
         self.logger = logger
         self.windowManager = windowManager
         self.translationsService = translationsService
         self.translationsTelemetry = translationsTelemetry
+        self.modelsFetcher = modelsFetcher
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -85,11 +88,20 @@ final class TranslationsMiddleware {
             return
         }
 
-        // When the translation button is in inactive state, tapping it shows a UIMenu natively,
-        // so we never reach this handler for that state.
-        // When user taps on button when in active mode,
-        // then we go back to inactive mode and page should reload to original language.
-        if translationConfiguration.state == .active {
+        if translationConfiguration.state == .inactive {
+            let capturedButton = action.buttonTapped
+            Task { @MainActor in
+                let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+                let supported = await modelsFetcher.fetchSupportedTargetLanguages()
+                let languages = await manager.preferredLanguages(supportedTargetLanguages: supported)
+                store.dispatch(GeneralBrowserAction(
+                    buttonTapped: capturedButton,
+                    translationLanguages: languages,
+                    windowUUID: action.windowUUID,
+                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                ))
+            }
+        } else if translationConfiguration.state == .active {
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willRestore,

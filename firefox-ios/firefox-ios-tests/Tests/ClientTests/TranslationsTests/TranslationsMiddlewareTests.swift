@@ -15,6 +15,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
     private var mockTranslationsTelemetry: MockTranslationsTelemetry!
+    private var mockModelsFetcher: MockTranslationModelsFetcher!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -26,6 +27,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             tabManager: mockTabManager
         )
         mockTranslationsTelemetry = MockTranslationsTelemetry()
+        mockModelsFetcher = MockTranslationModelsFetcher()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -40,6 +42,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager = nil
         mockWindowManager = nil
         mockTranslationsTelemetry = nil
+        mockModelsFetcher = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -202,8 +205,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.translateButtonTappedCalledCount, 0)
     }
 
-    func test_didTapButtonAction_withInactiveState_doesNotDispatchAction() throws {
-        // With UIMenu, inactive tap is handled natively by iOS — the middleware does nothing.
+    func test_didTapButtonAction_withInactiveState_dispatchesShowPickerAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
 
@@ -214,15 +216,17 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
 
-        let expectation = XCTestExpectation(description: "no action dispatched for inactive tap")
-        expectation.isInverted = true
+        let expectation = XCTestExpectation(description: "showTranslationLanguagePicker action dispatched for inactive tap")
+        expectation.expectedFulfillmentCount = 1
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(setupAppStateWithTranslationConfig(for: .inactive), action)
 
-        wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(mockTranslationsTelemetry.translateButtonTappedCalledCount, 0)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.showTranslationLanguagePicker)
     }
 
     func test_didSelectTargetLanguage_dispatchAction() throws {
@@ -639,7 +643,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             logger: mockLogger,
             windowManager: mockWindowManager,
             translationsService: translationsService,
-            translationsTelemetry: mockTranslationsTelemetry
+            translationsTelemetry: mockTranslationsTelemetry,
+            modelsFetcher: mockModelsFetcher
         )
     }
 
