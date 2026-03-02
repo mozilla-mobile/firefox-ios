@@ -145,25 +145,28 @@ extension UnsplashWallpaperSectionView {
 
     var noneOption: some View {
         let isNone = selectedPhotoId == nil
-        return ZStack {
-            RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
-                .fill(Color(theme?.colors.layer3 ?? .tertiarySystemBackground))
-                .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
-
-            VStack(spacing: 4) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(Color(theme?.colors.iconPrimary ?? .label))
-                Text("None")
-                    .font(.system(size: 11))
-                    .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
-            }
-
-            if isNone { selectionOverlay }
-        }
-        .onTapGesture {
+        return Button {
             Task { await clearWallpaper() }
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
+                    .fill(Color(theme?.colors.layer3 ?? .tertiarySystemBackground))
+
+                VStack(spacing: 4) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Color(theme?.colors.iconPrimary ?? .label))
+                    Text("None")
+                        .font(.system(size: 11))
+                        .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
+                }
+
+                if isNone { selectionOverlay }
+            }
+            .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -171,15 +174,18 @@ extension UnsplashWallpaperSectionView {
         let isSelected = selectedPhotoId == photo.id
         let isDownloadingThis = isDownloading && selectedPhotoId == photo.id
 
-        ZStack {
-            thumbnailImage(photo)
-            if isSelected { selectionOverlay }
-            if isDownloadingThis { downloadOverlay }
-        }
-        .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
-        .onTapGesture {
+        Button {
             Task { await selectPhoto(photo) }
+        } label: {
+            ZStack {
+                thumbnailImage(photo)
+                if isSelected { selectionOverlay }
+                if isDownloadingThis { downloadOverlay }
+            }
+            .frame(width: UX.thumbnailWidth, height: UX.thumbnailHeight)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
     }
 
     @ViewBuilder
