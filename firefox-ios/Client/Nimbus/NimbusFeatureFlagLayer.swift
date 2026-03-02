@@ -67,6 +67,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageStoriesScrollDirection:
             return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
 
+        case .needsReloadRefactor:
+            return checkNeedsReloadRefactorFeature(from: nimbus)
+
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
@@ -537,5 +540,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
+    }
+
+    private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.needsReloadRefactor.value().enabled
     }
 }
