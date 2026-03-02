@@ -20,23 +20,25 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     override func tearDown() async throws {
-        tabManager = nil
         profile.shutdown()
         profile = nil
+        tabManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
     // MARK: - Subject Creation
-    func createSubject(isFeatureFlagEnabled: Bool = false) -> BrowserViewController {
+    func createSubject(isFeatureFlagEnabled: Bool = false, isBottomSearchBar: Bool = true) -> BrowserViewController {
         // Setup feature flag to disabled by default and override only in the test that need it
         setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager)
+        subject.isBottomSearchBar = isBottomSearchBar
         trackForMemoryLeaks(subject)
 
         // Trigger view loading and constraint setup
         // SnapKit constraints are created in updateViewConstraints(), so we need to explicitly trigger it
+        subject.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
         subject.loadViewIfNeeded()
         subject.view.setNeedsUpdateConstraints()
         subject.view.updateConstraintsIfNeeded()

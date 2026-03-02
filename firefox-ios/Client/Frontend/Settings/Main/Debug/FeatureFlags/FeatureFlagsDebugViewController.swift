@@ -94,6 +94,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageStoryCategories,
+                titleText: format(string: "Homepage Story Categories"),
+                statusText: format(string: "Toggle to enable homepage story categories")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .improvedAppStoreReviewTriggerFeature,
+                titleText: format(string: "Improved App Store Review Trigger"),
+                statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .menuRefactor,
                 titleText: format(string: "Menu Refactor"),
                 statusText: format(string: "Toggle to use the menu redesign")
@@ -161,6 +175,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .snapkitRemovalRefactor,
                 titleText: format(string: "SnapKit Removal Refactor"),
                 statusText: format(string: "Toggle to enable SnapKit removal refactor")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerLanguageExpansion,
+                titleText: format(string: "Summarizer Language Expansion"),
+                statusText: format(string: "Toggle to enable Summarizer language expansion feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

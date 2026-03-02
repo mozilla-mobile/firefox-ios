@@ -51,6 +51,8 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
+    var showCertificatesFromErrorPageCalled = 0
+    var openLearnMoreFromNativeErrorPageCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -101,7 +103,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showTabTrayCalled += 1
     }
 
-    func showQRCode() {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         showQrCodeCalled += 1
     }
 
@@ -163,6 +165,14 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showTermsOfUse(context: TriggerContext) {
         showTermsOfUseCalled += 1
+    }
+
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
+        showCertificatesFromErrorPageCalled += 1
+    }
+
+    func openLearnMoreFromNativeErrorPage(url: URL) {
+        openLearnMoreFromNativeErrorPageCalled += 1
     }
 
     // MARK: - BrowserDelegate

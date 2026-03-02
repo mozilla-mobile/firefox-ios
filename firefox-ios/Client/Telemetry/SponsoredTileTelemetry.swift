@@ -30,7 +30,7 @@ struct DefaultSponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry {
     ///   - position: The position of the sponsored tile in the top sites collection view
     func sendImpressionTelemetry(tileSite: Site,
                                  position: Int) {
-        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+        guard case .sponsoredSite = tileSite.type else {
             assertionFailure("Only .sponsoredSite telemetry is supported right now")
             return
         }
@@ -52,7 +52,7 @@ struct DefaultSponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry {
     ///   - position: The position of the sponsored tile in the top sites collection view
     func sendClickTelemetry(tileSite: Site,
                             position: Int) {
-        guard case let .sponsoredSite(siteInfo) = tileSite.type else {
+        guard case .sponsoredSite = tileSite.type else {
             assertionFailure("Only .sponsoredSite telemetry is supported right now")
             return
         }

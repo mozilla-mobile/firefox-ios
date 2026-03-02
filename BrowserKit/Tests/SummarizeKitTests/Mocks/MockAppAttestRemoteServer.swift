@@ -5,14 +5,12 @@
 import Foundation
 @testable import SummarizeKit
 
-final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol {
+final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol, @unchecked Sendable {
     var challengeToReturn = "mock-challenge"
     var sendAttestationError: Error?
-    var sendAssertionError: Error?
 
     private(set) var fetchChallengeCallCount = 0
     private(set) var sendAttestationCallCount = 0
-    private(set) var sendAssertionCallCount = 0
     private(set) var lastAssertionKeyId: String?
 
     func fetchChallenge(for keyId: String) async throws -> String {
@@ -23,11 +21,5 @@ final class MockAppAttestRemoteServer: AppAttestRemoteServerProtocol {
     func sendAttestation(keyId: String, attestationObject: Data, challenge: String) async throws {
         sendAttestationCallCount += 1
         if let error = sendAttestationError { throw error }
-    }
-
-    func sendAssertion(keyId: String, assertionObject: Data, payload: Data, challenge: String) async throws {
-        sendAssertionCallCount += 1
-        lastAssertionKeyId = keyId
-        if let error = sendAssertionError { throw error }
     }
 }

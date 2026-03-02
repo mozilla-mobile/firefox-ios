@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Lader dig gemme fotos.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox bruger talegenkendelse for at konvertere din stemme til tekst til stemme-søgning.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skan QR-kode";
 

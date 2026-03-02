@@ -6,13 +6,12 @@ import Common
 import XCTest
 
 class SettingsTests: FeatureFlaggedTestBase {
-    var settingsScreen: SettingScreen!
-
     override func tearDown() async throws {
         if name.contains("testAutofillPasswordSettingsOptionSubtitles") ||
             name.contains("testBrowsingSettingsOptionSubtitles") ||
             name.contains("testSettingsOptionSubtitlesDarkMode") ||
-            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") {
+            name.contains("testSettingsOptionSubtitlesDarkModeLandscape") ||
+            name.contains("testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn") {
             switchThemeToDarkOrLight(theme: "Light")
         }
         XCUIDevice.shared.orientation = .portrait
@@ -128,36 +127,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
     func testImageOnOff() {
-        // Select no images or hide images, check it's hidden or not
-        app.launch()
-        waitUntilPageLoad()
-
-        // Select hide images under Browsing Settings page
-        let blockImagesSwitch = app.otherElements.tables.cells.switches[
-            AccessibilityIdentifiers.Settings.BlockImages.title
-        ]
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        app.cells[AccessibilityIdentifiers.Settings.Browsing.title].waitAndTap()
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
-
-        mozWaitForElementToExist(blockImagesSwitch)
-        app.swipeUp()
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: false)
-
-        // Select show images
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(blockImagesSwitch)
-        navigator.performAction(Action.ToggleNoImageMode)
-        checkShowImages(showImages: true)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307058
-    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
-    // SmokeTest TAE
-    func testImageOnOff_TAE() {
         let settingsScreen = SettingScreen(app: app)
         // Select no images or hide images, check it's hidden or not
         app.launch()
@@ -178,7 +147,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         // Select show images
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
-        settingsScreen.waitForBrowsingLinksSection()
+        _ = settingsScreen.waitForBlockImagesSwitch()
         navigator.performAction(Action.ToggleNoImageMode)
         settingsScreen.assertShowImagesState(showImages: true)
     }
@@ -186,13 +155,6 @@ class SettingsTests: FeatureFlaggedTestBase {
     // https://mozilla.testrail.io/index.php?/cases/view/2951435
     // Smoketest
     func testSettingsOptionSubtitles() {
-        app.launch()
-        validateSettingsUIOptions()
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2951435
-    // Smoketest TAE
-    func testSettingsOptionSubtitles_TAE() {
         app.launch()
         let settingsScreen = SettingScreen(app: app)
         navigator.nowAt(NewTabScreen)
@@ -255,6 +217,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135841
     func testSummarizeContentSettingsShouldShow_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()
@@ -272,6 +235,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         app.buttons["Done"].waitAndTap()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3376443
     func testSummarizeContentSettingsDoesNotAppear_hostedSummarizeExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "hosted-summarizer-feature")
         app.launchArguments.append(LaunchArguments.SkipAppleIntelligence)
@@ -284,6 +248,7 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(summarizeSettings)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3135845
     func testSummarizeContentSettingsWithToggleOnOff_hostedSummarizeExperimentOn() {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "hosted-summarizer-feature")
         app.launch()

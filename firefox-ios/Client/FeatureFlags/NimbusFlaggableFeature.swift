@@ -28,6 +28,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
     case homepageStoriesScrollDirection
+    case homepageStoryCategories
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -52,7 +53,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
+    case summarizerLanguageExpansion
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -86,7 +89,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageSearchBar,
+                .homepageStoryCategories,
                 .hostedSummarizer,
+                .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
@@ -99,6 +104,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -162,6 +168,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
+                .homepageStoryCategories,
+                .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -185,6 +193,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizerShakeGesture,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

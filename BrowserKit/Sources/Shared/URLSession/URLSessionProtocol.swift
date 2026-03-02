@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol URLSessionProtocol: Sendable {
+public protocol URLSessionProtocol: Sendable {
     typealias DataTaskResult = @Sendable (Data?, URLResponse?, Error?) -> Void
 
     func data(from url: URL) async throws -> (Data, URLResponse)
@@ -35,7 +35,7 @@ protocol URLSessionProtocol: Sendable {
 /// Attempting to use the default one here will yield a runtime assertion failure.
 /// The throw is just to satisfy the async‑throws signature.
 extension URLSessionProtocol {
-    func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
+    public func bytes(for request: URLRequest) async throws -> (URLSession.AsyncBytes, URLResponse) {
         assertionFailure("Fallback bytes(for:) called! Conforming types provide their own implementation")
         throw URLError(.unsupportedURL)
     }
@@ -54,20 +54,21 @@ extension URLSession: URLSessionProtocol {
         return try await bytes(for: request, delegate: nil)
     }
 
-    func dataTaskWith(
+    public func dataTaskWith(
         request: URLRequest,
         completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTaskProtocol {
         return dataTask(with: request, completionHandler: completionHandler)
     }
 
-    func dataTaskWith(_ url: URL,
-                      completionHandler: @escaping DataTaskResult
+    public func dataTaskWith(
+        _ url: URL,
+        completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol {
         dataTask(with: url, completionHandler: completionHandler) as URLSessionDataTaskProtocol
     }
 
-    func uploadTaskWith(
+    public func uploadTaskWith(
         with request: URLRequest,
         from bodyData: Data?,
         completionHandler: @escaping  @Sendable (Data?, URLResponse?, (any Error)?) -> Void

@@ -59,13 +59,16 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
+    private weak var navigationHandler: VoiceSearchNavigationHandler?
 
     public init(
+        navigationHandler: VoiceSearchNavigationHandler?,
         presentationTransitionType: VoiceSearchTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
+        self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter

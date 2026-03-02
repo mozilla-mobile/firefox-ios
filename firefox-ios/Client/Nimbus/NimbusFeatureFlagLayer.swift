@@ -55,6 +55,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault(from: nimbus)
 
+        case .homepageStoryCategories:
+            return checkHomepageStoriesCaterogiesFeature(from: nimbus)
+
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault(from: nimbus)
 
@@ -127,6 +130,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
+        case .improvedAppStoreReviewTriggerFeature:
+            return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
+
         case .relayIntegration:
             return checkRelayIntegration(from: nimbus)
 
@@ -137,7 +143,10 @@ final class NimbusFeatureFlagLayer: Sendable {
            return checkHostedSummarizerShakeGesture(from: nimbus)
 
         case .summarizerAppAttestAuth:
-            return checkAppleSummarizerFeature(from: nimbus)
+            return checkSummarizerAppAttestAuthFeature(from: nimbus)
+
+        case .summarizerLanguageExpansion:
+            return checkSummarizerLanguageExpansionFeature(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -240,6 +249,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageBookmarksSectionDefault(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().bookmarksSectionDefault
+    }
+
+    private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
     }
 
     private func checkHomepageJumpBackInSectionDefault(from nimbus: FxNimbus) -> Bool {
@@ -469,6 +482,10 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
     }
 
+    private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
     // MARK: - Summarizer Feature
     private func checkAppleSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appleSummarizerFeature.value()
@@ -500,6 +517,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
+    }
+
+    private func checkSummarizerLanguageExpansionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerLanguageExpansionFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
