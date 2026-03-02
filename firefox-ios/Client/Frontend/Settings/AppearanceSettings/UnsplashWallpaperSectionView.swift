@@ -144,7 +144,7 @@ extension UnsplashWallpaperSectionView {
     }
 
     var noneOption: some View {
-        let isNone = selectedPhotoId == nil && !isCurrentWallpaperUnsplash()
+        let isNone = selectedPhotoId == nil
         return ZStack {
             RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
                 .fill(Color(theme?.colors.layer3 ?? .tertiarySystemBackground))
@@ -168,7 +168,7 @@ extension UnsplashWallpaperSectionView {
 
     @ViewBuilder
     func photoThumbnail(_ photo: UnsplashPhoto) -> some View {
-        let isSelected = selectedPhotoId == photo.id || isCurrentUnsplashWallpaper(photo.id)
+        let isSelected = selectedPhotoId == photo.id
         let isDownloadingThis = isDownloading && selectedPhotoId == photo.id
 
         ZStack {
@@ -205,18 +205,8 @@ extension UnsplashWallpaperSectionView {
 
 extension UnsplashWallpaperSectionView {
     var selectionOverlay: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
-                .stroke(Color.accentColor, lineWidth: 3)
-            Circle()
-                .fill(Color.accentColor)
-                .frame(width: 28, height: 28)
-                .overlay(
-                    Image(systemName: "checkmark")
-                        .font(.system(size: UX.checkmarkSize - 8, weight: .bold))
-                        .foregroundColor(.white)
-                )
-        }
+        RoundedRectangle(cornerRadius: UX.thumbnailCornerRadius)
+            .stroke(Color.accentColor, lineWidth: 3)
     }
 
     var downloadOverlay: some View {
