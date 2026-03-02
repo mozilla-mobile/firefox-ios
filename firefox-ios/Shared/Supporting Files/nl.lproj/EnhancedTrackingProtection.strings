@@ -82,11 +82,20 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Trackers geblokkeerd: %@";
 
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standaard blokkeert veelgebruikte trackers nadat laden van een pagina is gestart, dus u ziet mogelijk meer trackers. %@";
+
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Streng blokkeert meer trackers door ze te stoppen voordat een pagina wordt geladen, dus u ziet mogelijk minder trackers. %@";
+
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Geverifieerd door %@";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Certificaat bekijken";
+
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "Meer info";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ heeft geen dienst. We raden u aan beschermingen weer in te schakelen.";

@@ -1,8 +1,23 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Body.v142" = "Comharran-lìn, eachdraidh is roghainnean – gach rud deas ri do làimh.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.MenuRedesign.Title.v142" = "Clàr-taice ùr, gun gutramaid";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
 "ContextualHints.MainMenu.NewMenu.Body.v132" = "Faigh lorg air na tha a dhìth ort nas luaithe, eadar brabhsadh prìobhaideach is gnìomhan sàbhalaidh.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Ùr: clàr-taice nas taine";
+
+/* On the main menu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.AccessibilityLabels.BookmarkPage.Title.v41" = "Dèan comharra-lìn dhen duilleag";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.AccessibilityLabels.CloseButton.142" = "Dùin an clàr-taice";
+
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Air a dhoilleireachadh";
 
 /* The accessibility label for the back button in the Main menu header navigation view. */
 "MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Air ais";
@@ -10,11 +25,20 @@
 /* The accessibility label for the close button in the Main menu. */
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Dùin";
 
+/* The accessibility label for the close button of the header menu banner. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v142" = "Dùin";
+
 /* The accessibility label for the sign in button in the Main menu header view. */
 "MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Clàraich a-steach a shioncronachadh fhaclan-faire, thabaichean is mòran a bharrachd";
 
+/* On the main menu, when the user is signed in. */
+"MainMenu.Account.SignedIn.Description.v141" = "Stiùirich na thèid lethbhreacan-glèidhidh a dhèanamh dheth ’s na thèid a shioncronachadh";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Sioncronaich faclan-faire, tabaichean is mòran a bharrachd";
+
+/* On the main menu, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v141" = "Sioncronaich comharran-lìn, faclan-faire, tabaichean is mòran a bharrachd";
 
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Clàraich a-steach";
@@ -220,6 +244,9 @@
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Dèan aithris";
 
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Dèan aithris air làrach bhriste…";
+
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Co-roinn";
 
@@ -252,6 +279,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Sàbhail";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Sàbhail am fo-chlàr-taice";
 
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Seall an làrach desktop";
