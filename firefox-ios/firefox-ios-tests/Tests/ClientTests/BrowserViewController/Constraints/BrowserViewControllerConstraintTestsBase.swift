@@ -55,7 +55,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
 
     func selectTabWithFindInPage() {
         let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
-        tab.isFindInPageMode = true
+        tab.isFindInPageMode = false
         tabManager.selectedTab = tab
     }
 }
