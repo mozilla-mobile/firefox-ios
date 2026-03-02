@@ -10,14 +10,12 @@ import Common
 final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable {
     private let url: URL
 
-    public let themeManager: any Common.ThemeManager
+    public let themeManager: any ThemeManager
     public var themeListenerCancellable: Any?
-    public var notificationCenter: any Common.NotificationProtocol
+    public var notificationCenter: any NotificationProtocol
     let windowUUID: WindowUUID
 
     var currentWindowUUID: UUID? { return windowUUID }
-
-    private var constraints = [NSLayoutConstraint]()
 
     // MARK: Navigation View
     private let navigationView: NavigationHeaderView = .build { header in
@@ -59,19 +57,17 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     }
 
     private func setupLayout() {
-        constraints.removeAll()
         setupNavigationView()
         setupContainerView()
         embedChild()
         setupAccessibilityIdentifiers()
         setupHeaderViewActions()
-        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: Header View Setup
     private func setupNavigationView() {
         view.addSubview(navigationView)
-        let navigationViewConstraints = [
+        NSLayoutConstraint.activate([
             navigationView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: TPMenuUX.UX.popoverTopDistance
@@ -82,8 +78,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
             navigationView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor
             )
-        ]
-        constraints.append(contentsOf: navigationViewConstraints)
+        ])
     }
 
     private func setNavigationViewDetails() {
@@ -94,7 +89,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     // MARK: Container View Setup
     private func setupContainerView() {
         view.addSubview(containerView)
-        let containerViewConstraints = [
+        NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(
                 equalTo: navigationView.bottomAnchor
             ),
@@ -107,8 +102,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
             containerView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor
             )
-        ]
-        constraints.append(contentsOf: containerViewConstraints)
+        ])
     }
 
     private func embedChild() {
@@ -118,7 +112,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
         addChild(settingsContentViewController)
         containerView.addSubview(settingsContentViewController.view)
         settingsContentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        let childViewConstraints = [
+        NSLayoutConstraint.activate([
             settingsContentViewController.view.topAnchor.constraint(
                 equalTo: containerView.topAnchor
             ),
@@ -131,8 +125,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
             settingsContentViewController.view.bottomAnchor.constraint(
                 equalTo: containerView.bottomAnchor
             )
-        ]
-        constraints.append(contentsOf: childViewConstraints)
+        ])
 
         settingsContentViewController.didMove(toParent: self)
     }
