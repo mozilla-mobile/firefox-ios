@@ -11,6 +11,7 @@ struct ThemeSettingsState: ScreenState {
     var manualThemeSelected: ThemeType
     var userBrightnessThreshold: Float
     var systemBrightness: Float
+    var accentColor: AccentColor
     var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -28,7 +29,8 @@ struct ThemeSettingsState: ScreenState {
                   isAutomaticBrightnessEnable: themeState.isAutomaticBrightnessEnabled,
                   manualThemeSelected: themeState.manualThemeSelected,
                   userBrightnessThreshold: themeState.userBrightnessThreshold,
-                  systemBrightness: themeState.systemBrightness)
+                  systemBrightness: themeState.systemBrightness,
+                  accentColor: themeState.accentColor)
     }
 
     init(windowUUID: WindowUUID) {
@@ -37,7 +39,8 @@ struct ThemeSettingsState: ScreenState {
                   isAutomaticBrightnessEnable: false,
                   manualThemeSelected: ThemeType.light,
                   userBrightnessThreshold: 0,
-                  systemBrightness: 1)
+                  systemBrightness: 1,
+                  accentColor: .blue)
     }
 
     init(windowUUID: WindowUUID,
@@ -45,13 +48,15 @@ struct ThemeSettingsState: ScreenState {
          isAutomaticBrightnessEnable: Bool,
          manualThemeSelected: ThemeType,
          userBrightnessThreshold: Float,
-         systemBrightness: Float) {
+         systemBrightness: Float,
+         accentColor: AccentColor = .blue) {
         self.windowUUID = windowUUID
         self.useSystemAppearance = useSystemAppearance
         self.isAutomaticBrightnessEnabled = isAutomaticBrightnessEnable
         self.manualThemeSelected = manualThemeSelected
         self.userBrightnessThreshold = userBrightnessThreshold
         self.systemBrightness = systemBrightness
+        self.accentColor = accentColor
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -77,6 +82,9 @@ struct ThemeSettingsState: ScreenState {
 
         case ThemeSettingsMiddlewareActionType.systemBrightnessChanged:
             return handleSystemBrightnessChangedAction(state: state, action: action)
+
+        case ThemeSettingsMiddlewareActionType.accentColorChanged:
+            return action.themeSettingsState ?? defaultState(from: state)
         default:
             return defaultState(from: state)
         }
@@ -88,7 +96,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
-                                  systemBrightness: state.systemBrightness)
+                                  systemBrightness: state.systemBrightness,
+                                  accentColor: state.accentColor)
     }
 
     private static func handleSystemThemeChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
@@ -98,7 +107,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
-                                  systemBrightness: state.systemBrightness)
+                                  systemBrightness: state.systemBrightness,
+                                  accentColor: state.accentColor)
     }
 
     private static func handleAutomaticBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
@@ -108,7 +118,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: enabled,
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
-                                  systemBrightness: state.systemBrightness)
+                                  systemBrightness: state.systemBrightness,
+                                  accentColor: state.accentColor)
     }
 
     private static func handleManualThemeChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
@@ -118,7 +129,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                   manualThemeSelected: theme,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
-                                  systemBrightness: state.systemBrightness)
+                                  systemBrightness: state.systemBrightness,
+                                  accentColor: state.accentColor)
     }
 
     private static func handleUserBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
@@ -128,7 +140,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: brightnessValue,
-                                  systemBrightness: state.systemBrightness)
+                                  systemBrightness: state.systemBrightness,
+                                  accentColor: state.accentColor)
     }
 
     private static func handleSystemBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
@@ -138,7 +151,8 @@ struct ThemeSettingsState: ScreenState {
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
-                                  systemBrightness: brightnessValue)
+                                  systemBrightness: brightnessValue,
+                                  accentColor: state.accentColor)
     }
 
     static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
@@ -146,5 +160,6 @@ struct ThemeSettingsState: ScreenState {
         && lhs.isAutomaticBrightnessEnabled == rhs.isAutomaticBrightnessEnabled
         && lhs.manualThemeSelected == rhs.manualThemeSelected
         && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
+        && lhs.accentColor == rhs.accentColor
     }
 }

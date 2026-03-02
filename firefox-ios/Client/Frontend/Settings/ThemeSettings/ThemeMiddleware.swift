@@ -85,6 +85,9 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
         case ThemeSettingsViewActionType.receivedSystemBrightnessChange:
             updateThemeFromSystemBrightnessChange(with: action)
 
+        case ThemeSettingsViewActionType.switchAccentColor:
+            updateAccentColor(with: action)
+
         default:
             break
         }
@@ -97,7 +100,8 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.getUserManualTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
-                           systemBrightness: getScreenBrightness())
+                           systemBrightness: getScreenBrightness(),
+                           accentColor: themeManager.accentColor)
     }
 
     func getScreenBrightness() -> Float {
@@ -136,6 +140,12 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
         guard let manualThemeType = action.manualThemeType else { return }
         themeManager.setManualTheme(to: manualThemeType)
         dispatchMiddlewareAction(from: action, to: .manualThemeChanged)
+    }
+
+    func updateAccentColor(with action: ThemeSettingsViewAction) {
+        guard let accentColor = action.accentColor else { return }
+        themeManager.setAccentColor(accentColor)
+        dispatchMiddlewareAction(from: action, to: .accentColorChanged)
     }
 
     func updateNightMode() {

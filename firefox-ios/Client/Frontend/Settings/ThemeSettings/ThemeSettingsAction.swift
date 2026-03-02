@@ -13,12 +13,14 @@ struct ThemeSettingsViewAction: Action {
     let manualThemeType: ThemeType?
     let userBrightness: Float?
     let systemBrightness: Float?
+    let accentColor: AccentColor?
 
     init(useSystemAppearance: Bool? = nil,
          automaticBrightnessEnabled: Bool? = nil,
          manualThemeType: ThemeType? = nil,
          userBrightness: Float? = nil,
          systemBrightness: Float? = nil,
+         accentColor: AccentColor? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -28,6 +30,7 @@ struct ThemeSettingsViewAction: Action {
         self.manualThemeType = manualThemeType
         self.userBrightness = userBrightness
         self.systemBrightness = systemBrightness
+        self.accentColor = accentColor
     }
 }
 
@@ -52,6 +55,7 @@ enum ThemeSettingsViewActionType: ActionType {
     case switchManualTheme
     case updateUserBrightness
     case receivedSystemBrightnessChange
+    case switchAccentColor
 }
 
 enum ThemeSettingsMiddlewareActionType: ActionType {
@@ -61,4 +65,5 @@ enum ThemeSettingsMiddlewareActionType: ActionType {
     case manualThemeChanged
     case userBrightnessChanged
     case systemBrightnessChanged
+    case accentColorChanged
 }
