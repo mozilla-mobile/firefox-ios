@@ -238,9 +238,9 @@ workflows:
             echo "Removing raw-xcodebuild-output.log to reduce artifact size"
             rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
 
-            echo "Keeping only one swiftlint report file"
-            # Remove one format or duplicate copies
+            echo "Removing swiftlint reports already deployed by the swiftlint workflow"
             rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.txt" || true
+            rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.xml" || true
 
             echo "Removing unit test xcresult"
             rm -f "$BITRISE_DEPLOY_DIR"/Test-Fennec_UnitTest_*.xcresult.zip || true
