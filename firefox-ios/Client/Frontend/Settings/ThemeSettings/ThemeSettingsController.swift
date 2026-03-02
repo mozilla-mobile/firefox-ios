@@ -7,6 +7,7 @@ import Foundation
 import Redux
 import Shared
 import ComponentLibrary
+import UIKit
 
 class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notifiable {
     typealias SubscriberStateType = ThemeSettingsState
@@ -15,18 +16,45 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
         static let moonSunIconSize: CGFloat = 18
         static let sliderLeftRightInset: CGFloat = 16
         static let spaceBetweenTableSections: CGFloat = 20
+        static let accentSwatchItemSize: CGFloat = 52
+        static let accentCollectionHeight: CGFloat = 60
+        static let accentItemCount = 6 // 5 presets + 1 custom
     }
 
     enum Section: Int {
         case systemTheme
         case automaticBrightness
         case lightDarkPicker
+        case accentColor
+    }
+
+    /// Returns the list of sections currently visible, accounting for system theme state.
+    private var allSections: [Section] {
+        if isSystemThemeOn {
+            return [.systemTheme, .accentColor]
+        } else {
+            return [.systemTheme, .automaticBrightness, .lightDarkPicker, .accentColor]
+        }
+    }
+
+    /// Maps a table view section index to its Section case.
+    private func sectionFor(_ sectionIndex: Int) -> Section {
+        guard sectionIndex < allSections.count else { return .systemTheme }
+        return allSections[sectionIndex]
+    }
+
+    /// Returns the table view section index for a given Section case, or nil if not visible.
+    private func indexForSection(_ section: Section) -> Int? {
+        return allSections.firstIndex(of: section)
     }
 
     private var themeState: ThemeSettingsState
 
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
+
+    /// Embedded collection view for accent color swatches
+    private var accentCollectionView: UICollectionView?
 
     var isAutoBrightnessOn: Bool {
         return themeState.isAutomaticBrightnessEnabled
@@ -175,6 +203,62 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
         return slider
     }
 
+    // MARK: - Accent Color Helpers
+
+    private func makeAccentCollectionView() -> UICollectionView {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: UX.accentSwatchItemSize, height: UX.accentSwatchItemSize)
+        layout.minimumInteritemSpacing = 8
+        layout.minimumLineSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 0, left: UX.sliderLeftRightInset,
+                                           bottom: 0, right: UX.sliderLeftRightInset)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(AccentColorCell.self, forCellWithReuseIdentifier: AccentColorCell.reuseIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        return collectionView
+    }
+
+    private func dispatchAccentColorChange(_ accentColor: AccentColor) {
+        let action = ThemeSettingsViewAction(accentColor: accentColor,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.switchAccentColor)
+        store.dispatch(action)
+    }
+
+    private func presentColorPicker() {
+        let picker = UIColorPickerViewController()
+        picker.supportsAlpha = false
+        picker.delegate = self
+
+        // Pre-select current custom color if any
+        if case .custom(let hex) = themeState.accentColor,
+           let currentColor = UIColor(accentHex: hex) {
+            picker.selectedColor = currentColor
+        }
+
+        present(picker, animated: true)
+    }
+
+    /// Returns the custom swatch UIColor if the user has a custom accent set, or nil.
+    private var customSwatchColor: UIColor? {
+        if case .custom(let hex) = themeState.accentColor {
+            return UIColor(accentHex: hex)
+        }
+        return nil
+    }
+
+    /// Whether the currently selected accent is a custom color.
+    private var isCustomAccentSelected: Bool {
+        if case .custom = themeState.accentColor { return true }
+        return false
+    }
+
     // MARK: - UITableView
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = super.tableView(
@@ -182,15 +266,17 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
             viewForHeaderInSection: section
         ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        let section = Section(rawValue: section) ?? .automaticBrightness
+        let sectionType = sectionFor(section)
         headerView.titleLabel.text = {
-            switch section {
+            switch sectionType {
             case .systemTheme:
                 return .SystemThemeSectionHeader
             case .automaticBrightness:
                 return .ThemeSwitchModeSectionHeader
             case .lightDarkPicker:
                 return isAutoBrightnessOn ? .DisplayThemeBrightnessThresholdSectionHeader : .ThemePickerSectionHeader
+            case .accentColor:
+                return "Accent Color"
             }
         }()
 
@@ -199,7 +285,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard isAutoBrightnessOn && section == Section.lightDarkPicker.rawValue else { return nil }
+        let sectionType = sectionFor(section)
+        guard isAutoBrightnessOn && sectionType == .lightDarkPicker else { return nil }
 
         let footer = UIView()
         let label: UILabel = .build { label in
@@ -222,19 +309,25 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard isAutoBrightnessOn && section == Section.lightDarkPicker.rawValue else {
-            return section == Section.automaticBrightness.rawValue ? UX.spaceBetweenTableSections : 1
+        let sectionType = sectionFor(section)
+        guard isAutoBrightnessOn && sectionType == .lightDarkPicker else {
+            return sectionType == .automaticBrightness ? UX.spaceBetweenTableSections : 1
         }
         // When auto is on, make footer arbitrarily large enough to handle large block of text.
         return 120
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let sectionType = sectionFor(indexPath.section)
+
+        if sectionType == .accentColor {
+            return configureAccentColorCell(for: tableView, at: indexPath)
+        }
+
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.selectionStyle = .none
-        let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        switch section {
+        switch sectionType {
         case .systemTheme:
             cell.textLabel?.text = .SystemThemeSectionSwitchTitle
             cell.textLabel?.numberOfLines = 0
@@ -253,9 +346,37 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
 
         case .lightDarkPicker:
             configureLightDarkTheme(indexPath: indexPath, cell: cell)
+
+        case .accentColor:
+            break // Handled above
         }
         cell.applyTheme(theme: theme)
 
+        return cell
+    }
+
+    private func configureAccentColorCell(
+        for tableView: UITableView,
+        at indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "AccentColorHostCell")
+        cell.selectionStyle = .none
+        cell.backgroundColor = .clear
+
+        let collectionView = makeAccentCollectionView()
+        accentCollectionView = collectionView
+        cell.contentView.addSubview(collectionView)
+
+        NSLayoutConstraint.activate([
+            collectionView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 4),
+            collectionView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -4),
+            collectionView.heightAnchor.constraint(equalToConstant: UX.accentCollectionHeight),
+        ])
+
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        cell.contentView.backgroundColor = theme.colors.layer5
         return cell
     }
 
@@ -271,30 +392,33 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return isSystemThemeOn ? 1 : 3
+        return allSections.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case Section.systemTheme.rawValue:
+        let sectionType = sectionFor(section)
+        switch sectionType {
+        case .systemTheme:
             return 1
-        case Section.automaticBrightness.rawValue:
+        case .automaticBrightness:
             return 2
-        case Section.lightDarkPicker.rawValue:
+        case .lightDarkPicker:
             return isAutoBrightnessOn ? 1 : 2
-        default:
+        case .accentColor:
             return 1
         }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == Section.automaticBrightness.rawValue {
+        let sectionType = sectionFor(indexPath.section)
+        if sectionType == .automaticBrightness {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             toggleAutomaticBrightness(isOn: indexPath.row != 0)
-        } else if indexPath.section == Section.lightDarkPicker.rawValue {
+        } else if sectionType == .lightDarkPicker {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             changeManualTheme(isLightTheme: indexPath.row == 0)
         }
+        // Accent color selection is handled by the embedded collection view delegate
         applyTheme()
     }
 
@@ -305,8 +429,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
                                              actionType: ThemeSettingsViewActionType.enableAutomaticBrightness)
         store.dispatch(action)
 
-        tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
-        tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
+        if let lightDarkIndex = indexForSection(.lightDarkPicker),
+           let autoBrightnessIndex = indexForSection(.automaticBrightness) {
+            tableView.reloadSections(IndexSet(integer: lightDarkIndex), with: .automatic)
+            tableView.reloadSections(IndexSet(integer: autoBrightnessIndex), with: .none)
+        }
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
                                      object: .setting,
@@ -392,5 +519,71 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
         default:
             return
         }
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension ThemeSettingsController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return UX.accentItemCount
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: AccentColorCell.reuseIdentifier,
+            for: indexPath
+        ) as? AccentColorCell else {
+            return UICollectionViewCell()
+        }
+
+        let presets = AccentColor.presets
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+
+        if indexPath.item < presets.count {
+            let preset = presets[indexPath.item]
+            let isSelected = themeState.accentColor == preset
+            cell.configure(accentColor: preset, isSelected: isSelected)
+        } else {
+            // Custom swatch (last item)
+            cell.configureAsCustom(color: customSwatchColor, isSelected: isCustomAccentSelected)
+        }
+
+        cell.applyTheme(theme: theme)
+        return cell
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension ThemeSettingsController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let presets = AccentColor.presets
+        if indexPath.item < presets.count {
+            dispatchAccentColorChange(presets[indexPath.item])
+        } else {
+            // Custom swatch tapped — present color picker
+            presentColorPicker()
+        }
+    }
+}
+
+// MARK: - UIColorPickerViewControllerDelegate
+extension ThemeSettingsController: UIColorPickerViewControllerDelegate {
+    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+        let hex = viewController.selectedColor.accentHexString()
+        dispatchAccentColorChange(.custom(hex: hex))
+    }
+
+    func colorPickerViewController(
+        _ viewController: UIColorPickerViewController,
+        didSelect color: UIColor,
+        continuously: Bool
+    ) {
+        // Only commit on final selection (not continuous updates)
+        guard !continuously else { return }
+        let hex = color.accentHexString()
+        dispatchAccentColorChange(.custom(hex: hex))
     }
 }
