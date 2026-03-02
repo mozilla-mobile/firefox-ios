@@ -3051,6 +3051,32 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
+        case .certificatesFromErrorPage:
+            guard let errorPageURL = type.errorPageURL,
+                  let originalURL = type.url,
+                  let title = type.certificateTitle else {
+                logger.log(
+                    "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.showCertificatesFromErrorPage(
+                errorPageURL: errorPageURL,
+                originalURL: originalURL,
+                title: title
+            )
+        case .nativeErrorPageLearnMore:
+            guard let url = type.url else {
+                logger.log(
+                    "url should not be nil when navigating for nativeErrorPageLearnMore",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
         }
     }
 

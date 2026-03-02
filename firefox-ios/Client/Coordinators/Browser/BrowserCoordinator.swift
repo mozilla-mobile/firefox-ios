@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 import WebKit
 import Shared
 import Storage
@@ -1113,6 +1114,30 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(linkVC, animated: true)
     }
 
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
+        let certificates = CertificateHelper.certificatesFromErrorURL(errorPageURL, logger: logger)
+        guard !certificates.isEmpty else { return }
+
+        let topLevelDomain = originalURL.host ?? originalURL.absoluteString
+        let model = CertificatesModel(
+            topLevelDomain: topLevelDomain,
+            title: title,
+            URL: originalURL.absoluteString,
+            certificates: certificates
+        )
+        let certificatesController = CertificatesViewController(
+            with: model,
+            windowUUID: windowUUID
+        )
+        let navController = UINavigationController(rootViewController: certificatesController)
+        navController.modalPresentationStyle = .pageSheet
+        router.present(navController, animated: true)
+    }
+
+    func openLearnMoreFromNativeErrorPage(url: URL) {
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+    }
+
     func popToBVC() {
         _ = router.popToViewController(browserViewController, reason: .deeplink)
     }
@@ -1148,7 +1173,8 @@ class BrowserCoordinator: BaseCoordinator,
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            tabManager: tabManager
         )
 
         guard browserViewController.embedContent(errorPageController) else {

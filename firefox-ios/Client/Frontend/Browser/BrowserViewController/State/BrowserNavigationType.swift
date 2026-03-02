@@ -21,6 +21,8 @@ enum BrowserNavigationDestination: Equatable {
     case storiesWebView
     case privacyNoticeLink(URL)
     case summarizer(config: SummarizerConfig)
+    case certificatesFromErrorPage
+    case nativeErrorPageLearnMore
 
     // Webpage views
     case link
@@ -48,6 +50,8 @@ struct NavigationDestination: Equatable {
     let isGoogleTopSite: Bool?
     let visitType: VisitType?
     let contextMenuConfiguration: ContextMenuConfiguration?
+    let errorPageURL: URL?
+    let certificateTitle: String?
 
     init(
         _ destination: BrowserNavigationDestination,
@@ -56,7 +60,9 @@ struct NavigationDestination: Equatable {
         selectNewTab: Bool? = nil,
         isGoogleTopSite: Bool? = nil,
         visitType: VisitType? = nil,
-        contextMenuConfiguration: ContextMenuConfiguration? = nil
+        contextMenuConfiguration: ContextMenuConfiguration? = nil,
+        errorPageURL: URL? = nil,
+        certificateTitle: String? = nil
     ) {
         self.destination = destination
         self.url = url
@@ -65,5 +71,7 @@ struct NavigationDestination: Equatable {
         self.isGoogleTopSite = isGoogleTopSite
         self.visitType = visitType
         self.contextMenuConfiguration = contextMenuConfiguration
+        self.errorPageURL = errorPageURL
+        self.certificateTitle = certificateTitle
     }
 }

@@ -1763,6 +1763,8 @@
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
 		CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */; };
+		CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */; };
+		CBC398772F4F455E00CD4EAD /* CertificateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
 		D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */; };
@@ -10278,8 +10280,10 @@
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSelectionHelper.swift; sourceTree = "<group>"; };
+		CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHelperTests.swift; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHelper.swift; sourceTree = "<group>"; };
 		CBD64E6DB514D36802C243A2 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBFF4C93B4ECB18CF4C73012 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		CC1542489046BEFF2588B8A4 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -12912,6 +12916,7 @@
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
+				CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */,
 				630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */,
 				635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */,
 				21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */,
@@ -12922,6 +12927,7 @@
 		63F7A9A82C752999005846F5 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
+				CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */,
 				63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */,
 				63B213292CCA797400A466DB /* NativeErrorPageState.swift */,
 				63B213272CCA796D00A466DB /* NativeErrorPageAction.swift */,
@@ -18849,6 +18855,7 @@
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */,
+				CBC398772F4F455E00CD4EAD /* CertificateHelper.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
@@ -19655,6 +19662,7 @@
 				C736C9C72E9D7C4800658045 /* StoriesFeedStateTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
 				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,
 				217C6A792F3A7A370085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift in Sources */,
 				F98CB66E2A4123F1005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift in Sources */,
