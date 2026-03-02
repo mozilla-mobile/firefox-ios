@@ -55,6 +55,7 @@ final class HomepageViewController: UIViewController,
     private var homepageState: HomepageState
     private var lastContentOffsetY: CGFloat = 0
     private var didFinishFirstLayout = false
+    private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
     private var currentTheme: Theme {
@@ -370,7 +371,7 @@ final class HomepageViewController: UIViewController,
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             )
-            updateWallpaperConstraints(availableContentHeight: state.availableContentHeight)
+            updateWallpaperConstraints(availableWallpaperHeight: state.availableWallpaperHeight)
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
@@ -401,17 +402,16 @@ final class HomepageViewController: UIViewController,
     private func configureWallpaperView() {
         view.addSubview(wallpaperView)
 
-        // Constraint so wallpaper appears under the status bar
-        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
-
         let heightConstraint = wallpaperView.heightAnchor.constraint(
-             equalToConstant: homepageState.availableContentHeight + wallpaperTopConstant
-         )
+            equalToConstant: homepageState.availableWallpaperHeight
+        )
+        let topConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor)
 
+        wallpaperTopConstraint = topConstraint
         wallpaperHeightConstraint = heightConstraint
 
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
+            topConstraint,
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             heightConstraint
@@ -420,9 +420,18 @@ final class HomepageViewController: UIViewController,
         view.sendSubviewToBack(wallpaperView)
     }
 
-    private func updateWallpaperConstraints(availableContentHeight: CGFloat) {
-        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
-        wallpaperHeightConstraint?.constant = availableContentHeight + wallpaperTopConstant
+    private func updateWallpaperConstraints(availableWallpaperHeight: CGFloat) {
+        guard let window = view.window else {
+            wallpaperHeightConstraint?.constant = availableWallpaperHeight
+            wallpaperTopConstraint?.constant = 0
+            return
+        }
+
+        // Shift up by the homepage view's window offset so wallpaper stays anchored to window top.
+        let viewTopOffset = view.convert(CGPoint.zero, to: window).y
+        // Height is authoritative from state and already includes the window-relative content offset.
+        wallpaperHeightConstraint?.constant = availableWallpaperHeight
+        wallpaperTopConstraint?.constant = -viewTopOffset
     }
 
     private func setupLayout() {

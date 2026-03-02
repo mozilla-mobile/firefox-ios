@@ -3354,14 +3354,21 @@ class BrowserViewController: UIViewController,
     }
 
     func dispatchAvailableContentHeightChangedAction() {
+        let availableContentHeight = getAvailableHomepageContentHeight()
+        let availableWallpaperHeight = getAvailableHomepageWallpaperHeight()
+
+        // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
-           homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
+           homepageState.availableContentHeight != availableContentHeight ||
+            homepageState.availableWallpaperHeight != availableWallpaperHeight
+        else { return }
 
         store.dispatch(
             HomepageAction(
-                availableContentHeight: getAvailableHomepageContentHeight(),
+                availableContentHeight: availableContentHeight,
+                availableWallpaperHeight: availableWallpaperHeight,
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.availableContentHeightDidChange
             )
@@ -3390,6 +3397,19 @@ class BrowserViewController: UIViewController,
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
                                  - addressBarHeight
+    }
+
+    private func getAvailableHomepageWallpaperHeight() -> CGFloat {
+        let availableContentHeight = getAvailableHomepageContentHeight()
+
+        guard let window = view.window else {
+            // Fallback before window attachment, this gets corrected on the next layout/state update.
+            return availableContentHeight + contentContainer.frame.origin.y
+        }
+
+        // Homepage pins wallpaper to window top, so include the content container's window Y offset.
+        let contentTopOffset = contentContainer.convert(CGPoint.zero, to: window).y
+        return availableContentHeight + contentTopOffset
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,

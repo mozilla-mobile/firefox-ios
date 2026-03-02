@@ -476,6 +476,31 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(tab.homepageScrollOffset, 140)
     }
 
+    func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        let stateWithWallpaperHeight = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                availableContentHeight: 100,
+                availableWallpaperHeight: 300,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        subject.newState(state: stateWithWallpaperHeight)
+
+        let wallpaperView = try XCTUnwrap(
+            subject.view.subviews.first(where: { $0 is WallpaperBackgroundView }) as? WallpaperBackgroundView
+        )
+        let wallpaperHeightConstraint = try XCTUnwrap(
+            wallpaperView.constraints.first(where: { $0.firstAttribute == .height && $0.firstItem === wallpaperView })
+        )
+        XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
+    }
+
     private func createSubject(
         tabManager: TabManager = MockTabManager(),
         statusBarScrollDelegate: StatusBarScrollDelegate? = nil
