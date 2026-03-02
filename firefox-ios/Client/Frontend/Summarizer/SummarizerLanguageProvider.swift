@@ -35,4 +35,10 @@ struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
         let localeIsSupported = supportedLocales.contains(locale)
         return localeIsSupported ? locale : nil
     }
+    
+    private func getWebsiteLocale(from source: LanguageSampleSource) async -> Locale? {
+        let languageIdentifier = try? await websiteLanguageProvider.detectLanguage(from: source)
+        guard let languageIdentifier else { return nil }
+        return Locale(identifier: languageIdentifier)
+    }
 }
