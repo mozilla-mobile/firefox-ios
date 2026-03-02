@@ -13,6 +13,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         static let systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
         static let hasMigratedToNewAppearanceMenu = "prefKeyhasMigratedToNewAppearanceMenu"
         static let accentColor = "prefKeyAccentColor"
+        static let backgroundTintColor = "prefKeyBackgroundTintColor"
+        static let toolbarTintColor = "prefKeyToolbarTintColor"
 
         enum AutomaticBrightness {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
@@ -63,6 +65,16 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var accentColor: AccentColor {
         guard let value = userDefaults.string(forKey: ThemeKeys.accentColor) else { return .blue }
+        return AccentColor.from(persistenceValue: value)
+    }
+
+    public var backgroundTintColor: AccentColor {
+        guard let value = userDefaults.string(forKey: ThemeKeys.backgroundTintColor) else { return .blue }
+        return AccentColor.from(persistenceValue: value)
+    }
+
+    public var toolbarTintColor: AccentColor {
+        guard let value = userDefaults.string(forKey: ThemeKeys.toolbarTintColor) else { return .blue }
         return AccentColor.from(persistenceValue: value)
     }
 
@@ -169,6 +181,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         applyThemeUpdatesToWindows()
     }
 
+    // MARK: - Background tint color functions
+    public func setBackgroundTintColor(_ color: AccentColor) {
+        userDefaults.set(color.persistenceValue, forKey: ThemeKeys.backgroundTintColor)
+        applyThemeUpdatesToWindows()
+    }
+
+    // MARK: - Toolbar tint color functions
+    public func setToolbarTintColor(_ color: AccentColor) {
+        userDefaults.set(color.persistenceValue, forKey: ThemeKeys.toolbarTintColor)
+        applyThemeUpdatesToWindows()
+    }
+
     private func getThemeTypeBasedOnBrightness() -> ThemeType {
         return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
     }
@@ -244,16 +268,23 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             baseTheme = PrivateModeTheme()
         }
 
-        // Only apply accent tinting to light and dark themes.
+        // Only apply tinting to light and dark themes.
         // Private mode and night mode retain their hardcoded palettes.
+        guard type == .light || type == .dark else { return baseTheme }
+
         let accent = accentColor
-        if !accent.isDefault && (type == .light || type == .dark) {
+        let bgTint = backgroundTintColor
+        let hasTinting = !accent.isDefault || !bgTint.isDefault
+
+        if hasTinting {
+            let resolvedBgTint: UIColor? = bgTint.isDefault ? nil : bgTint.color(for: type)
             return TintedTheme(
                 type: type,
                 colors: TintedThemeColourPalette(
                     base: baseTheme.colors,
-                    accent: accent.color(for: type),
-                    themeType: type
+                    accent: accent.isDefault ? baseTheme.colors.actionPrimary : accent.color(for: type),
+                    themeType: type,
+                    backgroundTint: resolvedBgTint
                 )
             )
         }

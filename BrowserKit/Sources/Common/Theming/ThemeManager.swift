@@ -35,6 +35,16 @@ public protocol ThemeManager {
     @MainActor
     func setAccentColor(_ color: AccentColor)
 
+    // Background tint color
+    var backgroundTintColor: AccentColor { get }
+    @MainActor
+    func setBackgroundTintColor(_ color: AccentColor)
+
+    // Toolbar tint color
+    var toolbarTintColor: AccentColor { get }
+    @MainActor
+    func setToolbarTintColor(_ color: AccentColor)
+
     @MainActor
     func setSystemTheme(isOn: Bool)
     @MainActor

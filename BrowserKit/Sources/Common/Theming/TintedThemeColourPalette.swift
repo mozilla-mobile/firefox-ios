@@ -10,15 +10,23 @@ import UIKit
 public struct TintedThemeColourPalette: ThemeColourPalette {
     private let base: ThemeColourPalette
     private let accent: UIColor
+    private let backgroundTint: UIColor?
     private let isLight: Bool
 
     /// - Parameters:
     ///   - base: The underlying palette (e.g. LightTheme or DarkTheme colours).
     ///   - accent: The resolved accent UIColor for the current theme type.
     ///   - themeType: The base theme type, used for light/dark branching.
-    public init(base: ThemeColourPalette, accent: UIColor, themeType: ThemeType) {
+    ///   - backgroundTint: Optional tint for background layers (layer1, layer3, layerHomepage).
+    public init(
+        base: ThemeColourPalette,
+        accent: UIColor,
+        themeType: ThemeType,
+        backgroundTint: UIColor? = nil
+    ) {
         self.base = base
         self.accent = accent
+        self.backgroundTint = backgroundTint
         self.isLight = (themeType == .light)
     }
 
@@ -51,11 +59,11 @@ public struct TintedThemeColourPalette: ThemeColourPalette {
         Gradient(colors: [accent.accentLighter(by: 0.15), accent])
     }
 
-    // MARK: - Delegated Layer Properties
+    // MARK: - Background Tint Layer Overrides
 
-    public var layer1: UIColor { base.layer1 }
+    public var layer1: UIColor { backgroundTint ?? base.layer1 }
     public var layer2: UIColor { base.layer2 }
-    public var layer3: UIColor { base.layer3 }
+    public var layer3: UIColor { backgroundTint ?? base.layer3 }
     public var layer4: UIColor { base.layer4 }
     public var layer5: UIColor { base.layer5 }
     public var layer5Hover: UIColor { base.layer5Hover }
@@ -64,7 +72,13 @@ public struct TintedThemeColourPalette: ThemeColourPalette {
     public var layerAccentPrivate: UIColor { base.layerAccentPrivate }
     public var layerAccentPrivateNonOpaque: UIColor { base.layerAccentPrivateNonOpaque }
     public var layerSepia: UIColor { base.layerSepia }
-    public var layerHomepage: Gradient { base.layerHomepage }
+    public var layerHomepage: Gradient {
+        if let bg = backgroundTint {
+            let lighter = bg.accentLighter(by: 0.1)
+            return Gradient(colors: [lighter, bg])
+        }
+        return base.layerHomepage
+    }
     public var layerSuccess: UIColor { base.layerSuccess }
     public var layerWarning: UIColor { base.layerWarning }
     public var layerCritical: UIColor { base.layerCritical }
