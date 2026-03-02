@@ -20,7 +20,6 @@ $tags:
 # 
 # This file contains telemetry metrics for tracking user interactions
 # - User impressions and acceptance tracking
-# - Date and Version of accepted terms
 # - Button taps and navigation events
 # - Dismissal behavior
 ###############################################################################
