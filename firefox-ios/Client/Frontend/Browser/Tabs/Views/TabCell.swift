@@ -107,7 +107,13 @@ final class TabCell: UICollectionViewCell,
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
+    func configure(
+        with tabModel: TabModel,
+        theme: Theme?,
+        delegate: TabCellDelegate,
+        a11yId: String,
+        newTabTitle: String?
+    ) {
         self.tabModel = tabModel
         self.delegate = delegate
 
@@ -117,16 +123,8 @@ final class TabCell: UICollectionViewCell,
 
         animator?.animateBackToCenter()
 
-        // When homepage is blank, we need to use firefoxFavIcon and
-        // "New Tab" title
-        if tabModel.url == nil {
-            let title = String.TabsTray.TabsSelectorBlankTabsTitle
-            titleText.text = title
-            accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, tabTitle: title)
-        } else {
-            titleText.text = tabModel.tabTitle
-            accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
-        }
+        titleText.text = newTabTitle ?? tabModel.tabTitle
+        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, newTabTitle: newTabTitle)
 
         if let firefoxFavicon = UIImage(named: ImageIdentifiers.firefoxFavicon) {
             favicon.manuallySetImage(firefoxFavicon)
@@ -318,8 +316,8 @@ final class TabCell: UICollectionViewCell,
         return true
     }
 
-    private func getA11yTitleLabel(tabModel: TabModel, tabTitle: String? = nil) -> String? {
-        let baseName = tabTitle ?? tabModel.tabTitle
+    private func getA11yTitleLabel(tabModel: TabModel, newTabTitle: String?) -> String? {
+        let baseName = newTabTitle ?? tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel
