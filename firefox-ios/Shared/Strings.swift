@@ -3976,12 +3976,12 @@ extension String {
 
         public struct LanguagePicker {
             public static let Title = MZLocalizedString(
-                key: "Translations.LanguagePicker.Title.v149",
+                key: "", // Translations.LanguagePicker.Title.v149
                 tableName: "Translations",
                 value: "Translate Page to...",
                 comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
             public static let PreferredLanguagesTitle = MZLocalizedString(
-                key: "Translations.LanguagePicker.PreferredLanguages.v149",
+                key: "", // Translations.LanguagePicker.PreferredLanguages.v149
                 tableName: "Translations",
                 value: "Preferred Languages...",
                 comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
