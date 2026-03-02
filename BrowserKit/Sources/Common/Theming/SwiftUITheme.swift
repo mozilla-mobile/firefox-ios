@@ -16,6 +16,9 @@ public struct SwiftUITheme: Equatable {
     }
 
     public static func == (lhs: SwiftUITheme, rhs: SwiftUITheme) -> Bool {
+        // Two themes are equal if they have the same type AND both are tinted/untinted.
+        // This ensures accent color changes trigger SwiftUI view updates.
         return lhs.theme.type == rhs.theme.type
+            && (lhs.theme is TintedTheme) == (rhs.theme is TintedTheme)
     }
 }
