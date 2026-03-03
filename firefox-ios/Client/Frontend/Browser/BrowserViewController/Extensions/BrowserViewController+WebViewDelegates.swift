@@ -679,24 +679,9 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     private func handleStoreURLNavigation(url: URL) {
-        // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
-        // Otherwise the AppStoreAlert is shown on the wrong tab
-        // TODO: FXIOS-14796 - Investigate if we can remove the handleStoreURLNavigation delay
-        let delaySelectingNewPopupTab: TimeInterval = 0.2
-        let delay: DispatchTime = .now() + delaySelectingNewPopupTab
-        DispatchQueue.main.asyncAfter(deadline: delay) { [weak self] in
-            self?.showAppStoreAlert { isOpened in
-                if isOpened {
-                    UIApplication.shared.open(url, options: [:])
-                }
-                // If a new window was opened for this URL, close it
-                if let currentTab = self?.tabManager.selectedTab,
-                   currentTab.historyList.count == 1,
-                   self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                    self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                    self?.tabManager.removeTab(currentTab.tabUUID)
-                }
-            }
+        self.showAppStoreAlert { isOpened in
+            guard isOpened else { return }
+            UIApplication.shared.open(url, options: [:])
         }
     }
 

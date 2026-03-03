@@ -201,7 +201,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         )
     }
 
-    var historyList: [URL] {
+    private var historyList: [URL] {
         func listToUrl(_ item: BackForwardListItem) -> URL { return item.url }
 
         var historyUrls = self.backForwardList?.backList.map(listToUrl) ?? [URL]()
