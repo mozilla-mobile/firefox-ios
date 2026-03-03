@@ -6,16 +6,18 @@ import SwiftUI
 import Common
 
 /// A section displaying background tint color swatches for the Appearance settings screen.
-/// Users can tap a preset color or "Custom" to open the system color picker.
+/// Shows preset colors, user-added custom colors in a scrollable row,
+/// and a pinned "+" button to add new custom colors via the system color picker.
 struct BackgroundTintSectionView: View {
     let theme: Theme?
     let themeManager: ThemeManager
     let cornerRadius: CGFloat
     @Binding var showColorPicker: Bool
+    @State private var hexToDelete: String?
 
     private struct UX {
         static let swatchSize: CGFloat = 40
-        static let checkmarkSize: CGFloat = 18
+        static let borderWidth: CGFloat = 3
         static let spacing: CGFloat = 12
         static let horizontalPadding: CGFloat = 16
         static let verticalPadding: CGFloat = 16
@@ -26,43 +28,92 @@ struct BackgroundTintSectionView: View {
         themeManager.backgroundTintColor
     }
 
-    private var isCustomSelected: Bool {
-        if case .custom = selectedTint { return true }
-        return false
-    }
-
     var body: some View {
         GenericSectionView(
             theme: theme,
             title: .Settings.Appearance.BackgroundTint.SectionHeader,
             identifier: AccessibilityIdentifiers.Settings.Appearance.backgroundTintSectionTitle
         ) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: UX.spacing) {
-                    ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
-                        swatchView(
-                            color: Color(accent.swatchColor),
-                            isSelected: selectedTint == accent,
-                            accessibilityLabel: accent.persistenceValue
-                        ) {
-                            themeManager.setBackgroundTintColor(accent)
-                        }
-                    }
-
-                    if isCustomSelected {
-                        customColorSwatch()
-                    }
-
-                    addButton()
-                }
-            }
-            .padding(.horizontal, UX.horizontalPadding)
-            .padding(.vertical, UX.verticalPadding)
-            .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
+            sectionContent
+                .padding(.horizontal, UX.horizontalPadding)
+                .padding(.vertical, UX.verticalPadding)
+                .modifier(SectionStyle(theme: theme, cornerRadius: cornerRadius))
         }
     }
 
-    // MARK: - Swatch Views
+    private var sectionContent: some View {
+        HStack(spacing: UX.spacing) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: UX.spacing) {
+                    presetSwatches
+                    customSwatches
+                }
+            }
+            addButton
+        }
+        .alert(
+            "Delete custom color?",
+            isPresented: Binding(
+                get: { hexToDelete != nil },
+                set: { if !$0 { hexToDelete = nil } }
+            )
+        ) {
+            Button("Delete", role: .destructive) {
+                if let hex = hexToDelete {
+                    themeManager.removeCustomBackgroundTintColor(hex)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+    }
+
+    // MARK: - Preset Swatches
+
+    private var presetSwatches: some View {
+        ForEach(AccentColor.presets, id: \.persistenceValue) { accent in
+            swatchView(
+                color: Color(accent.swatchColor),
+                isSelected: selectedTint == accent,
+                accessibilityLabel: accent.persistenceValue
+            ) {
+                themeManager.setBackgroundTintColor(accent)
+            }
+        }
+    }
+
+    // MARK: - Custom Swatches
+
+    private var customSwatches: some View {
+        ForEach(themeManager.customBackgroundTintColors, id: \.self) { hex in
+            let uiColor = UIColor(accentHex: hex) ?? .systemGray
+            swatchView(
+                color: Color(uiColor),
+                isSelected: selectedTint == .custom(hex: hex),
+                accessibilityLabel: "Custom \(hex)"
+            ) {
+                themeManager.setBackgroundTintColor(.custom(hex: hex))
+            }
+            .onLongPressGesture { hexToDelete = hex }
+        }
+    }
+
+    // MARK: - Add Button
+
+    private var addButton: some View {
+        Button { showColorPicker = true } label: {
+            ZStack {
+                Circle()
+                    .fill(Color(theme?.colors.layer3 ?? .tertiarySystemBackground))
+                    .frame(width: UX.swatchSize, height: UX.swatchSize)
+                Image(systemName: "plus")
+                    .font(.system(size: UX.customIconSize, weight: .medium))
+                    .foregroundColor(Color(theme?.colors.iconPrimary ?? .label))
+            }
+        }
+        .accessibilityLabel("Add custom color")
+    }
+
+    // MARK: - Swatch View
 
     @ViewBuilder
     private func swatchView(
@@ -71,54 +122,16 @@ struct BackgroundTintSectionView: View {
         accessibilityLabel: String,
         onTap: @escaping () -> Void
     ) -> some View {
-        ZStack {
-            Circle()
-                .fill(color)
-                .frame(width: UX.swatchSize, height: UX.swatchSize)
-
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: UX.checkmarkSize, weight: .bold))
-                    .foregroundColor(.white)
-            }
-        }
-        .accessibilityLabel(accessibilityLabel)
-        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
-        .onTapGesture { onTap() }
-    }
-
-    @ViewBuilder
-    private func customColorSwatch() -> some View {
-        let color: Color = {
-            if case .custom(let hex) = selectedTint {
-                return Color(UIColor(accentHex: hex) ?? .systemGray)
-            }
-            return Color.gray
-        }()
-
-        swatchView(
-            color: color,
-            isSelected: true,
-            accessibilityLabel: "Custom color"
-        ) {
-            showColorPicker = true
-        }
-    }
-
-    @ViewBuilder
-    private func addButton() -> some View {
-        ZStack {
-            Circle()
-                .fill(Color(UIColor.systemGray3))
-                .frame(width: UX.swatchSize, height: UX.swatchSize)
-
-            Image(systemName: "plus")
-                .font(.system(size: UX.customIconSize, weight: .semibold))
-                .foregroundColor(.white)
-        }
-        .accessibilityLabel("Add custom color")
-        .accessibilityAddTraits(.isButton)
-        .onTapGesture { showColorPicker = true }
+        Circle()
+            .fill(color)
+            .frame(width: UX.swatchSize, height: UX.swatchSize)
+            .overlay(
+                Circle()
+                    .strokeBorder(Color.white, lineWidth: isSelected ? UX.borderWidth : 0)
+            )
+            .accessibilityLabel(accessibilityLabel)
+            .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
+            .onTapGesture { onTap() }
     }
 }
 
@@ -161,7 +174,7 @@ struct BackgroundTintColorPickerSheet: UIViewControllerRepresentable {
         ) {
             guard !continuously else { return }
             let hex = color.accentHexString()
-            themeManager.setBackgroundTintColor(.custom(hex: hex))
+            themeManager.addCustomBackgroundTintColor(hex)
         }
     }
 }

@@ -34,16 +34,31 @@ public protocol ThemeManager {
     var accentColor: AccentColor { get }
     @MainActor
     func setAccentColor(_ color: AccentColor)
+    var customAccentColors: [String] { get }
+    @MainActor
+    func addCustomAccentColor(_ hex: String)
+    @MainActor
+    func removeCustomAccentColor(_ hex: String)
 
     // Background tint color
     var backgroundTintColor: AccentColor { get }
     @MainActor
     func setBackgroundTintColor(_ color: AccentColor)
+    var customBackgroundTintColors: [String] { get }
+    @MainActor
+    func addCustomBackgroundTintColor(_ hex: String)
+    @MainActor
+    func removeCustomBackgroundTintColor(_ hex: String)
 
     // Toolbar tint color
     var toolbarTintColor: AccentColor { get }
     @MainActor
     func setToolbarTintColor(_ color: AccentColor)
+    var customToolbarTintColors: [String] { get }
+    @MainActor
+    func addCustomToolbarTintColor(_ hex: String)
+    @MainActor
+    func removeCustomToolbarTintColor(_ hex: String)
 
     @MainActor
     func setSystemTheme(isOn: Bool)

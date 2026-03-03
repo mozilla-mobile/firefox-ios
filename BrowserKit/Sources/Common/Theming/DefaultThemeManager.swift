@@ -15,6 +15,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         static let accentColor = "prefKeyAccentColor"
         static let backgroundTintColor = "prefKeyBackgroundTintColor"
         static let toolbarTintColor = "prefKeyToolbarTintColor"
+        static let customAccentColors = "prefKeyCustomAccentColors"
+        static let customBackgroundTintColors = "prefKeyCustomBackgroundTintColors"
+        static let customToolbarTintColors = "prefKeyCustomToolbarTintColors"
 
         enum AutomaticBrightness {
             static let isOn = "prefKeyAutomaticSwitchOnOff"
@@ -76,6 +79,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public var toolbarTintColor: AccentColor {
         guard let value = userDefaults.string(forKey: ThemeKeys.toolbarTintColor) else { return .blue }
         return AccentColor.from(persistenceValue: value)
+    }
+
+    public var customAccentColors: [String] {
+        userDefaults.array(forKey: ThemeKeys.customAccentColors) as? [String] ?? []
+    }
+
+    public var customBackgroundTintColors: [String] {
+        userDefaults.array(forKey: ThemeKeys.customBackgroundTintColors) as? [String] ?? []
+    }
+
+    public var customToolbarTintColors: [String] {
+        userDefaults.array(forKey: ThemeKeys.customToolbarTintColors) as? [String] ?? []
     }
 
     // MARK: - Initializers
@@ -191,6 +206,66 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func setToolbarTintColor(_ color: AccentColor) {
         userDefaults.set(color.persistenceValue, forKey: ThemeKeys.toolbarTintColor)
         applyThemeUpdatesToWindows()
+    }
+
+    // MARK: - Custom accent color functions
+    public func addCustomAccentColor(_ hex: String) {
+        var colors = customAccentColors
+        guard !colors.contains(hex) else { return }
+        colors.append(hex)
+        userDefaults.set(colors, forKey: ThemeKeys.customAccentColors)
+        setAccentColor(.custom(hex: hex))
+    }
+
+    public func removeCustomAccentColor(_ hex: String) {
+        var colors = customAccentColors
+        colors.removeAll { $0 == hex }
+        userDefaults.set(colors, forKey: ThemeKeys.customAccentColors)
+        if accentColor == .custom(hex: hex) {
+            setAccentColor(.blue)
+        } else {
+            applyThemeUpdatesToWindows()
+        }
+    }
+
+    // MARK: - Custom background tint color functions
+    public func addCustomBackgroundTintColor(_ hex: String) {
+        var colors = customBackgroundTintColors
+        guard !colors.contains(hex) else { return }
+        colors.append(hex)
+        userDefaults.set(colors, forKey: ThemeKeys.customBackgroundTintColors)
+        setBackgroundTintColor(.custom(hex: hex))
+    }
+
+    public func removeCustomBackgroundTintColor(_ hex: String) {
+        var colors = customBackgroundTintColors
+        colors.removeAll { $0 == hex }
+        userDefaults.set(colors, forKey: ThemeKeys.customBackgroundTintColors)
+        if backgroundTintColor == .custom(hex: hex) {
+            setBackgroundTintColor(.blue)
+        } else {
+            applyThemeUpdatesToWindows()
+        }
+    }
+
+    // MARK: - Custom toolbar tint color functions
+    public func addCustomToolbarTintColor(_ hex: String) {
+        var colors = customToolbarTintColors
+        guard !colors.contains(hex) else { return }
+        colors.append(hex)
+        userDefaults.set(colors, forKey: ThemeKeys.customToolbarTintColors)
+        setToolbarTintColor(.custom(hex: hex))
+    }
+
+    public func removeCustomToolbarTintColor(_ hex: String) {
+        var colors = customToolbarTintColors
+        colors.removeAll { $0 == hex }
+        userDefaults.set(colors, forKey: ThemeKeys.customToolbarTintColors)
+        if toolbarTintColor == .custom(hex: hex) {
+            setToolbarTintColor(.blue)
+        } else {
+            applyThemeUpdatesToWindows()
+        }
     }
 
     private func getThemeTypeBasedOnBrightness() -> ThemeType {
