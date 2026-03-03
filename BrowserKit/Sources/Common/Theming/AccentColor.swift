@@ -134,15 +134,19 @@ extension UIColor {
     public func accentDarker(by percentage: CGFloat = 0.1) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        return UIColor(hue: h, saturation: s,
-                       brightness: max(b - percentage, 0), alpha: a)
+        return UIColor(hue: h,
+                       saturation: s,
+                       brightness: max(b - percentage, 0),
+                       alpha: a)
     }
 
     /// Returns a lighter variant of this color.
     public func accentLighter(by percentage: CGFloat = 0.1) -> UIColor {
         var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        return UIColor(hue: h, saturation: s,
-                       brightness: min(b + percentage, 1), alpha: a)
+        return UIColor(hue: h,
+                       saturation: s,
+                       brightness: min(b + percentage, 1),
+                       alpha: a)
     }
 }

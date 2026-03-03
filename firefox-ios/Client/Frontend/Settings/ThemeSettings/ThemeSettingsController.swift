@@ -211,8 +211,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
         layout.itemSize = CGSize(width: UX.accentSwatchItemSize, height: UX.accentSwatchItemSize)
         layout.minimumInteritemSpacing = 8
         layout.minimumLineSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 0, left: UX.sliderLeftRightInset,
-                                           bottom: 0, right: UX.sliderLeftRightInset)
+        layout.sectionInset = UIEdgeInsets(top: 0,
+                                           left: UX.sliderLeftRightInset,
+                                           bottom: 0,
+                                           right: UX.sliderLeftRightInset)
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false

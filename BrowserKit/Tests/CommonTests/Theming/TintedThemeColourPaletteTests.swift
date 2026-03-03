@@ -24,30 +24,48 @@ final class TintedThemeColourPaletteTests: XCTestCase {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertNotEqual(tinted.actionPrimary, basePalette.actionPrimary,
-                          "actionPrimary should be overridden by the red accent")
-        XCTAssertEqual(tinted.actionPrimary, accent,
-                       "actionPrimary should equal the red accent color")
+        XCTAssertNotEqual(
+            tinted.actionPrimary,
+            basePalette.actionPrimary,
+            "actionPrimary should be overridden by the red accent"
+        )
+        XCTAssertEqual(
+            tinted.actionPrimary,
+            accent,
+            "actionPrimary should equal the red accent color"
+        )
     }
 
     func testTintedPaletteOverridesTextAccent() {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertNotEqual(tinted.textAccent, basePalette.textAccent,
-                          "textAccent should be overridden by the red accent")
-        XCTAssertEqual(tinted.textAccent, accent,
-                       "textAccent should equal the red accent color")
+        XCTAssertNotEqual(
+            tinted.textAccent,
+            basePalette.textAccent,
+            "textAccent should be overridden by the red accent"
+        )
+        XCTAssertEqual(
+            tinted.textAccent,
+            accent,
+            "textAccent should equal the red accent color"
+        )
     }
 
     func testTintedPaletteOverridesIconAccent() {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertNotEqual(tinted.iconAccent, basePalette.iconAccent,
-                          "iconAccent should be overridden by the red accent")
-        XCTAssertEqual(tinted.iconAccent, accent,
-                       "iconAccent should equal the red accent color")
+        XCTAssertNotEqual(
+            tinted.iconAccent,
+            basePalette.iconAccent,
+            "iconAccent should be overridden by the red accent"
+        )
+        XCTAssertEqual(
+            tinted.iconAccent,
+            accent,
+            "iconAccent should equal the red accent color"
+        )
     }
 
     // MARK: - Delegation (no background tint)
@@ -56,16 +74,22 @@ final class TintedThemeColourPaletteTests: XCTestCase {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertEqual(tinted.layer1, basePalette.layer1,
-                       "layer1 should delegate to base when no backgroundTint is set")
+        XCTAssertEqual(
+            tinted.layer1,
+            basePalette.layer1,
+            "layer1 should delegate to base when no backgroundTint is set"
+        )
     }
 
     func testTintedPaletteDelegatesLayer3WhenNoBackgroundTint() {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertEqual(tinted.layer3, basePalette.layer3,
-                       "layer3 should delegate to base when no backgroundTint is set")
+        XCTAssertEqual(
+            tinted.layer3,
+            basePalette.layer3,
+            "layer3 should delegate to base when no backgroundTint is set"
+        )
     }
 
     // MARK: - Background Tint Overrides
@@ -77,8 +101,11 @@ final class TintedThemeColourPaletteTests: XCTestCase {
             base: basePalette, accent: accent, themeType: .light, backgroundTint: bgTint
         )
 
-        XCTAssertEqual(tinted.layer1, bgTint,
-                       "layer1 should be overridden by backgroundTint")
+        XCTAssertEqual(
+            tinted.layer1,
+            bgTint,
+            "layer1 should be overridden by backgroundTint"
+        )
     }
 
     func testBackgroundTintOverridesLayer3() {
@@ -88,8 +115,11 @@ final class TintedThemeColourPaletteTests: XCTestCase {
             base: basePalette, accent: accent, themeType: .light, backgroundTint: bgTint
         )
 
-        XCTAssertEqual(tinted.layer3, bgTint,
-                       "layer3 should be overridden by backgroundTint")
+        XCTAssertEqual(
+            tinted.layer3,
+            bgTint,
+            "layer3 should be overridden by backgroundTint"
+        )
     }
 
     func testBackgroundTintDoesNotOverrideLayer2() {
@@ -99,8 +129,11 @@ final class TintedThemeColourPaletteTests: XCTestCase {
             base: basePalette, accent: accent, themeType: .light, backgroundTint: bgTint
         )
 
-        XCTAssertEqual(tinted.layer2, basePalette.layer2,
-                       "layer2 should not be affected by backgroundTint")
+        XCTAssertEqual(
+            tinted.layer2,
+            basePalette.layer2,
+            "layer2 should not be affected by backgroundTint"
+        )
     }
 
     func testBackgroundTintOverridesLayerHomepage() {
@@ -112,27 +145,39 @@ final class TintedThemeColourPaletteTests: XCTestCase {
 
         // layerHomepage should be a 2-color gradient based on the background tint
         let gradientColors = tinted.layerHomepage.colors
-        XCTAssertEqual(gradientColors.count, 2,
-                       "Tinted layerHomepage should have exactly 2 gradient colors")
+        XCTAssertEqual(
+            gradientColors.count,
+            2,
+            "Tinted layerHomepage should have exactly 2 gradient colors"
+        )
         // The second color should be the background tint itself
-        XCTAssertEqual(gradientColors[1], bgTint,
-                       "Second gradient color should be the background tint")
+        XCTAssertEqual(
+            gradientColors[1],
+            bgTint,
+            "Second gradient color should be the background tint"
+        )
     }
 
     func testTintedPaletteDelegatesTextPrimary() {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertEqual(tinted.textPrimary, basePalette.textPrimary,
-                       "textPrimary should be delegated from the base palette")
+        XCTAssertEqual(
+            tinted.textPrimary,
+            basePalette.textPrimary,
+            "textPrimary should be delegated from the base palette"
+        )
     }
 
     func testTintedPaletteDelegatesShadowDefault() {
         let accent = AccentColor.red.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertEqual(tinted.shadowDefault, basePalette.shadowDefault,
-                       "shadowDefault should be delegated from the base palette")
+        XCTAssertEqual(
+            tinted.shadowDefault,
+            basePalette.shadowDefault,
+            "shadowDefault should be delegated from the base palette"
+        )
     }
 
     // MARK: - Blue Accent (Default)
@@ -143,7 +188,10 @@ final class TintedThemeColourPaletteTests: XCTestCase {
         let accent = AccentColor.blue.color(for: .light)
         let tinted = TintedThemeColourPalette(base: basePalette, accent: accent, themeType: .light)
 
-        XCTAssertEqual(tinted.actionPrimary, basePalette.actionPrimary,
-                       "Blue accent actionPrimary should match LightTheme's default actionPrimary")
+        XCTAssertEqual(
+            tinted.actionPrimary,
+            basePalette.actionPrimary,
+            "Blue accent actionPrimary should match LightTheme's default actionPrimary"
+        )
     }
 }

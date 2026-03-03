@@ -24,7 +24,7 @@ struct UnsplashWallpaperSectionView: View {
 
     @State private var photos: [UnsplashPhoto] = []
     @State private var thumbnails: [String: UIImage] = [:]
-    @State private var searchText: String = ""
+    @State private var searchText = ""
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var selectedPhotoId: String?

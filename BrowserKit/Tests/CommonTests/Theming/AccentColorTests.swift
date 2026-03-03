@@ -17,10 +17,16 @@ final class AccentColorTests: XCTestCase {
             (.orange, "orange")
         ]
         for (accent, expectedString) in presets {
-            XCTAssertEqual(accent.persistenceValue, expectedString,
-                           "\(accent) should serialize to \"\(expectedString)\"")
-            XCTAssertEqual(AccentColor.from(persistenceValue: expectedString), accent,
-                           "\"\(expectedString)\" should deserialize to \(accent)")
+            XCTAssertEqual(
+                accent.persistenceValue,
+                expectedString,
+                "\(accent) should serialize to \"\(expectedString)\""
+            )
+            XCTAssertEqual(
+                AccentColor.from(persistenceValue: expectedString),
+                accent,
+                "\"\(expectedString)\" should deserialize to \(accent)"
+            )
         }
     }
 
@@ -72,14 +78,20 @@ final class AccentColorTests: XCTestCase {
         originalColor.getHue(&origH, saturation: &origS, brightness: &origBrightness, alpha: &origA)
         adjustedColor.getHue(&adjH, saturation: &adjS, brightness: &adjBrightness, alpha: &adjA)
 
-        XCTAssertGreaterThan(adjBrightness, origBrightness,
-                             "Dark custom color should be lightened for dark mode")
+        XCTAssertGreaterThan(
+            adjBrightness,
+            origBrightness,
+            "Dark custom color should be lightened for dark mode"
+        )
     }
 
     func testSwatchColorUsesLightVariant() {
         let accent = AccentColor.red
-        XCTAssertEqual(accent.swatchColor, accent.color(for: .light),
-                       "swatchColor should match color(for: .light)")
+        XCTAssertEqual(
+            accent.swatchColor,
+            accent.color(for: .light),
+            "swatchColor should match color(for: .light)"
+        )
     }
 
     // MARK: - UIColor Hex Helpers
@@ -98,7 +110,10 @@ final class AccentColorTests: XCTestCase {
             return
         }
         let roundTripped = color.accentHexString()
-        XCTAssertEqual(roundTripped, hex,
-                       "Hex round-trip should produce the same string")
+        XCTAssertEqual(
+            roundTripped,
+            hex,
+            "Hex round-trip should produce the same string"
+        )
     }
 }
