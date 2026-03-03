@@ -5188,38 +5188,35 @@ extension BrowserViewController {
 
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        // Defer observer work to the next run loop to not compete with keyboard showing
-        DispatchQueue.main.async { [self] in
-            keyboardState = state
+        keyboardState = state
 
-            if !isSnapKitRemovalEnabled {
-                updateViewConstraints()
-            } else {
-                updateOverKeyboardContainerConstraints()
-                updateConstraintsForKeyboard()
-            }
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateOverKeyboardContainerConstraints()
+            updateConstraintsForKeyboard()
+        }
 
-            if isSwipingTabsEnabled {
-                addressToolbarContainer.hideSkeletonBars()
-            }
+        if isSwipingTabsEnabled {
+            addressToolbarContainer.hideSkeletonBars()
+        }
 
-            UIView.animate(
-                withDuration: state.animationDuration,
-                delay: 0,
-                options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
-                animations: {
-                    self.bottomContentStackView.layoutIfNeeded()
-                })
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
 
-            if isToolbarTranslucencyRefactorEnabled {
-                // When animation duration is zero the keyboard is already showing and we don't need
-                // to update the toolbar again. This is the case when we are moving between fields in a form.
-                if state.animationDuration > 0 {
-                    updateToolbarDisplay()
-                }
-            } else {
+        if isToolbarTranslucencyRefactorEnabled {
+            // When animation duration is zero the keyboard is already showing and we don't need
+            // to update the toolbar again. This is the case when we are moving between fields in a form.
+            if state.animationDuration > 0 {
                 updateToolbarDisplay()
             }
+        } else {
+            updateToolbarDisplay()
         }
     }
 
