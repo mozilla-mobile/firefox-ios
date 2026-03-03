@@ -116,6 +116,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         var scope: String { OAuthScope.relay }
     }
 
+    struct RelayConstants {
+        static let postLaunchDelay: TimeInterval = 5.0
+    }
+
     // MARK: - Properties
 
     let telemetry: RelayMaskTelemetry
@@ -282,8 +286,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - Private Utilities
 
     private func performPostLaunchUpdate() {
-        let postLaunchDelay: TimeInterval = 5.0
-        Timer.scheduledTimer(withTimeInterval: postLaunchDelay, repeats: false) { [weak self] _ in
+        let delay = RelayConstants.postLaunchDelay
+        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
             Task { @MainActor in
                 self?.updateRelayAccountStatus()

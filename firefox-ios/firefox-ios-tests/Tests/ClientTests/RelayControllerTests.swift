@@ -12,6 +12,9 @@ import Common
 
 @MainActor
 class RelayControllerTests: XCTestCase {
+    var mockAccountStatusProvider: MockRelayAccountStatusProvider!
+    var mockProfile: MockProfile!
+
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -104,14 +107,38 @@ class RelayControllerTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
 
+    func test_relayStatusUpdated_afterInitialization_noProfileAccount() {
+        let subject = createSubject(accountStatus: .unavailable)
+        mockProfile.hasSyncableAccountMock = false
+        withExtendedLifetime(subject) {
+            wait(RelayController.RelayConstants.postLaunchDelay + 1.0)
+            XCTAssertEqual(mockAccountStatusProvider.setValueCalled, 1)
+            XCTAssertEqual(mockAccountStatusProvider.wrappedValue, .unavailable)
+        }
+    }
+
+    func test_relayStatusUpdated_afterInitialization_hasValidProfileAccount() {
+        let subject = createSubject(accountStatus: .unavailable)
+        mockProfile.hasSyncableAccountMock = true
+        withExtendedLifetime(subject) {
+            wait(RelayController.RelayConstants.postLaunchDelay + 1.0)
+            XCTAssertEqual(mockAccountStatusProvider.setValueCalled, 1)
+            XCTAssertEqual(mockAccountStatusProvider.wrappedValue, .updating)
+        }
+    }
+
     // MARK: - Subject
 
     func createSubject(accountStatus: RelayAccountStatus = .unknown) -> RelayController {
+        let statusProvider = MockRelayAccountStatusProvider(mockValue: accountStatus)
+        mockAccountStatusProvider = statusProvider
+        let profile = MockProfile()
+        mockProfile = profile
         let subject =  RelayController(logger: MockLogger(),
-                                       profile: AppContainer.shared.resolve(),
+                                       profile: profile,
                                        relayClient: MockRelayClient(),
                                        relayRSClient: MockRelayRemoteSettingsClient(),
-                                       relayAccountStatusProvider: MockRelayAccountStatusProvider(mockValue: accountStatus),
+                                       relayAccountStatusProvider: statusProvider,
                                        gleanWrapper: MockGleanWrapper(),
                                        config: .prod,
                                        notificationCenter: MockNotificationCenter())
@@ -170,6 +197,7 @@ final class MockRelayClient: RelayClientProtocol {
 final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
     let mockValue: RelayAccountStatus
     var wrappedValue: RelayAccountStatus = .unknown
+    var setValueCalled = 0
 
     init(mockValue: RelayAccountStatus) {
         self.mockValue = mockValue
@@ -177,6 +205,9 @@ final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
 
     var accountStatus: RelayAccountStatus {
         get { return mockValue }
-        set { wrappedValue = newValue }
+        set {
+            wrappedValue = newValue
+            setValueCalled += 1
+        }
     }
 }
