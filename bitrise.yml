@@ -238,12 +238,21 @@ workflows:
             echo "Removing raw-xcodebuild-output.log to reduce artifact size"
             rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
 
-            echo "Keeping only one swiftlint report file"
-            # Remove one format or duplicate copies
+            echo "Removing swiftlint reports already deployed by the swiftlint workflow"
             rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.txt" || true
+            rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.xml" || true
 
             echo "Removing unit test xcresult"
-            rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator18.6-arm64.xcresult.zip"
+            rm -f "$BITRISE_DEPLOY_DIR"/Test-Fennec_UnitTest_*.xcresult.zip || true
+
+            echo "Removing testbundle.zip artifact (already available as pipeline intermediate)"
+            rm -f "$BITRISE_DEPLOY_DIR/testbundle.zip" || true
+
+            echo "Removing dSYM directories from test bundle to reduce pipeline artifact size"
+            find "$BITRISE_TEST_BUNDLE_PATH" -name "*.dSYM" -type d -exec rm -rf {} + 2>/dev/null || true
+
+            echo "Removing .bcsymbolmap files from test bundle"
+            find "$BITRISE_TEST_BUNDLE_PATH" -name "*.bcsymbolmap" -delete 2>/dev/null || true
     - deploy-to-bitrise-io@2.10.0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
