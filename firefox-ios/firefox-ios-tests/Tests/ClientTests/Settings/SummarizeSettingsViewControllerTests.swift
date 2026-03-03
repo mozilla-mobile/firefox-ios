@@ -14,19 +14,20 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
+        profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        self.profile = nil
+        profile = nil
         try await super.tearDown()
     }
 
     func test_generateSettings_withShakeFeature_hasExpectedSections() {
         let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
         mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = true
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = false
 
         let subject = createSubject(with: mockSummarizeNimbusUtils)
         let sections = subject.generateSettings()
@@ -42,6 +43,7 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     func test_generateSettings_withoutShakeFeature_hasExpectedSections() {
         let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
         mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = false
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = false
 
         let subject = createSubject(with: mockSummarizeNimbusUtils)
         let sections = subject.generateSettings()
@@ -51,6 +53,38 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         XCTAssertNil(sections.first?.title)
         XCTAssertEqual(sections.first?.children.count, 1)
         XCTAssertNil(sections.last?.title?.string)
+        XCTAssertEqual(sections.last?.children.count, 1)
+    }
+
+    func test_generateSettings_withLanguageExpansion_hasExpectedSections() {
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = false
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = true
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
+        let sections = subject.generateSettings()
+
+        XCTAssertEqual(sections.count, 2)
+        XCTAssertNil(sections.first?.title)
+        XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, "Language")
+        XCTAssertEqual(sections.last?.children.count, 1)
+    }
+
+    func test_generateSettings_withBothShakeAndLanguageExpansion_hasExpectedSections() {
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = true
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = true
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
+        let sections = subject.generateSettings()
+
+        XCTAssertEqual(sections.count, 3)
+        XCTAssertNil(sections.first?.title)
+        XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections[1].title?.string, "Gestures")
+        XCTAssertEqual(sections[1].children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, "Language")
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
@@ -85,8 +119,6 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
     private(set) var languageExpansionConfigurationCallCount = 0
     var languageExpansionConfiguration = SummarizerLanguageExpansionConfiguration(
         isFeatureEnabled: true,
-        isWebsiteDeviceLanguageSupported: true,
-        isDeviceLanguageSupported: true,
         supportedLocales: []
     )
 

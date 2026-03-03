@@ -1,4 +1,5 @@
 name: 'Focus: reference string linter'
+permissions: read-all
 on:
   push:
     branches:
@@ -15,13 +16,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: macos-15
+  check:
+    runs-on: macos-26
     strategy:
-      max-parallel: 4
       matrix:
-        xcode:
-          - "26.2"
+        xcode: ["26.2"]
+        python-version: ["3.12"]
     steps:
       - name: Clone code repository
         uses: actions/checkout@v6
@@ -35,14 +35,14 @@ jobs:
       - name: Select Xcode ${{ matrix.xcode }}
         run: |
           sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
-      - name: Set up Python 3
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
-      - name: Install Python dependencies
+          python-version: ${{ matrix.python-version }}
+      - name: Install l10n dependencies
         run: |
           pip install -r l10n_repo/.github/scripts/requirements.txt
-      - name: Run checkout script
+      - name: Run bootstrap script
         run: |
           (cd code_repo && ./bootstrap.sh focus)
       - name: Extract strings
@@ -51,7 +51,8 @@ jobs:
       - name: Check reference locale
         run: |
           (cd code_repo && moz-xliff-lint --path focus-ios/focusios-l10n/en-US --config .github/l10n/linter_config_focus.json)
-      - name: Upload artifact
+      - name: Store reference artifact
+        if: always()
         uses: actions/upload-artifact@v6
         with:
           name: focus-xliff-file

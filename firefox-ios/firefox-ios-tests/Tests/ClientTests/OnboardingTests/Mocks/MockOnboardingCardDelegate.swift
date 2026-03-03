@@ -22,7 +22,8 @@ class MockOnboardingCardDelegateController: UIViewController,
         profile: MockProfile(),
         model: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
         telemetryUtility: OnboardingTelemetryUtility(
-            with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)))
+            with: NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall),
+            onboardingReason: .newUser))
     var didFinishFlow: (() -> Void)?
     var themeManager: ThemeManager = AppContainer.shared.resolve()
     var themeListenerCancellable: Any?

@@ -18,12 +18,6 @@ protocol ContentContainable: UIViewController {
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView, FeatureFlaggable {
-    var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
-
-    private var isSwipingTabsEnabled: Bool {
-        return toolbarHelper.isSwipingTabsEnabled
-    }
-
     private var type: ContentType?
     private(set) var contentController: ContentContainable?
 

@@ -22,7 +22,7 @@ def version_bump_task(config, tasks):
             # We need to default to major here so taskgraph full can produce a valid task
             behavior = config.params.get("merge_config", {}).get("behavior", "major")
             if behavior == "major":
-                version_string = f"release/v{version.major_number}"
+                version_string = f"release/v{version.major_number}.0"
                 version = version.bump("major_number")
             elif behavior == "minor":
                 version_string = f"release/v{version.major_number}.{version.minor_number}"

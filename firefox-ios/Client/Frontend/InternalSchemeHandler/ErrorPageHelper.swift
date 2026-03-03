@@ -13,6 +13,7 @@ private let MozDomain = "mozilla"
 private let MozErrorDownloadsNotEnabled = 100
 private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
+private let ErrorPageBadCertParam = "badcert"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
@@ -36,11 +37,10 @@ private let LegacyCertErrorCodes = [
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if let encodedCert = components?.queryItems?.first(where: { $0.name == "badcert" })?.value,
+        if let encodedCert = components?.queryItems?.first(where: { $0.name == ErrorPageBadCertParam })?.value,
             let certData = Data(base64Encoded: encodedCert, options: []) {
             return SecCertificateCreateWithData(nil, certData as CFData)
         }
-
         return nil
     }
 
@@ -51,7 +51,6 @@ private func certFromErrorURL(_ url: URL) -> SecCertificate? {
 
     // Fallback case when the error url is nested, this happens when restoring an error url,
     // it will be inside a 'sessionrestore' url.
-    // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
     if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
         return getCert(url)
     }
@@ -321,7 +320,7 @@ class ErrorPageHelper {
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
             let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int {
             let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
-            queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
+            queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
 
             let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
             queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))

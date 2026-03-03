@@ -24,13 +24,14 @@ final class PrivateHomepageViewController: UIViewController,
                                            FeatureFlaggable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
-        static let defaultScrollContainerPadding: CGFloat = 16
+        static let scrollContainerTopPadding: CGFloat = 32
+        static let scrollContainerBottomPadding: CGFloat = 16
         private static let iPadScrollContainerPadding: CGFloat = 164
 
         @MainActor
         static func scrollContainerPadding(with traitCollection: UITraitCollection) -> CGFloat {
             let isiPad = UIDevice.current.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
-            return isiPad ? UX.iPadScrollContainerPadding : UX.defaultScrollContainerPadding
+            return isiPad ? UX.iPadScrollContainerPadding : UX.scrollContainerTopPadding
         }
     }
 
@@ -165,9 +166,9 @@ final class PrivateHomepageViewController: UIViewController,
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
             scrollContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
-                                                 constant: UX.defaultScrollContainerPadding),
+                                                 constant: UX.scrollContainerTopPadding),
             scrollContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-                                                    constant: -UX.defaultScrollContainerPadding),
+                                                    constant: -UX.scrollContainerBottomPadding),
         ])
 
         setupConstraintsForMultitasking()

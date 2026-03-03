@@ -6,22 +6,20 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 10 * * 1'
-  workflow_dispatch: {}
+    - cron: '0 10 * * MON'
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: macos-15
+  import:
+    runs-on: macos-26
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.12]
         xcode: ["26.2"]
+        python-version: ["3.12"]
     steps:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
-        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
@@ -43,7 +41,7 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: focus-string-import-${{ env.current_date }}
-        title: "Add FOCUS [Localization] String import ${{ env.current_date }}"
+        title: "Localize FOCUS [Strings] Import l10n from ${{ env.current_date }}"
         branch: focus-string-import-${{ env.current_date }}
-        body: "This (automated) PR import string changes"
+        body: "This automated PR imports Focus l10n string changes"
         labels: Needs Landing

@@ -394,6 +394,9 @@
 /* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.MoreOptions.Title.v141" = "കൂടുതല്‍";
 
+/* On the main menu, the title for the action that will show the reader view for the webpage. */
+"MainMenu.ToolsSection.ReaderView.Title.v149" = "വായന കാഴ്ച";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "കരുതിവയ്ക്കുക";
 

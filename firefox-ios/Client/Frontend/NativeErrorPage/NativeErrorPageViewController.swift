@@ -6,6 +6,7 @@ import Foundation
 import Common
 import ComponentLibrary
 import Redux
+import Shared
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
@@ -23,6 +24,8 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private var overlayManager: OverlayModeManager
+    private let tabManager: TabManager
+    private let logger: Logger
     var contentType: ContentType = .nativeErrorPage
     private var nativeErrorPageState: NativeErrorPageState
 
@@ -128,16 +131,20 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
-    init(
+   init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        tabManager: TabManager,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
+        self.tabManager = tabManager
+        self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
 
         super.init(
@@ -336,6 +343,51 @@ final class NativeErrorPageViewController: UIViewController,
                 )
             )
         }
+    }
+
+    @objc
+    private func didTapViewCertificate() {
+        guard let selectedTab = tabManager.selectedTab,
+              let errorURL = selectedTab.webView?.url,
+              let internalURL = InternalURL(errorURL),
+              internalURL.isErrorPage else { return }
+        let originalURL = nativeErrorPageState.url ?? internalURL.originalURLFromErrorPage ?? errorURL
+        guard !CertificateHelper.certificatesFromErrorURL(errorURL, logger: logger).isEmpty else { return }
+
+        let destination = NavigationDestination(
+            .certificatesFromErrorPage,
+            url: originalURL,
+            errorPageURL: errorURL,
+            certificateTitle: nativeErrorPageState.title
+        )
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage
+            )
+        )
+    }
+
+    @objc
+    private func didTapLearnMore() {
+        guard let url = SupportUtils.URLForTopic("what-does-your-connection-is-not-secure-mean") else {
+            logger.log(
+                "NativeErrorPage: Unable to create Learn More support URL",
+                level: .warning,
+                category: .lifecycle
+            )
+            return
+        }
+
+        let destination = NavigationDestination(.nativeErrorPageLearnMore, url: url)
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: destination,
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnNativeErrorPageLearnMore
+            )
+        )
     }
 
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {

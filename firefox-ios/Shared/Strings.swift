@@ -3077,12 +3077,6 @@ extension String {
                     value: "Preferred App Language",
                     comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
                 )
-                public static let PickerButtonAccessibilityLabel = MZLocalizedString(
-                    key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
-                    tableName: "Settings",
-                    value: "Pick a language",
-                    comment: "The accessibility label for the language picker button in the Summarize settings."
-                )
             }
         }
 
@@ -6170,6 +6164,24 @@ extension String {
                 value: "Trackers blocked: %@",
                 comment: "Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked.")
 
+            public static let trackersBlockedStandardModeFooterText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150",
+                tableName: "EnhancedTrackingProtection",
+                value: "Standard blocks common trackers after a page starts loading, so you may see a higher tracker count. %@",
+                comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
+
+            public static let trackersBlockedStrictModeFooterText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150",
+                tableName: "EnhancedTrackingProtection",
+                value: "Strict blocks more trackers by stopping them before a page loads, so you may see a lower tracker count. %@",
+                comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
+
+            public static let trackersBlockedFooterTextLink = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Link.LearnMore.v150",
+                tableName: "EnhancedTrackingProtection",
+                value: "Learn more",
+                comment: "Title for a link that explains how current Tracking Protection mode work.")
+
             public static let noTrackersLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131",
                 tableName: "EnhancedTrackingProtection",
@@ -8879,6 +8891,14 @@ extension String {
                 tableName: "Onboarding",
                 value: "Say goodbye to creepy trackers",
                 comment: "Title for the welcome card in the v148 brand refresh onboarding flow.")
+        }
+        struct v149 {
+            public static let PickerButtonAccessibilityLabel = MZLocalizedString(
+                key: "Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149",
+                tableName: "Settings",
+                value: "Pick a language",
+                comment: "The accessibility label for the language picker button in the Summarize settings."
+            )
         }
     }
 }

@@ -159,9 +159,16 @@ class BrowserViewController: UIViewController,
 
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
-    var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
+    var overKeyboardContainerConstraint: ConstraintReference?
+    var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+
+    // Other constraints
+    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
+    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
+    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -668,11 +675,11 @@ class BrowserViewController: UIViewController,
     func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
         guard let newSearchBarPosition else { return }
 
-        let newPositionIsBottom = newSearchBarPosition == .bottom
-        let newParent = newPositionIsBottom ? overKeyboardContainer : header
+        isBottomSearchBar = newSearchBarPosition == .bottom
+        let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
-        addressToolbarContainer.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
+        addressToolbarContainer.addToParent(parent: newParent, addToTop: !isBottomSearchBar)
 
         if isSwipingTabsEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -680,10 +687,9 @@ class BrowserViewController: UIViewController,
 
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
-            readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
+            readerModeBar.addToParent(parent: newParent, addToTop: isBottomSearchBar)
         }
 
-        isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
@@ -700,6 +706,8 @@ class BrowserViewController: UIViewController,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
         updateSwipingTabs()
+
+        searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
@@ -992,7 +1000,7 @@ class BrowserViewController: UIViewController,
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            if !isMinimalAddressBarEnabled { scrollController.showToolbars(animated: false) }
+            scrollController.showToolbars(animated: false)
         }
 
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
@@ -1767,6 +1775,10 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+
+            setupBottomContainerConstraints()
+            setupBottomContentStackViewConstraints()
+            setupOverKeyboardContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1801,6 +1813,77 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
+
+    private func setupBottomContainerConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        NSLayoutConstraint.activate([
+            bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        constraint.isActive = true
+        let constraintReference = ConstraintReference(native: constraint)
+
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.bottomContainerConstraint = constraintReference
+        }
+        bottomContainerConstraint = constraintReference
+    }
+
+    private func setupOverKeyboardContainerConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        NSLayoutConstraint.activate([
+            overKeyboardContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            overKeyboardContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        let constraint = overKeyboardContainer.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor)
+        constraint.isActive = true
+        let constraintReference = ConstraintReference(native: constraint)
+
+        if let scrollController = scrollController as? LegacyTabScrollProvider {
+            scrollController.overKeyboardContainerConstraint = constraintReference
+        }
+        overKeyboardContainerConstraint = constraintReference
+
+        overKeyboardContainerTopZoomHeightConstraint = overKeyboardContainer.heightAnchor.constraint(
+            greaterThanOrEqualToConstant: 0
+        )
+        overKeyboardContainerTopHeightConstraint = overKeyboardContainer.heightAnchor.constraint(
+            equalToConstant: 0
+        )
+    }
+
+    private func setupBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else { return }
+
+        NSLayoutConstraint.activate([
+            bottomContentStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomContentStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+
+            // Height is set by content - this removes run time error
+            bottomContentStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0),
+        ])
+
+        // caps with less than equals bounds above the toolbar/safeArea
+        bottomContentMaxBottomConstraints = [
+            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: overKeyboardContainer.topAnchor),
+            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ]
+        // pins the view with equal exactly above the keyboard when it is visible.
+        bottomContentStackViewKeyboardConstraint = bottomContentStackView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor
+        )
+        // This is the fallback, pins the view with equal to safeArea bottom when keyboard and navigation toolbar is hidden
+        bottomContentStackViewBasicConstraint = bottomContentStackView.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor
+        )
+
+        bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+    }
+
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
             browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
@@ -1847,30 +1930,57 @@ class BrowserViewController: UIViewController,
         }
 
         updateOverKeyboardContainerConstraints()
-        updateBottomContainerConstraints()
-        updateBottomContentStackViewConstraints()
+        updateSnapKitBottomContainerConstraints()
         updateConstraintsForKeyboard()
+        updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
     }
 
-    private func updateBottomContainerConstraints() {
+    private func updateSnapKitBottomContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
+
             if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                scrollController.bottomContainerConstraint = constraintReference
             } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+                bottomContainerConstraint = constraintReference
             }
             make.leading.trailing.equalTo(view)
         }
     }
 
     func updateOverKeyboardContainerConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitOverKeyboardContainerConstraints()
+            return
+        }
+
+        if !isBottomSearchBar, zoomPageBar != nil {
+            overKeyboardContainerTopZoomHeightConstraint?.isActive = true
+            overKeyboardContainerTopHeightConstraint?.isActive = false
+        } else if !isBottomSearchBar {
+            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
+            overKeyboardContainerTopHeightConstraint?.isActive = true
+        } else {
+            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
+            overKeyboardContainerTopHeightConstraint?.isActive = false
+        }
+    }
+
+    private func updateSnapKitOverKeyboardContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
             } else {
-                overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
             }
 
             if !isBottomSearchBar, zoomPageBar != nil {
@@ -1882,21 +1992,65 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateBottomContentStackViewConstraints() {
+    private func updateSnapKitBottomContentStackViewConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
+            adjustSnapKitBottomContentStackView(remake)
         }
     }
 
-    func updateConstraintsForKeyboard() {
+    private func updateBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitBottomContentStackViewConstraints()
+            return
+        }
+
+        // Deactivate all mutually exclusive constraints before activating the appropriate one.
+        NSLayoutConstraint.deactivate(bottomContentMaxBottomConstraints)
+        bottomContentStackViewKeyboardConstraint?.isActive = false
+        bottomContentStackViewBasicConstraint?.isActive = false
+
+        if isBottomSearchBar {
+            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
+            if !isToolbarTranslucencyRefactorEnabled {
+                view.layoutIfNeeded()
+            }
+        } else if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
+            bottomContentStackViewKeyboardConstraint?.constant = -keyboardHeight
+            bottomContentStackViewKeyboardConstraint?.isActive = true
+        } else if !navigationToolbarContainer.isHidden {
+            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
+        } else {
+            bottomContentStackViewBasicConstraint?.isActive = true
+        }
+    }
+
+    private func updateSnapkitConstraintsForKeyboard() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true)
+            scrollController.hideToolbars(animated: false)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    func updateConstraintsForKeyboard() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapkitConstraintsForKeyboard()
+            return
+        }
+
+        guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
+            adjustBottomSearchBarForKeyboard()
+            return
+        }
+    }
+
+    private func adjustSnapKitBottomContentStackView(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
@@ -1907,13 +2061,15 @@ class BrowserViewController: UIViewController,
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         if isBottomSearchBar {
-            adjustBottomContentBottomSearchBar(remake)
+            adjustSnapKitBottomContentBottomSearchBar(remake)
         } else {
-            adjustBottomContentTopSearchBar(remake)
+            adjustSnapKitBottomContentTopSearchBar(remake)
         }
     }
 
-    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !navigationToolbarContainer.isHidden {
@@ -1924,7 +2080,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         if !isToolbarTranslucencyRefactorEnabled {
@@ -1933,13 +2091,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
-        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+        let isKeyboardVisible = keyboardHeight > 0
 
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else {
-            guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
+            guard isBottomSearchBar, isKeyboardVisible else {
                 overKeyboardContainer.removeKeyboardSpacer()
                 return
             }
@@ -1953,7 +2111,7 @@ class BrowserViewController: UIViewController,
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
 
-        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
+        guard isBottomSearchBar, isKeyboardVisible else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -2893,6 +3051,32 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
+        case .certificatesFromErrorPage:
+            guard let errorPageURL = type.errorPageURL,
+                  let originalURL = type.url,
+                  let title = type.certificateTitle else {
+                logger.log(
+                    "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.showCertificatesFromErrorPage(
+                errorPageURL: errorPageURL,
+                originalURL: originalURL,
+                title: title
+            )
+        case .nativeErrorPageLearnMore:
+            guard let url = type.url else {
+                logger.log(
+                    "url should not be nil when navigating for nativeErrorPageLearnMore",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
         }
     }
 
@@ -4689,9 +4873,9 @@ extension BrowserViewController: TabManagerDelegate {
             navigationHandler?.removeDocumentLoading()
         }
 
-        // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
-        // and having multiple views with the same label confuses tests.
-        if let previousWebView = previousTab?.webView {
+        // Remove the old accessibilityLabel only when the selected tab isn't the previous tab.
+        // When the previous webview isn't visible anymore we ensure proper clean up for tests.
+        if let previousWebView = previousTab?.webView, selectedTab != previousTab {
             previousWebView.endEditing(true)
             previousWebView.accessibilityLabel = nil
             previousWebView.accessibilityElementsHidden = true

@@ -560,7 +560,7 @@ extension PreviewModel {
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
+            onComplete: { _, _ in }
         )
     )
 }
@@ -576,7 +576,7 @@ extension PreviewModel {
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
+            onComplete: { _, _ in }
         )
     )
     .preferredColorScheme(.dark)
@@ -593,7 +593,7 @@ extension PreviewModel {
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
+            onComplete: { _, _ in }
         )
     )
 }
@@ -609,7 +609,7 @@ extension PreviewModel {
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
+            onComplete: { _, _ in }
         )
     )
 }
