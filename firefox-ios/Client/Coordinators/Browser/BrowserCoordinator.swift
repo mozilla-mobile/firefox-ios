@@ -16,7 +16,7 @@ import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
 import ComponentLibrary
 
-class BrowserCoordinator: BaseCoordinator,
+final class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
                           SettingsCoordinatorDelegate,
@@ -1008,6 +1008,8 @@ class BrowserCoordinator: BaseCoordinator,
         } else {
             present(navigationController)
         }
+        guard browserViewController.isAppStoreReviewTriggerEnabled else { return }
+        browserViewController.ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     // This implementation of present is specifically for the animation on .tabTrayUIExperiments
