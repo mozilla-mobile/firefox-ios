@@ -170,8 +170,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
         DispatchQueue.main.async {
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+            let collectionView = panelViewController.tabDisplayView.collectionView
+            guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
                   let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
             else {
                 context.containerView.addSubview(destinationController.view)
@@ -184,10 +184,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             let theme = self.retrieveTheme()
 
             if let indexPath = dataSource.indexPath(for: item) {
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
                 // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
-                cv.layoutIfNeeded()
-                if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                collectionView.layoutIfNeeded()
+                if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
                     tabCell = cell
                     cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
                     cell.isHidden = true
@@ -196,8 +196,8 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 }
             }
             // Animate
-            cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.halfAlpha
+            collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+            collectionView.alpha = UX.halfAlpha
 
             destinationController.view.frame = finalFrame
             destinationController.view.layoutIfNeeded()
@@ -205,7 +205,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 cellFrame: cellFrame,
                 tabCell: tabCell,
                 bvcSnapshot: bvcSnapshot,
-                collectionView: cv,
+                collectionView: collectionView,
                 backgroundView: backgroundView,
                 context: context,
                 selectedTab: selectedTab,
