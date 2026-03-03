@@ -36,7 +36,7 @@ extension ToolbarButtonCaching {
 
         if let cachedButton = cachedButtonReferences[cacheKey] {
             button = cachedButton
-        }  else {
+        } else {
             if toolbarElement.iconName == nil &&
                 toolbarElement.numberOfTabs != nil {
                 button = StackedTabButton()

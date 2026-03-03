@@ -101,9 +101,13 @@ final class StackedTabButton: ToolbarButton {
         let colors = theme.colors
         let gradientColors: [CGColor] = colors.layerGradientURL.cgColors.reversed()
         let borderColor = colors.borderPrimary.withAlphaComponent(0.65).cgColor
-        bottomImageViewGradient.colors = gradientColors
-        topImageViewGradient.colors = gradientColors
-        bottomImageView.layer.borderColor = borderColor
+
+        topImageView.backgroundColor = colors.layer1
         topImageView.layer.borderColor = borderColor
+        topImageViewGradient.colors = gradientColors
+
+        bottomImageView.backgroundColor = colors.layer1
+        bottomImageView.layer.borderColor = borderColor
+        bottomImageViewGradient.colors = gradientColors
     }
 }

@@ -162,7 +162,7 @@ class ToolbarButton: UIButton,
     }
 
     private func addBadgeIcon(imageName: String) {
-        badgeImageView = .build(nil,{ UIImageView(image: UIImage(named: imageName)) })
+        badgeImageView = .build(nil, { UIImageView(image: UIImage(named: imageName))})
         guard let badgeImageView else { return }
 
         badgeContainerView().addSubview(badgeImageView)
@@ -170,7 +170,7 @@ class ToolbarButton: UIButton,
     }
 
     private func addMaskIcon(maskImageName: String) {
-        maskImageView = .build(nil,{ UIImageView(image: UIImage(named: maskImageName)) })
+        maskImageView = .build(nil, { UIImageView(image: UIImage(named: maskImageName))})
         guard let maskImageView, let badgeImageView else { return }
 
         badgeContainerView().addSubview(maskImageView)
