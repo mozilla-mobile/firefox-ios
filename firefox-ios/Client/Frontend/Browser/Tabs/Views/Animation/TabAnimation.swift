@@ -61,7 +61,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         level: .warning,
         category: .tabs
             )
-            context.completeTransition(true)
+            context.completeTransition(false)
             return
         }
 
@@ -70,6 +70,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             logger.log("Attempted to present the tab tray without having a selected tab",
                        level: .warning,
                        category: .tabs)
+            context.containerView.addSubview(destinationController.view)
             context.completeTransition(true)
             return
         }
@@ -143,6 +144,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        guard let panel = currentExperimentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
+        else {
+            context.containerView.addSubview(destinationController.view)
+            context.completeTransition(true)
+            return
+        }
+
         let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = browserVC.view.frame
@@ -158,16 +167,17 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         context.containerView.addSubview(backgroundView)
         context.containerView.addSubview(bvcSnapshot)
 
-        guard let panel = currentExperimentPanel as? ThemedNavigationController,
-              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-        else { return }
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
         DispatchQueue.main.async {
             let cv = panelViewController.tabDisplayView.collectionView
             guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
                   let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
+            else {
+                context.containerView.addSubview(destinationController.view)
+                context.completeTransition(true)
+                return
+            }
 
             var tabCell: ExperimentTabCell?
             var cellFrame: CGRect?
