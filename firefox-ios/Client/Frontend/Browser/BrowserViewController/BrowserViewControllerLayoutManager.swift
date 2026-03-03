@@ -153,15 +153,15 @@ final class BrowserViewControllerLayoutManager {
     // MARK: - Bottom Container Updates
 
     func updateOverKeyboardContainerConstraints(isBottomSearchBar: Bool, hasZoomPageBar: Bool) {
-        if !isBottomSearchBar, hasZoomPageBar {
+        overKeyboardContainerTopZoomHeightConstraint?.isActive = false
+        overKeyboardContainerTopHeightConstraint?.isActive = false
+
+        guard !isBottomSearchBar else { return }
+
+        if hasZoomPageBar {
             overKeyboardContainerTopZoomHeightConstraint?.isActive = true
-            overKeyboardContainerTopHeightConstraint?.isActive = false
-        } else if !isBottomSearchBar {
-            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
-            overKeyboardContainerTopHeightConstraint?.isActive = true
         } else {
-            overKeyboardContainerTopZoomHeightConstraint?.isActive = false
-            overKeyboardContainerTopHeightConstraint?.isActive = false
+            overKeyboardContainerTopHeightConstraint?.isActive = true
         }
     }
 
