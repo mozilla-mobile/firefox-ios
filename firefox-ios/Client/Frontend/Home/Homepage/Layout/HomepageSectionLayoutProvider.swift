@@ -551,9 +551,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
-        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
-        // collection view height
-        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
+        // If something went wrong with our availableContentHeight calculation in BVC, or the value has not been
+        // initialized yet, fall back to the actual collection view height.
+        let availableContentHeight = homepageState?.availableContentHeight ?? 0
+        let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
 
         // Calculate each individual sections height
         // Note: If showing vertical stories, no need to calculate stories height, since that is handled by
@@ -567,7 +568,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         // Calculate the spacer height, which is determined by the total height available minus the height of each section
-        let rawSpacerHeight = availableContentHeight
+        let rawSpacerHeight = height
             - UX.topSpacing
             - headerLogoHeight
             - privacyNoticeHeight
