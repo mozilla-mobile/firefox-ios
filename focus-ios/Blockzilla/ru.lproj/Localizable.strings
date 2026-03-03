@@ -59,7 +59,7 @@
 "Authentication.reason" = "Аутентифицируйтесь для возврата в %@";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Добавить пользовательский URL";
+"Autocomplete.addCustomUrl" = "Добавить свой URL";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "Внимательно проверьте введённый URL.";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlPlaceholder" = "Вставьте или введите URL";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ Добавить пользовательский URL";
+"Autocomplete.addCustomUrlWithPlus" = "+ добавить свой URL";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Новый пользовательский URL добавлен.";
