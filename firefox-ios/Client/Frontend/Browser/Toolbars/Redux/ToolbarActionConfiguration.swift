@@ -41,6 +41,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var hasHighlightedColor = true
     var largeContentTitle: String?
     var contextualHintType: String?
+    var previousTabScreenshot: UIImage?
+    var nextTabScreenshot: UIImage?
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

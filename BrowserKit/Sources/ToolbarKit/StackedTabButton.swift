@@ -6,25 +6,29 @@ import UIKit
 import Common
 
 final class StackedTabButton: ToolbarButton {
-    private let bottomImageView = UIImageView()
-    private let topImageView = UIImageView()
-
-    var topImage: UIImage? {
-        didSet { topImageView.image = topImage }
+    // MARK: - UX Constants
+    private struct UX {
+        static let tabImageViewSize: CGSize = .init(width: 27, height: 27)
+        static let tabImageViewCornerRadius: CGFloat = 4
+        static let tabImageViewBorderWidth: CGFloat = 0.5
+        static let bottomImageViewAngle: CGFloat = 10 * .pi / 180
+        static let topImageViewAngle: CGFloat = -4 * .pi / 180
+        static let bottomImageViewConstant: CGFloat = -6
+        static let topImageViewConstant: CGFloat = 5
     }
 
-    var bottomImage: UIImage? {
-        didSet { bottomImageView.image = bottomImage }
-    }
-
+    // MARK: - UI Elements
+    private lazy var bottomImageView = makeTabImageView()
+    private lazy var topImageView = makeTabImageView()
     private lazy var bottomImageViewGradient = CAGradientLayer()
+    private lazy var topImageViewGradient = CAGradientLayer()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        setupGradient(bottomImageViewGradient)
-        bottomImageView.layer.insertSublayer(bottomImageViewGradient, at: 0)
+        setupGradient(bottomImageViewGradient, for: bottomImageView)
+        setupGradient(topImageViewGradient, for: topImageView)
     }
 
     @MainActor
@@ -32,60 +36,74 @@ final class StackedTabButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Layout
-    private func setupLayout() {
-        bottomImageView.contentMode = .scaleAspectFit
-        bottomImageView.clipsToBounds = true
-        bottomImageView.translatesAutoresizingMaskIntoConstraints = false
-
-        topImageView.contentMode = .scaleAspectFill
-        topImageView.clipsToBounds = true
-        topImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(bottomImageView)
-        addSubview(topImageView)
-
-        topImageView.backgroundColor = .systemRed
-        topImageView.layer.cornerRadius = 4
-        bottomImageView.layer.cornerRadius = 4
-        bottomImageView.layer.borderWidth = 0.5
-        topImageView.layer.borderWidth = 0.5
-
-        NSLayoutConstraint.activate([
-            bottomImageView.widthAnchor.constraint(equalToConstant: 27),
-            bottomImageView.heightAnchor.constraint(equalToConstant: 27),
-
-            bottomImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-            bottomImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -6),
-
-            topImageView.widthAnchor.constraint(equalToConstant: 27),
-            topImageView.heightAnchor.constraint(equalToConstant: 27),
-            topImageView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            topImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5)
-        ])
-
-        bottomImageView.transform = CGAffineTransform(rotationAngle: 10 * .pi / 180)
-        topImageView.transform = CGAffineTransform(rotationAngle: -4 * .pi / 180)
-
+    override func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        super.configure(element: element)
+        setImage(element.nextTabScreenshot, for: topImageView, gradient: topImageViewGradient)
+        setImage(element.previousTabScreenshot, for: bottomImageView, gradient: bottomImageViewGradient)
     }
 
-    private func setupGradient(_ gradient: CAGradientLayer) {
-        gradient.startPoint = CGPoint(x: 0.5, y: 0)
-        gradient.endPoint = CGPoint(x: 0.5, y: 1)
-      }
-
+    // MARK: - Layout
     override func layoutSubviews() {
         super.layoutSubviews()
         bottomImageViewGradient.frame = bottomImageView.bounds
+        topImageViewGradient.frame = topImageView.bounds
     }
 
+    private func setupLayout() {
+        addSubviews(bottomImageView, topImageView)
 
-    // MARK: - ThemeApplicable
-    override func applyTheme(theme: any Theme) {
-//        bottomImageView.layer.borderColor = theme.colors.s
-        if topImage == nil {
-            bottomImageViewGradient.colors = theme.colors.layerGradientURL.cgColors.reversed()
+        NSLayoutConstraint.activate([
+            bottomImageView.widthAnchor.constraint(equalToConstant: UX.tabImageViewSize.width),
+            bottomImageView.heightAnchor.constraint(equalToConstant: UX.tabImageViewSize.height),
+            bottomImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UX.bottomImageViewConstant),
+            bottomImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.bottomImageViewConstant),
+
+            topImageView.widthAnchor.constraint(equalToConstant: UX.tabImageViewSize.width),
+            topImageView.heightAnchor.constraint(equalToConstant: UX.tabImageViewSize.height),
+            topImageView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topImageViewConstant),
+            topImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.topImageViewConstant),
+        ])
+
+        bottomImageView.transform = CGAffineTransform(rotationAngle: UX.bottomImageViewAngle)
+        topImageView.transform = CGAffineTransform(rotationAngle: UX.topImageViewAngle)
+    }
+
+    private func setupGradient(_ gradient: CAGradientLayer, for imageView: UIImageView) {
+        gradient.startPoint = CGPoint(x: 0.5, y: 0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        imageView.layer.insertSublayer(gradient, at: 0)
+    }
+
+    private func setImage(_ image: UIImage?, for imageView: UIImageView, gradient: CAGradientLayer) {
+        imageView.alpha = 0
+        imageView.image = image
+        gradient.opacity = image == nil ? 1 : 0
+        UIView.animate(withDuration: 0.2) { imageView.alpha = 1 }
+    }
+
+    // MARK: - Helpers
+    private func makeTabImageView() -> UIImageView {
+        return .build {
+            $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
+            /// Prevents the border from appearing pixelated due to the rotation transform applied to the image view.
+            $0.layer.allowsEdgeAntialiasing = true
+            $0.layer.cornerRadius = UX.tabImageViewCornerRadius
+            $0.layer.borderWidth = UX.tabImageViewBorderWidth
         }
     }
 
+    // MARK: - ThemeApplicable
+    override func applyTheme(theme: any Theme) {
+        let colors = theme.colors
+        let gradientColors: [CGColor] = colors.layerGradientURL.cgColors.reversed()
+        let borderColor = colors.borderPrimary.withAlphaComponent(0.65).cgColor
+        bottomImageViewGradient.colors = gradientColors
+        topImageViewGradient.colors = gradientColors
+        bottomImageView.layer.borderColor = borderColor
+        topImageView.layer.borderColor = borderColor
+    }
 }

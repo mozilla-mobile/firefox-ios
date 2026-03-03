@@ -127,16 +127,11 @@ class ToolbarButton: UIButton,
         largeContentImage = image
 
         configuration = config
+        removeBadgeAndMaskFromSuperview()
         if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
             if let maskImageName = element.maskImageName {
                 addMaskIcon(maskImageName: maskImageName)
-            }
-        } else {
-            // Remove badge & mask icons
-            imageView?.subviews.forEach { view in
-                guard view is UIImageView else { return }
-                view.removeFromSuperview()
             }
         }
         layoutIfNeeded()
@@ -167,30 +162,33 @@ class ToolbarButton: UIButton,
     }
 
     private func addBadgeIcon(imageName: String) {
-        badgeImageView = UIImageView(image: UIImage(named: imageName))
-        guard let badgeImageView, configuration?.image != nil else { return }
-        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
+        badgeImageView = .build(nil,{ UIImageView(image: UIImage(named: imageName)) })
+        guard let badgeImageView else { return }
 
-        imageView?.addSubview(badgeImageView)
+        badgeContainerView().addSubview(badgeImageView)
         applyBadgeConstraints(to: badgeImageView)
     }
 
     private func addMaskIcon(maskImageName: String) {
-        maskImageView = UIImageView(image: UIImage(named: maskImageName))
+        maskImageView = .build(nil,{ UIImageView(image: UIImage(named: maskImageName)) })
         guard let maskImageView, let badgeImageView else { return }
-        maskImageView.translatesAutoresizingMaskIntoConstraints = false
 
+        badgeContainerView().addSubview(maskImageView)
         maskImageView.addSubview(badgeImageView)
-        imageView?.addSubview(maskImageView)
         applyBadgeConstraints(to: maskImageView)
     }
 
     private func applyBadgeConstraints(to imageView: UIImageView) {
-        NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
-            imageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height),
+        let positionConstraints: [NSLayoutConstraint] = configuration?.image != nil ? [
             imageView.leadingAnchor.constraint(equalTo: centerXAnchor),
             imageView.bottomAnchor.constraint(equalTo: centerYAnchor)
+        ] : [
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(positionConstraints + [
+            imageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
+            imageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height)
         ])
     }
 
@@ -244,6 +242,18 @@ class ToolbarButton: UIButton,
         lastIconName = element.iconName
 
         return element.isFlippedForRTL ? image.imageFlippedForRightToLeftLayoutDirection() : image
+    }
+
+    // MARK: - Helpers
+    private func badgeContainerView() -> UIView {
+        return configuration?.image != nil ? (imageView ?? self) : self
+    }
+
+    private func removeBadgeAndMaskFromSuperview() {
+        badgeImageView?.removeFromSuperview()
+        maskImageView?.removeFromSuperview()
+        badgeImageView = nil
+        maskImageView = nil
     }
 
     // MARK: - Loading Icon for Translation Button
