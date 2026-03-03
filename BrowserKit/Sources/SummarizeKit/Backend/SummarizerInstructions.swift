@@ -107,7 +107,7 @@ enum SummarizerModelInstructionsLanguageAware {
 
     static let defaultRecipeInstructions = """
     The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
-    vocabulary, and cultural context.
+    vocabulary, and cultural context. You MUST translate all the headers with user's locale.
     You are an expert at creating mobile-optimized recipe summaries.
     Format exactly as shown below. Do not add any closing phrases.
     If a field is null or empty, omit that line.

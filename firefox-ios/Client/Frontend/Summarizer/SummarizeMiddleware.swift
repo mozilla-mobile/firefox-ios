@@ -7,7 +7,9 @@ import Redux
 import SummarizeKit
 import WebKit
 
+/// Creates summarizer configuration from a web view.
 protocol SummarizerConfigFactory: Sendable {
+    /// Returns config if summarization is possible, nil otherwise (e.g., unsupported language, feature disabled).
     func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig?
 }
 
