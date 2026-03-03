@@ -101,6 +101,7 @@ final class SettingsCoordinator: BaseCoordinator,
         }
     }
 
+    // swiftlint:disable:next function_body_length
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .appIcon:
@@ -224,7 +225,8 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .translation:
             return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
-        case .general, .rateApp: return nil // Return nil since we're already at the general page
+        case .general, .rateApp:
+            return nil // Return nil since we're already at the general page
         }
     }
 

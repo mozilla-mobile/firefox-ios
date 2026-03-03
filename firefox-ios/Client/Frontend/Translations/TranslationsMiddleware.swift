@@ -93,7 +93,7 @@ final class TranslationsMiddleware {
             Task { @MainActor in
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await modelsFetcher.fetchSupportedTargetLanguages()
-                let languages = await manager.preferredLanguages(supportedTargetLanguages: supported)
+                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
                 store.dispatch(GeneralBrowserAction(
                     buttonTapped: capturedButton,
                     translationLanguages: languages,

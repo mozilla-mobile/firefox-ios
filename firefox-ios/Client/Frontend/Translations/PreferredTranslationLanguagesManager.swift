@@ -10,6 +10,7 @@ import Shared
 ///
 /// - Device language is always the first entry and cannot be removed.
 /// - On first access, auto-populates from `Locale.preferredLanguages` intersected with `supportedTargetLanguages`.
+@MainActor
 final class PreferredTranslationLanguagesManager {
     private let prefs: Prefs
     private let logger: Logger
@@ -21,7 +22,7 @@ final class PreferredTranslationLanguagesManager {
 
     /// Returns the stored preferred language list, populating it on the first call if needed.
     /// `supportedTargetLanguages` is the authoritative list of languages we can translate TO.
-    func preferredLanguages(supportedTargetLanguages: [String]) async -> [String] {
+    func preferredLanguages(supportedTargetLanguages: [String]) -> [String] {
         if let stored = loadStoredLanguages(), !stored.isEmpty {
             return stored
         }
