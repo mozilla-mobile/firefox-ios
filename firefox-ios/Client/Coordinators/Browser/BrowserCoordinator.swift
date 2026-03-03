@@ -1173,8 +1173,8 @@ class BrowserCoordinator: BaseCoordinator,
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
-            overlayManager: overlayManager,
-            tabManager: tabManager
+            tabManager: tabManager,
+            overlayManager: overlayManager
         )
 
         guard browserViewController.embedContent(errorPageController) else {

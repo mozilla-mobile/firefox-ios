@@ -27,15 +27,8 @@ class CertificatesHandler {
         guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
             return certificates
         }
-        return Self.x509Certificates(from: certificateChain)
-    }
-
-    /// Converts an array of SecCertificate to X509 Certificate objects.
-    /// Minimal fix for cert UI PR: modal PR #31930 (FXIOS-14595) has CertificateHelper return X509 directly.
-    static func x509Certificates(from secCertificates: [SecCertificate]) -> [Certificate] {
-        var certificates = [Certificate]()
-        for secCertificate in secCertificates {
-            let certificateData = SecCertificateCopyData(secCertificate) as Data
+        for certificate in certificateChain {
+            let certificateData = SecCertificateCopyData(certificate) as Data
             do {
                 let certificate = try Certificate(derEncoded: Array(certificateData))
                 certificates.append(certificate)

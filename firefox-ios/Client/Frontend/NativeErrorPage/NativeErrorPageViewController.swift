@@ -161,7 +161,6 @@ final class NativeErrorPageViewController: UIViewController,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        tabManager: TabManager,
         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
@@ -169,7 +168,6 @@ final class NativeErrorPageViewController: UIViewController,
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
-        self.tabManager = tabManager
         self.logger = logger
         nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
 
@@ -455,11 +453,10 @@ final class NativeErrorPageViewController: UIViewController,
         guard !CertificateHelper.certificatesFromErrorURL(errorURL, logger: logger).isEmpty else { return }
 
         let destination = NavigationDestination(
-            .certificatesFromErrorPage(
-                originalURL: originalURL,
-                errorPageURL: errorURL,
-                certificateTitle: nativeErrorPageState.title
-            )
+            .certificatesFromErrorPage,
+            url: originalURL,
+            errorPageURL: errorURL,
+            certificateTitle: nativeErrorPageState.title
         )
         store.dispatch(
             NavigationBrowserAction(
@@ -480,7 +477,7 @@ final class NativeErrorPageViewController: UIViewController,
             return
         }
 
-        let destination = NavigationDestination(.nativeErrorPageLearnMore(url))
+        let destination = NavigationDestination(.nativeErrorPageLearnMore, url: url)
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: destination,
