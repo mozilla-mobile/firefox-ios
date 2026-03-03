@@ -971,7 +971,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.2.x-edge
+        stack: osx-xcode-26.3.x
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
@@ -1855,7 +1855,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e
-            
+
             # Get Xcode version and build version
             XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g')
             BUILD_VER=$(xcodebuild -version | grep "Build version" | sed 's/Build version //g')
@@ -1884,9 +1884,9 @@ workflows:
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
     meta:
-        bitrise.io:
-            stack: osx-xcode-26.3.x-edge
-            machine_type_id: g2.mac.4large
+      bitrise.io:
+        stack: osx-xcode-26.3.x-edge
+        machine_type_id: g2.mac.4large
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
   # The trends are reported on Bitrise Insights.
