@@ -41,6 +41,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var isNewAppearanceMenuOnClosure: () -> Bool
+    private var isCustomThemingEnabledClosure: () -> Bool
 
     private var nightModeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
@@ -60,6 +61,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public var isNewAppearanceMenuOn: Bool {
         return isNewAppearanceMenuOnClosure()
+    }
+
+    public var isCustomThemingEnabled: Bool {
+        return isCustomThemingEnabledClosure()
     }
 
     public var hasMigratedToNewAppearanceMenu: Bool {
@@ -100,13 +105,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
         sharedContainerIdentifier: String,
-        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false }
+        isNewAppearanceMenuOnClosure: @escaping () -> Bool = { false },
+        isCustomThemingEnabledClosure: @escaping () -> Bool = { false }
     ) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.mainQueue = mainQueue
         self.sharedContainerIdentifier = sharedContainerIdentifier
         self.isNewAppearanceMenuOnClosure = isNewAppearanceMenuOnClosure
+        self.isCustomThemingEnabledClosure = isCustomThemingEnabledClosure
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,

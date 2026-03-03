@@ -1,0 +1,29 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+# The configuration for the custom-theming-feature.
+# Controls the advanced custom theming system: per-axis accent color,
+# background tint, toolbar tint, and Unsplash homepage wallpapers.
+features:
+  custom-theming-feature:
+    description: >
+      This property controls the rollout of the advanced custom theming system,
+      which allows users to pick custom accent colors, background tints,
+      toolbar tints, and Unsplash wallpapers from the Appearance settings screen.
+    variables:
+      enabled:
+        description: >
+          If true, the custom theming controls (accent color, background tint,
+          toolbar tint, and Unsplash wallpaper picker) are shown in the
+          Appearance settings screen. Defaults to false so the feature is
+          hidden until explicitly enabled via Nimbus experiment or debug toggle.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

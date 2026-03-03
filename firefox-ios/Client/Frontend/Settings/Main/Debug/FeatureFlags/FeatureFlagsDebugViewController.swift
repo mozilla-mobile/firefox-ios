@@ -52,6 +52,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .customThemingFeature,
+                titleText: format(string: "Custom Theming"),
+                statusText: format(string: "Toggle to enable advanced accent color, background tint, " +
+                                           "toolbar tint, and Unsplash wallpapers in Appearance settings")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")

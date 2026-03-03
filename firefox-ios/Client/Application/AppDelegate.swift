@@ -29,7 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
+        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) },
+        isCustomThemingEnabledClosure: {
+            self.featureFlags.isFeatureEnabled(.customThemingFeature, checking: .buildOnly)
+        }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()

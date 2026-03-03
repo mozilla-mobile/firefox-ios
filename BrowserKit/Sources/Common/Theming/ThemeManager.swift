@@ -25,6 +25,10 @@ public protocol ThemeManager {
     /// instead of having to call the nimbus API each time. This should be removed once experiment is over.
     var isNewAppearanceMenuOn: Bool { get }
 
+    /// Whether the advanced custom theming system (accent color, background tint,
+    /// toolbar tint, Unsplash wallpapers) is enabled via Nimbus or debug toggle.
+    var isCustomThemingEnabled: Bool { get }
+
     // System theme and brightness settings
     var systemThemeIsOn: Bool { get }
     var automaticBrightnessIsOn: Bool { get }

@@ -34,6 +34,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .customThemingFeature:
+            return checkCustomThemingFeature(from: nimbus)
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -428,6 +431,11 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkAppearanceMenuFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
+    }
+
+    private func checkCustomThemingFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.customThemingFeature.value()
+        return config.enabled
     }
 
     private func checkAppIconSelectionSetting(from nimbus: FxNimbus) -> Bool {

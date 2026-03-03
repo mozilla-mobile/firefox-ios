@@ -28,6 +28,10 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
     }
 
+    private var shouldShowCustomTheming: Bool {
+        themeManager.isCustomThemingEnabled
+    }
+
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
     ///            otherwise, .light or .dark based on the manual theme.
@@ -96,34 +100,42 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             cornerRadius: UX.cornerRadius
         )
 
-        AccentColorSectionView(
-            theme: currentTheme,
-            themeManager: themeManager,
-            cornerRadius: UX.cornerRadius,
-            showColorPicker: $showColorPicker
-        )
+        if shouldShowCustomTheming {
+            AccentColorSectionView(
+                theme: currentTheme,
+                themeManager: themeManager,
+                cornerRadius: UX.cornerRadius,
+                showColorPicker: $showColorPicker
+            )
+        }
 
-        BackgroundTintSectionView(
-            theme: currentTheme,
-            themeManager: themeManager,
-            cornerRadius: UX.cornerRadius,
-            showColorPicker: $showBackgroundTintPicker
-        )
+        if shouldShowCustomTheming {
+            BackgroundTintSectionView(
+                theme: currentTheme,
+                themeManager: themeManager,
+                cornerRadius: UX.cornerRadius,
+                showColorPicker: $showBackgroundTintPicker
+            )
+        }
 
-        ToolbarTintSectionView(
-            theme: currentTheme,
-            themeManager: themeManager,
-            cornerRadius: UX.cornerRadius,
-            showColorPicker: $showToolbarTintPicker
-        )
+        if shouldShowCustomTheming {
+            ToolbarTintSectionView(
+                theme: currentTheme,
+                themeManager: themeManager,
+                cornerRadius: UX.cornerRadius,
+                showColorPicker: $showToolbarTintPicker
+            )
+        }
     }
 
     @ViewBuilder
     private var customizationSections: some View {
-        UnsplashWallpaperSectionView(
-            theme: currentTheme,
-            cornerRadius: UX.cornerRadius
-        )
+        if shouldShowCustomTheming {
+            UnsplashWallpaperSectionView(
+                theme: currentTheme,
+                cornerRadius: UX.cornerRadius
+            )
+        }
 
         WebsiteAppearanceSection(
             theme: currentTheme,
