@@ -9,7 +9,7 @@ import Shared
 /// Shared data layer between the translation action sheet and future settings screen.
 ///
 /// - Device language is always the first entry and cannot be removed.
-/// - On first access, auto-populates from `Locale.preferredLanguages` ∩ `supportedTargetLanguages`.
+/// - On first access, auto-populates from `Locale.preferredLanguages` intersected with `supportedTargetLanguages`.
 final class PreferredTranslationLanguagesManager {
     private let prefs: Prefs
     private let logger: Logger
