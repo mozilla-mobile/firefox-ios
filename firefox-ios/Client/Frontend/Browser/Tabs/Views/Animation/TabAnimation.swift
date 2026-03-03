@@ -167,6 +167,10 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         context.containerView.addSubview(backgroundView)
         context.containerView.addSubview(bvcSnapshot)
 
+        // this masks the timing issue with the redux state update to TabDisplayView
+        // otherwise the selected tab won't be found in the diffable data source
+        destinationController.view.frame = finalFrame
+        destinationController.view.layoutIfNeeded()
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
         DispatchQueue.main.async {
@@ -199,8 +203,6 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
             collectionView.alpha = UX.halfAlpha
 
-            destinationController.view.frame = finalFrame
-            destinationController.view.layoutIfNeeded()
             self.performPresentationAnimation(
                 cellFrame: cellFrame,
                 tabCell: tabCell,
