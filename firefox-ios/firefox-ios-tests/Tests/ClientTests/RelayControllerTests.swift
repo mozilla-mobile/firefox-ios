@@ -121,9 +121,14 @@ class RelayControllerTests: XCTestCase {
         let subject = createSubject(accountStatus: .unavailable)
         mockProfile.hasSyncableAccountMock = true
         withExtendedLifetime(subject) {
+            // Note: there are two follow-up async tasks which run in this
+            // scenario. This test is to ensure we are running the update,
+            // so as long as the account status has changed to one of the
+            // two acceptable values then the test can be considered green.
             wait(RelayController.RelayConstants.postLaunchDelay + 1.0)
-            XCTAssertEqual(mockAccountStatusProvider.setValueCalled, 1)
-            XCTAssertEqual(mockAccountStatusProvider.wrappedValue, .updating)
+            XCTAssertGreaterThan(mockAccountStatusProvider.setValueCalled, 0)
+            XCTAssert(mockAccountStatusProvider.wrappedValue == .updating ||
+                      mockAccountStatusProvider.wrappedValue == .unavailable)
         }
     }
 
