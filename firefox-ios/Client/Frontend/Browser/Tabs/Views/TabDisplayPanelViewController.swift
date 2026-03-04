@@ -5,7 +5,6 @@
 import Common
 import Redux
 import UIKit
-import LocalAuthentication
 
 protocol TabTrayThemeable {
     @MainActor
@@ -124,7 +123,9 @@ final class TabDisplayPanelViewController: UIViewController,
             viewHasAppeared = true
         }
         if panelType == .privateTabs {
-            store.dispatch(PrivatePanelLockAction(windowUUID: windowUUID, actionType: PrivatePanelLockActionType.enteredPrivatePanel))
+            store.dispatch(
+                PrivateLockAction(windowUUID: windowUUID,
+                                  actionType: PrivateLockActionType.enteredPrivatePanel))
         }
         updateInsets()
     }
@@ -217,89 +218,11 @@ final class TabDisplayPanelViewController: UIViewController,
     
     private func startPrivateAuthFlow() {
         store.dispatch(
-            PrivatePanelLockAction(
+            PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivatePanelLockActionType.requestAuth
+                actionType: PrivateLockActionType.requestAuth("Unlock your private tabs")
             )
         )
-
-        let context = LAContext()
-        context.localizedCancelTitle = "Cancel"
-
-        var error: NSError?
-
-        // ВАЖЛИВО: перевіряємо ту саму policy
-        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
-            store.dispatch(
-                PrivatePanelLockAction(
-                    windowUUID: windowUUID,
-                    actionType: PrivatePanelLockActionType.authFailed
-                )
-            )
-            return
-        }
-
-        context.evaluatePolicy(
-            .deviceOwnerAuthentication,
-            localizedReason: "Unlock your private tabs."
-        ) { [weak self] success, authError in
-            guard let self else { return }
-
-            Task { @MainActor in
-                if success {
-                    store.dispatch(
-                        PrivatePanelLockAction(
-                            windowUUID: self.windowUUID,
-                            actionType: PrivatePanelLockActionType.authSucceeded
-                        )
-                    )
-                } else {
-                    if let laError = authError as? LAError {
-                        switch laError.code {
-
-                        case .userCancel, .systemCancel, .appCancel:
-                            store.dispatch(
-                                PrivatePanelLockAction(
-                                    windowUUID: self.windowUUID,
-                                    actionType: PrivatePanelLockActionType.authFailed
-                                )
-                            )
-
-                        case .authenticationFailed:
-                            store.dispatch(
-                                PrivatePanelLockAction(
-                                    windowUUID: self.windowUUID,
-                                    actionType: PrivatePanelLockActionType.authFailed
-                                )
-                            )
-
-                        case .biometryLockout:
-                            store.dispatch(
-                                PrivatePanelLockAction(
-                                    windowUUID: self.windowUUID,
-                                    actionType: PrivatePanelLockActionType.authFailed
-                                )
-                            )
-
-                        default:
-                            store.dispatch(
-                                PrivatePanelLockAction(
-                                    windowUUID: self.windowUUID,
-                                    actionType: PrivatePanelLockActionType.authFailed
-                                )
-                            )
-                        }
-                    } else {
-                        store.dispatch(
-                            PrivatePanelLockAction(
-                                windowUUID: self.windowUUID,
-                                actionType: PrivatePanelLockActionType.authFailed
-                            )
-                        )
-                    }
-                }
-            }
-        }
     }
 
     // MARK: - Themeable
@@ -460,7 +383,7 @@ final class TabDisplayPanelViewController: UIViewController,
         }
     }
     
-    private func applyPrivateLockUI(_ lock: PrivatePanelLockState) {
+    private func applyPrivateLockUI(_ lock: PrivateLockState) {
         switch lock {
         case .unlocked:
             privateLockOverlay.isHidden = true

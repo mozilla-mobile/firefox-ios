@@ -67,8 +67,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
             self.resolveTabTrayActions(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
             self.resolveTabPanelViewActions(action: action, state: state)
-        } else if let action = action as? PrivatePanelLockAction {
-            self.resolveTabPrivatePanelLockActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
         } else if let action = action as? ScreenshotAction {
@@ -182,41 +180,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         case TabTrayActionType.doneButtonTapped:
             tabsPanelTelemetry.doneButtonTapped(mode: action.panelType?.modeForTelemetry ?? .normal)
             dispatchRecentlyAccessedTabs(action: action)
-        default:
-            break
-        }
-    }
-
-    private func resolveTabPrivatePanelLockActions(action: PrivatePanelLockAction, state: AppState) {
-        let shouldLock = profile.prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
-        guard shouldLock, let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: action.windowUUID),
-              tabsState.isPrivateMode else { return }
-        
-        switch action.actionType {
-        case PrivatePanelLockActionType.enteredPrivatePanel:
-            store.dispatch(TabPanelMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: TabPanelMiddlewareActionType.setPrivatePanelLockState,
-                privatePanelLockState: .lockedPrompt
-            ))
-        case PrivatePanelLockActionType.requestAuth:
-            store.dispatch(TabPanelMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: TabPanelMiddlewareActionType.setPrivatePanelLockState,
-                privatePanelLockState: .authenticating
-            ))
-        case PrivatePanelLockActionType.authSucceeded:
-            store.dispatch(TabPanelMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: TabPanelMiddlewareActionType.setPrivatePanelLockState,
-                privatePanelLockState: .unlocked
-            ))
-        case PrivatePanelLockActionType.authFailed:
-            store.dispatch(TabPanelMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: TabPanelMiddlewareActionType.setPrivatePanelLockState,
-                privatePanelLockState: .failed
-            ))
         default:
             break
         }

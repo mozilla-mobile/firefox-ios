@@ -86,7 +86,8 @@ let middlewares = [
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider,
-    TranslationsMiddleware().translationsProvider
+    TranslationsMiddleware().translationsProvider,
+    PrivateLockMiddleware().lockProvider
 ]
 
 // In order for us to mock and test the middlewares easier,
