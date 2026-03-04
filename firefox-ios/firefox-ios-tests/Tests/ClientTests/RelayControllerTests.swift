@@ -113,7 +113,7 @@ class RelayControllerTests: XCTestCase {
         let subject = createSubject(accountStatus: .unavailable)
         mockProfile.hasSyncableAccountMock = false
         withExtendedLifetime(subject) {
-            wait(RelayController.RelayConstants.postLaunchDelay + 1.0)
+            wait(1.0)
             XCTAssertEqual(mockAccountStatusProvider.setValueCalled, 1)
             XCTAssertEqual(mockAccountStatusProvider.wrappedValue, .unavailable)
         }
@@ -127,7 +127,7 @@ class RelayControllerTests: XCTestCase {
             // scenario. This test is to ensure we are running the update,
             // so as long as the account status has changed to one of the
             // two acceptable values then the test can be considered green.
-            wait(RelayController.RelayConstants.postLaunchDelay + 1.0)
+            wait(1.0)
             XCTAssertGreaterThan(mockAccountStatusProvider.setValueCalled, 0)
             XCTAssert(mockAccountStatusProvider.wrappedValue == .updating ||
                       mockAccountStatusProvider.wrappedValue == .unavailable)
@@ -141,13 +141,15 @@ class RelayControllerTests: XCTestCase {
         mockAccountStatusProvider = statusProvider
         let profile = MockProfile()
         mockProfile = profile
+        let mockConfig = RelayController.RelayUpdateConfiguration(postLaunchUpdateDelay: 0.0)
         let subject =  RelayController(logger: MockLogger(),
                                        profile: profile,
                                        relayClient: MockRelayClient(),
                                        relayRSClient: MockRelayRemoteSettingsClient(),
                                        relayAccountStatusProvider: statusProvider,
                                        gleanWrapper: MockGleanWrapper(),
-                                       config: .prod,
+                                       clientConfig: .prod,
+                                       updateConfig: mockConfig,
                                        notificationCenter: MockNotificationCenter())
         trackForMemoryLeaks(subject)
         return subject
