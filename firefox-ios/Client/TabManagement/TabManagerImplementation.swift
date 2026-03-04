@@ -29,6 +29,8 @@ class TabManagerImplementation: NSObject,
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
+    // FXIOS-15007 - `backupCloseTab` is never niled when the undo toast is cleared,
+    // causing us to retain the tab object indefinitely
     var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
     private(set) var tabs: [Tab] {
@@ -386,6 +388,15 @@ class TabManagerImplementation: NSObject,
         commitChanges()
     }
 
+    /// Internal tab manager function to configure and add a new tab
+    /// - Parameters:
+    ///   - request: The URL request to create the new tab with, if nil it won't load the URL inside the webview right away.
+    ///   Useful when restoring tabs.
+    ///   - afterTab: Will create the new tab after this tab, if nil it will append the tab at the end of the tabs array
+    ///   - flushToDisk: Will save session data and persist tabs data to disk if true
+    ///   - zombie: Whether it should create the webview right away for this tab or not
+    ///   - isPrivate: Whether the tab should be created in private mode or not
+    /// - Returns: the newly created tab
     private func addTab(_ request: URLRequest? = nil,
                         afterTab: Tab? = nil,
                         flushToDisk: Bool,

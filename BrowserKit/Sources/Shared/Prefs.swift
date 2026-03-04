@@ -23,11 +23,9 @@ public struct PrefsKeys {
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
-    public static let TermsOfServiceAcceptedVersion = "TermsOfServiceAcceptedVersion"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
     public static let TermsOfUseAccepted = "termsOfUseAccepted"
-    public static let TermsOfUseAcceptedVersion = "TermsOfUseAcceptedVersion"
     public static let TermsOfUseAcceptedDate = "TermsOfUseAcceptedDate"
     public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
     public static let TermsOfUseShownRecorded = "TermsOfUseShownRecorded"

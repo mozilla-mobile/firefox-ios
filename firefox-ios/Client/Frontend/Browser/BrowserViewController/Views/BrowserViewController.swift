@@ -481,6 +481,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
+    var isAppStoreReviewTriggerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -645,6 +649,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
+        guard !isAppStoreReviewTriggerEnabled else { return }
         ratingPromptManager.showRatingPromptIfNeeded()
     }
 
@@ -2226,13 +2231,15 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
-            // The web view can go gray if it was zombified due to memory pressure.
-            // When this happens, the URL is nil, so try restoring the page upon selection.
-            logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            if selectedTab.temporaryDocument == nil {
-                selectedTab.reload()
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
+                // The web view can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
+                if selectedTab.temporaryDocument == nil {
+                    selectedTab.reload()
+                }
             }
         }
 
@@ -4934,16 +4941,20 @@ extension BrowserViewController: TabManagerDelegate {
                 }
             }
 
-            if selectedTab.isFxHomeTab {
-                // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                // See: [FXIOS-10612] + [FXIOS-10335]
-                needsReload = true
-            }
+            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+                if selectedTab.isFxHomeTab {
+                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
+                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
+                    needsReload = true
+                }
 
-            if webView.url == nil {
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
+                if webView.url == nil {
+                    // The webView can go gray if it was zombified due to memory pressure.
+                    // When this happens, the URL is nil, so try restoring the page upon selection.
+                    needsReload = true
+                }
             }
         }
 
@@ -4986,17 +4997,23 @@ extension BrowserViewController: TabManagerDelegate {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         /// If the selectedTab is showing an error page trigger a reload
-        if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly),
+           let url = selectedTab.url,
+           let internalUrl = InternalURL(url),
+           internalUrl.isErrorPage {
             needsReload = true
         }
 
-        if selectedTab.temporaryDocument != nil {
-            needsReload = false
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+                needsReload = false
+            }
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if needsReload, selectedTab.url?.absoluteString != "about:blank" {
+        if needsReload {
             selectedTab.reloadPage()
         }
     }

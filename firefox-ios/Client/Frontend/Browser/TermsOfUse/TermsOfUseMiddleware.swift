@@ -75,7 +75,6 @@ final class TermsOfUseMiddleware {
     private func recordAcceptance() {
         let acceptedDate = Date()
         self.prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        self.prefs.setString(String(telemetry.termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         self.prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
         // Record telemetry for ToU acceptance
