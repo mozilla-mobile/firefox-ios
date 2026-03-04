@@ -26,9 +26,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hntSponsoredShortcuts
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
+    case homepageNewsTransition
     case homepageSearchBar
     case homepageStoriesScrollDirection
     case homepageStoryCategories
+    case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -88,6 +90,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
+                .homepageNewsTransition,
                 .homepageSearchBar,
                 .homepageStoryCategories,
                 .hostedSummarizer,
@@ -97,6 +100,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,
@@ -166,6 +170,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
+                .homepageNewsTransition,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
                 .homepageStoryCategories,
@@ -178,6 +183,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,

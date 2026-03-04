@@ -69,12 +69,10 @@ final class TermsOfUseMiddlewareTests: XCTestCase {
         XCTAssertNil(dismissedTimestamp)
     }
 
-    func testMiddleware_termsAccepted_recordsVersionAndDatePrefs() {
+    func testMiddleware_termsAccepted_recordsDatePref() {
         let action = TermsOfUseAction(windowUUID: .XCTestDefaultUUID, actionType: TermsOfUseActionType.termsAccepted)
         middleware.termsOfUseProvider(AppState(), action)
 
-        let versionString = profile.prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion)
-        XCTAssertEqual(versionString, String(middleware.telemetry.termsOfUseVersion))
         let dateTimestamp = profile.prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
         XCTAssertNotNil(dateTimestamp)
         if let timestamp = dateTimestamp {

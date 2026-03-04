@@ -55,17 +55,23 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault(from: nimbus)
 
-        case .homepageStoryCategories:
-            return checkHomepageStoriesCaterogiesFeature(from: nimbus)
-
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault(from: nimbus)
+
+        case .homepageNewsTransition:
+            return checkHomepageNewsTransitionFeature(from: nimbus)
 
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
         case .homepageStoriesScrollDirection:
             return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
+
+        case .homepageStoryCategories:
+            return checkHomepageStoriesCaterogiesFeature(from: nimbus)
+
+        case .needsReloadRefactor:
+            return checkNeedsReloadRefactorFeature(from: nimbus)
 
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
@@ -251,16 +257,20 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.homepageRedesignFeature.value().bookmarksSectionDefault
     }
 
-    private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
-    }
-
     private func checkHomepageJumpBackInSectionDefault(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().jbiSectionDefault
     }
 
+    private func checkHomepageNewsTransitionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().newsTransition
+    }
+
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
     }
 
     private func checkHomepageStoriesScrollDirectionFeature(from nimbus: FxNimbus) -> ScrollDirection {
@@ -537,5 +547,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
+    }
+
+    private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.needsReloadRefactor.value().enabled
     }
 }

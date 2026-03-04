@@ -4,12 +4,10 @@ import PackageDescription
 let checksum = "52359bca9ba1edadfbf28cbfe4e758bab0a8aa7afec592b2e2f3772614ab98f5"
 let version = "150.0.20260228050320"
 let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260228050320/artifacts/public/build/MozillaRustComponents.xcframework.zip"
-    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
 let focusChecksum = "7263117d20aa880ebaeb1cff7e4eb37d4aab01d3a6a38a0f219882fae125f14a"
 let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.150.20260228050320/artifacts/public/build/FocusRustComponents.xcframework.zip"
-    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
     name: "MozillaRustComponentsSwift",
