@@ -16,7 +16,7 @@ struct SummarizerLanguageExpansionConfigurationTests {
         let subject = createSubject(supportedLocales: [enLocale])
 
         let options = subject.settingOptions
-        #expect(options.count == 3)
+        #expect(options.count == 2)
         #expect(options[0].toOption() == (.websiteLanguage, .Settings.Summarize.LanguageSection.WebsiteLanguageLabel))
         #expect(options[1].toOption() == (.customLocale(enLocale),
                                localeProvider.current.localizedString(forIdentifier: enLocale.identifier)))

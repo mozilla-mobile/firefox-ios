@@ -54,7 +54,10 @@ struct DefaultSummarizerLanguageProvider: SummarizerLanguageProvider {
     }
 
     /// Checks that the locale identifier is contained in the supported locale identifiers.
-    /// This allows locale like `de-DE` to be supported if the supported list contains `de` only.
+    /// This allows `supportedLocales` with `regionCode` or `scriptingCode` to pass the check
+    /// for a locale that has only the `languageCode`.
+    ///
+    /// For example `[de-DE, en-US]` will pass the check for `en` or `de` locales.
     private func isLocaleInSupportedLocales(
         _ locale: Locale,
         supportedLocales: [Locale]

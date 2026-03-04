@@ -75,6 +75,9 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, SummarizeMiddlewareActionType.configuredSummarizer)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        // the summarizer provider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.summarizerProvider = { _, _ in }
     }
 
     func test_shakeMotionAction_withoutWebView_doesNotDispatchMiddlewareAction() throws {
@@ -95,6 +98,9 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        // the summarizer provider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.summarizerProvider = { _, _ in }
     }
 
     // MARK: - makeConfiguration

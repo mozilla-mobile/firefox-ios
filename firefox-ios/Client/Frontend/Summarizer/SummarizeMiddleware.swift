@@ -46,11 +46,11 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         self.summarizerConfigProvider = summarizerConfigProvider
     }
 
-    lazy var summarizerProvider: Middleware<AppState> = { [weak self] state, action in
+    lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case GeneralBrowserActionType.shakeMotionEnded:
-            Task { [weak self] in
-                await self?.dispatchSummarizeConfigurationAction(for: action)
+            Task { @MainActor in
+                await self.dispatchSummarizeConfigurationAction(for: action)
             }
         default:
             break
@@ -107,8 +107,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
             )
         }
         if summarizerNimbusUtils.isSummarizeFeatureEnabled {
-            // For previous experiments where lang is default to en we need to check just if web site language
-            // is en otherwise no configuration for the summarizer can be built.
+            // In this scenario where language expansion is false we support only english as locale. 
             let isSupportedLocale = await summarizerLanguageProvider.getLanguage(
                 userPreference: .websiteLanguage,
                 supportedLocales: [Locale(identifier: "en")],

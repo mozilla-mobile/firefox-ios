@@ -34,7 +34,7 @@ public struct DefaultSummarizerConfigSource: SummarizerConfigSourceProtocol {
     }
 }
 
-/// A configuration source that provided hard coded llm configuration with language aware support.
+/// A configuration source that provides hard coded llm configuration with language aware support.
 public struct SummarizerConfigSourceLanguageAware: SummarizerConfigSourceProtocol {
     public init() {}
 

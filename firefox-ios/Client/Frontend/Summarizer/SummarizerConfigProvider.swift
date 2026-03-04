@@ -18,7 +18,7 @@ protocol SummarizerConfigProvider {
 
 struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
     /// Returns the configuration for the Summarizer by merging the config loaded from the `sources`.
-    /// First sources have highest priority when the configuration are merged into one.
+    /// First sources in the array have highest priority when the configuration are merged into one.
     func getConfig(
         from sources: [any SummarizerConfigSourceProtocol],
         summarizerModel: SummarizerModel,

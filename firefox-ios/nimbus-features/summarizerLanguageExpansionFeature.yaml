@@ -21,7 +21,6 @@ features:
           - "es"
           - "de"
           - "pt"
-          - "it"
     defaults:
       - channel: beta
         value:
