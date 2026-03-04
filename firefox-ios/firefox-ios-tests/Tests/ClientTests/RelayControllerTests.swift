@@ -20,9 +20,11 @@ class RelayControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        mockProfile = nil
+        mockAccountStatusProvider = nil
+        try await super.tearDown()
     }
 
     // MARK: - RelayControllerProtocol Tests
