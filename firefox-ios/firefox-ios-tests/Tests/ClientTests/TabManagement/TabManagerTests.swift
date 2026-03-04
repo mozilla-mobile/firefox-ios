@@ -1472,8 +1472,11 @@ final class TabManagerTests: XCTestCase {
          XCTAssertEqual(subject.normalTabs.count, 3)
 
          subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false)
-         XCTAssertEqual(subject.normalTabs.count, 4,
-                        "normalTabs should reflect the newly added tab after cache invalidation.")
+         XCTAssertEqual(
+            subject.normalTabs.count,
+            4,
+            "normalTabs should reflect the newly added tab after cache invalidation."
+         )
      }
 
      @MainActor
@@ -1482,8 +1485,11 @@ final class TabManagerTests: XCTestCase {
          XCTAssertEqual(subject.privateTabs.count, 2)
 
          subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false, isPrivate: true)
-         XCTAssertEqual(subject.privateTabs.count, 3,
-                        "privateTabs should reflect the newly added tab after cache invalidation.")
+         XCTAssertEqual(
+            subject.privateTabs.count,
+            3,
+            "privateTabs should reflect the newly added tab after cache invalidation."
+         )
      }
 
      @MainActor
@@ -1493,8 +1499,11 @@ final class TabManagerTests: XCTestCase {
          XCTAssertEqual(subject.normalTabs.count, 3)
 
          subject.removeTab(tabs[0].tabUUID)
-         XCTAssertEqual(subject.normalTabs.count, 2,
-                        "normalTabs should reflect the removal after cache invalidation.")
+         XCTAssertEqual(
+            subject.normalTabs.count,
+            2,
+            "normalTabs should reflect the removal after cache invalidation."
+         )
      }
 
      @MainActor
@@ -1512,8 +1521,11 @@ final class TabManagerTests: XCTestCase {
 
          let normalTabs = subject.normalTabs
          let privateTabs = subject.privateTabs
-         XCTAssertEqual(normalTabs.count + privateTabs.count, subject.tabs.count,
-                        "normalTabs and privateTabs must be consistent with each other after mutation.")
+         XCTAssertEqual(
+            normalTabs.count + privateTabs.count,
+            subject.tabs.count,
+            "normalTabs and privateTabs must be consistent with each other after mutation."
+         )
      }
 
      @MainActor
