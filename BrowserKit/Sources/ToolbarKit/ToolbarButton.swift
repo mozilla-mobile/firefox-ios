@@ -134,7 +134,7 @@ class ToolbarButton: UIButton,
         } else {
             bottomBadgeImageView?.removeFromSuperview()
         }
-            
+
         if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
             if let maskImageName = element.maskImageName {
@@ -146,7 +146,7 @@ class ToolbarButton: UIButton,
             badgeImageView?.removeFromSuperview()
             maskImageView?.removeFromSuperview()
         }
-        
+
         layoutIfNeeded()
     }
 
@@ -173,13 +173,13 @@ class ToolbarButton: UIButton,
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
     }
-    
+
     private func addBottomBadgeImage(_ image: UIImage) {
         guard let imageView else { return }
         let badgeImageView = UIImageView(image: image)
         bottomBadgeImageView = badgeImageView
         badgeImageView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         imageView.addSubview(badgeImageView)
         NSLayoutConstraint.activate([
             badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
