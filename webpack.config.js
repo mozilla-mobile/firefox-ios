@@ -1,36 +1,36 @@
-const glob = require("glob");
+const { globSync } = require("glob");
 const path = require("path");
 const webpack = require("webpack");
 const Overrides = require("./firefox-ios/Client/Assets/CC_Script/Overrides.ios.js");
 
-const AllFramesAtDocumentStart = glob.sync(
+const AllFramesAtDocumentStart = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.{js,mjs}"
 );
-const AllFramesAtDocumentEnd = glob.sync(
+const AllFramesAtDocumentEnd = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.{js,mjs}"
 );
-const MainFrameAtDocumentStart = glob.sync(
+const MainFrameAtDocumentStart = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.{js,mjs}"
 );
-const MainFrameAtDocumentEnd = glob.sync(
+const MainFrameAtDocumentEnd = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.{js,mjs}"
 );
-const WebcompatAllFramesAtDocumentStart = glob.sync(
+const WebcompatAllFramesAtDocumentStart = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.{js,mjs}"
 );
-const AutofillAllFramesAtDocumentStart = glob.sync(
+const AutofillAllFramesAtDocumentStart = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.{js,mjs}"
 );
-const NightModeAllFramesAtDocumentStart = glob.sync(
+const NightModeAllFramesAtDocumentStart = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AllFrames/NightModeAtDocumentStart/*.{js,mjs}"
 );
-const AddressFormManager = glob.sync(
+const AddressFormManager = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/AddressFormManager/*.{js,mjs}"
 );
-const TranslationsEngine = glob.sync(
+const TranslationsEngine = globSync(
   "./firefox-ios/Client/Frontend/UserContent/UserScripts/TranslationsEngine/*.{js,mjs}"
 );
-const TranslationsEngineWorker = glob.sync(
+const TranslationsEngineWorker = globSync(
   "./firefox-ios/Client/Assets/CC_Script/translations-engine.worker.js"
 );
 

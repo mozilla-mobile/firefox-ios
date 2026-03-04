@@ -21,7 +21,7 @@
     "@babel/core": "^7.28.6",
     "@babel/preset-env": "7.28.6",
     "babel-loader": "^8.4.1",
-    "glob": "^8.1.0",
+    "glob": "^13.0.6",
     "script-loader": "^0.7.2",
     "webpack": "^5.105.0",
     "webpack-cli": "^4.10.0"
