@@ -21,6 +21,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case locationView
         case readerMode
         case readerModeWithSummarizer
+        case summarizer
         case translate
         case dataClearance
         case cancelEdit
@@ -54,6 +55,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .reload ||
                actionType == .newTab ||
                actionType == .readerMode ||
+               actionType == .summarizer ||
                actionType == .readerModeWithSummarizer ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
