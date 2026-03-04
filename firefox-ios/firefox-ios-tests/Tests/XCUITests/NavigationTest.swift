@@ -572,7 +572,10 @@ class NavigationTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306833
-    func testLongTapFirefoxIconNewTab() {
+    func testLongTapFirefoxIconNewTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
         waitForTabsButton()
@@ -588,7 +591,10 @@ class NavigationTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3408299
-    func testLongTapFirefoxIconNewPrivateTab() {
+    func testLongTapFirefoxIconNewPrivateTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
         let onboardingScreen = OnboardingScreen(app: app)
@@ -609,7 +615,10 @@ class NavigationTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/edit/3408300
-    func testLongTapFirefoxIconOpenLastBookmark() {
+    func testLongTapFirefoxIconOpenLastBookmark() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
         let springboardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
         let onboardingScreen = OnboardingScreen(app: app)
