@@ -29,7 +29,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         introScreenManager: IntroScreenManagerProtocol? = nil
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility,

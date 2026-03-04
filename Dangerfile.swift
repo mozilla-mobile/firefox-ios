@@ -118,7 +118,6 @@ class CodeCoverageGate {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
-            !$0.contains("MozillaRustComponents/") &&
             !$0.contains("/Strings.swift") &&
             !$0.contains("/AccessibilityIdentifiers.swift") &&
             !$0.contains("Protocol.swift")

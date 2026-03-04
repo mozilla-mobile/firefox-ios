@@ -417,7 +417,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307025
-    // Smoke
+    // Smoketest
     func testTabHistory() {
         openBookOfMozilla()
         toolbarScreen.waitUntilBackButtonHittable(timeout: 2.0)
@@ -508,7 +508,7 @@ class HistoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306894
-    // Smoke
+    // Smoketest
     func testClearRecentHistory() {
         clearRecentHistoryAndValidate(
             option: "Last 24 Hours",

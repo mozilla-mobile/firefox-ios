@@ -238,12 +238,21 @@ workflows:
             echo "Removing raw-xcodebuild-output.log to reduce artifact size"
             rm -f "$BITRISE_DEPLOY_DIR/raw-xcodebuild-output.log"
 
-            echo "Keeping only one swiftlint report file"
-            # Remove one format or duplicate copies
+            echo "Removing swiftlint reports already deployed by the swiftlint workflow"
             rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.txt" || true
+            rm -f "$BITRISE_DEPLOY_DIR/swiftlint_report.xml" || true
 
             echo "Removing unit test xcresult"
-            rm -f "$BITRISE_DEPLOY_DIR/Test-Fennec_UnitTest_iphonesimulator18.6-arm64.xcresult.zip"
+            rm -f "$BITRISE_DEPLOY_DIR"/Test-Fennec_UnitTest_*.xcresult.zip || true
+
+            echo "Removing testbundle.zip artifact (already available as pipeline intermediate)"
+            rm -f "$BITRISE_DEPLOY_DIR/testbundle.zip" || true
+
+            echo "Removing dSYM directories from test bundle to reduce pipeline artifact size"
+            find "$BITRISE_TEST_BUNDLE_PATH" -name "*.dSYM" -type d -exec rm -rf {} + 2>/dev/null || true
+
+            echo "Removing .bcsymbolmap files from test bundle"
+            find "$BITRISE_TEST_BUNDLE_PATH" -name "*.bcsymbolmap" -delete 2>/dev/null || true
     - deploy-to-bitrise-io@2.10.0:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
@@ -962,7 +971,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.2.x-edge
+        stack: osx-xcode-26.4.x-edge
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
@@ -1847,12 +1856,14 @@ workflows:
             #!/usr/bin/env bash
             set -e
             
-            # Get Xcode version
-            XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g)
+            # Get Xcode version and build version
+            XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g')
+            BUILD_VER=$(xcodebuild -version | grep "Build version" | sed 's/Build version //g')
             echo "Xcode Version: $XCODE_VER"
+            echo "Build Version: $BUILD_VER"
 
             # Export to environment for Slack notification
-            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER"
+            envman add --key XCODE_VERSION_INFO --value "$XCODE_VER ($BUILD_VER)"
     - slack@4.2.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_FIREFOX_IOS_UNIT_TESTS
@@ -1872,10 +1883,6 @@ workflows:
             Branch | ${BITRISE_GIT_BRANCH}
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
-    meta:
-        bitrise.io:
-            stack: osx-xcode-26.3.x-edge
-            machine_type_id: g2.mac.4large
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
   # The trends are reported on Bitrise Insights.
@@ -2731,5 +2738,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.2.x
+    stack: osx-xcode-26.3.x
     machine_type_id: g2.mac.4large

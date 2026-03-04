@@ -89,7 +89,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.loadNextLaunchType()
 
         let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         assertSavedLaunchType(.update(viewModel: UpdateViewModel(
             profile: profile,
             model: onboardingModel,
@@ -337,7 +337,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.loadNextLaunchType()
 
         let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         assertSavedLaunchType(.update(viewModel: UpdateViewModel(
             profile: profile,
             model: onboardingModel,
@@ -424,7 +424,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         XCTAssertEqual(subject.launchOrder.count, 1)
         subject.loadNextLaunchType()
         let onboardingModel = createOnboardingViewModel()
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         assertSavedLaunchType(.update(viewModel: UpdateViewModel(
             profile: profile,
             model: onboardingModel,

@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Dette gjør det mulig å lagre bilder.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox bruker talegjenkjenning for å gjøre stemmen din om til tekst ved talesøk.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skann QR-kode";
 

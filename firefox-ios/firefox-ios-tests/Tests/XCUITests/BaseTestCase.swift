@@ -20,8 +20,8 @@ func path(forTestPage page: String) -> String {
 }
 
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
-let TIMEOUT: TimeInterval = 20
-let TIMEOUT_LONG: TimeInterval = 45
+let TIMEOUT: TimeInterval = 10
+let TIMEOUT_LONG: TimeInterval = 20
 let MAX_SWIPE = 5
 
 @MainActor

@@ -69,7 +69,7 @@ final class LaunchTypeTests: XCTestCase {
 
     func testCanLaunch_updateFromBrowserCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
@@ -83,7 +83,7 @@ final class LaunchTypeTests: XCTestCase {
 
     func testCanLaunch_updateFromSceneCoordinator() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
@@ -117,7 +117,7 @@ final class LaunchTypeTests: XCTestCase {
 
     func testIsFullScreen_updateFullScreenOnIphone() {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let launchType = LaunchType.update(
             viewModel: UpdateViewModel(
                 profile: MockProfile(),

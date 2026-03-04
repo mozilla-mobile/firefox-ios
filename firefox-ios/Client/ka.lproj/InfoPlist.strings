@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "სურათების შენახვის საშუალებას იძლევა.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox მეტყველების ამომცნობს იყენებს თქვენი ხმის საძიებო ტექსტად ქცევისთვის.";
+
 /* (No Comment) */
 "Scan QR Code" = "QR კოდის წაკითხვა";
 

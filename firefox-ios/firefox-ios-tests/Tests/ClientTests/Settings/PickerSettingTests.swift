@@ -11,10 +11,9 @@ final class PickerSettingTests: XCTestCase {
     private let selectedValue = "value1"
     private lazy var pickerOptions = [(selectedValue, "Label 1")]
     private let accessibilityIdentifier = "test"
-    private let pickerButtonAccessibilityLabel = "Picker Button"
-    private let pickerButtonAccessibilityIdentifier = "pickerButton"
 
-    func test_onConfigureCell() throws {
+    @available(iOS 17.4, *)
+    func test_onConfigureCell_whenPickerMenuIsAvailable() throws {
         let subject = createSubject()
         let theme = DarkTheme()
         let cell = UITableViewCell()
@@ -28,9 +27,7 @@ final class PickerSettingTests: XCTestCase {
         XCTAssertTrue(pickerButton.adjustsImageSizeForAccessibilityContentSizeCategory)
         XCTAssertNotNil(pickerButton.menu)
         XCTAssertEqual(pickerButton.menu?.children.count, pickerOptions.count)
-        XCTAssertEqual(pickerButton.tintColor, theme.colors.iconPrimary)
-        XCTAssertEqual(pickerButton.accessibilityLabel, pickerButtonAccessibilityLabel)
-        XCTAssertEqual(pickerButton.accessibilityIdentifier, pickerButtonAccessibilityIdentifier)
+        XCTAssertEqual(pickerButton.tintColor, theme.colors.iconSecondary)
     }
 
     private func createSubject(
@@ -40,8 +37,6 @@ final class PickerSettingTests: XCTestCase {
             selectedValue: selectedValue,
             pickerOptions: pickerOptions,
             accessibilityIdentifier: accessibilityIdentifier,
-            pickerButtonAccessibilityLabel: pickerButtonAccessibilityLabel,
-            pickerButtonAccessibilityIdentifier: pickerButtonAccessibilityIdentifier,
             onOptionSelected: onOptionSelected
         )
         trackForMemoryLeaks(setting)

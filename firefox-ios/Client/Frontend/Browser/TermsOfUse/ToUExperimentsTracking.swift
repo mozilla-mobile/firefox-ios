@@ -89,6 +89,7 @@ final class ToUExperimentsTracking {
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseDismissedDate)
         prefs.setInt(0, forKey: PrefsKeys.TermsOfUseRemindersCount)
         prefs.setBool(false, forKey: PrefsKeys.TermsOfUseFirstShown)
+        prefs.setBool(false, forKey: PrefsKeys.TermsOfUseShownRecorded)
     }
 
     /// Experiment key: slug|branch|name. New experiment variant = new name in Experimenter

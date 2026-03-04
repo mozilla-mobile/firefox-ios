@@ -425,6 +425,22 @@ private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt16: FfiConverterPrimitive {
+    typealias FfiType = UInt16
+    typealias SwiftType = UInt16
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterInt32: FfiConverterPrimitive {
     typealias FfiType = Int32
     typealias SwiftType = Int32
@@ -540,6 +556,10 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 public protocol MetricsHandler: AnyObject, Sendable {
     
+    func recordDatabaseLoad(event: DatabaseLoadExtraDef) 
+    
+    func recordDatabaseMigration(event: DatabaseMigrationExtraDef) 
+    
     func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef]) 
     
     /**
@@ -607,6 +627,22 @@ open class MetricsHandlerImpl: MetricsHandler, @unchecked Sendable {
 
     
 
+    
+open func recordDatabaseLoad(event: DatabaseLoadExtraDef)  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_database_load(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeDatabaseLoadExtraDef_lower(event),$0
+    )
+}
+}
+    
+open func recordDatabaseMigration(event: DatabaseMigrationExtraDef)  {try! rustCall() {
+    uniffi_nimbus_fn_method_metricshandler_record_database_migration(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeDatabaseMigrationExtraDef_lower(event),$0
+    )
+}
+}
     
 open func recordEnrollmentStatuses(enrollmentStatusExtras: [EnrollmentStatusExtraDef])  {try! rustCall() {
     uniffi_nimbus_fn_method_metricshandler_record_enrollment_statuses(
@@ -679,6 +715,54 @@ fileprivate struct UniffiCallbackInterfaceMetricsHandler {
             } catch {
                 fatalError("Uniffi callback interface MetricsHandler: handle missing in uniffiClone")
             }
+        },
+        recordDatabaseLoad: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordDatabaseLoad(
+                     event: try FfiConverterTypeDatabaseLoadExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        },
+        recordDatabaseMigration: { (
+            uniffiHandle: UInt64,
+            event: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeMetricsHandler.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.recordDatabaseMigration(
+                     event: try FfiConverterTypeDatabaseMigrationExtraDef_lift(event)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
         },
         recordEnrollmentStatuses: { (
             uniffiHandle: UInt64,
@@ -2366,6 +2450,134 @@ public func FfiConverterTypeCalculatedAttributes_lower(_ value: CalculatedAttrib
 }
 
 
+public struct DatabaseLoadExtraDef: Equatable, Hashable {
+    public var corrupt: Bool?
+    public var error: String?
+    public var initialVersion: UInt16?
+    public var migratedVersion: UInt16?
+    public var migrationError: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(corrupt: Bool?, error: String?, initialVersion: UInt16?, migratedVersion: UInt16?, migrationError: String?) {
+        self.corrupt = corrupt
+        self.error = error
+        self.initialVersion = initialVersion
+        self.migratedVersion = migratedVersion
+        self.migrationError = migrationError
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension DatabaseLoadExtraDef: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeDatabaseLoadExtraDef: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DatabaseLoadExtraDef {
+        return
+            try DatabaseLoadExtraDef(
+                corrupt: FfiConverterOptionBool.read(from: &buf), 
+                error: FfiConverterOptionString.read(from: &buf), 
+                initialVersion: FfiConverterOptionUInt16.read(from: &buf), 
+                migratedVersion: FfiConverterOptionUInt16.read(from: &buf), 
+                migrationError: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: DatabaseLoadExtraDef, into buf: inout [UInt8]) {
+        FfiConverterOptionBool.write(value.corrupt, into: &buf)
+        FfiConverterOptionString.write(value.error, into: &buf)
+        FfiConverterOptionUInt16.write(value.initialVersion, into: &buf)
+        FfiConverterOptionUInt16.write(value.migratedVersion, into: &buf)
+        FfiConverterOptionString.write(value.migrationError, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDatabaseLoadExtraDef_lift(_ buf: RustBuffer) throws -> DatabaseLoadExtraDef {
+    return try FfiConverterTypeDatabaseLoadExtraDef.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDatabaseLoadExtraDef_lower(_ value: DatabaseLoadExtraDef) -> RustBuffer {
+    return FfiConverterTypeDatabaseLoadExtraDef.lower(value)
+}
+
+
+public struct DatabaseMigrationExtraDef: Equatable, Hashable {
+    public var reason: String
+    public var fromVersion: UInt16
+    public var toVersion: UInt16
+    public var error: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(reason: String, fromVersion: UInt16, toVersion: UInt16, error: String?) {
+        self.reason = reason
+        self.fromVersion = fromVersion
+        self.toVersion = toVersion
+        self.error = error
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension DatabaseMigrationExtraDef: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeDatabaseMigrationExtraDef: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> DatabaseMigrationExtraDef {
+        return
+            try DatabaseMigrationExtraDef(
+                reason: FfiConverterString.read(from: &buf), 
+                fromVersion: FfiConverterUInt16.read(from: &buf), 
+                toVersion: FfiConverterUInt16.read(from: &buf), 
+                error: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: DatabaseMigrationExtraDef, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.reason, into: &buf)
+        FfiConverterUInt16.write(value.fromVersion, into: &buf)
+        FfiConverterUInt16.write(value.toVersion, into: &buf)
+        FfiConverterOptionString.write(value.error, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDatabaseMigrationExtraDef_lift(_ buf: RustBuffer) throws -> DatabaseMigrationExtraDef {
+    return try FfiConverterTypeDatabaseMigrationExtraDef.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeDatabaseMigrationExtraDef_lower(_ value: DatabaseMigrationExtraDef) -> RustBuffer {
+    return FfiConverterTypeDatabaseMigrationExtraDef.lower(value)
+}
+
+
 public struct EnrolledExperiment: Equatable, Hashable {
     public var featureIds: [String]
     public var slug: String
@@ -3762,6 +3974,30 @@ public func FfiConverterCallbackInterfaceGeckoPrefHandler_lower(_ v: GeckoPrefHa
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionUInt16: FfiConverterRustBuffer {
+    typealias SwiftType = UInt16?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterUInt16.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterUInt16.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionInt32: FfiConverterRustBuffer {
     typealias SwiftType = Int32?
 
@@ -3802,6 +4038,30 @@ fileprivate struct FfiConverterOptionInt64: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionBool: FfiConverterRustBuffer {
+    typealias SwiftType = Bool?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterBool.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterBool.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -4458,6 +4718,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_func_validate_event_queries() != 42746) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_database_load() != 41701) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_nimbus_checksum_method_metricshandler_record_database_migration() != 30298) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_nimbus_checksum_method_metricshandler_record_enrollment_statuses() != 14510) {

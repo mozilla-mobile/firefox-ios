@@ -616,6 +616,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     func close() {
+        webView?.pauseAllMediaPlayback {}
+        webView?.closeAllMediaPresentations {}
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -702,13 +704,19 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
         }
 
-        // Do not reload from origin for homepage internal URLs
-        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
-            webView.reloadFromOrigin()
-            logger.log("Reloaded zombified tab from origin",
-                       level: .debug,
-                       category: .tabs)
-            return
+        if let webView, webView.url != nil {
+            // FXIOS-14783: Experimentation on removing the isAboutHome check
+            // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
+            let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
+            let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
+
+            if experimentEnabled || !isAboutHome {
+                webView.reloadFromOrigin()
+                logger.log("Reloaded zombified tab from origin",
+                           level: .debug,
+                           category: .tabs)
+                return
+            }
         }
 
         if let webView = self.webView {

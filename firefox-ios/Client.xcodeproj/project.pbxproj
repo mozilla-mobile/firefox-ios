@@ -1195,7 +1195,6 @@
 		8AD3AFC52D143F1200CFC887 /* HomepageDimensionCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */; };
 		8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */; };
 		8AD8FAF62EBAFA2C00FDFD78 /* HomepageUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8FAF52EBAFA2400FDFD78 /* HomepageUX.swift */; };
-		8AD8FC562EBAFE5200FDFD78 /* HomeLogoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8FC552EBAFE5200FDFD78 /* HomeLogoHeaderCell.swift */; };
 		8AD8FDB62EBB008E00FDFD78 /* MerinoManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8FDB52EBB008E00FDFD78 /* MerinoManagerTests.swift */; };
 		8AD8FF172EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8FF162EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift */; };
 		8ADA19A22E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */; };
@@ -1764,6 +1763,8 @@
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
 		CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */; };
+		CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */; };
+		CBC398772F4F455E00CD4EAD /* CertificateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
 		D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */; };
@@ -2864,6 +2865,7 @@
 		1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+sharedMPTCP.swift"; sourceTree = "<group>"; };
 		1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+defaultMPTCP.swift"; sourceTree = "<group>"; };
 		1BF1480584A7191A7FA97050 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Today.strings; sourceTree = "<group>"; };
+		1BFB58D82E4D1CB700643A49 /* MozillaRustComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MozillaRustComponents; path = ../MozillaRustComponents; sourceTree = "<group>"; };
 		1C0D49279DC88F974E4BE1CB /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		1C284BDCAF7741956A35582A /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		1C2E4AA7BD9C11EC9339D22F /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -9263,7 +9265,6 @@
 		8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuActionHelper.swift; sourceTree = "<group>"; };
 		8AD440CBBF202B15E74E186D /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Search.strings; sourceTree = "<group>"; };
 		8AD8FAF52EBAFA2400FDFD78 /* HomepageUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageUX.swift; sourceTree = "<group>"; };
-		8AD8FC552EBAFE5200FDFD78 /* HomeLogoHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoHeaderCell.swift; sourceTree = "<group>"; };
 		8AD8FDB52EBB008E00FDFD78 /* MerinoManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoManagerTests.swift; sourceTree = "<group>"; };
 		8AD8FF162EBB022A00FDFD78 /* MockGleanPlumbMessageManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGleanPlumbMessageManagerProtocol.swift; sourceTree = "<group>"; };
 		8ADA19A12E7DB86400E95E5E /* NotificationManagerTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTelemetryTests.swift; sourceTree = "<group>"; };
@@ -10279,8 +10280,10 @@
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* PasswordManagerSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerSelectionHelper.swift; sourceTree = "<group>"; };
+		CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHelperTests.swift; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateHelper.swift; sourceTree = "<group>"; };
 		CBD64E6DB514D36802C243A2 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBFF4C93B4ECB18CF4C73012 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		CC1542489046BEFF2588B8A4 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -12913,6 +12916,7 @@
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
+				CB5541862F51E1B100256DA1 /* CertificateHelperTests.swift */,
 				630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */,
 				635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */,
 				21F96EE22D41830300A164A0 /* NativeErrorPageFeatureFlagTests.swift */,
@@ -12923,6 +12927,7 @@
 		63F7A9A82C752999005846F5 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
+				CBC398762F4F455E00CD4EAD /* CertificateHelper.swift */,
 				63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */,
 				63B213292CCA797400A466DB /* NativeErrorPageState.swift */,
 				63B213272CCA796D00A466DB /* NativeErrorPageAction.swift */,
@@ -13359,7 +13364,6 @@
 		8A454D2A2CB7079A009436D9 /* Header */ = {
 			isa = PBXGroup;
 			children = (
-				8AD8FC552EBAFE5200FDFD78 /* HomeLogoHeaderCell.swift */,
 				8ABDBAA52CB6BF6600B51F63 /* HomepageHeaderCell.swift */,
 				8AD0110C2CB42FE700368BF3 /* HeaderState.swift */,
 			);
@@ -16241,6 +16245,7 @@
 			isa = PBXGroup;
 			children = (
 				D4F0C2642B2C90FB008ECEE8 /* BrowserKit */,
+				1BFB58D82E4D1CB700643A49 /* MozillaRustComponents */,
 				ED27142C2F1EBE17008070C2 /* CopyWithUpdatesMacro */,
 				C2F335362ECE339F0071588A /* TranslationsEngine.html */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
@@ -17436,7 +17441,6 @@
 				8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */,
 				5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				1BFB58D52E4D1C7600643A48 /* XCLocalSwiftPackageReference "../MozillaRustComponents" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -18851,6 +18855,7 @@
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				5A70EF21295E3E0B00790249 /* UnitTestSceneDelegate.swift in Sources */,
 				B2999FF72B194ADE00F0FEC1 /* FormAutofillPayloadType.swift in Sources */,
+				CBC398772F4F455E00CD4EAD /* CertificateHelper.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				ED9FD5DB2CEBB5EA00E906A3 /* SentFromFirefoxSetting.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
@@ -19309,7 +19314,6 @@
 				ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */,
 				45D5EDA729269F7500311934 /* DataObserver.swift in Sources */,
 				81A3F6F02C2DAEE200BDD86B /* MainMenuCoordinator.swift in Sources */,
-				8AD8FC562EBAFE5200FDFD78 /* HomeLogoHeaderCell.swift in Sources */,
 				961577922A38FDB300391E8D /* SponsoredTileDataUtility.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
 				0A6875152C91886A00606F53 /* CertificatesHeaderView.swift in Sources */,
@@ -19658,6 +19662,7 @@
 				C736C9C72E9D7C4800658045 /* StoriesFeedStateTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
 				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,
 				217C6A792F3A7A370085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift in Sources */,
 				F98CB66E2A4123F1005F38E9 /* EnhancedTrackingProtectionMenuVMTests.swift in Sources */,
@@ -31596,13 +31601,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		1BFB58D52E4D1C7600643A48 /* XCLocalSwiftPackageReference "../MozillaRustComponents" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../MozillaRustComponents;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -31763,7 +31761,6 @@
 		};
 		1BFB58D62E4D1CB700643A48 /* MozillaRustComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1BFB58D52E4D1C7600643A48 /* XCLocalSwiftPackageReference "../MozillaRustComponents" */;
 			productName = MozillaRustComponents;
 		};
 		216A0D752A40E7AB008077BA /* Redux */ = {

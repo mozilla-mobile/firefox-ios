@@ -6,6 +6,7 @@ import XCTest
 import Glean
 
 @testable import Client
+@testable import OnboardingKit
 
 @MainActor
 final class OnboardingTelemetryUtilityTests: XCTestCase {
@@ -374,9 +375,130 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
         XCTAssertEqual(savedExtras.onboardingVariant, "japan")
     }
 
+    // MARK: - onboarding.shown tests
+
+    func testSendOnboardingShown_NewUser_RecordsCorrectEvent() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .newUser)
+        let event = GleanMetrics.Onboarding.shown
+        typealias EventExtrasType = GleanMetrics.Onboarding.ShownExtra
+
+        subject.sendOnboardingShownTelemetry()
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.newUser.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func testSendOnboardingShown_ShowTour_RecordsCorrectReason() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .showTour)
+        typealias EventExtrasType = GleanMetrics.Onboarding.ShownExtra
+
+        subject.sendOnboardingShownTelemetry()
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.showTour.rawValue)
+    }
+
+    func testSendOnboardingShown_SubmitsPing() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendOnboardingShownTelemetry()
+
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+    }
+
+    // MARK: - onboarding.dismissed tests
+
+    func testSendOnboardingDismissed_Skipped_RecordsCorrectMethod() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+        let event = GleanMetrics.Onboarding.dismissed
+        typealias EventExtrasType = GleanMetrics.Onboarding.DismissedExtra
+
+        subject.sendOnboardingDismissedTelemetry(outcome: .skipped)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.method, OnboardingFlowOutcome.skipped.rawValue)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
+    func testSendOnboardingDismissed_Completed_RecordsCorrectMethod() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+        typealias EventExtrasType = GleanMetrics.Onboarding.DismissedExtra
+
+        subject.sendOnboardingDismissedTelemetry(outcome: .completed)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.method, OnboardingFlowOutcome.completed.rawValue)
+    }
+
+    func testSendOnboardingDismissed_IncludesOnboardingReason() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .showTour)
+        typealias EventExtrasType = GleanMetrics.Onboarding.DismissedExtra
+
+        subject.sendOnboardingDismissedTelemetry(outcome: .skipped)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.showTour.rawValue)
+    }
+
+    func testSendOnboardingDismissed_SubmitsPing() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendOnboardingDismissedTelemetry(outcome: .completed)
+
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+    }
+
+    // MARK: - onboardingReason in existing events
+
+    func testCardViewTelemetry_IncludesOnboardingReason_NewUser() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .newUser)
+        typealias EventExtrasType = GleanMetrics.Onboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.newUser.rawValue)
+    }
+
+    func testCardViewTelemetry_IncludesOnboardingReason_ShowTour() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .showTour)
+        typealias EventExtrasType = GleanMetrics.Onboarding.CardViewExtra
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.showTour.rawValue)
+    }
+
+    func testCardViewTelemetry_SubmitsPing() throws {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendCardViewTelemetry(from: CardNames.welcome.rawValue)
+
+        XCTAssertEqual(mockGleanWrapper.submitPingCalled, 1)
+    }
+
+    func testCloseTapTelemetry_IncludesOnboardingReason() throws {
+        let subject = createTelemetryUtility(for: .freshInstall, onboardingReason: .showTour)
+        typealias EventExtrasType = GleanMetrics.Onboarding.CloseTapExtra
+
+        subject.sendDismissOnboardingTelemetry(from: CardNames.welcome.rawValue)
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        XCTAssertEqual(savedExtras.onboardingReason, OnboardingReason.showTour.rawValue)
+    }
+
     // MARK: Private
     private func createTelemetryUtility(
-        for onboardingType: OnboardingType,
+        for onboardingType: Client.OnboardingType,
+        onboardingReason: OnboardingReason = .newUser,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
@@ -386,6 +508,7 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
 
         let telemetryUtility = OnboardingTelemetryUtility(
             with: model,
+            onboardingReason: onboardingReason,
             gleanWrapper: mockGleanWrapper
         )
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)
@@ -394,8 +517,9 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
     }
 
     private func createModernTelemetryUtility(
-        for onboardingType: OnboardingType,
-        variant: OnboardingVariant = .modern,
+        for onboardingType: Client.OnboardingType,
+        variant: Client.OnboardingVariant = .modern,
+        onboardingReason: OnboardingReason = .newUser,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> OnboardingTelemetryUtility {
@@ -419,6 +543,7 @@ final class OnboardingTelemetryUtilityTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(
             with: model,
             onboardingVariant: variant,
+            onboardingReason: onboardingReason,
             gleanWrapper: mockGleanWrapper
         )
         trackForMemoryLeaks(telemetryUtility, file: file, line: line)

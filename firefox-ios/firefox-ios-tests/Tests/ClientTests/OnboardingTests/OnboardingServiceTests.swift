@@ -136,6 +136,25 @@ class MockOnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     func sendDismissButtonTappedTelemetry() {
         sendDismissButtonTappedTelemetryCalled = true
     }
+
+    var sendOnboardingShownTelemetryCalled = false
+    func sendOnboardingShownTelemetry() {
+        sendOnboardingShownTelemetryCalled = true
+    }
+
+    var sendOnboardingDismissedTelemetryCalled = false
+    var lastDismissedOutcome: OnboardingFlowOutcome?
+    func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome) {
+        sendOnboardingDismissedTelemetryCalled = true
+        lastDismissedOutcome = outcome
+    }
+
+    func sendWallpaperSelectorViewTelemetry() {}
+    func sendWallpaperSelectorCloseTelemetry() {}
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {}
+    func sendEngagementNotificationTappedTelemetry() {}
+    func sendEngagementNotificationCancelTelemetry() {}
 }
 
 class MockActivityEventHelper: ActivityEventHelper {

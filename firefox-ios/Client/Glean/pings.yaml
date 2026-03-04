@@ -176,3 +176,17 @@ nimbus:
   notification_emails:
     - chumphreys@mozilla.com
     - project-nimbus@mozilla.com
+
+onboarding:
+  description: |
+    A ping representing events in the onboarding flow.
+    Sent when the user first sees onboarding (after ToS), when the user advances
+    a card, and when the user finishes onboarding (skip or complete).
+  include_client_id: true
+  send_if_empty: false
+  bugs:
+    - https://mozilla-hub.atlassian.net/browse/FXIOS-14577
+  data_reviews:
+    - https://github.com/mozilla-mobile/firefox-ios/pull/32275
+  notification_emails:
+    - fx-ios-data-stewards@mozilla.com

@@ -61,7 +61,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         level: .warning,
         category: .tabs
             )
-            context.completeTransition(true)
+            context.completeTransition(false)
             return
         }
 
@@ -70,6 +70,7 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
             logger.log("Attempted to present the tab tray without having a selected tab",
                        level: .warning,
                        category: .tabs)
+            context.containerView.addSubview(destinationController.view)
             context.completeTransition(true)
             return
         }
@@ -143,6 +144,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         finalFrame: CGRect,
         selectedTab: Tab
     ) {
+        guard let panel = currentExperimentPanel as? ThemedNavigationController,
+              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
+        else {
+            context.containerView.addSubview(destinationController.view)
+            context.completeTransition(true)
+            return
+        }
+
         let bvcSnapshot = UIImageView(image: browserVC.view.screenshot(quality: UX.bvcScreenshotQuality))
         bvcSnapshot.contentMode = .scaleAspectFill
         bvcSnapshot.frame = browserVC.view.frame
@@ -158,26 +167,31 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         context.containerView.addSubview(backgroundView)
         context.containerView.addSubview(bvcSnapshot)
 
-        guard let panel = currentExperimentPanel as? ThemedNavigationController,
-              let panelViewController = panel.viewControllers.first as? TabDisplayPanelViewController
-        else { return }
+        // this masks the timing issue with the redux state update to TabDisplayView
+        // otherwise the selected tab won't be found in the diffable data source
+        destinationController.view.frame = finalFrame
+        destinationController.view.layoutIfNeeded()
 
         // Don't block the UI rendering with the animation to make the snapshotting code more performant
         DispatchQueue.main.async {
-            let cv = panelViewController.tabDisplayView.collectionView
-            guard let dataSource = cv.dataSource as? TabDisplayDiffableDataSource,
+            let collectionView = panelViewController.tabDisplayView.collectionView
+            guard let dataSource = collectionView.dataSource as? TabDisplayDiffableDataSource,
                   let item = self.findItem(by: selectedTab.tabUUID, dataSource: dataSource)
-            else { return }
+            else {
+                context.containerView.addSubview(destinationController.view)
+                context.completeTransition(true)
+                return
+            }
 
             var tabCell: ExperimentTabCell?
             var cellFrame: CGRect?
             let theme = self.retrieveTheme()
 
             if let indexPath = dataSource.indexPath(for: item) {
-                cv.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+                collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
                 // TODO: FXIOS-14550 Look into if we can find an alternative to calling layoutIfNeeded() here
-                cv.layoutIfNeeded()
-                if let cell = cv.cellForItem(at: indexPath) as? ExperimentTabCell {
+                collectionView.layoutIfNeeded()
+                if let cell = collectionView.cellForItem(at: indexPath) as? ExperimentTabCell {
                     tabCell = cell
                     cellFrame = cell.convert(cell.backgroundHolder.bounds, to: nil)
                     cell.isHidden = true
@@ -186,16 +200,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
                 }
             }
             // Animate
-            cv.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
-            cv.alpha = UX.halfAlpha
+            collectionView.transform = CGAffineTransform(scaleX: UX.cvScalingFactor, y: UX.cvScalingFactor)
+            collectionView.alpha = UX.halfAlpha
 
-            destinationController.view.frame = finalFrame
-            destinationController.view.layoutIfNeeded()
             self.performPresentationAnimation(
                 cellFrame: cellFrame,
                 tabCell: tabCell,
                 bvcSnapshot: bvcSnapshot,
-                collectionView: cv,
+                collectionView: collectionView,
                 backgroundView: backgroundView,
                 context: context,
                 selectedTab: selectedTab,

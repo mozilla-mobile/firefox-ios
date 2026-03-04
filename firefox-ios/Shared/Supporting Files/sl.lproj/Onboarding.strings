@@ -100,6 +100,9 @@
 /* Continue button on the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Continue.Action.v148" = "Nadaljuj";
 
+/* Description for the toolbar customization card in the v148 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Customization.Toolbar.Description.v148" = "Začnite tipkati in prikazali se bodo predlogi iskanja, priljubljena spletna mesta, zaznamki, zgodovina in iskalniki – vse na enem mestu.";
+
 /* Title for the toolbar customization card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Toolbar.Title.v148" = "Izberite, kje želite imeti naslovno vrstico";
 
@@ -204,6 +207,9 @@
 
 /* Continue button on the toolbar customization card. */
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Nadaljuj";
+
+/* Description for the toolbar customization card. */
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Začnite tipkati in prikazali se bodo predlogi iskanja, priljubljena spletna mesta, zaznamki, zgodovina in iskalniki – vse na enem mestu.";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Izberite, kje naj bo prikazana naslovna vrstica";

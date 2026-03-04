@@ -87,9 +87,30 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageNewsTransition,
+                titleText: format(string: "Homepage News Transition"),
+                statusText: format(string: "Toggle to enable the homepage news transition")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .homepageStoryCategories,
+                titleText: format(string: "Homepage Story Categories"),
+                statusText: format(string: "Toggle to enable homepage story categories")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .improvedAppStoreReviewTriggerFeature,
+                titleText: format(string: "Improved App Store Review Trigger"),
+                statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -248,6 +269,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             ) { [weak self] _ in
                 self?.reloadView()
             },
+            FeatureFlagsBoolSetting(
+                with: .needsReloadRefactor,
+                titleText: format(string: "Needs Reload Refactor"),
+                statusText: format(string: "Toggle to enable the needs reload refactor")
+            ) { [weak self] _ in
+                self?.reloadView()
+            }
         ]
 
         // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true
