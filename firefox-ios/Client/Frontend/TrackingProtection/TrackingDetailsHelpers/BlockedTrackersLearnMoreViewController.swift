@@ -48,10 +48,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
         super.viewDidLoad()
         setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
-    }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         setNavigationViewDetails()
         applyTheme()
     }

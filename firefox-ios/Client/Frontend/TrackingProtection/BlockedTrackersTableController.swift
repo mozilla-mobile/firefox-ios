@@ -198,7 +198,6 @@ class BlockedTrackersTableViewController: UIViewController,
             theme: currentTheme(),
             and: self
         )
-        footerView.applyTheme(theme: currentTheme())
         return footerView
     }
 

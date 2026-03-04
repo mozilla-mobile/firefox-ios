@@ -69,6 +69,7 @@ class BlockedTrackersFooterView: UITableViewHeaderFooterView,
             theme: theme
         )
         trackersBlockedInfoTextView.attributedText = attributedText
+        applyTheme(theme: theme)
     }
 
     func getAttributedText(with text: String,
