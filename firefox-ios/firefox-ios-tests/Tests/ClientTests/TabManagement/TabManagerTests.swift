@@ -1535,7 +1535,6 @@ final class TabManagerTests: XCTestCase {
          XCTAssertTrue(subject.privateTabs.isEmpty)
      }
 
-
     // MARK: - Helper methods
     @MainActor
     private func createSubject(tabs: [Tab] = [],
