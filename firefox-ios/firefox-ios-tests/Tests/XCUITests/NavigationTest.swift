@@ -571,6 +571,79 @@ class NavigationTest: BaseTestCase {
         validateExternalLink()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306833
+    func testLongTapFirefoxIconNewTab() {
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewTabButton()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3408299
+    func testLongTapFirefoxIconNewPrivateTab() {
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app)
+        waitForTabsButton()
+        app.terminate()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewPrivateButton()
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.closeTourIfNeeded()
+        browserScreen.assertPrivateModeMessageCardExists()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    func testLongTapFirefoxIconOpenLastBookmark() {
+        let springboardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app)
+
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+
+        // Open and bookmark a page
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        bookmark()
+
+        // Terminate app and go to springboard
+        app.terminate()
+
+        springboardScreen.assertFennecIconExists()
+        springboardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+
+        // Verify all context menu options are present
+        springboardScreen.assertAllContextMenuOptionsExist()
+        springboardScreen.tapOpenLastBookmarkButton()
+
+        // Close onboarding if it appears
+        onboardingScreen.agreeAndContinue()
+        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.closeTourIfNeeded()
+
+        // Verify the bookmarked page opens
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
     private func validateExternalLink() {
         navigator.openURL("https://www.apple.com/apple-news/")
         waitUntilPageLoad()
