@@ -13,7 +13,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
-    "darkreader": "^4.9.89",
+    "darkreader": "^4.9.119",
     "dompurify": "^3.3.1",
     "page-metadata-parser": "1.1.4"
   },
