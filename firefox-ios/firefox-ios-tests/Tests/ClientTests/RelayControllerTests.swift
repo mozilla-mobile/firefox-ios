@@ -110,7 +110,7 @@ class RelayControllerTests: XCTestCase {
     }
 
     func test_relayStatusUpdated_afterInitialization_noProfileAccount() {
-        let subject = createSubject(accountStatus: .unavailable)
+        let subject = createSubject(accountStatus: .unavailable, updateDelay: 0.0)
         mockProfile.hasSyncableAccountMock = false
         withExtendedLifetime(subject) {
             wait(1.0)
@@ -120,7 +120,7 @@ class RelayControllerTests: XCTestCase {
     }
 
     func test_relayStatusUpdated_afterInitialization_hasValidProfileAccount() {
-        let subject = createSubject(accountStatus: .unavailable)
+        let subject = createSubject(accountStatus: .unavailable, updateDelay: 0.0)
         mockProfile.hasSyncableAccountMock = true
         withExtendedLifetime(subject) {
             // Note: there are two follow-up async tasks which run in this
@@ -136,12 +136,13 @@ class RelayControllerTests: XCTestCase {
 
     // MARK: - Subject
 
-    func createSubject(accountStatus: RelayAccountStatus = .unknown) -> RelayController {
+    func createSubject(accountStatus: RelayAccountStatus = .unknown,
+                       updateDelay: TimeInterval = 5.0) -> RelayController {
         let statusProvider = MockRelayAccountStatusProvider(mockValue: accountStatus)
         mockAccountStatusProvider = statusProvider
         let profile = MockProfile()
         mockProfile = profile
-        let mockConfig = RelayController.RelayUpdateConfiguration(postLaunchUpdateDelay: 0.0)
+        let mockConfig = RelayController.RelayUpdateConfiguration(postLaunchUpdateDelay: updateDelay)
         let subject =  RelayController(logger: MockLogger(),
                                        profile: profile,
                                        relayClient: MockRelayClient(),
