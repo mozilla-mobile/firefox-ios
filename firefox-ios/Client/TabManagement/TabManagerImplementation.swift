@@ -36,11 +36,11 @@ class TabManagerImplementation: NSObject,
     private(set) var tabs: [Tab] {
         didSet {
             // Invalidate cache on every mutation to keep it always updated.
-            _tabSplitCache = nil
+            tabsInternalCache = nil
         }
     }
 
-    private var _tabSplitCache: (normal: [Tab], private: [Tab])?
+    private var tabsInternalCache: (normal: [Tab], private: [Tab])?
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
@@ -169,13 +169,19 @@ class TabManagerImplementation: NSObject,
     /// Single O(n) pass that splits `tabs` into normal and private lists.
     /// Result is cached until the next `tabs` mutation.
     private func tabSplit() -> (normal: [Tab], private: [Tab]) {
-        if let cached = _tabSplitCache { return cached }
+        if let cached = tabsInternalCache { return cached }
         var normalTabs = [Tab]()
         var privateTabs = [Tab]()
         normalTabs.reserveCapacity(tabs.count)
-        for tab in tabs { if tab.isPrivate { privateTabs.append(tab) } else { normalTabs.append(tab) } }
+        for tab in tabs {
+            if tab.isPrivate {
+                privateTabs.append(tab)
+            } else {
+                normalTabs.append(tab)
+            }
+        }
         let result = (normal: normalTabs, private: privateTabs)
-        _tabSplitCache = result
+        tabsInternalCache = result
         return result
     }
 

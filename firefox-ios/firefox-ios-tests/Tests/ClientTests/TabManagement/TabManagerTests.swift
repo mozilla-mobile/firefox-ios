@@ -1515,9 +1515,9 @@ final class TabManagerTests: XCTestCase {
          let subject = createSubject(tabs: tabs)
 
          _ = subject.normalTabs
-         _ = subject.privateTabs // should hit same cache, not recompute
+         _ = subject.privateTabs // Should hit the same cache, does not recompute.
 
-         subject.removeTab(tabs[0].tabUUID)  // invalidate
+         subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
 
          let normalTabs = subject.normalTabs
          let privateTabs = subject.privateTabs
