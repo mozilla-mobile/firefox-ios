@@ -3354,15 +3354,17 @@ class BrowserViewController: UIViewController,
     }
 
     func dispatchAvailableContentHeightChangedAction() {
-        let availableContentHeight = getAvailableHomepageContentHeight()
-        let availableWallpaperHeight = getAvailableHomepageWallpaperHeight()
-
         // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
-           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
-           homepageState.availableContentHeight != availableContentHeight ||
-            homepageState.availableWallpaperHeight != availableWallpaperHeight
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+        else { return }
+
+        let availableContentHeight = getAvailableHomepageContentHeight()
+        let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
+
+        guard homepageState.availableContentHeight != availableContentHeight
+              || homepageState.availableWallpaperHeight != availableWallpaperHeight
         else { return }
 
         store.dispatch(
@@ -3399,9 +3401,7 @@ class BrowserViewController: UIViewController,
                                  - addressBarHeight
     }
 
-    private func getAvailableHomepageWallpaperHeight() -> CGFloat {
-        let availableContentHeight = getAvailableHomepageContentHeight()
-
+    private func getAvailableHomepageWallpaperHeight(availableContentHeight: CGFloat) -> CGFloat {
         guard let window = view.window else {
             // Fallback before window attachment, this gets corrected on the next layout/state update.
             return availableContentHeight + contentContainer.frame.origin.y
