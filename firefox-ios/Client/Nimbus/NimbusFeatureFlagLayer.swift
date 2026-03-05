@@ -21,6 +21,7 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .aiKillSwitch:
             return checkAiKillSwitchFeature(from: nimbus)
+
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 

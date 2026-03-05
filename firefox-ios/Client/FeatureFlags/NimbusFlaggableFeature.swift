@@ -82,8 +82,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appearanceMenu,
-                .aiKillSwitch,
+        case    .aiKillSwitch,
+                .appearanceMenu,
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
@@ -158,6 +158,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
+        // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .aiKillSwitch,
                 .appearanceMenu,
                 .appIconSelection,
