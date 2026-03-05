@@ -95,6 +95,7 @@ struct MerinoState: StateType, Equatable {
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
         let isScrollDirectionCustomized = scrollDirection != .baseline
         let isScrollDirectionVertical = scrollDirection == .vertical
+                                        && UIDeviceDetails.userInterfaceIdiom == .phone
         let isNewsTransitionEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageNewsTransition,
                                                                                         checking: .buildOnly)
         let shouldUseNewsAffordance = isScrollDirectionVertical && isNewsTransitionEnabled
