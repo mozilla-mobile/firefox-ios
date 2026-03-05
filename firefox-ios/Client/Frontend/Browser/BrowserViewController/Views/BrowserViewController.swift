@@ -159,9 +159,16 @@ class BrowserViewController: UIViewController,
 
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
-    var overKeyboardContainerConstraint: Constraint?
+    var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+
+    // Other constraints
+    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
+    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
+    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -474,6 +481,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
+    var isAppStoreReviewTriggerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -538,7 +549,11 @@ class BrowserViewController: UIViewController,
     lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
         return BrowserViewControllerLayoutManager(
             parentView: view,
-            headerView: header
+            headerView: header,
+            bottomContainer: bottomContainer,
+            overKeyboardContainer: overKeyboardContainer,
+            bottomContentStackView: bottomContentStackView,
+            navigationToolbarContainer: navigationToolbarContainer,
         )
     }()
 
@@ -638,6 +653,7 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
+        guard !isAppStoreReviewTriggerEnabled else { return }
         ratingPromptManager.showRatingPromptIfNeeded()
     }
 
@@ -1768,8 +1784,9 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
-
-            setupBottomContainerConstraints()
+            browserLayoutManager.setupBottomContainerConstraints()
+            browserLayoutManager.setupBottomContentStackViewConstraints()
+            browserLayoutManager.setupOverKeyboardContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1804,23 +1821,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
-
-    private func setupBottomContainerConstraints() {
-        guard isSnapKitRemovalEnabled else { return }
-
-        NSLayoutConstraint.activate([
-            bottomContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-        let constraint = bottomContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        constraint.isActive = true
-        let constraintReference = ConstraintReference(native: constraint)
-
-        if let scrollController = scrollController as? LegacyTabScrollProvider {
-            scrollController.bottomContainerConstraint = constraintReference
-        }
-        bottomContainerConstraint = constraintReference
-    }
 
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
@@ -1875,6 +1875,39 @@ class BrowserViewController: UIViewController,
         super.updateViewConstraints()
     }
 
+    func updateOverKeyboardContainerConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitOverKeyboardContainerConstraints()
+            return
+        }
+
+        browserLayoutManager.updateOverKeyboardContainerConstraints(isBottomSearchBar: isBottomSearchBar,
+                                                                    hasZoomPageBar: zoomPageBar != nil)
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitOverKeyboardContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        overKeyboardContainer.snp.remakeConstraints { make in
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
+            } else {
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
+            }
+
+            if !isBottomSearchBar, zoomPageBar != nil {
+                make.height.greaterThanOrEqualTo(0)
+            } else if !isBottomSearchBar {
+                make.height.equalTo(0)
+            }
+            make.leading.trailing.equalTo(view)
+        }
+    }
+
+    // TODO: SnapKit removal clean up
     private func updateSnapKitBottomContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
@@ -1891,29 +1924,18 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func updateOverKeyboardContainerConstraints() {
-        overKeyboardContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-            } else {
-                overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-            }
+    func updateConstraintsForKeyboard() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapkitConstraintsForKeyboard()
+            return
+        }
 
-            if !isBottomSearchBar, zoomPageBar != nil {
-                make.height.greaterThanOrEqualTo(0)
-            } else if !isBottomSearchBar {
-                make.height.equalTo(0)
-            }
-            make.leading.trailing.equalTo(view)
+        if tabManager.selectedTab?.isFindInPageMode == false {
+            adjustBottomSearchBarForKeyboard()
         }
     }
 
-    private func updateBottomContentStackViewConstraints() {
-        bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
-        }
-    }
-
+    // TODO: SnapKit removal clean up
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
@@ -1924,19 +1946,29 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func updateConstraintsForKeyboard() {
+    private func updateBottomContentStackViewConstraints() {
         guard isSnapKitRemovalEnabled else {
-            updateSnapkitConstraintsForKeyboard()
+            updateSnapKitBottomContentStackViewConstraints()
             return
         }
 
-        guard let tab = tabManager.selectedTab, tab.isFindInPageMode else {
-            adjustBottomSearchBarForKeyboard()
-            return
+        browserLayoutManager.updateBottomContentStackViewConstraints(isSnapKitRemovalEnabled: isSnapKitRemovalEnabled,
+                                                                     isBottomSearchBar: isBottomSearchBar,
+                                                                     keyboardState: keyboardState)
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitBottomContentStackViewConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustSnapKitBottomContentStackView(remake)
         }
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentStackView(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
@@ -1947,13 +1979,15 @@ class BrowserViewController: UIViewController,
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         if isBottomSearchBar {
-            adjustBottomContentBottomSearchBar(remake)
+            adjustSnapKitBottomContentBottomSearchBar(remake)
         } else {
-            adjustBottomContentTopSearchBar(remake)
+            adjustSnapKitBottomContentTopSearchBar(remake)
         }
     }
 
-    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !navigationToolbarContainer.isHidden {
@@ -1964,7 +1998,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         if !isToolbarTranslucencyRefactorEnabled {
@@ -2108,13 +2144,15 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
-            // The web view can go gray if it was zombified due to memory pressure.
-            // When this happens, the URL is nil, so try restoring the page upon selection.
-            logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            if selectedTab.temporaryDocument == nil {
-                selectedTab.reload()
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
+                // The web view can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
+                if selectedTab.temporaryDocument == nil {
+                    selectedTab.reload()
+                }
             }
         }
 
@@ -2933,6 +2971,32 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
+        case .certificatesFromErrorPage:
+            guard let errorPageURL = type.errorPageURL,
+                  let originalURL = type.url,
+                  let title = type.certificateTitle else {
+                logger.log(
+                    "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.showCertificatesFromErrorPage(
+                errorPageURL: errorPageURL,
+                originalURL: originalURL,
+                title: title
+            )
+        case .nativeErrorPageLearnMore:
+            guard let url = type.url else {
+                logger.log(
+                    "url should not be nil when navigating for nativeErrorPageLearnMore",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
         }
     }
 
@@ -4729,9 +4793,9 @@ extension BrowserViewController: TabManagerDelegate {
             navigationHandler?.removeDocumentLoading()
         }
 
-        // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
-        // and having multiple views with the same label confuses tests.
-        if let previousWebView = previousTab?.webView {
+        // Remove the old accessibilityLabel only when the selected tab isn't the previous tab.
+        // When the previous webview isn't visible anymore we ensure proper clean up for tests.
+        if let previousWebView = previousTab?.webView, selectedTab != previousTab {
             previousWebView.endEditing(true)
             previousWebView.accessibilityLabel = nil
             previousWebView.accessibilityElementsHidden = true
@@ -4790,16 +4854,20 @@ extension BrowserViewController: TabManagerDelegate {
                 }
             }
 
-            if selectedTab.isFxHomeTab {
-                // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                // See: [FXIOS-10612] + [FXIOS-10335]
-                needsReload = true
-            }
+            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+                if selectedTab.isFxHomeTab {
+                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
+                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
+                    needsReload = true
+                }
 
-            if webView.url == nil {
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
+                if webView.url == nil {
+                    // The webView can go gray if it was zombified due to memory pressure.
+                    // When this happens, the URL is nil, so try restoring the page upon selection.
+                    needsReload = true
+                }
             }
         }
 
@@ -4842,17 +4910,23 @@ extension BrowserViewController: TabManagerDelegate {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         /// If the selectedTab is showing an error page trigger a reload
-        if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly),
+           let url = selectedTab.url,
+           let internalUrl = InternalURL(url),
+           internalUrl.isErrorPage {
             needsReload = true
         }
 
-        if selectedTab.temporaryDocument != nil {
-            needsReload = false
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+                needsReload = false
+            }
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if needsReload, selectedTab.url?.absoluteString != "about:blank" {
+        if needsReload {
             selectedTab.reloadPage()
         }
     }
@@ -5046,7 +5120,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
 
@@ -5087,7 +5160,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
 
@@ -5131,7 +5203,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
         } else {
-            updateOverKeyboardContainerConstraints()
             updateConstraintsForKeyboard()
         }
     }

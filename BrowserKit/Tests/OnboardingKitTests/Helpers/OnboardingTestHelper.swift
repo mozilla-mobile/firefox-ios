@@ -13,6 +13,7 @@ final class OnboardingTestHelper {
     private(set) var onMultipleChoiceActionTapCallCount = 0
     private(set) var onCompleteCallCount = 0
     private(set) var lastCompletedCardName: String?
+    private(set) var lastCompletionOutcome: OnboardingFlowOutcome?
     private(set) var lastActionTapped: MockOnboardingActionType?
     private(set) var lastMultipleChoiceAction: MockOnboardingMultipleChoiceActionType?
 
@@ -24,6 +25,7 @@ final class OnboardingTestHelper {
         onMultipleChoiceActionTapCallCount = 0
         onCompleteCallCount = 0
         lastCompletedCardName = nil
+        lastCompletionOutcome = nil
         lastActionTapped = nil
         lastMultipleChoiceAction = nil
     }
@@ -48,8 +50,9 @@ final class OnboardingTestHelper {
     }
 
     /// Handler for completion callbacks
-    func handleCompletion(cardName: String) {
+    func handleCompletion(cardName: String, outcome: OnboardingFlowOutcome) {
         onCompleteCallCount += 1
         lastCompletedCardName = cardName
+        lastCompletionOutcome = outcome
     }
 }

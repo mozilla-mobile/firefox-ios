@@ -12,7 +12,7 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var tab: Tab? { get set }
     var zoomPageBar: ZoomPageBar? { get set }
     var headerTopConstraint: ConstraintReference? { get set }
-    var overKeyboardContainerConstraint: Constraint? { get set }
+    var overKeyboardContainerConstraint: ConstraintReference? { get set }
     var bottomContainerConstraint: ConstraintReference? { get set }
 
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
@@ -86,7 +86,7 @@ final class LegacyTabScrollController: NSObject,
 
     // Toolbar Constraints
     var headerTopConstraint: ConstraintReference?
-    var overKeyboardContainerConstraint: Constraint?
+    var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
 
     weak var zoomPageBar: ZoomPageBar?

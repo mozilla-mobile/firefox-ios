@@ -52,4 +52,10 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
             return SnapkitRemovalRefactor(enabled: isEnabled)
         }
     }
+
+    func selectTabWithFindInPage() {
+        let tab = Tab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.isFindInPageMode = false
+        tabManager.selectedTab = tab
+    }
 }

@@ -181,8 +181,9 @@ class IntroViewController: UIViewController,
         viewModel.saveHasSeenOnboarding()
         viewModel.saveSearchBarPosition()
         didFinishFlow?()
-        viewModel.telemetryUtility.sendDismissOnboardingTelemetry(
-            from: viewModel.availableCards[pageControl.currentPage].viewModel.name)
+        let cardName = viewModel.availableCards[pageControl.currentPage].viewModel.name
+        viewModel.telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
+        viewModel.telemetryUtility.sendOnboardingDismissedTelemetry(outcome: .skipped)
     }
 
     @objc
@@ -403,6 +404,7 @@ extension IntroViewController: OnboardingCardDelegate {
     private func showNextPageCompletionForLastCard() {
         guard let viewModel = viewModel as? IntroViewModel else { return }
         viewModel.saveHasSeenOnboarding()
+        viewModel.telemetryUtility.sendOnboardingDismissedTelemetry(outcome: .completed)
         didFinishFlow?()
     }
 

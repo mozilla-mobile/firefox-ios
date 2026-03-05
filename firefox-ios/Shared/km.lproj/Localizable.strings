@@ -92,13 +92,13 @@
 "Bookmarks" = "ចំណាំ";
 
 /* The button on the snackbar to edit a bookmark after adding it. */
-"Bookmarks.Edit.Button" = "កែ";
+"Bookmarks.Edit.Button" = "កែសម្រួល";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "កែ​ចំណាំ";
+"Bookmarks.EditBookmark.Label" = "កែសម្រួលចំណាំ";
 
 /* The button to edit a folder */
-"Bookmarks.EditFolder.Label" = "កែ​ថត";
+"Bookmarks.EditFolder.Label" = "កែសម្រួលថត";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ថត";

@@ -170,10 +170,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 itemHeight: UX.MessageCardConstants.height,
                 bottomInsets: UX.spacingBetweenSections
             )
-        case .topSites(_, let numberOfTilesPerRow):
+        case .topSites(_, let numberOfTilesPerRow, let shouldShowSectionHeader):
             return createTopSitesSectionLayout(
                 for: traitCollection,
-                numberOfTilesPerRow: numberOfTilesPerRow
+                numberOfTilesPerRow: numberOfTilesPerRow,
+                shouldShowSectionHeader: shouldShowSectionHeader
             )
         case .jumpBackIn(_, let configuration):
             return createJumpBackInSectionLayout(
@@ -349,21 +350,24 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
-        numberOfTilesPerRow: Int
+        numberOfTilesPerRow: Int,
+        shouldShowSectionHeader: Bool
     ) -> NSCollectionLayoutSection {
         let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(for: traitCollection,
                                                                                 numberOfTilesPerRow: numberOfTilesPerRow)
 
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        section.boundarySupplementaryItems = [header]
+        if shouldShowSectionHeader {
+            let headerSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(UX.sectionHeaderHeight)
+            )
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top
+            )
+            section.boundarySupplementaryItems = [header]
+        }
 
         let bottomInset = UX.spacingBetweenSections
         section.contentInsets.top = 0
@@ -547,9 +551,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
-        // If something went wrong with our availableContentHeight calculation in BVC, fall back to just using the actual
-        // collection view height
-        let availableContentHeight = homepageState?.availableContentHeight ?? collectionViewHeight
+        // If something went wrong with our availableContentHeight calculation in BVC, or the value has not been
+        // initialized yet, fall back to the actual collection view height.
+        let availableContentHeight = homepageState?.availableContentHeight ?? 0
+        let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
 
         // Calculate each individual sections height
         // Note: If showing vertical stories, no need to calculate stories height, since that is handled by
@@ -563,7 +568,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         // Calculate the spacer height, which is determined by the total height available minus the height of each section
-        let rawSpacerHeight = availableContentHeight
+        let rawSpacerHeight = height
             - UX.topSpacing
             - headerLogoHeight
             - privacyNoticeHeight
@@ -675,7 +680,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         // Add header height
-        totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+        if topSitesState.shouldShowSectionHeader {
+            totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+        }
 
         // Build array of configured cells for the data being displayed on the homepage
         let allCells = cellsData.map { data in

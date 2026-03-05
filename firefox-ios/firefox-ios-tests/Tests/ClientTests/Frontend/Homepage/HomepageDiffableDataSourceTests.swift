@@ -92,7 +92,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
-    func test_updateSnapshot_withValidState_returnTopSites() throws {
+    func test_updateSnapshot_withOverflowingTopSites_returnTopSitesWithHeader() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -116,10 +116,48 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, 4)), 8)
+        let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
+        let displayedTopSitesCount = updatedState.topSitesState.numberOfRows * numberOfTilesPerRow
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, true)), displayedTopSitesCount)
         let expectedSections: [HomepageSection] = [
             .header,
-            .topSites(nil, 4)
+            .topSites(nil, numberOfTilesPerRow, true)
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withTopSitesWithinVisibleCount_returnTopSitesWithoutHeader() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let numberOfRows = 2
+
+        let stateWithRows = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                numberOfRows: numberOfRows,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+        let topSitesCount = numberOfRows * stateWithRows.topSitesState.numberOfTilesPerRow
+
+        let updatedState = HomepageState.reducer(
+            stateWithRows,
+            TopSitesAction(
+                topSites: createSites(count: topSitesCount),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, false)), topSitesCount)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .topSites(nil, numberOfTilesPerRow, false)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }

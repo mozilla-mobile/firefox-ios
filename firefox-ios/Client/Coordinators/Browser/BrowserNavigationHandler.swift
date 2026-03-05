@@ -133,6 +133,12 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showTermsOfUse(context: TriggerContext)
 
     @MainActor
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String)
+
+    @MainActor
+    func openLearnMoreFromNativeErrorPage(url: URL)
+
+    @MainActor
     func popToBVC()
 }
 

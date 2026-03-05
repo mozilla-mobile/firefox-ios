@@ -397,6 +397,9 @@
 /* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.MoreOptions.Title.v141" = "Mehr";
 
+/* On the main menu, the title for the action that will show the reader view for the webpage. */
+"MainMenu.ToolsSection.ReaderView.Title.v149" = "Leseansicht";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Speichern";
 

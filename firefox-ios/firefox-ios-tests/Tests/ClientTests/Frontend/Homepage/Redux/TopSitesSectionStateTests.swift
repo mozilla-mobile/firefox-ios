@@ -26,6 +26,7 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.topSitesData, [])
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
+        XCTAssertFalse(initialState.shouldShowSectionHeader)
     }
 
     @MainActor
@@ -53,6 +54,42 @@ final class TopsSitesSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.topSitesData.count, 1)
         XCTAssertEqual(newState.topSitesData.compactMap { $0.title }, ["hello"])
+    }
+
+    @MainActor
+    func test_retrievedUpdatedSitesAction_withMoreSitesThanVisibleCount_showsSectionHeader() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let visibleTopSites = initialState.numberOfRows * initialState.numberOfTilesPerRow
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: visibleTopSites + 1),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        XCTAssertTrue(newState.shouldShowSectionHeader)
+    }
+
+    @MainActor
+    func test_retrievedUpdatedSitesAction_withVisibleSitesOnly_hidesSectionHeader() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let visibleTopSites = initialState.numberOfRows * initialState.numberOfTilesPerRow
+
+        let newState = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: visibleTopSites),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowSectionHeader)
     }
 
     @MainActor
@@ -95,6 +132,35 @@ final class TopsSitesSectionStateTests: XCTestCase {
     }
 
     @MainActor
+    func test_updatedNumberOfRows_recalculatesSectionHeaderVisibility() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let overflowingTopSitesCount = initialState.numberOfRows * initialState.numberOfTilesPerRow + 1
+        let rowsToFitAllSites =
+            (overflowingTopSitesCount + initialState.numberOfTilesPerRow - 1) / initialState.numberOfTilesPerRow
+
+        let stateWithOverflowingTopSites = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: overflowingTopSitesCount),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        let newState = reducer(
+            stateWithOverflowingTopSites,
+            TopSitesAction(
+                numberOfRows: rowsToFitAllSites,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+
+        XCTAssertFalse(newState.shouldShowSectionHeader)
+    }
+
+    @MainActor
     func test_toggleShowSectionSetting_withToggleOn_returnsExpectedState() throws {
         let initialState = createSubject()
         let reducer = topSiteReducer()
@@ -110,6 +176,34 @@ final class TopsSitesSectionStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertTrue(newState.shouldShowSection)
+    }
+
+    @MainActor
+    func test_toggleShowSectionSetting_preservesSectionHeaderVisibility() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let overflowingTopSitesCount = initialState.numberOfRows * initialState.numberOfTilesPerRow + 1
+
+        let stateWithHeader = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: overflowingTopSitesCount),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        let newState = reducer(
+            stateWithHeader,
+            TopSitesAction(
+                isEnabled: false,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.toggleShowSectionSetting
+            )
+        )
+
+        XCTAssertTrue(stateWithHeader.shouldShowSectionHeader)
+        XCTAssertTrue(newState.shouldShowSectionHeader)
     }
 
     // MARK: numberOfTilesPerRow
@@ -129,6 +223,35 @@ final class TopsSitesSectionStateTests: XCTestCase {
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.numberOfTilesPerRow, 8)
+    }
+
+    @MainActor
+    func test_viewWillTransition_recalculatesSectionHeaderVisibility() {
+        let initialState = createSubject()
+        let reducer = topSiteReducer()
+        let overflowingTopSitesCount = initialState.numberOfRows * initialState.numberOfTilesPerRow + 1
+        let tilesPerRowToFitAllSites = (overflowingTopSitesCount + initialState.numberOfRows - 1) / initialState.numberOfRows
+
+        let stateWithOverflowingTopSites = reducer(
+            initialState,
+            TopSitesAction(
+                topSites: createSites(count: overflowingTopSitesCount),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        let newState = reducer(
+            stateWithOverflowingTopSites,
+            HomepageAction(
+                numberOfTopSitesPerRow: tilesPerRowToFitAllSites,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.viewWillTransition
+            )
+        )
+
+        XCTAssertTrue(stateWithOverflowingTopSites.shouldShowSectionHeader)
+        XCTAssertFalse(newState.shouldShowSectionHeader)
     }
 
     @MainActor
