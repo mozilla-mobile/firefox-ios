@@ -469,6 +469,10 @@ struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
+        struct AIControls {
+            static let title = "AIControlsSettings"
+        }
+
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
             static let websiteAppearanceSectionTitle = "WebsiteAppearanceSectionTitle"

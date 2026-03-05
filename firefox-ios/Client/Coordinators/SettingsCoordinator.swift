@@ -372,6 +372,13 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     // MARK: GeneralSettingsDelegate
+    func pressedAIControls() {
+        let viewController = UIHostingController(
+            rootView: AIControlsSettingsView()
+        )
+        viewController.title = "AI Controls"
+        router.push(viewController)
+    }
 
     func pressedCustomizeAppIcon() {
         settingsTelemetry.optionSelected(option: .AppIconSelection)

@@ -736,6 +736,8 @@
 		61A1644A2CE7BE8A001D6058 /* WallpaperMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164472CE7BE3D001D6058 /* WallpaperMiddlewareTests.swift */; };
 		61C92A012DEF39F9004ACF49 /* TabConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */; };
 		61CEFF5E2DA8BC78000B88A7 /* TabsPanelTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CEFF5D2DA8BC78000B88A7 /* TabsPanelTelemetry.swift */; };
+		61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */; };
+		61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */; };
 		61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */; };
 		61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */; };
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
@@ -8569,6 +8571,8 @@
 		61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabConfigurationProvider.swift; sourceTree = "<group>"; };
 		61CEFF5D2DA8BC78000B88A7 /* TabsPanelTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPanelTelemetry.swift; sourceTree = "<group>"; };
 		61DA4B5AB7DA505B9C992F95 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSetting.swift; sourceTree = "<group>"; };
+		61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingsView.swift; sourceTree = "<group>"; };
 		61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderViewTests.swift; sourceTree = "<group>"; };
 		61F7A4322D136C3A00F7317B /* RouteBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilderTests.swift; sourceTree = "<group>"; };
 		623648C2A7D09ECA31155208 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -12301,6 +12305,7 @@
 		2F44FC551A9E83E200FD20CC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				61DD72D32F59374E002BFEA6 /* AIControls */,
 				8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */,
 				BA4BB9962D7F371F006BD137 /* AppearanceSettings */,
 				ED8B49B72D6CF2AE00743444 /* AppIconSelection */,
@@ -12919,6 +12924,14 @@
 			path = Wallpaper;
 			sourceTree = "<group>";
 		};
+		61DD72D32F59374E002BFEA6 /* AIControls */ = {
+			isa = PBXGroup;
+			children = (
+				61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */,
+			);
+			path = AIControls;
+			sourceTree = "<group>";
+		};
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -13511,6 +13524,7 @@
 		8A5D1CA22A30D661005AD35C /* General */ = {
 			isa = PBXGroup;
 			children = (
+				61DD72D02F5936AF002BFEA6 /* AIControlsSetting.swift */,
 				AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */,
 				BCBE058B2E3A871B004B6039 /* SummarizeSetting.swift */,
 				8ADED55D2D667A7700345293 /* BrowsingSetting.swift */,
@@ -18674,6 +18688,7 @@
 				8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */,
 				C2886E082EC5E025007AE6C3 /* StaticFileRoute.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
+				61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */,
 				1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */,
 				39BF0CD52EB512A1002064F5 /* ImpressionTrackingUtility.swift in Sources */,
 				D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */,
@@ -19359,6 +19374,7 @@
 				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				B2FEA68B2B460D1D0058E616 /* AddressAutofillSettingsView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
+				61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
 				8ABCFEA32B45C36100C2988A /* PrivateBrowsingTelemetry.swift in Sources */,
