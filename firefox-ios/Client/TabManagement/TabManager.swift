@@ -37,7 +37,7 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
-    func selectTab(_ tab: Tab?, previous: Tab?)
+    func selectTab(_ tab: Tab?, previous: Tab?, immediatePreservation: Bool)
 
     // MARK: - Add Tab
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
@@ -104,8 +104,12 @@ protocol TabManager: AnyObject {
 }
 
 extension TabManager {
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        selectTab(tab, previous: previous)
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
+        selectTab(tab, previous: previous, immediatePreservation: immediatePreservation)
+    }
+
+    func preserveTabs(immediate: Bool = false) {
+        preserveTabs(immediate: immediate)
     }
 
     @discardableResult

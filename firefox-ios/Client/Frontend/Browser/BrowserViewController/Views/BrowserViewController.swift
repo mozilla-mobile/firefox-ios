@@ -919,7 +919,7 @@ class BrowserViewController: UIViewController,
 
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
-        tabManager.preserveTabs(immediate: true)
+        tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
     }
 
