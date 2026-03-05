@@ -1034,82 +1034,35 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            var queryItems: [URLQueryItem] = [
-                URLQueryItem(
-                    name: InternalURL.Param.url.rawValue,
-                    value: url.absoluteString
-                ),
-                URLQueryItem(
-                    name: "code",
-                    value: String(error.code)
-                )
-            ]
-
-            // For certificate errors, try to extract the specific certificate error code
-            if CertErrors.contains(error.code) {
-                if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
-                   let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int,
-                   let certErrorString = CertErrorCodes[certErrorCode] {
-                    queryItems.append(URLQueryItem(name: "certerror", value: certErrorString))
-                } else {
-                    // If underlying error is missing, try to infer from URL or error description
-                    // For wrong.host.badssl.com and similar, default to SSL_ERROR_BAD_CERT_DOMAIN
-                    let desc = error.localizedDescription.lowercased()
-                    if let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
-                       let host = failingURL.host,
-                       host.contains("wrong.host") || host.contains("badssl")
-                       || desc.contains("domain") || desc.contains("hostname") {
-                        queryItems.append(URLQueryItem(name: "certerror", value: "SSL_ERROR_BAD_CERT_DOMAIN"))
-                    }
-                }
-                // Add badcert so "View certificate" can read the cert from the error page URL
-                // (same as ErrorPageHelper.loadPage)
-                if let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
-                   let cert = certChain.first {
-                    let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
-                    queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
-                }
-            }
-
-            errorPageURLComponents.queryItems = queryItems
+            errorPageURLComponents.queryItems = NativeErrorPageHelper.buildErrorPageQueryItems(
+                for: error,
+                url: url
+            )
 
             if let errorPageURL = errorPageURLComponents.url {
-                /// Used for checking if current error code is for no internet connection
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
-
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
                 let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(error.code)
 
-                // Handle No internet access or certificate errors with native error page
                 if isNoInternetError || isCertificateError {
-                    // Log error details for debugging
                     if isCertificateError {
-                        let hasUnderlyingError = error.userInfo[NSUnderlyingErrorKey] != nil
-                        let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError
-                        let hasCertErrorCode = underlying?.userInfo["_kCFStreamErrorCodeKey"] != nil
-                        logger.log(
-                            "NativeErrorPage: Dispatching certificate error",
-                            level: .debug,
-                            category: .webview,
-                            extra: [
-                                "errorCode": "\(error.code)",
-                                "hasUnderlyingError": "\(hasUnderlyingError)",
-                                "hasCertErrorCode": "\(hasCertErrorCode)",
-                                "url": url.absoluteString,
-                                "errorPageURL": errorPageURL.absoluteString
-                            ]
+                        NativeErrorPageHelper.logCertificateErrorDetails(
+                            error: error,
+                            url: url,
+                            errorPageURL: errorPageURL,
+                            logger: logger
                         )
                     }
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
+                    let action = NativeErrorPageAction(
+                        networkError: error,
+                        windowUUID: windowUUID,
+                        actionType: NativeErrorPageActionType.receivedError
                     )
                     store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
-                    // We can fall into here for bad certificates (e.g. self-signed)
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
                 }
             } else {
@@ -1123,13 +1076,11 @@ extension BrowserViewController: WKNavigationDelegate {
         didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        nonisolated(unsafe) let handler = completionHandler
-
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
             handleServerTrust(
                 challenge: challenge,
                 dispatchQueue: self.userInitiatedQueue,
-                completionHandler: handler
+                completionHandler: completionHandler
             )
             return
         }
@@ -1139,14 +1090,14 @@ extension BrowserViewController: WKNavigationDelegate {
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
               let tab = tabManager[webView]
         else {
-            handler(.performDefaultHandling, nil)
+            completionHandler(.performDefaultHandling, nil)
             return
         }
 
         // If this is a request to our local web server, use our private credentials.
         if challenge.protectionSpace.host == "localhost" &&
             challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
-            handler(.useCredential, WebServer.sharedInstance.credentials)
+            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
             return
         }
 
@@ -1159,9 +1110,9 @@ extension BrowserViewController: WKNavigationDelegate {
             Task { @MainActor in
                 switch res {
                 case .success(let credentials):
-                    handler(.useCredential, credentials.credentials)
+                    completionHandler(.useCredential, credentials.credentials)
                 case .failure:
-                    handler(.rejectProtectionSpace, nil)
+                    completionHandler(.rejectProtectionSpace, nil)
                 }
             }
         }
@@ -1401,26 +1352,22 @@ private extension BrowserViewController {
         dispatchQueue: DispatchQueueInterface,
         completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        nonisolated(unsafe) let handler = completionHandler
-
         dispatchQueue.async {
-            // If this is a certificate challenge, see if the certificate has previously been
-            // accepted by the user.
             let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
 
             guard let trust = challenge.protectionSpace.serverTrust,
                   let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
                   self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
             else {
-                ensureMainThread {
-                    handler(.performDefaultHandling, nil)
+                Task { @MainActor in
+                    completionHandler(.performDefaultHandling, nil)
                 }
                 return
             }
 
             let credential = URLCredential(trust: trust)
-            ensureMainThread {
-                handler(.useCredential, credential)
+            Task { @MainActor in
+                completionHandler(.useCredential, credential)
             }
         }
     }

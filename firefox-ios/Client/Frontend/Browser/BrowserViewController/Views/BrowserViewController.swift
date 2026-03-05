@@ -2293,18 +2293,10 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-
-        // Extract error code from URL query parameters to check if it's a certificate error
-        var isCertificateError = false
-        if isOtherErrorPagesEnabled, let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-           let codeString = components.queryItems?.first(where: { $0.name == "code" })?.value,
-           let errCode = Int(codeString) {
-            isCertificateError = CertErrors.contains(errCode)
-        }
+        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
