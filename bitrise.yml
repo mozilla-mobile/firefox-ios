@@ -1192,6 +1192,14 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'FirefoxBeta: Deploy to iTunes Connect'
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'FirefoxBeta build & deploy failed'
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "Log: $BITRISE_BUILD_URL"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
         is_expand: false
@@ -1290,6 +1298,14 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'FirefoxBeta build & deploy failed'
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "Log: $BITRISE_BUILD_URL"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
         is_expand: false
@@ -1394,6 +1410,14 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'Nightly FirefoxBeta build & deploy failed'
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "Log: $BITRISE_BUILD_URL"
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
         is_expand: false
