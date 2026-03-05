@@ -1197,8 +1197,10 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'FirefoxBeta build & deploy failed'
         inputs:
-        - channel: "#mobile-alerts-ios"
         - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Prod_Beta :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
@@ -1303,8 +1305,10 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'FirefoxBeta build & deploy failed'
         inputs:
-        - channel: "#mobile-alerts-ios"
         - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Beta_Only :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
@@ -1415,8 +1419,10 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'Nightly FirefoxBeta build & deploy failed'
         inputs:
-        - channel: "#mobile-alerts-ios"
-        - pretext_on_error: "Firefox-iOS :firefox: Build/SPM :x:"
+        - pretext_on_error: "Firefox-iOS :firefox: SPM_Nightly_Beta_Only :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
