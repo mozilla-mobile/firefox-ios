@@ -99,7 +99,7 @@ struct MerinoState: StateType, Equatable {
         let isNewsTransitionEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageNewsTransition,
                                                                                         checking: .buildOnly)
         let shouldUseNewsAffordance = isScrollDirectionVertical && isNewsTransitionEnabled
-        let title: String = shouldUseNewsAffordance
+        let title: String = isNewsTransitionEnabled
             ? .FirefoxHomepage.Pocket.NewsSectionTitle
             : .FirefoxHomepage.Pocket.PopularTodaySectionTitle
 
