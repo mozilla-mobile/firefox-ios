@@ -17,7 +17,9 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldNeedsSearchReset(_ textField: UITextField)
 }
 
-final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
+final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+    public var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
@@ -35,6 +37,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private var lastReplacement: String?
     private var hideCursor = false
     private var isSettingMarkedText = false
+    private var lastMarkedText = ""
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
@@ -42,8 +45,16 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - Init
     override init(frame: CGRect) {
-        super.init(frame: .zero)
-        super.addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func commonInit() {
+        addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
 
         font = FXFontStyles.Regular.body.scaledFont()
         adjustsFontForContentSizeCategory = true
@@ -76,10 +87,12 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
                 )
             }
         })
-    }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UITextInputMode.currentInputModeDidChangeNotification]
+        )
     }
 
     weak var accessibilityActionsSource: AccessibilityActionsSource?
@@ -103,6 +116,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     override func deleteBackward() {
+        lastMarkedText = ""
         lastReplacement = ""
         hideCursor = false
 
@@ -128,6 +142,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         isSettingMarkedText = true
+        lastMarkedText = markedText ?? ""
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
         isSettingMarkedText = false
@@ -150,6 +165,21 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         let suggestionText = String(suggestion.dropFirst(normalized.count))
         setMarkedText(suggestionText, selectedRange: NSRange())
         hideCursor = true
+    }
+
+    func handleInputModeDidChange() {
+        guard !lastMarkedText.isEmpty, let currentText = self.text else { return }
+        self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
+        hideCursor = true
+        setMarkedText(lastMarkedText, selectedRange: NSRange())
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UITextInputMode.currentInputModeDidChangeNotification else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.handleInputModeDidChange()
+        }
     }
 
     // MARK: - ThemeApplicable
@@ -187,6 +217,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
         // Clear the current completion, then set the text without the attributed style.
+        lastMarkedText = ""
         let text = (self.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
