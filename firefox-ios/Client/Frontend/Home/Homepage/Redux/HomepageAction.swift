@@ -23,6 +23,7 @@ struct HomepageAction: Action {
     let telemetryExtras: HomepageTelemetryExtras?
     let isZeroSearch: Bool?
     let availableContentHeight: CGFloat?
+    let availableWallpaperHeight: CGFloat?
 
     init(
         isSearchBarEnabled: Bool? = nil,
@@ -32,6 +33,7 @@ struct HomepageAction: Action {
         telemetryExtras: HomepageTelemetryExtras? = nil,
         isZeroSearch: Bool? = nil,
         availableContentHeight: CGFloat? = nil,
+        availableWallpaperHeight: CGFloat? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
@@ -44,6 +46,7 @@ struct HomepageAction: Action {
         self.telemetryExtras = telemetryExtras
         self.isZeroSearch = isZeroSearch
         self.availableContentHeight = availableContentHeight
+        self.availableWallpaperHeight = availableWallpaperHeight
     }
 }
 

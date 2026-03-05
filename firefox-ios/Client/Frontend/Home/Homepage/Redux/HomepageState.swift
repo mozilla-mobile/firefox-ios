@@ -45,6 +45,10 @@ struct HomepageState: ScreenState, Equatable {
     /// because it is determined by BVC
     let availableContentHeight: CGFloat
 
+    /// `availableWallpaperHeight` is the height to apply to the homepage wallpaper background so it can remain pinned to
+    /// the top of the window while still extending to the same visual bottom as the homepage content.
+    let availableWallpaperHeight: CGFloat
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = appState.screenState(
             HomepageState.self,
@@ -69,7 +73,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: homepageState.shouldTriggerImpression,
             shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice,
             shouldShowSpacer: homepageState.shouldShowSpacer,
-            availableContentHeight: homepageState.availableContentHeight
+            availableContentHeight: homepageState.availableContentHeight,
+            availableWallpaperHeight: homepageState.availableWallpaperHeight
         )
     }
 
@@ -88,7 +93,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: false,
             shouldShowSpacer: false,
-            availableContentHeight: 0
+            availableContentHeight: 0,
+            availableWallpaperHeight: 0
         )
     }
 
@@ -106,7 +112,8 @@ struct HomepageState: ScreenState, Equatable {
         shouldTriggerImpression: Bool,
         shouldShowPrivacyNotice: Bool,
         shouldShowSpacer: Bool,
-        availableContentHeight: CGFloat
+        availableContentHeight: CGFloat,
+        availableWallpaperHeight: CGFloat
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
@@ -122,6 +129,7 @@ struct HomepageState: ScreenState, Equatable {
         self.shouldShowPrivacyNotice = shouldShowPrivacyNotice
         self.shouldShowSpacer = shouldShowSpacer
         self.availableContentHeight = availableContentHeight
+        self.availableWallpaperHeight = availableWallpaperHeight
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -170,7 +178,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -192,15 +201,20 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
     @MainActor
     private static func handleAvailableContentHeightChangeAction(state: HomepageState, action: Action) -> HomepageState {
-        guard let availableContentHeight = (action as? HomepageAction)?.availableContentHeight else {
+        guard let homepageAction = action as? HomepageAction else {
             return defaultState(from: state)
         }
+
+        // Height updates can arrive with only one field populated; keep the other value stable.
+        let availableContentHeight = homepageAction.availableContentHeight ?? state.availableContentHeight
+        let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
         return HomepageState(
             windowUUID: state.windowUUID,
@@ -216,7 +230,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: availableContentHeight
+            availableContentHeight: availableContentHeight,
+            availableWallpaperHeight: availableWallpaperHeight
         )
     }
 
@@ -236,7 +251,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: false,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -256,7 +272,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: true,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -276,7 +293,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: true,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -300,7 +318,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: isSpacerEnabled,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -329,7 +348,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 
@@ -356,7 +376,8 @@ struct HomepageState: ScreenState, Equatable {
             shouldTriggerImpression: false,
             shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             shouldShowSpacer: state.shouldShowSpacer,
-            availableContentHeight: state.availableContentHeight
+            availableContentHeight: state.availableContentHeight,
+            availableWallpaperHeight: state.availableWallpaperHeight
         )
     }
 }
