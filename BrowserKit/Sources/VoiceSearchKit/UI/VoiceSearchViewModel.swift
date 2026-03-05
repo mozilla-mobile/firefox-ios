@@ -24,12 +24,13 @@ final class VoiceSearchViewModel {
         searchResultTask?.cancel()
         searchResultTask = nil
         recordVoiceTask = Task { [weak self] in
-            await self?.recordVoiceTask()
+            try? await self?.recordVoiceTask()
         }
     }
 
-    private func recordVoiceTask() async {
-        let stream = service.recordVoice()
+    // TODO: FXIOS-14880 - Update view model
+    private func recordVoiceTask() async throws {
+        guard let stream = try? await service.record() else { return }
         do {
             for try await result in stream {
                 try Task.checkCancellation()
@@ -47,10 +48,11 @@ final class VoiceSearchViewModel {
         }
     }
 
-    func stopRecordingVoice() {
+    // TODO: FXIOS-14880 - Update view model
+    func stopRecordingVoice() async throws {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
-        service.stopRecordingVoice()
+        try await service.stopRecording()
         guard let recentSpeechResult, searchResultTask == nil else { return }
         searchResultTask = Task { [weak self] in
             do {

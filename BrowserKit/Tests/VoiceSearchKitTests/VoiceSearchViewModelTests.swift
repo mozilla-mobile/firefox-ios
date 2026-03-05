@@ -100,11 +100,8 @@ final class VoiceSearchViewModelTests: XCTestCase {
         var states = [VoiceSearchViewModel.State]()
         let subject = createSubject()
 
-        subject.onStateChange = { [weak subject] state in
+        subject.onStateChange = { state in
             states.append(state)
-            if state == .recordVoice(partialResult, nil) {
-                subject?.stopRecordingVoice()
-            }
             guard states.count == 3 else { return }
             expectation.fulfill()
         }

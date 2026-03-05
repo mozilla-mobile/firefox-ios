@@ -12,7 +12,7 @@ final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable 
     var stopRecordingCalledCount = 0
     var searchCalledCount = 0
 
-    func recordVoice() -> AsyncThrowingStream<SpeechResult, Error> {
+    func record() async throws -> AsyncThrowingStream<SpeechResult, Error> {
         recordVoiceCalledCount += 1
         return AsyncThrowingStream { continuation in
             Task {
@@ -30,7 +30,7 @@ final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable 
         }
     }
 
-    func stopRecordingVoice() {
+    func stopRecording() async throws {
         stopRecordingCalledCount += 1
     }
 
