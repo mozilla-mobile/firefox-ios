@@ -310,8 +310,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
                 let contentType = summarizationCheckResult?.contentType ?? .generic
                 let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
-                                                    windowUUID: action.windowUUID,
-                                                    actionType: GeneralBrowserActionType.showSummarizer)
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
         case .translate:
