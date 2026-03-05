@@ -68,7 +68,7 @@ class NativeErrorPageHelper {
                                              appName,
                                              url.absoluteString)
                 let advancedInfo = "\(securityInfo)\n\(certificateInfo)"
-                let warningText = "\(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)\n\(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)"
+                let warningText = "\(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)\n\n\(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)"
 
                 let advancedSection = ErrorPageModel.AdvancedSectionConfig(
                     buttonText: String.NativeErrorPage.BadCertDomain.AdvancedButton,

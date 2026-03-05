@@ -100,20 +100,14 @@ final class NativeErrorPageViewController: UIViewController,
 
     private var currentActionView: UIView?
 
-    private lazy var regularContentView: NativeErrorRegularContentView = {
-        let view = NativeErrorRegularContentView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var regularContentView: NativeErrorRegularContentView = .build { view in
         view.delegate = self
         view.configure()
-        return view
-    }()
+    }
 
-    private lazy var badCertContentView: NativeErrorBadCertContentView = {
-        let view = NativeErrorBadCertContentView()
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var badCertContentView: NativeErrorBadCertContentView = .build { view in
         view.delegate = self
-        return view
-    }()
+    }
 
     // MARK: Constraints
 
@@ -155,7 +149,7 @@ final class NativeErrorPageViewController: UIViewController,
         }
     }
 
-   init(
+    init(
         windowUUID: WindowUUID,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -231,13 +225,7 @@ final class NativeErrorPageViewController: UIViewController,
             ? UIImage(named: nativeErrorPageState.foxImage)
             : UIImage(named: ImageIdentifiers.NativeErrorPage.securityError)
 
-        let titleString: String
-        if let range = nativeErrorPageState.title.range(of: ". ") {
-            titleString = nativeErrorPageState.title.replacingCharacters(in: range, with: ".\n")
-        } else {
-            titleString = nativeErrorPageState.title
-        }
-        titleLabel.text = titleString
+        titleLabel.text = nativeErrorPageState.title
         titleLabel.font = FXFontStyles.Bold.title2.scaledFont()
         errorDescriptionLabel.text = nativeErrorPageState.description
         errorDescriptionLabel.font = FXFontStyles.Regular.body.scaledFont()
