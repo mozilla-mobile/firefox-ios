@@ -63,8 +63,8 @@ features:
         description: >
           The style of the tab tray button in the toolbar.
         type: TabTrayButtonType
-        default: old-tab-tray-button
-        
+        default: number
+
     defaults:
       - channel: beta
         value:
@@ -79,7 +79,7 @@ features:
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
-          tab_tray_button_type: old-tab-tray-button
+          tab_tray_button_type: number
       - channel: developer
         value:
           enabled: true
@@ -93,7 +93,7 @@ features:
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
-          tab_tray_button_type: old-tab-tray-button
+          tab_tray_button_type: number
 
 enums:
   ToolbarLayoutType:
@@ -107,7 +107,7 @@ enums:
   TabTrayButtonType:
     description: The style of the tab tray button in the toolbar.
     variants:
-      old-tab-tray-button:
+      number:
         description: The original tab tray button style that show the icon with the number of tabs.
-      new-tab-tray-button:
+      screenshot:
         description: The new tab tray button style that shows two images stacked with the previous and next tab.

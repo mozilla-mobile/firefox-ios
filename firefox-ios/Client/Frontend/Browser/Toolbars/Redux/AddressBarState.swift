@@ -1239,8 +1239,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
 
         let iconName: String? = switch tabTrayButtonStyle {
-        case .oldTabTrayButton, .none: StandardImageIdentifiers.Large.tab
-        case .newTabTrayButton: nil
+        case .number, .none: StandardImageIdentifiers.Large.tab
+        case .screenshot: nil
         }
 
         switch layout {

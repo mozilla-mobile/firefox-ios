@@ -276,8 +276,8 @@ struct NavigationBarState: StateType, Equatable {
         ]
 
         let iconName: String? = switch tabTrayButtonStyle {
-        case .oldTabTrayButton, .none: StandardImageIdentifiers.Large.tab
-        case .newTabTrayButton: nil
+        case .number, .none: StandardImageIdentifiers.Large.tab
+        case .screenshot: nil
         }
 
         switch layout {

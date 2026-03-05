@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-final class StackedTabButton: ToolbarButton {
+final class StackedTabButton: ToolbarButton, TabCountable {
     // MARK: - UX Constants
     private struct UX {
         static let tabImageViewSize: CGSize = .init(width: 27, height: 27)
@@ -18,13 +18,13 @@ final class StackedTabButton: ToolbarButton {
     }
 
     // MARK: - UI Elements
-    private lazy var bottomImageView = makeTabImageView()
-    private lazy var topImageView = makeTabImageView()
-    private lazy var bottomImageViewGradient = CAGradientLayer()
-    private lazy var topImageViewGradient = CAGradientLayer()
+    private(set) lazy var bottomImageView = makeTabImageView()
+    private(set) lazy var topImageView = makeTabImageView()
+    private(set) lazy var bottomImageViewGradient = CAGradientLayer()
+    private(set) lazy var topImageViewGradient = CAGradientLayer()
 
     // MARK: - Initializers
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupLayout()
         setupGradient(bottomImageViewGradient, for: bottomImageView)
@@ -36,13 +36,11 @@ final class StackedTabButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func configure(
-        element: ToolbarElement,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
-    ) {
+    override func configure(element: ToolbarElement) {
         super.configure(element: element)
         setImage(element.nextTabScreenshot, for: topImageView, gradient: topImageViewGradient)
         setImage(element.previousTabScreenshot, for: bottomImageView, gradient: bottomImageViewGradient)
+        updateTabCount(for: element)
     }
 
     // MARK: - Layout

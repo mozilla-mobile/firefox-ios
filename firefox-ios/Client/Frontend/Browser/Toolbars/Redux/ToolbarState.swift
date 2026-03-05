@@ -68,7 +68,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: windowUUID,
             toolbarPosition: .top,
             toolbarLayout: .version1,
-            tabTrayButtonStyle: .oldTabTrayButton,
+            tabTrayButtonStyle: .number,
             isPrivateMode: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
