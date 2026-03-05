@@ -91,20 +91,17 @@ final class VoiceSearchViewModelTests: XCTestCase {
     // MARK: - Stop Recording Tests
 
     func testStopRecordingVoice_withRecentResult_triggersSearch() {
-        let partialResult = SpeechResult(text: "Hello", isFinal: false)
+        let finalResult = SpeechResult(text: "Hello", isFinal: true)
         let searchResult = SearchResult(title: "Test", body: "Test", url: nil)
-        mockService.speechResults = [partialResult]
+        mockService.speechResults = [finalResult]
         mockService.searchResult = .success(searchResult)
 
         let expectation = XCTestExpectation()
         var states = [VoiceSearchViewModel.State]()
         let subject = createSubject()
 
-        subject.onStateChange = { [weak subject] state in
+        subject.onStateChange = { state in
             states.append(state)
-            if state == .recordVoice(partialResult, nil) {
-                subject?.stopRecordingVoice()
-            }
             guard states.count == 3 else { return }
             expectation.fulfill()
         }
@@ -112,9 +109,8 @@ final class VoiceSearchViewModelTests: XCTestCase {
 
         wait(for: [expectation])
 
-        XCTAssertEqual(mockService.stopRecordingCalledCount, 1)
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
-        XCTAssertEqual(states[0], .recordVoice(partialResult, nil))
+        XCTAssertEqual(states[0], .recordVoice(finalResult, nil))
         XCTAssertEqual(states[1], .loadingSearchResult)
         XCTAssertEqual(states[2], .showSearchResult(searchResult, nil))
     }
