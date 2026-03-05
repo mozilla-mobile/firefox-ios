@@ -23,7 +23,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_withNormalCount_returnsCountString() {
         let numOfTabs = 5
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
         let result = button.updateTabCount(for: element)
 
         XCTAssertEqual(result, "5")
@@ -31,7 +32,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_withZeroTabs_clampsToOne() {
         let numOfTabs = 1
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
         let result = button.updateTabCount(for: element)
 
         XCTAssertEqual(result, "1")
@@ -39,7 +41,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_atMaxCount_returnsMaxString() {
         let numOfTabs = 99
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
         let result = button.updateTabCount(for: element)
 
         XCTAssertEqual(result, "99")
@@ -47,7 +50,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_exceedingMaxCount_returnsInfinitySymbol() {
         let numOfTabs = 100
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonOverflowLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonOverflowLargeContentTitle + numOfTabs.description)
         let result = button.updateTabCount(for: element)
 
         XCTAssertEqual(result, "\u{221E}")
@@ -78,7 +82,8 @@ final class TabCountableTests: XCTestCase {
     // MARK: - Side Effects
     func testUpdateTabCount_updatesAccessibilityValue() {
         let numOfTabs = 7
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
         button.updateTabCount(for: element)
 
         XCTAssertEqual(button.accessibilityValue, "7")
@@ -86,7 +91,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_updatesLargeContentTitle() {
         let numOfTabs = 3
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonLargeContentTitle + numOfTabs.description)
         button.updateTabCount(for: element)
 
         XCTAssertEqual(button.largeContentTitle, "Tabs open: 3")
@@ -94,7 +100,8 @@ final class TabCountableTests: XCTestCase {
 
     func testUpdateTabCount_updatesOverflowLargeContentTitle() {
         let numOfTabs = 101
-        let element = makeElement(numberOfTabs: numOfTabs, largeContentTitle: tabsButtonOverflowLargeContentTitle)
+        let element = makeElement(numberOfTabs: numOfTabs,
+                                  largeContentTitle: tabsButtonOverflowLargeContentTitle)
         button.updateTabCount(for: element)
 
         XCTAssertEqual(button.largeContentTitle, "Tabs open: 99+")
