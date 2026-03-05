@@ -12,6 +12,7 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
     struct UX {
         static let containerHeight: CGFloat = 56
         static let containerBottomInset: CGFloat = 16
+        static let totalHeight: CGFloat = containerHeight + containerBottomInset
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20
@@ -23,6 +24,8 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
     // MARK: - UIElements
     private lazy var containerView: UIView = .build { view in
         view.isAccessibilityElement = true
+        view.accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
+        view.accessibilityTraits.insert(.header)
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
@@ -66,14 +69,8 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        containerView.accessibilityIdentifier = nil
-    }
-
     // MARK: - Public methods
     func configure(theme: Theme) {
-        containerView.accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
         applyTheme(theme: theme)
     }
 

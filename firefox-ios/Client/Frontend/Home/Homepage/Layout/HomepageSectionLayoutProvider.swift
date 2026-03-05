@@ -61,7 +61,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             /// `storiesPeakOffset` is how much we want the stories section (section header) to peak in vertically
             ///  from the bottom of the homepage viewport
             static let storiesPeakOffset: CGFloat = 130
-            static let newsAffordanceSectionHeight: CGFloat = 71
+            static let newsAffordanceSectionHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
             static let newsAffordanceStoriesPeakOffset: CGFloat = 86
 
             @MainActor
