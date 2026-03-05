@@ -8,7 +8,6 @@ import Testing
 
 @MainActor
 struct DefaultVoiceSearchServiceTests {
-
     @Test
     func record_callsPrepareThenStart_andEmitsResults() async throws {
         let engine = MockTranscriptionEngine()

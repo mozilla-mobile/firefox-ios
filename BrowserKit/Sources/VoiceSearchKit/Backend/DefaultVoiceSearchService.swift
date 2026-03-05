@@ -57,21 +57,20 @@ final class DefaultVoiceSearchService: VoiceSearchService {
         // TODO: FXIOS-14949 - Add search results from search service
         return .success(SearchResult.empty())
     }
-    
-    
+
     // MARK: Private Methods
     private func beginRecording() throws {
         guard state == .idle else { throw SpeechError.alreadyRecording }
         state = .recording
         cleanUp()
     }
-    
+
     private func cleanUp() {
         recordingTask?.cancel()
         recordingTask = nil
         continuation = nil
     }
-    
+
     private func startRecordingTask(
         with continuation: AsyncThrowingStream<SpeechResult, Error>.Continuation
     ) {
@@ -90,7 +89,7 @@ final class DefaultVoiceSearchService: VoiceSearchService {
         continuation = nil
         state = .idle
     }
-    
+
     private static func makeDefaultEngine() -> TranscriptionEngine {
         if #available(iOS 26.0, *) {
             return SpeechAnalyzerEngine()
