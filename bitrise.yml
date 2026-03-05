@@ -1198,7 +1198,7 @@ workflows:
         title: 'FirefoxBeta build & deploy failed'
         inputs:
         - channel: "#mobile-alerts-ios"
-        - message: "Log: $BITRISE_BUILD_URL"
+        - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Prod_Beta :x:"
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
@@ -1304,7 +1304,7 @@ workflows:
         title: 'FirefoxBeta build & deploy failed'
         inputs:
         - channel: "#mobile-alerts-ios"
-        - message: "Log: $BITRISE_BUILD_URL"
+        - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Beta_Only :x:"
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
@@ -1416,7 +1416,7 @@ workflows:
         title: 'Nightly FirefoxBeta build & deploy failed'
         inputs:
         - channel: "#mobile-alerts-ios"
-        - message: "Log: $BITRISE_BUILD_URL"
+        - pretext_on_error: "Firefox-iOS :firefox: Build/SPM :x:"
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     envs:
     - opts:
