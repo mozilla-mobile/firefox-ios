@@ -46,27 +46,6 @@
 /* The label for the toast that shows when shaking and the summary is not available for that page. */
 "Summarizer.ToastLabel.v149" = "មិនមានសេចក្តីសង្ខេបទេ";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "អនុញ្ញាត";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ ប្រើប្រាស់ Apple Intelligence ដើម្បីសង្ខេបទំព័រនានា។";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "បោះបង់";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "បន្ត";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ ប្រើប្រាស់ AI ដែលមានមូលដ្ឋានលើពពក ដើម្បីសង្ខេបទំព័រនានា ហើយប្រគល់សេចក្តីសង្ខេបទាំងនោះទៅឧបករណ៍របស់អ្នក។";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ស្វែងយល់​បន្ថែម";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "អនុញ្ញាតឱ្យមានសេចក្ដីសង្ខេបទំព័រ?";
-
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "របៀបដែលវាដំណើរការ";
 

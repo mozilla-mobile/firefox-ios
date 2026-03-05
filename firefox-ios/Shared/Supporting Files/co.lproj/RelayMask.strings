@@ -2,9 +2,6 @@
 "RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novu ! Ora, e maschere di messaghjeria %@ Relay sò dispunibule nant’à l’apparechji mobili.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "E vostre 5 maschere di messaghjeria di rigalu sò in corsu d’adopru, è n’avemu sceltu unu per voi.";
-
-/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Avete impiegatu e vostre 5 maschere di messaghjeria di rigalu, tandu n’avemu sceltu unu chì vo puderete rimpiegà.";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
@@ -12,9 +9,6 @@
 
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Maschera di messaghjeria framessa";
-
-/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Piattate u vostru veru indirizzu elettronicu per prutege a vostra scatula di ricezzione da u merzaghju. Certi siti ùn l’accettenu micca.";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Piattate u vostru veru indirizzu elettronicu per prutege a vostra scatula di ricezzione da u merzaghju. Certi siti ùn accettenu micca e maschere di messaghjeria.";
