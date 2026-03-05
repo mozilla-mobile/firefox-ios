@@ -475,6 +475,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(tab.homepageScrollOffset, 140)
     }
+
     func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
         let subject = createSubject()
         subject.loadViewIfNeeded()
