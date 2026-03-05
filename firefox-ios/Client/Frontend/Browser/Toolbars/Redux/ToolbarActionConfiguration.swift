@@ -55,8 +55,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .reload ||
                actionType == .newTab ||
                actionType == .readerMode ||
-               actionType == .summarizer ||
                actionType == .readerModeWithSummarizer ||
+               actionType == .summarizer ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

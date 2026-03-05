@@ -461,6 +461,25 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.enabled, false)
     }
 
+    func testDidTapButton_tapOnReaderModeWithSummarizerButton_dispatchesShowReaderModes() throws {
+        try didTapButton(buttonType: .readerModeWithSummarizer, expectedActionType: .showReaderMode)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.isPrivate, false)
+        XCTAssertEqual(savedExtras.enabled, false)
+    }
+
     func testDidTapButton_tapOnReloadButton_dispatchesReloadWebsite() throws {
         try didTapButton(buttonType: .reload, expectedActionType: GeneralBrowserActionType.reloadWebsite)
 
@@ -657,6 +676,10 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_longPressOnSummarizer_dispatchesShowReaderModeAction() throws {
         try didLongPressButton(buttonType: .summarizer, expectedActionType: .showReaderMode)
+    }
+
+    func testDidTapButton_longPressOnReaderModeWithSummarizer_dispatchesShowSummarizerAction() throws {
+        try didLongPressButton(buttonType: .readerModeWithSummarizer, expectedActionType: .showSummarizer)
     }
 
     func testUrlDidChange_dispatchesBorderPositionChanged() throws {

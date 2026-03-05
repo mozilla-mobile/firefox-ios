@@ -175,12 +175,13 @@ class ToolbarButton: UIButton,
     }
 
     private func addBottomBadgeImage(_ image: UIImage) {
-        guard let imageView else { return }
+        // check for the image in the configuration otherwise imageView is not part of the button's view hierarchy.
+        guard configuration?.image != nil else { return }
         let badgeImageView = UIImageView(image: image)
         bottomBadgeImageView = badgeImageView
         badgeImageView.translatesAutoresizingMaskIntoConstraints = false
 
-        imageView.addSubview(badgeImageView)
+        imageView?.addSubview(badgeImageView)
         NSLayoutConstraint.activate([
             badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
             badgeImageView.topAnchor.constraint(equalTo: centerYAnchor),
