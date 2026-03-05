@@ -4,8 +4,10 @@
 
 import UIKit
 import Common
+import ComponentLibrary
 import Shared
 
+@MainActor
 protocol NativeErrorBadCertContentViewDelegate: AnyObject {
     func badCertContentViewDidTapGoBack()
     func badCertContentViewDidTapProceed()
@@ -32,12 +34,7 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         /// List item 4/5: total row 44pt; content padding 6.5 top/bottom → content height 31pt.
         static let linkRowHeight: CGFloat = 31
         static let linkVerticalPadding: CGFloat = 6.5
-        static let buttonCornerRadius: CGFloat = 12
         static let buttonHeight: CGFloat = 45
-        static let buttonPaddingVertical: CGFloat = 12
-        static let buttonPaddingHorizontal: CGFloat = 16
-        /// Letter-spacing for proceed label: -0.0031em (iOS/Bold/Callout spec).
-        static let proceedLabelLetterSpacingEm: CGFloat = -0.0031
         static let proceedContainerPadding: CGFloat = 8
         static let proceedContainerGap: CGFloat = 10
         static let contentSpacing: CGFloat = 16
@@ -89,8 +86,6 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var advancedSectionContent: UIView = .build()
-
     private lazy var advancedSectionContentStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -98,46 +93,12 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         stackView.spacing = 0
     }
 
-    private lazy var goBackButton: UIButton = .build { button in
+    private lazy var goBackButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapGoBack), for: .touchUpInside)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.buttonPaddingVertical,
-            leading: UX.buttonPaddingHorizontal,
-            bottom: UX.buttonPaddingVertical,
-            trailing: UX.buttonPaddingHorizontal
-        )
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var container = incoming
-            container.font = FXFontStyles.Bold.callout.scaledFont()
-            return container
-        }
-        button.configuration = config
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.goBackButton
     }
 
-    private lazy var proceedButton: UIButton = .build { button in
+    private lazy var proceedButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapProceed), for: .touchUpInside)
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.titleLabel?.textAlignment = .center
-        var config = UIButton.Configuration.plain()
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: UX.buttonPaddingVertical,
-            leading: UX.buttonPaddingHorizontal,
-            bottom: UX.buttonPaddingVertical,
-            trailing: UX.buttonPaddingHorizontal
-        )
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var container = incoming
-            let font = FXFontStyles.Bold.callout.scaledFont()
-            container.font = font
-            container.kern = UX.proceedLabelLetterSpacingEm * font.pointSize
-            return container
-        }
-        button.configuration = config
-        button.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.proceedButton
     }
 
     // MARK: - Init
@@ -171,14 +132,10 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
 
     private func setupAdvancedSectionLayout() {
         advancedSectionContainer.addSubview(advancedSectionStack)
-        advancedSectionStack.translatesAutoresizingMaskIntoConstraints = false
 
         advancedSectionHeader.addSubview(advancedSectionHeaderButton)
-        advancedSectionHeaderButton.translatesAutoresizingMaskIntoConstraints = false
         advancedSectionHeaderButton.addSubview(advancedSectionTitleLabel)
-        advancedSectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         advancedSectionHeaderButton.addSubview(advancedSectionChevron)
-        advancedSectionChevron.translatesAutoresizingMaskIntoConstraints = false
         let chevronConfig = UIImage.SymbolConfiguration(
             pointSize: UX.chevronSize, weight: .regular
         )
@@ -186,10 +143,8 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             systemName: "chevron.right", withConfiguration: chevronConfig
         )
 
-        advancedSectionContent.addSubview(advancedSectionContentStack)
-        advancedSectionContentStack.translatesAutoresizingMaskIntoConstraints = false
         advancedSectionStack.addArrangedSubview(advancedSectionHeader)
-        advancedSectionStack.addArrangedSubview(advancedSectionContent)
+        advancedSectionStack.addArrangedSubview(advancedSectionContentStack)
 
         let padding = UX.sectionPaddingTop
         let listPadding = UX.listItemHorizontalPadding
@@ -226,16 +181,34 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             advancedSectionChevron.widthAnchor.constraint(
                 equalToConstant: UX.chevronSize),
             advancedSectionChevron.heightAnchor.constraint(
-                equalToConstant: UX.chevronSize),
-            advancedSectionContentStack.topAnchor.constraint(
-                equalTo: advancedSectionContent.topAnchor),
-            advancedSectionContentStack.leadingAnchor.constraint(
-                equalTo: advancedSectionContent.leadingAnchor),
-            advancedSectionContentStack.trailingAnchor.constraint(
-                equalTo: advancedSectionContent.trailingAnchor),
-            advancedSectionContentStack.bottomAnchor.constraint(
-                equalTo: advancedSectionContent.bottomAnchor)
+                equalToConstant: UX.chevronSize)
         ])
+    }
+
+    /// Builds the proceed-button container with horizontal/vertical padding.
+    /// The wrapper UIView is needed so we can inset the button within the stack; it uses an explicit
+    /// height constraint so the parent stack view allocates the correct amount of space.
+    private func makeProceedButtonContainer() -> UIView {
+        let buttonContainer = UIView()
+        buttonContainer.translatesAutoresizingMaskIntoConstraints = false
+        buttonContainer.addSubview(proceedButton)
+        let proceedPadding = UX.proceedContainerPadding
+        let hPadding = UX.listItemHorizontalPadding
+        NSLayoutConstraint.activate([
+            proceedButton.topAnchor.constraint(
+                equalTo: buttonContainer.topAnchor, constant: proceedPadding),
+            proceedButton.leadingAnchor.constraint(
+                equalTo: buttonContainer.leadingAnchor, constant: hPadding),
+            proceedButton.trailingAnchor.constraint(
+                equalTo: buttonContainer.trailingAnchor, constant: -hPadding),
+            proceedButton.bottomAnchor.constraint(
+                equalTo: buttonContainer.bottomAnchor, constant: -proceedPadding),
+            proceedButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
+            buttonContainer.heightAnchor.constraint(
+                equalToConstant: UX.buttonHeight + 2 * proceedPadding
+            )
+        ])
+        return buttonContainer
     }
 
     private static func truncateHostInMiddle(_ host: String) -> String {
@@ -287,28 +260,21 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         if advancedSection.showProceedButton {
             let host = url?.host ?? url?.absoluteString ?? ""
             let displayHost = Self.truncateHostInMiddle(host)
-            proceedButton.setTitle(
-                String(format: String.NativeErrorPage.BadCertDomain.ProceedButton, displayHost),
-                for: .normal
+            let proceedTitle = String(
+                format: String.NativeErrorPage.BadCertDomain.ProceedButton,
+                displayHost
             )
+            proceedButton.configure(viewModel: SecondaryRoundedButtonViewModel(
+                title: proceedTitle,
+                a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.proceedButton
+            ))
+            proceedButton.isUserInteractionEnabled = true
+            proceedButton.isAccessibilityElement = true
+            proceedButton.accessibilityElementsHidden = false
+            if let theme { proceedButton.applyTheme(theme: theme) }
             proceedButton.isHidden = false
 
-            let buttonContainer = UIView()
-            buttonContainer.addSubview(proceedButton)
-            proceedButton.translatesAutoresizingMaskIntoConstraints = false
-            let proceedPadding = UX.proceedContainerPadding
-            let hPadding = UX.listItemHorizontalPadding
-            NSLayoutConstraint.activate([
-                proceedButton.topAnchor.constraint(
-                    equalTo: buttonContainer.topAnchor, constant: proceedPadding),
-                proceedButton.leadingAnchor.constraint(
-                    equalTo: buttonContainer.leadingAnchor, constant: hPadding),
-                proceedButton.trailingAnchor.constraint(
-                    equalTo: buttonContainer.trailingAnchor, constant: -hPadding),
-                proceedButton.bottomAnchor.constraint(
-                    equalTo: buttonContainer.bottomAnchor, constant: -proceedPadding),
-                proceedButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight)
-            ])
+            let buttonContainer = makeProceedButtonContainer()
             advancedSectionContentStack.addArrangedSubview(buttonContainer)
             advancedSectionContentStack.setCustomSpacing(
                 UX.proceedContainerGap, after: buttonContainer
@@ -322,8 +288,13 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             advancedSectionContentStack.addArrangedSubview(errorCodeLabel)
         }
 
-        goBackButton.setTitle(goBackTitle, for: .normal)
-        advancedSectionContent.isHidden = !isAdvancedSectionExpanded
+        goBackButton.configure(viewModel: PrimaryRoundedButtonViewModel(
+            title: goBackTitle,
+            a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.goBackButton
+        ))
+        if let theme { goBackButton.applyTheme(theme: theme) }
+
+        advancedSectionContentStack.isHidden = !isAdvancedSectionExpanded
     }
 
     // MARK: - Actions
@@ -336,7 +307,7 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             : String.NativeErrorPage.BadCertDomain.AdvancedButton
         if let theme = theme { applyHeaderTitleTheme(theme: theme) }
         UIView.animate(withDuration: 0.3) {
-            self.advancedSectionContent.isHidden = !self.isAdvancedSectionExpanded
+            self.advancedSectionContentStack.isHidden = !self.isAdvancedSectionExpanded
             self.advancedSectionChevron.transform = self.isAdvancedSectionExpanded
                 ? CGAffineTransform(rotationAngle: .pi / 2) : .identity
         }
@@ -366,10 +337,8 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
 
     func applyTheme(theme: any Theme) {
         self.theme = theme
-        goBackButton.backgroundColor = theme.colors.actionPrimary
-        applyGoBackButtonTheme(theme: theme)
-        proceedButton.backgroundColor = theme.colors.actionSecondary
-        applyProceedButtonTheme(theme: theme)
+        goBackButton.applyTheme(theme: theme)
+        proceedButton.applyTheme(theme: theme)
         advancedSectionContainer.backgroundColor = theme.colors.layer2
         advancedSectionContainer.layer.borderColor = theme.colors.borderPrimary.cgColor
         applyHeaderTitleTheme(theme: theme)
@@ -388,32 +357,6 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
                 .kern: kern
             ]
         )
-    }
-
-    private func applyGoBackButtonTheme(theme: any Theme) {
-        guard var config = goBackButton.configuration else { return }
-        let textColor = theme.colors.textInverted
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var container = incoming
-            container.font = FXFontStyles.Bold.callout.scaledFont()
-            container.foregroundColor = textColor
-            return container
-        }
-        goBackButton.configuration = config
-    }
-
-    private func applyProceedButtonTheme(theme: any Theme) {
-        guard var config = proceedButton.configuration else { return }
-        let textColor = theme.colors.textPrimary
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var container = incoming
-            let font = FXFontStyles.Bold.callout.scaledFont()
-            container.font = font
-            container.kern = UX.proceedLabelLetterSpacingEm * font.pointSize
-            container.foregroundColor = textColor
-            return container
-        }
-        proceedButton.configuration = config
     }
 
     // MARK: - Content Builders
@@ -442,12 +385,14 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
 
     private func createParagraph(text: String, highlightedSubstring: String? = nil) -> UIView {
         let container = UIView()
-        let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
         let textColor = theme?.colors.textPrimary ?? .label
         let regularFont = FXFontStyles.Regular.subheadline.scaledFont()
         let boldFont = FXFontStyles.Bold.subheadline.scaledFont()
+
+        let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+
         if let highlight = highlightedSubstring, !highlight.isEmpty, let range = text.range(of: highlight) {
             let nsRange = NSRange(range, in: text)
             let attributed = NSMutableAttributedString(string: text)
@@ -475,8 +420,9 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         accessibilityIdentifier: String? = nil
     ) -> UIView {
         let container = UIView()
-        let button = UIButton(type: .system)
         let font = FXFontStyles.Regular.subheadline.scaledFont()
+
+        let button = UIButton(type: .system)
         button.setTitle(text, for: .normal)
         button.titleLabel?.font = font
         button.setTitleColor(theme?.colors.actionPrimary, for: .normal)
@@ -507,9 +453,6 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
 
     private func createErrorCode(errorCode: String) -> UIView {
         let container = UIView()
-        let label = UILabel()
-        label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
         let font = FXFontStyles.Regular.footnote.scaledFont()
         let textColor = theme?.colors.textPrimary ?? .label
         let dateFormatter = DateFormatter()
@@ -520,6 +463,10 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         )
         let fullText = "\(errorCodeText)\n\(dateString)"
         let kern = UX.footnoteLetterSpacingEm * font.pointSize
+
+        let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
         label.attributedText = NSAttributedString(
             string: fullText,
             attributes: [

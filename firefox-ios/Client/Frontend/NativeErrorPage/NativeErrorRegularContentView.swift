@@ -7,6 +7,7 @@ import Common
 import ComponentLibrary
 import Shared
 
+@MainActor
 protocol NativeErrorRegularContentViewDelegate: AnyObject {
     func regularContentViewDidTapReload()
 }
