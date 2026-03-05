@@ -25,6 +25,7 @@ enum AppScreenState: Sendable, Equatable {
     case nativeErrorPage(NativeErrorPageState)
     case shortcutsLibrary(ShortcutsLibraryState)
     case storiesFeed(StoriesFeedState)
+    case translationSettings(TranslationSettingsState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -49,6 +50,8 @@ enum AppScreenState: Sendable, Equatable {
         case .nativeErrorPage(let state): return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
         case .shortcutsLibrary(let state): return .shortcutsLibrary(ShortcutsLibraryState.reducer(state, action))
         case .storiesFeed(let state): return .storiesFeed(StoriesFeedState.reducer(state, action))
+        case .translationSettings(let state):
+            return .translationSettings(TranslationSettingsState.reducer(state, action))
         }
     }
 
@@ -73,6 +76,7 @@ enum AppScreenState: Sendable, Equatable {
         case .nativeErrorPage: return .nativeErrorPage
         case .shortcutsLibrary: return .shortcutsLibrary
         case .storiesFeed: return .storiesFeed
+        case .translationSettings: return .translationSettings
         }
     }
 
@@ -96,6 +100,7 @@ enum AppScreenState: Sendable, Equatable {
         case .nativeErrorPage(let state): return state.windowUUID
         case .shortcutsLibrary(let state): return state.windowUUID
         case .storiesFeed(let state): return state.windowUUID
+        case .translationSettings(let state): return state.windowUUID
         }
     }
 }
@@ -170,6 +175,8 @@ struct ActiveScreensState: Sendable, Equatable {
                 screens.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .storiesFeed:
                 screens.append(.storiesFeed(StoriesFeedState(windowUUID: uuid)))
+            case .translationSettings:
+                screens.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
             }
         default:
             return screens

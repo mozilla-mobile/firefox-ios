@@ -224,7 +224,7 @@ final class SettingsCoordinator: BaseCoordinator,
             return nil // Needs authentication, decision handled by VC
 
         case .translation:
-            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+            return TranslationSettingsViewController(windowUUID: windowUUID)
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
@@ -464,7 +464,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        let viewController = TranslationSettingsViewController(windowUUID: windowUUID)
         router.push(viewController)
     }
 
