@@ -1,5 +1,5 @@
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
-"Menu.CloseAllTabsAction.Title" = "Dùin a h&#x2011;uile taba";
+"Menu.CloseAllTabsAction.Title" = "Dùin a h-uile taba";
 
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "Dèan lethbhreac dhen cheangal";
@@ -9,6 +9,9 @@
 
 /* Label for the button, displayed in the menu, downloads a pdf when pressed. */
 "Menu.DownloadPDF.Label.v129" = "Luchdaich a-nuas am PDF";
+
+/* Label for the edit bookmark button in the legacy menu. Pressing this button opens the bookmark editing screen for the current page's bookmark. Please keep the text as short as possible for this label. */
+"Menu.EditBookmark.Label.v135" = "Deasaich";
 
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Lorg san duilleag";

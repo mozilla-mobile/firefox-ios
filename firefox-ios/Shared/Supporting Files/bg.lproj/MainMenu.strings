@@ -67,12 +67,6 @@
 /* On the main menu, at the top, title for the banner which suggest user can set Firefox as default browser. %@ is the app name */
 "MainMenu.HeaderBanner.Title.v142" = "Направете %@ по подразбиране";
 
-/* On the main menu, a title for a label that indicate the current option/action state is off. */
-"MainMenu.Off.Title.v141" = "Изключено";
-
-/* On the main menu, a title for a label that indicate the current option/action state is on. */
-"MainMenu.On.Title.v141" = "Включено";
-
 /* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Отметки";
 
@@ -261,9 +255,6 @@
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Нощен режим";
-
-/* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. %@ is the current zoom level percentage. */
-"MainMenu.Submenus.Tools.PageZoom.Title.v140" = "Мащабиране на страницата (%@)";
 
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current page zoom level. */
 "MainMenu.Submenus.Tools.PageZoomV2.Title.v141" = "Мащабиране на страницата";

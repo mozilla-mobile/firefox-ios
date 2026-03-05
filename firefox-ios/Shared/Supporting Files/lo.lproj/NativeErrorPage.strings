@@ -10,6 +10,9 @@
 /* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
 "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "ທ່ານອາດຈະຕ້ອງເຂົ້າສູ່ລະບົບເຄືອຂ່າຍ Wi-Fi ຂອງທ່ານ ຫຼື ກວດສອບການຕັ້ງຄ່າ VPN ຂອງທ່ານ.";
 
+/* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
+"NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "ລະຫັດຄວາມຜິດພາດ: %@";
+
 /* On certificate error page, this is the text on a button that will hide the advanced information section. */
 "NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "ເຊື່ອງຂັ້ນສູງ";
 
