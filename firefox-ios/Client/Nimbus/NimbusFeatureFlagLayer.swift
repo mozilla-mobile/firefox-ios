@@ -549,6 +549,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.aiKillSwitch.value().enabled
+        return nimbus.features.aiKillSwitchFeature.value().enabled
     }
 }
