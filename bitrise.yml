@@ -1197,6 +1197,8 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'FirefoxBeta build & deploy failed'
         inputs:
+        - title: ''
+        - author_name: ''
         - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Prod_Beta :x:"
         - buttons: ""
         - fields: |
@@ -1305,6 +1307,8 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'FirefoxBeta build & deploy failed'
         inputs:
+        - title: ''
+        - author_name: ''
         - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Beta_Only :x:"
         - buttons: ""
         - fields: |
@@ -1419,6 +1423,8 @@ workflows:
         run_if: ".IsBuildFailed"
         title: 'Nightly FirefoxBeta build & deploy failed'
         inputs:
+        - title: ''
+        - author_name: ''
         - pretext_on_error: "Firefox-iOS :firefox: SPM_Nightly_Beta_Only :x:"
         - buttons: ""
         - fields: |
