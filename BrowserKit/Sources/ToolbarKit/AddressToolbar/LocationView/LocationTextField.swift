@@ -18,7 +18,7 @@ protocol LocationTextFieldDelegate: AnyObject {
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
-    private var notificationCenter: NotificationProtocol = NotificationCenter.default
+    public var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
@@ -44,11 +44,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private let copyShortcutKey = "c"
 
     // MARK: - Init
-    convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.init(frame: frame)
-        self.notificationCenter = notificationCenter
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
