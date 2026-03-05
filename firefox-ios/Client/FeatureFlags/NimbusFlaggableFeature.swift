@@ -13,6 +13,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case adsClient
+    case aiKillSwitch
     case appearanceMenu
     case appIconSelection
     case bottomSearchBar
@@ -82,6 +83,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .appearanceMenu,
+                .aiKillSwitch,
                 .appIconSelection,
                 .appleSummarizer,
                 .addressBarMenu,
@@ -156,8 +158,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
-        // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
-        case .appearanceMenu,
+        case .aiKillSwitch,
+                .appearanceMenu,
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,

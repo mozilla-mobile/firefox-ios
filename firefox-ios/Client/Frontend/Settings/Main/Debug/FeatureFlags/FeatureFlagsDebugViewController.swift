@@ -38,6 +38,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .aiKillSwitch,
+                titleText: format(string: "Ai Kill Switch"),
+                statusText: format(string: "Toggle Ai Kill Switch")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
                 statusText: format(string: "Toggle to show the new apperance menu")
