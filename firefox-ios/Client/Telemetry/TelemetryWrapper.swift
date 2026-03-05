@@ -1112,10 +1112,6 @@ extension TelemetryWrapper {
         // MARK: Default Browser
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
-        case(.action, .tap, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationTapped.record()
-        case(.action, .cancel, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
@@ -1221,27 +1217,6 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
-            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
-               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
-                GleanMetrics.Onboarding.wallpaperSelected.record(wallpaperExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .onboardingWallpaperSelector, .wallpaperSelected, let extras):
-            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
-               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(wallpaperName: name, wallpaperType: type)
-                GleanMetrics.Onboarding.wallpaperSelectorSelected.record(wallpaperExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .view, .onboardingWallpaperSelector, _, _):
-            GleanMetrics.Onboarding.wallpaperSelectorView.record()
-        case (.action, .close, .onboardingWallpaperSelector, _, _):
-            GleanMetrics.Onboarding.wallpaperSelectorClose.record()
-
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()

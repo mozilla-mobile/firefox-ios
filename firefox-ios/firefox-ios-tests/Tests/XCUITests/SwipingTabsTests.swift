@@ -6,22 +6,30 @@ import Foundation
 import XCTest
 
 class SwipingTabsTests: BaseTestCase {
+    var browserScreen: BrowserScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+    }
+
     override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
         try await super.tearDown()
     }
 
-    let addressBar = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     let mozillaValue = "mozilla.org"
     let localhostValue = "localhost"
     let searchValue = "Search or enter address"
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3167438&group_id=654433
+    // https://mozilla.testrail.io/index.php?/cases/view/3167438
     func testSwipeToSwitchTabs_swipingTabsExperimentOn() throws {
         guard !iPad() else {
             throw XCTSkip("Swiping tabs is not available for iPad")
         }
-        selectToolbarBottom()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ToolbarSettings)
+        navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
@@ -33,29 +41,14 @@ class SwipingTabsTests: BaseTestCase {
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
-        mozWaitForValueContains(addressBar, value: mozillaValue)
-        swipeToAndValidateAddressBarValue(swipeRight: true, localhostValue)
-        swipeToAndValidateAddressBarValue(swipeRight: true, searchValue)
-        swipeToAndValidateAddressBarValue(swipeRight: false, localhostValue)
-        swipeToAndValidateAddressBarValue(swipeRight: false, mozillaValue)
-        swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
+        browserScreen.assertAddressBarContains(value: mozillaValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: true, localhostValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: true, searchValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, localhostValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, mozillaValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
         XCUIDevice.shared.orientation = .landscapeLeft
-        swipeToAndValidateAddressBarValue(swipeRight: true, searchValue)
-        swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
-    }
-
-    private func swipeToAndValidateAddressBarValue(swipeRight: Bool, _ value: String) {
-        if swipeRight {
-            addressBar.swipeRight()
-        } else {
-            addressBar.swipeLeft()
-        }
-        mozWaitForValueContains(addressBar, value: value)
-    }
-
-    private func selectToolbarBottom() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(ToolbarSettings)
-        navigator.performAction(Action.SelectToolbarBottom)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: true, searchValue)
+        browserScreen.swipeToAndValidateAddressBarValue(swipeRight: false, searchValue)
     }
 }

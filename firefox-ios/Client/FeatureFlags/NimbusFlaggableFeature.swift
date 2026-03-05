@@ -26,8 +26,11 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hntSponsoredShortcuts
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
+    case homepageNewsTransition
     case homepageSearchBar
     case homepageStoriesScrollDirection
+    case homepageStoryCategories
+    case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case menuDefaultBrowserBanner
@@ -52,7 +55,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
+    case summarizerLanguageExpansion
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -85,13 +90,17 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
+                .homepageNewsTransition,
                 .homepageSearchBar,
+                .homepageStoryCategories,
                 .hostedSummarizer,
+                .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,
@@ -99,6 +108,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -160,8 +170,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
+                .homepageNewsTransition,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
+                .homepageStoryCategories,
+                .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
                 .menuDefaultBrowserBanner,
@@ -170,6 +183,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,
@@ -185,6 +199,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizerShakeGesture,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

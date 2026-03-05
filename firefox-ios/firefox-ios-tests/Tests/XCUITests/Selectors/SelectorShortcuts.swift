@@ -385,7 +385,74 @@ extension Selector {
 
     static func pageIndicatorById(_ id: String, description: String, groups: [String] = []) -> Selector {
          return Selector(strategy: .pageIndicatorById(id), value: id, description: description, groups: groups)
-     }
+    }
+
+    static func buttonStaticTextByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .buttonStaticTextByLabel(label),
+              value: label,
+              description: description,
+              groups: groups
+          )
+    }
+
+    static func otherElementsButtonStaticTextByLabel(
+        _ label: String,
+        description: String,
+        groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .otherElementsButtonStaticTextByLabel(label),
+              value: label,
+              description: description,
+              groups: groups
+          )
+    }
+
+    static func collectionViewLinkById(_ id: String, description: String, groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .collectionViewLinkById(id),
+              value: id,
+              description: description,
+              groups: groups
+          )
+    }
+
+    static func cellButtonById(_ id: String, description: String, groups: [String] = []) -> Selector {
+          Selector(
+              strategy: .cellButtonById(id),
+              value: id,
+              description: description,
+              groups: groups
+          )
+    }
+
+    static func otherElementId(_ id: String, description: String, groups: [String] = []) -> Selector {
+          Selector(strategy: .predicate(
+              NSPredicate(
+                  format: "elementType == %d AND identifier == %@",
+                  XCUIElement.ElementType.other.rawValue,
+                  id
+              )
+          ),
+          value: id,
+          description: description,
+          groups: groups
+          )
+    }
+
+    static func otherElementByLabel(_ label: String, description: String, groups: [String] = []) -> Selector {
+          Selector(strategy: .predicate(
+              NSPredicate(
+                  format: "elementType == %d AND label == %@",
+                  XCUIElement.ElementType.other.rawValue,
+                  label
+              )
+          ),
+          value: label,
+          description: description,
+          groups: groups
+          )
+    }
 }
 
 extension XCUIElement {

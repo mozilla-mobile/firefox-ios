@@ -10,6 +10,9 @@
 /* On certificate error page, this is the first warning message in the advanced section suggesting possible solutions. */
 "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Morda se morate prijaviti v omrežje Wi-Fi ali preveriti nastavitve VPN.";
 
+/* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Če uporabljate službeno omrežje, vam morda lahko več informacij nudi IT-služba.";
+
 /* On certificate error page, this is the description explaining the security risk. */
 "NativeErrorPage.BadCertDomain.Description.v149" = "Nekdo, ki bi se izdajal za to spletno mesto, bi lahko poskušal ukrasti vaše osebne podatke. Morda so tudi nastavitve povezave nepravilno nastavljene.";
 

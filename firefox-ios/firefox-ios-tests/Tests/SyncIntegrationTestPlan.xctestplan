@@ -126,6 +126,7 @@
         "LibraryTestsIphone",
         "LoginTest",
         "MicrosurveyTests",
+        "ModernOnboardingTests",
         "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest",

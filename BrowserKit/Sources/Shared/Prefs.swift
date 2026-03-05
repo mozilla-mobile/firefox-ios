@@ -21,13 +21,12 @@ public struct PrefsKeys {
     public static let KeyMailToOption = "MailToOption"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
-    public static let TermsOfServiceAcceptedVersion = "TermsOfServiceAcceptedVersion"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
     public static let TermsOfUseAccepted = "termsOfUseAccepted"
-    public static let TermsOfUseAcceptedVersion = "TermsOfUseAcceptedVersion"
     public static let TermsOfUseAcceptedDate = "TermsOfUseAcceptedDate"
     public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
+    public static let TermsOfUseShownRecorded = "TermsOfUseShownRecorded"
     public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
@@ -79,6 +78,7 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
+        public static let selectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {

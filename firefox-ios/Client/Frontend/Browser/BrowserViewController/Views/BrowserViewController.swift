@@ -108,12 +108,14 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
+    // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
     var downloadProgressManager: DownloadProgressManager?
     let tabsPanelTelemetry: TabsPanelTelemetry
     let recordVisitManager: RecordVisitObserving
+    let relayController: RelayControllerProtocol
 
     private var _downloadLiveActivityWrapper: Any?
 
@@ -157,9 +159,16 @@ class BrowserViewController: UIViewController,
 
     // Constraints used to show/hide toolbars
     var headerTopConstraint: Constraint?
-    var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
+    var overKeyboardContainerConstraint: ConstraintReference?
+    var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+
+    // Other constraints
+    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
+    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
+    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
+    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -472,6 +481,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
     }
 
+    var isAppStoreReviewTriggerEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+    }
+
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
@@ -536,7 +549,11 @@ class BrowserViewController: UIViewController,
     lazy var browserLayoutManager: BrowserViewControllerLayoutManager = {
         return BrowserViewControllerLayoutManager(
             parentView: view,
-            headerView: header
+            headerView: header,
+            bottomContainer: bottomContainer,
+            overKeyboardContainer: overKeyboardContainer,
+            bottomContentStackView: bottomContentStackView,
+            navigationToolbarContainer: navigationToolbarContainer,
         )
     }()
 
@@ -554,7 +571,8 @@ class BrowserViewController: UIViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
-        recordVisitManager: RecordVisitObserving? = nil
+        recordVisitManager: RecordVisitObserving? = nil,
+        relayController: RelayControllerProtocol = RelayController()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -576,6 +594,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
+        self.relayController = relayController
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -634,8 +653,8 @@ class BrowserViewController: UIViewController,
         }
 
         crashTracker.updateData()
+        guard !isAppStoreReviewTriggerEnabled else { return }
         ratingPromptManager.showRatingPromptIfNeeded()
-        _ = RelayController.shared // Ensure RelayController is init'd early to allow for account notification observers.
     }
 
     private func didAddPendingBlobDownloadToQueue() {
@@ -665,11 +684,11 @@ class BrowserViewController: UIViewController,
     func searchBarPositionDidChange(newSearchBarPosition: SearchBarPosition?) {
         guard let newSearchBarPosition else { return }
 
-        let newPositionIsBottom = newSearchBarPosition == .bottom
-        let newParent = newPositionIsBottom ? overKeyboardContainer : header
+        isBottomSearchBar = newSearchBarPosition == .bottom
+        let newParent = isBottomSearchBar ? overKeyboardContainer : header
 
         addressToolbarContainer.removeFromParent()
-        addressToolbarContainer.addToParent(parent: newParent, addToTop: !newPositionIsBottom)
+        addressToolbarContainer.addToParent(parent: newParent, addToTop: !isBottomSearchBar)
 
         if isSwipingTabsEnabled {
             webPagePreview.invalidateScreenshotData()
@@ -677,10 +696,9 @@ class BrowserViewController: UIViewController,
 
         if let readerModeBar = readerModeBar {
             readerModeBar.removeFromParent()
-            readerModeBar.addToParent(parent: newParent, addToTop: newSearchBarPosition == .bottom)
+            readerModeBar.addToParent(parent: newParent, addToTop: isBottomSearchBar)
         }
 
-        isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
@@ -697,6 +715,8 @@ class BrowserViewController: UIViewController,
             actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
         updateSwipingTabs()
+
+        searchController?.viewModel.updateBottomSearchBarState(isBottomSearchBar: isBottomSearchBar)
     }
 
     private func updateToolbarDisplay(scrollOffset: CGFloat? = nil, shouldUpdateBlurViews: Bool = true) {
@@ -989,7 +1009,7 @@ class BrowserViewController: UIViewController,
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            if !isMinimalAddressBarEnabled { scrollController.showToolbars(animated: false) }
+            scrollController.showToolbars(animated: false)
         }
 
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
@@ -1764,6 +1784,9 @@ class BrowserViewController: UIViewController,
         if isSnapKitRemovalEnabled {
             browserLayoutManager.setScrollController(scrollController as? LegacyTabScrollProvider)
             browserLayoutManager.setupHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+            browserLayoutManager.setupBottomContainerConstraints()
+            browserLayoutManager.setupBottomContentStackViewConstraints()
+            browserLayoutManager.setupOverKeyboardContainerConstraints()
         } else {
             updateHeaderConstraints()
         }
@@ -1798,6 +1821,7 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Snapkit related
+
     private func updateHeaderConstraints() {
         guard !isSnapKitRemovalEnabled else {
             browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
@@ -1844,30 +1868,34 @@ class BrowserViewController: UIViewController,
         }
 
         updateOverKeyboardContainerConstraints()
-        updateBottomContainerConstraints()
-        updateBottomContentStackViewConstraints()
+        updateSnapKitBottomContainerConstraints()
         updateConstraintsForKeyboard()
+        updateBottomContentStackViewConstraints()
 
         super.updateViewConstraints()
     }
 
-    private func updateBottomContainerConstraints() {
-        bottomContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            } else {
-                bottomContainerConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-            }
-            make.leading.trailing.equalTo(view)
+    func updateOverKeyboardContainerConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitOverKeyboardContainerConstraints()
+            return
         }
+
+        browserLayoutManager.updateOverKeyboardContainerConstraints(isBottomSearchBar: isBottomSearchBar,
+                                                                    hasZoomPageBar: zoomPageBar != nil)
     }
 
-    func updateOverKeyboardContainerConstraints() {
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitOverKeyboardContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         overKeyboardContainer.snp.remakeConstraints { make in
             if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
             } else {
-                overKeyboardContainerConstraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
+                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
             }
 
             if !isBottomSearchBar, zoomPageBar != nil {
@@ -1879,21 +1907,68 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateBottomContentStackViewConstraints() {
-        bottomContentStackView.snp.remakeConstraints { remake in
-            adjustBottomContentStackView(remake)
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitBottomContainerConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
+            let constraintReference = ConstraintReference(snapKit: constraint)
+
+            if let scrollController = scrollController as? LegacyTabScrollProvider {
+                scrollController.bottomContainerConstraint = constraintReference
+            } else {
+                bottomContainerConstraint = constraintReference
+            }
+            make.leading.trailing.equalTo(view)
         }
     }
 
     func updateConstraintsForKeyboard() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapkitConstraintsForKeyboard()
+            return
+        }
+
+        if tabManager.selectedTab?.isFindInPageMode == false {
+            adjustBottomSearchBarForKeyboard()
+        }
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapkitConstraintsForKeyboard() {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: true)
+            scrollController.hideToolbars(animated: false)
         } else {
             adjustBottomSearchBarForKeyboard()
         }
     }
 
-    private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
+    private func updateBottomContentStackViewConstraints() {
+        guard isSnapKitRemovalEnabled else {
+            updateSnapKitBottomContentStackViewConstraints()
+            return
+        }
+
+        browserLayoutManager.updateBottomContentStackViewConstraints(isSnapKitRemovalEnabled: isSnapKitRemovalEnabled,
+                                                                     isBottomSearchBar: isBottomSearchBar,
+                                                                     keyboardState: keyboardState)
+    }
+
+    // TODO: SnapKit removal clean up
+    private func updateSnapKitBottomContentStackViewConstraints() {
+        guard !isSnapKitRemovalEnabled else { return }
+
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustSnapKitBottomContentStackView(remake)
+        }
+    }
+
+    private func adjustSnapKitBottomContentStackView(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.left.equalTo(view.safeArea.left)
         remake.right.equalTo(view.safeArea.right)
         remake.centerX.equalTo(view)
@@ -1904,13 +1979,15 @@ class BrowserViewController: UIViewController,
         bottomContentStackView.setContentHuggingPriority(.defaultHigh, for: .vertical)
 
         if isBottomSearchBar {
-            adjustBottomContentBottomSearchBar(remake)
+            adjustSnapKitBottomContentBottomSearchBar(remake)
         } else {
-            adjustBottomContentTopSearchBar(remake)
+            adjustSnapKitBottomContentTopSearchBar(remake)
         }
     }
 
-    private func adjustBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentTopSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         if let keyboardHeight = keyboardState?.intersectionHeightForView(view), keyboardHeight > 0 {
             remake.bottom.equalTo(view).offset(-keyboardHeight)
         } else if !navigationToolbarContainer.isHidden {
@@ -1921,7 +1998,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func adjustBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+    private func adjustSnapKitBottomContentBottomSearchBar(_ remake: ConstraintMaker) {
+        guard !isSnapKitRemovalEnabled else { return }
+
         remake.bottom.lessThanOrEqualTo(overKeyboardContainer.snp.top)
         remake.bottom.lessThanOrEqualTo(view.safeArea.bottom)
         if !isToolbarTranslucencyRefactorEnabled {
@@ -1930,13 +2009,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustBottomSearchBarForKeyboard() {
-        let keyboardHeight = keyboardState?.intersectionHeightForView(view)
-        let isKeyboardVisible = keyboardHeight != nil && keyboardHeight! > 0
+        let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
+        let isKeyboardVisible = keyboardHeight > 0
 
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else {
-            guard isBottomSearchBar, isKeyboardVisible, keyboardHeight != nil else {
+            guard isBottomSearchBar, isKeyboardVisible else {
                 overKeyboardContainer.removeKeyboardSpacer()
                 return
             }
@@ -1950,7 +2029,7 @@ class BrowserViewController: UIViewController,
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
 
-        guard isBottomSearchBar, isKeyboardVisible, let keyboardHeight else {
+        guard isBottomSearchBar, isKeyboardVisible else {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -2065,13 +2144,15 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
-            // The web view can go gray if it was zombified due to memory pressure.
-            // When this happens, the URL is nil, so try restoring the page upon selection.
-            logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
-            if selectedTab.temporaryDocument == nil {
-                selectedTab.reload()
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
+                // The web view can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
+                if selectedTab.temporaryDocument == nil {
+                    selectedTab.reload()
+                }
             }
         }
 
@@ -2273,20 +2354,22 @@ class BrowserViewController: UIViewController,
 
         guard let searchController = self.searchController else { return }
 
-        // This needs to be added to ensure during animation of the keyboard,
-        // No content is showing in between the bottom search bar and the searchViewController
-        if isBottomSearchBar, keyboardBackdrop == nil {
-            keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
-            view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
-            if isSnapKitRemovalEnabled {
-                setupKeyboardBackdropConstraints(for: keyboardBackdrop)
-            } else {
-                keyboardBackdrop?.snp.makeConstraints { make in
-                    make.edges.equalTo(view)
+        if !isToolbarTranslucencyRefactorEnabled {
+            // This needs to be added to ensure during animation of the keyboard,
+            // No content is showing in between the bottom search bar and the searchViewController
+            if isBottomSearchBar, keyboardBackdrop == nil {
+                keyboardBackdrop = UIView()
+                keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
+                view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
+                if isSnapKitRemovalEnabled {
+                    setupKeyboardBackdropConstraints(for: keyboardBackdrop)
+                } else {
+                    keyboardBackdrop?.snp.makeConstraints { make in
+                        make.edges.equalTo(view)
+                    }
                 }
+                view.bringSubviewToFront(bottomContainer)
             }
-            view.bringSubviewToFront(bottomContainer)
         }
 
         addChild(searchController)
@@ -2328,8 +2411,10 @@ class BrowserViewController: UIViewController,
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
 
-        keyboardBackdrop?.removeFromSuperview()
-        keyboardBackdrop = nil
+        if !isToolbarTranslucencyRefactorEnabled {
+            keyboardBackdrop?.removeFromSuperview()
+            keyboardBackdrop = nil
+        }
 
         contentContainer.accessibilityElementsHidden = false
     }
@@ -2392,27 +2477,35 @@ class BrowserViewController: UIViewController,
             // Special case for mobile folder since it's title is "mobile" and we want to display it as "Bookmarks"
             if let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder),
                recentBookmarkFolderGuid != BookmarkRoots.MobileFolderGUID {
+                // Ensure the recentBookmarkFolderGuid exists in the places db
                 profile.places.getBookmark(guid: recentBookmarkFolderGuid)
                     .uponQueue(.main) { result in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
-                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else { return }
+                            guard let bookmarkFolder = result.successValue as? BookmarkFolderData else {
+                                self.showDefaultBookmarkToast(urlString: urlString, title: title)
+                                return
+                            }
                             let folderName = bookmarkFolder.title
                             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
                             self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
                         }
                     }
-                // If recent bookmarks folder is nil or the mobile (default) folder
+            // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showToast(
-                    urlString,
-                    title,
-                    message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
-                    toastAction: .bookmarkPage
-                )
+                showDefaultBookmarkToast(urlString: urlString, title: title)
             }
         default: break
         }
+    }
+
+    private func showDefaultBookmarkToast(urlString: String?, title: String?) {
+        showToast(
+            urlString,
+            title,
+            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
+            toastAction: .bookmarkPage
+        )
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
@@ -2878,6 +2971,32 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
+        case .certificatesFromErrorPage:
+            guard let errorPageURL = type.errorPageURL,
+                  let originalURL = type.url,
+                  let title = type.certificateTitle else {
+                logger.log(
+                    "errorPageURL, url or certificateTitle should not be nil when navigating for certificatesFromErrorPage",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.showCertificatesFromErrorPage(
+                errorPageURL: errorPageURL,
+                originalURL: originalURL,
+                title: title
+            )
+        case .nativeErrorPageLearnMore:
+            guard let url = type.url else {
+                logger.log(
+                    "url should not be nil when navigating for nativeErrorPageLearnMore",
+                    level: .warning,
+                    category: .coordinator
+                )
+                return
+            }
+            navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
         }
     }
 
@@ -3904,7 +4023,10 @@ class BrowserViewController: UIViewController,
         let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = toolbarHelper.shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
-        keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+
+        if !isToolbarTranslucencyRefactorEnabled {
+            keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
+        }
 
         // to make sure on homepage with bottom search bar the status bar is hidden
         // we have to adjust the background color to match the homepage background color
@@ -4134,9 +4256,9 @@ class BrowserViewController: UIViewController,
         guard let tab, let tabURL = tab.url else { return }
         guard RelayController.isFeatureEnabled else { return }
 
-        if RelayController.shared.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
-            RelayController.shared.telemetry.showPrompt()
-            RelayController.shared.emailFieldFocused(in: tab)
+        if relayController.emailFocusShouldDisplayRelayPrompt(url: tabURL) {
+            relayController.telemetry.showPrompt()
+            relayController.emailFieldFocused(in: tab)
             tab.webView?.accessoryView.useRelayMaskClosure = { [weak self] in self?.handleUseRelayMaskTapped() }
             tab.webView?.accessoryView.reloadViewFor(.relayEmailMask)
             Task { @MainActor [weak self] in
@@ -4157,7 +4279,7 @@ class BrowserViewController: UIViewController,
     private func handleUseRelayMaskTapped() {
         guard RelayController.isFeatureEnabled else { return }
         guard let currentTab = tabManager.selectedTab else { return }
-        RelayController.shared.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
+        relayController.populateEmailFieldWithRelayMask(for: currentTab) { [weak self] result in
             self?.handleRelayMaskResult(result)
         }
     }
@@ -4662,9 +4784,9 @@ extension BrowserViewController: TabManagerDelegate {
             navigationHandler?.removeDocumentLoading()
         }
 
-        // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
-        // and having multiple views with the same label confuses tests.
-        if let previousWebView = previousTab?.webView {
+        // Remove the old accessibilityLabel only when the selected tab isn't the previous tab.
+        // When the previous webview isn't visible anymore we ensure proper clean up for tests.
+        if let previousWebView = previousTab?.webView, selectedTab != previousTab {
             previousWebView.endEditing(true)
             previousWebView.accessibilityLabel = nil
             previousWebView.accessibilityElementsHidden = true
@@ -4723,16 +4845,20 @@ extension BrowserViewController: TabManagerDelegate {
                 }
             }
 
-            if selectedTab.isFxHomeTab {
-                // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                // See: [FXIOS-10612] + [FXIOS-10335]
-                needsReload = true
-            }
+            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+                if selectedTab.isFxHomeTab {
+                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
+                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
+                    needsReload = true
+                }
 
-            if webView.url == nil {
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
+                if webView.url == nil {
+                    // The webView can go gray if it was zombified due to memory pressure.
+                    // When this happens, the URL is nil, so try restoring the page upon selection.
+                    needsReload = true
+                }
             }
         }
 
@@ -4775,17 +4901,23 @@ extension BrowserViewController: TabManagerDelegate {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
         }
 
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         /// If the selectedTab is showing an error page trigger a reload
-        if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly),
+           let url = selectedTab.url,
+           let internalUrl = InternalURL(url),
+           internalUrl.isErrorPage {
             needsReload = true
         }
 
-        if selectedTab.temporaryDocument != nil {
-            needsReload = false
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+                needsReload = false
+            }
         }
 
-        // TODO: FXIOS-14783 - Investigate proper solution to needsReload
-        if needsReload, selectedTab.url?.absoluteString != "about:blank" {
+        if needsReload {
             selectedTab.reloadPage()
         }
     }
@@ -4975,7 +5107,13 @@ extension BrowserViewController {
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateConstraintsForKeyboard()
+        }
+
         if isSwipingTabsEnabled {
             addressToolbarContainer.hideSkeletonBars()
         }
@@ -5010,7 +5148,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         keyboardState = nil
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateConstraintsForKeyboard()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -5049,12 +5191,18 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else {
+            updateConstraintsForKeyboard()
+        }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
-        updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
 
         UIView.animate(
             withDuration: state.animationDuration,

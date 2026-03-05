@@ -45,30 +45,6 @@ class BrowsingPDFTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307117
     func testOpenLinkFromPDF() {
-        // Sometimes the test fails before opening the URL
-        // Let's make sure the homepage is ready
-        mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        navigator.openURL(PDF_website["url"]!)
-        waitUntilPageLoad()
-
-        // Click on a link on the pdf and check that the website is shown
-        app.webViews.links.element(boundBy: 0).tapOnApp()
-        waitUntilPageLoad()
-        let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
-        if checkboxValidation.exists {
-            checkboxValidation.waitAndTap()
-        }
-        mozWaitForValueContains(url, value: PDF_website["urlValue"]!)
-        // Let's comment the next line until that fails intermittently due to the page re-direction
-        // mozWaitForElementToExist(app.staticTexts["Education and schools"])
-
-        // Go back to pdf view
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
-        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307117
-    func testOpenLinkFromPDF_TAE() {
         // Sometimes the test fails before opening the URL. Let's make sure the homepage is ready
         topSites.assertVisible()
 

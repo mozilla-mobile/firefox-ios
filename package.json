@@ -1,5 +1,5 @@
 {
-  "name": "firefox-ios",
+  "name": "@mozilla/firefox-ios",
   "version": "1.0.0",
   "description": "Firefox for iOS",
   "scripts": {
@@ -14,16 +14,16 @@
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
     "darkreader": "^4.9.89",
-    "dompurify": "^3.2.4",
+    "dompurify": "^3.3.1",
     "page-metadata-parser": "1.1.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/preset-env": "7.17.10",
-    "babel-loader": "^8.2.5",
-    "glob": "^8.0.1",
+    "@babel/core": "^7.28.6",
+    "@babel/preset-env": "7.28.6",
+    "babel-loader": "^8.4.1",
+    "glob": "^8.1.0",
     "script-loader": "^0.7.2",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^4.9.2"
+    "webpack": "^5.105.0",
+    "webpack-cli": "^4.10.0"
   }
 }

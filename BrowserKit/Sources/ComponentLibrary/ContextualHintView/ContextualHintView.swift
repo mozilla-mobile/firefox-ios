@@ -6,11 +6,14 @@ import Foundation
 import Common
 import UIKit
 
-public final class ContextualHintView: UIView, ThemeApplicable {
+public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
     private var viewModel: ContextualHintViewModel?
+    private var closeButtonHeightConstraint: NSLayoutConstraint?
+    private var closeButtonWidthConstraint: NSLayoutConstraint?
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
+        static let maxCloseButtonSize = CGSize(width: closeButtonSize.width * 2.0, height: closeButtonSize.height * 2.0)
         static let closeButtonTrailing: CGFloat = 5
         static let closeButtonTop: CGFloat = 23
         static let closeButtonBottom: CGFloat = 12
@@ -22,14 +25,26 @@ public final class ContextualHintView: UIView, ThemeApplicable {
         static let heightSpacing: CGFloat = UX.stackViewTopArrowTopConstraint + UX.stackViewBottomArrowTopConstraint
     }
 
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
     // MARK: - UI Elements
     private lazy var contentContainer: UIView = .build { _ in }
 
     private lazy var closeButton: UIButton = .build { button in
+        button.configuration = nil
         button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         button.addTarget(self, action: #selector(self.didTapCloseButton), for: .touchUpInside)
-        button.configuration = .plain()
         button.configuration?.contentInsets = UX.closeButtonInsets
     }
 
@@ -104,6 +119,12 @@ public final class ContextualHintView: UIView, ThemeApplicable {
         let topPadding = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
         let closeButtonPadding = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
 
+        let heightConstraint = closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
+        closeButtonHeightConstraint = heightConstraint
+        let widthConstraint = closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
+        closeButtonWidthConstraint = widthConstraint
+        updateButtonSizeForDynamicFont()
+
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalTo: stackView.heightAnchor, constant: UX.heightSpacing),
 
@@ -121,8 +142,8 @@ public final class ContextualHintView: UIView, ThemeApplicable {
 
             closeButton.topAnchor.constraint(equalTo: topAnchor, constant: closeButtonPadding),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.closeButtonTrailing),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
-            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
+            heightConstraint,
+            widthConstraint,
 
             stackView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: topPadding),
             stackView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor,
@@ -146,5 +167,27 @@ public final class ContextualHintView: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
+    }
+
+    private func updateButtonSizeForDynamicFont() {
+        let scaledWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
+        let scaledHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
+        let dynamicWidth = min(max(scaledWidth, UX.closeButtonSize.width), UX.maxCloseButtonSize.width)
+        let dynamicHeight = min(max(scaledHeight, UX.closeButtonSize.height), UX.maxCloseButtonSize.height)
+        closeButtonHeightConstraint?.constant = dynamicHeight
+        closeButtonWidthConstraint?.constant = dynamicWidth
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            ensureMainThread {
+                self.updateButtonSizeForDynamicFont()
+            }
+        default:
+            break
+        }
     }
 }

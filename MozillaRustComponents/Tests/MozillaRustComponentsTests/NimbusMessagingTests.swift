@@ -18,7 +18,7 @@ class NimbusMessagingTests: XCTestCase {
 
     func createNimbus() throws -> NimbusMessagingProtocol {
         let appSettings = NimbusAppSettings(appName: "NimbusMessagingTests", channel: "nightly")
-        let nimbusEnabled = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath())
+        let nimbusEnabled = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath())
         XCTAssert(nimbusEnabled is Nimbus)
         if let nimbus = nimbusEnabled as? Nimbus {
             try nimbus.initializeOnThisThread()

@@ -94,7 +94,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         line: UInt = #line
     ) -> IntroViewController {
         let onboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingViewModel, onboardingReason: .newUser)
         let viewModel = IntroViewModel(profile: MockProfile(),
                                        model: onboardingViewModel,
                                        telemetryUtility: telemetryUtility)

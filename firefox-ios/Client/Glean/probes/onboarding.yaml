@@ -17,7 +17,7 @@ $tags:
 
 ###############################################################################
 # Onboarding Telemetry Metrics
-# 
+#
 # This file contains telemetry metrics for tracking user interactions
 # during the onboarding flow (both legacy UIKit and modern SwiftUI), including:
 # - Card views and navigation
@@ -31,6 +31,48 @@ $tags:
 
 # Onboarding metrics
 onboarding:
+  shown:
+    type: event
+    description: |
+      Triggered when onboarding appears after the ToS screen.
+    extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-14577
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/32275
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  dismissed:
+    type: event
+    description: |
+      Triggered when the user exits onboarding (skip or complete).
+    extra_keys:
+      method:
+        type: string
+        description: |
+          How onboarding was exited: "skipped" or "completed".
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-14577
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/32275
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
   card_view:
     type: event
     description: |
@@ -44,6 +86,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
@@ -56,6 +102,9 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
@@ -83,6 +132,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
@@ -95,6 +148,9 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
@@ -123,6 +179,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
@@ -135,6 +195,9 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
@@ -163,6 +226,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
@@ -175,6 +242,9 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18358
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
@@ -197,6 +267,10 @@ onboarding:
         type: string
         description: |
           Whether it's a fresh install or an upgrade flow
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
@@ -209,6 +283,9 @@ onboarding:
         type: string
         description: |
           The position of the card in the current branch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14566
       - https://github.com/mozilla-mobile/firefox-ios/issues/30844
@@ -224,6 +301,9 @@ onboarding:
     type: event
     description: |
       User viewed the terms of service onboarding card.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -235,6 +315,9 @@ onboarding:
     type: event
     description: |
       User clicked accept button on the terms of service onboarding card.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -246,6 +329,9 @@ onboarding:
     type: event
     description: |
       User clicked the terms of service link on the onboarding card.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -257,6 +343,9 @@ onboarding:
     type: event
     description: |
       User clicked the manage link on the terms of service onboarding card.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -268,6 +357,9 @@ onboarding:
     type: event
     description: |
       User clicked the privacy policy link on the terms of service onboarding card.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -284,6 +376,9 @@ onboarding:
         type: boolean
         description: |
           The value of the technical interaction data switch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -300,6 +395,9 @@ onboarding:
         type: boolean
         description: |
           The value of the automatic crash reports switch.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-10733
     data_reviews:
@@ -313,6 +411,10 @@ onboarding:
       Recorded when the user selects a wallpaper from
       the wallpaper onboarding screen.
     extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       wallpaper_name:
         type: string
         description: |
@@ -321,6 +423,9 @@ onboarding:
         type: string
         description: |
           The name of the wallpaper set.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     data_reviews:
@@ -333,6 +438,14 @@ onboarding:
     type: event
     description: |
       Recorded when the wallpaper onboarding bottom sheet is shown to the user.
+    extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
@@ -347,6 +460,14 @@ onboarding:
     description: |
       Recorded when the wallpaper onboarding bottom sheet
       is dismissed by the user.
+    extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
@@ -363,6 +484,10 @@ onboarding:
       the wallpaper onboarding bottom sheet. Wallpaper information
       is sent in the extra keys.
     extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       wallpaper_name:
         type: string
         description: |
@@ -371,6 +496,9 @@ onboarding:
         type: string
         description: |
           The name of the wallpaper set.
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11675
     data_reviews:
@@ -389,6 +517,13 @@ onboarding:
         type: boolean
         description: |
           Whether the notification permission was granted.
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/13039
     data_reviews:
@@ -401,6 +536,14 @@ onboarding:
     type: event
     description: |
       Records the users interaction with the engagement notification.
+    extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     data_reviews:
@@ -413,6 +556,14 @@ onboarding:
     type: event
     description: |
       Records the cancelation of a scheduled engagement notification.
+    extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     data_reviews:
@@ -430,10 +581,17 @@ onboarding.default_browser_sheet:
       Records when the Go To Settings button on default browser onboarding
       is clicked. This applies to both legacy and modern onboarding flows.
     extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
           The onboarding variant (modern, legacy, or japan).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7870
       - https://github.com/mozilla-mobile/firefox-ios/issues/31366
@@ -452,10 +610,17 @@ onboarding.default_browser_sheet:
       Records when default browser onboarding is dismissed.
       This applies to both legacy and modern onboarding flows.
     extra_keys:
+      onboarding_reason:
+        type: string
+        description: |
+          Whether this is a new_user (first install) or show_tour (returning user via Settings).
       onboarding_variant:
         type: string
         description: |
           The onboarding variant (modern, legacy, or japan).
+    send_in_pings:
+      - events
+      - onboarding
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7870
       - https://github.com/mozilla-mobile/firefox-ios/issues/31366
@@ -468,4 +633,3 @@ onboarding.default_browser_sheet:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-

@@ -740,6 +740,7 @@ struct AccessibilityIdentifiers {
             static let title = "SummarizeSettings"
             static let summarizeContentSwitch = "summarizeContentFeature"
             static let shakeGestureSwitch = "shakeGestureEnabledKey"
+            static let languageCell = "summarizeLanguageCell"
         }
 
         struct Theme {

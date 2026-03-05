@@ -1,6 +1,15 @@
 /* This is the title of the Pocket section on Firefox Homepage. */
 "FirefoxHome.Pocket.SectionTitle.v140" = "ამბები";
 
+/* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
+"FirefoxHome.PrivacyNotice.Body.v148" = "%1$@ განვაახლეთ იმ უახლესი შესაძლებლობების ასახვისთვის, რომელთაც შეიცავს %2$@. %3$@";
+
+/* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
+"FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "ვრცლად";
+
+/* Label for the “Privacy Notice” link inserted into the first placeholder of the Privacy Notice body label. This text will appear as a tappable link that opens the updated Firefox Privacy Notice. */
+"FirefoxHome.PrivacyNotice.PrivacyNoticeLink.v148" = "პირადულობის განაცხადი";
+
 /* The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu */
 "FirefoxHome.ScreenTitle.v144" = "საწყისი გვერდი";
 
@@ -9,6 +18,12 @@
 
 /* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
 "FirefoxHome.Stories.AllStoriesViewTitle.v145" = "ყველა სიახლე";
+
+/* This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles */
+"FirefoxHome.Stories.NewsAffordanceLabel.v149" = "სიახლეები";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.NewsSectionTitle.v149" = "სიახლეები";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
 "FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "ხშირად ნანახი დღეს";

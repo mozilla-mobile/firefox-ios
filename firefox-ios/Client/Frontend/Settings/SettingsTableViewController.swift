@@ -813,6 +813,120 @@ class WithoutAccountSetting: AccountSetting {
     }
 }
 
+/// A setting that displays a picker menu allowing users to select from multiple predefined options.
+///
+/// Note: on pre iOS 17.4 devices the setting shows an `UIAlertController` on cell tap instead of an `UIMenu`.
+class PickerSetting<Value: Equatable>: Setting {
+    private let pickerOptions: [(value: Value, displayString: String)]
+    private let onOptionSelected: (Value) -> Void
+    private var menuItems: [UIAction] {
+        return pickerOptions.map { option in
+            return UIAction(title: option.displayString) { [weak self] _ in
+                self?.selectedDisplayString = option.displayString
+                self?.onOptionSelected(option.value)
+            }
+        }
+    }
+    private var selectedDisplayString: String
+    private var pickerButton: UIButton?
+
+    /// Initializes a new picker setting with the specified configuration.
+    ///
+    /// - Parameters:
+    ///   - selectedValue: The currently selected value that determines which option appears as selected.
+    ///   - pickerOptions: An array of tuples pairing each selectable value with its localized display string.
+    ///   - accessibilityIdentifier: The accessibility identifier for the setting cell.
+    ///   - onOptionSelected: A closure called when a new option is selected,
+    ///   receiving the selected value (not the display string).
+    init(
+        selectedValue: Value,
+        pickerOptions: [(value: Value, displayString: String)],
+        accessibilityIdentifier: String,
+        onOptionSelected: @escaping (Value) -> Void
+    ) {
+        self.selectedDisplayString = pickerOptions.first(where: { $0.value == selectedValue })?.displayString ?? ""
+        self.pickerOptions = pickerOptions
+        self.onOptionSelected = onOptionSelected
+        super.init()
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell, theme: any Theme) {
+        super.onConfigureCell(cell, theme: theme)
+        cell.textLabel?.text = selectedDisplayString
+
+        // We show the picker button with the attached UIMenu only in iOS 17.4 more devices cause on previous
+        // version there is no possibility to trigger the menu programmatically on cell tap, given missing
+        // button.performPrimaryAction() API.
+        if #available(iOS 17.4, *) {
+            let pickerButton = makePickerButton(theme: theme)
+            cell.accessoryView = pickerButton
+            self.pickerButton = pickerButton
+        } else {
+            // Use UIImageView for older iOS to avoid button tint color flickering issue when tapping the cell.
+            let accessoryImageView = makeAccessoryImageView(theme: theme)
+            cell.accessoryView = accessoryImageView
+        }
+
+        cell.selectionStyle = .none
+    }
+
+    private func makePickerButton(theme: any Theme) -> UIButton {
+        let button = UIButton()
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.sizeToFit()
+        button.tintColor = theme.colors.iconSecondary
+        button.isAccessibilityElement = false
+        button.showsMenuAsPrimaryAction = true
+        button.menu = UIMenu(children: menuItems)
+        return button
+    }
+
+    private func makeAccessoryImageView(theme: any Theme) -> UIImageView {
+        let imageView = UIImageView(
+            image: UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate)
+        )
+        imageView.tintColor = theme.colors.iconSecondary
+        imageView.contentMode = .scaleAspectFit
+        imageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        return imageView
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        if #available(iOS 17.4, *) {
+            pickerButton?.performPrimaryAction()
+        } else {
+            presentActionSheet(from: navigationController)
+        }
+    }
+
+    private func presentActionSheet(from navigationController: UINavigationController?) {
+        let alertController = UIAlertController(
+            title: nil,
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        for option in pickerOptions {
+            let action = UIAlertAction(
+                title: option.displayString,
+                style: .default
+            ) { [weak self] _ in
+                self?.selectedDisplayString = option.displayString
+                self?.onOptionSelected(option.value)
+            }
+            alertController.addAction(action)
+        }
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+
+        navigationController?.present(alertController, animated: true)
+    }
+}
+
 protocol SettingsDelegate: AnyObject {
     @MainActor
     func settingsOpenURLInNewTab(_ url: URL)
@@ -885,11 +999,6 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
         super.applyTheme()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        refresh()
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
@@ -907,13 +1016,6 @@ class SettingsTableViewController: ThemedTableViewController, Notifiable {
 
     private func syncDidChangeState() {
         self.tableView.reloadData()
-    }
-
-    private func refresh() {
-        // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported
-        // and will likely crash the app.
-        // self.profile.rustAccount.refreshProfile()
-        // TODO [rustfxa] listen to notification and refresh profile
     }
 
     func firefoxAccountDidChange() {
