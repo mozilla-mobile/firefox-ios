@@ -31,6 +31,7 @@ enum AppScreen {
     case nativeErrorPage
     case shortcutsLibrary
     case storiesFeed
+    case translationSettings
 }
 
 enum ScreenActionType: ActionType {

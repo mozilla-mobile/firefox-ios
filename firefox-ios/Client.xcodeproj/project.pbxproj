@@ -1394,6 +1394,9 @@
 		AAD1CD872EAABA8100BEC90A /* TranslationsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */; };
 		AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */; };
 		AAD861AB2E9E75AB00F6E0E0 /* TranslationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */; };
+		AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */; };
+		AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */; };
+		AAD861B02E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */; };
 		AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */; };
 		AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBD0E32EBBA79700F35E30 /* MockLanguageDetector.swift */; };
 		AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */ = {isa = PBXBuildFile; productRef = AB2AC6622BCFD0A200022AAB /* X509 */; };
@@ -9745,6 +9748,9 @@
 		AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsConfiguration.swift; sourceTree = "<group>"; };
 		AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSetting.swift; sourceTree = "<group>"; };
 		AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewController.swift; sourceTree = "<group>"; };
+		AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsAction.swift; sourceTree = "<group>"; };
+		AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsState.swift; sourceTree = "<group>"; };
+		AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsMiddleware.swift; sourceTree = "<group>"; };
 		AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddlewareTests.swift; sourceTree = "<group>"; };
 		AADBD0E32EBBA79700F35E30 /* MockLanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLanguageDetector.swift; sourceTree = "<group>"; };
 		AAF64ABAB8A585208603D45B /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -14362,6 +14368,9 @@
 		AAD861A92E9E757D00F6E0E0 /* Translation */ = {
 			isa = PBXGroup;
 			children = (
+				AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */,
+				AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */,
+				AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */,
 				AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */,
 			);
 			path = Translation;
@@ -19064,6 +19073,9 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */,
 				AAD861AB2E9E75AB00F6E0E0 /* TranslationSettingsViewController.swift in Sources */,
+				AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */,
+				AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */,
+				AAD861B02E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift in Sources */,
 				5AD3B67E2CF665B400AFA1FE /* UIApplicationInterface.swift in Sources */,
 				435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */,
 				0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */,
