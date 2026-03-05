@@ -508,6 +508,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.loadViewIfNeeded()
         let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
         subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
 
         let collectionView = try getCollectionView(from: subject)
         let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
@@ -534,6 +535,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         subject.loadViewIfNeeded()
         let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
         subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
 
         let collectionView = try getCollectionView(from: subject)
         let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
