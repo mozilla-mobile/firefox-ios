@@ -161,14 +161,10 @@ final class AddressToolbarContainerModel: Equatable {
             lockIconNeedsTheming = hasSecureContent
         }
 
-        let lockIconButtonA11yId = hasSecureContent ?
-            AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
-            AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
-
         let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: "",
             searchEngineImageViewA11yLabel: "",
-            lockIconButtonA11yId: lockIconButtonA11yId,
+            lockIconButtonA11yId: nil,
             lockIconButtonA11yLabel: "",
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: "",

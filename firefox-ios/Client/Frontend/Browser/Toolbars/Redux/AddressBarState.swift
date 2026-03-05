@@ -241,7 +241,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             borderPosition: borderPosition,
             url: nil,
             searchTerm: nil,
-            lockIconButtonA11yId: "",
+            lockIconButtonA11yId: nil,
             lockIconImageName: nil,
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
