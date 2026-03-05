@@ -1199,7 +1199,7 @@ workflows:
         inputs:
         - title: ''
         - author_name: ''
-        - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Prod_Beta :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Deploy_Prod_Beta* :x:"
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
@@ -1309,7 +1309,7 @@ workflows:
         inputs:
         - title: ''
         - author_name: ''
-        - pretext_on_error: "Firefox-iOS :firefox: SPM_Deploy_Beta_Only :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Deploy_Beta_Only* :x:"
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
@@ -1425,7 +1425,7 @@ workflows:
         inputs:
         - title: ''
         - author_name: ''
-        - pretext_on_error: "Firefox-iOS :firefox: SPM_Nightly_Beta_Only :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Nightly_Beta_Only* :x:"
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
