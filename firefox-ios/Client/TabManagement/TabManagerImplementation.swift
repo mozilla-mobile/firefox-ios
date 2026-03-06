@@ -720,7 +720,24 @@ class TabManagerImplementation: NSObject,
                 logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
+            await MainActor.run { dispatchDidSetScreenshotAction(for: tab) }
         }
+    }
+
+    // MARK: - Redux
+    @MainActor
+    private func dispatchDidSetScreenshotAction(for tab: Tab) {
+        guard selectedTab === tab else { return }
+        let currentTabs = tab.isPrivate ? privateTabs : normalTabs
+        guard let index = currentTabs.firstIndex(of: tab) else { return }
+        store.dispatch(
+            ToolbarAction(
+                previousTabScreenshot: currentTabs[safe: index-1]?.screenshot,
+                nextTabScreenshot: currentTabs[safe: index+1]?.screenshot,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didSetTabScreenshot
+            )
+        )
     }
 
     // MARK: - Save tabs
@@ -868,6 +885,7 @@ class TabManagerImplementation: NSObject,
         tab.resumeDocumentDownload()
 
         didSelectTab(url)
+        dispatchDidSetScreenshotAction(for: tab)
         updateMenuItemsForSelectedTab()
 
         // Broadcast updates for any listeners

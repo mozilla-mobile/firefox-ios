@@ -299,6 +299,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: toolbarPosition,
                             toolbarLayout: .version1,
+                            tabTrayButtonStyle: .number,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: nil),
                             navigationToolbar: createBasicNavigationBarState(),
@@ -313,13 +314,16 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
-                            isTranslucent: false)
+                            isTranslucent: false,
+                            previousTabScreenshot: nil,
+                            nextTabScreenshot: nil)
     }
 
     private func createToolbarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> ToolbarState {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
                             toolbarLayout: .version1,
+                            tabTrayButtonStyle: .number,
                             isPrivateMode: false,
                             addressToolbar: createAddressBarState(withSearchEngine: searchEngine),
                             navigationToolbar: createBasicNavigationBarState(),
@@ -334,7 +338,9 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
-                            isTranslucent: false)
+                            isTranslucent: false,
+                            previousTabScreenshot: nil,
+                            nextTabScreenshot: nil)
     }
 
     @MainActor
