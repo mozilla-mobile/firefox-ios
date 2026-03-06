@@ -64,4 +64,10 @@ enum TabTrayPanelType: Int, CaseIterable {
         }
         return panelType
     }
+    
+    @MainActor
+    static func convert(from tab: Tab?) -> TabTrayPanelType {
+        let isPrivateTab = tab?.isPrivate ?? false
+        return isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+    }
 }

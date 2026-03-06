@@ -19,24 +19,56 @@ final class PrivateLockMiddleware {
     lazy var lockProvider: Middleware<AppState> = { state, action in
         if let action = action as? PrivateLockAction {
             self.resolveTabPrivateLockActions(action: action, state: state)
+        } else if let action = action as? TabTrayAction {
+            self.resolveTabChange(action: action, state: state)
         }
     }
     
     private func resolveTabPrivateLockActions(action: PrivateLockAction, state: AppState) {
-        let shouldLock = prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
-        guard shouldLock else { return }
+        guard isPrivateLockFeatureEnabled() else {
+            Self.unlock(windowUUID: action.windowUUID)
+            return
+        }
         
         switch action.actionType {
-        case PrivateLockActionType.enteredPrivatePanel:
-            store.dispatch(PrivateLockMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
-                privatePanelLockState: .lockedPrompt
-            ))
         case PrivateLockActionType.requestAuth(let reason):
             let browserState = state.screenState(BrowserViewControllerState.self, for: .browserViewController, window: action.windowUUID)
-            guard browserState?.privateLockState != PrivateLockState.authenticating else { return }
+            guard browserState?.privateLockState.auth != .authenticating else { return }
             auth(reason: reason, windowUUID: action.windowUUID)
+        case PrivateLockActionType.setTrayDisplayContext:
+            store.dispatch(PrivateLockMiddlewareAction(
+                windowUUID: action.windowUUID,
+                actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
+                trayDisplayContext: action.trayDisplayContext)
+            )
+        case PrivateLockActionType.setTrayDisplayContextAndPanelType:
+            store.dispatch(PrivateLockMiddlewareAction(
+                windowUUID: action.windowUUID,
+                actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
+                trayDisplayContext: action.trayDisplayContext)
+            )
+            store.dispatch(PrivateLockMiddlewareAction(
+                windowUUID: action.windowUUID,
+                actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
+                trayPanelType: action.trayPanelType,
+                privateLockEnabled: isPrivateLockFeatureEnabled()
+            ))
+        case PrivateLockActionType.didEnterBackground, PrivateLockActionType.willEnterForeground:
+            Self.lock(triggeredByFailure: false, windowUUID: action.windowUUID)
+        default:
+            break
+        }
+    }
+    
+    private func resolveTabChange(action: TabTrayAction, state: AppState) {
+        switch action.actionType {
+        case TabTrayActionType.changePanel:
+            store.dispatch(PrivateLockMiddlewareAction(
+                windowUUID: action.windowUUID,
+                actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
+                trayPanelType: action.panelType,
+                privateLockEnabled: isPrivateLockFeatureEnabled()
+            ))
         default:
             break
         }
@@ -47,7 +79,9 @@ final class PrivateLockMiddleware {
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
           actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
-          privatePanelLockState: .authenticating
+          privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .locked,
+                                                                                   auth: .authenticating,
+                                                                                   lastUnlockedAt: nil)
         ))
         
         let context = LAContext()
@@ -56,7 +90,7 @@ final class PrivateLockMiddleware {
         var error: NSError?
 
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
-            Self.authFailed(windowUUID: windowUUID)
+            Self.lock(triggeredByFailure: true, windowUUID: windowUUID)
             return
         }
 
@@ -66,23 +100,37 @@ final class PrivateLockMiddleware {
         ) { success, authError in
             Task { @MainActor in
                 if success {
-                    store.dispatch(PrivateLockMiddlewareAction(
-                        windowUUID: windowUUID,
-                        actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
-                        privatePanelLockState: .unlocked
-                    ))
+                    Self.unlock(windowUUID: windowUUID)
                 } else {
-                    Self.authFailed(windowUUID: windowUUID)
+                    Self.lock(triggeredByFailure: true, windowUUID: windowUUID)
                 }
             }
         }
     }
     
-    private static func authFailed(windowUUID: WindowUUID) {
+    private static func lock(triggeredByFailure: Bool, windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
             actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
-            privatePanelLockState: .failed
+            privatePanelLockState:
+                BrowserViewControllerState.PrivateLockDomainState(access: .locked,
+                                                                  auth: triggeredByFailure ? .failed : .idle,
+                                                                  lastUnlockedAt: nil)
         ))
+    }
+    
+    private static func unlock(windowUUID: WindowUUID) {
+        store.dispatch(PrivateLockMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+            privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .unlocked,
+                                                                                     auth: .idle,
+                                                                                     lastUnlockedAt: Date())
+        ))
+    }
+    
+    private func isPrivateLockFeatureEnabled() -> Bool {
+        let shouldLock = prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
+        return shouldLock
     }
 }

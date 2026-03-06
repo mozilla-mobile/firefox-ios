@@ -122,11 +122,6 @@ final class TabDisplayPanelViewController: UIViewController,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
             viewHasAppeared = true
         }
-        if panelType == .privateTabs {
-            store.dispatch(
-                PrivateLockAction(windowUUID: windowUUID,
-                                  actionType: PrivateLockActionType.enteredPrivatePanel))
-        }
         updateInsets()
     }
 
@@ -383,21 +378,16 @@ final class TabDisplayPanelViewController: UIViewController,
         }
     }
     
-    private func applyPrivateLockUI(_ lock: PrivateLockState) {
-        switch lock {
-        case .unlocked:
-            privateLockOverlay.isHidden = true
-            privateLockOverlay.apply(mode: .prompt)
-        case .lockedPrompt:
-            privateLockOverlay.isHidden = false
-            privateLockOverlay.apply(mode: .prompt)
-        case .authenticating:
-            privateLockOverlay.isHidden = false
-            privateLockOverlay.apply(mode: .authenticating)
-        case .failed:
-            privateLockOverlay.isHidden = false
-            privateLockOverlay.apply(mode: .failed)
+    private func applyPrivateLockUI(_ lock: BrowserViewControllerState.PrivateLockDomainState?) {
+        guard let lock else {
+            privateLockOverlay.renderHidden()
+            return
         }
+
+        privateLockOverlay.render(
+            access: lock.access,
+            auth: lock.auth
+        )
     }
 
     // MARK: - EmptyPrivateTabsViewDelegate

@@ -31,18 +31,44 @@ final class PrivateTabsLockOverlayView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func render(access: BrowserViewControllerState.PrivateAccessState, auth: BrowserViewControllerState.PrivateAuthState) {
+        switch access {
+        case .unlocked:
+            isHidden = true
+            apply(mode: .prompt)
+
+        case .locked:
+            isHidden = false
+            switch auth {
+            case .idle:
+                apply(mode: .prompt)
+            case .authenticating:
+                apply(mode: .authenticating)
+            case .failed:
+                apply(mode: .failed)
+            }
+        }
+    }
+
+    func renderHidden() {
+        isHidden = true
+        apply(mode: .prompt)
+    }
 
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
 
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(blurView)
-        NSLayoutConstraint.activate([
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+//        blurView.translatesAutoresizingMaskIntoConstraints = false
+//        addSubview(blurView)
+//        NSLayoutConstraint.activate([
+//            blurView.topAnchor.constraint(equalTo: topAnchor),
+//            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
+//        ])
+        
+        backgroundColor = .blue
 
         titleLabel.font = .preferredFont(forTextStyle: .title2)
         titleLabel.textAlignment = .center

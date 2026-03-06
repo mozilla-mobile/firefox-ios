@@ -1286,6 +1286,15 @@ final class BrowserCoordinator: BaseCoordinator,
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)
+        let panel = TabTrayPanelType.convert(from: tabManager.selectedTab)
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.setTrayDisplayContextAndPanelType,
+                trayDisplayContext: .page,
+                trayPanelType: panel
+            )
+        )
     }
 
     // MARK: - WindowEventCoordinator

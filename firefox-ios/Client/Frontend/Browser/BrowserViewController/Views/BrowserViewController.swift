@@ -966,10 +966,26 @@ class BrowserViewController: UIViewController,
         guard canShowPrivacyWindow else { return }
 
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+        
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didEnterBackground
+            )
+        )
     }
 
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
+    }
+    
+    func sceneWillEnterForegroundNotification() {
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.willEnterForeground
+            )
+        )
     }
 
     func appWillResignActiveNotification() {
@@ -1126,6 +1142,7 @@ class BrowserViewController: UIViewController,
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
         dismissToolbarCFRs(with: windowUUID)
+        applyPrivateLockUI(state.privateLockState)
     }
 
     private func showToastType(toast: ToastType) {
@@ -1173,6 +1190,15 @@ class BrowserViewController: UIViewController,
             guard microsurvey == nil else { return }
             createMicrosurveyPrompt(with: state.microsurveyState)
         }
+    }
+    
+    private func startPrivateAuthFlow() {
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.requestAuth("Unlock your private tabs")
+            )
+        )
     }
 
     // MARK: - Lifecycle
@@ -1294,6 +1320,29 @@ class BrowserViewController: UIViewController,
         title = .SettingsHomePageSectionName
         navigationItem.backButtonDisplayMode = .generic
     }
+    
+    private lazy var privateLockOverlay: PrivateTabsLockOverlayView = {
+        let overlay = PrivateTabsLockOverlayView()
+        overlay.isHidden = true
+        overlay.onUnlockTapped = { [weak self] in self?.startPrivateAuthFlow() }
+        overlay.onRetryTapped = { [weak self] in self?.startPrivateAuthFlow() }
+        return overlay
+    }()
+    
+    private func applyPrivateLockUI(_ lock: BrowserViewControllerState.PrivateLockDomainState?) {
+        guard let lock else {
+            privateLockOverlay.renderHidden()
+            return
+        }
+
+        privateLockOverlay.render(
+            access: lock.access,
+            auth: lock.auth
+        )
+        addressToolbarContainer.isHidden = lock.access == .locked
+        view.bringSubviewToFront(privateLockOverlay)
+        view.bringSubviewToFront(bottomContainer)
+    }
 
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
@@ -1320,6 +1369,8 @@ class BrowserViewController: UIViewController,
                 sceneDidEnterBackgroundNotification(windowScene: windowScene)
             case UIScene.didActivateNotification:
                 sceneDidActivateNotification()
+            case UIScene.willEnterForegroundNotification:
+                sceneWillEnterForegroundNotification()
             case UIAccessibility.announcementDidFinishNotification:
                 didFinishAnnouncement(announcementText: announcementText)
             case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
@@ -1359,6 +1410,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.didEnterBackgroundNotification,
                 UIApplication.willTerminateNotification,
                 UIScene.didEnterBackgroundNotification,
+                UIScene.willEnterForegroundNotification,
                 UIScene.didActivateNotification,
                 UIAccessibility.announcementDidFinishNotification,
                 UIAccessibility.reduceTransparencyStatusDidChangeNotification,
@@ -1495,6 +1547,7 @@ class BrowserViewController: UIViewController,
                 return self?.newTabSettings
             }
         }
+        view.addSubview(privateLockOverlay)
     }
 
     private func enqueueTabRestoration() {
@@ -1791,6 +1844,13 @@ class BrowserViewController: UIViewController,
             updateHeaderConstraints()
         }
         setupBlurViews()
+        
+        NSLayoutConstraint.activate([
+            privateLockOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            privateLockOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            privateLockOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            privateLockOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func setupBlurViews() {
@@ -2277,6 +2337,14 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
+        
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.setTrayDisplayContext,
+                trayDisplayContext: .page
+            )
+        )
     }
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
@@ -3391,6 +3459,14 @@ class BrowserViewController: UIViewController,
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
         navigationHandler?.showTabTray(selectedPanel: selectedSegment)
+        
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.setTrayDisplayContext,
+                trayDisplayContext: .tray
+            )
+        )
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
@@ -4917,6 +4993,15 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
+        
+        let panel = TabTrayPanelType.convert(from: selectedTab)
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.setTrayDisplayContextAndPanelType,
+                trayPanelType: panel
+            )
+        )
     }
 
     // TODO: FXIOS-14347 This function will be removed when toolbarTranslucencyRefactor is on for everyone

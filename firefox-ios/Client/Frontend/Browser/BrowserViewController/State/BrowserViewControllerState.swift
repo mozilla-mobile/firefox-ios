@@ -37,6 +37,42 @@ struct BrowserViewControllerState: ScreenState {
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
     }
+    
+    enum PrivateAccessState: Equatable {
+        case locked
+        case unlocked
+    }
+    
+    enum PrivateAuthState: Equatable {
+        case idle
+        case authenticating
+        case failed
+    }
+    
+    enum TrayDisplayContext: Equatable {
+        case page
+        case tray
+    }
+    
+    struct PrivateLockDomainState: Equatable {
+        var access: PrivateAccessState = .locked
+        var auth: PrivateAuthState = .idle
+        var lastUnlockedAt: Date?
+        let relockInterval: TimeInterval = 20
+
+        var shouldRelockByTime: Bool {
+            guard let lastUnlockedAt else { return true }
+            return Date().timeIntervalSince(lastUnlockedAt) > relockInterval
+        }
+        
+        func copy(access: PrivateAccessState? = nil,
+                  auth: PrivateAuthState? = nil,
+                  lastUnlockedAt: Date? = nil) -> PrivateLockDomainState {
+            PrivateLockDomainState(access: access ?? self.access,
+                                   auth: auth ?? self.auth,
+                                   lastUnlockedAt: lastUnlockedAt ?? self.lastUnlockedAt)
+        }
+    }
 
     let windowUUID: WindowUUID
     var searchScreenState: SearchScreenState
@@ -51,7 +87,9 @@ struct BrowserViewControllerState: ScreenState {
     var frameContext: PasswordGeneratorFrameContext?
     var microsurveyState: MicrosurveyPromptState
     var navigationDestination: NavigationDestination?
-    var privateLockState: PrivateLockState
+    var privateLockState: PrivateLockDomainState
+    var trayPanelType: TabTrayPanelType?
+    var trayDisplayContext: TrayDisplayContext = TrayDisplayContext.page
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.screenState(
@@ -76,7 +114,9 @@ struct BrowserViewControllerState: ScreenState {
                   frameContext: bvcState.frameContext,
                   microsurveyState: bvcState.microsurveyState,
                   navigationDestination: bvcState.navigationDestination,
-                  privateLockState: bvcState.privateLockState)
+                  privateLockState: bvcState.privateLockState,
+                  trayPanelType: bvcState.trayPanelType,
+                  trayDisplayContext: bvcState.trayDisplayContext)
     }
 
     init(windowUUID: WindowUUID) {
@@ -107,7 +147,10 @@ struct BrowserViewControllerState: ScreenState {
         frameContext: PasswordGeneratorFrameContext? = nil,
         microsurveyState: MicrosurveyPromptState,
         navigationDestination: NavigationDestination? = nil,
-        privateLockState: PrivateLockState = .unlocked
+        privateLockState: PrivateLockDomainState =
+            PrivateLockDomainState(access: .unlocked, auth: .idle, lastUnlockedAt: nil),
+        trayPanelType: TabTrayPanelType? = nil,
+        trayDisplayContext: TrayDisplayContext = TrayDisplayContext.page
     ) {
         self.searchScreenState = searchScreenState
         self.toast = toast
@@ -123,6 +166,7 @@ struct BrowserViewControllerState: ScreenState {
         self.microsurveyState = microsurveyState
         self.navigationDestination = navigationDestination
         self.privateLockState = privateLockState
+        self.trayPanelType = trayPanelType
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -156,7 +200,9 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: nil,
-                privateLockState: state.privateLockState)
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext)
         }
     }
 
@@ -188,7 +234,9 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: action.navigationDestination,
-                privateLockState: state.privateLockState
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext
             )
         default:
             return passthroughState(from: state, action: action)
@@ -223,7 +271,9 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: NavigationDestination(.summarizer(config: action.summarizerConfig)),
-                privateLockState: state.privateLockState
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext
             )
         default:
             return passthroughState(from: state, action: action)
@@ -237,13 +287,36 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case PrivateLockMiddlewareActionType.setPrivateLockState:
-//            guard state.pri
+            guard let privateLockState = action.privateLockState else { return state }
             var newState = state
-            newState.privateLockState = action.privatePanelLockState
+            newState.privateLockState = privateLockState
+            return newState
+        case PrivateLockMiddlewareActionType.changedTabTrayPanelType:
+            guard let panelType = action.trayPanelType else { return state }
+            var newState = state
+            newState.trayPanelType = panelType
+            let becamePrivateVisible = !state.isPrivateSurfaceVisible && newState.isPrivateSurfaceVisible
+            if becamePrivateVisible {
+                let privateLockFeatureEnabled = action.privateLockEnabled ?? false
+                if privateLockFeatureEnabled,
+                   newState.privateLockState.auth != .authenticating,
+                   newState.privateLockState.shouldRelockByTime == true {
+                    newState.privateLockState = newState.privateLockState.copy(access: .locked)
+                }
+            }
+            return newState
+        case PrivateLockMiddlewareActionType.setTrayDisplayContext:
+            guard let trayDisplayContext = action.trayDisplayContext else { return state }
+            var newState = state
+            newState.trayDisplayContext = trayDisplayContext
             return newState
         default:
             return state
         }
+    }
+    
+    private var isPrivateSurfaceVisible: Bool {
+        trayPanelType == .privateTabs
     }
 
     // MARK: - Toolbar Action
@@ -273,7 +346,9 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 navigationDestination: NavigationDestination(.homepageZeroSearch),
-                privateLockState: state.privateLockState
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext
             )
         default:
             return passthroughState(from: state, action: action)
@@ -309,7 +384,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             navigationDestination: NavigationDestination(.zeroSearch),
-            privateLockState: state.privateLockState
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
         )
     }
 
@@ -321,7 +398,10 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
+        )
     }
 
     @MainActor
@@ -394,7 +474,9 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
         )
     }
 
@@ -408,7 +490,9 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -421,7 +505,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .home,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
         )
     }
 
@@ -435,7 +521,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .newTab,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -448,7 +536,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .backForwardList,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -463,7 +553,9 @@ struct BrowserViewControllerState: ScreenState {
                 displayView: .trackingProtectionDetails,
                 buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                privateLockState: state.privateLockState)
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext)
         }
 
     @MainActor
@@ -477,7 +569,9 @@ struct BrowserViewControllerState: ScreenState {
             displayView: .menu,
             buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -490,7 +584,10 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .tabsLongPressActions,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
+        )
     }
 
     @MainActor
@@ -504,7 +601,9 @@ struct BrowserViewControllerState: ScreenState {
             displayView: .reloadLongPressAction,
             buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -518,7 +617,9 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 displayView: .locationViewLongPressAction,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                privateLockState: state.privateLockState)
+                privateLockState: state.privateLockState,
+                trayPanelType: state.trayPanelType,
+                trayDisplayContext: state.trayDisplayContext)
         }
 
     @MainActor
@@ -531,7 +632,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .back,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -544,7 +647,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .forward,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -557,7 +662,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .tabTray,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -570,7 +677,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .reload,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -583,7 +692,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .reloadNoCache,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -596,7 +707,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             navigateTo: .stopLoading,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -610,7 +723,9 @@ struct BrowserViewControllerState: ScreenState {
             displayView: .share,
             buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -623,7 +738,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .readerMode,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -636,7 +753,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .newTabLongPressActions,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -649,7 +768,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .readerModeLongPressAction,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -661,7 +782,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .dataClearance,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -674,7 +797,9 @@ struct BrowserViewControllerState: ScreenState {
             displayView: .passwordGenerator,
             frameContext: action.frameContext,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -686,7 +811,9 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .summarizer(config: action.summarizerConfig),
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 
     @MainActor
@@ -701,7 +828,9 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             microsurveyState: microsurveyState,
-            privateLockState: state.privateLockState
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
         )
     }
 
@@ -712,7 +841,9 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             microsurveyState: microsurveyState,
-            privateLockState: state.privateLockState
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
         )
     }
 
@@ -735,7 +866,10 @@ struct BrowserViewControllerState: ScreenState {
             reloadWebView: true,
             browserViewType: browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext
+        )
     }
 
     @MainActor
@@ -749,6 +883,8 @@ struct BrowserViewControllerState: ScreenState {
             shouldStartAtHome: action.shouldStartAtHome ?? false,
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            privateLockState: state.privateLockState)
+            privateLockState: state.privateLockState,
+            trayPanelType: state.trayPanelType,
+            trayDisplayContext: state.trayDisplayContext)
     }
 }
