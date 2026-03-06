@@ -2,9 +2,6 @@
 "RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novinka! E‑mailové masky služby %@ Relay sú teraz k dispozícii aj na mobilných zariadeniach.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Vašich 5 bezplatných e‑mailových masiek je už použitých, tak sme pre vás jednu vybrali.";
-
-/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Použili ste svojich 5 bezplatných e‑mailových masiek, takže sme pre vás vybrali jednu na opätovné použitie.";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
@@ -12,9 +9,6 @@
 
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Vložená e‑mailová maska";
-
-/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Skryte svoj skutočný e‑mail, aby ste ochránili svoju schránku pred nevyžiadanou poštou. Niektoré stránky to však nepodporujú.";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skryte svoj skutočný e-mail, aby ste ochránili svoju schránku pred nevyžiadanou poštou. Niektoré stránky nepodporujú e‑mailové masky.";

@@ -161,8 +161,7 @@ final class LocationView: UIView,
         configureURLPlaceholder(basedOn: config)
         setTextFieldPlaceholder(color: theme.colors.textPrimary)
         urlTextField.text = config.url?.absoluteString
-        updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
-                            isURLTextFieldCentered: isURLTextFieldCentered,
+        updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
         formatAndTruncateURLTextField()
@@ -196,8 +195,7 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
-        updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
-                            isURLTextFieldCentered: isURLTextFieldCentered,
+        updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
         handleGesture(
@@ -360,8 +358,7 @@ final class LocationView: UIView,
         iconContainerStackView.removeAllArrangedViews()
     }
 
-    private func updateIconContainer(iconContainerCornerRadius: CGFloat,
-                                     isURLTextFieldCentered: Bool,
+    private func updateIconContainer(isURLTextFieldCentered: Bool,
                                      locationTextFieldTrailingPadding: CGFloat) {
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
@@ -679,7 +676,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationTextFieldDelegate
-    func locationTextField(_ textField: LocationTextField, didEnterText text: String) {
+    func locationTextFieldDidEnterText(_ text: String) {
         delegate?.locationViewDidEnterText(text)
     }
 
@@ -694,7 +691,7 @@ final class LocationView: UIView,
         }
     }
 
-    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
+    func locationTextFieldShouldClear() -> Bool {
         delegate?.locationViewDidClearText()
         return true
     }
@@ -711,7 +708,7 @@ final class LocationView: UIView,
         delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
 
-    func locationTextFieldDidEndEditing(_ textField: UITextField) {
+    func locationTextFieldDidEndEditing() {
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
@@ -719,7 +716,7 @@ final class LocationView: UIView,
         }
     }
 
-    func locationTextFieldNeedsSearchReset(_ textField: UITextField) {
+    func locationTextFieldNeedsSearchReset() {
         delegate?.locationTextFieldNeedsSearchReset()
     }
 

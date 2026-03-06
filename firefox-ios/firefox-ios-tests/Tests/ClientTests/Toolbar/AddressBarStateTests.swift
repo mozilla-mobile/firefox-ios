@@ -1009,7 +1009,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: isShowingNavigationToolbar,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange

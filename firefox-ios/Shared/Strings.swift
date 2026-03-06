@@ -8286,6 +8286,7 @@ extension String {
 extension String {
     /// For more detailed information on how to use this struct, please see
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
+    /// periphery:ignore - These strings are getting removed every couple of months
     struct OldStrings {
         struct v147 {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(

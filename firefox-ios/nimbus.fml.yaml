@@ -13,8 +13,10 @@ channels:
   - beta
   - release
 include:
+
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/adsClient.yaml
+  - nimbus-features/aiKillSwitchFeature.yaml
   - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/appleSummarizerFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml

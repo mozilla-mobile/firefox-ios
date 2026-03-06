@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-               BuildableName = "libStorage.a"
+               BuildableName = "lib.a"
                BlueprintName = "Storage"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
-               BuildableName = "StorageTests.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
-               BuildableName = "StoragePerfTests.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "StoragePerfTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "libStorage.a"
+            BuildableName = "lib.a"
             BlueprintName = "Storage"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "libStorage.a"
+            BuildableName = "lib.a"
             BlueprintName = "Storage"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
