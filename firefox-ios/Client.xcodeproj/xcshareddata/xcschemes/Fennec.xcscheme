@@ -254,7 +254,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTelemetryTests.xctest"
                BlueprintName = "SyncTelemetryTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -268,7 +268,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = ".xctest"
+               BuildableName = "AccountTests.xctest"
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -296,7 +296,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = ".xctest"
+               BuildableName = "SharedTests.xctest"
                BlueprintName = "SharedTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -310,7 +310,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
-               BuildableName = ".xctest"
+               BuildableName = "StorageTests.xctest"
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -324,7 +324,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTests.xctest"
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -367,7 +367,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
-            BuildableName = "lib.a"
+            BuildableName = "libAccount.a"
             BlueprintName = "Account"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -388,14 +388,14 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "397848DA1ED86605004C0C0B"
-            BuildableName = ".appex"
+            BuildableName = "NotificationService.appex"
             BlueprintName = "NotificationService"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "lib.a"
+            BuildableName = "libStorage.a"
             BlueprintName = "Storage"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -409,14 +409,14 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "047F9B2624E1FE1C00CD7DF7"
-            BuildableName = ".appex"
+            BuildableName = "WidgetKitExtension.appex"
             BlueprintName = "WidgetKitExtension"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F84B22481A0920C600AAB793"
-            BuildableName = ".appex"
+            BuildableName = "ShareTo.appex"
             BlueprintName = "ShareTo"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -580,7 +580,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = ".xctest"
+               BuildableName = "XCUITests.xctest"
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -640,7 +640,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTelemetryTests.xctest"
                BlueprintName = "SyncTelemetryTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -650,7 +650,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = ".xctest"
+               BuildableName = "AccountTests.xctest"
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -665,7 +665,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
-               BuildableName = ".xctest"
+               BuildableName = "StorageTests.xctest"
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -699,7 +699,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = ".xctest"
+               BuildableName = "SharedTests.xctest"
                BlueprintName = "SharedTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -709,7 +709,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTests.xctest"
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>

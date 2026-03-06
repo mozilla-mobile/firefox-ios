@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = ".xctest"
+               BuildableName = "XCUITests.xctest"
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -67,7 +67,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = ".xctest"
+               BuildableName = "XCUITests.xctest"
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -77,7 +77,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTelemetryTests.xctest"
                BlueprintName = "SyncTelemetryTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -87,7 +87,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA436041ABB83B4008031D1"
-               BuildableName = ".xctest"
+               BuildableName = "AccountTests.xctest"
                BlueprintName = "AccountTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -130,7 +130,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = ".xctest"
+               BuildableName = "SharedTests.xctest"
                BlueprintName = "SharedTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -145,7 +145,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B43E3CF1D95C48D00BBA9DB"
-               BuildableName = ".xctest"
+               BuildableName = "StoragePerfTests.xctest"
                BlueprintName = "StoragePerfTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -155,7 +155,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
-               BuildableName = ".xctest"
+               BuildableName = "StorageTests.xctest"
                BlueprintName = "StorageTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -165,7 +165,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
-               BuildableName = ".xctest"
+               BuildableName = "SyncTests.xctest"
                BlueprintName = "SyncTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
