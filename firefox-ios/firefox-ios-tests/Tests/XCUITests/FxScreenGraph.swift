@@ -60,6 +60,7 @@ let LoginsSettings = "LoginsSettings"
 let MailAppSettings = "MailAppSettings"
 let ShowTourInSettings = "ShowTourInSettings"
 let TrackingProtectionSettings = "TrackingProtectionSettings"
+let EnhancedTrackingProtection = "EnhancedTrackingProtection"
 let Intro_FxASignin = "Intro_FxASignin"
 let WebImageContextMenu = "WebImageContextMenu"
 let WebLinkContextMenu = "WebLinkContextMenu"
@@ -289,6 +290,7 @@ class Action {
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
     static let SelectShortcuts = "TopSitesSettings"
+    static let SelectTrackersBlocked = "TrackersBlocked"
 }
 
 private let defaultURL = "https://www.mozilla.org/en-US/book/"

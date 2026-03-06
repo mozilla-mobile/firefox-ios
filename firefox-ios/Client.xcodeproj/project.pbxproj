@@ -57,12 +57,16 @@
 		0A8A37B12F45E070005A84C7 /* LAContextProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8A37AF2F45E066005A84C7 /* LAContextProtocol.swift */; };
 		0A93C8AA2C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */; };
 		0A93C8AC2C870E7100BEA143 /* TrackingProtectionToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */; };
+		0AB768FA2F3DF280009458EB /* BlockedTrackersFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB768F92F3DF257009458EB /* BlockedTrackersFooterView.swift */; };
+		0AB76B562F3F67E3009458EB /* BlockedTrackersFooterViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */; };
 		0ABCD45B2D355260005D704A /* TermsOfServiceTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */; };
 		0ABCD45D2D356015005D704A /* TermsOfServiceTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */; };
 		0AC0F9482E3CA17900E826D8 /* MainMenuConfigurationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */; };
 		0AC659272BF35854005C614A /* FxAWebViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */; };
 		0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */; };
 		0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */; };
+		0AEA26D42F506C1900B512EB /* BlockedTrackersLearnMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEA26D32F506BDA00B512EB /* BlockedTrackersLearnMoreViewController.swift */; };
+		0AEA29362F518B8F00B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */; };
 		0AFE9BF12CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE9BF02CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift */; };
 		0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F632C7784D600265214 /* MockDataCleaner.swift */; };
 		0AFF7F662C7784F100265214 /* TrackingProtectionModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */; };
@@ -2661,6 +2665,8 @@
 		0A8A37AF2F45E066005A84C7 /* LAContextProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAContextProtocol.swift; sourceTree = "<group>"; };
 		0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionConnectionStatusView.swift; sourceTree = "<group>"; };
 		0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionToggleView.swift; sourceTree = "<group>"; };
+		0AB768F92F3DF257009458EB /* BlockedTrackersFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersFooterView.swift; sourceTree = "<group>"; };
+		0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersFooterViewTests.swift; sourceTree = "<group>"; };
 		0ABCD45A2D355255005D704A /* TermsOfServiceTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetry.swift; sourceTree = "<group>"; };
 		0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceTelemetryTests.swift; sourceTree = "<group>"; };
 		0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuConfigurationUtilityTests.swift; sourceTree = "<group>"; };
@@ -2668,6 +2674,8 @@
 		0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxAWebViewModel.swift; sourceTree = "<group>"; };
 		0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		0AE9462E8A8E05CE07D4973D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0AEA26D32F506BDA00B512EB /* BlockedTrackersLearnMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersLearnMoreViewController.swift; sourceTree = "<group>"; };
+		0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersLearnMoreViewControllerTests.swift; sourceTree = "<group>"; };
 		0AFE9BF02CF47DFC003DB4D1 /* PrivacyPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPreferencesViewController.swift; sourceTree = "<group>"; };
 		0AFF7F632C7784D600265214 /* MockDataCleaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataCleaner.swift; sourceTree = "<group>"; };
 		0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionModelTests.swift; sourceTree = "<group>"; };
@@ -14399,6 +14407,7 @@
 		AB11407E2CAC0D9D005080CE /* TrackingDetailsHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				0AEA26D32F506BDA00B512EB /* BlockedTrackersLearnMoreViewController.swift */,
 				ABE856AC2C75029F00C56F47 /* TrackingProtectionStatusView.swift */,
 				AB8EE2D22C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift */,
 			);
@@ -14425,6 +14434,7 @@
 		AB4FB4DE2C8A0251005EF0CC /* BlockedTrackersHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				0AB768F92F3DF257009458EB /* BlockedTrackersFooterView.swift */,
 				AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */,
 				AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */,
 				AB4FB4D62C89FB0D005EF0CC /* BlockedTrackersModel.swift */,
@@ -14436,6 +14446,8 @@
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
 			isa = PBXGroup;
 			children = (
+				0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */,
+				0AB76B552F3F678A009458EB /* BlockedTrackersFooterViewTests.swift */,
 				0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */,
 				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
 				0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */,
@@ -18787,6 +18799,7 @@
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
+				0AEA26D42F506C1900B512EB /* BlockedTrackersLearnMoreViewController.swift in Sources */,
 				C8CD80DC2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift in Sources */,
 				8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */,
 				96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */,
@@ -19555,6 +19568,7 @@
 				AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */,
 				8A93F87229D3A5AD004159D9 /* BrowserCoordinator.swift in Sources */,
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
+				0AB768FA2F3DF280009458EB /* BlockedTrackersFooterView.swift in Sources */,
 				BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */,
 				8A3EF7FB2A2FCF9D00796E3A /* ForceCrashSetting.swift in Sources */,
 				2178A6A4291455F7002EC290 /* ReaderModeFontSizeButton.swift in Sources */,
@@ -19738,6 +19752,7 @@
 				AA3CEBAD2ECB853400DDEFEF /* SearchTelemetryTests.swift in Sources */,
 				8A03FFA32DB12AFF00509A72 /* MockSponsoredTelemetry.swift in Sources */,
 				8A09A9E32D77552C0069B005 /* HomepageMiddlewareTests.swift in Sources */,
+				0AB76B562F3F67E3009458EB /* BlockedTrackersFooterViewTests.swift in Sources */,
 				033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */,
 				C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */,
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
@@ -19984,6 +19999,7 @@
 				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
 				8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift in Sources */,
 				03D994682EE820D40081D209 /* TermsOfUseStateTests.swift in Sources */,
+				0AEA29362F518B8F00B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift in Sources */,
 				8A87E98C2E707932006F0239 /* FxSuggestTelemetryTests.swift in Sources */,
 				5A81C5DD2A4C981A00BE88C2 /* PasswordManagerCoordinatorTests.swift in Sources */,
 				219F27152EA2956100AE4536 /* MockBrowserViewControllerWebViewDelegates.swift in Sources */,
