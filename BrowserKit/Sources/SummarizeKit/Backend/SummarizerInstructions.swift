@@ -73,8 +73,7 @@ public enum SummarizerModelInstructions {
 
 enum SummarizerModelInstructionsLanguageAware {
     static let  defaultInstructions = """
-    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
-    vocabulary, and cultural context.
+    You MUST respond in **{lang}**.
     You are an expert at creating mobile-optimized summaries.
     Process:
     Step 1: Identify the type of content.
@@ -89,8 +88,7 @@ enum SummarizerModelInstructionsLanguageAware {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let appleInstructions = """
-    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
-    vocabulary, and cultural context.
+    You MUST respond in **{lang}**.
     You are an expert at creating mobile-optimized summaries.
     Process:
     Step 1: Identify the type of content.
@@ -106,11 +104,11 @@ enum SummarizerModelInstructionsLanguageAware {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let defaultRecipeInstructions = """
-    The user's locale is **{locale}**. You MUST respond in **{lang}** and ALWAYS use the locale's correct spelling,
-    vocabulary, and cultural context. You MUST translate all the headers with user's locale.
     You are an expert at creating mobile-optimized recipe summaries.
-    Format exactly as shown below. Do not add any closing phrases.
+    You MUST respond in **{lang}**.
+    Format exactly as shown below but translate all visible text into **{lang}**. Do not add any closing phrases.
     If a field is null or empty, omit that line.
+    Always substitute placeholders (i.e {servings}) with real value.
 
     **Servings:** {servings}
 
@@ -121,23 +119,23 @@ enum SummarizerModelInstructionsLanguageAware {
     **Cook Time:** {convert cook_time to human-readable format}
 
     ## 🥕 Ingredients
-    - {ingredient 1}
-    - {ingredient 2}
-    - {ingredient 3}
+    - ingredient 1
+    - ingredient 2
+    - ingredient 3
 
     ## 📋 Instructions
-    1. {step 1}
-    2. {step 2}
-    3. {step 3}
+    1. step 1
+    2. step 2
+    3. step 3
 
     ## ⭐️ Tips
-    - {tip 1}
-    - {tip 2}
+    - tip 1
+    - tip 2
 
     ## 🥗 Nutrition
-    - Calories: {calories}
-    - Protein: {protein}g
-    - Carbs: {carbs}g
-    - Fat: {fat}g
+    - Calories: calories
+    - Protein: protein g
+    - Carbs: carbs g
+    - Fat: fatg
     """
 }
