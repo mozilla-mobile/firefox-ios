@@ -33,7 +33,14 @@ class TabManagerImplementation: NSObject,
     // causing us to retain the tab object indefinitely
     var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
-    private(set) var tabs: [Tab]
+    private(set) var tabs: [Tab] {
+        didSet {
+            // Invalidate cache on every mutation to keep it always updated.
+            tabsInternalCache = nil
+        }
+    }
+
+    private var tabsInternalCache: (normal: [Tab], private: [Tab])?
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
@@ -50,13 +57,8 @@ class TabManagerImplementation: NSObject,
         return tabs[selectedIndex]
     }
 
-    var normalTabs: [Tab] {
-        return tabs.filter { !$0.isPrivate }
-    }
-
-    var privateTabs: [Tab] {
-        return tabs.filter { $0.isPrivate }
-    }
+    var normalTabs: [Tab] { tabSplit().normal }
+    var privateTabs: [Tab] { tabSplit().private }
 
     var recentlyAccessedNormalTabs: [Tab] {
         var eligibleTabs = normalTabs
@@ -162,6 +164,25 @@ class TabManagerImplementation: NSObject,
         }
 
         return nil
+    }
+
+    /// Single O(n) pass that splits `tabs` into normal and private lists.
+    /// Result is cached until the next `tabs` mutation.
+    private func tabSplit() -> (normal: [Tab], private: [Tab]) {
+        if let cached = tabsInternalCache { return cached }
+        var normalTabs = [Tab]()
+        var privateTabs = [Tab]()
+        normalTabs.reserveCapacity(tabs.count)
+        for tab in tabs {
+            if tab.isPrivate {
+                privateTabs.append(tab)
+            } else {
+                normalTabs.append(tab)
+            }
+        }
+        let result = (normal: normalTabs, private: privateTabs)
+        tabsInternalCache = result
+        return result
     }
 
     // MARK: - Add/Remove Delegate
