@@ -43,26 +43,8 @@
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
 "Summarizer.TabSnapshot.Accessibility.Label.v145" = "Seret atau ketuk laman web untuk menutup ringkasan";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Izinkan";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ menggunakan Apple Intelligence untuk meringkas laman.";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Batal";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Lanjutkan";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ menggunakan AI berbasis cloud untuk meringkas laman, dan mengembalikan ringkasan tersebut ke perangkat Anda.";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Pelajari lebih lanjut";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "Izinkan Ringkasan Laman?";
+/* The label for the toast that shows when shaking and the summary is not available for that page. */
+"Summarizer.ToastLabel.v149" = "Ringkasan tidak tersedia";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Cara kerjanya";

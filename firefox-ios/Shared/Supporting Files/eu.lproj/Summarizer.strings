@@ -46,27 +46,6 @@
 /* The label for the toast that shows when shaking and the summary is not available for that page. */
 "Summarizer.ToastLabel.v149" = "Laburpena ez dago erabilgarri";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Baimendu";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@(e)k Apple Intelligence darabil orriak laburbiltzeko.";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Utzi";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Jarraitu";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@(e)k hodeian oinarritutako AAa darabil orriak laburbiltzeko eta laburpenak zure gailura bidaltzen ditu.";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Argibide gehiago";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "Baimendu orriak laburbiltzea?";
-
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Nola dabilen";
 

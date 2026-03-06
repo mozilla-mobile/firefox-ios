@@ -2847,36 +2847,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard let possibleKeywordQuerySeparatorSpace = trimmedText.firstIndex(of: " ") else {
-            submitSearchText(text, forTab: currentTab)
-            return
-        }
-
-        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
-        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
-
-        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword)
-            .uponQueue(.main) { result in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    if var urlString = result.successValue ?? "",
-                       let escapedQuery = possibleQuery.addingPercentEncoding(
-                        withAllowedCharacters: NSCharacterSet.urlQueryAllowed
-                       ),
-                       let range = urlString.range(of: "%s") {
-                        urlString.replaceSubrange(range, with: escapedQuery)
-
-                        if let url = URL(string: urlString) {
-                            self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-                            return
-                        }
-                    }
-
-                    self.submitSearchText(text, forTab: currentTab)
-                }
-            }
+        submitSearchText(text, forTab: currentTab)
     }
 
     // MARK: - Handle navigation
@@ -3355,14 +3326,23 @@ class BrowserViewController: UIViewController,
     }
 
     func dispatchAvailableContentHeightChangedAction() {
+        // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
-           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
-           homepageState.availableContentHeight != getAvailableHomepageContentHeight() else { return }
+           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+        else { return }
+
+        let availableContentHeight = getAvailableHomepageContentHeight()
+        let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
+
+        guard homepageState.availableContentHeight != availableContentHeight
+              || homepageState.availableWallpaperHeight != availableWallpaperHeight
+        else { return }
 
         store.dispatch(
             HomepageAction(
-                availableContentHeight: getAvailableHomepageContentHeight(),
+                availableContentHeight: availableContentHeight,
+                availableWallpaperHeight: availableWallpaperHeight,
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.availableContentHeightDidChange
             )
@@ -3391,6 +3371,17 @@ class BrowserViewController: UIViewController,
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
                                  - addressBarHeight
+    }
+
+    private func getAvailableHomepageWallpaperHeight(availableContentHeight: CGFloat) -> CGFloat {
+        guard let window = view.window else {
+            // Fallback before window attachment, this gets corrected on the next layout/state update.
+            return availableContentHeight + contentContainer.frame.origin.y
+        }
+
+        // Homepage pins wallpaper to window top, so include the content container's window Y offset.
+        let contentTopOffset = contentContainer.convert(CGPoint.zero, to: window).y
+        return availableContentHeight + contentTopOffset
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,

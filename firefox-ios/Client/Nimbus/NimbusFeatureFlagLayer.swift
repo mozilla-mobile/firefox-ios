@@ -19,6 +19,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .adsClient:
             return checkAdsClientFeature(from: nimbus)
 
+        case .aiKillSwitch:
+            return checkAiKillSwitchFeature(from: nimbus)
+
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -551,5 +554,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.needsReloadRefactor.value().enabled
+    }
+
+    private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.aiKillSwitchFeature.value().enabled
     }
 }

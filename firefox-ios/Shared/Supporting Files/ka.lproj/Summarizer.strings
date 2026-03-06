@@ -46,27 +46,6 @@
 /* The label for the toast that shows when shaking and the summary is not available for that page. */
 "Summarizer.ToastLabel.v149" = "შეჯამება მიუწვდომელია";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "ნებართვა";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ როცა გვერდებს შეაჯამებს, გამოიყენება Apple Intelligence.";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "გაუქმება";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "განაგრძეთ";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ იყენებს ღრუბლოვან ხელგონს გვერდების შეჯამებისთვის და პასუხს აბრუნებს მოწყობილობაზე.";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ვრცლად";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "ნებას რთავთ გვერდის შესაჯამებლად?";
-
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "როგორ მუშაობს";
 

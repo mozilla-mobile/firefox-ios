@@ -1,0 +1,6 @@
+/* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "Sgaoil am facal mu dhèidhinn %1$@ gach turas a cho-roinneas tu ceangal air %2$@.";
+
+/* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
+"SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "Gabh a-staigh ceangal %1$@ airson a luchdadh a-nuas is tu ga cho-roinneadh air %2$@";
+

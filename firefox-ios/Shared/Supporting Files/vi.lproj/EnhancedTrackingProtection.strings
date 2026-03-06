@@ -82,11 +82,20 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Trình theo dõi bị chặn: %@";
 
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Trình chặn tiêu chuẩn thường được sử dụng sẽ chặn các trình theo dõi phổ biến sau khi trang bắt đầu tải, vì vậy bạn có thể thấy số lượng trình theo dõi cao hơn. %@";
+
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+"Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Chế độ nghiêm ngặt chặn nhiều trình theo dõi hơn bằng cách ngăn chúng trước khi trang tải xong, vì vậy bạn có thể thấy số lượng trình theo dõi thấp hơn. %@";
+
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Đã xác minh bởi %@";
 
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Xem chứng chỉ";
+
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "Tìm hiểu thêm";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ không còn hoạt động. Chúng tôi khuyên bạn nên bật lại trình chống.";

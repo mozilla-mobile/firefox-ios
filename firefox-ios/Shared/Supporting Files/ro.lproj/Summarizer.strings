@@ -43,27 +43,6 @@
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
 "Summarizer.TabSnapshot.Accessibility.Label.v145" = "Trage sau atinge pagina web ca să închizi rezumatul";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Permite";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ folosește Apple Intelligence pentru rezumarea paginilor.";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Anulează";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Continuă";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ utilizează AI în cloud pentru a rezuma pagini și trimite aceste rezumate pe dispozitivul tău.";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Află mai multe";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "Permiți rezumarea paginilor?";
-
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Cum funcționează";
 

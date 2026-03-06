@@ -1,3 +1,21 @@
 /* Action button for deleting history entries in the history panel. */
 "Delete" = "Sguab às";
 
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear all browsing history */
+"LibraryPanel.History.AllTimeOption.v138" = "An-còmhnaidh";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 4 weeks */
+"LibraryPanel.History.LastFourWeeksOption.v138" = "Na 4 seachdainean seo chaidh";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last hour */
+"LibraryPanel.History.LastHourOption.v138" = "An uair a thìde seo chaidh";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 7 days */
+"LibraryPanel.History.LastSevenDaysOption.v138" = "Na 7 làithean seo chaidh";
+
+/* Destructive action button on the “Clear browsing history“ action sheet used to clear browsing history for the last 24 hours */
+"LibraryPanel.History.LastTwentyFourHoursOption.v138" = "Sna 24 uair a thìde seo chaidh";
+
+/* Title of the “Clear browsing history“ action sheet */
+"LibraryPanel.History.Title.v138" = "Sguabaidh seo an eachdraidh (a’ gabhail a-staigh eachdraidh a chaidh a shioncronachadh o uidheaman eile), briosgaidean is dàta brabhsaidh eile às.";
+
