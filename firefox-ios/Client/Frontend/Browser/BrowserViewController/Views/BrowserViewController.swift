@@ -4204,7 +4204,10 @@ class BrowserViewController: UIViewController,
             // we handle that in `showZeroSearchView()` and avoid embedding homepage here.
             let isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
             if !isRecentOrTrendingSearchEnabled || isPrivateMode {
-                showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
+                // Wait for the next run loop to embed homepage so that we give time for the keyboard to layout
+                DispatchQueue.main.async {
+                    self.showEmbeddedHomepage(inline: false, isPrivate: isPrivateMode)
+                }
             }
         }
 
