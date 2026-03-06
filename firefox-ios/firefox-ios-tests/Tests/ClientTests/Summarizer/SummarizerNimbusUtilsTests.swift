@@ -220,7 +220,6 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
 
         let config = subject.languageExpansionConfiguration()
 
-        XCTAssertFalse(config.isFeatureEnabled)
         XCTAssertEqual(config.supportedLocales.count, testLocales.count)
         XCTAssertEqual(config.supportedLocales[0].identifier, testLocales[0])
         XCTAssertEqual(config.supportedLocales[1].identifier, testLocales[1])
