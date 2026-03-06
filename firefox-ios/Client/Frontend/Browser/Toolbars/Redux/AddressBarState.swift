@@ -1141,8 +1141,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
               !isEditing
         else { return actions }
 
-        let isSummarizeFeatureForToolbarOn = DefaultSummarizerNimbusUtils().isToolbarButtonEnabled
-        if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
+        let summarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        let isSummarizeFeatureForToolbarOn = summarizerNimbusUtils.isToolbarButtonEnabled
+        let isReaderModeWithSummarizerEnabled = summarizerNimbusUtils.isLanguageExpansionEnabled && canSummarize == true
+            && (readerModeState == .active || readerModeState == .available)
+        if isReaderModeWithSummarizerEnabled {
+            actions.append(readerModeWithSummarizerAction(isSelected: readerModeState == .active,
+                                                          hasAlternativeLocationColor: hasAlternativeLocationColor))
+        } else if isSummarizeFeatureForToolbarOn && canSummarize == true, readerModeState != .active, !UIWindow.isLandscape {
             actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         } else if readerModeState == .active || readerModeState == .available {
             actions.append(readerModeAction(isSelected: readerModeState == .active,
@@ -1362,6 +1368,20 @@ struct AddressBarState: StateType, Sendable, Equatable {
             a11yHint: .TabLocationReloadAccessibilityHint,
             a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
             a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+    }
+
+    private static func readerModeWithSummarizerAction(isSelected: Bool,
+                                                       hasAlternativeLocationColor: Bool) -> ToolbarActionConfiguration {
+        return ToolbarActionConfiguration(
+            actionType: .readerModeWithSummarizer,
+            iconName: StandardImageIdentifiers.Medium.readerView,
+            bottomBadgeImage: UIImage(named: ImageIdentifiers.lightningBadge),
+            isEnabled: true,
+            isSelected: isSelected,
+            hasCustomColor: !hasAlternativeLocationColor,
+            a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+            a11yHint: .TabLocationReloadAccessibilityHint,
+            a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton)
     }
 
     // Sets up translation icon on the toolbar

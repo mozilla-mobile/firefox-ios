@@ -461,6 +461,25 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.enabled, false)
     }
 
+    func testDidTapButton_tapOnReaderModeWithSummarizerButton_dispatchesShowReaderModes() throws {
+        try didTapButton(buttonType: .readerModeWithSummarizer, expectedActionType: .showReaderMode)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.isPrivate, false)
+        XCTAssertEqual(savedExtras.enabled, false)
+    }
+
     func testDidTapButton_tapOnReloadButton_dispatchesReloadWebsite() throws {
         try didTapButton(buttonType: .reload, expectedActionType: GeneralBrowserActionType.reloadWebsite)
 
@@ -657,6 +676,18 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_longPressOnSummarizer_dispatchesShowReaderModeAction() throws {
         try didLongPressButton(buttonType: .summarizer, expectedActionType: .showReaderMode)
+    }
+
+    func testDidTapButton_longPressOnReaderModeWithSummarizer_dispatchesShowSummarizerAction() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+
+        try didLongPressButton(
+            buttonType: .readerModeWithSummarizer,
+            expectedActionType: .showSummarizer,
+            expectation: expectation(description: "The show summarizer action should have been dispatched.")
+        )
     }
 
     func testUrlDidChange_dispatchesBorderPositionChanged() throws {
@@ -856,7 +887,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func didLongPressButton(buttonType: ToolbarActionConfiguration.ActionType,
-                                    expectedActionType: GeneralBrowserActionType) throws {
+                                    expectedActionType: GeneralBrowserActionType,
+                                    expectation: XCTestExpectation? = nil) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
@@ -864,7 +896,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton)
 
+        mockStore.dispatchCalled = {
+            expectation?.fulfill()
+        }
+
         subject.toolbarProvider(mockStore.state, action)
+
+        if let expectation {
+            wait(for: [expectation], timeout: 1.0)
+        }
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)

@@ -269,7 +269,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .cancelEdit:
             cancelEditMode(windowUUID: action.windowUUID)
 
-        case .readerMode:
+        case .readerMode, .readerModeWithSummarizer:
             recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
@@ -368,6 +368,17 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
+        case .readerModeWithSummarizer:
+            Task { @MainActor in
+                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+                let summarizeMiddleware = SummarizerMiddleware()
+                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
+                let contentType = summarizationCheckResult?.contentType ?? .generic
+                let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: GeneralBrowserActionType.showSummarizer)
+                store.dispatch(action)
+            }
         default:
             break
         }

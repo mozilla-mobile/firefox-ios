@@ -20,6 +20,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
+        setIsSummarizerLanguageExpansionEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
@@ -197,6 +198,35 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.trailingPageActions.count, 2)
         XCTAssertEqual(newState.trailingPageActions[0].actionType, .summarizer)
         XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.lightning)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeLanguaeExpansionOn() {
+        setIsSummarizerLanguageExpansionEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(
+            state: initialState,
+            reducer: reducer
+        )
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canSummarize: true,
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerModeWithSummarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertNotNil(newState.trailingPageActions[0].bottomBadgeImage)
         XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
@@ -990,6 +1020,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     private func setIsHostedSummarizerFeatureEnabled(enabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: enabled, toolbarEntrypoint: enabled)
+        }
+    }
+
+    private func setIsSummarizerLanguageExpansionEnabled(enabled: Bool) {
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+            return SummarizerLanguageExpansionFeature(enabled: enabled)
         }
     }
 
