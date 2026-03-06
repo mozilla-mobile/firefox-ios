@@ -273,6 +273,14 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             profile.readingList.deleteRecord(record, completion: nil)
             readerModeBar.added = false
             readerModeBar.unread = false
+        case .summarizer:
+            // TODO: - add proper action 
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.shakeMotionEnded
+                )
+            )
         }
     }
 }

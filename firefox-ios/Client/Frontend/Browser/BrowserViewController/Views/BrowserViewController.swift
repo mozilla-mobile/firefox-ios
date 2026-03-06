@@ -1110,7 +1110,7 @@ class BrowserViewController: UIViewController,
         } else if state.showOverlay == false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
-
+        readerModeBar?.updateSummarizerButton()
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)

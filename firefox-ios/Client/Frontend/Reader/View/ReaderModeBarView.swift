@@ -11,6 +11,7 @@ enum ReaderModeBarButtonType {
     case settings
     case addToReadingList
     case removeFromReadingList
+    case summarizer
 
     private var localizedDescription: String {
         switch self {
@@ -19,6 +20,7 @@ enum ReaderModeBarButtonType {
         case .settings: return .ReaderModeBarSettings
         case .addToReadingList: return .ReaderModeBarAddToReadingList
         case .removeFromReadingList: return .ReaderModeBarRemoveFromReadingList
+        case .summarizer: return ""
         }
     }
 
@@ -29,6 +31,7 @@ enum ReaderModeBarButtonType {
         case .settings: return "SettingsSerif"
         case .addToReadingList: return StandardImageIdentifiers.Large.readingListAdd
         case .removeFromReadingList: return StandardImageIdentifiers.Large.delete
+        case .summarizer: return StandardImageIdentifiers.Large.lightning
         }
     }
 
@@ -56,47 +59,47 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
 
     var contextStrokeColor: UIColor?
 
-    var readStatusButton: UIButton?
-    var settingsButton: UIButton?
-    var listStatusButton: UIButton?
+    private lazy var readStatusButton: UIButton = {
+        let button = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.readStatusButton
+        return button
+    }()
+    private lazy var settingsButton: UIButton = {
+        let button = createButton(.settings, action: #selector(tappedSettingsButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.settingsButton
+        return button
+    }()
+    private lazy var listStatusButton: UIButton = {
+        let button = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.listStatusButton
+        return button
+    }()
+    private lazy var summarizerButton: UIButton? = {
+        guard summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
+        let button = createButton(.summarizer, action: #selector(tappedSummarizerButton))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.summarizerButton
+        return button
+    }()
+    private let buttonStackView: UIStackView = .build {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
+        $0.alignment = .fill
+    }
 
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
     private var toolbarLayoutType: ToolbarLayoutType? {
         return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
     }
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
 
-    @objc dynamic var buttonTintColor = UIColor.clear {
-        didSet {
-            readStatusButton?.tintColor = self.buttonTintColor
-            settingsButton?.tintColor = self.buttonTintColor
-            listStatusButton?.tintColor = self.buttonTintColor
-        }
-    }
-
-    override init(frame: CGRect) {
+    init(
+        frame: CGRect,
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+    ) {
+        self.summarizerNimbusUtils = summarizerNimbusUtils
         super.init(frame: frame)
-
-        readStatusButton = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
-        readStatusButton?.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
-        readStatusButton?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        readStatusButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        readStatusButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        readStatusButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
-
-        settingsButton = createButton(.settings, action: #selector(tappedSettingsButton))
-        settingsButton?.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
-        settingsButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        settingsButton?.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        settingsButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        settingsButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
-
-        listStatusButton = createButton(.addToReadingList, action: #selector(tappedListStatusButton))
-        listStatusButton?.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
-        listStatusButton?.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
-        listStatusButton?.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        listStatusButton?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        listStatusButton?.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
+        setupSubviews()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -117,13 +120,29 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         context.addLine(to: CGPoint(x: frame.width, y: yPosition))
         context.strokePath()
     }
+    
+    private func setupSubviews() {
+        buttonStackView.addArrangedSubview(readStatusButton)
+        buttonStackView.addArrangedSubview(settingsButton)
+        buttonStackView.addArrangedSubview(listStatusButton)
+        if let summarizerButton {
+            buttonStackView.addArrangedSubview(summarizerButton)
+        }
+        addSubview(buttonStackView)
+        NSLayoutConstraint.activate([
+            buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            buttonStackView.topAnchor.constraint(equalTo: topAnchor),
+            buttonStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
 
     private func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button: UIButton = .build { button in
             button.setImage(type.image, for: .normal)
             button.addTarget(self, action: action, for: .touchUpInside)
         }
-        addSubview(button)
+        button.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
         return button
     }
 
@@ -151,20 +170,39 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         )
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }
+    
+    @objc
+    func tappedSummarizerButton() {
+        delegate?.readerModeBar(self, didSelectButton: .summarizer)
+    }
+    
+    func updateSummarizerButton() {
+        let shouldAddSummarizerButton = summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn
+        guard shouldAddSummarizerButton else {
+            summarizerButton?.removeFromSuperview()
+            return
+        }
+        // Add the button only if it is nil otherwise it is already added to the subviews
+        guard summarizerButton == nil else { return }
+        let summarizerButton = createButton(.summarizer, action: #selector(tappedSummarizerButton))
+        summarizerButton.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.summarizerButton
+        buttonStackView.addArrangedSubview(summarizerButton)
+        self.summarizerButton = summarizerButton
+    }
 
     var unread = true {
         didSet {
             let buttonType: ReaderModeBarButtonType = unread && added ? .markAsRead : .markAsUnread
-            readStatusButton?.setImage(buttonType.image, for: .normal)
-            readStatusButton?.isEnabled = added
-            readStatusButton?.alpha = added ? 1.0 : 0.6
+            readStatusButton.setImage(buttonType.image, for: .normal)
+            readStatusButton.isEnabled = added
+            readStatusButton.alpha = added ? 1.0 : 0.6
         }
     }
 
     var added = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList
-            listStatusButton?.setImage(buttonType.image, for: .normal)
+            listStatusButton.setImage(buttonType.image, for: .normal)
         }
     }
 
@@ -175,7 +213,10 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
 
         backgroundColor = colors.layerSurfaceLow.withAlphaComponent(backgroundAlpha)
-        buttonTintColor = colors.textPrimary
+        readStatusButton.tintColor = colors.textPrimary
+        settingsButton.tintColor = colors.textPrimary
+        listStatusButton.tintColor = colors.textPrimary
+        summarizerButton?.tintColor = colors.textPrimary
         contextStrokeColor = colors.textSecondary
     }
 }
