@@ -11,7 +11,6 @@ import UIKit
 @MainActor
 final class NewsAffordanceHeaderViewTests: XCTestCase {
     private let darkTheme = DarkTheme()
-    private let lightTheme = LightTheme()
 
     func test_configure_appliesThemeActionPrimaryToIconAndLabelColors() {
         let view = createSubject()
