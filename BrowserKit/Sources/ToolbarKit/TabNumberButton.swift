@@ -23,7 +23,7 @@ final class TabNumberButton: ToolbarButton, TabCountable {
     }
 
     // MARK: - Init
-    init(frame: CGRect = .zero) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
     }
@@ -32,7 +32,9 @@ final class TabNumberButton: ToolbarButton, TabCountable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func configure(element: ToolbarElement) {
+    override func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         super.configure(element: element)
         countLabel.text = updateTabCount(for: element)
     }

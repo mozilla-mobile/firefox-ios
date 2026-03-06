@@ -35,7 +35,7 @@ class ToolbarButton: UIButton,
 
     private var longPressRecognizer: UILongPressGestureRecognizer?
     private var onLongPress: ((UIButton) -> Void)?
-    private let notificationCenter: any NotificationProtocol
+    private var notificationCenter: NotificationProtocol?
     private var largeContentViewerInteraction: UILargeContentViewerInteraction?
 
     private var isTextButton = false
@@ -47,8 +47,7 @@ class ToolbarButton: UIButton,
     // Cache the current element to avoid unnecessary reconfiguration.
     private var currentElement: ToolbarElement?
 
-    init(frame: CGRect = .zero, notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.notificationCenter = notificationCenter
+    override init(frame: CGRect) {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
@@ -59,7 +58,9 @@ class ToolbarButton: UIButton,
         titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
-    open func configure(element: ToolbarElement) {
+    open func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         guard var config = configuration else { return }
 
         // Skip reconfiguration if the element hasn't changed.
@@ -73,6 +74,8 @@ class ToolbarButton: UIButton,
         isTextButton = element.title != nil
         hasCustomColor = element.hasCustomColor
         hasHighlightedColor = element.hasHighlightedColor
+
+        self.notificationCenter = notificationCenter
 
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
         if let isLoading = element.loadingConfig?.isLoading, isLoading {

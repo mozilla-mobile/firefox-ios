@@ -24,7 +24,7 @@ final class StackedTabButton: ToolbarButton, TabCountable {
     private(set) lazy var topImageViewGradient = CAGradientLayer()
 
     // MARK: - Initializers
-    init(frame: CGRect = .zero) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
         setupGradient(bottomImageViewGradient, for: bottomImageView)
@@ -36,7 +36,9 @@ final class StackedTabButton: ToolbarButton, TabCountable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func configure(element: ToolbarElement) {
+    override func configure(
+        element: ToolbarElement,
+        notificationCenter: NotificationProtocol = NotificationCenter.default) {
         super.configure(element: element)
         setImage(element.nextTabScreenshot, for: topImageView, gradient: topImageViewGradient)
         setImage(element.previousTabScreenshot, for: bottomImageView, gradient: bottomImageViewGradient)

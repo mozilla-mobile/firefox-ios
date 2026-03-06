@@ -56,7 +56,6 @@ final class StackedTabButtonTests: XCTestCase {
     }
 
     // MARK: - Helper
-
     private func makeElement(
         previousTabScreenshot: UIImage? = nil,
         nextTabScreenshot: UIImage? = nil
