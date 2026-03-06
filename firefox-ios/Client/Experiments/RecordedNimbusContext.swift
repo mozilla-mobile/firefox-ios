@@ -161,7 +161,6 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
                 touExperiencePoints: touExperiencePoints.toInt64()
             )
         )
-        GleanMetrics.Pings.shared.nimbus.submit()
         logger.log("record end", level: .debug, category: .experiments)
     }
 
