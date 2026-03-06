@@ -257,9 +257,13 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func bookmark() {
+    func bookmark(isLockIconOff: Bool = true) {
         let browserScreen = BrowserScreen(app: app)
-        browserScreen.assertAddressBar_LockIconExist()
+        if isLockIconOff {
+            browserScreen.assertAddressBar_LockIconOffExist()
+        } else {
+            browserScreen.assertAddressBar_LockIconExist()
+        }
         browserScreen.tapSaveButtonIfExist()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)

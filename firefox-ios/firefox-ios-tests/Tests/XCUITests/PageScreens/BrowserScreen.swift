@@ -213,6 +213,10 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
     }
 
+    func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app))
+    }
+
     func assertAddressBarHasKeyboardFocus() {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
         BaseTestCase().mozWaitForElementToExist(addressBar)
