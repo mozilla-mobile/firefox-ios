@@ -40,7 +40,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let privateBrowsingLabel = "Private Browsing"
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
-        static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
+        static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
         static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
         static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         static let saveButton = "Save"
