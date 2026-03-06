@@ -465,6 +465,10 @@ final class HomepageViewController: UIViewController,
             of: UICollectionView.elementKindSectionHeader,
             cellType: LabelButtonHeaderView.self
         )
+        collectionView.registerSupplementary(
+            of: UICollectionView.elementKindSectionHeader,
+            cellType: NewsAffordanceHeaderView.self
+        )
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
@@ -654,11 +658,6 @@ final class HomepageViewController: UIViewController,
     ) -> UICollectionReusableView? {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            guard let sectionHeaderView = collectionView.dequeueSupplementary(
-                of: kind,
-                cellType: LabelButtonHeaderView.self,
-                for: indexPath)
-            else { return UICollectionReusableView() }
             guard let section = dataSource?.sectionIdentifier(for: indexPath.section) else {
                 self.logger.log(
                     "Section should not have been nil, something went wrong",
@@ -667,10 +666,38 @@ final class HomepageViewController: UIViewController,
                 )
                 return UICollectionReusableView()
             }
+
+            if case .pocket = section,
+               homepageState.merinoState.sectionHeaderState.style == .newsAffordance {
+                guard let newsAffordanceHeaderView = collectionView.dequeueSupplementary(
+                    of: kind,
+                    cellType: NewsAffordanceHeaderView.self,
+                    for: indexPath
+                ) else {
+                    return UICollectionReusableView()
+                }
+                return configureNewsAffordanceHeader(with: newsAffordanceHeaderView)
+            }
+
+            guard let sectionHeaderView = collectionView.dequeueSupplementary(
+                of: kind,
+                cellType: LabelButtonHeaderView.self,
+                for: indexPath
+            ) else {
+                return UICollectionReusableView()
+            }
+
             return self.configureSectionHeader(for: section, with: sectionHeaderView)
         default:
             return nil
         }
+    }
+
+    private func configureNewsAffordanceHeader(
+        with newsAffordanceHeaderView: NewsAffordanceHeaderView
+    ) -> NewsAffordanceHeaderView {
+        newsAffordanceHeaderView.configure(theme: currentTheme)
+        return newsAffordanceHeaderView
     }
 
     private func configureSectionHeader(
