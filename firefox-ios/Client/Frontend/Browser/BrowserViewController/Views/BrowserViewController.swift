@@ -3979,15 +3979,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    /// Tapping in the scrim area will behave the same as tapping the cancel button on the top toolbar.
-    @objc
-    private func tappedZeroSearchScrim() {
-        let overlayAction = GeneralBrowserAction(showOverlay: false,
-                                                 windowUUID: windowUUID,
-                                                 actionType: GeneralBrowserActionType.showOverlay)
-        store.dispatch(overlayAction)
-    }
-
     // Determines the view user should see when editing the url bar
     // Dimming view appears if private mode search suggest is disabled
     // Otherwise shows search suggests screen

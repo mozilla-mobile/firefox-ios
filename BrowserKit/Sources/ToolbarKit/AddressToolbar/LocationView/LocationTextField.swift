@@ -9,12 +9,12 @@ import UIKit
 /// callers must use this instead.
 @MainActor
 protocol LocationTextFieldDelegate: AnyObject {
-    func locationTextField(_ textField: LocationTextField, didEnterText text: String)
+    func locationTextFieldDidEnterText(_ text: String)
     func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool
-    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool
+    func locationTextFieldShouldClear() -> Bool
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
-    func locationTextFieldDidEndEditing(_ textField: UITextField)
-    func locationTextFieldNeedsSearchReset(_ textField: UITextField)
+    func locationTextFieldDidEndEditing()
+    func locationTextFieldNeedsSearchReset()
 }
 
 final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
@@ -41,7 +41,6 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
-    private let copyShortcutKey = "c"
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -81,9 +80,8 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         notifyTextChanged = debounce(0.1,
                                      action: {
             if self.isEditing {
-                self.autocompleteDelegate?.locationTextField(
-                    self,
-                    didEnterText: self.normalizeString(self.textWithoutSuggestion() ?? "")
+                self.autocompleteDelegate?.locationTextFieldDidEnterText(
+                    self.normalizeString(self.textWithoutSuggestion() ?? "")
                 )
             }
         })
@@ -199,7 +197,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - Private
     @objc
-    private func textDidChange(_ textField: UITextField) {
+    private func textDidChange() {
         // When marked text (autocomplete suggestion) is set this method is called
         // in this case we don't need to
         guard !isSettingMarkedText else { return }
@@ -252,7 +250,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private func clear() {
         text = ""
         removeCompletion()
-        autocompleteDelegate?.locationTextField(self, didEnterText: "")
+        autocompleteDelegate?.locationTextFieldDidEnterText("")
     }
 
     private func normalizeString(_ string: String) -> String {
@@ -293,7 +291,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
         textField.selectedTextRange = nil
-        autocompleteDelegate?.locationTextFieldDidEndEditing(self)
+        autocompleteDelegate?.locationTextFieldDidEndEditing()
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
@@ -310,7 +308,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         // can reset itself since it will only lookup results if the new text is
         // longer than the previous text.
         if lastReplacement == nil {
-            autocompleteDelegate?.locationTextFieldNeedsSearchReset(textField)
+            autocompleteDelegate?.locationTextFieldNeedsSearchReset()
         }
 
         lastReplacement = string
@@ -325,7 +323,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         text = ""
         removeCompletion()
-        return autocompleteDelegate?.locationTextFieldShouldClear(self) ?? true
+        return autocompleteDelegate?.locationTextFieldShouldClear() ?? true
     }
 
     // MARK: - Debounce

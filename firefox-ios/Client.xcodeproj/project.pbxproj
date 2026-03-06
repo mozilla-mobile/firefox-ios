@@ -6,6 +6,23 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		C2A1EA0D2F4383F000DD202A /* Periphery */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = C2A1EA142F4383F100DD202A /* Build configuration list for PBXAggregateTarget "Periphery" */;
+			buildPhases = (
+				C2A1EA152F4383FE00DD202A /* Run Periphery */,
+			);
+			dependencies = (
+				C2A1EA172F43875400DD202A /* PBXTargetDependency */,
+			);
+			name = Periphery;
+			packageProductDependencies = (
+			);
+			productName = Periphery;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		032CE5F62EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032CE5F52EBA0C04007CCC0D /* ToUExperiencePointsCalculatorTests.swift */; };
 		033A5FCC2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033A5FCB2E5F001200A84E8A /* TermsOfUseTelemetryTests.swift */; };
@@ -1842,7 +1859,6 @@
 		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
 		D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
-		D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */; };
 		D433852C27ABC8150069DD33 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = D433852B27ABC8150069DD33 /* MappaMundi */; };
 		D437C4FD25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */; };
 		D4859A7727328569009A2390 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
@@ -2376,6 +2392,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8CF609242EA8D46E00F069B6;
 			remoteInfo = ActionExtension;
+		};
+		C2A1EA162F43875400DD202A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
 		};
 		C82043702523DBEB00740B71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -10425,7 +10448,6 @@
 		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
 		D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTableViewController.swift; sourceTree = "<group>"; };
 		D3FA777A1A43B2990010CD32 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
-		D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D437C4FC25FF5A3E00316F2C /* L10nMktSuiteSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nMktSuiteSnapshotTests.swift; sourceTree = "<group>"; };
 		D4574C1988EB984BD5A9CAD7 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		D45E40209531804D1FFFC9DB /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -15360,7 +15382,6 @@
 			isa = PBXGroup;
 			children = (
 				EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */,
-				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
 				D0152244229855A8009DE753 /* OneLineTableViewCell.swift */,
@@ -17252,6 +17273,9 @@
 					8CF609242EA8D46E00F069B6 = {
 						CreatedOnToolsVersion = 26.0;
 					};
+					C2A1EA0D2F4383F000DD202A = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 43AQ936H96;
@@ -17473,6 +17497,7 @@
 				288A2D851AB8B3260023ABC3 /* Localizations */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
 				8CF609242EA8D46E00F069B6 /* ActionExtension */,
+				C2A1EA0D2F4383F000DD202A /* Periphery */,
 			);
 		};
 /* End PBXProject section */
@@ -17970,6 +17995,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
+		};
+		C2A1EA152F4383FE00DD202A /* Run Periphery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Periphery";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which periphery >/dev/null; then\n    periphery scan --config \"${SRCROOT}/.periphery.yml\" --format xcode -- -destination \"generic/platform=iOS Simulator\"\nelse\n    echo \"warning: periphery not installed, install from https://github.com/peripheryapp/periphery\"\nfi\n";
 		};
 		C31224262EB9944500683849 /* Strip Symbols */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -19194,7 +19237,6 @@
 				21EEAA1D2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift in Sources */,
 				5A32C2B62AD8517200A9B5A4 /* MetricKitWrapper.swift in Sources */,
 				8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */,
-				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				F89453A92DA71D530022BA3F /* DeleteLoginsKeysSetting.swift in Sources */,
 				8A19ACAE2A329058001C2147 /* PasswordManagerSetting.swift in Sources */,
 				1D2F68AB2ACB262900524B92 /* RemoteTabsPanelAction.swift in Sources */,
@@ -20170,6 +20212,11 @@
 			isa = PBXTargetDependency;
 			target = 8CF609242EA8D46E00F069B6 /* ActionExtension */;
 			targetProxy = 8CF609302EA8D46F00F069B6 /* PBXContainerItemProxy */;
+		};
+		C2A1EA172F43875400DD202A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = C2A1EA162F43875400DD202A /* PBXContainerItemProxy */;
 		};
 		C82043712523DBEB00740B71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -29650,6 +29697,60 @@
 			};
 			name = FirefoxStaging;
 		};
+		C2A1EA0E2F4383F100DD202A /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Fennec;
+		};
+		C2A1EA0F2F4383F100DD202A /* Fennec_Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Fennec_Testing;
+		};
+		C2A1EA102F4383F100DD202A /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Fennec_Enterprise;
+		};
+		C2A1EA112F4383F100DD202A /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Firefox;
+		};
+		C2A1EA122F4383F100DD202A /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = FirefoxBeta;
+		};
+		C2A1EA132F4383F100DD202A /* FirefoxStaging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = FirefoxStaging;
+		};
 		D39FA1681A83E0EC00EE869C /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -31476,6 +31577,19 @@
 				8CF609362EA8D46F00F069B6 /* Firefox */,
 				8CF609372EA8D46F00F069B6 /* FirefoxBeta */,
 				8CF609382EA8D46F00F069B6 /* FirefoxStaging */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		C2A1EA142F4383F100DD202A /* Build configuration list for PBXAggregateTarget "Periphery" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C2A1EA0E2F4383F100DD202A /* Fennec */,
+				C2A1EA0F2F4383F100DD202A /* Fennec_Testing */,
+				C2A1EA102F4383F100DD202A /* Fennec_Enterprise */,
+				C2A1EA112F4383F100DD202A /* Firefox */,
+				C2A1EA122F4383F100DD202A /* FirefoxBeta */,
+				C2A1EA132F4383F100DD202A /* FirefoxStaging */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
