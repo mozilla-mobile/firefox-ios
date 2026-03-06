@@ -14,7 +14,7 @@ import Common
 // This is unavoidable with the current architecture given a new tab is created as a side effect. For these tabs, if the test
 // isn't run on the main thread, then in its deinit the webView.navigationDelegate is updated not on the main thread, causing
 // failures in Bitrise. This should be improved. [FXIOS-10110]
-class TabManagerTests: XCTestCase {
+final class TabManagerTests: XCTestCase {
     var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
@@ -356,7 +356,7 @@ class TabManagerTests: XCTestCase {
     @MainActor
     func testPreserveTabsWithNoTabs() async throws {
         let subject = createSubject()
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
@@ -366,7 +366,7 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithOneTab() async throws {
         let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 1)
@@ -376,7 +376,7 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithManyTabs() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)
