@@ -201,7 +201,8 @@ final class TabDisplayView: UIView,
             ) as? TabTitleSupplementaryView else { return nil }
 
             if let tab = tabsState.tabs[safe: indexPath.row] {
-                titleView.configure(with: tab, theme: theme)
+                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
+                titleView.configure(with: tab, theme: theme, newTabTitle: newTabTitle)
             }
             return titleView
 
