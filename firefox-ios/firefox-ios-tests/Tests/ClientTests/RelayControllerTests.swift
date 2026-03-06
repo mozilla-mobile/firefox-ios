@@ -12,14 +12,19 @@ import Common
 
 @MainActor
 class RelayControllerTests: XCTestCase {
+    var mockAccountStatusProvider: MockRelayAccountStatusProvider!
+    var mockProfile: MockProfile!
+
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         DependencyHelperMock().reset()
-        super.tearDown()
+        mockProfile = nil
+        mockAccountStatusProvider = nil
+        try await super.tearDown()
     }
 
     // MARK: - RelayControllerProtocol Tests
@@ -104,16 +109,48 @@ class RelayControllerTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
 
+    func test_relayStatusUpdated_afterInitialization_noProfileAccount() {
+        let subject = createSubject(accountStatus: .unavailable, updateDelay: 0.0)
+        mockProfile.hasSyncableAccountMock = false
+        withExtendedLifetime(subject) {
+            wait(1.0)
+            XCTAssertEqual(mockAccountStatusProvider.setValueCalled, 1)
+            XCTAssertEqual(mockAccountStatusProvider.wrappedValue, .unavailable)
+        }
+    }
+
+    func test_relayStatusUpdated_afterInitialization_hasValidProfileAccount() {
+        let subject = createSubject(accountStatus: .unavailable, updateDelay: 0.0)
+        mockProfile.hasSyncableAccountMock = true
+        withExtendedLifetime(subject) {
+            // Note: there are two follow-up async tasks which run in this
+            // scenario. This test is to ensure we are running the update,
+            // so as long as the account status has changed to one of the
+            // two acceptable values then the test can be considered green.
+            wait(1.0)
+            XCTAssertGreaterThan(mockAccountStatusProvider.setValueCalled, 0)
+            XCTAssert(mockAccountStatusProvider.wrappedValue == .updating ||
+                      mockAccountStatusProvider.wrappedValue == .unavailable)
+        }
+    }
+
     // MARK: - Subject
 
-    func createSubject(accountStatus: RelayAccountStatus = .unknown) -> RelayController {
+    func createSubject(accountStatus: RelayAccountStatus = .unknown,
+                       updateDelay: TimeInterval = 5.0) -> RelayController {
+        let statusProvider = MockRelayAccountStatusProvider(mockValue: accountStatus)
+        mockAccountStatusProvider = statusProvider
+        let profile = MockProfile()
+        mockProfile = profile
+        let mockConfig = RelayController.RelayUpdateConfiguration(postLaunchUpdateDelay: updateDelay)
         let subject =  RelayController(logger: MockLogger(),
-                                       profile: AppContainer.shared.resolve(),
+                                       profile: profile,
                                        relayClient: MockRelayClient(),
                                        relayRSClient: MockRelayRemoteSettingsClient(),
-                                       relayAccountStatusProvider: MockRelayAccountStatusProvider(mockValue: accountStatus),
+                                       relayAccountStatusProvider: statusProvider,
                                        gleanWrapper: MockGleanWrapper(),
-                                       config: .prod,
+                                       clientConfig: .prod,
+                                       updateConfig: mockConfig,
                                        notificationCenter: MockNotificationCenter())
         trackForMemoryLeaks(subject)
         return subject
@@ -170,6 +207,7 @@ final class MockRelayClient: RelayClientProtocol {
 final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
     let mockValue: RelayAccountStatus
     var wrappedValue: RelayAccountStatus = .unknown
+    var setValueCalled = 0
 
     init(mockValue: RelayAccountStatus) {
         self.mockValue = mockValue
@@ -177,6 +215,9 @@ final class MockRelayAccountStatusProvider: RelayAccountStatusProvider {
 
     var accountStatus: RelayAccountStatus {
         get { return mockValue }
-        set { wrappedValue = newValue }
+        set {
+            wrappedValue = newValue
+            setValueCalled += 1
+        }
     }
 }
