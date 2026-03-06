@@ -263,6 +263,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             backUpName = baseDomain.contains("local") ? .LegacyAppMenu.AppMenuOpenHomePageTitleString : baseDomain
         } else if let url = url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
+        } else if url == nil {
+            // When homepage is blank, we need to use "New Tab" as title instead "Homepage"
+            backUpName = .TabsTray.TabsSelectorBlankTabsTitle
         }
 
         return displayTitle.isEmpty ? backUpName : displayTitle

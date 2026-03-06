@@ -130,7 +130,13 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
     // MARK: - Configuration
 
-    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
+    func configure(
+        with tabModel: TabModel,
+        theme: Theme?,
+        delegate: TabCellDelegate,
+        a11yId: String,
+        newTabTitle: String?
+    ) {
         self.tabModel = tabModel
         self.delegate = delegate
 
@@ -140,7 +146,7 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
         animator?.animateBackToCenter()
 
-        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
+        accessibilityLabel = getA11yTitleLabel(tabModel: tabModel, newTabTitle: newTabTitle)
         isAccessibilityElement = true
         accessibilityHint = .TabsTray.TabTraySwipeToCloseAccessibilityHint
         accessibilityIdentifier = a11yId
@@ -371,8 +377,8 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         return true
     }
 
-    private func getA11yTitleLabel(tabModel: TabModel) -> String? {
-        let baseName = tabModel.tabTitle
+    private func getA11yTitleLabel(tabModel: TabModel, newTabTitle: String?) -> String? {
+        let baseName = newTabTitle ?? tabModel.tabTitle
 
         if isSelectedTab, !baseName.isEmpty {
             return baseName + ". " + String.TabsTray.TabTrayCurrentlySelectedTabAccessibilityLabel

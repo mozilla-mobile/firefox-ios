@@ -52,6 +52,7 @@ final class TabDisplayView: UIView,
 
             switch sectionItem {
             case .tab(let tab):
+                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
                 if isTabTrayUIExperimentsEnabled {
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: ExperimentTabCell.cellIdentifier,
@@ -59,7 +60,7 @@ final class TabDisplayView: UIView,
                     ) as? ExperimentTabCell else { return UICollectionViewCell() }
 
                     let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
                     return cell
                 } else {
                     guard let cell = collectionView.dequeueReusableCell(
@@ -68,7 +69,7 @@ final class TabDisplayView: UIView,
                     ) as? TabCell else { return UICollectionViewCell() }
 
                     let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
                     return cell
                 }
             }
@@ -200,7 +201,8 @@ final class TabDisplayView: UIView,
             ) as? TabTitleSupplementaryView else { return nil }
 
             if let tab = tabsState.tabs[safe: indexPath.row] {
-                titleView.configure(with: tab, theme: theme)
+                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
+                titleView.configure(with: tab, theme: theme, newTabTitle: newTabTitle)
             }
             return titleView
 

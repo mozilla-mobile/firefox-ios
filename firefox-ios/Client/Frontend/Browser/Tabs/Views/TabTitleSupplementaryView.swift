@@ -67,12 +67,11 @@ final class TabTitleSupplementaryView: UICollectionReusableView, ThemeApplicable
         favicon.layer.cornerRadius = UX.faviconSize.height / 2
     }
 
-    func configure(with tabModel: TabModel, theme: Theme?) {
-        titleText.text = tabModel.tabTitle
+    func configure(with tabModel: TabModel, theme: Theme?, newTabTitle: String?) {
+        titleText.text = newTabTitle ?? tabModel.tabTitle
 
-        let identifier = StandardImageIdentifiers.Large.globe
-        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
-            favicon.manuallySetImage(globeFavicon)
+        if let firefoxFavicon = UIImage(named: ImageIdentifiers.firefoxFavicon) {
+            favicon.manuallySetImage(firefoxFavicon)
         }
 
         if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
