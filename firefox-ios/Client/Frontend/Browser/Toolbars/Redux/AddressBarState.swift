@@ -1387,6 +1387,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                 a11yLabel: .Translations.Sheet.AccessibilityLabels.LoadingCompletedAccessibilityLabel
             ),
             isEnabled: enabled,
+            isSelected: isActiveState,
             hasCustomColor: !hasAlternativeLocationColor,
             hasHighlightedColor: false,
             contextualHintType: ContextualHintType.translation.rawValue,
