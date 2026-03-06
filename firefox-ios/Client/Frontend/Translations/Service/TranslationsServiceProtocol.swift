@@ -15,6 +15,7 @@ protocol TranslationsServiceProtocol {
     /// For now `onLanguageIdentified` is used to notify caller when language detection is done.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws
     /// This method resolves when the document receives the first translations response.
