@@ -428,6 +428,10 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
+    var isOtherErrorPagesEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    }
+
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -2289,14 +2293,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
+        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && noInternetConnectionEnabled {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()

@@ -308,59 +308,87 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     // MARK: - Authentication
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodServerTrust() async {
+    func testWebViewDidReceiveChallenge_MethodServerTrust() {
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "completion handler called")
+        var disposition: URLSession.AuthChallengeDisposition?
+        var credential: URLCredential?
 
-        // Get the (disposition, credential) result tuple
-        let result = await subject.webView(
+        subject.webView(
             anyWebView(),
-            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
-        )
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
+        ) { receivedDisposition, receivedCredential in
+            disposition = receivedDisposition
+            credential = receivedCredential
+            expectation.fulfill()
+        }
 
-        XCTAssertEqual(result.0, .performDefaultHandling)
-        XCTAssertNil(result.1)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(disposition, .performDefaultHandling)
+        XCTAssertNil(credential)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPDigest() async {
+    func testWebViewDidReceiveChallenge_MethodHTTPDigest() {
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "completion handler called")
+        var disposition: URLSession.AuthChallengeDisposition?
+        var credential: URLCredential?
 
-        // Get the (disposition, credential) result tuple
-        let result = await subject.webView(
+        subject.webView(
             anyWebView(),
-            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
-        )
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
+        ) { receivedDisposition, receivedCredential in
+            disposition = receivedDisposition
+            credential = receivedCredential
+            expectation.fulfill()
+        }
 
-        XCTAssertEqual(result.0, .performDefaultHandling)
-        XCTAssertNil(result.1)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(disposition, .performDefaultHandling)
+        XCTAssertNil(credential)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() async {
+    func testWebViewDidReceiveChallenge_MethodHTTPNTLM() {
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "completion handler called")
+        var disposition: URLSession.AuthChallengeDisposition?
+        var credential: URLCredential?
 
-        // Get the (disposition, credential) result tuple
-        let result = await subject.webView(
+        subject.webView(
             anyWebView(),
-            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
-        )
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
+        ) { receivedDisposition, receivedCredential in
+            disposition = receivedDisposition
+            credential = receivedCredential
+            expectation.fulfill()
+        }
 
-        XCTAssertEqual(result.0, .performDefaultHandling)
-        XCTAssertNil(result.1)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(disposition, .performDefaultHandling)
+        XCTAssertNil(credential)
     }
 
     @MainActor
-    func testWebViewDidReceiveChallenge_MethodHTTPBasic() async {
+    func testWebViewDidReceiveChallenge_MethodHTTPBasic() {
         let subject = createSubject()
+        let expectation = XCTestExpectation(description: "completion handler called")
+        var disposition: URLSession.AuthChallengeDisposition?
+        var credential: URLCredential?
 
-        // Get the (disposition, credential) result tuple
-        let result = await subject.webView(
+        subject.webView(
             anyWebView(),
-            respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
-        )
+            didReceive: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")
+        ) { receivedDisposition, receivedCredential in
+            disposition = receivedDisposition
+            credential = receivedCredential
+            expectation.fulfill()
+        }
 
-        XCTAssertEqual(result.0, .performDefaultHandling)
-        XCTAssertNil(result.1)
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(disposition, .performDefaultHandling)
+        XCTAssertNil(credential)
     }
 
     @MainActor
