@@ -17,7 +17,7 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
-    /// The image for the bade at the bottom of a button
+    /// The image for the bottom badge of the toolbar element
     let bottomBadgeImage: UIImage?
 
     /// Indicated whether to use template mode or not for an image
