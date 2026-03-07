@@ -15,6 +15,7 @@ struct MIMEType {
     static let HTML = "text/html"
     static let OctetStream = "application/octet-stream"
     static let Passbook = "application/vnd.apple.pkpass"
+    static let PassbookBundle = "application/vnd.apple.pkpasses"
     static let PDF = "application/pdf"
     static let PlainText = "text/plain"
     static let PNG = "image/png"
@@ -39,6 +40,10 @@ struct MIMEType {
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
         return webViewViewableTypes.contains(mimeType.lowercased())
+    }
+
+    static func isPassbook(_ mimeType: String) -> Bool {
+        return [MIMEType.Passbook, MIMEType.PassbookBundle].contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {

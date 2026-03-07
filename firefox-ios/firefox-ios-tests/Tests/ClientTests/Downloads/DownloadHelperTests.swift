@@ -8,6 +8,36 @@ import WebKit
 @testable import Client
 
 class DownloadHelperTests: XCTestCase {
+    func test_isPassbook_whenPkpass_isTrue() {
+        XCTAssertTrue(MIMEType.isPassbook(MIMEType.Passbook))
+    }
+
+    func test_isPassbook_whenPkpasses_isTrue() {
+        XCTAssertTrue(MIMEType.isPassbook(MIMEType.PassbookBundle))
+    }
+
+    func test_isPassbook_whenOtherMimeType_isFalse() {
+        XCTAssertFalse(MIMEType.isPassbook(MIMEType.PDF))
+    }
+
+    func test_pkpassBundleExtractor_whenArchiveContainsPkpass_extractsPassData() throws {
+        let nestedPassData = Data([0x50, 0x4B, 0x50, 0x41, 0x53, 0x53]) // "PKPASS"
+        let archiveData = makeStoredZipArchive(entries: [
+            ("bundle/boarding.pkpass", nestedPassData),
+            ("bundle/readme.txt", Data("ignore".utf8))
+        ])
+
+        let extracted = try PKPassBundleExtractor.extractPasses(from: archiveData)
+
+        XCTAssertEqual(extracted, [nestedPassData])
+    }
+
+    func test_pkpassBundleExtractor_whenArchiveHasNoPkpass_throws() {
+        let archiveData = makeStoredZipArchive(entries: [("bundle/readme.txt", Data("ignore".utf8))])
+
+        XCTAssertThrowsError(try PKPassBundleExtractor.extractPasses(from: archiveData))
+    }
+
     @MainActor
     func test_init_whenMIMETypeIsNil_initializeCorrectly() {
         let response = anyResponse(mimeType: nil)
@@ -215,6 +245,73 @@ class DownloadHelperTests: XCTestCase {
     private func anyCachePolicy() -> URLRequest.CachePolicy {
         return .useProtocolCachePolicy
     }
+
+    private func makeStoredZipArchive(entries: [(String, Data)]) -> Data {
+        var archive = Data()
+        var centralDirectory = Data()
+        var localHeaderOffsets: [UInt32] = []
+
+        for (filename, fileData) in entries {
+            let fileNameData = Data(filename.utf8)
+            let localHeaderOffset = UInt32(archive.count)
+            localHeaderOffsets.append(localHeaderOffset)
+
+            // Local file header signature
+            archive.appendLE32(0x04034b50)
+            archive.appendLE16(20) // version needed
+            archive.appendLE16(0) // flags
+            archive.appendLE16(0) // compression: stored
+            archive.appendLE16(0) // mod time
+            archive.appendLE16(0) // mod date
+            archive.appendLE32(0) // crc32 not required by extractor tests
+            archive.appendLE32(UInt32(fileData.count))
+            archive.appendLE32(UInt32(fileData.count))
+            archive.appendLE16(UInt16(fileNameData.count))
+            archive.appendLE16(0) // extra length
+            archive.append(fileNameData)
+            archive.append(fileData)
+        }
+
+        let centralDirectoryOffset = UInt32(archive.count)
+        for (index, entry) in entries.enumerated() {
+            let fileNameData = Data(entry.0.utf8)
+            let fileData = entry.1
+
+            // Central directory file header signature
+            centralDirectory.appendLE32(0x02014b50)
+            centralDirectory.appendLE16(20) // version made by
+            centralDirectory.appendLE16(20) // version needed
+            centralDirectory.appendLE16(0) // flags
+            centralDirectory.appendLE16(0) // compression: stored
+            centralDirectory.appendLE16(0) // mod time
+            centralDirectory.appendLE16(0) // mod date
+            centralDirectory.appendLE32(0) // crc32 not required by extractor tests
+            centralDirectory.appendLE32(UInt32(fileData.count))
+            centralDirectory.appendLE32(UInt32(fileData.count))
+            centralDirectory.appendLE16(UInt16(fileNameData.count))
+            centralDirectory.appendLE16(0) // extra length
+            centralDirectory.appendLE16(0) // comment length
+            centralDirectory.appendLE16(0) // disk number start
+            centralDirectory.appendLE16(0) // internal attrs
+            centralDirectory.appendLE32(0) // external attrs
+            centralDirectory.appendLE32(localHeaderOffsets[index])
+            centralDirectory.append(fileNameData)
+        }
+
+        archive.append(centralDirectory)
+
+        // End of central directory record
+        archive.appendLE32(0x06054b50)
+        archive.appendLE16(0) // disk number
+        archive.appendLE16(0) // central dir start disk
+        archive.appendLE16(UInt16(entries.count))
+        archive.appendLE16(UInt16(entries.count))
+        archive.appendLE32(UInt32(centralDirectory.count))
+        archive.appendLE32(centralDirectoryOffset)
+        archive.appendLE16(0) // zip comment length
+
+        return archive
+    }
 }
 
 class MockHTTPURLResponse: HTTPURLResponse, @unchecked Sendable {
@@ -234,4 +331,18 @@ class MockHTTPURLResponse: HTTPURLResponse, @unchecked Sendable {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     override var mimeType: String? { forcedMimeType }
+}
+
+private extension Data {
+    mutating func appendLE16(_ value: UInt16) {
+        append(UInt8(value & 0x00ff))
+        append(UInt8((value >> 8) & 0x00ff))
+    }
+
+    mutating func appendLE32(_ value: UInt32) {
+        append(UInt8(value & 0x000000ff))
+        append(UInt8((value >> 8) & 0x000000ff))
+        append(UInt8((value >> 16) & 0x000000ff))
+        append(UInt8((value >> 24) & 0x000000ff))
+    }
 }
