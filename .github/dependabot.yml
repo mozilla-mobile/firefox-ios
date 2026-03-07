@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: quarterly
+    groups:
+      frontend:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "npm"
+      include: scope
+    labels:
+      - Dependencies
+      - javascript
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: quarterly
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "actions(gha)"
