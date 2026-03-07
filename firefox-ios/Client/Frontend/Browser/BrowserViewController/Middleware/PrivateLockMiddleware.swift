@@ -52,6 +52,13 @@ final class PrivateLockMiddleware {
                                           state: state)
         case PrivateLockActionType.didEnterBackground, PrivateLockActionType.willEnterForeground:
             Self.lock(triggeredByFailure: false, windowUUID: action.windowUUID)
+        case PrivateLockActionType.lockPrivateTabsSettingsDidChange:
+            let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
+            store.dispatch(PrivateLockMiddlewareAction(
+                windowUUID: action.windowUUID,
+                actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+                privatePanelLockState: browserState?.privateLockState.withLastUnlocked(at: nil)
+            ))
         default:
             break
         }

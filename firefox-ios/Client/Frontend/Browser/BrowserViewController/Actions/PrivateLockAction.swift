@@ -12,6 +12,7 @@ enum PrivateLockActionType: ActionType {
     case setTrayDisplayContextAndPanelType
     case didEnterBackground
     case willEnterForeground
+    case lockPrivateTabsSettingsDidChange
 }
 
 struct PrivateLockAction: Action {

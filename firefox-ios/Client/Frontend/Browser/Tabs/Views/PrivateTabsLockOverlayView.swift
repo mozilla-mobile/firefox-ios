@@ -19,7 +19,6 @@ final class PrivateTabsLockOverlayView: UIView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let spinner = UIActivityIndicatorView(style: .large)
-    private let retryButton = UIButton(type: .system)
     private let stack = UIStackView()
 
     override init(frame: CGRect) {
@@ -123,6 +122,27 @@ final class PrivateTabsLockOverlayView: UIView {
 
         var config = UIButton.Configuration.filled()
         config.title = "Unlock"
+        config.baseBackgroundColor = UIColor.systemBlue
+        config.baseForegroundColor = .white
+        config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 28, bottom: 14, trailing: 28)
+
+        button.configuration = config
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.18
+        button.layer.shadowRadius = 10
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+
+        return button
+    }()
+    
+    private let retryButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        var config = UIButton.Configuration.filled()
+        config.title = "Try Again"
         config.baseBackgroundColor = UIColor.systemBlue
         config.baseForegroundColor = .white
         config.cornerStyle = .capsule

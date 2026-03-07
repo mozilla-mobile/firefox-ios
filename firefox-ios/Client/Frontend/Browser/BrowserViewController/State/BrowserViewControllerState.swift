@@ -58,10 +58,11 @@ struct BrowserViewControllerState: ScreenState {
         var access: PrivateAccessState = .locked
         var auth: PrivateAuthState = .idle
         var lastUnlockedAt: Date?
-        let relockInterval: TimeInterval = 20
+        let relockInterval: TimeInterval = 120
 
         var shouldRelockByTime: Bool {
-            return true
+            guard let lastUnlockedAt else { return true }
+            return Date().timeIntervalSince(lastUnlockedAt) > relockInterval
         }
         
         func copy(access: PrivateAccessState? = nil,
@@ -74,6 +75,10 @@ struct BrowserViewControllerState: ScreenState {
         
         func locked() -> PrivateLockDomainState {
             copy(access: .locked)
+        }
+        
+        func withLastUnlocked(at: Date?) -> PrivateLockDomainState {
+            PrivateLockDomainState(access: access, auth: auth, lastUnlockedAt: at)
         }
     }
 
