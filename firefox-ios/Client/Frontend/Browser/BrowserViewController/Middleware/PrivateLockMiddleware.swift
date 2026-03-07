@@ -32,7 +32,7 @@ final class PrivateLockMiddleware {
         
         switch action.actionType {
         case PrivateLockActionType.requestAuth(let reason):
-            let browserState = state.screenState(BrowserViewControllerState.self, for: .browserViewController, window: action.windowUUID)
+            let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
             guard browserState?.privateLockState.auth != .authenticating else { return }
             auth(reason: reason, windowUUID: action.windowUUID)
         case PrivateLockActionType.setTrayDisplayContext:
@@ -47,12 +47,9 @@ final class PrivateLockMiddleware {
                 actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
                 trayDisplayContext: action.trayDisplayContext)
             )
-            store.dispatch(PrivateLockMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
-                trayPanelType: action.trayPanelType,
-                privateLockEnabled: isPrivateLockFeatureEnabled()
-            ))
+            resolveTabTrayPanelTypeChange(panel: action.trayPanelType,
+                                          windowUUID: action.windowUUID,
+                                          state: state)
         case PrivateLockActionType.didEnterBackground, PrivateLockActionType.willEnterForeground:
             Self.lock(triggeredByFailure: false, windowUUID: action.windowUUID)
         default:
@@ -63,15 +60,40 @@ final class PrivateLockMiddleware {
     private func resolveTabChange(action: TabTrayAction, state: AppState) {
         switch action.actionType {
         case TabTrayActionType.changePanel:
-            store.dispatch(PrivateLockMiddlewareAction(
-                windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
-                trayPanelType: action.panelType,
-                privateLockEnabled: isPrivateLockFeatureEnabled()
-            ))
+            resolveTabTrayPanelTypeChange(panel: action.panelType,
+                                          windowUUID: action.windowUUID,
+                                          state: state)
         default:
             break
         }
+    }
+    
+    private func resolveTabTrayPanelTypeChange(panel: TabTrayPanelType?,
+                                               windowUUID: WindowUUID,
+                                               state: AppState) {
+        
+        guard let panelType = panel,
+              let state = browserState(from: state, windowUUID: windowUUID)
+        else { return }
+        
+        let privateLockEnabled = isPrivateLockFeatureEnabled()
+        store.dispatch(PrivateLockMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
+            trayPanelType: panel,
+            privateLockEnabled: privateLockEnabled
+        ))
+        
+        guard state.didBecomePrivateVisible(afterChangingPanelTo: panelType) else { return }
+            guard privateLockEnabled else { return }
+            guard state.privateLockState.auth != .authenticating else { return }
+            guard state.privateLockState.shouldRelockByTime else { return }
+        
+        store.dispatch(PrivateLockMiddlewareAction(
+          windowUUID: windowUUID,
+          actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+          privatePanelLockState: state.privateLockState.locked()
+        ))
     }
     
     private func auth(reason: String, windowUUID: WindowUUID) {
@@ -132,5 +154,13 @@ final class PrivateLockMiddleware {
     private func isPrivateLockFeatureEnabled() -> Bool {
         let shouldLock = prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
         return shouldLock
+    }
+    
+    private func browserState(from appState: AppState, windowUUID: WindowUUID) -> BrowserViewControllerState? {
+        appState.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: windowUUID
+        )
     }
 }

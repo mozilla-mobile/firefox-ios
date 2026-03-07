@@ -72,6 +72,10 @@ struct BrowserViewControllerState: ScreenState {
                                    auth: auth ?? self.auth,
                                    lastUnlockedAt: lastUnlockedAt ?? self.lastUnlockedAt)
         }
+        
+        func locked() -> PrivateLockDomainState {
+            copy(access: .locked)
+        }
     }
 
     let windowUUID: WindowUUID
@@ -295,15 +299,6 @@ struct BrowserViewControllerState: ScreenState {
             guard let panelType = action.trayPanelType else { return state }
             var newState = state
             newState.trayPanelType = panelType
-            let becamePrivateVisible = !state.isPrivateSurfaceVisible && newState.isPrivateSurfaceVisible
-            if becamePrivateVisible {
-                let privateLockFeatureEnabled = action.privateLockEnabled ?? false
-                if privateLockFeatureEnabled,
-                   newState.privateLockState.auth != .authenticating,
-                   newState.privateLockState.shouldRelockByTime == true {
-                    newState.privateLockState = newState.privateLockState.copy(access: .locked)
-                }
-            }
             return newState
         case PrivateLockMiddlewareActionType.setTrayDisplayContext:
             guard let trayDisplayContext = action.trayDisplayContext else { return state }
@@ -313,6 +308,10 @@ struct BrowserViewControllerState: ScreenState {
         default:
             return state
         }
+    }
+    
+    func didBecomePrivateVisible(afterChangingPanelTo panelType: TabTrayPanelType) -> Bool {
+        !isPrivateSurfaceVisible && panelType == .privateTabs
     }
     
     private var isPrivateSurfaceVisible: Bool {
