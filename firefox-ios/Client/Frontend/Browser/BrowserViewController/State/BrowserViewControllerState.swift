@@ -61,8 +61,7 @@ struct BrowserViewControllerState: ScreenState {
         let relockInterval: TimeInterval = 20
 
         var shouldRelockByTime: Bool {
-            guard let lastUnlockedAt else { return true }
-            return Date().timeIntervalSince(lastUnlockedAt) > relockInterval
+            return true
         }
         
         func copy(access: PrivateAccessState? = nil,

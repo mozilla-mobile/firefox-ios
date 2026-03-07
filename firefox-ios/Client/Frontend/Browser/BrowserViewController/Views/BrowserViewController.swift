@@ -1156,7 +1156,6 @@ class BrowserViewController: UIViewController,
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
         dismissToolbarCFRs(with: windowUUID)
-//        applyPrivateLockUI(state.privateLockState)
     }
 
     private func showToastType(toast: ToastType) {
@@ -1333,29 +1332,6 @@ class BrowserViewController: UIViewController,
         // TODO: FXIOS-13342 - replace this string with .FirefoxHomepage.ScreenTitle once it is translated (v144)
         title = .SettingsHomePageSectionName
         navigationItem.backButtonDisplayMode = .generic
-    }
-    
-    private lazy var privateLockOverlay: PrivateTabsLockOverlayView = {
-        let overlay = PrivateTabsLockOverlayView()
-        overlay.isHidden = true
-        overlay.onUnlockTapped = { [weak self] in self?.startPrivateAuthFlow() }
-        overlay.onRetryTapped = { [weak self] in self?.startPrivateAuthFlow() }
-        return overlay
-    }()
-    
-    private func applyPrivateLockUI(_ lock: BrowserViewControllerState.PrivateLockDomainState?) {
-        guard let lock else {
-            privateLockOverlay.renderHidden()
-            return
-        }
-
-        privateLockOverlay.render(
-            access: lock.access,
-            auth: lock.auth
-        )
-        addressToolbarContainer.isHidden = lock.access == .locked
-        view.bringSubviewToFront(privateLockOverlay)
-        view.bringSubviewToFront(bottomContainer)
     }
 
     // MARK: - Notifiable
@@ -1561,7 +1537,6 @@ class BrowserViewController: UIViewController,
                 return self?.newTabSettings
             }
         }
-        view.addSubview(privateLockOverlay)
     }
 
     private func enqueueTabRestoration() {
@@ -1858,13 +1833,6 @@ class BrowserViewController: UIViewController,
             updateHeaderConstraints()
         }
         setupBlurViews()
-        
-        NSLayoutConstraint.activate([
-            privateLockOverlay.topAnchor.constraint(equalTo: view.topAnchor),
-            privateLockOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            privateLockOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            privateLockOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
 
     private func setupBlurViews() {

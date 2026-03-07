@@ -369,6 +369,8 @@ final class TabDisplayPanelViewController: UIViewController,
         if panelType == .privateTabs, tabsState.isPrivateMode {
             // Only adjust the empty view if we are in private mode
             shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+        }
+        if panelType == .privateTabs {
             applyPrivateLockUI(tabsState.privateLockState)
         }
         shouldShowFadeView()
