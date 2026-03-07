@@ -499,6 +499,7 @@ class TabsTestsIphone: BaseTestCase {
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         toolBarScreen.assertTabsButtonExists()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeExperimentTabTrayView(goBackToBrowserTab: "Homepage")

@@ -11,6 +11,7 @@ class FindInPageTests: BaseTestCase {
     private func navigateToOpenFindInPage(openSite: String) {
         navigator.openURL(openSite)
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
 
@@ -20,6 +21,7 @@ class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu(openSite: String) {
         navigator.openURL(openSite)
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
 

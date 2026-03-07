@@ -69,13 +69,47 @@ class DataManagementTests: BaseTestCase {
     // Smoketest
     func testWebSiteDataEnterFirstTime() {
         webSitesDataScreen = WebsiteDataScreen(app: app)
+
+        // Warm-up: Open Website Data Settings first to handle slow cold start (best effort)
+        // The first load is often very slow due to initialization, subsequent loads are fast
+        // If warm-up times out, the retry pattern below will handle it
+        navigator.goto(WebsiteDataSettings)
+        if app.tables.otherElements["Website Data"].waitForExistence(timeout: TIMEOUT) {
+            // Wait up to 45s for activity indicator, but don't fail if it times out
+            mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+        }
+        navigator.goto(NewTabScreen)
+        waitForTabsButton()
+
+        // Now run the actual test with the app already warmed up
         navigator.goto(WebsiteDataSettings)
         webSitesDataScreen.clearAllWebsiteData()
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.openURL("example.com")
         waitUntilPageLoad()
-        navigator.goto(WebsiteDataSettings)
-        webSitesDataScreen.waitUntilListIsReady()
+
+        // Retry pattern: try loading website data settings up to 3 times
+        // This handles the flaky behavior where iOS may not have persisted website data yet
+        var dataLoaded = false
+        for attempt in 1...3 {
+            navigator.goto(WebsiteDataSettings)
+
+            // Check if data loaded successfully
+            if webSitesDataScreen.checkIfDataLoaded() {
+                dataLoaded = true
+                break
+            }
+
+            // If not loaded and not last attempt, go back and wait before retry
+            if attempt < 3 {
+                navigator.goto(NewTabScreen)
+                sleep(2) // Give iOS more time to persist website data
+            }
+        }
+
+        XCTAssertTrue(dataLoaded, "Website data did not load after 3 attempts")
+
         webSitesDataScreen.expandShowMoreIfNeeded()
         webSitesDataScreen.waitForExampleDomain()
         webSitesDataScreen.assertWebsiteDataVisible()

@@ -134,6 +134,8 @@ class CreditCardsTests: BaseTestCase {
         // The autofill option (Use saved card prompt) is not displayed
         let cardNumber = creditCardScreen.getCardNumberField()
         creditCardScreen.assertNoAutofillPromptWhenEnteringCard()
+        // Reset navigator state before navigating to settings
+        navigator.goto(NewTabScreen)
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             navigator.goto(BrowserTabMenu)

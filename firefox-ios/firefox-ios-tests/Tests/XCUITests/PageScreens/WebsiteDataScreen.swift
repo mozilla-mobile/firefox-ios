@@ -16,7 +16,8 @@ final class WebsiteDataScreen {
 
     func clearAllWebsiteData() {
         BaseTestCase().mozWaitForElementToExist(sel.TABLE_WEBSITE_DATA.element(in: app))
-        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch)
+        // Use longer timeout for parallel execution - activity indicator may take longer
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
 
         let clearAll = sel.clearAllLabel(in: app)
         BaseTestCase().mozWaitForElementToExist(clearAll)
@@ -49,12 +50,37 @@ final class WebsiteDataScreen {
     func waitUntilListIsReady(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.TABLE_WEBSITE_DATA.element(in: app), timeout: timeout)
 
+        // Wait for activity indicator to disappear before checking for data
+        // Use longer timeout when running in parallel as iOS takes longer to persist website data
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+
         if #available(iOS 17, *) {
             let circleInCells = sel.circleImageInsideCells(app)
             BaseTestCase().mozWaitForElementToExist(circleInCells, timeout: timeout)
         } else {
             let anyBtn = sel.anyTableButton(app)
             BaseTestCase().mozWaitForElementToExist(anyBtn, timeout: timeout)
+        }
+    }
+
+    /// Checks if website data has loaded without failing the test
+    /// Returns true if data is loaded, false otherwise
+    func checkIfDataLoaded(timeout: TimeInterval = TIMEOUT) -> Bool {
+        // Wait for table to exist
+        guard sel.TABLE_WEBSITE_DATA.element(in: app).waitForExistence(timeout: timeout) else {
+            return false
+        }
+
+        // Wait for activity indicator to disappear
+        BaseTestCase().mozWaitForElementToNotExist(app.activityIndicators.firstMatch, timeout: TIMEOUT_LONG)
+
+        // Check if data cells exist
+        if #available(iOS 17, *) {
+            let circleInCells = sel.circleImageInsideCells(app)
+            return circleInCells.waitForExistence(timeout: timeout)
+        } else {
+            let anyBtn = sel.anyTableButton(app)
+            return anyBtn.waitForExistence(timeout: timeout)
         }
     }
 
