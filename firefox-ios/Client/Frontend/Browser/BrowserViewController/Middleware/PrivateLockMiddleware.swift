@@ -85,9 +85,9 @@ final class PrivateLockMiddleware {
         ))
         
         guard state.didBecomePrivateVisible(afterChangingPanelTo: panelType) else { return }
-            guard privateLockEnabled else { return }
-            guard state.privateLockState.auth != .authenticating else { return }
-            guard state.privateLockState.shouldRelockByTime else { return }
+        guard privateLockEnabled else { return }
+        guard state.privateLockState.auth != .authenticating else { return }
+        guard state.privateLockState.shouldRelockByTime else { return }
         
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
