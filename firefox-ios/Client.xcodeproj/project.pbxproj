@@ -781,6 +781,7 @@
 		767742A92F4F649500DEC06D /* PrivateLockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742A82F4F649500DEC06D /* PrivateLockAction.swift */; };
 		767742AB2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742AA2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift */; };
 		76AFB6632F58B16C0064E6AC /* PrivateLockMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */; };
+		76F1091F2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1091E2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
 		789A0B232E2E969D004547CE /* FxUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F5423F62DF6EF17000AA578 /* FxUserState.swift */; };
@@ -8773,6 +8774,7 @@
 		7681461D8ADDD3E9662A2A53 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Shared.strings; sourceTree = "<group>"; };
 		7693448FA2E2865EA28005EE /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateLockMiddleware.swift; sourceTree = "<group>"; };
+		76F1091E2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxGradientBackgroundView.swift; sourceTree = "<group>"; };
 		772744E9858179A908A070DB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		77294827911067CD5994B5FD /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		779D4B8EAE580D7B2B55EC3F /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -12157,6 +12159,7 @@
 				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
 				213BF7522AC21D1B00C53A64 /* TabDisplayPanelViewController.swift */,
 				767742AA2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift */,
+				76F1091E2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift */,
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
 				5A679E4A2B239FAE004F2B0D /* TabPeekViewController.swift */,
 				8A06DF5E2DE0C0EB007B7E9D /* TabTitleSupplementaryView.swift */,
@@ -19479,6 +19482,7 @@
 				8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */,
 				21365E392F30FD700000C369 /* BrowserViewControllerLayoutManager.swift in Sources */,
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
+				76F1091F2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift in Sources */,
 				8187561A2BB4618500DCD1F3 /* OnboardingViewControllerState.swift in Sources */,
 				F82F68B12E86EF5F002E42D1 /* DeleteAutofillKeysSetting.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
