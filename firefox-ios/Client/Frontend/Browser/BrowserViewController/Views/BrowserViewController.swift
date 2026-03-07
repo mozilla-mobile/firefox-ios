@@ -947,10 +947,17 @@ class BrowserViewController: UIViewController,
         tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
         
+        showPrivacyOverlayIfNeeded()
+    }
+    
+    private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
         if let state = browserViewControllerState {
             let shouldLock = profile.prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
             if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && shouldLock {
-                focusOnTabSegment()
+                focusOnTabSegment(animated: false)
+                if checkActualState {
+                    sceneWillEnterForegroundNotification()
+                }
             }
         }
     }
@@ -3004,7 +3011,7 @@ class BrowserViewController: UIViewController,
         case .summarizer(let config):
             navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
         case .tabTray(let panelType):
-            navigationHandler?.showTabTray(selectedPanel: panelType)
+            navigationHandler?.showTabTray(selectedPanel: panelType, animated: true)
         case .homepageZeroSearch:
             store.dispatch(
                 GeneralBrowserAction(
@@ -3373,10 +3380,10 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    func focusOnTabSegment() {
+    func focusOnTabSegment(animated: Bool = true) {
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        showTabTray(focusedSegment: segmentToFocus)
+        showTabTray(focusedSegment: segmentToFocus, animated: animated)
     }
 
     /// When the trait collection changes the top taps display might have to change
@@ -3460,12 +3467,13 @@ class BrowserViewController: UIViewController,
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                     focusedSegment: TabTrayPanelType? = nil) {
+                     focusedSegment: TabTrayPanelType? = nil,
+                     animated: Bool = true) {
         updateFindInPageVisibility(isVisible: false)
 
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
-        navigationHandler?.showTabTray(selectedPanel: selectedSegment)
+        navigationHandler?.showTabTray(selectedPanel: selectedSegment, animated: animated)
         
         store.dispatch(
             PrivateLockAction(
@@ -4768,6 +4776,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         )
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
+    }
+    
+    func settingsControllerDidHide() {
+        showPrivacyOverlayIfNeeded(checkActualState: true)
     }
 
     func updateForDefaultSearchEngineDidChange() {

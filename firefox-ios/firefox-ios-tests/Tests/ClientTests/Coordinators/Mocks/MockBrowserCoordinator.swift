@@ -99,7 +99,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showEnhancedTrackingProtectionCalled += 1
     }
 
-    func showTabTray(selectedPanel: TabTrayPanelType) {
+    func showTabTray(selectedPanel: TabTrayPanelType, animated: Bool) {
         showTabTrayCalled += 1
     }
 

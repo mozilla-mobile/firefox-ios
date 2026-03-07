@@ -19,7 +19,6 @@ final class PrivateTabsLockOverlayView: UIView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let spinner = UIActivityIndicatorView(style: .large)
-    private let unlockButton = UIButton(type: .system)
     private let retryButton = UIButton(type: .system)
     private let stack = UIStackView()
 
@@ -59,16 +58,17 @@ final class PrivateTabsLockOverlayView: UIView {
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
 
-//        blurView.translatesAutoresizingMaskIntoConstraints = false
-//        addSubview(blurView)
-//        NSLayoutConstraint.activate([
-//            blurView.topAnchor.constraint(equalTo: topAnchor),
-//            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-//        ])
-        
-        backgroundColor = .blue
+        let background = FirefoxGradientBackgroundView()
+
+        addSubview(background)
+        background.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            background.topAnchor.constraint(equalTo: topAnchor),
+            background.bottomAnchor.constraint(equalTo: bottomAnchor),
+            background.leadingAnchor.constraint(equalTo: leadingAnchor),
+            background.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
 
         titleLabel.font = .preferredFont(forTextStyle: .title2)
         titleLabel.textAlignment = .center
@@ -94,7 +94,7 @@ final class PrivateTabsLockOverlayView: UIView {
         retryButton.addTarget(self, action: #selector(retryTapped), for: .touchUpInside)
 
         stack.axis = .vertical
-        stack.alignment = .fill
+        stack.alignment = .center
         stack.distribution = .fill
         stack.spacing = 12
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -116,6 +116,27 @@ final class PrivateTabsLockOverlayView: UIView {
 
         apply(mode: .prompt)
     }
+    
+    private let unlockButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        var config = UIButton.Configuration.filled()
+        config.title = "Unlock"
+        config.baseBackgroundColor = UIColor.systemBlue
+        config.baseForegroundColor = .white
+        config.cornerStyle = .capsule
+        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 28, bottom: 14, trailing: 28)
+
+        button.configuration = config
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.18
+        button.layer.shadowRadius = 10
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
+
+        return button
+    }()
 
     func apply(mode: Mode) {
         switch mode {
