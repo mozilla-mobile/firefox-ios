@@ -946,6 +946,13 @@ class BrowserViewController: UIViewController,
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
+        
+        if let state = browserViewControllerState {
+            let shouldLock = profile.prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
+            if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && shouldLock {
+                focusOnTabSegment()
+            }
+        }
     }
 
     /// Remove KVO observers on terminate to prevent crashes during force-close.
@@ -1142,7 +1149,7 @@ class BrowserViewController: UIViewController,
         dismissModalsIfStartAtHome()
         shouldHideAddressToolbar()
         dismissToolbarCFRs(with: windowUUID)
-        applyPrivateLockUI(state.privateLockState)
+//        applyPrivateLockUI(state.privateLockState)
     }
 
     private func showToastType(toast: ToastType) {
