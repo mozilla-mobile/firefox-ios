@@ -109,6 +109,9 @@ class RelayControllerTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
 
+    // Note: The post-initialization tests below exercise the Relay update which currently
+    // runs on a timer. Testing this async has a potential to be flaky, however; if we
+    // find that these are causing any issues on CI we should revisit.
     func test_relayStatusUpdated_afterInitialization_noProfileAccount() {
         let subject = createSubject(accountStatus: .unavailable, updateDelay: 0.0)
         mockProfile.hasSyncableAccountMock = false
