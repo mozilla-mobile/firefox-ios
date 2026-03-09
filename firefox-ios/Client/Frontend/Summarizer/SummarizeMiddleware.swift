@@ -83,46 +83,35 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
 
         let preSummarizationCheckResults = await summarizationChecker.check(on: webView, maxWords: maxWords)
         guard preSummarizationCheckResults.canSummarize else { return nil }
+        guard let summarizerLocale = await getSummarizerLocale(for: webView) else { return nil }
+
         let contentType = preSummarizationCheckResults.contentType ?? .generic
         let summarizerModel: SummarizerModel =
             summarizerNimbusUtils.isAppleSummarizerEnabled() ? .appleSummarizer : .liteLLMSummarizer
 
+        return summarizerConfigProvider.getConfig(
+            summarizerModel: summarizerModel,
+            contentType: contentType,
+            locale: summarizerLocale
+        )
+    }
+
+    private func getSummarizerLocale(for webView: WKWebView) async -> Locale? {
         if summarizerNimbusUtils.isLanguageExpansionEnabled {
             let langExpansionConfiguration = summarizerNimbusUtils.languageExpansionConfiguration()
-            guard let summarizerLocale = await summarizerLanguageProvider.getLanguage(
-                userPreference: langExpansionConfiguration.selectedPreference(
-                    prefs: profile.prefs
-                ),
+            return await summarizerLanguageProvider.getLanguage(
+                userPreference: langExpansionConfiguration.selectedPreference(prefs: profile.prefs),
                 supportedLocales: langExpansionConfiguration.supportedLocales,
                 languageSampleSource: WebViewLanguageSampleSource(webView: webView)
-            ) else {
-                return nil
-            }
-
-            return summarizerConfigProvider.getConfig(
-                from: [SummarizerConfigSourceLanguageAware()],
-                summarizerModel: summarizerModel,
-                contentType: contentType,
-                locale: summarizerLocale
             )
         }
+        // This branch is a fallback in case Language expansion is not enabled. In this case
+        // we default to the old experiment where the summarizer is available only for english websites.
         if summarizerNimbusUtils.isSummarizeFeatureEnabled {
-            // In this scenario where language expansion is false we support only english as locale. 
-            let isSupportedLocale = await summarizerLanguageProvider.getLanguage(
+            return await summarizerLanguageProvider.getLanguage(
                 userPreference: .websiteLanguage,
                 supportedLocales: [Locale(identifier: "en")],
                 languageSampleSource: WebViewLanguageSampleSource(webView: webView)
-            ) != nil
-            guard isSupportedLocale else { return nil }
-            return summarizerConfigProvider.getConfig(
-                from: [
-                    UserSummarizerConfigSource(),
-                    RemoteSummarizerConfigSource(),
-                    DefaultSummarizerConfigSource()
-                ],
-                summarizerModel: summarizerModel,
-                contentType: contentType,
-                locale: nil
             )
         }
         return nil

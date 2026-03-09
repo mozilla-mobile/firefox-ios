@@ -5,25 +5,32 @@
 import SummarizeKit
 import WebKit
 
-// TODO: - FXIOS-15016 move SummarizerConfigProvider and default implementation to SummarizeKit
 protocol SummarizerConfigProvider {
-    /// Returns the configuration for the summarizer fetching it from the sources.
     func getConfig(
-        from sources: [any SummarizerConfigSourceProtocol],
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale?
+        locale: Locale
     ) -> SummarizerConfig
 }
 
 struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
+    private let sources: [any SummarizerConfigSourceProtocol]
+    private static let defaultSources: [any SummarizerConfigSourceProtocol] = [
+        UserSummarizerConfigSource(),
+        DefaultSummarizerConfigSource(),
+        RemoteSummarizerConfigSource(),
+    ]
+
+    init(sources: [any SummarizerConfigSourceProtocol] = Self.defaultSources) {
+        self.sources = sources
+    }
+
     /// Returns the configuration for the Summarizer by merging the config loaded from the `sources`.
     /// First sources in the array have highest priority when the configuration are merged into one.
     func getConfig(
-        from sources: [any SummarizerConfigSourceProtocol],
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale?
+        locale: Locale
     ) -> SummarizerConfig {
         let initialConfig = SummarizerConfig(instructions: "", options: [:])
         // Merge configs in reverse order (so higher priority overrides lower)
@@ -31,9 +38,14 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         let config = sources
             .compactMap { $0.load(summarizerModel, contentType: contentType) }
             .reduce(initialConfig) { $0.merging(with: $1) }
-        if let locale {
-            return config.injecting(locale: locale)
-        }
-        return config
+        // inject the locale into the instructions, use English Locale to get the localized string for the provided locale
+        // cause the LLM needs english localized content.
+        let enLocale = Locale(identifier: "en")
+        let instructionsWithLocale = config.instructions
+            .replacingOccurrences(
+                of: "**{lang}**",
+                with: enLocale.localizedString(forIdentifier: locale.identifier) ?? "English"
+            )
+        return SummarizerConfig(instructions: instructionsWithLocale, options: config.options)
     }
 }
