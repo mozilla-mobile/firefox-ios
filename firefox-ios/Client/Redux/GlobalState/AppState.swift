@@ -7,18 +7,18 @@ import Redux
 import Common
 
 struct AppState: StateType, Sendable {
-    let activeScreens: ActiveScreensState
+    let activeComponents: ActiveComponentsState
 
     static let reducer: Reducer<Self> = { state, action in
-        return AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        return AppState(activeComponents: ActiveComponentsState.reducer(state.activeComponents, action))
     }
 
     func screenState<S: ScreenState>(_ s: S.Type,
-                                     for screen: AppScreen,
+                                     for component: AppComponent,
                                      window: WindowUUID?) -> S? {
-        return activeScreens.screens
+        return activeComponents.components
             .compactMap {
-                switch ($0, screen) {
+                switch ($0, component) {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 case (.homepage(let state), .homepage): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S
@@ -52,13 +52,13 @@ struct AppState: StateType, Sendable {
     }
 
     static func defaultState(from state: AppState) -> AppState {
-        return AppState(activeScreens: state.activeScreens)
+        return AppState(activeComponents: state.activeComponents)
     }
 }
 
 extension AppState {
     init() {
-        activeScreens = ActiveScreensState()
+        activeComponents = ActiveComponentsState()
     }
 }
 

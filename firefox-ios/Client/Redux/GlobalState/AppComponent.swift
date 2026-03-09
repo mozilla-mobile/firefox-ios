@@ -3,16 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Redux
-import Common
 
-struct ScreenAction: Action {
-    let windowUUID: WindowUUID
-    let actionType: ActionType
-    let screen: AppScreen
-}
-
-enum AppScreen {
+enum AppComponent {
     case browserViewController
     case onboardingViewController
     case homepage
@@ -31,9 +23,4 @@ enum AppScreen {
     case nativeErrorPage
     case shortcutsLibrary
     case translationSettings
-}
-
-enum ScreenActionType: ActionType {
-    case showScreen
-    case closeScreen
 }
