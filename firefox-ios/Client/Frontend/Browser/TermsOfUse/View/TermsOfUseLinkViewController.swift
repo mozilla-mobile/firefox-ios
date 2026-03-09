@@ -30,7 +30,7 @@ final class TermsOfUseLinkViewController: UIViewController,
 
     private var estimatedProgressObserver: NSKeyValueObservation?
     private var isLoading = false
-    
+
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.isHidden = true
     }
