@@ -314,7 +314,7 @@
 "Settings.DailyUsagePing.Message" = "Toto Mozille pomáhá odhadnout počet aktivních uživatelů.";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title" = "Ping denního používání";
+"Settings.DailyUsagePing.Title" = "Denní ping o používání";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Tmavý";
