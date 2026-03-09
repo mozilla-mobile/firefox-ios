@@ -37,6 +37,12 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
+    /// Selects the given tab as the active tab.
+    ///
+    /// - Parameters:
+    ///   - tab: The tab to select.
+    ///   - previous: The tab to treat as the previously selected tab..
+    ///   - immediatePreservation: When `true`, tab state is persisted synchronously instead of being deferred.
     func selectTab(_ tab: Tab?, previous: Tab?, immediatePreservation: Bool)
 
     // MARK: - Add Tab
