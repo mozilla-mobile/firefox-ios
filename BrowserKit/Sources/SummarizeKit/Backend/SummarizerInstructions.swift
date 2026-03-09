@@ -10,8 +10,9 @@
 /// For more context on how tokenizers handle newlines vs spaces, see: https://simonwillison.net/2023/Jun/8/gpt-tokenizers/
 public enum SummarizerModelInstructions {
     static let  defaultInstructions = """
-    You MUST respond in **{lang}**.
-    You are an expert at creating mobile-optimized summaries. Process:
+    You are an expert at creating mobile-optimized summaries.
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
@@ -24,8 +25,9 @@ public enum SummarizerModelInstructions {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let appleInstructions = """
-    You MUST respond in **{lang}**.
-    You are an expert at creating mobile-optimized summaries. Process:
+    You are an expert at creating mobile-optimized summaries.
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
@@ -40,18 +42,25 @@ public enum SummarizerModelInstructions {
 
     static let defaultRecipeInstructions = """
     You are an expert at creating mobile-optimized recipe summaries.
-    You MUST respond in **{lang}**.
-    Format exactly as shown below but translate all visible text into **{lang}**. Do not add any closing phrases.
-    If a field is null or empty, omit that line.
-    Always substitute placeholders (i.e {servings}) with real value.
+
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Translate all visible section headers and labels into **{lang}**.
+    Output ONLY the formatted result. Do not add any closing phrases.
+
+    If a field is null, empty, or missing, omit that section entirely.
+
+    Always replace placeholders with actual values.
+    Convert time values to minutes and hours.
+
+    FORMAT:
 
     **Servings:** {servings}
 
-    **Total Time:** {convert total_time to human-readable format}
+    **Total Time:** {total_time}
 
-    **Prep Time:** {convert prep_time to human-readable format}
+    **Prep Time:** {prep_time}
 
-    **Cook Time:** {convert cook_time to human-readable format}
+    **Cook Time:** {cook_time}
 
     ## 🥕 Ingredients
     - ingredient 1
@@ -68,9 +77,9 @@ public enum SummarizerModelInstructions {
     - tip 2
 
     ## 🥗 Nutrition
-    - Calories: calories
-    - Protein: protein g
-    - Carbs: carbs g
-    - Fat: fatg
+    - Calories: {calories}
+    - Protein: {protein} g
+    - Carbs: {carbs} g
+    - Fat: {fat} g
     """
 }
