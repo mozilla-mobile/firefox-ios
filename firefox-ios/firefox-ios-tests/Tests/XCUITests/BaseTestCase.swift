@@ -545,6 +545,62 @@ class BaseTestCase: XCTestCase {
             mozWaitForElementToExist(dragElement)
         }
     }
+
+    /// Wait until the app has fully rotated to the requested orientation.
+     /// - Parameters:
+     ///   - orientation: desired `UIDeviceOrientation`
+     ///   - timeout: max time to wait.
+     ///   - pollInterval: how often to re-check.
+    func waitForRotation(
+        to orientation: UIDeviceOrientation,
+        timeout: TimeInterval = 5.0,
+        pollInterval: TimeInterval = 0.1
+    ) {
+        let deadline = Date().addingTimeInterval(timeout)
+        var stableCount = 0
+        let requiredStable = 2
+
+        // Helper to check frame matches expected orientation
+        func frameMatchesOrientation(_ frame: CGRect, for orientation: UIDeviceOrientation) -> Bool {
+            switch orientation {
+            case .landscapeLeft, .landscapeRight:
+                return frame.width > frame.height
+            case .portrait, .portraitUpsideDown:
+                return frame.height > frame.width
+            default:
+                return false
+            }
+        }
+
+        while Date() < deadline {
+            let deviceOrientation = XCUIDevice.shared.orientation
+            let window = app.windows.firstMatch
+
+            if window.exists {
+                let frame = window.frame
+                // Check both device reported orientation and window frame alignment.
+                if deviceOrientation == orientation || (
+                    (orientation.isLandscape && deviceOrientation.isLandscape) ||
+                    (orientation.isPortrait && deviceOrientation.isPortrait)
+                ) {
+                    if frameMatchesOrientation(frame, for: orientation) {
+                        stableCount += 1
+                        if stableCount >= requiredStable { return } // rotation finished and stable
+                    } else {
+                        stableCount = 0
+                    }
+                } else {
+                    stableCount = 0
+                }
+            } else {
+                stableCount = 0
+            }
+
+            RunLoop.current.run(until: Date().addingTimeInterval(pollInterval))
+        }
+
+        XCTFail("Timed out waiting for app to rotate to \(orientation)")
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {

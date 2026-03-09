@@ -359,4 +359,19 @@ final class BrowserScreen {
         let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
         BaseTestCase().mozWaitForElementToNotExist(clipboardToast, timeout: timeout)
     }
+
+    func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let link = app.links[name].firstMatch
+        BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+    }
+
+    func assertWebViewLinkTextExists(text: String, timeout: TimeInterval = TIMEOUT) {
+        let linkText = app.webViews.links.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
+    }
+
+    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
+        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    }
  }

@@ -24,6 +24,7 @@ protocol BrowserSelectorsSet {
     var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
     var SAVE_BUTTON: Selector { get }
     var CLIPBOARD_TOAST: Selector { get }
+    var PRIVATE_MODE_HOMEPAGE_TITLE: Selector { get }
     func linkElement(named name: String) -> Selector
     func linkPreview(named preview: String) -> Selector
     func webPageElement(with text: String) -> Selector
@@ -47,6 +48,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         static let saveButton = "Save"
         static let clipboardToast = "Fennec pasted from CoreSimulatorBridge"
+        static let privateModeHomepageTitle = "PrivateMode.Homepage.Title"
     }
 
     let ADDRESS_BAR = Selector.textFieldId(
@@ -163,6 +165,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser", "system"]
     )
 
+    let PRIVATE_MODE_HOMEPAGE_TITLE = Selector.staticTextId(
+        IDs.privateModeHomepageTitle,
+        description: "Private mode homepage title message",
+        groups: ["browser", "private-mode"]
+    )
+
     func linkElement(named name: String) -> Selector {
         Selector.linkById(
             name,
@@ -192,6 +200,6 @@ struct BrowserSelectors: BrowserSelectorsSet {
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
                            TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
-                           SAVE_BUTTON, CLIPBOARD_TOAST]
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE]
     }
 }

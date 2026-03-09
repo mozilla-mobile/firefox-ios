@@ -72,7 +72,7 @@ final class OnboardingScreen {
         if closeButton.exists {
             closeButton.waitAndTap()
         }
-        // Generic Popup “Close”
+        // Generic Popup "Close"
         let genericClose = app.buttons["Close"]
         if genericClose.exists {
             genericClose.waitAndTap()
