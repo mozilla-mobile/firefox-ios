@@ -28,12 +28,12 @@ final class TermsOfUseLinkViewController: UIViewController,
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?
 
+    private var estimatedProgressObserver: NSKeyValueObservation?
+    private var isLoading = false
+    
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.isHidden = true
     }
-
-    private var estimatedProgressObserver: NSKeyValueObservation?
-    private var isLoading = false
 
     private lazy var header: UIView = .build { view in
         view.backgroundColor = self.currentTheme().colors.layer1
@@ -146,11 +146,10 @@ final class TermsOfUseLinkViewController: UIViewController,
 
             Task { @MainActor [weak self] in
                 guard let self, self.isLoading else { return }
-
                 let currentProgress = Double(self.progressBar.progress)
                 let progress = max(currentProgress, observedProgress)
+                
                 guard 0.0...1.0 ~= progress else { return }
-
                 self.updateProgressBar(progress: progress)
             }
         }
@@ -160,7 +159,6 @@ final class TermsOfUseLinkViewController: UIViewController,
     private func updateProgressBar(progress: Double) {
         let maximumProgress: Double = isLoading ? 0.9 : 1.0
         let displayedProgress = min(max(0.0, progress), maximumProgress)
-
         guard displayedProgress >= Double(progressBar.progress) else { return }
 
         progressBar.alpha = 1
