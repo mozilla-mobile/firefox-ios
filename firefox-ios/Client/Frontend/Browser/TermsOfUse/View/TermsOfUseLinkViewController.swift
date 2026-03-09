@@ -148,7 +148,7 @@ final class TermsOfUseLinkViewController: UIViewController,
                 guard let self, self.isLoading else { return }
                 let currentProgress = Double(self.progressBar.progress)
                 let progress = max(currentProgress, observedProgress)
-                
+
                 guard 0.0...1.0 ~= progress else { return }
                 self.updateProgressBar(progress: progress)
             }
