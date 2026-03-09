@@ -219,7 +219,6 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     func updateConstraints() {
         if let contentViewHeightConstraint {
-            cardTableView.layoutIfNeeded()
             let buttonsHeight = buttonsContainerStackView.frame.height
             let estimatedContentHeight = cardTableView.contentSize.height +
                 buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
@@ -236,6 +235,13 @@ class CreditCardBottomSheetViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateConstraints()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if #unavailable(iOS 26.0) {
+            updateConstraints()
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
