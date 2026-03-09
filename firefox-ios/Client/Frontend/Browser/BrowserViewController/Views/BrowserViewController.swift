@@ -4903,7 +4903,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
-            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString == "about:blank" {
                 needsReload = false
             }
         }
