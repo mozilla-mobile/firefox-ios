@@ -30,15 +30,19 @@ final class SummarizerMiddleware {
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case ReaderModeActionType.didTapSummarizerButton:
-            break
-        case GeneralBrowserActionType.updateSelectedTab:
-            // evaluate config and if config available then dispatch
-            // ReaderModeAction show summarize button
-            break
+        case GeneralBrowserActionType.showReaderMode:
+            Task { @MainActor in
+                await self.dispatchSummarizeConfigurationAction(
+                    for: action,
+                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForReaderModeButton
+                )
+            }
         case GeneralBrowserActionType.shakeMotionEnded:
             Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(for: action)
+                await self.dispatchSummarizeConfigurationAction(
+                    for: action,
+                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForShakeMotion
+                )
             }
         default:
             break
@@ -68,7 +72,7 @@ final class SummarizerMiddleware {
     }
 
     @MainActor
-    private func dispatchSummarizeConfigurationAction(for action: Action) async {
+    private func dispatchSummarizeConfigurationAction(for action: Action, actionType: ActionType) async {
         guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
         let result = await checkSummarizationResult(tab)
         let contentType = result?.contentType ?? .generic
@@ -76,7 +80,7 @@ final class SummarizerMiddleware {
         store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
-                actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+                actionType: actionType,
                 summarizerConfig: getConfig(for: contentType)
             )
         )

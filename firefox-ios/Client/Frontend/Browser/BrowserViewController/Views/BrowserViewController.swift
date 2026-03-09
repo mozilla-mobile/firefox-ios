@@ -502,7 +502,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let crashTracker: CrashTracker
     let ratingPromptManager: RatingPromptManager
-    private var browserViewControllerState: BrowserViewControllerState?
+    private(set) var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
     private let summarizerNimbusUtils: SummarizerNimbusUtils
@@ -1110,9 +1110,7 @@ class BrowserViewController: UIViewController,
         } else if state.showOverlay == false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
-        if state.shouldShowReaderBarModeSummarizerButton {
-            readerModeBar?.updateContent()
-        }
+        
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
@@ -2923,8 +2921,8 @@ class BrowserViewController: UIViewController,
                 toastContainer: config.toastContainer,
                 popoverArrowDirection: config.popoverArrowDirection
             )
-        case .summarizer(let config):
-            navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
+        case .summarizer(let config, let trigger):
+            navigationHandler?.showSummarizePanel(trigger, config: config)
         case .tabTray(let panelType):
             navigationHandler?.showTabTray(selectedPanel: panelType)
         case .homepageZeroSearch:
@@ -3013,8 +3011,6 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
-        case .summarizer(let config):
-            navigationHandler?.showSummarizePanel(.toolbarIcon, config: config)
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)

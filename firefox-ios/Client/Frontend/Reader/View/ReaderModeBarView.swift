@@ -74,10 +74,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.listStatusButton
         return button
     }()
-    private lazy var summarizerButton: UIButton? = {
-        guard summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn else {
-            return nil
-        }
+    private lazy var summarizerButton: UIButton = {
         let button = createButton(.summarizer, action: #selector(tappedSummarizerButton))
         button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.summarizerButton
         return button
@@ -127,9 +124,6 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         buttonStackView.addArrangedSubview(readStatusButton)
         buttonStackView.addArrangedSubview(settingsButton)
         buttonStackView.addArrangedSubview(listStatusButton)
-        if let summarizerButton {
-            buttonStackView.addArrangedSubview(summarizerButton)
-        }
         addSubview(buttonStackView)
         NSLayoutConstraint.activate([
             buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -180,19 +174,14 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     
     /// Updates the reader mode bar content by dynamically adding or removing the content buttons
     /// based on Nimbus feature flag configuration.
-    func updateContent() {
-        let shouldAddSummarizerButton = summarizerNimbusUtils.isLanguageExpansionEnabled
-                                        && summarizerNimbusUtils.isSummarizeFeatureToggledOn
-        guard shouldAddSummarizerButton else {
-            summarizerButton?.removeFromSuperview()
+    func updateContent(shouldShowSummarizerButton: Bool) {
+        guard shouldShowSummarizerButton else {
+            summarizerButton.removeFromSuperview()
             return
         }
-        // Add the button only if it is nil otherwise it is already added to the subviews
-        guard summarizerButton == nil else { return }
-        let summarizerButton = createButton(.summarizer, action: #selector(tappedSummarizerButton))
-        summarizerButton.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.summarizerButton
+        // Add the button only if it is not already in the view hierarchy
+        guard summarizerButton.superview == nil else { return }
         buttonStackView.addArrangedSubview(summarizerButton)
-        self.summarizerButton = summarizerButton
     }
 
     var unread = true {
@@ -221,7 +210,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         readStatusButton.tintColor = colors.textPrimary
         settingsButton.tintColor = colors.textPrimary
         listStatusButton.tintColor = colors.textPrimary
-        summarizerButton?.tintColor = colors.textPrimary
+        summarizerButton.tintColor = colors.textPrimary
         contextStrokeColor = colors.textSecondary
     }
 }

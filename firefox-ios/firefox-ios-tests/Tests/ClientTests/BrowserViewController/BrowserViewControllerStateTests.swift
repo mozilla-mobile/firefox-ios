@@ -321,7 +321,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = SummarizeAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+            actionType: SummarizeMiddlewareActionType.configuredSummarizerForShakeMotion,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
         )
         let newState = reducer(initialState, action)

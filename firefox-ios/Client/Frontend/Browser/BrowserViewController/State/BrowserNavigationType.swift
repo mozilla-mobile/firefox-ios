@@ -20,7 +20,7 @@ enum BrowserNavigationDestination: Equatable {
     case storiesFeed
     case storiesWebView
     case privacyNoticeLink(URL)
-    case summarizer(config: SummarizerConfig)
+    case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage
     case nativeErrorPageLearnMore
 

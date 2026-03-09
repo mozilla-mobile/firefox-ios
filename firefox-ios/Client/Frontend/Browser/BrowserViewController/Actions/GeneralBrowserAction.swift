@@ -19,6 +19,7 @@ struct GeneralBrowserAction: Action {
     let isNativeErrorPage: Bool?
     let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
+    let summarizerTrigger: SummarizerTrigger
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -27,6 +28,7 @@ struct GeneralBrowserAction: Action {
          isNativeErrorPage: Bool? = nil,
          frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
+         summarizerTrigger: SummarizerTrigger = .shakeGesture,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -39,6 +41,7 @@ struct GeneralBrowserAction: Action {
         self.isNativeErrorPage = isNativeErrorPage
         self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
+        self.summarizerTrigger = summarizerTrigger
     }
 }
 
