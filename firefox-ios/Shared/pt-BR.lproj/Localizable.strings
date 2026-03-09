@@ -695,7 +695,7 @@
 "LoginsList.Title" = "LOGINS SALVOS";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parece que o Firefox travou anteriormente. Quer restaurar suas abas?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Parece que o Firefox falhou anteriormente. Quer restaurar suas abas?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Marcar como lido";
@@ -884,7 +884,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Iniciar navegação";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ops! O Firefox travou";
+"Oops! Firefox crashed" = "Ops! O Firefox falhou";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Abra artigos no modo de leitura tocando no ícone de livro quando ele aparecer na barra de título.";

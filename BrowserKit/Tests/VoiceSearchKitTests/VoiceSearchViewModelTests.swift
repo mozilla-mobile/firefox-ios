@@ -4,6 +4,7 @@
 
 @testable import VoiceSearchKit
 import XCTest
+import TestKit
 
 @MainActor
 final class VoiceSearchViewModelTests: XCTestCase {

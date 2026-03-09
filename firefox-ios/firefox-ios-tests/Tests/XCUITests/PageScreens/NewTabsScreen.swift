@@ -38,7 +38,7 @@ final class NewTabsScreen {
     func pressOpenNewTabButtonExist(duration: TimeInterval, timeout: TimeInterval = TIMEOUT) {
         let openNewTabButton = sel.OPEN_NEW_TAB_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(openNewTabButton, timeout: timeout)
-        openNewTabButton.waitAndTap()
+        openNewTabButton.press(forDuration: duration)
     }
 
     func pressOpenNewPrivateTabButton(duration: TimeInterval, timeout: TimeInterval = TIMEOUT) {
@@ -49,5 +49,28 @@ final class NewTabsScreen {
 
     func tapOnSwitchButton() {
         sel.SWITCH_BUTTON.element(in: app).waitAndTap()
+    }
+
+    func assertIconsExistInCells(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(
+            sel.ICON_PLUS_IN_CELLS.element(in: app),
+            timeout: timeout
+        )
+        BaseTestCase().mozWaitForElementToExist(
+            sel.ICON_CROSS_IN_CELLS.element(in: app),
+            timeout: timeout
+        )
+    }
+
+    func tapPlusIconInCells() {
+        sel.ICON_PLUS_IN_CELLS.element(in: app).waitAndTap()
+    }
+
+    func tapCrossIconInTableCells() {
+        sel.ICON_CROSS_IN_TABLE_CELLS.element(in: app).waitAndTap()
+    }
+
+    func tapNewPrivateTabInTableCells() {
+        sel.NEW_PRIVATE_TAB_IN_TABLE_CELLS.element(in: app).waitAndTap()
     }
 }

@@ -28,7 +28,7 @@ jobs:
       - name: Setup Xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_26.0.1.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
           xcodebuild -version
       - name: Run setup scripts for Focus
         timeout-minutes: 10

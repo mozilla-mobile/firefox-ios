@@ -28,6 +28,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertFalse(initialState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(initialState.availableContentHeight, 0)
+        XCTAssertEqual(initialState.availableWallpaperHeight, 0)
     }
 
     @MainActor
@@ -50,6 +51,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
+        XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
 
     @MainActor
@@ -70,6 +72,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertTrue(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
+        XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
 
     @MainActor
@@ -90,6 +93,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertFalse(initialState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
+        XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
 
     @MainActor
@@ -109,6 +113,7 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertFalse(newState.isZeroSearch)
         XCTAssertTrue(newState.shouldTriggerImpression)
         XCTAssertEqual(newState.availableContentHeight, initialState.availableContentHeight)
+        XCTAssertEqual(newState.availableWallpaperHeight, initialState.availableWallpaperHeight)
     }
 
     @MainActor
@@ -120,12 +125,14 @@ final class HomepageStateTests: XCTestCase {
             initialState,
             HomepageAction(
                 availableContentHeight: 500,
+                availableWallpaperHeight: 525,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageActionType.availableContentHeightDidChange
             )
         )
 
         XCTAssertEqual(newState.availableContentHeight, 500)
+        XCTAssertEqual(newState.availableWallpaperHeight, 525)
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(newState.shouldTriggerImpression)
         XCTAssertEqual(newState.isZeroSearch, initialState.isZeroSearch)

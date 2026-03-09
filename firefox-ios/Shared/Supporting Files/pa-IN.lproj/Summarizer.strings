@@ -43,27 +43,6 @@
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
 "Summarizer.TabSnapshot.Accessibility.Label.v145" = "ਸਾਰ ਨੂੰ ਬੰਦ ਕਰਨ ਵਾਸਤੇ ਵੈੱਬ ਸਫ਼ੇ ਨੂੰ ਖਿੱਚੋ ਜਾਂ  ਛੂਹੋ";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "ਮਨਜ਼ੂਰ";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ ਤਿਆਰ ਕਰਨ ਲਈ Apple Intelligence ਨੂੰ ਵਰਤਦਾ ਹੈ।";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "ਰੱਦ ਕਰੋ";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "ਜਾਰੀ ਰੱਖੋ";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ ਤਿਆਰ ਕਰਨ ਅਤੇ ਉਸ ਸਾਰ ਨੂੰ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਤੱਕ ਪਹੁੰਚਣ ਲਈ %@ ਕਲਾਉਡ ਅਧਾਰਿਤ AI ਨੂੰ ਵਰਤਦਾ ਹੈ।";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "ਹੋਰ ਜਾਣੋ";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "ਸਫ਼ਾ ਸਾਰ ਦੀ ਮਨਜ਼ੂਰੀ ਦੇਣੀ ਹੈ?";
-
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ";
 

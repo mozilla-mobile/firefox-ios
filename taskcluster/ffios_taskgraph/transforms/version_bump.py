@@ -21,16 +21,19 @@ def version_bump_task(config, tasks):
         if "create-branch-info" in task["worker"]:
             # We need to default to major here so taskgraph full can produce a valid task
             behavior = config.params.get("merge_config", {}).get("behavior", "major")
+            branch_name = f"release/v{version.major_number}.{version.minor_number}"
+            task["worker"]["create-branch-info"]["branch-name"] = branch_name
             if behavior == "major":
-                version_string = f"release/v{version.major_number}"
                 version = version.bump("major_number")
             elif behavior == "minor":
-                version_string = f"release/v{version.major_number}.{version.minor_number}"
                 version = version.bump("minor_number")
             else:
                 raise Exception(f"Unknown merge-automation behavior: {behavior}")
-            task["worker"]["create-branch-info"]["branch-name"] = version_string
 
         task["worker"]["next-version"] = str(version)
         task["worker"].update(branch=config.params["head_ref"])
+
+        if config.params.get("merge_config", {}).get("force-dry-run"):
+            task["worker"]["force-dry-run"] = True
+
         yield task

@@ -117,35 +117,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     // MARK: - Onboarding
-    func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() throws {
-        let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
-        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
-        let extras = [wallpaperNameKey: "defaultBackground",
-                      wallpaperTypeKey: "default"]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingSelectWallpaper,
-                                     value: .wallpaperSelected,
-                                     extras: extras)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelected)
-    }
-
-    func test_onboardingEngagementNotificationTapped_GleanIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .engagementNotification)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationTapped)
-    }
-
-    func test_onboardingEngagementNotificationCancel_GleanIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .cancel,
-                                     object: .engagementNotification)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationCancel)
-    }
 
     // MARK: Wallpapers
 

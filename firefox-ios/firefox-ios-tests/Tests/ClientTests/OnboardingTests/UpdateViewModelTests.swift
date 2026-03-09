@@ -186,7 +186,7 @@ final class UpdateViewModelTests: XCTestCase {
         line: UInt = #line
     ) -> UpdateViewModel {
         let onboardingModel = createOnboardingViewModel(withCards: hasOnboardingCards)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let subject = UpdateViewModel(profile: profile,
                                       model: onboardingModel,
                                       telemetryUtility: telemetryUtility,

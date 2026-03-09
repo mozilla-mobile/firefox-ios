@@ -107,8 +107,8 @@ final class MockToolbarView: ToolbarViewProtocol {
     var overKeyboardContainer = BaseAlphaStackView()
     var isBottomSearchBar = false
     var headerTopConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
-    var overKeyboardContainerConstraint: Constraint?
+    var bottomContainerConstraint: ConstraintReference?
+    var overKeyboardContainerConstraint: ConstraintReference?
 }
 
 // MARK: - Mock Delegate

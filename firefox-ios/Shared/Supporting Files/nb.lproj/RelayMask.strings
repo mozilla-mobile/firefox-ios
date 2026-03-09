@@ -2,9 +2,6 @@
 "RelayMask.RelayEmailMaskAvailableCFR.v146" = "Nyhet! %@ Relay e-postalias er nå tilgjengelige på mobil.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "De 5 gratis e-postaliasene dine er i bruk, så vi valgte ett for deg.";
-
-/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Du har brukt dine 5 gratis e-postaliaser, så vi valgte én du kan bruke om igjen.";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
@@ -12,9 +9,6 @@
 
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "E-postalias satt inn";
-
-/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Skjul din virkelige e-postadresse for å beskytte innboksen din mot spam. Enkelte nettsteder støtter ikke dette.";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Skjul din virkelige e-postadresse for å beskytte innboksen din mot spam. Enkelte nettsteder støtter ikke e-postalias.";

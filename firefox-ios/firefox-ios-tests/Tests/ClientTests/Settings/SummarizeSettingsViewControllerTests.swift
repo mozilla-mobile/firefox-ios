@@ -14,20 +14,25 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        self.profile = MockProfile()
+        profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        self.profile = nil
+        profile = nil
         try await super.tearDown()
     }
 
     func test_generateSettings_withShakeFeature_hasExpectedSections() {
-        setupNimbusHostedSummarizerTesting(isEnabled: true)
-        let subject = createSubject()
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = true
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = false
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
         let sections = subject.generateSettings()
+
+        XCTAssertEqual(mockSummarizeNimbusUtils.isShakeGestureFeatureFlagEnabledCallCount, 1)
         XCTAssertEqual(sections.count, 2)
         XCTAssertNil(sections.first?.title)
         XCTAssertEqual(sections.first?.children.count, 1)
@@ -36,9 +41,14 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
     }
 
     func test_generateSettings_withoutShakeFeature_hasExpectedSections() {
-        setupNimbusHostedSummarizerTesting(isEnabled: false)
-        let subject = createSubject()
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = false
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = false
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
         let sections = subject.generateSettings()
+
+        XCTAssertEqual(mockSummarizeNimbusUtils.isShakeGestureFeatureFlagEnabledCallCount, 1)
         XCTAssertEqual(sections.count, 1)
         XCTAssertNil(sections.first?.title)
         XCTAssertEqual(sections.first?.children.count, 1)
@@ -46,16 +56,96 @@ final class SummarizeSettingsViewControllerTests: XCTestCase {
         XCTAssertEqual(sections.last?.children.count, 1)
     }
 
+    func test_generateSettings_withLanguageExpansion_hasExpectedSections() {
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = false
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = true
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
+        let sections = subject.generateSettings()
+
+        XCTAssertEqual(sections.count, 2)
+        XCTAssertNil(sections.first?.title)
+        XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, "Language")
+        XCTAssertEqual(sections.last?.children.count, 1)
+    }
+
+    func test_generateSettings_withBothShakeAndLanguageExpansion_hasExpectedSections() {
+        let mockSummarizeNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizeNimbusUtils.shakeGestureFeatureFlagEnabled = true
+        mockSummarizeNimbusUtils.isLanguageExpansionEnabled = true
+
+        let subject = createSubject(with: mockSummarizeNimbusUtils)
+        let sections = subject.generateSettings()
+
+        XCTAssertEqual(sections.count, 3)
+        XCTAssertNil(sections.first?.title)
+        XCTAssertEqual(sections.first?.children.count, 1)
+        XCTAssertEqual(sections[1].title?.string, "Gestures")
+        XCTAssertEqual(sections[1].children.count, 1)
+        XCTAssertEqual(sections.last?.title?.string, "Language")
+        XCTAssertEqual(sections.last?.children.count, 1)
+    }
+
     // MARK: - Helper
-    private func createSubject() -> SummarizeSettingsViewController {
-        let subject = SummarizeSettingsViewController(prefs: profile.prefs, windowUUID: .XCTestDefaultUUID)
+    private func createSubject(with summarizeNimbusUtils: MockSummarizerNimbusUtils) -> SummarizeSettingsViewController {
+        let subject = SummarizeSettingsViewController(
+            prefs: profile.prefs,
+            summarizeNimbusUtils: summarizeNimbusUtils,
+            windowUUID: .XCTestDefaultUUID
+        )
         trackForMemoryLeaks(subject)
         return subject
     }
+}
 
-    private func setupNimbusHostedSummarizerTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
-        }
+final class MockSummarizerNimbusUtils: SummarizerNimbusUtils {
+    var isSummarizeFeatureToggledOn = false
+    var isSummarizeFeatureEnabled = false
+    var isShakeGestureEnabled = false
+    var isToolbarButtonEnabled = false
+
+    var appleSummarizerEnabled = false
+    var hostedSummarizerEnabled = false
+    var shakeGestureFeatureFlagEnabled = false
+    var appAttestAuthEnabled = false
+    var isLanguageExpansionEnabled = false
+
+    private(set) var isAppleSummarizerEnabledCallCount = 0
+    private(set) var isHostedSummarizerEnabledCallCount = 0
+    private(set) var isShakeGestureFeatureFlagEnabledCallCount = 0
+    private(set) var isAppAttestAuthEnabledCallCount = 0
+    private(set) var languageExpansionConfigurationCallCount = 0
+    var languageExpansionConfiguration = SummarizerLanguageExpansionConfiguration(
+        isFeatureEnabled: true,
+        supportedLocales: []
+    )
+
+    func isAppleSummarizerEnabled() -> Bool {
+        isAppleSummarizerEnabledCallCount += 1
+        return appleSummarizerEnabled
+    }
+
+    func isHostedSummarizerEnabled() -> Bool {
+        isHostedSummarizerEnabledCallCount += 1
+        return hostedSummarizerEnabled
+    }
+
+    func isShakeGestureFeatureFlagEnabled() -> Bool {
+        isShakeGestureFeatureFlagEnabledCallCount += 1
+        return shakeGestureFeatureFlagEnabled
+    }
+
+    func isAppAttestAuthEnabled() -> Bool {
+        isAppAttestAuthEnabledCallCount += 1
+        return appAttestAuthEnabled
+    }
+
+    func languageExpansionConfiguration(
+        from nimbusFeature: Client.SummarizerLanguageExpansionFeature
+    ) -> Client.SummarizerLanguageExpansionConfiguration {
+        languageExpansionConfigurationCallCount += 1
+        return languageExpansionConfiguration
     }
 }

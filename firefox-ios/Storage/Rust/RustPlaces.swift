@@ -327,12 +327,6 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
         }
     }
 
-    public func getBookmarkURLForKeyword(keyword: String) -> Deferred<Maybe<String?>> {
-        return withReader { connection in
-            return try connection.getBookmarkURLForKeyword(keyword: keyword)
-        }
-    }
-
     public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.getBookmarksWithURL(url: url)

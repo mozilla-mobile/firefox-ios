@@ -54,6 +54,7 @@ final class ToolbarScreen {
     }
 
     func assertTabsButtonValue(expectedCount: String) {
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
         let tabsButtonValue = tabsButton.value as? String
         XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
     }

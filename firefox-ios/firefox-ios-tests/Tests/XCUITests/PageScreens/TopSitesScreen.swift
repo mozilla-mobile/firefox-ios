@@ -72,13 +72,13 @@ final class TopSitesScreen {
 
     // Asserts a top site with a specific label exists.
     func assertTopSiteExists(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let linkElement = app.links.staticTexts[name]
+        let linkElement = sel.COLLECTION_VIEW.element(in: app).links.staticTexts[name]
         BaseTestCase().mozWaitForElementToExist(linkElement, timeout: timeout)
     }
 
     // Asserts a top site with a specific label does not exist.
     func assertTopSiteDoesNotExist(named name: String, timeout: TimeInterval = TIMEOUT) {
-        let linkElement = app.links.staticTexts[name]
+        let linkElement = sel.COLLECTION_VIEW.element(in: app).links.staticTexts[name]
         BaseTestCase().mozWaitForElementToNotExist(linkElement, timeout: timeout)
     }
 
@@ -87,6 +87,15 @@ final class TopSitesScreen {
         let pinnedSite = sel.COLLECTION_VIEW.element(in: app)
             .links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite, timeout: timeout)
+        // Verify pin icon is visible (matching legacy test behavior)
+        if #available(iOS 17, *) {
+            let pinIcon = pinnedSite.images[sel.PIN.value]
+            BaseTestCase().mozWaitForElementToExist(pinIcon, timeout: timeout)
+        } else {
+            // For iOS 16 and below, check for image at index 1
+            let pinIcon = pinnedSite.images.element(boundBy: 1)
+            BaseTestCase().mozWaitForElementToExist(pinIcon, timeout: timeout)
+        }
     }
 
     // Asserts a site is not pinned
@@ -112,7 +121,7 @@ final class TopSitesScreen {
     }
 
     // Long-presses on a pinned top site to show the context menu.
-    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 1.0) {
+    func longPressOnPinnedSite(named name: String, duration: TimeInterval = 2.0) {
         let pinnedSite = sel.COLLECTION_VIEW.element(in: app).links["Pinned: \(name)"]
         BaseTestCase().mozWaitForElementToExist(pinnedSite)
         pinnedSite.press(forDuration: duration)

@@ -14,19 +14,16 @@ final class TermsOfUseMigrationTests: XCTestCase {
         mockPrefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let testTimestamp = Date().toTimestamp()
         mockPrefs.setTimestamp(testTimestamp, forKey: PrefsKeys.TermsOfServiceAcceptedDate)
-        mockPrefs.setString("123", forKey: PrefsKeys.TermsOfServiceAcceptedVersion)
 
         TermsOfUseMigration(prefs: mockPrefs).migrateTermsOfService()
 
         // Verify migration: new prefs are set
         XCTAssertTrue(mockPrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false)
         XCTAssertEqual(mockPrefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate), testTimestamp)
-        XCTAssertEqual(mockPrefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion), "123")
 
         // Verify old prefs are deleted
         XCTAssertNil(mockPrefs.intForKey(PrefsKeys.TermsOfServiceAccepted))
         XCTAssertNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate))
-        XCTAssertNil(mockPrefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion))
     }
 
     func testMigrateTermsOfServicePrefs_migratesFromTermsOfServiceAccepted_withoutDateAndVersion() {
@@ -37,14 +34,12 @@ final class TermsOfUseMigrationTests: XCTestCase {
 
         // ToU pref should be set
         XCTAssertTrue(mockPrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false)
-        // Date and version should be backfilled
+        // Date should be backfilled
         XCTAssertNotNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate))
-        XCTAssertEqual(mockPrefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion), "4")
 
         // Verify old prefs are deleted
         XCTAssertNil(mockPrefs.intForKey(PrefsKeys.TermsOfServiceAccepted))
         XCTAssertNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfServiceAcceptedDate))
-        XCTAssertNil(mockPrefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion))
     }
 
     func testMigrateTermsOfServicePrefs_ForUsersWithOnlyTermsOfUseAccepted() {
@@ -55,10 +50,9 @@ final class TermsOfUseMigrationTests: XCTestCase {
 
         TermsOfUseMigration(prefs: mockPrefs).migrateTermsOfService()
 
-        // ToU prefs should remain unchanged (no date/version created).
+        // ToU prefs should remain unchanged (no date created).
         XCTAssertTrue(mockPrefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false)
         XCTAssertNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate))
-        XCTAssertNil(mockPrefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion))
     }
 
     func testMigrateTermsOfServicePrefs_doesNothingWhenNoAcceptancePrefs() {
@@ -70,6 +64,5 @@ final class TermsOfUseMigrationTests: XCTestCase {
         XCTAssertNil(mockPrefs.intForKey(PrefsKeys.TermsOfServiceAccepted))
         XCTAssertNil(mockPrefs.boolForKey(PrefsKeys.TermsOfUseAccepted))
         XCTAssertNil(mockPrefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate))
-        XCTAssertNil(mockPrefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion))
     }
 }

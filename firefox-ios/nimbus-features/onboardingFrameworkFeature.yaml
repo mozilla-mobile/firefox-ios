@@ -408,7 +408,7 @@ features:
             welcome-brand-refresh:
               card-type: basic
               order: 10
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149
               body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
               image: trackers-brand-refresh
               buttons:

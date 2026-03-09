@@ -43,7 +43,12 @@ final class SummarizeServiceFactoryTests: XCTestCase {
         }
         let subject = createSubject()
 
-        let result = subject.make(isAppleSummarizerEnabled: true, isHostedSummarizerEnabled: false, config: nil)
+        let result = subject.make(
+            isAppleSummarizerEnabled: true,
+            isHostedSummarizerEnabled: false,
+            isAppAttestAuthEnabled: false,
+            config: nil
+        )
         let service = try XCTUnwrap(result as? DefaultSummarizerService)
 
         XCTAssertNotNil(service.summarizerLifecycle)
@@ -53,7 +58,25 @@ final class SummarizeServiceFactoryTests: XCTestCase {
     func test_make_whenHostedSummarizerTrue_returnsNilForLLMConfigNotAvailable() throws {
         let subject = createSubject()
 
-        let result = subject.make(isAppleSummarizerEnabled: false, isHostedSummarizerEnabled: true, config: nil)
+        let result = subject.make(
+            isAppleSummarizerEnabled: false,
+            isHostedSummarizerEnabled: true,
+            isAppAttestAuthEnabled: false,
+            config: nil
+        )
+
+        XCTAssertNil(result)
+    }
+
+    func test_make_whenAppAttestAuthEnabled_returnsNilForAppAttestConfigNotAvailable() throws {
+        let subject = createSubject()
+
+        let result = subject.make(
+            isAppleSummarizerEnabled: false,
+            isHostedSummarizerEnabled: true,
+            isAppAttestAuthEnabled: true,
+            config: nil
+        )
 
         XCTAssertNil(result)
     }
@@ -61,7 +84,12 @@ final class SummarizeServiceFactoryTests: XCTestCase {
     func test_make_returnsNilWhenSummarizerAvailable() throws {
         let subject = createSubject()
 
-        let result = subject.make(isAppleSummarizerEnabled: false, isHostedSummarizerEnabled: false, config: nil)
+        let result = subject.make(
+            isAppleSummarizerEnabled: false,
+            isHostedSummarizerEnabled: false,
+            isAppAttestAuthEnabled: false,
+            config: nil
+        )
 
         XCTAssertNil(result)
     }

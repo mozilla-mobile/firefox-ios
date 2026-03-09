@@ -119,7 +119,6 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
 
         let onboardingEvent = GleanMetrics.Onboarding.termsOfServiceAccepted
         let touAcceptedEvent = GleanMetrics.TermsOfUse.accepted
-        let versionMetric = GleanMetrics.UserTermsOfUse.versionAccepted
         let dateMetric = GleanMetrics.UserTermsOfUse.dateAccepted
         typealias AcceptedExtra = GleanMetrics.TermsOfUse.AcceptedExtra
 
@@ -127,7 +126,6 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
 
         XCTAssertEqual(mockGleanWrapper.recordEventNoExtraCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssertEqual(mockGleanWrapper.recordQuantityCalled, 1)
         XCTAssertEqual(mockGleanWrapper.recordDatetimeCalled, 1)
 
         let savedOnboardingEvent = try XCTUnwrap(
@@ -144,15 +142,9 @@ final class TermsOfServiceTelemetryTests: XCTestCase {
             mockGleanWrapper.savedExtras.first as? AcceptedExtra
         )
         XCTAssertEqual(savedExtras.surface, "onboarding")
-        XCTAssertEqual(savedExtras.touVersion, "4")
-
-        let savedVersionMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents[2] as? QuantityMetricType
-        )
-        XCTAssert(savedVersionMetric === versionMetric, "Received \(savedVersionMetric) instead of \(versionMetric)")
 
         let savedDateMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents[3] as? DatetimeMetricType
+            mockGleanWrapper.savedEvents[2] as? DatetimeMetricType
         )
         XCTAssert(savedDateMetric === dateMetric, "Received \(savedDateMetric) instead of \(dateMetric)")
     }

@@ -23,9 +23,11 @@ final class NativeErrorPageViewControllerTests: XCTestCase {
 
     func testNativeErrorPageViewController_simpleCreation_hasNoLeaks() {
         let overlayManager = MockOverlayModeManager()
+        let tabManager = MockTabManager()
         let nativeErrroPageViewController = NativeErrorPageViewController(
             windowUUID: windowUUID,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            tabManager: tabManager
         )
         trackForMemoryLeaks(nativeErrroPageViewController)
     }

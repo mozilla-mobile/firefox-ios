@@ -1,3 +1,12 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Avanzado";
+
+/* On certificate error page, this is the advanced information explaining why the certificate is invalid. %1$@ is the app name (e.g. Firefox). %2$@ is the site URL. */
+"NativeErrorPage.BadCertDomain.AdvancedInfo.v149" = "%1$@ no confía en este sitio porque el certificado encontrado no es válido para %2$@.";
+
+/* On certificate error page, this is the security information shown in the advanced section. */
+"NativeErrorPage.BadCertDomain.AdvancedSecurityInfo.v149" = "Este sitio no permite conexiones que no sean seguras.";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Recargar";
 

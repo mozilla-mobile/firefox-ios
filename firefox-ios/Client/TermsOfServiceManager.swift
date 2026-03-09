@@ -42,7 +42,6 @@ struct TermsOfServiceManager: FeatureFlaggable, Sendable {
 
     func setAccepted(acceptedDate: Date) {
         prefs.setBool(true, forKey: PrefsKeys.TermsOfUseAccepted)
-        prefs.setString(String(TermsOfUseTelemetry().termsOfUseVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
         prefs.setTimestamp(acceptedDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
     }
 

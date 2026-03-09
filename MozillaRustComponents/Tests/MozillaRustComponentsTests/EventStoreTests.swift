@@ -31,7 +31,7 @@ final class EventStoreTests: XCTestCase {
 
     func createNimbus() throws -> NimbusInterface {
         let appSettings = NimbusAppSettings(appName: "EventStoreTest", channel: "nightly")
-        let nimbusEnabled = try Nimbus.create(nil, appSettings: appSettings, dbPath: createDatabasePath())
+        let nimbusEnabled = try Nimbus.create(server: nil, appSettings: appSettings, dbPath: createDatabasePath())
         XCTAssert(nimbusEnabled is Nimbus)
         if let nimbus = nimbusEnabled as? Nimbus {
             try nimbus.initializeOnThisThread()

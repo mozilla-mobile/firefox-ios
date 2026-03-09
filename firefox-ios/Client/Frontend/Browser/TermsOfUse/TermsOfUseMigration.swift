@@ -13,7 +13,7 @@ struct TermsOfUseMigration {
     }
 
     /// Migrate TermsOfService prefs to TermsOfUse
-    /// and add missing ToU date/version if needed
+    /// and add missing ToU date if needed
     func migrateTermsOfService() {
         let hasAcceptedToS = prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
 
@@ -34,30 +34,18 @@ struct TermsOfUseMigration {
             prefs.setTimestamp(acceptedDate, forKey: PrefsKeys.TermsOfUseAcceptedDate)
             prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedDate)
         }
-
-        // Migrate TermsOfServiceAcceptedVersion
-        if let acceptedVersion = prefs.stringForKey(PrefsKeys.TermsOfServiceAcceptedVersion) {
-            prefs.setString(acceptedVersion, forKey: PrefsKeys.TermsOfUseAcceptedVersion)
-            prefs.removeObjectForKey(PrefsKeys.TermsOfServiceAcceptedVersion)
-        }
     }
 
     private func migrateLegacyToSAcceptance() {
-        let hasVersion = prefs.stringForKey(PrefsKeys.TermsOfUseAcceptedVersion)
         let hasDate = prefs.timestampForKey(PrefsKeys.TermsOfUseAcceptedDate)
 
-        guard hasDate == nil || hasVersion == nil else { return }
-
-        // Use terms of use version 4 as convention,
-        // since cannot be determined the exact version that was accepted
-        let pastVersion = 4
-        prefs.setString(String(pastVersion), forKey: PrefsKeys.TermsOfUseAcceptedVersion)
+        guard hasDate == nil else { return }
 
         // Use installation date as accepted date
         let installationDate = InstallationUtils.inferredDateInstalledOn ?? Date()
         prefs.setTimestamp(installationDate.toTimestamp(), forKey: PrefsKeys.TermsOfUseAcceptedDate)
 
-        // Record date and version telemetry for legacy users who just got migrated
-        TermsOfServiceTelemetry().recordDateAndVersion(acceptedDate: installationDate)
+        // Record date metric for legacy users who just got migrated
+        TermsOfServiceTelemetry().recordToUAcceptDate(acceptedDate: installationDate)
     }
 }

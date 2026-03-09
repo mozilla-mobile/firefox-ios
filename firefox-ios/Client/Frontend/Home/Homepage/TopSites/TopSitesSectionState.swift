@@ -16,6 +16,7 @@ struct TopSitesSectionState: StateType, Equatable {
     let numberOfRows: Int
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
+    let shouldShowSectionHeader: Bool
 
     let sectionHeaderState = SectionHeaderConfiguration(
         title: .FirefoxHomepage.Shortcuts.SectionTitle,
@@ -36,7 +37,8 @@ struct TopSitesSectionState: StateType, Equatable {
             topSitesData: [],
             numberOfRows: numberOfRows,
             numberOfTilesPerRow: TopSitesSectionLayoutProvider.UX.minCards,
-            shouldShowSection: shouldShowSection
+            shouldShowSection: shouldShowSection,
+            shouldShowSectionHeader: false
         )
     }
 
@@ -45,13 +47,15 @@ struct TopSitesSectionState: StateType, Equatable {
         topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
         numberOfTilesPerRow: Int,
-        shouldShowSection: Bool
+        shouldShowSection: Bool,
+        shouldShowSectionHeader: Bool,
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
         self.numberOfTilesPerRow = numberOfTilesPerRow
         self.shouldShowSection = shouldShowSection
+        self.shouldShowSectionHeader = shouldShowSectionHeader
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -81,12 +85,15 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
+        let shouldShowSectionHeader = sites.count > state.numberOfRows * state.numberOfTilesPerRow
+
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
             topSitesData: sites,
             numberOfRows: state.numberOfRows,
             numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSection: state.shouldShowSection,
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -97,12 +104,15 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
+        let shouldShowSectionHeader = state.topSitesData.count > numberOfRows * state.numberOfTilesPerRow
+
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: numberOfRows,
             numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSection: state.shouldShowSection,
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -113,12 +123,15 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
+        let shouldShowSectionHeader = state.topSitesData.count > state.numberOfRows * numberOfTilesPerRow
+
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
             numberOfTilesPerRow: numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSection: state.shouldShowSection,
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -134,7 +147,8 @@ struct TopSitesSectionState: StateType, Equatable {
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
             numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: isEnabled
+            shouldShowSection: isEnabled,
+            shouldShowSectionHeader: state.shouldShowSectionHeader
         )
     }
 
@@ -144,7 +158,8 @@ struct TopSitesSectionState: StateType, Equatable {
             topSitesData: state.topSitesData,
             numberOfRows: state.numberOfRows,
             numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSection: state.shouldShowSection,
+            shouldShowSectionHeader: state.shouldShowSectionHeader
         )
     }
 }
