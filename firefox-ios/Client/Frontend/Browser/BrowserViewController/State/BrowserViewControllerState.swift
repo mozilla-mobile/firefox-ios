@@ -44,6 +44,7 @@ struct BrowserViewControllerState: ScreenState {
     var showOverlay: Bool? // use default value when re-creating
     var reloadWebView: Bool
     var shouldStartAtHome: Bool
+    var shouldShowReaderBarModeSummarizerButton: Bool
     var browserViewType: BrowserViewType
     var navigateTo: NavigationType? // use default value when re-creating
     var displayView: DisplayType? // use default value when re-creating
@@ -68,6 +69,7 @@ struct BrowserViewControllerState: ScreenState {
                   windowUUID: bvcState.windowUUID,
                   reloadWebView: bvcState.reloadWebView,
                   shouldStartAtHome: bvcState.shouldStartAtHome,
+                  updateReaderModeView: bvcState.shouldShowReaderBarModeSummarizerButton,
                   browserViewType: bvcState.browserViewType,
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
@@ -98,6 +100,7 @@ struct BrowserViewControllerState: ScreenState {
         windowUUID: WindowUUID,
         reloadWebView: Bool = false,
         shouldStartAtHome: Bool = false,
+        updateReaderModeView: Bool = false,
         browserViewType: BrowserViewType,
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
@@ -111,6 +114,7 @@ struct BrowserViewControllerState: ScreenState {
         self.windowUUID = windowUUID
         self.showOverlay = showOverlay
         self.reloadWebView = reloadWebView
+        self.shouldShowReaderBarModeSummarizerButton = updateReaderModeView
         self.shouldStartAtHome = shouldStartAtHome
         self.browserViewType = browserViewType
         self.navigateTo = navigateTo

@@ -30,6 +30,12 @@ final class SummarizerMiddleware {
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
+        case ReaderModeActionType.didTapSummarizerButton:
+            break
+        case GeneralBrowserActionType.updateSelectedTab:
+            // evaluate config and if config available then dispatch
+            // ReaderModeAction show summarize button
+            break
         case GeneralBrowserActionType.shakeMotionEnded:
             Task { @MainActor in
                 await self.dispatchSummarizeConfigurationAction(for: action)

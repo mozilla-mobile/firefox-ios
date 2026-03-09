@@ -75,7 +75,9 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         return button
     }()
     private lazy var summarizerButton: UIButton? = {
-        guard summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
+        guard summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn else {
+            return nil
+        }
         let button = createButton(.summarizer, action: #selector(tappedSummarizerButton))
         button.accessibilityIdentifier = AccessibilityIdentifiers.ReaderMode.BarView.summarizerButton
         return button
@@ -176,8 +178,11 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         delegate?.readerModeBar(self, didSelectButton: .summarizer)
     }
     
-    func updateSummarizerButton() {
-        let shouldAddSummarizerButton = summarizerNimbusUtils.isLanguageExpansionEnabled && summarizerNimbusUtils.isSummarizeFeatureToggledOn
+    /// Updates the reader mode bar content by dynamically adding or removing the content buttons
+    /// based on Nimbus feature flag configuration.
+    func updateContent() {
+        let shouldAddSummarizerButton = summarizerNimbusUtils.isLanguageExpansionEnabled
+                                        && summarizerNimbusUtils.isSummarizeFeatureToggledOn
         guard shouldAddSummarizerButton else {
             summarizerButton?.removeFromSuperview()
             return
