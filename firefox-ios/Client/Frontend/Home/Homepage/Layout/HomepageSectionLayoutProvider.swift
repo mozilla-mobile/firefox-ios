@@ -55,7 +55,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             /// `storiesPeakOffset` is how much we want the stories section (section header) to peak in vertically
             ///  from the bottom of the homepage viewport
             static let storiesPeakOffset: CGFloat = 130
-            static let newsAffordanceSectionHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
             static let newsAffordanceStoriesPeakOffset: CGFloat = 86
             static let minimumNewsAffordanceVisibleHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
 
@@ -884,7 +883,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         case .newsAffordance:
-            if shouldUseNewsAffordance, getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .sectionTitle {
+            if shouldUseNewsAffordance,
+               getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .sectionTitle {
                 let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
                 header.configure(state: headerState, textColor: .black, theme: LightTheme())
                 headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)

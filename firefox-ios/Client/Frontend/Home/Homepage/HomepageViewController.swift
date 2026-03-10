@@ -688,7 +688,8 @@ final class HomepageViewController: UIViewController,
 
             if case .pocket = section,
                homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
-               shouldUseNewsTransitionHeader {
+               shouldUseNewsTransitionHeader,
+               isNewsTransitionEnabled(for: collectionView, at: indexPath) {
                 guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
                     of: kind,
                     cellType: NewsTransitionHeaderView.self,
@@ -729,17 +730,11 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath,
         with newsTransitionHeaderView: NewsTransitionHeaderView
     ) -> NewsTransitionHeaderView {
-        let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )?.size.height ?? newsTransitionHeaderView.bounds.height
-        let transitionEnabled = headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
-
         newsTransitionHeaderView.configure(
             state: homepageState.merinoState.sectionHeaderState,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
-            transitionEnabled: transitionEnabled
+            transitionEnabled: true
         )
         newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderView
@@ -818,9 +813,16 @@ final class HomepageViewController: UIViewController,
             return
         }
 
-        let transitionEnabled = headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight
-        headerView.setTransitionEnabled(transitionEnabled)
+        guard headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight else { return }
         headerView.setTransitionProgress(newsTransitionProgress())
+    }
+
+    private func isNewsTransitionEnabled(for collectionView: UICollectionView, at indexPath: IndexPath) -> Bool {
+        let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            at: indexPath
+        )?.size.height ?? 0
+        return headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
     }
 
     private func newsTransitionProgress() -> CGFloat {
