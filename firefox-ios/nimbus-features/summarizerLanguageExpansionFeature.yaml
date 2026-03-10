@@ -17,6 +17,7 @@ features:
         type: List<String>
         default:
           - "en"
+          - "it"
           - "fr"
           - "es"
           - "de"
