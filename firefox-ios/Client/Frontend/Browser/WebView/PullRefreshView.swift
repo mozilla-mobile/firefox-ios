@@ -26,6 +26,7 @@ class PullRefreshView: UIView,
     private lazy var progressView: UIImageView = .build { view in
         view.image = UIImage(named: StandardImageIdentifiers.Large.arrowClockwise)?.withRenderingMode(.alwaysTemplate)
         view.contentMode = .scaleAspectFit
+        view.alpha = 0
     }
     private lazy var progressContainerView: UIView = .build { view in
         view.layer.cornerRadius = UX.progressViewAnimatedBackgroundSize / 2.0 * self.computeShrinkingFactor()
@@ -104,37 +105,48 @@ class PullRefreshView: UIView,
         scrollObserver = scrollView?.observe(\.contentOffset) { [weak self] _, _ in
             ensureMainThread { [weak self] in
                 guard let scrollView = self?.scrollView, scrollView.isDragging else {
-                    if let scrollView = self?.scrollView, scrollView.contentOffset.y <= 0 {
-                        self?.updateElementAlpha()
-                    }
-
-                    guard let refreshHasFocus = self?.refreshIconHasFocus, refreshHasFocus else { return }
-                    self?.refreshIconHasFocus = false
-                    self?.easterEggGif?.removeFromSuperview()
-                    self?.easterEggGif = nil
-                    self?.scrollObserver?.invalidate()
-                    self?.triggerReloadAnimation()
+                    self?.handleScrollViewNotDragging()
                     return
                 }
 
-                let threshold = (self?.computeShrinkingFactor() ?? 1.0) * UX.blinkProgressViewStandardThreshold
+                self?.handleScrollViewDragging()
+            }
+        }
+    }
 
-                if scrollView.contentOffset.y < -threshold {
-                    self?.blinkBackgroundProgressViewIfNeeded()
-                    self?.scheduleEasterEgg()
-                } else if scrollView.contentOffset.y != 0.0 {
-                    self?.easterEggTimer?.cancel()
-                    self?.easterEggTimer = nil
-                    // This check prevents progressView re blink when scrolling the pull refresh
-                    // before the web view is loaded
-                    self?.restoreBackgroundProgressViewIfNeeded()
-                    let rotationAngle = -(scrollView.contentOffset.y) / threshold
+    private func handleScrollViewNotDragging() {
+        if let scrollView = scrollView, scrollView.contentOffset.y <= 0 {
+            updateElementAlpha()
+        }
 
-                    UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
-                        self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
-                        self?.updateElementAlpha()
-                    }
-                }
+        if refreshIconHasFocus {
+            refreshIconHasFocus = false
+            easterEggGif?.removeFromSuperview()
+            easterEggGif = nil
+            scrollObserver?.invalidate()
+            triggerReloadAnimation()
+        }
+    }
+
+    private func handleScrollViewDragging() {
+        guard let scrollView else { return }
+
+        let threshold = computeShrinkingFactor() * UX.blinkProgressViewStandardThreshold
+
+        if scrollView.contentOffset.y < -threshold {
+            blinkBackgroundProgressViewIfNeeded()
+            scheduleEasterEgg()
+        } else if scrollView.contentOffset.y != 0.0 {
+            easterEggTimer?.cancel()
+            easterEggTimer = nil
+            // This check prevents progressView re blink when scrolling the pull refresh
+            // before the web view is loaded
+            restoreBackgroundProgressViewIfNeeded()
+            let rotationAngle = -(scrollView.contentOffset.y) / threshold
+
+            UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
+                self.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
+                self.updateElementAlpha()
             }
         }
     }
