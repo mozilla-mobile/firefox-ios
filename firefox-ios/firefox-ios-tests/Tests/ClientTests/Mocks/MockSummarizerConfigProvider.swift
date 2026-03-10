@@ -10,10 +10,9 @@ final class MockSummarizerConfigProvider: SummarizerConfigProvider {
     private(set) var getConfigCalledCount = 0
 
     func getConfig(
-        from sources: [any SummarizerConfigSourceProtocol],
         summarizerModel: SummarizerModel,
         contentType: SummarizationContentType,
-        locale: Locale?
+        locale: Locale
     ) -> SummarizerConfig {
         getConfigCalledCount += 1
         return SummarizerConfig.defaultConfig

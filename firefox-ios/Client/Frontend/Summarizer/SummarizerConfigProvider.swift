@@ -14,11 +14,16 @@ protocol SummarizerConfigProvider {
 }
 
 struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
+    private enum Constants {
+        static let languageTag = "**{lang}**"
+        static let enLocale = Locale(identifier: "en")
+        static let englishLanguage = "English"
+    }
     private let sources: [any SummarizerConfigSourceProtocol]
     private static let defaultSources: [any SummarizerConfigSourceProtocol] = [
         UserSummarizerConfigSource(),
-        DefaultSummarizerConfigSource(),
         RemoteSummarizerConfigSource(),
+        DefaultSummarizerConfigSource(),
     ]
 
     init(sources: [any SummarizerConfigSourceProtocol] = Self.defaultSources) {
@@ -40,11 +45,10 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
             .reduce(initialConfig) { $0.merging(with: $1) }
         // inject the locale into the instructions, use English Locale to get the localized string for the provided locale
         // cause the LLM needs english localized content.
-        let enLocale = Locale(identifier: "en")
         let instructionsWithLocale = config.instructions
             .replacingOccurrences(
-                of: "**{lang}**",
-                with: enLocale.localizedString(forIdentifier: locale.identifier) ?? "English"
+                of: Constants.languageTag,
+                with: Constants.enLocale.localizedString(forIdentifier: locale.identifier) ?? Constants.englishLanguage
             )
         return SummarizerConfig(instructions: instructionsWithLocale, options: config.options)
     }
