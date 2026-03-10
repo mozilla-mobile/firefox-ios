@@ -715,10 +715,12 @@ final class HomepageViewController: UIViewController,
     private func configureNewsTransitionHeader(
         with newsTransitionHeaderView: NewsTransitionHeaderView
     ) -> NewsTransitionHeaderView {
+        let storiesHeaderPresentation = HomepageStoriesHeaderPresentationCache.presentation(for: windowUUID)
         newsTransitionHeaderView.configure(
             state: homepageState.merinoState.sectionHeaderState,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
-            theme: currentTheme
+            theme: currentTheme,
+            transitionEnabled: storiesHeaderPresentation.transitionEnabled
         )
         newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderView
@@ -798,6 +800,8 @@ final class HomepageViewController: UIViewController,
 
     private func newsTransitionProgress() -> CGFloat {
         guard let collectionView else { return 0 }
+        let storiesHeaderPresentation = HomepageStoriesHeaderPresentationCache.presentation(for: windowUUID)
+        guard storiesHeaderPresentation.transitionEnabled else { return 1 }
 
         let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
         let progress = normalizedOffset / NewsTransitionHeaderView.UX.transitionDistance

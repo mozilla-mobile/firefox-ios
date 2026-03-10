@@ -19,6 +19,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
 
     private var progress: CGFloat = 0
+    private var transitionEnabled = true
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,8 +41,10 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     func configure(
         state: SectionHeaderConfiguration,
         textColor: UIColor?,
-        theme: Theme
+        theme: Theme,
+        transitionEnabled: Bool
     ) {
+        self.transitionEnabled = transitionEnabled
         newsAffordanceHeaderView.configure(theme: theme)
         sectionTitleHeaderView.configure(
             state: state,
@@ -81,10 +84,18 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     }
 
     private func updateViewState() {
-        newsAffordanceHeaderView.alpha = 1 - progress
-        newsAffordanceHeaderView.accessibilityElementsHidden = progress >= 0.5
+        if transitionEnabled {
+            newsAffordanceHeaderView.alpha = 1 - progress
+            newsAffordanceHeaderView.accessibilityElementsHidden = progress >= 0.5
 
-        sectionTitleHeaderView.alpha = progress
-        sectionTitleHeaderView.accessibilityElementsHidden = progress < 0.5
+            sectionTitleHeaderView.alpha = progress
+            sectionTitleHeaderView.accessibilityElementsHidden = progress < 0.5
+        } else {
+            newsAffordanceHeaderView.alpha = 0
+            newsAffordanceHeaderView.accessibilityElementsHidden = true
+
+            sectionTitleHeaderView.alpha = 1
+            sectionTitleHeaderView.accessibilityElementsHidden = false
+        }
     }
 }
