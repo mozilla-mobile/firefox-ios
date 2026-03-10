@@ -76,6 +76,7 @@ enum GeneralBrowserActionType: ActionType {
     case enteredZeroSearchScreen
     case didUnhideToolbar
     case didCloseTabFromToolbar
+    case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
 }
 

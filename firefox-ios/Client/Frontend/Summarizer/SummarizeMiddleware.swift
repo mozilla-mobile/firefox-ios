@@ -30,6 +30,25 @@ final class SummarizerMiddleware {
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
+        case GeneralBrowserActionType.didTapReaderModeBarSummarizerButton:
+            Task { @MainActor in
+                await self.dispatchSummarizeConfigurationAction(
+                    for: action,
+                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForTapOnReaderModeButton
+                )
+            }
+        case ToolbarActionType.didSummarizeSettingsChange:
+            guard let action = action as? ToolbarAction else { return }
+            guard action.canSummarize else {
+                self.dispatchSummarizerNotAvailable(for: action)
+                return
+            }
+            Task { @MainActor in
+                await self.dispatchSummarizeConfigurationAction(
+                    for: action,
+                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForReaderModeButton
+                )
+            }
         case GeneralBrowserActionType.showReaderMode:
             Task { @MainActor in
                 await self.dispatchSummarizeConfigurationAction(
@@ -73,10 +92,16 @@ final class SummarizerMiddleware {
 
     @MainActor
     private func dispatchSummarizeConfigurationAction(for action: Action, actionType: ActionType) async {
-        guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
+        guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else {
+            dispatchSummarizerNotAvailable(for: action)
+            return
+        }
         let result = await checkSummarizationResult(tab)
         let contentType = result?.contentType ?? .generic
-        guard result?.canSummarize == true else { return }
+        guard result?.canSummarize == true else {
+            dispatchSummarizerNotAvailable(for: action)
+            return
+        }
         store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
@@ -85,4 +110,23 @@ final class SummarizerMiddleware {
             )
         )
     }
+    
+    private func dispatchSummarizerNotAvailable(for action: Action) {
+        store.dispatch(
+            SummarizeAction(
+                windowUUID: action.windowUUID,
+                actionType: SummarizeMiddlewareActionType.summarizerNotAvailable,
+                summarizerConfig: .defaultConfig
+            )
+        )
+    }
 }
+
+
+
+
+
+//case GeneralBrowserActionType.didTapReaderModeBarSummarizerButton:
+//case ToolbarActionType.didSummarizeSettingsChange:
+//case GeneralBrowserActionType.showReaderMode:
+//case GeneralBrowserActionType.shakeMotionEnded:

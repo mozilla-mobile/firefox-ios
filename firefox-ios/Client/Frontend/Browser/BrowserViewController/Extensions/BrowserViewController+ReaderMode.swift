@@ -281,7 +281,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 GeneralBrowserAction(
                     summarizerTrigger: .readerModeBarButton,
                     windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.showSummarizer
+                    actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
                 )
             )
         }

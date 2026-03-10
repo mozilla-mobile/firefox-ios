@@ -235,6 +235,14 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             )
+        case SummarizeMiddlewareActionType.summarizerNotAvailable:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                shouldShowReaderModeBarSummarizerButton: false,
+                browserViewType: state.browserViewType,
+                microsurveyState: state.microsurveyState
+            )
         default:
             return passthroughState(from: state, action: action)
         }
