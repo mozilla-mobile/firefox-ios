@@ -1203,7 +1203,7 @@ workflows:
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
@@ -1313,7 +1313,7 @@ workflows:
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
@@ -1429,7 +1429,7 @@ workflows:
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
