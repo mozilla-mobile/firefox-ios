@@ -546,7 +546,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "generatePassword",
       });
-    } else if (!isEmail && !formHasNewPassword && (password || updatedPasswordManagerEnabled)) {
+    } else if (isLoginField && !formHasNewPassword && (password || updatedPasswordManagerEnabled)) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
         fieldType:
