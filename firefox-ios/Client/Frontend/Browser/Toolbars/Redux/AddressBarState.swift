@@ -150,6 +150,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
+        case ToolbarActionType.didSetTabScreenshot:
+            return handleDidSetTabScreenshotAction(state: state, action: action)
+
         // Translation related actions
         case ToolbarActionType.didStartTranslatingPage,
             ToolbarActionType.translationCompleted,
@@ -272,6 +275,35 @@ struct AddressBarState: StateType, Sendable, Equatable {
             url: state.url,
             searchTerm: state.searchTerm,
             lockIconButtonA11yId: state.lockIconButtonA11yId,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            canSummarize: state.canSummarize,
+            translationConfiguration: state.translationConfiguration,
+            didStartTyping: state.didStartTyping,
+            isEmptySearch: state.isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    @MainActor
+    private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            leadingPageActions: state.leadingPageActions,
+            trailingPageActions: state.trailingPageActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
@@ -1208,6 +1240,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let tabTrayButtonStyle = isLoadAction ? action.tabTrayButtonStyle : toolbarState.tabTrayButtonStyle
 
         if isEditing {
             // cancel button when in edit mode
@@ -1229,17 +1262,42 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
         let menuIcon = StandardImageIdentifiers.Large.moreHorizontalRound
 
+        let isTabScreenshotAction = action.actionType as? ToolbarActionType == .didSetTabScreenshot
+        let previousTabScreenshot = isTabScreenshotAction ? action.previousTabScreenshot : toolbarState.previousTabScreenshot
+        let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
+
+        let iconName: String? = switch tabTrayButtonStyle {
+        case .number, .none: StandardImageIdentifiers.Large.tab
+        case .screenshot: nil
+        }
+
         switch layout {
         case .version1, .none:
-            actions.append(contentsOf: [
-                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
-                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode)
-            ])
+            actions.append(
+                contentsOf: [
+                    menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge),
+                    tabsAction(
+                        iconName: iconName,
+                        numberOfTabs: numberOfTabs,
+                        isPrivateMode: toolbarState.isPrivateMode,
+                        previousTabScreenshot: previousTabScreenshot,
+                        nextTabScreenshot: nextTabScreenshot
+                    )
+                ]
+            )
         case .version2:
-            actions.append(contentsOf: [
-                tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-                menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
-            ])
+            actions.append(
+                contentsOf: [
+                    tabsAction(
+                        iconName: iconName,
+                        numberOfTabs: numberOfTabs,
+                        isPrivateMode: toolbarState.isPrivateMode,
+                        previousTabScreenshot: previousTabScreenshot,
+                        nextTabScreenshot: nextTabScreenshot
+                    ),
+                    menuAction(iconName: menuIcon, showWarningBadge: showWarningBadge)
+                ]
+            )
         }
 
         return actions
@@ -1285,8 +1343,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     private static func tabsAction(
+        iconName: String?,
         numberOfTabs: Int = 1,
-        isPrivateMode: Bool = false)
+        isPrivateMode: Bool = false,
+        previousTabScreenshot: UIImage?,
+        nextTabScreenshot: UIImage?)
     -> ToolbarActionConfiguration {
         let largeContentTitle = numberOfTabs > 99 ?
             .Toolbars.TabsButtonOverflowLargeContentTitle :
@@ -1294,12 +1355,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
         return ToolbarActionConfiguration(
             actionType: .tabs,
-            iconName: StandardImageIdentifiers.Large.tab,
+            iconName: iconName,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
-            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
+            maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
             largeContentTitle: largeContentTitle,
+            previousTabScreenshot: previousTabScreenshot,
+            nextTabScreenshot: nextTabScreenshot,
             a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }

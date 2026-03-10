@@ -74,6 +74,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
             let toolbarConfig = FxNimbus.shared.features.toolbarRefactorFeature.value()
             let toolbarLayout = ToolbarLayoutStyle.style(from: toolbarConfig.layout)
+            let tabTrayButtonStyle = TabTrayButtonStyle.style(from: toolbarConfig.tabTrayButtonType)
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
@@ -90,6 +91,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = ToolbarAction(
                 toolbarPosition: toolbarPosition,
                 toolbarLayout: toolbarLayout,
+                tabTrayButtonStyle: tabTrayButtonStyle,
                 isTranslucent: toolbarHelper.shouldBlur(),
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,

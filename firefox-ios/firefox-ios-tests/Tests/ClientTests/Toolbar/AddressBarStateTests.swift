@@ -1030,6 +1030,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             toolbarPosition: toolbarState.toolbarPosition,
             toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
             isPrivateMode: toolbarState.isPrivateMode,
             addressToolbar: toolbarState.addressToolbar,
             navigationToolbar: toolbarState.navigationToolbar,
@@ -1044,7 +1045,9 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
-            isTranslucent: toolbarState.isTranslucent)
+            isTranslucent: toolbarState.isTranslucent,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot)
     }
 
     // MARK: StoreTestUtility
