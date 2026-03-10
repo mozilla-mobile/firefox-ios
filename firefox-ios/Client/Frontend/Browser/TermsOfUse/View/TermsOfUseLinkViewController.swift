@@ -144,7 +144,7 @@ final class TermsOfUseLinkViewController: UIViewController,
         estimatedProgressObserver = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, change in
             let observedProgress = change.newValue ?? 0.0
 
-            Task { @MainActor [weak self] in
+            ensureMainThread { [weak self] in
                 guard let self, self.isLoading else { return }
                 let currentProgress = Double(self.progressBar.progress)
                 let progress = max(currentProgress, observedProgress)
@@ -155,7 +155,6 @@ final class TermsOfUseLinkViewController: UIViewController,
         }
     }
 
-    @MainActor
     private func updateProgressBar(progress: Double) {
         let maximumProgress: Double = isLoading ? 0.9 : 1.0
         let displayedProgress = min(max(0.0, progress), maximumProgress)
