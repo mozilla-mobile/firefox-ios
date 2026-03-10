@@ -328,8 +328,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             return UnsplashKeyTextSetting(
                 title: format(string: "\(item.title): \(display)"),
                 keyTitle: item.title,
-                prefKey: item.prefKey,
-                theme: themeManager.getCurrentTheme(for: windowUUID)
+                prefKey: item.prefKey
             ) { [weak self] in
                 self?.reloadView()
             }

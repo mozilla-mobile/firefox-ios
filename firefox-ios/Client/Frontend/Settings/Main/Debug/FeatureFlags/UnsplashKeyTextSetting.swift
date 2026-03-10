@@ -12,19 +12,16 @@ import UIKit
 final class UnsplashKeyTextSetting: Setting {
     private let keyTitle: String
     private let prefKey: String
-    private let theme: Theme
     private let onChange: () -> Void
 
     init(
         title: NSAttributedString,
         keyTitle: String,
         prefKey: String,
-        theme: Theme,
         onChange: @escaping () -> Void
     ) {
         self.keyTitle = keyTitle
         self.prefKey = prefKey
-        self.theme = theme
         self.onChange = onChange
         super.init(title: title)
     }
