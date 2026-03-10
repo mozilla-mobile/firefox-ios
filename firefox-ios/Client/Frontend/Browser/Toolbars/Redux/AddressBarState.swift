@@ -304,6 +304,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
+            lockIconButtonA11yId: state.lockIconButtonA11yId,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
