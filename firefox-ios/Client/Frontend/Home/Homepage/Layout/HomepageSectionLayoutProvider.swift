@@ -6,49 +6,9 @@ import Foundation
 import Common
 import Storage
 import UIKit
-
-@MainActor
-struct HomepageStoriesHeaderPresentation: Equatable {
-    enum HeaderHeightMode: Equatable {
-        case sectionTitle
-        case affordance
-    }
-
-    let shouldUseTransitionHeader: Bool
-    let transitionEnabled: Bool
-    let appliedNewsAffordancePeakOffset: CGFloat
-    let headerHeightMode: HeaderHeightMode
-
-    static let fallback = HomepageStoriesHeaderPresentation(
-        shouldUseTransitionHeader: false,
-        transitionEnabled: false,
-        appliedNewsAffordancePeakOffset: 0,
-        headerHeightMode: .sectionTitle
-    )
-}
-
-@MainActor
-enum HomepageStoriesHeaderPresentationCache {
-    private static var presentations: [WindowUUID: HomepageStoriesHeaderPresentation] = [:]
-
-    static func presentation(for windowUUID: WindowUUID) -> HomepageStoriesHeaderPresentation {
-        return presentations[windowUUID] ?? .fallback
-    }
-
-    static func setPresentation(_ presentation: HomepageStoriesHeaderPresentation, for windowUUID: WindowUUID) {
-        presentations[windowUUID] = presentation
-    }
-}
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
-    private struct HeaderMeasurementKey: Hashable {
-        let configuration: SectionHeaderConfiguration
-        let headerHeightMode: HomepageStoriesHeaderPresentation.HeaderHeightMode
-        let containerWidth: Double
-        let contentSizeCategory: UIContentSizeCategory
-    }
-
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
@@ -166,7 +126,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// the relevant state for each section, preventing stale heights from being reused when any
     /// of the inputs differ between layout passes.
     private var measurementsCache = HomepageLayoutMeasurementCache()
-    private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
+    private var headerHeightCache: [HomepageLayoutMeasurementCache.HeaderMeasurementKey: CGFloat] = [:]
 
     private var storiesScrollDirection: ScrollDirection {
         return featureFlags.getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
@@ -359,7 +319,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
-        let storiesHeaderPresentation = getStoriesHeaderPresentation(environment: environment)
+        let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -378,7 +338,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(
-                storiesHeaderPresentation.headerHeightMode == .affordance
+                storiesHeaderLayoutState.headerHeightMode == .affordance
                     ? UX.PocketConstants.newsAffordanceSectionHeight
                     : UX.sectionHeaderHeight
             )
@@ -602,7 +562,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
-        let storiesHeaderPresentation = getStoriesHeaderPresentation(environment: environment)
+        let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         var spacerHeight = max(0.1, rawSpacerHeight)
@@ -610,8 +570,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // For vertically scrolling stories, apply the appropriate peak treatment only when there is spare vertical space.
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
         if rawSpacerHeight > 0, isStoriesScrollDirectionVertical {
-            if storiesHeaderPresentation.shouldUseTransitionHeader {
-                spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderPresentation.appliedNewsAffordancePeakOffset)
+            if shouldUseNewsAffordance {
+                spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderLayoutState.appliedPeakOffset)
             } else {
                 spacerHeight -= UX.PocketConstants.storiesPeakOffset
             }
@@ -885,19 +845,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         headerState: SectionHeaderConfiguration,
         environment: NSCollectionLayoutEnvironment
     ) -> CGFloat {
-        let headerHeightMode: HomepageStoriesHeaderPresentation.HeaderHeightMode
+        let headerHeightMode: HomepageLayoutMeasurementCache.HeaderHeightMode
         switch headerState.style {
         case .sectionTitle:
             headerHeightMode = .sectionTitle
         case .newsAffordance:
-            let storiesHeaderPresentation = getStoriesHeaderPresentation(environment: environment)
-            headerHeightMode = storiesHeaderPresentation.shouldUseTransitionHeader
-                ? storiesHeaderPresentation.headerHeightMode
+            headerHeightMode = shouldUseNewsAffordance
+                ? getStoriesHeaderLayoutState(environment: environment).headerHeightMode
                 : .affordance
         }
 
         let width = normalizedDimension(environment.container.contentSize.width)
-        let cacheKey = HeaderMeasurementKey(
+        let cacheKey = HomepageLayoutMeasurementCache.HeaderMeasurementKey(
             configuration: headerState,
             headerHeightMode: headerHeightMode,
             containerWidth: width,
@@ -917,29 +876,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         case .newsAffordance:
-            let storiesHeaderPresentation = getStoriesHeaderPresentation(environment: environment)
-            if storiesHeaderPresentation.shouldUseTransitionHeader {
-                if storiesHeaderPresentation.headerHeightMode == .affordance {
-                    let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
-                    header.configure(
-                        state: headerState,
-                        textColor: .black,
-                        theme: LightTheme(),
-                        transitionEnabled: true
-                    )
-                    headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-                } else {
-                    let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
-                    header.configure(state: headerState, textColor: .black, theme: LightTheme())
-                    headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-                }
+            if shouldUseNewsAffordance, getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .sectionTitle {
+                let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
+                header.configure(state: headerState, textColor: .black, theme: LightTheme())
+                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
             } else if shouldUseNewsAffordance {
                 let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
                 header.configure(
                     state: headerState,
                     textColor: .black,
                     theme: LightTheme(),
-                    transitionEnabled: false
+                    transitionEnabled: true
                 )
                 headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
             } else {
@@ -953,47 +900,38 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return headerHeight
     }
 
-    private func getStoriesHeaderPresentation(environment: NSCollectionLayoutEnvironment) -> HomepageStoriesHeaderPresentation {
+    private func getStoriesHeaderLayoutState(
+        environment: NSCollectionLayoutEnvironment
+    ) -> HomepageLayoutMeasurementCache.StoriesHeaderLayoutState {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
-        let presentation: HomepageStoriesHeaderPresentation
-
-        if shouldUseNewsAffordance {
-            let minimumVisibleHeight = UX.PocketConstants.minimumNewsAffordanceVisibleHeight
-            let fullPeakOffset = UX.PocketConstants.newsAffordanceStoriesPeakOffset
-
-            if rawSpacerHeight >= fullPeakOffset {
-                presentation = HomepageStoriesHeaderPresentation(
-                    shouldUseTransitionHeader: true,
-                    transitionEnabled: true,
-                    appliedNewsAffordancePeakOffset: fullPeakOffset,
-                    headerHeightMode: .affordance
-                )
-            } else if rawSpacerHeight >= minimumVisibleHeight {
-                presentation = HomepageStoriesHeaderPresentation(
-                    shouldUseTransitionHeader: true,
-                    transitionEnabled: true,
-                    appliedNewsAffordancePeakOffset: rawSpacerHeight,
-                    headerHeightMode: .affordance
-                )
-            } else {
-                presentation = HomepageStoriesHeaderPresentation(
-                    shouldUseTransitionHeader: true,
-                    transitionEnabled: false,
-                    appliedNewsAffordancePeakOffset: 0,
-                    headerHeightMode: .sectionTitle
-                )
-            }
-        } else {
-            presentation = HomepageStoriesHeaderPresentation(
-                shouldUseTransitionHeader: false,
-                transitionEnabled: false,
-                appliedNewsAffordancePeakOffset: 0,
-                headerHeightMode: .sectionTitle
+        guard shouldUseNewsAffordance else {
+            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+                headerHeightMode: .sectionTitle,
+                appliedPeakOffset: 0
             )
         }
 
-        HomepageStoriesHeaderPresentationCache.setPresentation(presentation, for: windowUUID)
-        return presentation
+        let minimumVisibleHeight = UX.PocketConstants.minimumNewsAffordanceVisibleHeight
+        let fullPeakOffset = UX.PocketConstants.newsAffordanceStoriesPeakOffset
+
+        if rawSpacerHeight >= fullPeakOffset {
+            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+                headerHeightMode: .affordance,
+                appliedPeakOffset: fullPeakOffset
+            )
+        }
+
+        if rawSpacerHeight >= minimumVisibleHeight {
+            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+                headerHeightMode: .affordance,
+                appliedPeakOffset: rawSpacerHeight
+            )
+        }
+
+        return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+            headerHeightMode: .sectionTitle,
+            appliedPeakOffset: 0
+        )
     }
 
     private func getRawSpacerHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {

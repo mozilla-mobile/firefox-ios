@@ -688,7 +688,11 @@ final class HomepageViewController: UIViewController,
                 ) else {
                     return UICollectionReusableView()
                 }
-                return configureNewsTransitionHeader(with: newsTransitionHeaderView)
+                return configureNewsTransitionHeader(
+                    with: collectionView,
+                    at: indexPath,
+                    with: newsTransitionHeaderView
+                )
             }
 
             guard let sectionHeaderView = collectionView.dequeueSupplementary(
@@ -713,14 +717,21 @@ final class HomepageViewController: UIViewController,
     }
 
     private func configureNewsTransitionHeader(
+        with collectionView: UICollectionView,
+        at indexPath: IndexPath,
         with newsTransitionHeaderView: NewsTransitionHeaderView
     ) -> NewsTransitionHeaderView {
-        let storiesHeaderPresentation = HomepageStoriesHeaderPresentationCache.presentation(for: windowUUID)
+        let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            at: indexPath
+        )?.size.height ?? newsTransitionHeaderView.bounds.height
+        let transitionEnabled = headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
+
         newsTransitionHeaderView.configure(
             state: homepageState.merinoState.sectionHeaderState,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
-            transitionEnabled: storiesHeaderPresentation.transitionEnabled
+            transitionEnabled: transitionEnabled
         )
         newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderView
@@ -800,8 +811,6 @@ final class HomepageViewController: UIViewController,
 
     private func newsTransitionProgress() -> CGFloat {
         guard let collectionView else { return 0 }
-        let storiesHeaderPresentation = HomepageStoriesHeaderPresentationCache.presentation(for: windowUUID)
-        guard storiesHeaderPresentation.transitionEnabled else { return 1 }
 
         let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
         let progress = normalizedOffset / NewsTransitionHeaderView.UX.transitionDistance
