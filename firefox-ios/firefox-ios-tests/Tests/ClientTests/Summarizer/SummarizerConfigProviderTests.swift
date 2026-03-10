@@ -107,10 +107,11 @@ final class SummarizerConfigProviderTests: XCTestCase {
     func testAppliesLocaleToInstructions() {
         let mockSources = [
             MockSummarizerConfigSource(configToReturn: SummarizerConfig(
-                instructions: "Instructions with **{locale}** and **{lang}**",
+                instructions: "Instructions with **{lang}**",
                 options: [:]
             ))
         ]
+        let enLocale = Locale(identifier: "en")
 
         let subject = createSubject(sources: mockSources)
         let config = subject.getConfig(
@@ -121,7 +122,7 @@ final class SummarizerConfigProviderTests: XCTestCase {
 
         XCTAssertEqual(
             config.instructions,
-            "Instructions with \(locale.identifier) and \(locale.languageCode ?? "")"
+            "Instructions with \(enLocale.localizedString(forIdentifier: locale.identifier) ?? "English")"
         )
     }
 
