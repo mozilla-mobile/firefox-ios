@@ -107,7 +107,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         // Switch to Private Browsing
@@ -116,7 +116,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         navigator.goto(BrowserTabMenu)

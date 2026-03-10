@@ -26,6 +26,7 @@ struct ToolbarAction: Action {
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
+    let lockIconButtonA11yId: String?
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool?
     let safeListedURLImageName: String?
@@ -54,6 +55,7 @@ struct ToolbarAction: Action {
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
+         lockIconButtonA11yId: String? = nil,
          lockIconImageName: String? = nil,
          lockIconNeedsTheming: Bool? = nil,
          safeListedURLImageName: String? = nil,
@@ -84,6 +86,7 @@ struct ToolbarAction: Action {
         self.readerModeState = readerModeState
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
+        self.lockIconButtonA11yId = lockIconButtonA11yId
         self.lockIconImageName = lockIconImageName
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName

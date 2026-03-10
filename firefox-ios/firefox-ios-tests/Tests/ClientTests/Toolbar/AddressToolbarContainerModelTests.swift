@@ -271,6 +271,7 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                borderPosition: nil,
                                url: nil,
                                searchTerm: nil,
+                               lockIconButtonA11yId: nil,
                                lockIconImageName: nil,
                                lockIconNeedsTheming: true,
                                safeListedURLImageName: nil,

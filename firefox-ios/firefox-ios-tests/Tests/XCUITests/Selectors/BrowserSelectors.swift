@@ -18,6 +18,7 @@ protocol BrowserSelectorsSet {
     var LINK_RFC_2606: Selector { get }
     var BOOK_OF_MOZILLA_TEXT: Selector { get }
     var ADDRESSTOOLBAR_LOCKICON: Selector { get }
+    var ADDRESSTOOLBAR_LOCKICON_OFF: Selector { get }
     var TOPTABS_COLLECTIONVIEW: Selector { get }
     var MICROSURVEY_CLOSE_BUTTON: Selector { get }
     var BOOK_OF_MOZILLA_TEXT_IN_TABLE: Selector { get }
@@ -42,6 +43,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         static let cancelButton = "Cancel"
         static let rfc = "RFC 2606"
         static let AddressToolbar_LockIcon = AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon
+        static let AddressToolbar_LockIcon_Off = AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
         static let topTabsCollectionView = AccessibilityIdentifiers.Browser.TopTabs.collectionView
         static let microsurveyCloseButton = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         static let saveButton = "Save"
@@ -127,6 +129,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
         groups: ["browser"]
     )
 
+    let ADDRESSTOOLBAR_LOCKICON_OFF = Selector.buttonId(
+        IDs.AddressToolbar_LockIcon_Off,
+        description: "Lock Icon OFF on the Address toolbar",
+        groups: ["browser"]
+    )
+
     let TOPTABS_COLLECTIONVIEW = Selector.collectionViewIdOrLabel(
         IDs.topTabsCollectionView,
         description: "Collection View of Top tabs",
@@ -190,8 +198,8 @@ struct BrowserSelectors: BrowserSelectorsSet {
     var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
-                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, TOPTABS_COLLECTIONVIEW,
-                           MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE, SAVE_BUTTON, CLIPBOARD_TOAST,
-                           PRIVATE_MODE_HOMEPAGE_TITLE]
+                           LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
+                           TOPTABS_COLLECTIONVIEW, MICROSURVEY_CLOSE_BUTTON, BOOK_OF_MOZILLA_TEXT_IN_TABLE,
+                           SAVE_BUTTON, CLIPBOARD_TOAST, PRIVATE_MODE_HOMEPAGE_TITLE]
     }
 }
