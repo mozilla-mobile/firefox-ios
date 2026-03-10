@@ -57,7 +57,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.37
             static let storiesSpacing: CGFloat = 12
             static let verticalStoriesSpacing: CGFloat = 16
+
+            /// `storiesPeakOffset` is how much we want the stories section (section header) to peak in vertically
+            ///  from the bottom of the homepage viewport
             static let storiesPeakOffset: CGFloat = 130
+            static let newsAffordanceSectionHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
+            static let newsAffordanceStoriesPeakOffset: CGFloat = 86
 
             @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
@@ -138,6 +143,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var isStoriesScrollDirectionHorizontal: Bool {
         return storiesScrollDirection == .horizontal && UIDevice.current.userInterfaceIdiom == .phone
+    }
+
+    private var isNewsTransitionEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
+    }
+
+    private var shouldUseNewsAffordance: Bool {
+        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
     }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
@@ -328,7 +341,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.sectionHeaderHeight)
+            heightDimension: .estimated(shouldUseNewsAffordance ? UX.PocketConstants.newsAffordanceSectionHeight
+                                                                : UX.sectionHeaderHeight
+            )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
@@ -584,7 +599,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // For vertically scrolling stories, apply the peak offset only when there is spare vertical space (spacer).
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
         if rawSpacerHeight > 0, isStoriesScrollDirectionVertical {
-            spacerHeight -= UX.PocketConstants.storiesPeakOffset
+            let peakOffset = shouldUseNewsAffordance
+                ? UX.PocketConstants.newsAffordanceStoriesPeakOffset
+                : UX.PocketConstants.storiesPeakOffset
+            spacerHeight -= peakOffset
         }
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -866,15 +884,19 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return cachedHeight
         }
 
-        let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
-        header.configure(state: headerState, textColor: .black, theme: LightTheme())
-
         let containerWidth = environment.container.contentSize.width
-        let headerHeight = header.systemLayoutSizeFitting(
-            CGSize(width: containerWidth, height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
+        let headerHeight: CGFloat
+
+        switch headerState.style {
+        case .sectionTitle:
+            let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
+            header.configure(state: headerState, textColor: .black, theme: LightTheme())
+            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+        case .newsAffordance:
+            let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
+            header.configure(theme: LightTheme())
+            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+        }
 
         headerHeightCache[cacheKey] = headerHeight
         return headerHeight

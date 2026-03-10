@@ -18,8 +18,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let prefs: Prefs
     private let recentSearchProvider: RecentSearchProvider
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
     }
@@ -35,15 +34,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
          toolbarTelemetry: ToolbarTelemetry = ToolbarTelemetry(),
          profile: Profile = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          recentSearchProvider: RecentSearchProvider? = nil,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.manager = manager
-        self.summarizationChecker = summarizationChecker
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.toolbarHelper = toolbarHelper
         self.toolbarTelemetry = toolbarTelemetry
         self.prefs = profile.prefs
@@ -305,16 +302,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
         case .summarizer:
             Task { @MainActor in
-                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
-                let summarizeMiddleware = SummarizerMiddleware()
-                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
-                let contentType = summarizationCheckResult?.contentType ?? .generic
-                let action = GeneralBrowserAction(
-                    summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
-                    summarizerTrigger: .toolbarIcon,
-                    windowUUID: action.windowUUID,
-                    actionType: GeneralBrowserActionType.showSummarizer,
-                )
+                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
+                let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
         case .translate:
@@ -471,16 +463,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView,
               isSummarizerOn
         else { return }
-        let maxWords = summarizerServiceFactory.maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
-                                                         isHostedSummarizerEnabled: isHostedSummaryEnabled)
+
         Task { @MainActor in
-            let result = await summarizationChecker.check(
-                on: webView,
-                maxWords: maxWords
-            )
+            let canSummarize = await summarizerConfigFactory.makeConfiguration(from: webView) != nil
             store.dispatch(
                 ToolbarAction(
-                    canSummarize: result.canSummarize,
+                    canSummarize: canSummarize,
                     readerModeState: action.readerModeState,
                     windowUUID: action.windowUUID,
                     actionType: ToolbarActionType.readerModeStateChanged

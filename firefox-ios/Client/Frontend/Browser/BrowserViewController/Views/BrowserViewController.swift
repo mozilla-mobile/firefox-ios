@@ -4901,7 +4901,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
-            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+            // Do not reload when it's an about:blank page or has a temporary document
+            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
                 needsReload = false
             }
         }

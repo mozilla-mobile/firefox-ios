@@ -116,6 +116,13 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         var scope: String { OAuthScope.relay }
     }
 
+    struct RelayUpdateConfiguration {
+        let postLaunchUpdateDelay: TimeInterval
+        static func `default`() -> RelayUpdateConfiguration {
+            return RelayUpdateConfiguration(postLaunchUpdateDelay: 5.0)
+        }
+    }
+
     // MARK: - Properties
 
     let telemetry: RelayMaskTelemetry
@@ -131,7 +138,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     private let logger: Logger
     private let profile: Profile
-    private let config: RelayClientConfiguration
+    private let clientConfig: RelayClientConfiguration
+    private let updateConfig: RelayUpdateConfiguration
     private var relayRSClient: RelayRemoteSettingsClientProtocol?
     private var client: RelayClientProtocol?
     private var isCreatingClient = false
@@ -152,14 +160,16 @@ final class RelayController: RelayControllerProtocol, Notifiable {
          relayRSClient: RelayRemoteSettingsClientProtocol? = nil,
          relayAccountStatusProvider: RelayAccountStatusProvider? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
-         config: RelayClientConfiguration = .prod,
+         clientConfig: RelayClientConfiguration = .prod,
+         updateConfig: RelayUpdateConfiguration = RelayUpdateConfiguration.default(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
         let isStaging = profile.prefs.boolForKey(PrefsKeys.UseStageServer) ?? false
         logger.log("Relay server: \(isStaging ? "staging" : "prod")", level: .info, category: .relay)
-        self.config = isStaging ? .staging : .prod
+        self.clientConfig = isStaging ? .staging : .prod
         self.notificationCenter = notificationCenter
+        self.updateConfig = updateConfig
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
         if let relayClient {
@@ -282,8 +292,8 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - Private Utilities
 
     private func performPostLaunchUpdate() {
-        let postLaunchDelay: TimeInterval = 5.0
-        Timer.scheduledTimer(withTimeInterval: postLaunchDelay, repeats: false) { [weak self] _ in
+        let delay = updateConfig.postLaunchUpdateDelay
+        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
             Task { @MainActor in
                 self?.updateRelayAccountStatus()
@@ -374,7 +384,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         accountStatus = .updating
-        let isStaging = config == .staging
+        let isStaging = clientConfig == .staging
         // Fetch the account status (off the main thread)
         Task {
             await fetchRelayAccountAvailability(isStaging: isStaging)
@@ -398,7 +408,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
         isCreatingClient = true
         let useCache = !isRefresh
-        acctManager.getAccessToken(scope: config.scope, useCache: useCache) { [config, weak self] result in
+        acctManager.getAccessToken(scope: clientConfig.scope, useCache: useCache) { [clientConfig, weak self] result in
             switch result {
             case .failure(let error):
                 self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
@@ -406,7 +416,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 completion?()
             case .success(let tokenInfo):
                 do {
-                    let clientResult = try RelayClient(serverUrl: config.serverURL, authToken: tokenInfo.token)
+                    let clientResult = try RelayClient(serverUrl: clientConfig.serverURL, authToken: tokenInfo.token)
                     self?.handleRelayClientCreated(clientResult)
                 } catch {
                     self?.logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)

@@ -369,6 +369,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         homePage.validateHomePageLogo(isPrivate: true)
         // Validate steps 1 and 2 in landscape orientation
         XCUIDevice.shared.orientation = .landscapeLeft
+        waitForRotation(to: .landscapeLeft)
         homePage.assertPrivateHomeTitleExists()
         homePage.validateHomePageLogo(isPrivate: true)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
