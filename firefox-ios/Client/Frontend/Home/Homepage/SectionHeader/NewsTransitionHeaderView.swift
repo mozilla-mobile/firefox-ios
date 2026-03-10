@@ -61,9 +61,27 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         updateViewState()
     }
 
+    func setTransitionEnabled(_ transitionEnabled: Bool) {
+        self.transitionEnabled = transitionEnabled
+        updateViewState()
+    }
+
     func applyTheme(theme: Theme) {
         newsAffordanceHeaderView.applyTheme(theme: theme)
         sectionTitleHeaderView.applyTheme(theme: theme)
+    }
+
+    override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+    ) -> CGSize {
+        let measuredView: UIView = transitionEnabled ? newsAffordanceHeaderView : sectionTitleHeaderView
+        return measuredView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
     }
 
     private func setupLayout() {

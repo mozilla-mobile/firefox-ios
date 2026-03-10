@@ -224,7 +224,10 @@ final class HomepageViewController: UIViewController,
         }
 
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
-        guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else { return }
+        guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else {
+            updateNewsTransitionHeaderProgress()
+            return
+        }
 
         store.dispatch(
             HomepageAction(
@@ -233,6 +236,8 @@ final class HomepageViewController: UIViewController,
                 actionType: HomepageActionType.viewDidLayoutSubviews
             )
         )
+
+        updateNewsTransitionHeaderProgress()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -391,6 +396,9 @@ final class HomepageViewController: UIViewController,
             trackVisibleItemImpressions()
         }
         self.homepageState = state
+        collectionView?.collectionViewLayout.invalidateLayout()
+        collectionView?.layoutIfNeeded()
+        updateNewsTransitionHeaderProgress()
     }
 
     func unsubscribeFromRedux() {
@@ -798,6 +806,10 @@ final class HomepageViewController: UIViewController,
                   }
                   return false
               }),
+              let headerAttributes = collectionView.layoutAttributesForSupplementaryElement(
+                  ofKind: UICollectionView.elementKindSectionHeader,
+                  at: IndexPath(item: 0, section: pocketSectionIndex)
+              ),
               let headerView = collectionView.supplementaryView(
                   forElementKind: UICollectionView.elementKindSectionHeader,
                   at: IndexPath(item: 0, section: pocketSectionIndex)
@@ -806,6 +818,8 @@ final class HomepageViewController: UIViewController,
             return
         }
 
+        let transitionEnabled = headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight
+        headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
 

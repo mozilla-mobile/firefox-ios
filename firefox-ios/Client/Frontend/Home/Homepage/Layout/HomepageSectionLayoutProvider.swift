@@ -320,6 +320,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
         let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
+        let storiesHeaderState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)?
+            .merinoState.sectionHeaderState
+            ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -337,10 +340,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(
-                storiesHeaderLayoutState.headerHeightMode == .affordance
-                    ? UX.PocketConstants.newsAffordanceSectionHeight
-                    : UX.sectionHeaderHeight
+            heightDimension: .absolute(
+                getHeaderHeight(
+                    headerState: storiesHeaderState,
+                    environment: environment
+                )
             )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -571,7 +575,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
         if rawSpacerHeight > 0, isStoriesScrollDirectionVertical {
             if shouldUseNewsAffordance {
-                spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderLayoutState.appliedPeakOffset)
+                if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
+                    spacerHeight = 0.1
+                } else {
+                    spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderLayoutState.appliedPeakOffset)
+                }
             } else {
                 spacerHeight -= UX.PocketConstants.storiesPeakOffset
             }
