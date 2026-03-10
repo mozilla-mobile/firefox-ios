@@ -160,14 +160,12 @@ final class TermsOfUseLinkViewController: UIViewController,
         let displayedProgress = min(max(0.0, progress), maximumProgress)
         guard displayedProgress >= Double(progressBar.progress) else { return }
 
-        progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(Float(displayedProgress), animated: true)
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         isLoading = true
-        progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(0, animated: false)
     }
