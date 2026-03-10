@@ -279,7 +279,6 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .summarizer:
             store.dispatch(
                 GeneralBrowserAction(
-                    summarizerTrigger: .readerModeBarButton,
                     windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
                 )

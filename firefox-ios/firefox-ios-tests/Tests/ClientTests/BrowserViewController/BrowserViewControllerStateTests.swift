@@ -98,12 +98,106 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
+        let action = GeneralBrowserAction(
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
+            summarizerTrigger: .toolbarIcon,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.showSummarizer
+        )
+        let newState = reducer(initialState, action)
+
+        guard case .summarizer(_, _) = newState.navigationDestination?.destination else {
+            return XCTFail("Expected .summarizer")
+        }
+    }
+
+    func test_showSummarizerAction_withNilConfig_doesNotNavigate() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
         let action = getAction(for: .showSummarizer)
         let newState = reducer(initialState, action)
 
-        guard case .summarizer = newState.displayView else {
-            return XCTFail("Expected .summarizer")
+        XCTAssertNil(newState.navigationDestination)
+    }
+
+    func test_showSummarizerAction_withReaderModeBarButtonTrigger_navigatesWithCorrectTrigger() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = GeneralBrowserAction(
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
+            summarizerTrigger: .readerModeBarButton,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.showSummarizer
+        )
+        let newState = reducer(initialState, action)
+
+        let destination = try XCTUnwrap(newState.navigationDestination?.destination)
+        guard case .summarizer(_, let trigger) = destination else {
+            return XCTFail("Expected .summarizer destination")
         }
+        XCTAssertEqual(trigger, .readerModeBarButton)
+    }
+
+    // MARK: - Summarizer middleware actions
+
+    func test_showReaderModeBarSummarizerButton_summarizerAction_setsButtonVisible() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertFalse(initialState.shouldShowReaderModeBarSummarizerButton)
+
+        let action = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.shouldShowReaderModeBarSummarizerButton)
+    }
+
+    func test_summarizerNotAvailable_summarizerAction_setsButtonHidden() {
+        var initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let showAction = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
+            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
+        )
+        initialState = reducer(initialState, showAction)
+        XCTAssertTrue(initialState.shouldShowReaderModeBarSummarizerButton)
+
+        let hideAction = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.summarizerNotAvailable,
+            summarizerConfig: .defaultConfig
+        )
+        let newState = reducer(initialState, hideAction)
+
+        XCTAssertFalse(newState.shouldShowReaderModeBarSummarizerButton)
+    }
+
+    func test_triggerSummarizationFromReaderModeBarButton_summarizerAction_navigatesWithReaderModeBarTrigger() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let expectedConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
+        let action = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton,
+            summarizerConfig: expectedConfig
+        )
+        let newState = reducer(initialState, action)
+
+        let destination = try XCTUnwrap(newState.navigationDestination?.destination)
+        guard case .summarizer(let config, let trigger) = destination else {
+            return XCTFail("Expected .summarizer destination")
+        }
+        XCTAssertEqual(config, expectedConfig)
+        XCTAssertEqual(trigger, .readerModeBarButton)
     }
 
     // MARK: - Navigation Browser Action
@@ -321,14 +415,14 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = SummarizeAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: SummarizeMiddlewareActionType.configuredSummarizerForShakeMotion,
+            actionType: SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
         )
         let newState = reducer(initialState, action)
         let expectedConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
         let destination = newState.navigationDestination?.destination
         switch destination {
-        case .summarizer(let config):
+        case .summarizer(let config, _):
             XCTAssertEqual(config, expectedConfig)
         default:
             XCTFail("destination is not the right type")

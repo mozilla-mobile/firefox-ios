@@ -49,40 +49,26 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case GeneralBrowserActionType.didTapReaderModeBarSummarizerButton:
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(
-                    for: action,
-                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForTapOnReaderModeButton
-                )
-            }
+            self.dispatchInTask(for: action, actionType: .triggerSummarizationFromReaderModeBarButton)
         case ToolbarActionType.didSummarizeSettingsChange:
             guard let action = action as? ToolbarAction else { return }
             guard action.canSummarize else {
                 self.dispatchSummarizerNotAvailable(for: action)
                 return
             }
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(
-                    for: action,
-                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForReaderModeButton
-                )
-            }
+            self.dispatchInTask(for: action, actionType: .showReaderModeBarSummarizerButton)
         case GeneralBrowserActionType.showReaderMode:
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(
-                    for: action,
-                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForReaderModeButton
-                )
-            }
+            self.dispatchInTask(for: action, actionType: .showReaderModeBarSummarizerButton)
         case GeneralBrowserActionType.shakeMotionEnded:
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(
-                    for: action,
-                    actionType: SummarizeMiddlewareActionType.configuredSummarizerForShakeMotion
-                )
-            }
+            self.dispatchInTask(for: action, actionType: .triggerSummarizationFromShakeMotion)
         default:
             break
+        }
+    }
+
+    private func dispatchInTask(for action: Action, actionType: SummarizeMiddlewareActionType) {
+        Task {
+            await self.dispatchSummarizeConfigurationAction(for: action, actionType: actionType)
         }
     }
 
@@ -94,14 +80,20 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     @MainActor
-    private func dispatchSummarizeConfigurationAction(for action: Action) async {
+    private func dispatchSummarizeConfigurationAction(
+        for action: Action,
+        actionType: SummarizeMiddlewareActionType
+    ) async {
         guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
-        guard let summarizerConfig = await makeConfiguration(from: webView) else { return }
+        guard let summarizerConfig = await makeConfiguration(from: webView) else {
+            dispatchSummarizerNotAvailable(for: action)
+            return
+        }
 
         store.dispatch(
             SummarizeAction(
                 windowUUID: action.windowUUID,
-                actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+                actionType: actionType,
                 summarizerConfig: summarizerConfig
             )
         )
@@ -145,13 +137,14 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         }
         return nil
     }
+    
+    private func dispatchSummarizerNotAvailable(for action: Action) {
+        store.dispatch(
+            SummarizeAction(
+                windowUUID: action.windowUUID,
+                actionType: SummarizeMiddlewareActionType.summarizerNotAvailable,
+                summarizerConfig: .defaultConfig
+            )
+        )
+    }
 }
-
-
-
-
-
-//case GeneralBrowserActionType.didTapReaderModeBarSummarizerButton:
-//case ToolbarActionType.didSummarizeSettingsChange:
-//case GeneralBrowserActionType.showReaderMode:
-//case GeneralBrowserActionType.shakeMotionEnded:

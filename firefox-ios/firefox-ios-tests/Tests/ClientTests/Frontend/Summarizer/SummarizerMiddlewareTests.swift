@@ -73,7 +73,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.configuredSummarizer)
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         // the summarizer provider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
@@ -100,6 +100,182 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         // the summarizer provider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    // MARK: - didTapReaderModeBarSummarizerButton
+    func test_didTapReaderModeBarSummarizerButton_withValidConfiguration_dispatchesTriggerAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
+        )
+        let expectation = XCTestExpectation(description: "Reader mode bar summarizer button dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    func test_didTapReaderModeBarSummarizerButton_withoutWebView_doesNotDispatchAction() throws {
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
+        )
+        let expectation = XCTestExpectation(description: "Reader mode bar summarizer button dispatched")
+        expectation.isInverted = true
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    // MARK: - showReaderMode
+    func test_showReaderModeAction_withValidConfiguration_dispatchesShowButtonAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.showReaderMode
+        )
+        let expectation = XCTestExpectation(description: "Show reader mode action dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    func test_showReaderModeAction_withInvalidConfiguration_dispatchesNotAvailableAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = false
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.showReaderMode
+        )
+        let expectation = XCTestExpectation(description: "Show reader mode not available dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.summarizerNotAvailable)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    // MARK: - didSummarizeSettingsChange
+    func test_didSummarizeSettingsChange_withCanSummarizeTrue_withValidConfig_dispatchesShowButtonAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let subject = createSubject()
+
+        let action = ToolbarAction(
+            canSummarize: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didSummarizeSettingsChange
+        )
+        let expectation = XCTestExpectation(description: "Summarize settings change dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    func test_didSummarizeSettingsChange_withCanSummarizeFalse_dispatchesNotAvailableAction() throws {
+        let subject = createSubject()
+
+        let action = ToolbarAction(
+            canSummarize: false,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didSummarizeSettingsChange
+        )
+        let expectation = XCTestExpectation(description: "Summarize not available dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.summarizerNotAvailable)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }
 

@@ -213,7 +213,7 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case SummarizeMiddlewareActionType.configuredSummarizerForShakeMotion:
+        case SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
@@ -227,7 +227,7 @@ struct BrowserViewControllerState: ScreenState {
                     )
                 )
             )
-        case SummarizeMiddlewareActionType.configuredSummarizerForReaderModeButton:
+        case SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
@@ -242,6 +242,20 @@ struct BrowserViewControllerState: ScreenState {
                 shouldShowReaderModeBarSummarizerButton: false,
                 browserViewType: state.browserViewType,
                 microsurveyState: state.microsurveyState
+            )
+        case SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(
+                    .summarizer(
+                        config: action.summarizerConfig,
+                        trigger: .readerModeBarButton
+                    )
+                )
             )
         default:
             return passthroughState(from: state, action: action)

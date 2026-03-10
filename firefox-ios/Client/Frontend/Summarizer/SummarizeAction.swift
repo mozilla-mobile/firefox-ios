@@ -24,8 +24,8 @@ struct SummarizeAction: Action {
 }
 
 enum SummarizeMiddlewareActionType: ActionType {
-    case configuredSummarizerForShakeMotion
-    case configuredSummarizerForReaderModeButton
+    case triggerSummarizationFromShakeMotion
+    case triggerSummarizationFromReaderModeBarButton
+    case showReaderModeBarSummarizerButton
     case summarizerNotAvailable
-    case configuredSummarizerForTapOnReaderModeButton
 }
