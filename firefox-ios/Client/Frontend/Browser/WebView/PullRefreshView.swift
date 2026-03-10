@@ -119,13 +119,13 @@ class PullRefreshView: UIView,
             updateElementAlpha()
         }
 
-        if refreshIconHasFocus {
-            refreshIconHasFocus = false
-            easterEggGif?.removeFromSuperview()
-            easterEggGif = nil
-            scrollObserver?.invalidate()
-            triggerReloadAnimation()
-        }
+        guard refreshIconHasFocus else { return }
+
+        refreshIconHasFocus = false
+        easterEggGif?.removeFromSuperview()
+        easterEggGif = nil
+        scrollObserver?.invalidate()
+        triggerReloadAnimation()
     }
 
     private func handleScrollViewDragging() {
