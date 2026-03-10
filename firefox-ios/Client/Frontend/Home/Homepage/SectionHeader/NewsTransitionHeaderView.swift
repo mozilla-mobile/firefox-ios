@@ -15,7 +15,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         static let transitionDistance: CGFloat = 96
     }
 
-    private lazy var newsAffordanceContentView: NewsAffordanceContentView = .build()
+    private lazy var newsAffordanceContentView: NewsAffordanceHeaderView = .build()
     private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
 
     private var progress: CGFloat = 0

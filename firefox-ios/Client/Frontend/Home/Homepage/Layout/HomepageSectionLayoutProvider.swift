@@ -899,7 +899,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
             } else {
                 let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
-                header.configure(theme: LightTheme())
+                header.applyTheme(theme: LightTheme())
                 headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
             }
         }

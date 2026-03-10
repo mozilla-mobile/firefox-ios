@@ -525,7 +525,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(header is LabelButtonHeaderView)
     }
 
-    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsAffordanceHeaderView() async throws {
+    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsTransitionHeaderView() async throws {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             throw XCTSkip("News affordance is phone-only.")
         }
@@ -549,7 +549,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
 
-        XCTAssertTrue(header is NewsAffordanceHeaderView)
+        XCTAssertTrue(header is NewsTransitionHeaderView)
     }
 
     private func createSubject(

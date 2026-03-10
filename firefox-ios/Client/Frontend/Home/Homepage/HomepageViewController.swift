@@ -718,13 +718,6 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func configureNewsAffordanceHeader(
-        with newsAffordanceHeaderView: NewsAffordanceHeaderView
-    ) -> NewsAffordanceHeaderView {
-        newsAffordanceHeaderView.configure(theme: currentTheme)
-        return newsAffordanceHeaderView
-    }
-
     private func configureNewsTransitionHeader(
         with collectionView: UICollectionView,
         at indexPath: IndexPath,
