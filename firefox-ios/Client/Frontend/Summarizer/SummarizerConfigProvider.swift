@@ -18,15 +18,15 @@ struct DefaultSummarizerConfigProvider: SummarizerConfigProvider {
         static let languageTag = "**{lang}**"
         static let enLocale = Locale(identifier: "en")
         static let englishLanguage = "English"
+        static let defaultSources: [any SummarizerConfigSourceProtocol] = [
+            UserSummarizerConfigSource(),
+            RemoteSummarizerConfigSource(),
+            DefaultSummarizerConfigSource(),
+        ]
     }
     private let sources: [any SummarizerConfigSourceProtocol]
-    private static let defaultSources: [any SummarizerConfigSourceProtocol] = [
-        UserSummarizerConfigSource(),
-        RemoteSummarizerConfigSource(),
-        DefaultSummarizerConfigSource(),
-    ]
 
-    init(sources: [any SummarizerConfigSourceProtocol] = Self.defaultSources) {
+    init(sources: [any SummarizerConfigSourceProtocol] = Constants.defaultSources) {
         self.sources = sources
     }
 
