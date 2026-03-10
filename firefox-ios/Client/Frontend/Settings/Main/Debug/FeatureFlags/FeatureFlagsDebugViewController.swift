@@ -21,6 +21,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     override func generateSettings() -> [SettingSection] {
         return [
             generateFeatureFlagToggleSettings(),
+            generateUnsplashKeySettings(),
             generateDefaultBrowserStatusDisplay(),
             generateFeatureFlagList()
         ]
@@ -312,6 +313,30 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         return SettingSection(
             title: nil,
             children: children
+        )
+    }
+
+    private func generateUnsplashKeySettings() -> SettingSection {
+        let keys: [(title: String, prefKey: String)] = [
+            ("Unsplash App ID", PrefsKeys.CustomTheming.unsplashAppId),
+            ("Unsplash Access Key", PrefsKeys.CustomTheming.unsplashAccessKey),
+            ("Unsplash Secret Key", PrefsKeys.CustomTheming.unsplashSecretKey)
+        ]
+        let rows: [Setting] = keys.map { item in
+            let saved = UserDefaults.standard.string(forKey: item.prefKey) ?? ""
+            let display = saved.isEmpty ? "(not set)" : saved
+            return UnsplashKeyTextSetting(
+                title: format(string: "\(item.title): \(display)"),
+                keyTitle: item.title,
+                prefKey: item.prefKey,
+                theme: themeManager.getCurrentTheme(for: windowUUID)
+            ) { [weak self] in
+                self?.reloadView()
+            }
+        }
+        return SettingSection(
+            title: NSAttributedString(string: "Custom Theming — Unsplash Keys"),
+            children: rows
         )
     }
 

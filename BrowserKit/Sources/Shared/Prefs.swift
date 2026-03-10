@@ -100,6 +100,12 @@ public struct PrefsKeys {
         public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
     }
 
+    public struct CustomTheming {
+        public static let unsplashAppId = "CustomThemingUnsplashAppId"
+        public static let unsplashAccessKey = "CustomThemingUnsplashAccessKey"
+        public static let unsplashSecretKey = "CustomThemingUnsplashSecretKey"
+    }
+
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let DebugSuffixKey = "DebugKey"
