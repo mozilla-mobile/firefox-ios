@@ -13,7 +13,7 @@ struct DefaultQuickAnswersServiceTests {
     func test_record_returnsExpectCallsAndResults() async throws {
         let engine = MockTranscriptionEngine()
         engine.resultsToYield = [
-            SpeechResult(text: "What is the waether", isFinal: false),
+            SpeechResult(text: "What is the weather", isFinal: false),
             SpeechResult(text: "today?", isFinal: true)
         ]
         let subject = DefaultQuickAnswersService(engine: engine)

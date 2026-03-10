@@ -10,7 +10,6 @@ import Foundation
 /// Engine selection
 /// - iOS 26+ uses `SpeechAnalyzerEngine`.
 /// - Earlier versions use `SFSpeechRecognizerEngine`.
-
 @MainActor
 final class DefaultQuickAnswersService: QuickAnswersService {
     enum RecordingState: Equatable {
@@ -75,10 +74,9 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     ) {
         recordingTask?.cancel()
         recordingTask = Task { [weak self] in
-            guard let self else { return }
             do {
                 try Task.checkCancellation()
-                try await self.engine.start(continuation: continuation)
+                try await self?.engine.start(continuation: continuation)
             } catch is CancellationError {
                 continuation.finish()
             } catch {
