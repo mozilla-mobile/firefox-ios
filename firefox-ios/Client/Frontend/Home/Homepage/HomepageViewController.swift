@@ -62,6 +62,14 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    private var shouldUseNewsTransitionHeader: Bool {
+        let scrollDirection: ScrollDirection = featureFlags.getCustomState(for: .homepageStoriesScrollDirection)
+                                               ?? .baseline
+        let isStoriesScrollDirectionVertical = scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
+        let isNewsTransitionEnabled = featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
+        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
+    }
+
     private var availableWidth: CGFloat {
         return view.frame.size.width
     }
@@ -250,6 +258,7 @@ final class HomepageViewController: UIViewController,
             return
         }
         collectionView?.contentOffset.y = homepageScrollOffset
+        updateNewsTransitionHeaderProgress()
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -284,6 +293,8 @@ final class HomepageViewController: UIViewController,
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
+        updateNewsTransitionHeaderProgress()
+
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -467,7 +478,7 @@ final class HomepageViewController: UIViewController,
         )
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
-            cellType: NewsAffordanceHeaderView.self
+            cellType: NewsTransitionHeaderView.self
         )
 
         collectionView.keyboardDismissMode = .onDrag
@@ -668,15 +679,16 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               homepageState.merinoState.sectionHeaderState.style == .newsAffordance {
-                guard let newsAffordanceHeaderView = collectionView.dequeueSupplementary(
+               homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+               shouldUseNewsTransitionHeader {
+                guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
                     of: kind,
-                    cellType: NewsAffordanceHeaderView.self,
+                    cellType: NewsTransitionHeaderView.self,
                     for: indexPath
                 ) else {
                     return UICollectionReusableView()
                 }
-                return configureNewsAffordanceHeader(with: newsAffordanceHeaderView)
+                return configureNewsTransitionHeader(with: newsTransitionHeaderView)
             }
 
             guard let sectionHeaderView = collectionView.dequeueSupplementary(
@@ -698,6 +710,18 @@ final class HomepageViewController: UIViewController,
     ) -> NewsAffordanceHeaderView {
         newsAffordanceHeaderView.configure(theme: currentTheme)
         return newsAffordanceHeaderView
+    }
+
+    private func configureNewsTransitionHeader(
+        with newsTransitionHeaderView: NewsTransitionHeaderView
+    ) -> NewsTransitionHeaderView {
+        newsTransitionHeaderView.configure(
+            state: homepageState.merinoState.sectionHeaderState,
+            textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
+            theme: currentTheme
+        )
+        newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
+        return newsTransitionHeaderView
     }
 
     private func configureSectionHeader(
@@ -749,6 +773,35 @@ final class HomepageViewController: UIViewController,
         default:
             return nil
         }
+    }
+
+    private func updateNewsTransitionHeaderProgress() {
+        guard homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+              shouldUseNewsTransitionHeader,
+              let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 {
+                      return true
+                  }
+                  return false
+              }),
+              let headerView = collectionView.supplementaryView(
+                  forElementKind: UICollectionView.elementKindSectionHeader,
+                  at: IndexPath(item: 0, section: pocketSectionIndex)
+              ) as? NewsTransitionHeaderView
+        else {
+            return
+        }
+
+        headerView.setTransitionProgress(newsTransitionProgress())
+    }
+
+    private func newsTransitionProgress() -> CGFloat {
+        guard let collectionView else { return 0 }
+
+        let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        let progress = normalizedOffset / NewsTransitionHeaderView.UX.transitionDistance
+        return min(max(progress, 0), 1)
     }
 
     // MARK: - Screenshotable

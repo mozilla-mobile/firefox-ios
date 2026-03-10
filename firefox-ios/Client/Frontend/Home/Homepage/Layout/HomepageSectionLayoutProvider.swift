@@ -893,9 +893,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         case .newsAffordance:
-            let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(theme: LightTheme())
-            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+            if shouldUseNewsAffordance {
+                let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
+                header.configure(state: headerState, textColor: .black, theme: LightTheme())
+                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+            } else {
+                let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
+                header.configure(theme: LightTheme())
+                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+            }
         }
 
         headerHeightCache[cacheKey] = headerHeight
