@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 enum SpeechError: Error, Equatable {
+    case alreadyRecording
     case failedToAllocateBuffer
     case noAudioFormat
     case noInputContinuation

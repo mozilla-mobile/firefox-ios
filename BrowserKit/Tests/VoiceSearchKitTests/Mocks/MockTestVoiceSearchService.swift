@@ -4,7 +4,7 @@
 
 @testable import VoiceSearchKit
 
-final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable {
+final class MockTestVoiceSearchService: QuickAnswersService, @unchecked Sendable {
     var speechResults: [SpeechResult] = []
     var searchResult: Result<SearchResult, SearchResultError> = .success(.empty())
     var shouldThrowSpeechError = false
@@ -12,7 +12,7 @@ final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable 
     var stopRecordingCalledCount = 0
     var searchCalledCount = 0
 
-    func recordVoice() -> AsyncThrowingStream<SpeechResult, Error> {
+    func record() async throws -> AsyncThrowingStream<SpeechResult, Error> {
         recordVoiceCalledCount += 1
         return AsyncThrowingStream { continuation in
             Task {
@@ -30,7 +30,7 @@ final class MockTestVoiceSearchService: VoiceSearchService, @unchecked Sendable 
         }
     }
 
-    func stopRecordingVoice() {
+    func stopRecording() async throws {
         stopRecordingCalledCount += 1
     }
 

@@ -5,7 +5,7 @@
 import Foundation
 
 /// A Mock Service to drive UI implementation.
-struct MockVoiceSearchService: VoiceSearchService {
+struct MockQuickAnswersService: QuickAnswersService {
     private let recordPhrase: [String] = [
         "What",
         "is",
@@ -17,7 +17,7 @@ struct MockVoiceSearchService: VoiceSearchService {
     private let throwRecordVoiceError = false
     private let throwSearchError = false
 
-    func recordVoice() -> AsyncThrowingStream<SpeechResult, Error> {
+    func record() -> AsyncThrowingStream<SpeechResult, Error> {
         return AsyncThrowingStream<SpeechResult, Error> { continuation in
             Task {
                 if throwRecordVoiceError {
@@ -34,7 +34,7 @@ struct MockVoiceSearchService: VoiceSearchService {
         }
     }
 
-    func stopRecordingVoice() {}
+    func stopRecording() {}
 
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
         try? await Task.sleep(nanoseconds: 200_000_000)
