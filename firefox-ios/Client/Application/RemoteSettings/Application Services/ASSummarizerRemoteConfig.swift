@@ -18,15 +18,25 @@ final class ASSummarizerRemoteConfig: Sendable {
     private let service: RemoteSettingsService
     private let rsClient: RemoteSettingsClient?
     private let profile: Profile
+    private let summarizerNimbusUtils: SummarizerNimbusUtils
+    private static let expansionTag = "expansion"
 
-    init?(profile: Profile = AppContainer.shared.resolve()) {
+    init?(
+        profile: Profile = AppContainer.shared.resolve(),
+        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+    ) {
         self.profile = profile
         self.service = profile.remoteSettingsService
         self.rsClient = ASRemoteSettingsCollection.summarizerModelsConfig.makeClient()
+        self.summarizerNimbusUtils = summarizerNimbusUtils
     }
 
     func fetchSummarizerConfig(_ model: SummarizerModel, for contentType: SummarizationContentType) -> SummarizerConfig? {
-        let recordName = "\(model.rawValue)-\(contentType.rawValue)"
+        let recordName: String = if summarizerNimbusUtils.isLanguageExpansionEnabled {
+            "\(model.rawValue)-\(contentType.rawValue)-\(Self.expansionTag)"
+        } else {
+            "\(model.rawValue)-\(contentType.rawValue)"
+        }
         let records = getRecords()
         guard let record = records.first(where: { $0.name == recordName }) else { return nil }
         return SummarizerConfig(
