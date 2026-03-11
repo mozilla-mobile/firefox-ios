@@ -14,10 +14,7 @@ final class TermsOfUseLinkViewController: UIViewController,
     weak var coordinator: TermsOfUseCoordinatorDelegate?
 
     private struct UX {
-        static let headerHeight: CGFloat = 44
-        static let backButtonLeading: CGFloat = 8
         static let progressBarHeight: CGFloat = 2
-        static let backArrowImage = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
     }
 
     private let url: URL
@@ -33,22 +30,6 @@ final class TermsOfUseLinkViewController: UIViewController,
 
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.isHidden = true
-    }
-
-    private lazy var header: UIView = .build { view in
-        view.backgroundColor = self.currentTheme().colors.layer1
-    }
-
-    private lazy var backButton: UIButton = .build { button in
-        button.setImage(UX.backArrowImage.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        button.imageView?.contentMode = .scaleAspectFit
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
-        button.setTitle(TermsOfUse.BackButton, for: .normal)
-        button.setTitleColor(self.currentTheme().colors.actionPrimary, for: .normal)
-        button.tintColor = self.currentTheme().colors.actionPrimary
-        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
     private lazy var webView: WKWebView = {
@@ -89,26 +70,23 @@ final class TermsOfUseLinkViewController: UIViewController,
     }
 
     private func setupViews() {
-        view.addSubview(header)
-        header.addSubview(backButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: TermsOfUse.CloseButton,
+            style: .plain,
+            target: self,
+            action: #selector(closeTapped)
+        )
+
+        view.addSubview(progressBar)
         view.addSubview(webView)
-        header.addSubview(progressBar)
-
+    
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.topAnchor),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.heightAnchor.constraint(equalToConstant: UX.headerHeight),
-
-            backButton.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: UX.backButtonLeading),
-            backButton.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-
-            progressBar.leadingAnchor.constraint(equalTo: header.leadingAnchor),
-            progressBar.trailingAnchor.constraint(equalTo: header.trailingAnchor),
-            progressBar.bottomAnchor.constraint(equalTo: header.bottomAnchor),
+            progressBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             progressBar.heightAnchor.constraint(equalToConstant: UX.progressBarHeight),
-
-            webView.topAnchor.constraint(equalTo: header.bottomAnchor),
+    
+            webView.topAnchor.constraint(equalTo: progressBar.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -116,8 +94,9 @@ final class TermsOfUseLinkViewController: UIViewController,
     }
 
     func applyTheme() {
-        view.backgroundColor = currentTheme().colors.layer1
-        applyProgressBarTheme(theme: currentTheme())
+        let theme = currentTheme()
+        view.backgroundColor = theme.colors.layer1
+        applyProgressBarTheme(theme: theme)
     }
 
     @objc private func closeTapped() {

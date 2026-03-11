@@ -1112,8 +1112,9 @@ final class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID,
             themeManager: themeManager
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        router.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        router.present(navController, animated: true)
     }
 
     func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
