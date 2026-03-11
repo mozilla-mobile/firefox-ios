@@ -3684,7 +3684,9 @@ class BrowserViewController: UIViewController,
     fileprivate func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else { return }
         // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
-        if !isShowingJSPromptAlert() {
+        // Avoid dismissing Terms of Use sheet when app is opened from deep links
+        if !isShowingJSPromptAlert(),
+           !(navigationController?.presentedViewController is TermsOfUseViewController) {
             currentViewController.dismiss(animated: true, completion: nil)
         }
 
