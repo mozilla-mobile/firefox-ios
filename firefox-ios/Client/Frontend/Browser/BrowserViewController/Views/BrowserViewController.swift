@@ -2793,6 +2793,7 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Small.notificationDotFill : nil
         }
 
+        var lockIconButtonA11yId: String?
         var lockIconImageName: String?
         var lockIconNeedsTheming = true
 
@@ -2800,6 +2801,9 @@ class BrowserViewController: UIViewController,
             lockIconImageName = hasSecureContent ?
                 StandardImageIdentifiers.Small.shieldCheckmarkFill :
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+            lockIconButtonA11yId = hasSecureContent ?
+                AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
+                AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
             lockIconImageName = isWebsiteMode ? lockIconImageName : nil
@@ -2811,6 +2815,7 @@ class BrowserViewController: UIViewController,
             isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
             canGoBack: tab.canGoBack,
             canGoForward: tab.canGoForward,
+            lockIconButtonA11yId: lockIconButtonA11yId,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
@@ -4903,7 +4908,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
-            if selectedTab.temporaryDocument != nil, selectedTab.url?.absoluteString != "about:blank" {
+            // Do not reload when it's an about:blank page or has a temporary document
+            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
                 needsReload = false
             }
         }

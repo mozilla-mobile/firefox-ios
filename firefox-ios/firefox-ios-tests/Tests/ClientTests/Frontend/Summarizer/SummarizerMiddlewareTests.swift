@@ -11,6 +11,10 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
     private var mockSummarizationChecker: MockSummarizationChecker!
+    private var mockSummarizerNimbusUtils: MockSummarizerNimbusUtils!
+    private var mockSummarizerConfigProvider: MockSummarizerConfigProvider!
+    private var mockSummarizerLanguageProvider: MockSummarizerLanguageProvider!
+    private let mockURL = URL(string: "https://example.com")!
     private var mockProfile: MockProfile!
     private var mockStore: MockStoreForMiddleware<AppState>!
 
@@ -23,6 +27,9 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             tabManager: mockTabManager
         )
         mockSummarizationChecker = MockSummarizationChecker()
+        mockSummarizerNimbusUtils = MockSummarizerNimbusUtils()
+        mockSummarizerConfigProvider = MockSummarizerConfigProvider()
+        mockSummarizerLanguageProvider = MockSummarizerLanguageProvider()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -34,45 +41,18 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         mockProfile = nil
         mockWindowManager = nil
         mockSummarizationChecker = nil
+        mockSummarizerNimbusUtils = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
     }
 
-    // TODO(FXIOS-13126): Fix and uncomment this test
-//    func test_shakeMotionAction_withFeatureFlagEnabled_dispatchesMiddlewareAction() throws {
-//        setupNimbusHostedSummarizerTesting(isEnabled: true)
-//        setupWebViewForTabManager()
-//        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
-//
-//        let subject = createSubject()
-//
-//        let action = GeneralBrowserAction(
-//            windowUUID: .XCTestDefaultUUID,
-//            actionType: GeneralBrowserActionType.shakeMotionEnded
-//        )
-//        let expectation = XCTestExpectation(description: "General browser action initialize dispatched")
-//
-//        mockStore.dispatchCalled = {
-//            expectation.fulfill()
-//        }
-//
-//        subject.summarizerProvider(AppState(), action)
-//
-//        wait(for: [expectation], timeout: 1)
-//
-//        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
-//        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
-//
-//        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.configuredSummarizer)
-//        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-//        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
-//    }
-
-    func test_shakeMotionAction_failsSummarizerCheck_doesNotDispatchMiddlewareAction() throws {
-        setupNimbusHostedSummarizerTesting(isEnabled: true)
+    func test_shakeMotionAction_withValidConfiguration_dispatchesMiddlewareAction() throws {
         setupWebViewForTabManager()
-        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
 
         let subject = createSubject()
 
@@ -81,7 +61,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: GeneralBrowserActionType.shakeMotionEnded
         )
         let expectation = XCTestExpectation(description: "General browser action initialize dispatched")
-        expectation.isInverted = true
+
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
@@ -90,12 +70,17 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation], timeout: 1)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+
+        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.configuredSummarizer)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        // the summarizer provider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.summarizerProvider = { _, _ in }
     }
 
     func test_shakeMotionAction_withoutWebView_doesNotDispatchMiddlewareAction() throws {
-        setupNimbusHostedSummarizerTesting(isEnabled: true)
         let subject = createSubject()
 
         let action = GeneralBrowserAction(
@@ -113,50 +98,133 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        // the summarizer provider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    // MARK: - makeConfiguration
+    func test_makeConfiguration_withSummarizerFeatureToggledOff_returnsNil() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = false
+
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNil(config)
         XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 0)
     }
 
-    func test_shakeMotionAction_withFeatureFlagDisabled_doesNotDispatchMiddlewareAction() throws {
-        setupNimbusHostedSummarizerTesting(isEnabled: false)
+    func test_makeConfiguration_withSummarizationCheckFailed_returnsNil() async {
         let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
 
-        let action = GeneralBrowserAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.shakeMotionEnded
-        )
-        let expectation = XCTestExpectation(description: "General browser action initialize dispatched")
-        expectation.isInverted = true
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
 
-        subject.summarizerProvider(AppState(), action)
+        XCTAssertNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+    }
 
-        wait(for: [expectation], timeout: 1)
+    func test_makeConfiguration_withLanguageExpansionEnabled_localeNotSupported_returnsNil() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isLanguageExpansionEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = false
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 0)
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        XCTAssertEqual(mockSummarizerNimbusUtils.languageExpansionConfigurationCallCount, 1)
+        XCTAssertEqual(mockSummarizerLanguageProvider.getLanguageCallCount, 1)
+        XCTAssertEqual(mockSummarizerConfigProvider.getConfigCalledCount, 0)
+    }
+
+    func test_makeConfiguration_withLanguageExpansionEnabled_supportedLocale_returnsConfig() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isLanguageExpansionEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNotNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        XCTAssertEqual(mockSummarizerNimbusUtils.languageExpansionConfigurationCallCount, 1)
+        XCTAssertEqual(mockSummarizerLanguageProvider.getLanguageCallCount, 1)
+        XCTAssertEqual(mockSummarizerConfigProvider.getConfigCalledCount, 1)
+    }
+
+    func test_makeConfiguration_withSummarizeFeatureEnabled_notSupportedLocale_returnsNil() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerNimbusUtils.isLanguageExpansionEnabled = false
+        mockSummarizerLanguageProvider.shouldReturnLocale = false
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        XCTAssertEqual(mockSummarizerNimbusUtils.languageExpansionConfigurationCallCount, 0)
+        XCTAssertEqual(mockSummarizerLanguageProvider.getLanguageCallCount, 1)
+        XCTAssertEqual(mockSummarizerConfigProvider.getConfigCalledCount, 0)
+    }
+
+    func test_makeConfiguration_withSummarizeFeatureEnabled_supportedLocale_returnsConfig() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerNimbusUtils.isLanguageExpansionEnabled = false
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNotNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        XCTAssertEqual(mockSummarizerNimbusUtils.languageExpansionConfigurationCallCount, 0)
+        XCTAssertEqual(mockSummarizerLanguageProvider.getLanguageCallCount, 1)
+        XCTAssertEqual(mockSummarizerConfigProvider.getConfigCalledCount, 1)
+    }
+
+    func test_makeConfiguration_withLanguageExpansionDisabledAndSummarizeFeatureDisabled_returnsNil() async {
+        let subject = createSubject()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = false
+        mockSummarizerNimbusUtils.isLanguageExpansionEnabled = false
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+
+        let config = await subject.makeConfiguration(from: MockWKWebView(mockURL))
+
+        XCTAssertNil(config)
+        XCTAssertEqual(mockSummarizationChecker.checkCalledCount, 1)
+        XCTAssertEqual(mockSummarizerNimbusUtils.languageExpansionConfigurationCallCount, 0)
+        XCTAssertEqual(mockSummarizerConfigProvider.getConfigCalledCount, 0)
     }
 
     // MARK: - Helpers
     private func createSubject() -> SummarizerMiddleware {
-        return SummarizerMiddleware(
+        let subject = SummarizerMiddleware(
             logger: MockLogger(),
             windowManager: mockWindowManager,
-            summarizationChecker: mockSummarizationChecker
+            profile: mockProfile,
+            summarizerNimbusUtility: mockSummarizerNimbusUtils,
+            summarizationChecker: mockSummarizationChecker,
+            summarizerLanguageProvider: mockSummarizerLanguageProvider,
+            summarizerConfigProvider: mockSummarizerConfigProvider
         )
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     private func setupWebViewForTabManager() {
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
-    }
-
-    private func setupNimbusHostedSummarizerTesting(isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
-        }
     }
 
     // MARK: StoreTestUtility

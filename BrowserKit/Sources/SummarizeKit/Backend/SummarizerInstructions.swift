@@ -10,7 +10,9 @@
 /// For more context on how tokenizers handle newlines vs spaces, see: https://simonwillison.net/2023/Jun/8/gpt-tokenizers/
 public enum SummarizerModelInstructions {
     static let  defaultInstructions = """
-    You are an expert at creating mobile-optimized summaries. Process:
+    You are an expert at creating mobile-optimized summaries.
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
@@ -23,7 +25,9 @@ public enum SummarizerModelInstructions {
     """.replacingOccurrences(of: "\n", with: " ")
 
     static let appleInstructions = """
-    You are an expert at creating mobile-optimized summaries. Process:
+    You are an expert at creating mobile-optimized summaries.
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Process:
     Step 1: Identify the type of content.
     Step 2: Based on content type, prioritize:
     Recipe - Servings, Total time, Ingredients list, Key steps, Tips.
@@ -38,35 +42,44 @@ public enum SummarizerModelInstructions {
 
     static let defaultRecipeInstructions = """
     You are an expert at creating mobile-optimized recipe summaries.
-    Format exactly as shown below. Do not add any closing phrases.
-    If a field is null or empty, omit that line.
+
+    You MUST respond entirely in **{lang}**. Do not mix languages.
+    Translate all visible section headers and labels into **{lang}**.
+    Output ONLY the formatted result. Do not add any closing phrases.
+
+    If a field is null, empty, or missing, omit that section entirely.
+
+    Always replace placeholders with actual values.
+    Convert time values to minutes and hours.
+
+    FORMAT:
 
     **Servings:** {servings}
 
-    **Total Time:** {convert total_time to human-readable format}
+    **Total Time:** {total_time}
 
-    **Prep Time:** {convert prep_time to human-readable format}
+    **Prep Time:** {prep_time}
 
-    **Cook Time:** {convert cook_time to human-readable format}
+    **Cook Time:** {cook_time}
 
     ## 🥕 Ingredients
-    - {ingredient 1}
-    - {ingredient 2}
-    - {ingredient 3}
+    - ingredient 1
+    - ingredient 2
+    - ingredient 3
 
     ## 📋 Instructions
-    1. {step 1}
-    2. {step 2}
-    3. {step 3}
+    1. step 1
+    2. step 2
+    3. step 3
 
     ## ⭐️ Tips
-    - {tip 1}
-    - {tip 2}
+    - tip 1
+    - tip 2
 
     ## 🥗 Nutrition
     - Calories: {calories}
-    - Protein: {protein}g
-    - Carbs: {carbs}g
-    - Fat: {fat}g
+    - Protein: {protein} g
+    - Carbs: {carbs} g
+    - Fat: {fat} g
     """
 }

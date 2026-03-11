@@ -529,8 +529,9 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       password && Logic.isProbablyANewPasswordField(password);
     const isPasswordField = field === password;
     const isLoginField = field === username || isPasswordField;
+    let isEmail = Logic.isInferredEmailField(field);
 
-    if(!isLoginField) {
+    if(!isLoginField && !isEmail) {
       return ;
     }
 
@@ -545,13 +546,13 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "generatePassword",
       });
-    } else if (!formHasNewPassword && (password || updatedPasswordManagerEnabled)) {
+    } else if (isLoginField && !formHasNewPassword && (password || updatedPasswordManagerEnabled)) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
         fieldType:
           field === username ? FocusFieldType.username : FocusFieldType.password,
       });
-    } else if (Logic.isInferredEmailField(field)) {
+    } else if (isEmail) {
         pendingRelayEmailField = field;
         webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
             type: "fieldType",

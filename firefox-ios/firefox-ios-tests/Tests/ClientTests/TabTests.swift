@@ -111,6 +111,65 @@ class TabTests: XCTestCase {
         XCTAssertTrue(tab.isDownloadingDocument())
     }
 
+    func testGetTabTrayTitle_whenDisplayTitleIsNotEmpty_returnsDisplayTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.mockTitle = "Test Page Title"
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "Test Page Title")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andBaseDomainExists_returnsBaseDomain() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "https://google.com")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "https://google.com")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andBaseDomainContainsLocal_returnsLegacyHomeTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "internal://local/about/home")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, .LegacyAppMenu.AppMenuOpenHomePageTitleString)
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andInternalAboutURL_returnsAboutComponent() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "file:///about/test")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "test")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andURLIsNil_returnsBlankTabsTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = nil
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, .TabsTray.TabsSelectorBlankTabsTitle)
+    }
+
     // MARK: - isSameTypeAs
     @MainActor
     func testIsSameTypeAs_trueForTwoPrivateTabs_oneNormal_oneOlder() {
