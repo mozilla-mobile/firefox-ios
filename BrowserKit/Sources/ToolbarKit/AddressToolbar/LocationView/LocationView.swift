@@ -195,6 +195,7 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
+        formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
@@ -415,10 +416,10 @@ final class LocationView: UIView,
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
+
         updateURLTextFieldLeadingConstraintBasedOnState()
 
         let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
-
         iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
@@ -549,6 +550,7 @@ final class LocationView: UIView,
 
     private func formatAndTruncateURLTextField() {
         guard !isEditing else { return }
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
