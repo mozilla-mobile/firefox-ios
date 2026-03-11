@@ -17,15 +17,23 @@ class LabelButtonHeaderView: UICollectionReusableView,
         static let bottomSpace: CGFloat = 16
         static let bottomButtonSpace: CGFloat = 6
         static let leadingInset: CGFloat = 0
-        static let blurCornerRadius: CGFloat = 12
-        static let blurHorizontalPadding: CGFloat = 10
-        static let blurVerticalPadding: CGFloat = 6
+        static let blurCornerRadius: CGFloat = 10
+        static let blurHorizontalPadding: CGFloat = 8
+        static let blurVerticalPadding: CGFloat = 4
     }
 
     // MARK: - UIElements
 
-    /// Frosted-glass background — visible only when `showsBlurBackground` is `true`
-    private lazy var blurBackgroundView: UIVisualEffectView = .build { view in
+    /// Frosted-glass pill behind the title label — visible only when `showsBlurBackground` is `true`
+    private lazy var titleBlurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemMaterial)
+        view.layer.cornerRadius = UX.blurCornerRadius
+        view.layer.masksToBounds = true
+        view.isHidden = true
+    }
+
+    /// Frosted-glass pill behind the "Show All" button — shown when `showsBlurBackground` is `true`
+    private lazy var buttonBlurView: UIVisualEffectView = .build { view in
         view.effect = UIBlurEffect(style: .systemMaterial)
         view.layer.cornerRadius = UX.blurCornerRadius
         view.layer.masksToBounds = true
@@ -75,31 +83,30 @@ class LabelButtonHeaderView: UICollectionReusableView,
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(moreButton)
 
-        addSubview(blurBackgroundView)
+        // Blur views sit behind the stack; stack is inserted last so it renders on top
+        addSubview(titleBlurView)
+        addSubview(buttonBlurView)
         addSubview(stackView)
 
+        let hPad = UX.blurHorizontalPadding
+        let vPad = UX.blurVerticalPadding
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
 
-            blurBackgroundView.topAnchor.constraint(
-                equalTo: stackView.topAnchor,
-                constant: -UX.blurVerticalPadding
-            ),
-            blurBackgroundView.leadingAnchor.constraint(
-                equalTo: stackView.leadingAnchor,
-                constant: -UX.blurHorizontalPadding
-            ),
-            blurBackgroundView.trailingAnchor.constraint(
-                equalTo: stackView.trailingAnchor,
-                constant: UX.blurHorizontalPadding
-            ),
-            blurBackgroundView.bottomAnchor.constraint(
-                equalTo: stackView.bottomAnchor,
-                constant: UX.blurVerticalPadding
-            )
+            // Title pill — hugs the titleLabel
+            titleBlurView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -vPad),
+            titleBlurView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -hPad),
+            titleBlurView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: hPad),
+            titleBlurView.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: vPad),
+
+            // Button pill — hugs the moreButton
+            buttonBlurView.topAnchor.constraint(equalTo: moreButton.topAnchor, constant: -vPad),
+            buttonBlurView.leadingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -hPad),
+            buttonBlurView.trailingAnchor.constraint(equalTo: moreButton.trailingAnchor, constant: hPad),
+            buttonBlurView.bottomAnchor.constraint(equalTo: moreButton.bottomAnchor, constant: vPad)
         ])
 
         // Setting custom values to resolve horizontal ambiguity
@@ -121,7 +128,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
         moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
-        blurBackgroundView.isHidden = true
+        titleBlurView.isHidden = true
+        buttonBlurView.isHidden = true
     }
 
     func configure(
@@ -145,7 +153,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
             )
         }
 
-        blurBackgroundView.isHidden = !state.showsBlurBackground
+        titleBlurView.isHidden = !state.showsBlurBackground
+        buttonBlurView.isHidden = !state.showsBlurBackground || state.isButtonHidden
 
         if let color = textColor {
             applyTextColors(color: color)
