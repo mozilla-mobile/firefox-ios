@@ -633,7 +633,10 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         subject.showPrivacyNoticeLink(url: url)
 
-        XCTAssertNotNil(mockRouter.presentedViewController as? TermsOfUseLinkViewController)
+        let navController = mockRouter.presentedViewController as? UINavigationController
+        let termsOfUseLinkVC = navController?.viewControllers.first as? TermsOfUseLinkViewController
+
+        XCTAssertNotNil(termsOfUseLinkVC)
         XCTAssertEqual(mockRouter.presentCalled, 1)
     }
 
