@@ -9,13 +9,12 @@ import LocalAuthentication
 
 @MainActor
 final class PrivateLockMiddleware: FeatureFlaggable {
-    
     private let prefs: Prefs
-    
+
     init(profile: Profile = AppContainer.shared.resolve()) {
         prefs = profile.prefs
     }
-    
+
     lazy var lockProvider: Middleware<AppState> = { state, action in
         if let action = action as? PrivateLockAction {
             self.resolveTabPrivateLockActions(action: action, state: state)
@@ -23,17 +22,18 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             self.resolveTabChange(action: action, state: state)
         }
     }
-    
+
     private func resolveTabPrivateLockActions(action: PrivateLockAction, state: AppState) {
         guard isPrivateLockFeatureEnabled() else {
             Self.unlock(windowUUID: action.windowUUID)
             return
         }
-        
+
         switch action.actionType {
         case PrivateLockActionType.requestAuth(let reason):
             let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
-            guard browserState?.privateLockState.auth != .authenticating else { return }
+            let lockState = browserState?.privateLockState
+            guard lockState?.auth != .authenticating, lockState?.access == .locked else { return }
             auth(reason: reason, windowUUID: action.windowUUID)
         case PrivateLockActionType.setTrayDisplayContext:
             store.dispatch(PrivateLockMiddlewareAction(
@@ -63,7 +63,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             break
         }
     }
-    
+
     private func resolveTabChange(action: TabTrayAction, state: AppState) {
         switch action.actionType {
         case TabTrayActionType.changePanel:
@@ -74,15 +74,14 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             break
         }
     }
-    
+
     private func resolveTabTrayPanelTypeChange(panel: TabTrayPanelType?,
                                                windowUUID: WindowUUID,
                                                state: AppState) {
-        
         guard let panelType = panel,
               let state = browserState(from: state, windowUUID: windowUUID)
         else { return }
-        
+
         let privateLockEnabled = isPrivateLockFeatureEnabled()
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
@@ -90,21 +89,20 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             trayPanelType: panel,
             privateLockEnabled: privateLockEnabled
         ))
-        
+
         guard state.didBecomePrivateVisible(afterChangingPanelTo: panelType) else { return }
         guard privateLockEnabled else { return }
         guard state.privateLockState.auth != .authenticating else { return }
         guard state.privateLockState.shouldRelockByTime else { return }
-        
+
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
           actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
           privatePanelLockState: state.privateLockState.locked()
         ))
     }
-    
+
     private func auth(reason: String, windowUUID: WindowUUID) {
-        
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
           actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
@@ -112,7 +110,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                                                                                    auth: .authenticating,
                                                                                    lastUnlockedAt: nil)
         ))
-        
+
         let context = LAContext()
         context.localizedCancelTitle = "Cancel"
 
@@ -136,7 +134,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             }
         }
     }
-    
+
     private static func lock(triggeredByFailure: Bool, windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
@@ -147,7 +145,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                                                                   lastUnlockedAt: nil)
         ))
     }
-    
+
     private static func unlock(windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
@@ -157,11 +155,11 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                                                                                      lastUnlockedAt: Date())
         ))
     }
-    
+
     private func isPrivateLockFeatureEnabled() -> Bool {
         PrivateTabsLockFeatureGate(prefs: prefs).isEnabled
     }
-    
+
     private func browserState(from appState: AppState, windowUUID: WindowUUID) -> BrowserViewControllerState? {
         appState.screenState(
             BrowserViewControllerState.self,

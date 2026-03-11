@@ -5,14 +5,12 @@
 import UIKit
 
 final class PrivateTabsLockOverlayView: UIView {
-
     enum Mode: Equatable {
         case prompt
         case authenticating
         case failed
     }
 
-    var onUnlockTapped: (() -> Void)?
     var onRetryTapped: (() -> Void)?
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
@@ -29,7 +27,7 @@ final class PrivateTabsLockOverlayView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func render(access: BrowserViewControllerState.PrivateAccessState, auth: BrowserViewControllerState.PrivateAuthState) {
         switch access {
         case .unlocked:
@@ -84,10 +82,6 @@ final class PrivateTabsLockOverlayView: UIView {
 
         spinner.hidesWhenStopped = true
 
-        unlockButton.setTitle("Unlock", for: .normal)
-        unlockButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
-        unlockButton.addTarget(self, action: #selector(unlockTapped), for: .touchUpInside)
-
         retryButton.setTitle("Try Again", for: .normal)
         retryButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         retryButton.addTarget(self, action: #selector(retryTapped), for: .touchUpInside)
@@ -101,7 +95,6 @@ final class PrivateTabsLockOverlayView: UIView {
         stack.addArrangedSubview(titleLabel)
         stack.addArrangedSubview(subtitleLabel)
         stack.addArrangedSubview(spinner)
-        stack.addArrangedSubview(unlockButton)
         stack.addArrangedSubview(retryButton)
 
         addSubview(stack)
@@ -115,28 +108,7 @@ final class PrivateTabsLockOverlayView: UIView {
 
         apply(mode: .prompt)
     }
-    
-    private let unlockButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
 
-        var config = UIButton.Configuration.filled()
-        config.title = "Unlock"
-        config.baseBackgroundColor = UIColor.systemBlue
-        config.baseForegroundColor = .white
-        config.cornerStyle = .capsule
-        config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 28, bottom: 14, trailing: 28)
-
-        button.configuration = config
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.18
-        button.layer.shadowRadius = 10
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-
-        return button
-    }()
-    
     private let retryButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -162,24 +134,20 @@ final class PrivateTabsLockOverlayView: UIView {
         switch mode {
         case .prompt:
             spinner.stopAnimating()
-            unlockButton.isHidden = false
             retryButton.isHidden = true
             subtitleLabel.text = "Unlock with Face ID to view private tabs"
 
         case .authenticating:
             spinner.startAnimating()
-            unlockButton.isHidden = true
             retryButton.isHidden = true
             subtitleLabel.text = "Authenticating…"
 
         case .failed:
             spinner.stopAnimating()
-            unlockButton.isHidden = true
             retryButton.isHidden = false
             subtitleLabel.text = "Face ID failed. Try again."
         }
     }
 
-    @objc private func unlockTapped() { onUnlockTapped?() }
     @objc private func retryTapped() { onRetryTapped?() }
 }

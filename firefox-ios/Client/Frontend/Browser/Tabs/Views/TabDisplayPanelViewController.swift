@@ -29,6 +29,7 @@ final class TabDisplayPanelViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
+    private var privateLockAuthTask: Task<Void, Never>?
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -131,6 +132,12 @@ final class TabDisplayPanelViewController: UIViewController,
         shouldShowFadeView()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        privateLockAuthTask?.cancel()
+        privateLockAuthTask = nil
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
@@ -164,7 +171,7 @@ final class TabDisplayPanelViewController: UIViewController,
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
         setupFadeView()
-        
+
         view.addSubview(privateLockOverlay)
         NSLayoutConstraint.activate([
             privateLockOverlay.topAnchor.constraint(equalTo: view.topAnchor),
@@ -202,15 +209,14 @@ final class TabDisplayPanelViewController: UIViewController,
         view.subviews.forEach { $0.removeFromSuperview() }
         view.removeFromSuperview()
     }
-    
+
     private lazy var privateLockOverlay: PrivateTabsLockOverlayView = {
         let overlay = PrivateTabsLockOverlayView()
         overlay.isHidden = true
-        overlay.onUnlockTapped = { [weak self] in self?.startPrivateAuthFlow() }
         overlay.onRetryTapped = { [weak self] in self?.startPrivateAuthFlow() }
         return overlay
     }()
-    
+
     private func startPrivateAuthFlow() {
         store.dispatch(
             PrivateLockAction(
@@ -379,10 +385,12 @@ final class TabDisplayPanelViewController: UIViewController,
             applyTheme()
         }
     }
-    
+
     private func applyPrivateLockUI(_ lock: BrowserViewControllerState.PrivateLockDomainState?) {
-        guard let lock else {
+        guard panelType == .privateTabs, let lock else {
             privateLockOverlay.renderHidden()
+            privateLockAuthTask?.cancel()
+            privateLockAuthTask = nil
             return
         }
 
@@ -390,6 +398,23 @@ final class TabDisplayPanelViewController: UIViewController,
             access: lock.access,
             auth: lock.auth
         )
+
+        guard lock.access == .locked else {
+            privateLockAuthTask?.cancel()
+            privateLockAuthTask = nil
+            return
+        }
+
+        guard lock.auth == .idle else { return }
+
+        privateLockAuthTask?.cancel()
+        privateLockAuthTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 sec delay for better ux
+            guard !Task.isCancelled else { return }
+            guard let self else { return }
+            guard self.isViewLoaded, self.view.window != nil else { return }
+            self.startPrivateAuthFlow()
+        }
     }
 
     // MARK: - EmptyPrivateTabsViewDelegate

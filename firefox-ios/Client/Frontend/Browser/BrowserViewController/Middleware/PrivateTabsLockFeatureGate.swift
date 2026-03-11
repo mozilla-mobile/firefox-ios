@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 final class PrivateTabsLockFeatureGate: FeatureFlaggable {
-    
     private let prefs: Prefs
     init(prefs: Prefs) {
         self.prefs = prefs

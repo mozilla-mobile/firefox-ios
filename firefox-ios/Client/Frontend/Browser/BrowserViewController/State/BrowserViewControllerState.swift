@@ -37,23 +37,23 @@ struct BrowserViewControllerState: ScreenState {
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
     }
-    
+
     enum PrivateAccessState: Equatable {
         case locked
         case unlocked
     }
-    
+
     enum PrivateAuthState: Equatable {
         case idle
         case authenticating
         case failed
     }
-    
+
     enum TrayDisplayContext: Equatable {
         case page
         case tray
     }
-    
+
     struct PrivateLockDomainState: Equatable {
         var access: PrivateAccessState = .locked
         var auth: PrivateAuthState = .idle
@@ -64,7 +64,7 @@ struct BrowserViewControllerState: ScreenState {
             guard let lastUnlockedAt else { return true }
             return Date().timeIntervalSince(lastUnlockedAt) > relockInterval
         }
-        
+
         func copy(access: PrivateAccessState? = nil,
                   auth: PrivateAuthState? = nil,
                   lastUnlockedAt: Date? = nil) -> PrivateLockDomainState {
@@ -72,11 +72,11 @@ struct BrowserViewControllerState: ScreenState {
                                    auth: auth ?? self.auth,
                                    lastUnlockedAt: lastUnlockedAt ?? self.lastUnlockedAt)
         }
-        
+
         func locked() -> PrivateLockDomainState {
             copy(access: .locked)
         }
-        
+
         func withLastUnlocked(at: Date?) -> PrivateLockDomainState {
             PrivateLockDomainState(access: access, auth: auth, lastUnlockedAt: at)
         }
@@ -97,7 +97,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigationDestination: NavigationDestination?
     var privateLockState: PrivateLockDomainState
     var trayPanelType: TabTrayPanelType?
-    var trayDisplayContext: TrayDisplayContext = TrayDisplayContext.page
+    var trayDisplayContext = TrayDisplayContext.page
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = appState.screenState(
@@ -287,7 +287,7 @@ struct BrowserViewControllerState: ScreenState {
             return passthroughState(from: state, action: action)
         }
     }
-    
+
     @MainActor
     static func reduceStateForPrivateLockAction(
         action: PrivateLockMiddlewareAction,
@@ -313,11 +313,11 @@ struct BrowserViewControllerState: ScreenState {
             return state
         }
     }
-    
+
     func didBecomePrivateVisible(afterChangingPanelTo panelType: TabTrayPanelType) -> Bool {
         !isPrivateSurfaceVisible && panelType == .privateTabs
     }
-    
+
     private var isPrivateSurfaceVisible: Bool {
         trayPanelType == .privateTabs
     }
