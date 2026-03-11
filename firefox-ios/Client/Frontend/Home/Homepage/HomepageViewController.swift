@@ -225,7 +225,6 @@ final class HomepageViewController: UIViewController,
 
         let numberOfTilesPerRow = numberOfTilesPerRow(for: availableWidth)
         guard homepageState.topSitesState.numberOfTilesPerRow != numberOfTilesPerRow else {
-            updateNewsTransitionHeaderProgress()
             return
         }
 
@@ -236,8 +235,6 @@ final class HomepageViewController: UIViewController,
                 actionType: HomepageActionType.viewDidLayoutSubviews
             )
         )
-
-        updateNewsTransitionHeaderProgress()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -396,9 +393,6 @@ final class HomepageViewController: UIViewController,
             trackVisibleItemImpressions()
         }
         self.homepageState = state
-        collectionView?.collectionViewLayout.invalidateLayout()
-        collectionView?.layoutIfNeeded()
-        updateNewsTransitionHeaderProgress()
     }
 
     func unsubscribeFromRedux() {
@@ -784,6 +778,10 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    /// Reapplies scroll-based fade progress to the visible pocket header after scrolling or relayout.
+    /// This is a no-op unless the pocket section is present and the `NewsTransitionHeaderView` is able to transition
+    /// (the section label fallback header used when there is no room for the header to transition does not participate
+    /// in the transition)
     private func updateNewsTransitionHeaderProgress() {
         guard homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
               shouldUseNewsTransitionHeader,
@@ -810,6 +808,9 @@ final class HomepageViewController: UIViewController,
         headerView.setTransitionProgress(newsTransitionProgress())
     }
 
+    /// Returns whether the pocket header is currently in the affordance-height layout state.
+    /// We use the header height as the source of truth for whether the news affordance transition should be active
+    /// since it is only active when there is room for the affordance at the bottom of the unscrolled homepage
     private func isNewsTransitionEnabled(for collectionView: UICollectionView, at indexPath: IndexPath) -> Bool {
         let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
             ofKind: UICollectionView.elementKindSectionHeader,

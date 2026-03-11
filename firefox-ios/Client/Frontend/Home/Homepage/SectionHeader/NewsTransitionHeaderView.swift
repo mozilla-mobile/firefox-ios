@@ -25,7 +25,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        updateViewState()
+        updateViewState(forHeight: bounds.height)
     }
 
     required init?(coder: NSCoder) {
@@ -37,7 +37,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         progress = 0
         transitionEnabled = true
         sectionTitleHeaderView.prepareForReuse()
-        updateViewState()
+        updateViewState(forHeight: bounds.height)
     }
 
     func configure(
@@ -55,7 +55,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             theme: theme
         )
         sectionTitleHeaderView.moreButton.isHidden = true
-        updateViewState()
+        updateViewState(forHeight: bounds.height)
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -65,12 +65,12 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateViewState()
+        updateViewState(forHeight: bounds.height)
     }
 
     func setTransitionProgress(_ progress: CGFloat) {
         self.progress = min(max(progress, 0), 1)
-        updateViewState()
+        updateViewState(forHeight: bounds.height)
     }
 
     func applyTheme(theme: Theme) {
@@ -111,10 +111,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-    }
-
-    private func updateViewState() {
-        updateViewState(forHeight: bounds.height)
     }
 
     private func updateViewState(forHeight height: CGFloat) {

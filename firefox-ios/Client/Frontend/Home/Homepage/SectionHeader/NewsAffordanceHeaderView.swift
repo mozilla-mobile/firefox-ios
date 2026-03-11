@@ -52,9 +52,6 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     private lazy var newsLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .center
         label.text = .FirefoxHomepage.Pocket.NewsAffordanceLabel
     }
 
@@ -104,8 +101,5 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
             newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize),
             newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize),
         ])
-
-        newsLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        newsLabel.setContentHuggingPriority(.required, for: .vertical)
     }
 }
