@@ -85,7 +85,7 @@ final class TermsOfUseLinkViewController: UIViewController,
             progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             progressBar.heightAnchor.constraint(equalToConstant: UX.progressBarHeight),
-    
+
             webView.topAnchor.constraint(equalTo: progressBar.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
