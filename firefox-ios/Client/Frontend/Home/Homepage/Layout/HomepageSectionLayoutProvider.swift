@@ -129,7 +129,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let appliedPeakOffset: CGFloat
     }
 
-
     private var logger: Logger
     private var windowUUID: WindowUUID
 
