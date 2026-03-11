@@ -457,12 +457,16 @@ final class HomepageViewController: UIViewController,
     private func unsplashWallpaperDidChange(_ notification: Notification) {
         if let clear = notification.userInfo?["clear"] as? Bool, clear {
             wallpaperView.unsplashImage = nil
-            return
-        }
-
-        if let image = notification.userInfo?["image"] as? UIImage {
+        } else if let image = notification.userInfo?["image"] as? UIImage {
             wallpaperView.unsplashImage = image
         }
+        reloadSectionHeaders()
+    }
+
+    /// Reloads all supplementary header views so blur/background pills update immediately.
+    private func reloadSectionHeaders() {
+        collectionView?.collectionViewLayout.invalidateLayout()
+        collectionView?.reloadData()
     }
 
     private func setupLayout() {
@@ -731,9 +735,15 @@ final class HomepageViewController: UIViewController,
         return newsAffordanceHeaderView
     }
 
-    /// Returns `true` when any wallpaper (legacy or Unsplash) is currently visible on the homepage.
+    /// Returns `true` when any wallpaper (legacy or Unsplash) is selected or visible on the homepage.
+    /// Checks UserDefaults for Unsplash selection so headers show the background even before
+    /// the async image finishes loading.
     private var hasActiveWallpaper: Bool {
-        homepageState.wallpaperState.wallpaperConfiguration.hasImage || wallpaperView.unsplashImage != nil
+        let hasLegacyWallpaper = homepageState.wallpaperState.wallpaperConfiguration.hasImage
+        let hasUnsplashWallpaper = UserDefaults.standard.string(
+            forKey: UnsplashWallpaperKeys.currentPhotoId
+        ) != nil
+        return hasLegacyWallpaper || hasUnsplashWallpaper
     }
 
     /// Returns a copy of the given `SectionHeaderConfiguration` with `showsBlurBackground`
