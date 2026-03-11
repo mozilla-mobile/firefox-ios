@@ -163,7 +163,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .startAtHome:
             return FlagKeys.StartAtHome
         case .privateTabsLock:
-            fatalError("Please implement a key for this feature")
+            return PrefsKeys.Settings.lockPrivateTabs
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .aiKillSwitch,
                 .appearanceMenu,

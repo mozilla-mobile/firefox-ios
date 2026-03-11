@@ -564,6 +564,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     private func checkPrivateTabsLockFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.privateTabsLock.value().enabled
+        return nimbus.features.privateTabsLockFeature.value().enabled
     }
 }
