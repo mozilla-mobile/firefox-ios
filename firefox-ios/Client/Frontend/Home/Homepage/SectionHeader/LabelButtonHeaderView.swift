@@ -98,11 +98,17 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     /// Sizes the background pill to the intrinsic content width of the title button.
+    /// Defers to the next run-loop tick if the button frame hasn't been laid out yet.
     private func updateBackgroundFrame() {
         guard !titleBackgroundView.isHidden else { return }
+        let btnFrame = titleButton.frame
+        // If layout hasn't run yet, defer until the next run-loop so we get real frames.
+        guard btnFrame.height > 0 else {
+            DispatchQueue.main.async { [weak self] in self?.updateBackgroundFrame() }
+            return
+        }
         let hPad = UX.blurHorizontalPadding
         let vPad = UX.blurVerticalPadding
-        let btnFrame = titleButton.frame
         let intrinsicWidth = titleButton.intrinsicContentSize.width
         let pillWidth = min(intrinsicWidth + hPad * 2, btnFrame.width + hPad * 2)
         titleBackgroundView.frame = CGRect(
