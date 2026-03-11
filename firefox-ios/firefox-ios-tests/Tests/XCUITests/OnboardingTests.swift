@@ -151,17 +151,38 @@ class OnboardingTests: BaseTestCase {
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
-    func testOnboardingSignIn() {
-        if isFirefoxBeta || isFirefox {
-            // In the new modern onboarding flow, the ToS screen uses the basic onboarding button
-            onboardingScreen.primaryButtonContinue()
-        } else {
-            // In the old onboarding flow, the ToS screen uses the 'agree and continue' button (same text visually as
-            // FirefoxBeta and Firefox)
-            onboardingScreen.agreeAndContinue()
-        }
+    func testOnboardingSignIn_Modern() throws {
+        try XCTSkipIf(isFennec, "We only show new onboarding on isFirefoxBeta and isFirefox")
 
-        onboardingScreen.swipeToNextScreen()
+        // In the new modern onboarding flow, the ToS screen uses the basic onboarding button
+        onboardingScreen.primaryButtonContinue()
+
+        // In the new modern onboarding flow, the sign-in screen is in position 3. Swipe past 3 screens then sign in.
+        onboardingScreen.goToNextScreenViaSecondary()
+        onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.goToNextScreenViaPrimary()
+
+        onboardingScreen.assertTextsOnCurrentScreen(
+            expectedTitle: "Instantly pick up where you left off",
+            expectedDescription: "Get your bookmarks, history, and passwords on any device.",
+            expectedPrimary: "Start Syncing",
+            expectedSecondary: "Not now"
+        )
+
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+        onboardingScreen.exitSignInFlow()
+    }
+
+    func testOnboardingSignIn_Old() throws {
+        try XCTSkipIf(isFirefox || isFirefoxBeta, "We only show old onboarding on Fennec")
+
+        // In the old flow, the ToS screen uses the 'agree and continue' button (same text visually as FirefoxBeta and
+        // Firefox, but different accessibility identifier)
+        onboardingScreen.agreeAndContinue()
+
+        // Sign-in is on the second screen after ToS. Swipe past first screen, and then test sign in on the second
+        onboardingScreen.goToNextScreenViaSecondary()
 
         onboardingScreen.assertTextsOnCurrentScreen(
             expectedTitle: "Stay encrypted when you hop between devices",
