@@ -2605,7 +2605,7 @@ public struct TermsOfUse {
         comment: "Label for the back button shown in the Terms of Use web view."
     )
     public static let CloseButton = MZLocalizedString(
-        key: "TermsOfUse.CloseButton.v148",
+        key: "TermsOfUse.CloseButton.v150",
         tableName: "TermsOfUse",
         value: "Close",
         comment: "Label for the close button shown in the Terms of Use web view."
