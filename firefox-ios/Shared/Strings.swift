@@ -7402,8 +7402,8 @@ extension String {
         public static let ReaderModeWithSummarizerButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.ReaderModeWithSummarizer.Button.v150",
             tableName: "Toolbar",
-            value: "Reader View. Shake to Summarize available.",
-            comment: "Accessibility label for the reader view button with a bottom badge that indicates that shake to summarize is available for the page. The button is displayed in the address bar.")
+            value: "Reader View. Page summarization available.",
+            comment: "Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar.")
 
         public struct Translation {
             public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
