@@ -8,7 +8,7 @@ import UIKit
 struct HomepageLayoutMeasurementCache {
     enum HeaderHeightMode: Equatable, Hashable {
         case sectionTitle
-        case affordance
+        case newsAffordance
     }
 
     struct StoriesHeaderLayoutState: Equatable {

@@ -821,6 +821,8 @@ final class HomepageViewController: UIViewController,
         return headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
     }
 
+    /// Converts the homepage's vertical scroll offset into normalized transition progress for the
+    /// stories header crossfade, clamping the result to the 0...1 range over the fixed transition distance.
     private func newsTransitionProgress() -> CGFloat {
         guard let collectionView else { return 0 }
 

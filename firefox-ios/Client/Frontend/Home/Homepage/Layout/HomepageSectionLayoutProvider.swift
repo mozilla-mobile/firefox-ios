@@ -859,7 +859,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .newsAffordance:
             headerHeightMode = shouldUseNewsAffordance
                 ? getStoriesHeaderLayoutState(environment: environment).headerHeightMode
-                : .affordance
+                : .newsAffordance
         }
 
         let width = normalizedDimension(environment.container.contentSize.width)
@@ -878,30 +878,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let headerHeight: CGFloat
 
         switch headerState.style {
-        case .sectionTitle:
+        case .newsAffordance
+            where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
+            let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
+            header.configure(state: headerState, textColor: .black, theme: LightTheme(), transitionEnabled: true)
+            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+
+        default:
             let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-        case .newsAffordance:
-            if shouldUseNewsAffordance,
-               getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .sectionTitle {
-                let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
-                header.configure(state: headerState, textColor: .black, theme: LightTheme())
-                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-            } else if shouldUseNewsAffordance {
-                let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
-                header.configure(
-                    state: headerState,
-                    textColor: .black,
-                    theme: LightTheme(),
-                    transitionEnabled: true
-                )
-                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-            } else {
-                let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
-                header.applyTheme(theme: LightTheme())
-                headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-            }
         }
 
         headerHeightCache[cacheKey] = headerHeight
@@ -924,14 +910,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         if rawSpacerHeight >= fullPeakOffset {
             return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
-                headerHeightMode: .affordance,
+                headerHeightMode: .newsAffordance,
                 appliedPeakOffset: fullPeakOffset
             )
         }
 
         if rawSpacerHeight >= minimumVisibleHeight {
             return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
-                headerHeightMode: .affordance,
+                headerHeightMode: .newsAffordance,
                 appliedPeakOffset: rawSpacerHeight
             )
         }
