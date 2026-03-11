@@ -740,6 +740,8 @@ public protocol RemoteSettingsClientProtocol: AnyObject, Sendable {
      */
     func getRecordsMap(syncIfEmpty: Bool)  -> [String: RemoteSettingsRecord]?
     
+    func resetStorage() throws 
+    
     /**
      * Shutdown the client, releasing the SQLite connection used to cache records.
      */
@@ -877,6 +879,13 @@ open func getRecordsMap(syncIfEmpty: Bool = false) -> [String: RemoteSettingsRec
         FfiConverterBool.lower(syncIfEmpty),$0
     )
 })
+}
+    
+open func resetStorage()throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+    uniffi_remote_settings_fn_method_remotesettingsclient_reset_storage(
+            self.uniffiCloneHandle(),$0
+    )
+}
 }
     
     /**
@@ -2222,6 +2231,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records_map() != 50710) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_reset_storage() != 27780) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_shutdown() != 43691) {
