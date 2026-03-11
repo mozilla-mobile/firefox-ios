@@ -1367,7 +1367,6 @@
 		A093CD292F35408E0017774C /* MozAdsClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093CD282F35408E0017774C /* MozAdsClientFactory.swift */; };
 		A093CF852F3696D70017774C /* MockMozAdsClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A093CF842F3696D70017774C /* MockMozAdsClientFactory.swift */; };
 		A0B6D6632EB49C0400574E34 /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
-		A1B2C3D42F6A111100ABC001 /* NewsAffordanceHeaderViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32F6A111100ABC001 /* NewsAffordanceHeaderViewTests.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -9646,7 +9645,6 @@
 		A1A140059C225473C3FA403D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		A1A14DC8BACF934566BE688B /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Search.strings"; sourceTree = "<group>"; };
 		A1A84AEDBA7F9C17C2698BDE /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
-		A1B2C3D32F6A111100ABC001 /* NewsAffordanceHeaderViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAffordanceHeaderViewTests.swift; sourceTree = "<group>"; };
 		A1BF498F8BBB5DC36E678327 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		A1E14C52A9764D105546D292 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		A214487DA2ACCB4BA604AD56 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
@@ -13179,7 +13177,6 @@
 				8AD3AFC42D143F0D00CFC887 /* HomepageDimensionCalculatorTests.swift */,
 				8A00BD862CAB3FE500680AF9 /* HomepageViewControllerTests.swift */,
 				61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */,
-				A1B2C3D32F6A111100ABC001 /* NewsAffordanceHeaderViewTests.swift */,
 				8AD8FDB52EBB008E00FDFD78 /* MerinoManagerTests.swift */,
 				8A87B4352CC1A8FD003A9239 /* Mock */,
 				8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */,
@@ -19839,7 +19836,6 @@
 				967EDABD29D705300089208D /* CreditCardValidatorTests.swift in Sources */,
 				967EDABF29D769A10089208D /* CreditCardInputFieldTests.swift in Sources */,
 				61E637852D03615D00E95B63 /* LabelButtonHeaderViewTests.swift in Sources */,
-				A1B2C3D42F6A111100ABC001 /* NewsAffordanceHeaderViewTests.swift in Sources */,
 				21F2A2D42B0D194A00626AEC /* TabsPanelStateTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* MainThreadThrottlerTests.swift in Sources */,
 				8AD8FDB62EBB008E00FDFD78 /* MerinoManagerTests.swift in Sources */,
