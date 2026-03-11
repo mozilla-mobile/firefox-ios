@@ -865,6 +865,8 @@
 		8A09BCC32D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */; };
 		8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */; };
 		8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */; };
+		8A0A7C2D2F61E3E600D00820 /* TabContentScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A7C2C2F61E3E400D00820 /* TabContentScriptManager.swift */; };
+		8A0A7C402F61F03500D00820 /* TabWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0A7C3F2F61F03200D00820 /* TabWebView.swift */; };
 		8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */; };
 		8A0DF2C22D6D1C670066EC00 /* AutoplaySettingTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */; };
 		8A106D632D416F82009AD7E4 /* MessageCardMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */; };
@@ -8977,6 +8979,8 @@
 		8A09BCC22D22F1BE00CFDF60 /* ContextMenuCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A0A1B9F2B2200FD00E8706F /* PrivateHomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateHomepageViewController.swift; sourceTree = "<group>"; };
 		8A0A1BA22B22030100E8706F /* PrivateMessageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateMessageCardCell.swift; sourceTree = "<group>"; };
+		8A0A7C2C2F61E3E400D00820 /* TabContentScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabContentScriptManager.swift; sourceTree = "<group>"; };
+		8A0A7C3F2F61F03200D00820 /* TabWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebView.swift; sourceTree = "<group>"; };
 		8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlay.swift; sourceTree = "<group>"; };
 		8A0DF2C12D6D1C670066EC00 /* AutoplaySettingTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoplaySettingTelemetry.swift; sourceTree = "<group>"; };
 		8A0E5F3D2BFBA49400DE052B /* MicrosurveyCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -13518,19 +13522,21 @@
 		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
-				61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */,
 				0B1278DF2DDB1D6E00406656 /* BackForwardList.swift */,
-				D3A994961A3686BD008AD1AC /* Tab.swift */,
-				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
-				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
-				39455F761FC83F430088A22C /* TabEventHandler.swift */,
+				0B7B957B2DCA305D007DC749 /* Document */,
 				39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */,
+				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
+				61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */,
+				8A0A7C2C2F61E3E400D00820 /* TabContentScriptManager.swift */,
+				39455F761FC83F430088A22C /* TabEventHandler.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
+				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
-				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
+				8A0A7C3F2F61F03200D00820 /* TabWebView.swift */,
 				BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */,
 				BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */,
-				0B7B957B2DCA305D007DC749 /* Document */,
+				1D558A592BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift */,
 			);
 			path = TabManagement;
 			sourceTree = "<group>";
@@ -18864,6 +18870,7 @@
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				8AC0B1C02D1D935C004237FD /* ContextMenuConfiguration.swift in Sources */,
+				8A0A7C2D2F61E3E600D00820 /* TabContentScriptManager.swift in Sources */,
 				BCB769192E4F80650046AA37 /* StylingViewModifiers.swift in Sources */,
 				BD011FB82D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift in Sources */,
 				E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */,
@@ -19310,6 +19317,7 @@
 				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,
 				8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */,
 				8ADED55C2D6679D500345293 /* BrowsingSettingsViewController.swift in Sources */,
+				8A0A7C402F61F03500D00820 /* TabWebView.swift in Sources */,
 				BCBE058C2E3A8720004B6039 /* SummarizeSetting.swift in Sources */,
 				E1442FD5294782D9003680B0 /* UIView+SnapKit.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
