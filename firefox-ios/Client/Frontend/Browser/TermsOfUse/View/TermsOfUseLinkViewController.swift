@@ -79,7 +79,7 @@ final class TermsOfUseLinkViewController: UIViewController,
 
         view.addSubview(progressBar)
         view.addSubview(webView)
-    
+
         NSLayoutConstraint.activate([
             progressBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             progressBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
