@@ -14,6 +14,7 @@ protocol OnboardingSelectorsSet {
     func multipleChoiceButton(rootId: String) -> Selector
     func modernTosPrimaryButton() -> Selector
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
+    var ONBOARDING_PRIMARY_BUTTON: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
@@ -29,6 +30,7 @@ protocol OnboardingSelectorsSet {
 struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let termsAndService_OnboardingPrimaryButton = "TermsOfService.OnboardingPrimaryButton"
         static let continueButton = "Continue"
         static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
@@ -43,6 +45,12 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
         IDs.termsAndService_AgreeAndContinueButton,
         description: "Agree & Continue button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let ONBOARDING_PRIMARY_BUTTON = Selector.buttonId(
+        IDs.termsAndService_OnboardingPrimaryButton,
+        description: "Continue button on first onboarding screen",
         groups: ["onboarding"]
     )
 

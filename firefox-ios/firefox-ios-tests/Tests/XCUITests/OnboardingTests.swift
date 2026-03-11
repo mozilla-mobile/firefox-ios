@@ -152,7 +152,15 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testOnboardingSignIn() {
-        onboardingScreen.agreeAndContinue()
+        if isFirefoxBeta || isFirefox {
+            // In the new modern onboarding flow, the ToS screen uses the basic onboarding button
+            onboardingScreen.primaryButtonContinue()
+        } else {
+            // In the old onboarding flow, the ToS screen uses the 'agree and continue' button (same text visually as
+            // FirefoxBeta and Firefox)
+            onboardingScreen.agreeAndContinue()
+        }
+
         onboardingScreen.swipeToNextScreen()
 
         onboardingScreen.assertTextsOnCurrentScreen(
