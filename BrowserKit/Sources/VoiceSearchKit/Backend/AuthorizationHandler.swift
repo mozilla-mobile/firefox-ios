@@ -7,6 +7,10 @@ import Speech
 struct AuthorizationHandler: AuthorizeProvider {
     let audioSession: AudioSessionProvider
 
+    init(audioSession: AudioSessionProvider = AVAudioSession()) {
+        self.audioSession = audioSession
+    }
+
     func isMicrophonePermissionAuthorized() async -> Bool {
         await withCheckedContinuation { continuation in
             audioSession.requestRecordPermission { granted in
