@@ -73,6 +73,12 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         updateViewState(forHeight: bounds.height)
     }
 
+    func setTransitionEnabled(_ transitionEnabled: Bool) {
+        guard self.transitionEnabled != transitionEnabled else { return }
+        self.transitionEnabled = transitionEnabled
+        updateViewState(forHeight: bounds.height)
+    }
+
     func applyTheme(theme: Theme) {
         newsAffordanceContentView.applyTheme(theme: theme)
         sectionTitleHeaderView.applyTheme(theme: theme)

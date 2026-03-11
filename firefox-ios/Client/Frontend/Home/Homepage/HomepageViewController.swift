@@ -682,8 +682,7 @@ final class HomepageViewController: UIViewController,
 
             if case .pocket = section,
                homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
-               shouldUseNewsTransitionHeader,
-               isNewsTransitionEnabled(for: collectionView, at: indexPath) {
+               shouldUseNewsTransitionHeader {
                 guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
                     of: kind,
                     cellType: NewsTransitionHeaderView.self,
@@ -717,11 +716,12 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath,
         with newsTransitionHeaderView: NewsTransitionHeaderView
     ) -> NewsTransitionHeaderView {
+        let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
         newsTransitionHeaderView.configure(
             state: homepageState.merinoState.sectionHeaderState,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
-            transitionEnabled: true
+            transitionEnabled: transitionEnabled
         )
         newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderView
@@ -804,7 +804,8 @@ final class HomepageViewController: UIViewController,
             return
         }
 
-        guard headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight else { return }
+        let transitionEnabled = headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight
+        headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
 
