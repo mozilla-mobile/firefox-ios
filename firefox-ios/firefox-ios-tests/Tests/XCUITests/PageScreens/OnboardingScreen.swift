@@ -155,7 +155,7 @@ final class OnboardingScreen {
         currentScreen += 1
     }
 
-    func swipeToNextScreen() {
+    func goToNextScreenViaSecondary() {
         let next = sel.secondaryButton(rootId: rootA11yId).element(in: app)
         BaseTestCase().mozWaitForElementToExist(next)
         next.waitAndTap()
