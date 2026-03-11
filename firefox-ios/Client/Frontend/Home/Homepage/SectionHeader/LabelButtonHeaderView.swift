@@ -143,6 +143,9 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
         let color = textColor ?? theme.colors.textPrimary
         applyUnderlinedTitle(state.title, color: color)
+        // Always apply theme so titleBackgroundView.backgroundColor is set on first configure
+        // (applyTheme is not always called before configure on initial load).
+        applyTheme(theme: theme)
     }
 
     // MARK: - Private helpers
