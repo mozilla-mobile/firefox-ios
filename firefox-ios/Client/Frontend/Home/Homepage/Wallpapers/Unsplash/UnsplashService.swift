@@ -68,6 +68,25 @@ final class UnsplashService {
         return try JSONDecoder().decode(UnsplashSearchResult.self, from: data)
     }
 
+    /// Fetches a single random portrait photo from the Unsplash library.
+    /// Uses GET /photos/random?orientation=portrait&count=1
+    func fetchRandomPhoto() async throws -> UnsplashPhoto {
+        let url = try buildURL(
+            path: "/photos/random",
+            queryItems: [
+                URLQueryItem(name: "orientation", value: "portrait"),
+                URLQueryItem(name: "count", value: "1"),
+            ]
+        )
+        let request = try authorizedRequest(for: url)
+        let (data, response) = try await session.data(for: request)
+        try validateResponse(response)
+        // Unsplash returns an array when count=1
+        let photos = try JSONDecoder().decode([UnsplashPhoto].self, from: data)
+        guard let photo = photos.first else { throw UnsplashError.noResults }
+        return photo
+    }
+
     // MARK: - Download Image
 
     /// Downloads the regular-sized image for a photo and saves it to disk.
@@ -206,6 +225,7 @@ enum UnsplashError: LocalizedError {
     case unauthorized
     case rateLimited
     case notFound
+    case noResults
     case storageUnavailable
     case serverError(statusCode: Int)
 
@@ -225,6 +245,8 @@ enum UnsplashError: LocalizedError {
             return "Unsplash API rate limit exceeded. Try again later."
         case .notFound:
             return "Photo not found."
+        case .noResults:
+            return "No photos were returned."
         case .storageUnavailable:
             return "Cannot access wallpaper storage directory."
         case .serverError(let code):

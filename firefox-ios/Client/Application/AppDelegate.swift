@@ -226,7 +226,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         updateWallpaperMetadata()
         loadBackgroundTabs()
         ingestFirefoxSuggestions(in: application)
-
+        UnsplashRefreshManager.shared.checkAndRefreshIfNeeded()
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)

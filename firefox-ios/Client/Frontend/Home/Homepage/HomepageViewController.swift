@@ -177,6 +177,7 @@ final class HomepageViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        UnsplashRefreshManager.shared.checkAndRefreshIfNeeded()
         store.dispatch(
             HomepageAction(
                 windowUUID: windowUUID,

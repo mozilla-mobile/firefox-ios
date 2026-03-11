@@ -10,10 +10,51 @@ import Common
 enum UnsplashWallpaperKeys {
     static let currentPhotoId = "prefKeyUnsplashWallpaperPhotoId"
     static let currentPhotoJSON = "prefKeyUnsplashWallpaperPhotoJSON"
+    static let refreshInterval    = "prefKeyUnsplashRefreshInterval"
+    static let lastRefreshDate    = "prefKeyUnsplashLastRefreshDate"
+    static let autoRefreshPhotoId = "prefKeyUnsplashAutoRefreshPhotoId"
 }
 
 extension Notification.Name {
     static let UnsplashWallpaperDidChange = Notification.Name("UnsplashWallpaperDidChange")
+}
+
+// MARK: - Refresh Interval
+
+enum UnsplashRefreshInterval: String, CaseIterable, Identifiable {
+    case never  = "never"
+    case hourly = "hourly"
+    case daily  = "daily"
+    case weekly = "weekly"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .never:  return "Never"
+        case .hourly: return "Every Hour"
+        case .daily:  return "Daily"
+        case .weekly: return "Weekly"
+        }
+    }
+
+    var seconds: TimeInterval? {
+        switch self {
+        case .never:  return nil
+        case .hourly: return 3600
+        case .daily:  return 86400
+        case .weekly: return 604800
+        }
+    }
+
+    static func current() -> UnsplashRefreshInterval {
+        let raw = UserDefaults.standard.string(forKey: UnsplashWallpaperKeys.refreshInterval) ?? "never"
+        return UnsplashRefreshInterval(rawValue: raw) ?? .never
+    }
+
+    func save() {
+        UserDefaults.standard.set(rawValue, forKey: UnsplashWallpaperKeys.refreshInterval)
+    }
 }
 
 /// A section in Appearance settings that lets users browse and select Unsplash wallpapers
@@ -29,6 +70,7 @@ struct UnsplashWallpaperSectionView: View {
     @State private var errorMessage: String?
     @State private var selectedPhotoId: String?
     @State private var isDownloading = false
+    @State private var refreshInterval: UnsplashRefreshInterval = UnsplashRefreshInterval.current()
 
     let service = UnsplashService.shared
 
@@ -56,9 +98,39 @@ struct UnsplashWallpaperSectionView: View {
         }
     }
 
+    private var refreshIntervalRow: some View {
+        VStack(alignment: .leading, spacing: UX.spacing) {
+            Text("Auto-Refresh Wallpaper")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(Color(theme?.colors.textPrimary ?? .label))
+            Picker("Refresh", selection: $refreshInterval) {
+                ForEach(UnsplashRefreshInterval.allCases) { interval in
+                    Text(interval.displayName).tag(interval)
+                }
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: refreshInterval) { newInterval in
+                newInterval.save()
+                if newInterval == .never {
+                    UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.lastRefreshDate)
+                } else {
+                    UserDefaults.standard.set(
+                        Date().timeIntervalSince1970,
+                        forKey: UnsplashWallpaperKeys.lastRefreshDate
+                    )
+                    UnsplashRefreshManager.shared.forceRefresh()
+                }
+            }
+        }
+        .padding(.horizontal, UX.horizontalPadding)
+        .padding(.top, UX.spacing)
+    }
+
     @ViewBuilder
     private var sectionContent: some View {
         VStack(alignment: .leading, spacing: UX.spacing) {
+            refreshIntervalRow
             searchBar
             contentArea
             if !photos.isEmpty { attributionView }
@@ -325,6 +397,10 @@ extension UnsplashWallpaperSectionView {
     func selectPhoto(_ photo: UnsplashPhoto) async {
         guard !isDownloading else { return }
         selectedPhotoId = photo.id
+        // Manual selection resets auto-refresh to never
+        refreshInterval = .never
+        UnsplashRefreshInterval.never.save()
+        UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.lastRefreshDate)
         isDownloading = true
         do {
             let fileURL = try await service.downloadWallpaperImage(for: photo)
@@ -351,6 +427,9 @@ extension UnsplashWallpaperSectionView {
         UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.currentPhotoId)
         UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.currentPhotoJSON)
         selectedPhotoId = nil
+        refreshInterval = .never
+        UnsplashRefreshInterval.never.save()
+        UserDefaults.standard.removeObject(forKey: UnsplashWallpaperKeys.lastRefreshDate)
         NotificationCenter.default.post(
             name: .UnsplashWallpaperDidChange,
             object: nil,
