@@ -22,10 +22,10 @@ extension Notification.Name {
 // MARK: - Refresh Interval
 
 enum UnsplashRefreshInterval: String, CaseIterable, Identifiable {
-    case never  = "never"
-    case hourly = "hourly"
-    case daily  = "daily"
-    case weekly = "weekly"
+    case never
+    case hourly
+    case daily
+    case weekly
 
     var id: String { rawValue }
 
@@ -70,7 +70,7 @@ struct UnsplashWallpaperSectionView: View {
     @State private var errorMessage: String?
     @State private var selectedPhotoId: String?
     @State private var isDownloading = false
-    @State private var refreshInterval: UnsplashRefreshInterval = UnsplashRefreshInterval.current()
+    @State private var refreshInterval = UnsplashRefreshInterval.current()
 
     let service = UnsplashService.shared
 
