@@ -25,6 +25,12 @@ final class OnboardingScreen {
         button.tap()
     }
 
+    func primaryButtonContinue() {
+        let button = sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.tap()
+    }
+
     func assertContinueButtonIsOnTheBottom() {
         let continueButton = sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
         let manageButton = sel.MANAGE_TEXT_BUTTON.element(in: app)
