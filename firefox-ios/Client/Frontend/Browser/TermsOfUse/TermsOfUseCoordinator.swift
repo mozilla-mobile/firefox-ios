@@ -23,7 +23,7 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
 
 @MainActor
 final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
-    /// Prevents deep link  route handling from dismissing the Terms of Use sheet
+    /// Prevents deep link route handling from dismissing the Terms of Use sheet
     override var isDismissible: Bool { false }
 
     weak var parentCoordinator: ParentCoordinatorDelegate?
