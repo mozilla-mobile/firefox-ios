@@ -79,44 +79,40 @@ class LabelButtonHeaderView: UICollectionReusableView,
     private func setupLayout() {
         titleButton.addTarget(self, action: #selector(handleTitleTap), for: .touchUpInside)
 
+        // Background sits behind button; button is inserted last so it renders on top.
         addSubview(titleBackgroundView)
         addSubview(titleButton)
 
+        let hPad = UX.blurHorizontalPadding
+        let vPad = UX.blurVerticalPadding
+
+        // Title button: pinned top/leading/bottom, hugs its text width (no trailing constraint —
+        // intrinsic size drives width via high hugging priority).
         NSLayoutConstraint.activate([
             titleButton.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             titleButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
-            titleButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
+            titleButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
+
+            // Background pill: constrained directly to titleButton edges + padding.
+            // Auto Layout sizes it correctly on every pass without any frame math.
+            titleBackgroundView.topAnchor.constraint(equalTo: titleButton.topAnchor, constant: -vPad),
+            titleBackgroundView.leadingAnchor.constraint(
+                equalTo: titleButton.leadingAnchor,
+                constant: -hPad
+            ),
+            titleBackgroundView.trailingAnchor.constraint(
+                equalTo: titleButton.trailingAnchor,
+                constant: hPad
+            ),
+            titleBackgroundView.bottomAnchor.constraint(
+                equalTo: titleButton.bottomAnchor,
+                constant: vPad
+            )
         ])
 
+        // High hugging so button shrinks to its text width, not full cell width.
         titleButton.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
         titleButton.setContentHuggingPriority(UILayoutPriority(751), for: .horizontal)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateBackgroundFrame()
-    }
-
-    /// Sizes the background pill to the intrinsic content width of the title button.
-    /// Defers to the next run-loop tick if the button frame hasn't been laid out yet.
-    private func updateBackgroundFrame() {
-        guard !titleBackgroundView.isHidden else { return }
-        let btnFrame = titleButton.frame
-        // If layout hasn't run yet, defer until the next run-loop so we get real frames.
-        guard btnFrame.height > 0 else {
-            DispatchQueue.main.async { [weak self] in self?.updateBackgroundFrame() }
-            return
-        }
-        let hPad = UX.blurHorizontalPadding
-        let vPad = UX.blurVerticalPadding
-        let intrinsicWidth = titleButton.intrinsicContentSize.width
-        let pillWidth = min(intrinsicWidth + hPad * 2, btnFrame.width + hPad * 2)
-        titleBackgroundView.frame = CGRect(
-            x: btnFrame.minX - hPad,
-            y: btnFrame.minY - vPad,
-            width: pillWidth,
-            height: btnFrame.height + vPad * 2
-        )
     }
 
     // MARK: - Helper functions

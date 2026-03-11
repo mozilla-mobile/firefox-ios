@@ -185,16 +185,6 @@ final class HomepageViewController: UIViewController,
             )
         )
         trackVisibleItemImpressions()
-        // Trigger a layout pass on all visible section headers so the background pill
-        // frame is calculated after Auto Layout has settled on first appearance.
-        refreshVisibleHeaderLayouts()
-    }
-
-    private func refreshVisibleHeaderLayouts() {
-        guard let collectionView else { return }
-        collectionView.visibleSupplementaryViews(
-            ofKind: UICollectionView.elementKindSectionHeader
-        ).forEach { $0.setNeedsLayout() }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
