@@ -7399,8 +7399,8 @@ extension String {
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
-        public static let ReaderModeWithSummarizeButtonAccessibilityLabel = MZLocalizedString(
-            key: "Toolbar.NewTab.Button.v150",
+        public static let ReaderModeWithSummarizerButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.ReaderModeWithSummarizer.Button.v150",
             tableName: "Toolbar",
             value: "Reader View. Shake to Summarize available.",
             comment: "Accessibility label for the reader view button with a bottom badge that indicates that shake to summarize is available for the page.")
