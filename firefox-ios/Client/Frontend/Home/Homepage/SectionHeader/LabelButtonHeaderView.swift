@@ -23,9 +23,9 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     // MARK: - UIElements
 
-    /// Frosted-glass pill behind the title button — visible only when `showsBlurBackground` is `true`
-    private lazy var titleBlurView: UIVisualEffectView = .build { view in
-        view.effect = UIBlurEffect(style: .systemMaterial)
+    /// Solid pill behind the title button using the same `layer5` color as homepage cards.
+    /// Visible only when `showsBlurBackground` is `true`.
+    private lazy var titleBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.blurCornerRadius
         view.layer.masksToBounds = true
         view.isHidden = true
@@ -79,7 +79,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     private func setupLayout() {
         titleButton.addTarget(self, action: #selector(handleTitleTap), for: .touchUpInside)
 
-        addSubview(titleBlurView)
+        addSubview(titleBackgroundView)
         addSubview(titleButton)
 
         NSLayoutConstraint.activate([
@@ -94,18 +94,18 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateBlurFrame()
+        updateBackgroundFrame()
     }
 
-    /// Sizes the blur pill to the intrinsic content width of the title button.
-    private func updateBlurFrame() {
-        guard !titleBlurView.isHidden else { return }
+    /// Sizes the background pill to the intrinsic content width of the title button.
+    private func updateBackgroundFrame() {
+        guard !titleBackgroundView.isHidden else { return }
         let hPad = UX.blurHorizontalPadding
         let vPad = UX.blurVerticalPadding
         let btnFrame = titleButton.frame
         let intrinsicWidth = titleButton.intrinsicContentSize.width
         let pillWidth = min(intrinsicWidth + hPad * 2, btnFrame.width + hPad * 2)
-        titleBlurView.frame = CGRect(
+        titleBackgroundView.frame = CGRect(
             x: btnFrame.minX - hPad,
             y: btnFrame.minY - vPad,
             width: pillWidth,
@@ -120,7 +120,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         titleButton.setAttributedTitle(nil, for: .normal)
         titleButton.accessibilityIdentifier = nil
         titleButtonAction = nil
-        titleBlurView.isHidden = true
+        titleBackgroundView.isHidden = true
         moreButton.isHidden = true
     }
 
@@ -137,7 +137,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         // moreButton is always hidden; title button takes its role
         moreButton.isHidden = true
 
-        titleBlurView.isHidden = !state.showsBlurBackground
+        titleBackgroundView.isHidden = !state.showsBlurBackground
 
         let color = textColor ?? theme.colors.textPrimary
         applyUnderlinedTitle(state.title, color: color)
@@ -178,6 +178,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     func applyTheme(theme: Theme) {
         applyUnderlinedTitle(title, color: theme.colors.textPrimary)
+        titleBackgroundView.backgroundColor = theme.colors.layer5
     }
 
     // MARK: - Notifiable
