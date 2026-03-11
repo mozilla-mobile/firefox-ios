@@ -58,16 +58,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         updateViewState(forHeight: bounds.height)
     }
 
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        updateViewState(forHeight: layoutAttributes.size.height)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateViewState(forHeight: bounds.height)
-    }
-
     func setTransitionProgress(_ progress: CGFloat) {
         self.progress = min(max(progress, 0), 1)
         updateViewState(forHeight: bounds.height)
