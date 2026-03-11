@@ -521,8 +521,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
         self.configuration = configuration
         if webView == nil {
-            configuration.userContentController = WKUserContentController()
-            configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
             webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -624,8 +622,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
-        webView?.configuration.userContentController.removeAllUserScripts()
-        webView?.configuration.userContentController.removeAllScriptMessageHandlers()
+        webView?.removeAllUserScripts()
 
         if let webView = webView {
             tabDelegate?.tab(self, willDeleteWebView: webView)
@@ -1187,6 +1184,11 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func removeAllUserScripts() {
+        configuration.userContentController.removeAllUserScripts()
+        configuration.userContentController.removeAllScriptMessageHandlers()
     }
 
     func menuHelperFindInPage() {
