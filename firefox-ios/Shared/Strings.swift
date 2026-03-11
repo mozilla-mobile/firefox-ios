@@ -7262,6 +7262,13 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Name for button removing current article from reading list in reader mode")
+    public struct ReaderModeBar {
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "ReaderModeBar.SummarizeButtonAccessibilityLabel.v150",
+            tableName: "ReaderModeBar",
+            value: "Summarize Page",
+            comment: "Accessibility label for the summarize button in the reader mode bar view")
+    }
 }
 
 // MARK: - SearchViewController
@@ -7387,12 +7394,16 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
-
         public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.NewTab.Button.v142",
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
+        public static let ReaderModeWithSummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v150",
+            tableName: "Toolbar",
+            value: "Reader View. Shake to Summarize available.",
+            comment: "Accessibility label for the reader view button with a bottom badge that indicates that shake to summarize is available for the page.")
 
         public struct Translation {
             public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
