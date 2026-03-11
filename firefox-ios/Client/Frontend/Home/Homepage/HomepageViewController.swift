@@ -1188,7 +1188,7 @@ final class HomepageViewController: UIViewController,
         else { return }
 
         jumpBackInContextualHintViewController.configure(
-            anchor: headerView.titleLabel,
+            anchor: headerView.titleButton,
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { [weak self] in
