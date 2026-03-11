@@ -558,11 +558,15 @@ class Tab: NSObject,
 
         configureEdgeSwipeGestureRecognizers()
 
-        UserScriptManager.shared.injectUserScriptsIntoWebView(
-            webView,
-            nightMode: nightMode,
-            noImageMode: noImageMode
-        )
+        /// FXIOS-8027 FXIOS-11230 FXIOS-13891
+        /// This conflicts with popup tabs for Paypal and Shopify so not injecting on those cases
+        if requiredPopupConfiguration == nil {
+            UserScriptManager.shared.injectUserScriptsIntoWebView(
+                webView,
+                nightMode: nightMode,
+                noImageMode: noImageMode
+            )
+        }
 
         tabDelegate?.tab(self, didCreateWebView: webView)
         webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in

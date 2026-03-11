@@ -38,8 +38,6 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        guard !isPayPalPopUp(navigationAction) else { return nil }
-
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -1312,14 +1310,6 @@ private extension BrowserViewController {
         }
 
         return false
-    }
-
-    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
-    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
-    // so we will block the creation of a new Webview with this check
-    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
-        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
