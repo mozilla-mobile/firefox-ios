@@ -76,6 +76,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .needsReloadRefactor:
             return checkNeedsReloadRefactorFeature(from: nimbus)
 
+        case .privateTabsLock:
+            return checkPrivateTabsLockFeature(from: nimbus)
+            
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
@@ -558,5 +561,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
+    }
+
+    private func checkPrivateTabsLockFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.privateTabsLock.value().enabled
     }
 }

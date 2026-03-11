@@ -952,11 +952,11 @@ class BrowserViewController: UIViewController,
     
     private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
         if let state = browserViewControllerState {
-            let shouldLock = profile.prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
-            if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && shouldLock {
+            let featureEnabled = PrivateTabsLockFeatureGate(prefs: profile.prefs).isEnabled
+            if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && featureEnabled {
                 focusOnTabSegment(animated: false)
                 if checkActualState {
-                    sceneWillEnterForegroundNotification()
+                    privateLockWillEnterForeground()
                 }
             }
         }
@@ -994,6 +994,10 @@ class BrowserViewController: UIViewController,
     }
     
     func sceneWillEnterForegroundNotification() {
+        privateLockWillEnterForeground()
+    }
+    
+    private func privateLockWillEnterForeground() {
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,

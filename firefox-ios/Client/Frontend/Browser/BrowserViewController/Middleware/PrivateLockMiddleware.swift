@@ -8,7 +8,7 @@ import Shared
 import LocalAuthentication
 
 @MainActor
-final class PrivateLockMiddleware {
+final class PrivateLockMiddleware: FeatureFlaggable {
     
     private let prefs: Prefs
     
@@ -159,8 +159,7 @@ final class PrivateLockMiddleware {
     }
     
     private func isPrivateLockFeatureEnabled() -> Bool {
-        let shouldLock = prefs.boolForKey(PrefsKeys.Settings.lockPrivateTabs) ?? false
-        return shouldLock
+        PrivateTabsLockFeatureGate(prefs: prefs).isEnabled
     }
     
     private func browserState(from appState: AppState, windowUUID: WindowUUID) -> BrowserViewControllerState? {

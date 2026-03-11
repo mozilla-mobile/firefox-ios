@@ -778,6 +778,7 @@
 		74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B195431CF503FC007F36EF /* RecentlyClosedTabs.swift */; };
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
+		76206ED02F61ADA400A5AF66 /* PrivateTabsLockFeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76206ECF2F61ADA400A5AF66 /* PrivateTabsLockFeatureGate.swift */; };
 		767742A92F4F649500DEC06D /* PrivateLockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742A82F4F649500DEC06D /* PrivateLockAction.swift */; };
 		767742AB2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742AA2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift */; };
 		76AFB6632F58B16C0064E6AC /* PrivateLockMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */; };
@@ -8765,6 +8766,7 @@
 		75BA4E00A029A2AD26DF8960 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		75BC41B2962DAC5B25A288B4 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		75EF43EA84AEEBBE2C059310 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Menu.strings; sourceTree = "<group>"; };
+		76206ECF2F61ADA400A5AF66 /* PrivateTabsLockFeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateTabsLockFeatureGate.swift; sourceTree = "<group>"; };
 		764643DCB449658AAA8ED829 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		765243D790B967A69BD5DCF7 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		766F49788D099E2201B74791 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -13001,6 +13003,7 @@
 			isa = PBXGroup;
 			children = (
 				76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */,
+				76206ECF2F61ADA400A5AF66 /* PrivateTabsLockFeatureGate.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -19231,6 +19234,7 @@
 				8A5D1CBF2A30DC75005AD35C /* SyncNowSetting.swift in Sources */,
 				210E0EB8298D9D4500BB4F33 /* SearchEngineProvider.swift in Sources */,
 				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
+				76206ED02F61ADA400A5AF66 /* PrivateTabsLockFeatureGate.swift in Sources */,
 				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				8A15AB752D5FDB80008BB03C /* AutoplaySettingsViewController.swift in Sources */,

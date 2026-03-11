@@ -1,0 +1,18 @@
+# The configuration for the privateTabsLockFeature feature
+features:
+  private-tabs-lock-feature:
+    description: >
+      Protect private tabs with authentication
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
