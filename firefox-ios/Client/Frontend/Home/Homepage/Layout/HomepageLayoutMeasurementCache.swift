@@ -6,23 +6,6 @@ import Common
 import UIKit
 
 struct HomepageLayoutMeasurementCache {
-    enum HeaderHeightMode: Equatable, Hashable {
-        case sectionTitle
-        case newsAffordance
-    }
-
-    struct StoriesHeaderLayoutState: Equatable {
-        let headerHeightMode: HeaderHeightMode
-        let appliedPeakOffset: CGFloat
-    }
-
-    struct HeaderMeasurementKey: Hashable {
-        let configuration: SectionHeaderConfiguration
-        let headerHeightMode: HeaderHeightMode
-        let containerWidth: Double
-        let contentSizeCategory: UIContentSizeCategory
-    }
-
     struct TopSitesMeasurement: Equatable {
         struct Key: Equatable {
             let topSites: [TopSiteConfiguration]

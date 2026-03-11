@@ -56,6 +56,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             ///  from the bottom of the homepage viewport
             static let storiesPeakOffset: CGFloat = 130
             static let newsAffordanceStoriesPeakOffset: CGFloat = 86
+            /// `minimumNewsAffordanceVisibleHeight` is how much available free space there must be at the bottom of the
+            /// homepage viewport to be able to show the transitioning news affordance header
             static let minimumNewsAffordanceVisibleHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
 
             @MainActor
@@ -117,6 +119,17 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
     }
 
+    private enum StoriesHeaderHeightMode: Equatable {
+        case sectionTitle
+        case newsAffordance
+    }
+
+    private struct StoriesHeaderLayoutState: Equatable {
+        let headerHeightMode: StoriesHeaderHeightMode
+        let appliedPeakOffset: CGFloat
+    }
+
+
     private var logger: Logger
     private var windowUUID: WindowUUID
 
@@ -125,7 +138,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// the relevant state for each section, preventing stale heights from being reused when any
     /// of the inputs differ between layout passes.
     private var measurementsCache = HomepageLayoutMeasurementCache()
-    private var headerHeightCache: [HomepageLayoutMeasurementCache.HeaderMeasurementKey: CGFloat] = [:]
 
     private var storiesScrollDirection: ScrollDirection {
         return featureFlags.getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
@@ -318,7 +330,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
-        let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
         let storiesHeaderState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)?
             .merinoState.sectionHeaderState
             ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
@@ -852,28 +863,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         headerState: SectionHeaderConfiguration,
         environment: NSCollectionLayoutEnvironment
     ) -> CGFloat {
-        let headerHeightMode: HomepageLayoutMeasurementCache.HeaderHeightMode
-        switch headerState.style {
-        case .sectionTitle:
-            headerHeightMode = .sectionTitle
-        case .newsAffordance:
-            headerHeightMode = shouldUseNewsAffordance
-                ? getStoriesHeaderLayoutState(environment: environment).headerHeightMode
-                : .newsAffordance
-        }
-
-        let width = normalizedDimension(environment.container.contentSize.width)
-        let cacheKey = HomepageLayoutMeasurementCache.HeaderMeasurementKey(
-            configuration: headerState,
-            headerHeightMode: headerHeightMode,
-            containerWidth: width,
-            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
-        )
-
-        if let cachedHeight = headerHeightCache[cacheKey] {
-            return cachedHeight
-        }
-
         let containerWidth = environment.container.contentSize.width
         let headerHeight: CGFloat
 
@@ -890,16 +879,23 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         }
 
-        headerHeightCache[cacheKey] = headerHeight
         return headerHeight
     }
 
+    /// Resolves how the vertical stories header should be presented from the amount of free
+    /// space available at the bottom of the unscrolled homepage.
+    ///
+    /// When there is enough space for the full news affordance peek, we use the affordance-height
+    /// header and the full affordance peak offset. If there is only enough space to show the
+    /// affordance itself, we still use the affordance-height header but only peek by the available
+    /// space. If there is less space than the affordance needs, we fall back to the section-title
+    /// header and remove the spacer peek entirely.
     private func getStoriesHeaderLayoutState(
         environment: NSCollectionLayoutEnvironment
-    ) -> HomepageLayoutMeasurementCache.StoriesHeaderLayoutState {
+    ) -> StoriesHeaderLayoutState {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
         guard shouldUseNewsAffordance else {
-            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+            return StoriesHeaderLayoutState(
                 headerHeightMode: .sectionTitle,
                 appliedPeakOffset: 0
             )
@@ -909,20 +905,23 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let fullPeakOffset = UX.PocketConstants.newsAffordanceStoriesPeakOffset
 
         if rawSpacerHeight >= fullPeakOffset {
-            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+            // Enough free space to show the full affordance header and the full peek offset.
+            return StoriesHeaderLayoutState(
                 headerHeightMode: .newsAffordance,
                 appliedPeakOffset: fullPeakOffset
             )
         }
 
         if rawSpacerHeight >= minimumVisibleHeight {
-            return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+            // Enough space to show the affordance itself, but not enough for the full peek offset.
+            return StoriesHeaderLayoutState(
                 headerHeightMode: .newsAffordance,
                 appliedPeakOffset: rawSpacerHeight
             )
         }
 
-        return HomepageLayoutMeasurementCache.StoriesHeaderLayoutState(
+        // Not enough space for the affordance, so fall back to the section-title header with no peek.
+        return StoriesHeaderLayoutState(
             headerHeightMode: .sectionTitle,
             appliedPeakOffset: 0
         )
