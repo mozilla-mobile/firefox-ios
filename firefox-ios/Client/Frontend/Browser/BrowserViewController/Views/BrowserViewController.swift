@@ -2014,15 +2014,14 @@ class BrowserViewController: UIViewController,
         let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 
-        // To avoid some UI glitches, when authentication is in progress
-        // we don't need to update/change keyboard spacer
-        guard !appAuthenticator.isAuthenticating else {
-            guard isBottomSearchBar, isKeyboardVisible else {
-                overKeyboardContainer.removeKeyboardSpacer()
-                return
-            }
+        guard isBottomSearchBar, isKeyboardVisible else {
+            overKeyboardContainer.removeKeyboardSpacer()
             return
         }
+
+        // To avoid some UI glitches, when authentication is in progress
+        // we don't need to update/change keyboard spacer
+        guard !appAuthenticator.isAuthenticating else { return }
 
         /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
         /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
@@ -2030,11 +2029,6 @@ class BrowserViewController: UIViewController,
         /// It  might be an apple bug.
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
-
-        guard isBottomSearchBar, isKeyboardVisible else {
-            overKeyboardContainer.removeKeyboardSpacer()
-            return
-        }
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
             hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
         )
