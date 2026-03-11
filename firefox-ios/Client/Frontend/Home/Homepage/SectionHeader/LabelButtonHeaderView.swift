@@ -17,9 +17,21 @@ class LabelButtonHeaderView: UICollectionReusableView,
         static let bottomSpace: CGFloat = 16
         static let bottomButtonSpace: CGFloat = 6
         static let leadingInset: CGFloat = 0
+        static let blurCornerRadius: CGFloat = 12
+        static let blurHorizontalPadding: CGFloat = 10
+        static let blurVerticalPadding: CGFloat = 6
     }
 
     // MARK: - UIElements
+
+    /// Frosted-glass background — visible only when `showsBlurBackground` is `true`
+    private lazy var blurBackgroundView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemMaterial)
+        view.layer.cornerRadius = UX.blurCornerRadius
+        view.layer.masksToBounds = true
+        view.isHidden = true
+    }
+
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.spacing = UX.inBetweenSpace
@@ -62,6 +74,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
     private func setupLayout() {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(moreButton)
+
+        addSubview(blurBackgroundView)
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
@@ -69,6 +83,23 @@ class LabelButtonHeaderView: UICollectionReusableView,
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
+
+            blurBackgroundView.topAnchor.constraint(
+                equalTo: stackView.topAnchor,
+                constant: -UX.blurVerticalPadding
+            ),
+            blurBackgroundView.leadingAnchor.constraint(
+                equalTo: stackView.leadingAnchor,
+                constant: -UX.blurHorizontalPadding
+            ),
+            blurBackgroundView.trailingAnchor.constraint(
+                equalTo: stackView.trailingAnchor,
+                constant: UX.blurHorizontalPadding
+            ),
+            blurBackgroundView.bottomAnchor.constraint(
+                equalTo: stackView.bottomAnchor,
+                constant: UX.blurVerticalPadding
+            )
         ])
 
         // Setting custom values to resolve horizontal ambiguity
@@ -90,6 +121,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
+        blurBackgroundView.isHidden = true
     }
 
     func configure(
@@ -112,6 +144,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
                 viewModel: moreButtonViewModel
             )
         }
+
+        blurBackgroundView.isHidden = !state.showsBlurBackground
 
         if let color = textColor {
             applyTextColors(color: color)

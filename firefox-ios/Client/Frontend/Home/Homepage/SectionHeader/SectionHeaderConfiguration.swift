@@ -16,4 +16,7 @@ struct SectionHeaderConfiguration: Equatable, Hashable {
     var buttonA11yIdentifier: String?
     var buttonTitle: String?
     var style: Style = .sectionTitle
+    /// When `true`, a frosted-glass material background is shown behind the header text/button
+    /// so the content remains legible over a homepage wallpaper.
+    var showsBlurBackground = false
 }

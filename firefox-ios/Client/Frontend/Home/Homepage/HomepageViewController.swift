@@ -731,6 +731,19 @@ final class HomepageViewController: UIViewController,
         return newsAffordanceHeaderView
     }
 
+    /// Returns `true` when any wallpaper (legacy or Unsplash) is currently visible on the homepage.
+    private var hasActiveWallpaper: Bool {
+        homepageState.wallpaperState.wallpaperConfiguration.hasImage || wallpaperView.unsplashImage != nil
+    }
+
+    /// Returns a copy of the given `SectionHeaderConfiguration` with `showsBlurBackground`
+    /// set according to whether a wallpaper is currently active.
+    private func wallpaperAwareHeaderState(_ state: SectionHeaderConfiguration) -> SectionHeaderConfiguration {
+        var updated = state
+        updated.showsBlurBackground = hasActiveWallpaper
+        return updated
+    }
+
     private func configureSectionHeader(
         for section: HomepageSection,
         with sectionLabelCell: LabelButtonHeaderView
@@ -738,7 +751,7 @@ final class HomepageViewController: UIViewController,
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
-                state: homepageState.topSitesState.sectionHeaderState,
+                state: wallpaperAwareHeaderState(homepageState.topSitesState.sectionHeaderState),
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToShortcutsLibrary()
                 },
@@ -748,7 +761,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
-                state: homepageState.jumpBackInState.sectionHeaderState,
+                state: wallpaperAwareHeaderState(homepageState.jumpBackInState.sectionHeaderState),
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToTabTray(with: .tabs)
                 },
@@ -759,7 +772,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.bookmarkState.sectionHeaderState,
+                state: wallpaperAwareHeaderState(homepageState.bookmarkState.sectionHeaderState),
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToBookmarksPanel()
                 },
@@ -769,7 +782,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.merinoState.sectionHeaderState,
+                state: wallpaperAwareHeaderState(homepageState.merinoState.sectionHeaderState),
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToStoriesFeed()
                 },
