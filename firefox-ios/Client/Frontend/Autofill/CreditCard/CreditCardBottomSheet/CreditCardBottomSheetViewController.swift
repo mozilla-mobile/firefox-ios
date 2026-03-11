@@ -239,9 +239,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if #unavailable(iOS 26.0) {
-            updateConstraints()
-        }
+        updateConstraints()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
