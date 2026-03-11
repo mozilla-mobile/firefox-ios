@@ -53,6 +53,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
+        label.backgroundColor = .clear
     }
 
     private(set) lazy var moreButton: ActionButton = .build { button in
@@ -83,30 +84,17 @@ class LabelButtonHeaderView: UICollectionReusableView,
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(moreButton)
 
-        // Blur views sit behind the stack; stack is inserted last so it renders on top
+        // Blur views are positioned manually in layoutSubviews based on intrinsic text size;
+        // they are inserted before the stack so it renders on top.
         addSubview(titleBlurView)
         addSubview(buttonBlurView)
         addSubview(stackView)
 
-        let hPad = UX.blurHorizontalPadding
-        let vPad = UX.blurVerticalPadding
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
-
-            // Title pill — hugs the titleLabel
-            titleBlurView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -vPad),
-            titleBlurView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -hPad),
-            titleBlurView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: hPad),
-            titleBlurView.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: vPad),
-
-            // Button pill — hugs the moreButton
-            buttonBlurView.topAnchor.constraint(equalTo: moreButton.topAnchor, constant: -vPad),
-            buttonBlurView.leadingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -hPad),
-            buttonBlurView.trailingAnchor.constraint(equalTo: moreButton.trailingAnchor, constant: hPad),
-            buttonBlurView.bottomAnchor.constraint(equalTo: moreButton.bottomAnchor, constant: vPad)
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
         ])
 
         // Setting custom values to resolve horizontal ambiguity
@@ -114,6 +102,41 @@ class LabelButtonHeaderView: UICollectionReusableView,
         titleLabel.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
 
         adjustLayout()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateBlurFrames()
+    }
+
+    /// Sizes each blur pill to the intrinsic content width of its element, not the full layout width.
+    private func updateBlurFrames() {
+        let hPad = UX.blurHorizontalPadding
+        let vPad = UX.blurVerticalPadding
+
+        if !titleBlurView.isHidden {
+            let textSize = titleLabel.intrinsicContentSize
+            let labelFrame = titleLabel.frame
+            let pillWidth = min(textSize.width + hPad * 2, labelFrame.width + hPad * 2)
+            titleBlurView.frame = CGRect(
+                x: labelFrame.minX - hPad,
+                y: labelFrame.minY - vPad,
+                width: pillWidth,
+                height: labelFrame.height + vPad * 2
+            )
+        }
+
+        if !buttonBlurView.isHidden {
+            let btnSize = moreButton.intrinsicContentSize
+            let btnFrame = moreButton.frame
+            let pillWidth = min(btnSize.width + hPad * 2, btnFrame.width + hPad * 2)
+            buttonBlurView.frame = CGRect(
+                x: btnFrame.maxX - pillWidth + hPad,
+                y: btnFrame.minY - vPad,
+                width: pillWidth,
+                height: btnFrame.height + vPad * 2
+            )
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
