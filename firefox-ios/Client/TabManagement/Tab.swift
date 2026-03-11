@@ -449,7 +449,7 @@ class Tab: NSObject,
     private var contentScriptManager = TabContentScriptManager()
 
     /// WebKit-provided configuration for popup tabs. Takes precedence over standard configuration when set.
-    var requiredConfiguration: WKWebViewConfiguration?
+    var requiredPopupConfiguration: WKWebViewConfiguration?
     private var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
@@ -541,7 +541,8 @@ class Tab: NSObject,
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
         guard webView == nil else { return }
 
-        let requiredConfiguration = requiredConfiguration ?? configuration
+        let requiredConfiguration = requiredPopupConfiguration ?? configuration
+        // Ensures we inject scripts into a new content controller
         requiredConfiguration.userContentController = .init()
         self.configuration = requiredConfiguration
         let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
