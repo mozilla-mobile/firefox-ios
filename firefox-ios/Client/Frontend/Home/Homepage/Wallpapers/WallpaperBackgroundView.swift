@@ -13,6 +13,22 @@ class WallpaperBackgroundView: UIView {
         imageView.clipsToBounds = true
     }
 
+    /// 15% black scrim layered over the wallpaper to improve legibility.
+    private lazy var scrimView: UIView = .build { view in
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        view.isHidden = true
+    }
+
+    /// Blur view that fades from strong at the top edge to nothing toward the center.
+    private lazy var topBlurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+
+    /// Blur view that fades from strong at the bottom edge to nothing toward the center.
+    private lazy var bottomBlurView: UIVisualEffectView = .build { view in
+        view.effect = UIBlurEffect(style: .systemUltraThinMaterial)
+    }
+
     // MARK: - Variables
     var wallpaperState: WallpaperState? {
         didSet {
@@ -20,7 +36,7 @@ class WallpaperBackgroundView: UIView {
         }
     }
 
-    /// When set, this Unsplash image takes priority over the Redux wallpaper state.
+    /// When set, this provider wallpaper image takes priority over the Redux wallpaper state.
     var unsplashImage: UIImage? {
         didSet {
             updateImageToCurrentWallpaper()
@@ -41,14 +57,58 @@ class WallpaperBackgroundView: UIView {
     private func setupView() {
         backgroundColor = .clear
         addSubview(pictureView)
+        addSubview(scrimView)
+        addSubview(topBlurView)
+        addSubview(bottomBlurView)
+
+        let blurHeightRatio: CGFloat = 0.30
 
         NSLayoutConstraint.activate([
             pictureView.leadingAnchor.constraint(equalTo: leadingAnchor),
             pictureView.topAnchor.constraint(equalTo: topAnchor),
             pictureView.bottomAnchor.constraint(equalTo: bottomAnchor),
             pictureView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            scrimView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrimView.topAnchor.constraint(equalTo: topAnchor),
+            scrimView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrimView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            topBlurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBlurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            topBlurView.topAnchor.constraint(equalTo: topAnchor),
+            topBlurView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: blurHeightRatio),
+
+            bottomBlurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomBlurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomBlurView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomBlurView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: blurHeightRatio)
         ])
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        applyGradientMask(to: topBlurView, direction: .topToBottom)
+        applyGradientMask(to: bottomBlurView, direction: .bottomToTop)
+    }
+
+    /// Applies a gradient mask so the blur fades from opaque (edge) to transparent (center).
+    private func applyGradientMask(to blurView: UIVisualEffectView, direction: GradientDirection) {
+        let gradient = CAGradientLayer()
+        gradient.frame = blurView.bounds
+        gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        switch direction {
+        case .topToBottom:
+            gradient.startPoint = CGPoint(x: 0.5, y: 0)
+            gradient.endPoint   = CGPoint(x: 0.5, y: 1)
+        case .bottomToTop:
+            gradient.startPoint = CGPoint(x: 0.5, y: 1)
+            gradient.endPoint   = CGPoint(x: 0.5, y: 0)
+        }
+        blurView.layer.mask = gradient
+    }
+
+    private enum GradientDirection { case topToBottom, bottomToTop }
 
     // MARK: - Methods
     public func updateImageForOrientationChange() {
@@ -57,10 +117,11 @@ class WallpaperBackgroundView: UIView {
 
     private func updateImageToCurrentWallpaper() {
         ensureMainThread {
-            // Unsplash wallpaper takes priority if set
-            if let unsplash = self.unsplashImage {
+            // Provider wallpaper takes priority if set
+            if let providerImage = self.unsplashImage {
                 UIView.animate(withDuration: 0.3) {
-                    self.pictureView.image = unsplash
+                    self.pictureView.image = providerImage
+                    self.scrimView.isHidden = false
                 }
                 return
             }
@@ -69,6 +130,7 @@ class WallpaperBackgroundView: UIView {
             let currentWallpaperImage = self.currentWallpaperImage(from: state)
             UIView.animate(withDuration: 0.3) {
                 self.pictureView.image = currentWallpaperImage
+                self.scrimView.isHidden = currentWallpaperImage == nil
             }
         }
     }
