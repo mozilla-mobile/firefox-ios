@@ -1472,6 +1472,9 @@
 		D4E5F607182940B2C3D4E5F6 /* UnsplashPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0718293041B2C3D4E5F60718 /* UnsplashPhoto.swift */; };
 		E5F607182950C3D4E5F60718 /* UnsplashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182930A152C3D4E5F6071829 /* UnsplashService.swift */; };
 		C7A3B8D24F2E9051C7A3B8D2 /* UnsplashRefreshManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A3B8D14F2E9051C7A3B8D1 /* UnsplashRefreshManager.swift */; };
+		AA11BB22CC33DD44EE550001 /* PexelsConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE440001 /* PexelsConfig.swift */; };
+		AA11BB22CC33DD44EE550002 /* PexelsPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE440002 /* PexelsPhoto.swift */; };
+		AA11BB22CC33DD44EE550003 /* PexelsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE440003 /* PexelsService.swift */; };
 		F60718296063D4E5F6071829 /* UnsplashWallpaperSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2930A1B263D4E5F607182930 /* UnsplashWallpaperSectionView.swift */; };
 		071829307074E5F607182930 /* UnsplashConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 30A1B2C374E5F60718293041 /* UnsplashConfig.json */; };
 		BA4BB99E2D7FB38B006BD137 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */; };
@@ -9939,6 +9942,9 @@
 		0718293041B2C3D4E5F60718 /* UnsplashPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashPhoto.swift; sourceTree = "<group>"; };
 		182930A152C3D4E5F6071829 /* UnsplashService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashService.swift; sourceTree = "<group>"; };
 		C7A3B8D14F2E9051C7A3B8D1 /* UnsplashRefreshManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashRefreshManager.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE440001 /* PexelsConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PexelsConfig.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE440002 /* PexelsPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PexelsPhoto.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE440003 /* PexelsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PexelsService.swift; sourceTree = "<group>"; };
 		2930A1B263D4E5F607182930 /* UnsplashWallpaperSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashWallpaperSectionView.swift; sourceTree = "<group>"; };
 		30A1B2C374E5F60718293041 /* UnsplashConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = UnsplashConfig.json; sourceTree = "<group>"; };
 		BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelectionView.swift; sourceTree = "<group>"; };
@@ -15630,10 +15636,21 @@
 			path = Unsplash;
 			sourceTree = "<group>";
 		};
+		AA11BB22CC33DD44EE330001 /* Pexels */ = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE440001 /* PexelsConfig.swift */,
+				AA11BB22CC33DD44EE440002 /* PexelsPhoto.swift */,
+				AA11BB22CC33DD44EE440003 /* PexelsService.swift */,
+			);
+			path = Pexels;
+			sourceTree = "<group>";
+		};
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
 			isa = PBXGroup;
 			children = (
 				A1B2C3D4E5F60718UNSPLASH /* Unsplash */,
+				AA11BB22CC33DD44EE330001 /* Pexels */,
 				612194E42CE50A7B001664BB /* Redux */,
 				C84655DC2887384200861B4A /* v1 */,
 				612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */,
@@ -19197,6 +19214,9 @@
 				D4E5F607182940B2C3D4E5F6 /* UnsplashPhoto.swift in Sources */,
 				E5F607182950C3D4E5F60718 /* UnsplashService.swift in Sources */,
 				C7A3B8D24F2E9051C7A3B8D2 /* UnsplashRefreshManager.swift in Sources */,
+				AA11BB22CC33DD44EE550001 /* PexelsConfig.swift in Sources */,
+				AA11BB22CC33DD44EE550002 /* PexelsPhoto.swift in Sources */,
+				AA11BB22CC33DD44EE550003 /* PexelsService.swift in Sources */,
 				F60718296063D4E5F6071829 /* UnsplashWallpaperSectionView.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				21F422662E315E5C004FF994 /* LegacyTabScrollController.swift in Sources */,
