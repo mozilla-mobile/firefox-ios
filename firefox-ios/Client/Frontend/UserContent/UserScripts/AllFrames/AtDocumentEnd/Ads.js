@@ -44,8 +44,23 @@ function getLinks() {
  * @return {Array<{name: string, value: string}>} containing all cookies.
  */
 function getCookies() {
-    let cookiesList = document.cookie.split("; ");
     let result = [];
+    let cookiesList = [];
+
+    // FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
+    if (window.location.protocol == "about:" && window.opener && window.opener.parent != window.opener) {
+        let frameParent = window.opener.parent;
+        // Positively catch the SecurityError on the conditional as a way to not touch the cookie inside
+        try {
+            if (frameParent.location.origin == window.opener.location.origin) {
+                cookiesList = document.cookie.split("; ");
+            }
+        } catch {
+            cookiesList = [""];
+        }
+    } else {
+        cookiesList = document.cookie.split("; ");
+    }
 
     cookiesList.forEach(cookie => {
         var [name, ...value] = cookie.split('=');
