@@ -132,7 +132,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             )
         }
 
-        if shouldShowCustomTheming && UX.showCuratedThemes {
+        if UX.showCuratedThemes {
             CuratedThemesSectionView(
                 theme: currentTheme,
                 themeManager: themeManager,

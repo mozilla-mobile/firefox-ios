@@ -7,54 +7,65 @@ import Shared
 
 /// Unsplash API credentials.
 ///
-/// The loader tries three sources in order:
-/// 1. A bundled `UnsplashConfig.json` (added to Copy Bundle Resources, gitignored).
-/// 2. Values saved locally via the Feature Flags debug settings (Settings → Feature Flags →
-///    Custom Theming — Unsplash Keys). These are stored in UserDefaults and never committed.
-/// 3. The placeholder constants below — edit them locally for quick testing.
+/// Key resolution priority:
+/// 1. **CI/CD env vars** — set in Bitrise (or any CI) as secret environment variables:
+///    - `WALLPAPER_UNSPLASH_APP_ID`
+///    - `WALLPAPER_UNSPLASH_ACCESS_KEY`  ← required; others are optional
+///    - `WALLPAPER_UNSPLASH_SECRET_KEY`
+/// 2. **Bundled JSON** — `UnsplashConfig.json` in Copy Bundle Resources (gitignored).
+/// 3. **Feature Flags debug UI** — Settings → Feature Flags → Wallpaper Provider.
+///    Stored in UserDefaults, never committed.
+/// 4. **Local placeholder** — edit `placeholder*` constants below for quick dev testing.
 ///
-/// **Do NOT commit real keys.** The placeholders and UserDefaults values are safe to commit.
+/// **Do NOT commit real keys.**
 struct UnsplashConfig: Codable {
     let appId: String
     let accessKey: String
     let secretKey: String
 
+    // MARK: - Bitrise / CI Environment Variable Names
+    static let envAppId     = "WALLPAPER_UNSPLASH_APP_ID"
+    static let envAccessKey = "WALLPAPER_UNSPLASH_ACCESS_KEY"
+    static let envSecretKey = "WALLPAPER_UNSPLASH_SECRET_KEY"
+
     // MARK: - Local Testing Placeholders
-    // Replace these with your Unsplash API credentials for local dev/testing.
-    // They are only used when UnsplashConfig.json and UserDefaults are both empty.
     private static let placeholderAppId     = "REPLACE_ME_APP_ID"
     private static let placeholderAccessKey = "REPLACE_ME_ACCESS_KEY"
     private static let placeholderSecretKey = "REPLACE_ME_SECRET_KEY"
 
-    /// Loads config from the bundled JSON, then UserDefaults debug overrides,
-    /// then placeholder constants. Returns `nil` if no real keys are available.
+    /// Returns a configured `UnsplashConfig` using the first available source, or `nil`.
     static func load() -> UnsplashConfig? {
-        // 1. Try bundled JSON first
+        // 1. CI/CD environment variables (Bitrise secret env vars)
+        let env = ProcessInfo.processInfo.environment
+        let ciAccessKey = env[envAccessKey] ?? ""
+        if !ciAccessKey.isEmpty {
+            return UnsplashConfig(
+                appId: env[envAppId] ?? "",
+                accessKey: ciAccessKey,
+                secretKey: env[envSecretKey] ?? ""
+            )
+        }
+
+        // 2. Bundled JSON (gitignored, for local dev with real keys)
         if let url = Bundle.main.url(forResource: "UnsplashConfig", withExtension: "json"),
            let data = try? Data(contentsOf: url),
            let config = try? JSONDecoder().decode(UnsplashConfig.self, from: data) {
             return config
         }
 
-        // 2. Try values saved via Feature Flags debug settings
+        // 3. Feature Flags debug settings (UserDefaults)
         let defaults = UserDefaults.standard
-        let debugAppId = defaults.string(forKey: PrefsKeys.CustomTheming.unsplashAppId) ?? ""
         let debugAccessKey = defaults.string(forKey: PrefsKeys.CustomTheming.unsplashAccessKey) ?? ""
-        let debugSecretKey = defaults.string(forKey: PrefsKeys.CustomTheming.unsplashSecretKey) ?? ""
         if !debugAccessKey.isEmpty {
             return UnsplashConfig(
-                appId: debugAppId,
+                appId: defaults.string(forKey: PrefsKeys.CustomTheming.unsplashAppId) ?? "",
                 accessKey: debugAccessKey,
-                secretKey: debugSecretKey
+                secretKey: defaults.string(forKey: PrefsKeys.CustomTheming.unsplashSecretKey) ?? ""
             )
         }
 
-        // 3. Fall back to placeholder constants (edit locally, don't commit real keys)
+        // 4. Local placeholder (never commit real keys)
         guard placeholderAccessKey != "REPLACE_ME_ACCESS_KEY" else { return nil }
-        return UnsplashConfig(
-            appId: placeholderAppId,
-            accessKey: placeholderAccessKey,
-            secretKey: placeholderSecretKey
-        )
+        return UnsplashConfig(appId: placeholderAppId, accessKey: placeholderAccessKey, secretKey: placeholderSecretKey)
     }
 }
