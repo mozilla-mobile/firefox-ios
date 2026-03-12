@@ -5418,6 +5418,18 @@ extension String {
                 value: "Reader View",
                 comment: "On the main menu, the title for the action that will show the reader view for the webpage."
             )
+            public static let ReaderViewOn = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOn.Title.v150",
+                tableName: "On",
+                value: "Reader View",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned on."
+            )
+            public static let ReaderViewOff = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOff.Title.v150",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned off."
+            )
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(
@@ -5468,6 +5480,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let ReaderView = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150",
+                    tableName: "MainMenu",
+                    value: "Reader View",
+                    comment: "On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage.")
                 public static let SummarizePage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142",
                     tableName: "MainMenu",
