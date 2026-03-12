@@ -56,9 +56,9 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
         }
         // Debug flag: show free-pick color pickers (accent/background/toolbar).
         // When false, only curated JSON themes are shown.
-        static let showCustomColorPickers: Bool = false
+        static let showCustomColorPickers = false
         // Debug flag: show the curated JSON theme picker section.
-        static let showCuratedThemes: Bool = true
+        static let showCuratedThemes = true
     }
 
     var body: some View {

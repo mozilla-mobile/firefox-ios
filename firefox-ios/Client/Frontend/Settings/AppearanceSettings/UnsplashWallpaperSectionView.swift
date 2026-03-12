@@ -34,7 +34,7 @@ struct UnsplashWallpaperSectionView: View {
         static let verticalPadding: CGFloat = 12
         static let checkmarkSize: CGFloat = 22
         static let searchBarHeight: CGFloat = 36
-        static let showRefreshUI: Bool = false // set true to show auto-refresh picker
+        static let showRefreshUI = false // set true to show auto-refresh picker
         /// UserDefaults key for the cached initial "nature" photo list.
         static let initialCacheKey = "wallpaper.nature.photoCache"
     }
