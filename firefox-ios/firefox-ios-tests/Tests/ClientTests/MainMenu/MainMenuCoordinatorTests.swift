@@ -58,19 +58,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
         mockRouter.savedCompletion?()
 
         XCTAssertEqual(mockDelegate.showReaderModeCalled, 1)
-    }
-
-    func testHandleNavigation_readerView_dismissesMenuModal() {
-        let subject = createSubject()
-        subject.navigationHandler = MockMainMenuCoordinatorDelegate()
-
-        subject.navigateTo(MenuNavigationDestination(.readerView), animated: false)
-        // First dismiss from navigateTo
         XCTAssertEqual(mockRouter.dismissCalled, 1)
-
-        mockRouter.savedCompletion?()
-        // Second dismiss from dismissMenuModal inside handleDestination
-        XCTAssertEqual(mockRouter.dismissCalled, 2)
     }
 
     private func createSubject(
@@ -82,23 +70,4 @@ final class MainMenuCoordinatorTests: XCTestCase {
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
-}
-
-// MARK: - MockMainMenuCoordinatorDelegate
-
-private class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
-    var showReaderModeCalled = 0
-
-    func editBookmarkForCurrentTab() {}
-    func showLibraryPanel(_ panel: Route.HomepanelSection) {}
-    func showSettings(at destination: Route.SettingsSection) {}
-    func showFindInPage() {}
-    func showSignInView(fxaParameters: FxASignInViewParameters?) {}
-    func updateZoomPageBarVisibility() {}
-    func presentSavePDFController() {}
-    func presentSiteProtections() {}
-    func showPrintSheet() {}
-    func showReaderMode() { showReaderModeCalled += 1 }
-    func showShareSheetForCurrentlySelectedTab() {}
-    func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {}
 }

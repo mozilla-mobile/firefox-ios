@@ -11,12 +11,14 @@ import SummarizeKit
 
 @MainActor
 final class MainMenuConfigurationUtilityTests: XCTestCase {
-    var configUtility: MainMenuConfigurationUtility!
+    private var configUtility: MainMenuConfigurationUtility!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        setIsSummarizerLanguageExpansionEnabled(false)
         configUtility = MainMenuConfigurationUtility()
     }
 
@@ -58,47 +60,33 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.Print))
     }
 
-    func testGenerateMenuElements_readerViewItem_isDisabled_whenReaderModeNotAvailable() {
-        let tabInfo = getTabInfo(readerModeIsAvailable: false, readerModeIsEnabled: false)
-        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
+    func testGenerateMenuElements_readerViewItem_whenSummarizerLanguageExpansionEnabled() {
+        setIsSummarizerLanguageExpansionEnabled(true)
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isExpanded: true)
 
         let allItems = sections.flatMap { $0.options }
-        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
+        let titles = allItems.map { $0.title }
 
-        for item in readerViewItems {
-            XCTAssertFalse(item.isEnabled, "Reader view item should be disabled when reader mode is not available")
-        }
+        XCTAssertTrue(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
     }
-
-    func testGenerateMenuElements_readerViewItem_isEnabled_whenReaderModeAvailable() {
-        let tabInfo = getTabInfo(readerModeIsAvailable: true, readerModeIsEnabled: false)
-        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
+    
+    func testGenerateMenuElements_readerViewItem_whenSummarizerLanguageExpansionDisabled() {
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isExpanded: true)
 
         let allItems = sections.flatMap { $0.options }
-        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
+        let titles = allItems.map { $0.title }
 
-        for item in readerViewItems {
-            XCTAssertTrue(item.isEnabled, "Reader view item should be enabled when reader mode is available")
-            XCTAssertFalse(item.isActive, "Reader view item should not be active when reader mode is not enabled")
-        }
+        XCTAssertFalse(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
     }
-
-    func testGenerateMenuElements_readerViewItem_isActive_whenReaderModeEnabled() {
-        let tabInfo = getTabInfo(readerModeIsAvailable: true, readerModeIsEnabled: true)
-        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
-
-        let allItems = sections.flatMap { $0.options }
-        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
-
-        for item in readerViewItems {
-            XCTAssertTrue(item.isActive, "Reader view item should be active when reader mode is enabled")
+    
+    private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+            return SummarizerLanguageExpansionFeature(enabled: enabled)
         }
     }
 
     private func getTabInfo(
         isHomepage: Bool = false,
-        readerModeIsAvailable: Bool = false,
-        readerModeIsEnabled: Bool = false
     ) -> MainMenuTabInfo {
         return MainMenuTabInfo(
             tabID: "uuid",
@@ -108,8 +96,8 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             isDefaultUserAgentDesktop: false,
             hasChangedUserAgent: false,
             zoomLevel: 0,
-            readerModeIsAvailable: readerModeIsAvailable,
-            readerModeIsEnabled: readerModeIsEnabled,
+            readerModeIsAvailable: false,
+            readerModeIsEnabled: false,
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,

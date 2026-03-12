@@ -127,7 +127,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             navigationHandler?.showSettings(at: .password)
             
         case .readerView:
-            dismissMenuModal(animated: true)
             navigationHandler?.showReaderMode()
 
         case .settings:
