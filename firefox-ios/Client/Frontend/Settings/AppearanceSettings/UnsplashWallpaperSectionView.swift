@@ -328,7 +328,6 @@ extension UnsplashWallpaperSectionView {
 // MARK: - Data Loading & Selection
 
 extension UnsplashWallpaperSectionView {
-    @MainActor
     /// Initial load: serves from cache if available, otherwise fetches "nature" and caches results.
     /// Cache is keyed to provider type so switching providers gets a fresh fetch.
     @MainActor
