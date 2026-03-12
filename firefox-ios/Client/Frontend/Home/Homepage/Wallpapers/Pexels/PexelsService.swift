@@ -83,6 +83,27 @@ final class PexelsService: WallpaperProvider {
         return decoded.photos.compactMap { wallpaperPhoto(from: $0) }
     }
 
+    func search(query: String, page: Int, perPage: Int) async throws -> [WallpaperPhoto] {
+        guard let config = PexelsConfig.load() else { throw PexelsError.notConfigured }
+        var components = URLComponents(string: "\(baseURL)/search")
+        components?.queryItems = [
+            URLQueryItem(name: "query", value: query),
+            URLQueryItem(name: "per_page", value: "\(perPage)"),
+            URLQueryItem(name: "page", value: "\(page)"),
+            URLQueryItem(name: "orientation", value: "portrait")
+        ]
+        guard let url = components?.url else { throw PexelsError.invalidURL }
+
+        var request = URLRequest(url: url)
+        request.setValue(config.apiKey, forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try validateHTTPResponse(response)
+
+        let decoded = try JSONDecoder().decode(PexelsCuratedResponse.self, from: data)
+        return decoded.photos.compactMap { wallpaperPhoto(from: $0) }
+    }
+
     func downloadImage(for photo: WallpaperPhoto) async throws -> URL {
         guard let dir = wallpaperDirectory else { throw PexelsError.storageUnavailable }
         let photoDir = dir.appendingPathComponent(photo.id, isDirectory: true)

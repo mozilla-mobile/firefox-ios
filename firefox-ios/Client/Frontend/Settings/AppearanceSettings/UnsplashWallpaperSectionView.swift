@@ -18,6 +18,10 @@ struct UnsplashWallpaperSectionView: View {
     @State private var selectedPhotoId: String?
     @State private var isDownloading = false
     @State private var refreshInterval = UnsplashRefreshInterval.current()
+    @State private var selectedKeyword: String?
+
+    private let keywords = ["Nature", "Ocean", "Mountains", "City", "Forest",
+                            "Space", "Flowers", "Puppies", "Abstract", "Sunset"]
 
     private var provider: WallpaperProvider { WallpaperProviderManager.shared.activeProvider }
     private var providerType: WallpaperProviderType { WallpaperProviderManager.shared.activeProviderType }
@@ -48,25 +52,18 @@ struct UnsplashWallpaperSectionView: View {
 
     private var refreshIntervalRow: some View {
         VStack(alignment: .leading, spacing: UXConstants.spacing) {
-            Text("Auto-Refresh Wallpaper")
-                .font(.subheadline)
-                .fontWeight(.medium)
+            Text("Auto-Refresh Wallpaper").font(.subheadline).fontWeight(.medium)
                 .foregroundColor(Color(theme?.colors.textPrimary ?? .label))
             Picker("Refresh", selection: $refreshInterval) {
-                ForEach(UnsplashRefreshInterval.allCases) { interval in
-                    Text(interval.displayName).tag(interval)
-                }
+                ForEach(UnsplashRefreshInterval.allCases) { Text($0.displayName).tag($0) }
             }
             .pickerStyle(.segmented)
-            .onChange(of: refreshInterval) { newInterval in
-                newInterval.save()
-                if newInterval == .never {
+            .onChange(of: refreshInterval) { interval in
+                interval.save()
+                if interval == .never {
                     UserDefaults.standard.removeObject(forKey: WallpaperKeys.lastRefreshDate)
                 } else {
-                    UserDefaults.standard.set(
-                        Date().timeIntervalSince1970,
-                        forKey: WallpaperKeys.lastRefreshDate
-                    )
+                    UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: WallpaperKeys.lastRefreshDate)
                     UnsplashRefreshManager.shared.forceRefresh()
                 }
             }
@@ -81,6 +78,7 @@ struct UnsplashWallpaperSectionView: View {
             refreshIntervalRow
             searchBar
             contentArea
+            keywordChips
             if !photos.isEmpty { attributionView }
         }
         .padding(.horizontal, UXConstants.horizontalPadding)
@@ -102,9 +100,41 @@ struct UnsplashWallpaperSectionView: View {
     }
 }
 
-// MARK: - Search Bar
+// MARK: - Search Bar & Keyword Chips
 
 extension UnsplashWallpaperSectionView {
+    var keywordChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(keywords, id: \.self) { keyword in
+                    chipButton(keyword)
+                }
+            }
+        }
+    }
+
+    private func chipButton(_ keyword: String) -> some View {
+        let active = selectedKeyword == keyword
+        let fgColor = active ? Color.white : Color(theme?.colors.textSecondary ?? .secondaryLabel)
+        let bgColor = active
+            ? Color(theme?.colors.actionPrimary ?? .systemBlue)
+            : Color(theme?.colors.layer2 ?? .secondarySystemBackground)
+        return Button {
+            if active {
+                selectedKeyword = nil; searchText = ""
+                Task { await loadCuratedPhotos() }
+            } else {
+                selectedKeyword = keyword; searchText = keyword
+                Task { await performSearch() }
+            }
+        } label: {
+            Text(keyword).font(.system(size: 13, weight: .medium))
+                .foregroundColor(fgColor).padding(.horizontal, 12).padding(.vertical, 6)
+                .background(bgColor).clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+    }
+
     var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
@@ -127,6 +157,7 @@ extension UnsplashWallpaperSectionView {
             if !searchText.isEmpty {
                 Button {
                     searchText = ""
+                    selectedKeyword = nil
                     Task { await loadCuratedPhotos() }
                 } label: {
                     Image(systemName: "xmark.circle.fill")
@@ -240,22 +271,14 @@ extension UnsplashWallpaperSectionView {
     }
 
     var loadingView: some View {
-        HStack {
-            Spacer()
-            ProgressView().frame(height: UXConstants.thumbnailHeight)
-            Spacer()
-        }
+        ProgressView().frame(maxWidth: .infinity).frame(height: UXConstants.thumbnailHeight)
     }
 
     var notConfiguredView: some View {
-        HStack {
-            Spacer()
-            Text("\(providerType.displayName) API not configured")
-                .font(.system(size: 13))
-                .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
-                .frame(height: UXConstants.thumbnailHeight)
-            Spacer()
-        }
+        Text("\(providerType.displayName) API not configured")
+            .font(.system(size: 13))
+            .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
+            .frame(maxWidth: .infinity).frame(height: UXConstants.thumbnailHeight)
     }
 
     @ViewBuilder
@@ -278,14 +301,10 @@ extension UnsplashWallpaperSectionView {
     }
 
     var emptyView: some View {
-        HStack {
-            Spacer()
-            Text("No photos found")
-                .font(.system(size: 13))
-                .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
-                .frame(height: UXConstants.thumbnailHeight)
-            Spacer()
-        }
+        Text("No photos found")
+            .font(.system(size: 13))
+            .foregroundColor(Color(theme?.colors.textSecondary ?? .secondaryLabel))
+            .frame(maxWidth: .infinity).frame(height: UXConstants.thumbnailHeight)
     }
 
     /// Attribution text that reads "Photos by [ProviderName]" with a hyperlink.
@@ -325,22 +344,15 @@ extension UnsplashWallpaperSectionView {
             await loadCuratedPhotos()
             return
         }
-        // Search only supported for Unsplash; for Pexels fall back to curated load.
-        if case .unsplash = providerType,
-           let unsplash = provider as? UnsplashService {
-            isLoading = true
-            errorMessage = nil
-            do {
-                let result = try await unsplash.searchPhotos(query: query, page: 1, perPage: 30)
-                photos = result.results.map { unsplash.wallpaperPhotoValue(from: $0) }
-                selectedPhotoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId)
-            } catch {
-                errorMessage = error.localizedDescription
-            }
-            isLoading = false
-        } else {
-            await loadCuratedPhotos()
+        isLoading = true
+        errorMessage = nil
+        do {
+            photos = try await provider.search(query: query, page: 1, perPage: 30)
+            selectedPhotoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId)
+        } catch {
+            errorMessage = error.localizedDescription
         }
+        isLoading = false
     }
 
     @MainActor
@@ -363,20 +375,12 @@ extension UnsplashWallpaperSectionView {
         do {
             let fileURL = try await provider.downloadImage(for: photo)
             guard let image = UIImage(contentsOfFile: fileURL.path) else {
-                errorMessage = "Failed to load downloaded image"
-                isDownloading = false
-                return
+                errorMessage = "Failed to load downloaded image"; isDownloading = false; return
             }
             UserDefaults.standard.set(photo.id, forKey: WallpaperKeys.currentPhotoId)
-            NotificationCenter.default.post(
-                name: .UnsplashWallpaperDidChange,
-                object: nil,
-                userInfo: [
-                    "image": image,
-                    "photoId": photo.id,
-                    "photographerName": photo.photographerName
-                ]
-            )
+            let info: [String: Any] = ["image": image, "photoId": photo.id,
+                                       "photographerName": photo.photographerName]
+            NotificationCenter.default.post(name: .UnsplashWallpaperDidChange, object: nil, userInfo: info)
         } catch {
             errorMessage = "Download failed: \(error.localizedDescription)"
             selectedPhotoId = nil
@@ -391,10 +395,6 @@ extension UnsplashWallpaperSectionView {
         refreshInterval = .never
         UnsplashRefreshInterval.never.save()
         UserDefaults.standard.removeObject(forKey: WallpaperKeys.lastRefreshDate)
-        NotificationCenter.default.post(
-            name: .UnsplashWallpaperDidChange,
-            object: nil,
-            userInfo: ["clear": true]
-        )
+        NotificationCenter.default.post(name: .UnsplashWallpaperDidChange, object: nil, userInfo: ["clear": true])
     }
 }

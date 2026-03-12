@@ -57,6 +57,9 @@ public protocol WallpaperProvider {
     /// Return the cached full-resolution image for a previously downloaded photo, or nil.
     func loadSavedImage(photoId: String) -> UIImage?
 
+    /// Search for photos matching a query string. Returns an empty array if unsupported.
+    func search(query: String, page: Int, perPage: Int) async throws -> [WallpaperPhoto]
+
     /// Return true if the wallpaper for this photo id has already been downloaded.
     func isImageDownloaded(photoId: String) -> Bool
 

@@ -228,6 +228,11 @@ extension UnsplashService: WallpaperProvider {
         return photos.map { wallpaperPhotoValue(from: $0) }
     }
 
+    func search(query: String, page: Int, perPage: Int) async throws -> [WallpaperPhoto] {
+        let result = try await searchPhotos(query: query, page: page, perPage: perPage)
+        return result.results.map { wallpaperPhotoValue(from: $0) }
+    }
+
     func downloadImage(for photo: WallpaperPhoto) async throws -> URL {
         guard let dir = wallpaperDirectory else { throw UnsplashError.storageUnavailable }
         let photoDir = dir.appendingPathComponent(photo.id, isDirectory: true)
