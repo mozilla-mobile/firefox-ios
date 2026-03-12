@@ -26,30 +26,13 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func tearDown() async throws {
-        // Skip theme switching for FirefoxBeta since test exits early
-        if isFirefoxBeta {
-            app.terminate()
-            try await super.tearDown()
-            return
-        }
-
-        if #available(iOS 17.0, *) {
-            if self.name.contains("testSelectBottomPlacement")
-                || self.name.contains("testValidateContinueButton")
-                || iPad() {
-                // Toolbar option not available for iPad, so the theme is not changed there.
-                return
-            } else {
-                switchThemeToDarkOrLight(theme: "Light")
-            }
-        }
         app.terminate()
         try await super.tearDown()
     }
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
-    func testFirstRunTour() throws {
+    func testFirstRunTour() {
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
         // Handle initial gate (ToS for Fennec, Continue for Firefox/Beta)
@@ -67,6 +50,8 @@ class OnboardingTests: BaseTestCase {
 
         // Dismiss new changes pop up if exists
         firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        checkThemeSwitch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
@@ -147,6 +132,8 @@ class OnboardingTests: BaseTestCase {
         // Dismiss new changes pop up if exists
         app.buttons["Close"].tapIfExists()
         mozWaitForElementToExist(topSites)
+
+        checkThemeSwitch()
     }
 
     // Smoketest
@@ -172,6 +159,8 @@ class OnboardingTests: BaseTestCase {
         onboardingScreen.tapSignIn()
         onboardingScreen.assertSignInScreen()
         onboardingScreen.exitSignInFlow()
+
+        checkThemeSwitch()
     }
 
     func testOnboardingSignIn_Old() throws {
@@ -194,6 +183,8 @@ class OnboardingTests: BaseTestCase {
         onboardingScreen.tapSignIn()
         onboardingScreen.assertSignInScreen()
         onboardingScreen.exitSignInFlow()
+
+        checkThemeSwitch()
     }
 
     // Smoketest
@@ -202,6 +193,8 @@ class OnboardingTests: BaseTestCase {
         onboardingScreen.agreeAndContinue()
         onboardingScreen.closeTourIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
+
+        checkThemeSwitch()
     }
 
     // TOOLBAR THEME
@@ -254,6 +247,8 @@ class OnboardingTests: BaseTestCase {
 
             XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
         }
+
+        checkThemeSwitch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
@@ -303,6 +298,8 @@ class OnboardingTests: BaseTestCase {
 
             XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
         }
+
+        checkThemeSwitch()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575177
@@ -328,6 +325,8 @@ class OnboardingTests: BaseTestCase {
         app.buttons["CloseButton"].waitAndTap()
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+
+        checkThemeSwitch()
     }
 
     // Smoketest
@@ -341,5 +340,21 @@ class OnboardingTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         settingsScreen.assertSendTechicalDataIsOn()
         settingsScreen.assertSendCrashReportsIsOn()
+
+        checkThemeSwitch()
+    }
+
+    // MARK: Helpers
+    private func checkThemeSwitch() {
+        if #available(iOS 17.0, *) {
+            guard !self.name.contains("testSelectBottomPlacement"),
+                !self.name.contains("testValidateContinueButton"),
+                !iPad() else {
+                // Toolbar option not available for iPad, so the theme is not changed there.
+                return
+            }
+
+            switchThemeToDarkOrLight(theme: "Light")
+        }
     }
 }
