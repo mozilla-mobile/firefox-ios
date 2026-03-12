@@ -521,6 +521,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
         self.configuration = configuration
         if webView == nil {
+            configuration.userContentController = WKUserContentController()
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
             webView.accessibilityLabel = .WebViewAccessibilityLabel
