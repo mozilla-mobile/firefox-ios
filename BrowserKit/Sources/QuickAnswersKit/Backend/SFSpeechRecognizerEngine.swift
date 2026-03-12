@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import AVFoundation
+import Shared
 import Speech
 
 /// A speech transcription engine backed by `AVAudioEngine` and `SFSpeechRecognizer`.
@@ -60,14 +61,27 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
                 return
             }
             guard let result else { return }
+
             let chunk = result.bestTranscription.formattedString
+            let formattedWords = chunk
+                .components(separatedBy: .whitespacesAndNewlines)
+                .filter { !$0.isEmpty }
+
+            // `isFinal` is not reliable so we add extra checks
+            // such as a confidence level as well as a cap of 50 words.
+            // From manual testing, the confidence level is usually > 0.0 when user finishes speaking.
+            let confidence = result.bestTranscription.segments[safe: 0]?.confidence ?? 0.0
+            let additionalChecks = confidence > 0.0 || formattedWords.count >= 50
+            let shouldFinish = result.isFinal || result.speechRecognitionMetadata != nil || additionalChecks
+
             let speechResult = SpeechResult(
                 text: chunk,
-                isFinal: result.isFinal
+                isFinal: shouldFinish
             )
+
             continuation.yield(speechResult)
-            // TODO: FXIOS-14893 - Improve detection
-            if result.isFinal || result.speechRecognitionMetadata != nil {
+
+            if shouldFinish {
                 continuation.finish()
             }
         }
