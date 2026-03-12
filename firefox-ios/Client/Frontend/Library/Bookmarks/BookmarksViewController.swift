@@ -32,6 +32,25 @@ final class BookmarksViewController: SiteTableViewController,
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
 
+    // MARK: - Search Properties
+    private var isSearching = false
+    private var filteredBookmarkNodes = [FxBookmarkNode]()
+    /// The data source nodes currently displayed: filtered results when searching, otherwise the view model's nodes.
+    private var displayedBookmarkNodes: [FxBookmarkNode] {
+        return isSearching ? filteredBookmarkNodes : viewModel.bookmarkNodes
+    }
+    var keyboardState: KeyboardState?
+
+    // MARK: - Search UI (History-style bottom search bar)
+    var bottomStackView: BaseAlphaStackView = .build { _ in }
+
+    lazy var searchbar: UISearchBar = .build { searchbar in
+        searchbar.searchTextField.placeholder = .Bookmarks.Search.SearchPlaceholder
+        searchbar.returnKeyType = .go
+        searchbar.delegate = self
+        searchbar.showsCancelButton = true
+    }
+
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
         // Return empty toolbar when bookmarks is in desktop folder node
@@ -49,7 +68,13 @@ final class BookmarksViewController: SiteTableViewController,
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
-            return [flexibleSpace, bottomRightButton]
+            return [flexibleSpace, bottomSearchButton, flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .search):
+            bottomRightButton.title = .BookmarksEdit
+            if #available(iOS 26.0, *) {
+                bottomRightButton.tintColor = currentTheme().colors.textPrimary
+            }
+            return [flexibleSpace, bottomSearchButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
@@ -94,6 +119,17 @@ final class BookmarksViewController: SiteTableViewController,
             action: #selector(bottomRightButtonAction)
         )
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
+        return button
+    }()
+
+    private lazy var bottomSearchButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.search),
+            style: .plain,
+            target: self,
+            action: #selector(bottomSearchButtonAction)
+        )
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
         return button
     }()
 
@@ -158,6 +194,8 @@ final class BookmarksViewController: SiteTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self,
                                                                         action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
@@ -167,6 +205,7 @@ final class BookmarksViewController: SiteTableViewController,
         tableView.dragDelegate = self
         tableView.dropDelegate = self
 
+        setupLayout()
         setupEmptyStateView()
     }
 
@@ -180,6 +219,8 @@ final class BookmarksViewController: SiteTableViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        bottomStackView.isHidden = !isSearching
 
         if tableView.isEditing {
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
@@ -435,6 +476,13 @@ final class BookmarksViewController: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
+    private func resetSearch() {
+        isSearching = false
+        filteredBookmarkNodes.removeAll()
+        tableView.reloadData()
+        updateEmptyState(animated: false)
+    }
+
     private func backButtonView() -> UIView? {
         let navigationBarContentView = navigationController?.navigationBar.subviews.first(where: {
             $0.description.starts(with: "<_UINavigationBarContentView:")
@@ -446,6 +494,31 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     // MARK: - UI Setup
+    private func setupLayout() {
+        view.addSubview(bottomStackView)
+        bottomStackView.addArrangedSubview(searchbar)
+        bottomStackView.isHidden = true
+
+        NSLayoutConstraint.activate([
+            bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+
+        bottomStackView.applyTheme(theme: currentTheme())
+    }
+
+    func updateLayoutForKeyboard() {
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
+              keyboardHeight > 0 else {
+            bottomStackView.removeKeyboardSpacer()
+            return
+        }
+
+        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+        bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+    }
+
     private func setupEmptyStateView() {
         view.addSubview(a11yEmptyStateScrollView)
         a11yEmptyStateScrollView.addSubview(emptyStateView)
@@ -475,13 +548,14 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        guard let node = viewModel.bookmarkNodes[safe: indexPath.row],
+        guard let node = displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkCell = node as? BookmarksFolderCell
         else { return }
 
         guard !tableView.isEditing else {
             if let bookmarkFolder = self.viewModel.bookmarkFolder,
                 !(node is BookmarkSeparatorData),
+                !isSearching,
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
                 bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
@@ -493,14 +567,14 @@ final class BookmarksViewController: SiteTableViewController,
         if let itemData = bookmarkCell as? BookmarkItemData,
            let url = URL(string: itemData.url) {
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-        } else {
+        } else if !isSearching {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
             bookmarkCoordinatorDelegate?.start(from: folder)
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.bookmarkNodes.count
+        return displayedBookmarkNodes.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -508,7 +582,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let node = viewModel.bookmarkNodes[safe: indexPath.row] else {
+        guard let node = displayedBookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -560,10 +634,12 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard !isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        guard !isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
@@ -606,6 +682,15 @@ final class BookmarksViewController: SiteTableViewController,
 
     private func currentTheme() -> Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
+    private func applyThemeToSearchBar() {
+        bottomStackView.applyTheme(theme: currentTheme())
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        applyThemeToSearchBar()
     }
 
     // MARK: - UITableViewDragDelegate | UITableViewDropDelegate
@@ -799,10 +884,24 @@ extension BookmarksViewController {
         updatePanelState(newState: .bookmarks(state: .transitioning))
     }
 
+    func handleRightTopButton() {
+        if state == .bookmarks(state: .search) {
+            exitSearchState()
+            updatePanelState(newState: viewModel.isRootNode
+                             ? .bookmarks(state: .mainView)
+                             : .bookmarks(state: .inFolder))
+        }
+    }
+
     func shouldDismissOnDone() -> Bool {
-        guard state != .bookmarks(state: .itemEditMode) else { return false }
+        guard state != .bookmarks(state: .itemEditMode),
+              state != .bookmarks(state: .search) else { return false }
 
         return true
+    }
+
+    func bottomSearchButtonAction() {
+        startSearchState()
     }
 
     func bottomRightButtonAction() {
@@ -819,4 +918,82 @@ extension BookmarksViewController {
             return
         }
     }
+}
+
+// MARK: - UISearchBarDelegate
+extension BookmarksViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+
+        performSearch(term: searchText)
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            handleEmptySearch()
+            return
+        }
+
+        performSearch(term: searchText)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        exitSearchState()
+        let substate: LibraryPanelSubState = viewModel.isRootNode ? .mainView : .inFolder
+        updatePanelState(newState: .bookmarks(state: substate))
+        sendPanelChangeNotification()
+    }
+
+    func startSearchState() {
+        updatePanelState(newState: .bookmarks(state: .search))
+        bottomStackView.isHidden = false
+        searchbar.becomeFirstResponder()
+        sendPanelChangeNotification()
+    }
+
+    func exitSearchState() {
+        resetSearch()
+        searchbar.text = ""
+        searchbar.resignFirstResponder()
+        bottomStackView.isHidden = true
+    }
+
+    func performSearch(term: String) {
+        viewModel.searchBookmarks(query: term) { [weak self] results in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.isSearching = true
+                self.filteredBookmarkNodes = results
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    private func handleEmptySearch() {
+        resetSearch()
+    }
+}
+
+// MARK: - KeyboardHelperDelegate
+extension BookmarksViewController: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateLayoutForKeyboard()
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomStackView.layoutIfNeeded()
+            })
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = nil
+        updateLayoutForKeyboard()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }

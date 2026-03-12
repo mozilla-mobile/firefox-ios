@@ -210,6 +210,14 @@ extension String {
                 comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
         }
 
+        public struct Search {
+            public static let SearchPlaceholder = MZLocalizedString(
+                key: "Bookmarks.Search.Placeholder.v140",
+                tableName: "Bookmarks",
+                value: "Search Bookmarks",
+                comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
+        }
+
         public struct EmptyState {
             public struct Root {
                 public static let Title = MZLocalizedString(

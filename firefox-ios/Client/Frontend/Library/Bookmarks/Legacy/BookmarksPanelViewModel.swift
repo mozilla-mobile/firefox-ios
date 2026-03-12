@@ -146,6 +146,56 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
         ).items
     }
 
+    // MARK: - Search
+
+    /// Recursively searches all bookmarks under the current folder (and its subfolders)
+    /// for items whose title or URL contains the given query string (case-insensitive).
+    func searchBookmarks(query: String, completion: @escaping @Sendable ([FxBookmarkNode]) -> Void) {
+        guard !query.isEmpty else {
+            completion([])
+            return
+        }
+
+        bookmarksHandler
+            .getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: true)
+            .uponQueue(.main) { [weak self] result in
+                guard let folderData = result.successValue as? BookmarkFolderData else {
+                    self?.logger.log("Search bookmarks tree fetch failed",
+                                     level: .debug,
+                                     category: .library)
+                    completion([])
+                    return
+                }
+
+                let lowercasedQuery = query.lowercased()
+                var matches = [FxBookmarkNode]()
+                self?.collectMatchingBookmarks(from: folderData,
+                                               query: lowercasedQuery,
+                                               results: &matches)
+                completion(matches)
+            }
+    }
+
+    /// Recursively traverses the bookmark tree collecting BookmarkItemData nodes
+    /// whose title or URL matches the search query.
+    private func collectMatchingBookmarks(from folder: BookmarkFolderData,
+                                          query: String,
+                                          results: inout [FxBookmarkNode]) {
+        guard let children = folder.children else { return }
+
+        for child in children {
+            if let item = child as? BookmarkItemData {
+                if item.title.lowercased().contains(query) ||
+                    item.url.lowercased().contains(query) {
+                    results.append(item)
+                }
+            } else if let subfolder = child as? BookmarkFolderData {
+                collectMatchingBookmarks(from: subfolder, query: query, results: &results)
+            }
+            // Skip separators
+        }
+    }
+
     // MARK: - Private
 
     /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder,
