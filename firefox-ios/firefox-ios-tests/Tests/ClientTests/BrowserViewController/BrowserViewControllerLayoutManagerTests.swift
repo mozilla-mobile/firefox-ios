@@ -321,23 +321,19 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     // MARK: - Update BottomContent StackView Constraints
 
-    func test_updateBottomContentStackViewConstraints_bottomToolbar_activatesMaxBottomConstraints() {
+    func test_updateBottomContentStackViewConstraints_bottomToolbar_activatesOverKeyboardConstraint() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
         subject.setupOverKeyboardContainerConstraints()
         subject.setupBottomContentStackViewConstraints()
 
-        subject.updateBottomContentStackViewConstraints(
-            isSnapKitRemovalEnabled: true,
-            isBottomSearchBar: true,
-            keyboardState: nil
-        )
+        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: true, keyboardState: nil)
 
-        // The lessThanOrEqual constraints (to overKeyboard and safeArea) should be active
+        // the bottom anchor should be pin to overkeyboard top
         let activeMaxConstraints = parentView.constraints.filter {
-            ($0.firstItem === bottomContentStackView || $0.secondItem === bottomContentStackView)
-                && $0.relation == .lessThanOrEqual
-                && $0.isActive
+            ($0.firstItem === bottomContentStackView || $0.secondItem === overKeyboardContainer)
+            && $0.relation == .equal
+            && $0.firstAttribute == .bottom && $0.secondAttribute == .top
         }
         XCTAssertFalse(activeMaxConstraints.isEmpty)
     }
@@ -349,11 +345,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupBottomContentStackViewConstraints()
         navigationToolbarContainer.isHidden = true
 
-        subject.updateBottomContentStackViewConstraints(
-            isSnapKitRemovalEnabled: true,
-            isBottomSearchBar: false,
-            keyboardState: nil
-        )
+        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: false,
+                                                        keyboardState: nil)
 
         // Basic constraint (equalTo safeArea bottom) should be active
         let basicConstraint = parentView.constraints.first {
