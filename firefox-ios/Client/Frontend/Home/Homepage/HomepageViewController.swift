@@ -440,7 +440,7 @@ final class HomepageViewController: UIViewController,
     private func configureUnsplashWallpaper() {
         // Load previously saved wallpaper (provider-agnostic via WallpaperKeys.currentPhotoId)
         if let photoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId),
-           let image = WallpaperProviderManager.shared.activeProvider.loadSavedWallpaper(photoId: photoId) {
+           let image = WallpaperProviderManager.shared.activeProvider.loadSavedImage(photoId: photoId) {
             wallpaperView.unsplashImage = image
         }
 
