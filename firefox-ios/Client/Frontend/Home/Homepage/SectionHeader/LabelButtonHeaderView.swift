@@ -157,8 +157,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         }
         let attrs: [NSAttributedString.Key: Any] = [
             .font: FXFontStyles.Bold.title3.scaledFont(),
-            .foregroundColor: color,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
+            .foregroundColor: color
         ]
         titleButton.setAttributedTitle(NSAttributedString(string: text, attributes: attrs), for: .normal)
     }
@@ -183,7 +182,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     func applyTheme(theme: Theme) {
         applyUnderlinedTitle(title, color: theme.colors.textPrimary)
-        titleBackgroundView.backgroundColor = theme.colors.layer5
+        titleBackgroundView.backgroundColor = .clear
     }
 
     // MARK: - Notifiable
