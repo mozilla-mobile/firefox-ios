@@ -104,7 +104,12 @@ class UserScriptManager: FeatureFlaggable {
         return try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
     }
 
-    public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
+    public func injectUserScriptsIntoWebView(
+        _ webView: WKWebView?,
+        nightMode: Bool,
+        noImageMode: Bool,
+        shouldInjectAllFramesAtDocumentEnd: Bool = true
+    ) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
         webView?.configuration.userContentController.removeAllUserScripts()
@@ -119,7 +124,11 @@ class UserScriptManager: FeatureFlaggable {
             let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
             let name = mainframeString + "AtDocument" + injectionString
             if let userScript = compiledUserScripts[name] {
-                webView?.configuration.userContentController.addUserScript(userScript)
+                // Laurie - Need to create ticket
+                // FXIOS-TODO - Skip AllFramesAtDocumentEnd for popup tabs
+                if shouldInjectAllFramesAtDocumentEnd || name != "AllFramesAtDocumentEnd" {
+                    webView?.configuration.userContentController.addUserScript(userScript)
+                }
             }
 
             let autofillName = "Autofill\(name)"
