@@ -385,6 +385,8 @@ final class HomepageViewController: UIViewController,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             )
             updateWallpaperConstraints(availableWallpaperHeight: state.availableWallpaperHeight)
+            collectionView?.layoutIfNeeded()
+            updateNewsTransitionHeaderProgress()
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
