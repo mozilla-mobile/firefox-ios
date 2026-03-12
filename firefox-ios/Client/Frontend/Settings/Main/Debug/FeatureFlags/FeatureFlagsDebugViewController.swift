@@ -317,12 +317,22 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateUnsplashKeySettings() -> SettingSection {
-        let keys: [(title: String, prefKey: String)] = [
+        let providerToggle = WallpaperProviderToggleSetting { [weak self] in
+            self?.reloadView()
+        }
+        let pexelsKey = PexelsKeyTextSetting(
+            title: "Pexels API Key",
+            keyTitle: "Pexels API Key",
+            prefKey: PrefsKeys.CustomTheming.pexelsApiKey
+        ) { [weak self] in
+            self?.reloadView()
+        }
+        let unsplashKeys: [(title: String, prefKey: String)] = [
             ("Unsplash App ID", PrefsKeys.CustomTheming.unsplashAppId),
             ("Unsplash Access Key", PrefsKeys.CustomTheming.unsplashAccessKey),
             ("Unsplash Secret Key", PrefsKeys.CustomTheming.unsplashSecretKey)
         ]
-        let rows: [Setting] = keys.map { item in
+        let unsplashRows: [Setting] = unsplashKeys.map { item in
             let saved = UserDefaults.standard.string(forKey: item.prefKey) ?? ""
             let display = saved.isEmpty ? "(not set)" : saved
             return UnsplashKeyTextSetting(
@@ -334,8 +344,8 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             }
         }
         return SettingSection(
-            title: NSAttributedString(string: "Custom Theming — Unsplash Keys"),
-            children: rows
+            title: NSAttributedString(string: "Wallpaper Provider"),
+            children: [providerToggle, pexelsKey] + unsplashRows
         )
     }
 

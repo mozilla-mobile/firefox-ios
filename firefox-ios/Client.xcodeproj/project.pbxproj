@@ -1001,6 +1001,8 @@
 		8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */; };
 		8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */; };
 		AB1C2D3E4F5A6B7C8D9E0F1B /* UnsplashKeyTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1C2D3E4F5A6B7C8D9E0F1A /* UnsplashKeyTextSetting.swift */; };
+		C3E4F5A6B7C8D9E0F1B2C3D4 /* PexelsKeyTextSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E4F5A6B7C8D9E0F1B2C3D3 /* PexelsKeyTextSetting.swift */; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* WallpaperProviderToggleSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C4 /* WallpaperProviderToggleSetting.swift */; };
 		8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
 		8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */; };
 		8A5D1CA02A30C9D7005AD35C /* MockAppSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */; };
@@ -9123,6 +9125,8 @@
 		8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPassBookHelper.swift; sourceTree = "<group>"; };
 		8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsBoolSetting.swift; sourceTree = "<group>"; };
 		AB1C2D3E4F5A6B7C8D9E0F1A /* UnsplashKeyTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashKeyTextSetting.swift; sourceTree = "<group>"; };
+		C3E4F5A6B7C8D9E0F1B2C3D3 /* PexelsKeyTextSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PexelsKeyTextSetting.swift; sourceTree = "<group>"; };
+		D4E5F6A7B8C9D0E1F2A3B4C4 /* WallpaperProviderToggleSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperProviderToggleSetting.swift; sourceTree = "<group>"; };
 		8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesHelperTests.swift; sourceTree = "<group>"; };
 		8A5BD95B2878AA74000FE773 /* PinnedSiteInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedSiteInfo.swift; sourceTree = "<group>"; };
 		8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidgetManager.swift; sourceTree = "<group>"; };
@@ -13960,6 +13964,8 @@
 			children = (
 				8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */,
 				AB1C2D3E4F5A6B7C8D9E0F1A /* UnsplashKeyTextSetting.swift */,
+				C3E4F5A6B7C8D9E0F1B2C3D3 /* PexelsKeyTextSetting.swift */,
+				D4E5F6A7B8C9D0E1F2A3B4C4 /* WallpaperProviderToggleSetting.swift */,
 				8AEAD9F22C3D7B3E001A2C5A /* FeatureFlagsSettings.swift */,
 				8AEAD9F42C3D7BA9001A2C5A /* FeatureFlagsDebugViewController.swift */,
 			);
@@ -19069,6 +19075,8 @@
 				E2479B342E959A6700A0C9DB /* HomepageLayoutMeasurementCache.swift in Sources */,
 				8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */,
 				AB1C2D3E4F5A6B7C8D9E0F1B /* UnsplashKeyTextSetting.swift in Sources */,
+				C3E4F5A6B7C8D9E0F1B2C3D4 /* PexelsKeyTextSetting.swift in Sources */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* WallpaperProviderToggleSetting.swift in Sources */,
 				2154A0FB2F115E700067EA43 /* PasswordGeneratorScriptEvaluator.swift in Sources */,
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
 				39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */,
