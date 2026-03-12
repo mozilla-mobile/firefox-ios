@@ -104,13 +104,13 @@ final class MockTabWebView: TabWebView {
 class MockTab: Tab {
     private var isHomePage: Bool
     var enqueueDocumentCalled = 0
-    var overrideReaderModeState: ReaderModeState? = nil
+    var overrideReaderModeState: ReaderModeState?
 
     init(profile: Profile, isPrivate: Bool = false, windowUUID: WindowUUID, isHomePage: Bool = false) {
         self.isHomePage = isHomePage
         super.init(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
     }
-    
+
     override var readerModeState: ReaderModeState? {
         return overrideReaderModeState
     }

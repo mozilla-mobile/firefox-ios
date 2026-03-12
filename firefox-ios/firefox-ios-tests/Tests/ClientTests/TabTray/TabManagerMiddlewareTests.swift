@@ -412,7 +412,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action.currentTabInfo?.readerModeIsEnabled, false)
         XCTAssertEqual(action.currentTabInfo?.readerModeIsAvailable, false)
     }
-    
+
     func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsActive() throws {
         let expectation = XCTestExpectation(description: "expect main menu action to be fired")
         let subject = createSubject()
