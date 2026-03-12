@@ -196,7 +196,7 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         app.buttons["Reader View"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            app.cells["actionGroupCell"].staticTexts["More"].waitAndTap(timeout: 10)
+            app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
         }
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells[option])
