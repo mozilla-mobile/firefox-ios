@@ -5420,8 +5420,8 @@ extension String {
             )
             public static let ReaderViewOn = MZLocalizedString(
                 key: "MainMenu.ToolsSection.ReaderViewOn.Title.v150",
-                tableName: "On",
-                value: "Reader View",
+                tableName: "MainMenu",
+                value: "On",
                 comment: "On the main menu, the label for the action that indicates that Reader view is turned on."
             )
             public static let ReaderViewOff = MZLocalizedString(
