@@ -17729,8 +17729,6 @@
 				437126962EBCB8CA0023653F /* SearchZero.strings in Resources */,
 				43E168932CA183A400E67516 /* PasswordGenerator.strings in Resources */,
 				43A7153D2A2DF94F00DD5747 /* Footer.strings in Resources */,
-				A1B2C3D4E5F600001234ABCD /* CustomThemes.json in Resources */,
-				A1B2C3D4E5F600005678EFAB /* UnsplashConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -17891,6 +17889,8 @@
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
 				D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */,
+				A1B2C3D4E5F600001234ABCD /* CustomThemes.json in Resources */,
+				A1B2C3D4E5F600005678EFAB /* UnsplashConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
