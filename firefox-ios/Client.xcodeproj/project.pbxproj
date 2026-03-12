@@ -1469,6 +1469,9 @@
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
 		BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */; };
 		54019C4F91898C0D5C43D6F3 /* AccentColorSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */; };
+		99740C2486124E6783478E35 /* CuratedThemesSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD171D9515CA40F488C37C65 /* CuratedThemesSectionView.swift */; };
+		B00E526721CD41628F881F43 /* CustomThemeEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB0B41D59044431908C72A3 /* CustomThemeEntry.swift */; };
+		63AC9CCCC4D846B9AAA4D4A7 /* CustomThemes.json in Resources */ = {isa = PBXBuildFile; fileRef = 001C1AEC8C9A40D6BEFC6105 /* CustomThemes.json */; };
 		A1B2C3D4E5F60718293A4B5C /* BackgroundTintSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */; };
 		B2C3D4E5F6071829A1B2C3D4 /* ToolbarTintSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */; };
 		C3D4E5F607182930A1B2C3D4 /* UnsplashConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F607182930A1B2C3D4E5F607 /* UnsplashConfig.swift */; };
@@ -9943,6 +9946,9 @@
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorSectionView.swift; sourceTree = "<group>"; };
+		CD171D9515CA40F488C37C65 /* CuratedThemesSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedThemesSectionView.swift; sourceTree = "<group>"; };
+		8DB0B41D59044431908C72A3 /* CustomThemeEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomThemeEntry.swift; sourceTree = "<group>"; };
+		001C1AEC8C9A40D6BEFC6105 /* CustomThemes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CustomThemes.json; sourceTree = "<group>"; };
 		D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTintSectionView.swift; sourceTree = "<group>"; };
 		E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTintSectionView.swift; sourceTree = "<group>"; };
 		F607182930A1B2C3D4E5F607 /* UnsplashConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashConfig.swift; sourceTree = "<group>"; };
@@ -14577,6 +14583,9 @@
 				214099602DCBF4DB004881E1 /* Zoom */,
 				BA4BB9992D7F3743006BD137 /* AppearanceSettingsView.swift */,
 				4D2B29CAE0F1379C5BDABF43 /* AccentColorSectionView.swift */,
+				CD171D9515CA40F488C37C65 /* CuratedThemesSectionView.swift */,
+				8DB0B41D59044431908C72A3 /* CustomThemeEntry.swift */,
+				001C1AEC8C9A40D6BEFC6105 /* CustomThemes.json */,
 				D4E5F6071829A1B2C3D4E5F6 /* BackgroundTintSectionView.swift */,
 				E5F60718293A4B5CD4E5F607 /* ToolbarTintSectionView.swift */,
 				518B3E8AD2A04D5DA18D8B86 /* UnsplashWallpaperConstants.swift */,
@@ -17615,6 +17624,7 @@
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
 				8A1F6C332BC5A6D100DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				071829307074E5F607182930 /* UnsplashConfig.json in Resources */,
+				63AC9CCCC4D846B9AAA4D4A7 /* CustomThemes.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19222,6 +19232,8 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				BA4BB99A2D7F374C006BD137 /* AppearanceSettingsView.swift in Sources */,
 				54019C4F91898C0D5C43D6F3 /* AccentColorSectionView.swift in Sources */,
+				99740C2486124E6783478E35 /* CuratedThemesSectionView.swift in Sources */,
+				B00E526721CD41628F881F43 /* CustomThemeEntry.swift in Sources */,
 				A1B2C3D4E5F60718293A4B5C /* BackgroundTintSectionView.swift in Sources */,
 				B2C3D4E5F6071829A1B2C3D4 /* ToolbarTintSectionView.swift in Sources */,
 				C3D4E5F607182930A1B2C3D4 /* UnsplashConfig.swift in Sources */,

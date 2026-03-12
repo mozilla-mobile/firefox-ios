@@ -19,7 +19,6 @@ struct UnsplashWallpaperSectionView: View {
     @State private var isDownloading = false
     @State private var refreshInterval = UnsplashRefreshInterval.current()
     @State private var selectedKeyword: String?
-
     private let keywords = ["Nature", "Ocean", "Mountains", "City", "Forest",
                             "Space", "Flowers", "Puppies", "Abstract", "Sunset"]
 
@@ -35,6 +34,7 @@ struct UnsplashWallpaperSectionView: View {
         static let verticalPadding: CGFloat = 12
         static let checkmarkSize: CGFloat = 22
         static let searchBarHeight: CGFloat = 36
+        static let showRefreshUI: Bool = false // set true to show auto-refresh picker
     }
 
     var body: some View {
@@ -75,7 +75,7 @@ struct UnsplashWallpaperSectionView: View {
     @ViewBuilder
     private var sectionContent: some View {
         VStack(alignment: .leading, spacing: UXConstants.spacing) {
-            refreshIntervalRow
+            if UXConstants.showRefreshUI { refreshIntervalRow }
             searchBar
             contentArea
             keywordChips

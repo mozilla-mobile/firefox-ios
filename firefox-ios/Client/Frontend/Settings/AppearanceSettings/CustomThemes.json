@@ -1,0 +1,102 @@
+{
+  "themes": [
+    {
+      "id": "ocean",
+      "name": "Ocean",
+      "dark": {
+        "accent":     "#2E86AB",
+        "background": "#0D1B2A",
+        "toolbar":    "#1A3A52"
+      },
+      "light": {
+        "accent":     "#2E86AB",
+        "background": "#E8F4F8",
+        "toolbar":    "#C8E8F4"
+      }
+    },
+    {
+      "id": "forest",
+      "name": "Forest",
+      "dark": {
+        "accent":     "#52B788",
+        "background": "#0F2015",
+        "toolbar":    "#1B3A24"
+      },
+      "light": {
+        "accent":     "#40916C",
+        "background": "#EEF5EC",
+        "toolbar":    "#D8EDD5"
+      }
+    },
+    {
+      "id": "sunset",
+      "name": "Sunset",
+      "dark": {
+        "accent":     "#E07A5F",
+        "background": "#1A0E08",
+        "toolbar":    "#3D1C0E"
+      },
+      "light": {
+        "accent":     "#E07A5F",
+        "background": "#FDF0EC",
+        "toolbar":    "#FAD9D1"
+      }
+    },
+    {
+      "id": "lavender",
+      "name": "Lavender",
+      "dark": {
+        "accent":     "#9B72CF",
+        "background": "#140D1F",
+        "toolbar":    "#2A1A42"
+      },
+      "light": {
+        "accent":     "#7B52A8",
+        "background": "#F4F0FA",
+        "toolbar":    "#E0D5F2"
+      }
+    },
+    {
+      "id": "midnight",
+      "name": "Midnight",
+      "dark": {
+        "accent":     "#4A90D9",
+        "background": "#060912",
+        "toolbar":    "#0E1525"
+      },
+      "light": {
+        "accent":     "#3A7BBA",
+        "background": "#EEF1F7",
+        "toolbar":    "#D4DDF0"
+      }
+    },
+    {
+      "id": "rose",
+      "name": "Rose",
+      "dark": {
+        "accent":     "#D4607A",
+        "background": "#1A0A0E",
+        "toolbar":    "#3A1220"
+      },
+      "light": {
+        "accent":     "#C0435C",
+        "background": "#FDF0F3",
+        "toolbar":    "#F5D5DB"
+      }
+    },
+    {
+      "id": "slate",
+      "name": "Slate",
+      "dark": {
+        "accent":     "#7EB8C9",
+        "background": "#0E1418",
+        "toolbar":    "#1E2C35"
+      },
+      "light": {
+        "accent":     "#5A9AAD",
+        "background": "#EFF3F5",
+        "toolbar":    "#D5E5EA"
+      }
+    }
+  ]
+}

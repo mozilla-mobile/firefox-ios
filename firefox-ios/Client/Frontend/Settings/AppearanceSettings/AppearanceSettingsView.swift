@@ -54,6 +54,11 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             guard #available(iOS 26.0, *) else { return 0 }
             return UX.spacing
         }
+        // Debug flag: show free-pick color pickers (accent/background/toolbar).
+        // When false, only curated JSON themes are shown.
+        static let showCustomColorPickers: Bool = false
+        // Debug flag: show the curated JSON theme picker section.
+        static let showCuratedThemes: Bool = true
     }
 
     var body: some View {
@@ -100,7 +105,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             cornerRadius: UX.cornerRadius
         )
 
-        if shouldShowCustomTheming {
+        if shouldShowCustomTheming && UX.showCustomColorPickers {
             AccentColorSectionView(
                 theme: currentTheme,
                 themeManager: themeManager,
@@ -109,7 +114,7 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             )
         }
 
-        if shouldShowCustomTheming {
+        if shouldShowCustomTheming && UX.showCustomColorPickers {
             BackgroundTintSectionView(
                 theme: currentTheme,
                 themeManager: themeManager,
@@ -118,12 +123,20 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
             )
         }
 
-        if shouldShowCustomTheming {
+        if shouldShowCustomTheming && UX.showCustomColorPickers {
             ToolbarTintSectionView(
                 theme: currentTheme,
                 themeManager: themeManager,
                 cornerRadius: UX.cornerRadius,
                 showColorPicker: $showToolbarTintPicker
+            )
+        }
+
+        if shouldShowCustomTheming && UX.showCuratedThemes {
+            CuratedThemesSectionView(
+                theme: currentTheme,
+                themeManager: themeManager,
+                cornerRadius: UX.cornerRadius
             )
         }
     }
