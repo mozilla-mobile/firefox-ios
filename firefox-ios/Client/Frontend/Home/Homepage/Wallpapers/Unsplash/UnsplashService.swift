@@ -215,6 +215,59 @@ final class UnsplashService {
     }
 }
 
+// MARK: - WallpaperProvider Conformance
+
+extension UnsplashService: WallpaperProvider {
+    func fetchRandom() async throws -> WallpaperPhoto {
+        let photo = try await fetchRandomPhoto()
+        return wallpaperPhotoValue(from: photo)
+    }
+
+    func fetchCurated(page: Int, perPage: Int) async throws -> [WallpaperPhoto] {
+        let photos = try await fetchCuratedPhotos(page: page, perPage: perPage)
+        return photos.map { wallpaperPhotoValue(from: $0) }
+    }
+
+    func downloadImage(for photo: WallpaperPhoto) async throws -> URL {
+        guard let dir = wallpaperDirectory else { throw UnsplashError.storageUnavailable }
+        let photoDir = dir.appendingPathComponent(photo.id, isDirectory: true)
+        let fileURL = photoDir.appendingPathComponent("wallpaper.jpg")
+        if FileManager.default.fileExists(atPath: fileURL.path) { return fileURL }
+        try FileManager.default.createDirectory(at: photoDir, withIntermediateDirectories: true)
+        let (data, response) = try await session.data(from: photo.fullURL)
+        try validateResponse(response)
+        try data.write(to: fileURL)
+        return fileURL
+    }
+
+    func loadSavedImage(photoId: String) -> UIImage? {
+        return loadSavedWallpaper(photoId: photoId)
+    }
+
+    func isImageDownloaded(photoId: String) -> Bool {
+        return isWallpaperDownloaded(photoId: photoId)
+    }
+
+    func removeDownloadedImage(photoId: String) {
+        removeDownloadedWallpaper(photoId: photoId)
+    }
+
+    // Maps an UnsplashPhoto to the provider-agnostic WallpaperPhoto.
+    func wallpaperPhotoValue(from photo: UnsplashPhoto) -> WallpaperPhoto {
+        let thumbURL = URL(string: photo.urls.small) ?? URL(string: photo.urls.thumb)!
+        let fullURL = URL(string: photo.urls.regular)!
+        let pageURL = URL(string: photo.links.html)!
+        return WallpaperPhoto(
+            id: photo.id,
+            photographerName: photo.user.name,
+            providerName: WallpaperProviderType.unsplash.displayName,
+            thumbnailURL: thumbURL,
+            fullURL: fullURL,
+            pageURL: pageURL
+        )
+    }
+}
+
 // MARK: - Errors
 
 enum UnsplashError: LocalizedError {
