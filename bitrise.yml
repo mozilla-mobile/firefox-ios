@@ -1009,7 +1009,7 @@ workflows:
             fastlane -version
             xcodebuild -version
 
-            ./firefox-ios/l10n-screenshots.sh en-US
+            ./firefox-ios/l10n-screenshots.sh tr
         title: Generate screenshots
     - save-cache@1.4.0:
         inputs:
@@ -1017,7 +1017,7 @@ workflows:
         - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2.10.0:
         inputs:
-        - deploy_path: l10n-screenshots/en-US/en-US
+        - deploy_path: l10n-screenshots/tr/tr/
         - is_compress: 'true'
     envs:
     - opts:
