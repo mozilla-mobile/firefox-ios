@@ -29,7 +29,7 @@ final class WallpaperProviderManager {
             let raw = UserDefaults.standard.string(
                 forKey: PrefsKeys.CustomTheming.activeWallpaperProvider
             ) ?? WallpaperProviderType.pexels.rawValue
-            return WallpaperProviderType(rawValue: raw) ?? .pexels
+            return WallpaperProviderType(rawValue: raw) ?? .unsplash
         }
         set {
             UserDefaults.standard.set(
