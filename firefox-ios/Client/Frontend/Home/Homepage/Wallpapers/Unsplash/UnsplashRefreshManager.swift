@@ -5,17 +5,16 @@
 import Foundation
 import UIKit
 
-/// Manages automatic periodic refresh of the Unsplash homepage wallpaper.
+/// Manages automatic periodic refresh of the homepage wallpaper using the active provider.
 ///
 /// Call `checkAndRefreshIfNeeded()` when the app becomes active or the homepage appears.
-/// When the configured refresh interval has elapsed, fetches a new random photo and
-/// posts `Notification.Name.UnsplashWallpaperDidChange` — which `HomepageViewController`
-/// already handles with zero additional wiring.
+/// When the configured refresh interval has elapsed, fetches a new random photo via
+/// `WallpaperProviderManager.shared.activeProvider` and posts
+/// `Notification.Name.UnsplashWallpaperDidChange` so `HomepageViewController` updates.
 @MainActor
 final class UnsplashRefreshManager {
     static let shared = UnsplashRefreshManager()
 
-    private let service = UnsplashService.shared
     private var isRefreshing = false
 
     private init() {}
@@ -23,25 +22,23 @@ final class UnsplashRefreshManager {
     // MARK: - Public
 
     /// Checks whether the configured refresh interval has elapsed and, if so,
-    /// fetches and applies a new random wallpaper. No-op when interval is `.never`
-    /// or no Unsplash credentials are configured.
+    /// fetches and applies a new random wallpaper from the active provider.
+    /// No-op when interval is `.never`.
     func checkAndRefreshIfNeeded() {
         let interval = UnsplashRefreshInterval.current()
         guard let seconds = interval.seconds else { return }
-        guard UnsplashConfig.load() != nil else { return }
         guard !isRefreshing else { return }
 
-        let lastRefresh = UserDefaults.standard.double(forKey: UnsplashWallpaperKeys.lastRefreshDate)
+        let lastRefresh = UserDefaults.standard.double(forKey: WallpaperKeys.lastRefreshDate)
         let elapsed = Date().timeIntervalSince1970 - lastRefresh
         guard elapsed >= seconds else { return }
 
         Task { await refresh() }
     }
 
-    /// Forces an immediate random wallpaper fetch, ignoring the interval check.
-    /// Used when the user selects a new interval in the Appearance settings.
+    /// Forces an immediate random wallpaper fetch via the active provider,
+    /// ignoring the interval check. Used when the user selects a new interval.
     func forceRefresh() {
-        guard UnsplashConfig.load() != nil else { return }
         guard !isRefreshing else { return }
         Task { await refresh() }
     }
@@ -52,23 +49,22 @@ final class UnsplashRefreshManager {
         isRefreshing = true
         defer { isRefreshing = false }
 
-        do {
-            let photo = try await service.fetchRandomPhoto()
-            // downloadWallpaperImage returns a local file URL and internally
-            // triggers download tracking per Unsplash API guidelines.
-            let fileURL = try await service.downloadWallpaperImage(for: photo)
+        let provider = WallpaperProviderManager.shared.activeProvider
+        let defaults = UserDefaults.standard
 
+        do {
+            let photo = try await provider.fetchRandom()
+            let fileURL = try await provider.downloadImage(for: photo)
             guard let image = UIImage(contentsOfFile: fileURL.path) else { return }
 
-            // Clean up previous auto-refresh photo from disk (if different from manual pin)
-            let defaults = UserDefaults.standard
-            if let oldId = defaults.string(forKey: UnsplashWallpaperKeys.autoRefreshPhotoId),
-               oldId != defaults.string(forKey: UnsplashWallpaperKeys.currentPhotoId) {
-                service.removeDownloadedWallpaper(photoId: oldId)
+            // Clean up previous auto-refresh photo if it differs from the pinned one
+            if let oldId = defaults.string(forKey: WallpaperKeys.autoRefreshPhotoId),
+               oldId != defaults.string(forKey: WallpaperKeys.currentPhotoId) {
+                provider.removeDownloadedImage(photoId: oldId)
             }
 
-            defaults.set(photo.id, forKey: UnsplashWallpaperKeys.autoRefreshPhotoId)
-            defaults.set(Date().timeIntervalSince1970, forKey: UnsplashWallpaperKeys.lastRefreshDate)
+            defaults.set(photo.id, forKey: WallpaperKeys.autoRefreshPhotoId)
+            defaults.set(Date().timeIntervalSince1970, forKey: WallpaperKeys.lastRefreshDate)
 
             NotificationCenter.default.post(
                 name: .UnsplashWallpaperDidChange,
@@ -76,11 +72,11 @@ final class UnsplashRefreshManager {
                 userInfo: [
                     "image": image,
                     "photoId": photo.id,
-                    "photographerName": photo.user.name
+                    "photographerName": photo.photographerName
                 ]
             )
         } catch {
-            // Silent failure — keep existing wallpaper
+            // Silent failure — keep the existing wallpaper
         }
     }
 }

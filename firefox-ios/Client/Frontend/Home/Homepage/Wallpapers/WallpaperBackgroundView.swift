@@ -6,6 +6,8 @@ import UIKit
 import Common
 
 class WallpaperBackgroundView: UIView {
+    private enum GradientDirection { case topToBottom, bottomToTop }
+
     // MARK: - UI Elements
     private lazy var pictureView: UIImageView = .build { imageView in
         imageView.image = nil
@@ -13,9 +15,9 @@ class WallpaperBackgroundView: UIView {
         imageView.clipsToBounds = true
     }
 
-    /// 15% black scrim layered over the wallpaper to improve legibility.
+    /// 28% black scrim layered over the wallpaper to improve legibility.
     private lazy var scrimView: UIView = .build { view in
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.28)
         view.isHidden = true
     }
 
@@ -61,7 +63,8 @@ class WallpaperBackgroundView: UIView {
         addSubview(topBlurView)
         addSubview(bottomBlurView)
 
-        let blurHeightRatio: CGFloat = 0.30
+        let blurHeightRatioTop: CGFloat = 0.04
+        let blurHeightRatioBottom: CGFloat = 0.04
 
         NSLayoutConstraint.activate([
             pictureView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -77,12 +80,14 @@ class WallpaperBackgroundView: UIView {
             topBlurView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topBlurView.trailingAnchor.constraint(equalTo: trailingAnchor),
             topBlurView.topAnchor.constraint(equalTo: topAnchor),
-            topBlurView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: blurHeightRatio),
+            topBlurView.heightAnchor.constraint(equalTo: heightAnchor,
+                                                multiplier: blurHeightRatioTop),
 
             bottomBlurView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomBlurView.trailingAnchor.constraint(equalTo: trailingAnchor),
             bottomBlurView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            bottomBlurView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: blurHeightRatio)
+            bottomBlurView.heightAnchor.constraint(equalTo: heightAnchor,
+                                                   multiplier: blurHeightRatioBottom)
         ])
     }
 
@@ -93,7 +98,8 @@ class WallpaperBackgroundView: UIView {
     }
 
     /// Applies a gradient mask so the blur fades from opaque (edge) to transparent (center).
-    private func applyGradientMask(to blurView: UIVisualEffectView, direction: GradientDirection) {
+    private func applyGradientMask(to blurView: UIVisualEffectView,
+                                   direction: GradientDirection) {
         let gradient = CAGradientLayer()
         gradient.frame = blurView.bounds
         gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
@@ -107,8 +113,6 @@ class WallpaperBackgroundView: UIView {
         }
         blurView.layer.mask = gradient
     }
-
-    private enum GradientDirection { case topToBottom, bottomToTop }
 
     // MARK: - Methods
     public func updateImageForOrientationChange() {
