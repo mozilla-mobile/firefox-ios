@@ -69,7 +69,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
         XCTAssertTrue(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
     }
-    
+
     func testGenerateMenuElements_readerViewItem_whenSummarizerLanguageExpansionDisabled() {
         let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isExpanded: true)
 
@@ -78,7 +78,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
         XCTAssertFalse(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
     }
-    
+
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)

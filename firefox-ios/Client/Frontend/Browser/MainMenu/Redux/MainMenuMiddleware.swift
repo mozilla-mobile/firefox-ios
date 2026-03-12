@@ -202,7 +202,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .passwords:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.passwords)
-            
+
         case .readerView:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.readerView)
 

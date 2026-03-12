@@ -33,7 +33,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 
     @MainActor
     func showPrintSheet()
-    
+
     @MainActor
     func showReaderMode()
 
@@ -125,7 +125,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .passwords:
             navigationHandler?.showSettings(at: .password)
-            
+
         case .readerView:
             navigationHandler?.showReaderMode()
 

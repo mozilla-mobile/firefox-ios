@@ -37,7 +37,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private var isSummarizerOn: Bool {
         return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
-    
+
     private var isSummarizerLanguageExpansionEnabled: Bool {
         return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
     }
@@ -418,7 +418,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 }
             )
     }
-    
+
     private func configureReaderViewItem(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo
@@ -447,7 +447,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             )
         }
     }
-    
+
     private func configureMoreLessItem(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo,

@@ -703,7 +703,7 @@ final class BrowserCoordinator: BaseCoordinator,
                                                           flowType: fxaParameters.flowType,
                                                           referringPage: fxaParameters.referringPage)
     }
-    
+
     func showReaderMode() {
         store.dispatch(
             GeneralBrowserAction(

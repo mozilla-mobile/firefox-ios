@@ -419,7 +419,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         }
         return false
     }
-    
+
     /// The reader mode state for the tab. The value could be nil when ReaderMode is not supported for the page.
     var readerModeState: ReaderModeState? {
         if mimeType == MIMEType.HTML,
