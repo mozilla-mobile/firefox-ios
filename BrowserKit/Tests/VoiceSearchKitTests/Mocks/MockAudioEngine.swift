@@ -30,9 +30,16 @@ final class MockAudioEngine: AudioEngineProvider, @unchecked Sendable {
 }
 
 final class MockAudioInputNode: AudioInputNodeProvider, @unchecked Sendable {
+    private let nativeFormat: AVAudioFormat
+    private var tapHandler: AVAudioNodeTapBlock?
+
     private(set) var installTapCallCount = 0
     private(set) var removeTapCallCount = 0
     private(set) var outputFormatCallCount = 0
+
+    init(sampleRate: Double = 44100, channels: UInt32 = 1) {
+        self.nativeFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channels)!
+    }
 
     func installTap(
         onBus bus: AVAudioNodeBus,
@@ -41,14 +48,26 @@ final class MockAudioInputNode: AudioInputNodeProvider, @unchecked Sendable {
         block: @escaping @Sendable AVAudioNodeTapBlock
     ) {
         installTapCallCount += 1
+        tapHandler = block
     }
 
     func removeTap(onBus bus: AVAudioNodeBus) {
         removeTapCallCount += 1
+        tapHandler = nil
     }
 
     func outputFormat(forBus bus: AVAudioNodeBus) -> AVAudioFormat {
         outputFormatCallCount += 1
-        return AVAudioFormat()
+        return nativeFormat
+    }
+
+    func simulateAudioInput(frameCount: AVAudioFrameCount = 1024) {
+        guard let handler = tapHandler,
+              let buffer = AVAudioPCMBuffer(pcmFormat: nativeFormat, frameCapacity: frameCount) else {
+            return
+        }
+        buffer.frameLength = frameCount
+        let time = AVAudioTime()
+        handler(buffer, time)
     }
 }

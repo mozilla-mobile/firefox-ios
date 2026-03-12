@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // TODO: FXIOS-14934 - remove preconcurrency
-@preconcurrency import AVFoundation
+import AVFoundation
 import Speech
 import Common
 import CoreMedia

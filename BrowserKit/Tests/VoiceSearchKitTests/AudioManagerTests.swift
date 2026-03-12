@@ -85,6 +85,46 @@ struct AudioManagerTests {
         )!
 
         try subject.startCapture(targetFormat: targetFormat) { _ in }
+
+        #expect(engine.mockInputNode.installTapCallCount == 1)
+    }
+
+    // MARK: - Format Conversion Tests
+    @Test
+    func test_convertIfNeeded_withDifferentSampleRate_convertsBuffer() throws {
+        let subject = createSubject()
+        let targetFormat = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
+
+        try subject.startCapture(targetFormat: targetFormat) { buffer in
+            #expect(buffer.format.sampleRate == 16000)
+            #expect(buffer.format.channelCount == 1)
+            // calculated by ratio (target sample rate / buffer sample rate) * buffer.frameLength
+            // (16000 / 44100) * 1024
+            #expect(buffer.frameLength == 371)
+        }
+
+        engine.mockInputNode.simulateAudioInput(frameCount: 1024)
+
+        #expect(engine.mockInputNode.outputFormatCallCount == 1)
+        #expect(engine.mockInputNode.removeTapCallCount == 1)
+        #expect(engine.mockInputNode.installTapCallCount == 1)
+    }
+
+    @Test
+    func test_convertIfNeeded_withMatchingSampleRate_passesThroughWithoutConversion() throws {
+        let subject = createSubject()
+        let targetFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
+
+        try subject.startCapture(targetFormat: targetFormat) { buffer in
+            #expect(buffer.format.sampleRate == 44100.0)
+            #expect(buffer.format.channelCount == 1)
+            #expect(buffer.frameLength == 1024)
+        }
+
+        engine.mockInputNode.simulateAudioInput(frameCount: 1024)
+
+        #expect(engine.mockInputNode.outputFormatCallCount == 1)
+        #expect(engine.mockInputNode.removeTapCallCount == 1)
         #expect(engine.mockInputNode.installTapCallCount == 1)
     }
 
