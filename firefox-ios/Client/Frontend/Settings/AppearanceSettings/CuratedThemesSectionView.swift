@@ -141,9 +141,10 @@ struct CuratedThemesSectionView: View {
     }
 
     private func clearTheme() {
-        themeManager.setAccentColor(.default)
-        themeManager.setBackgroundTintColor(.default)
-        themeManager.setToolbarTintColor(.default)
+        let defaultColor = AccentColor.presets[0]
+        themeManager.setAccentColor(defaultColor)
+        themeManager.setBackgroundTintColor(defaultColor)
+        themeManager.setToolbarTintColor(defaultColor)
         selectedThemeId = nil
     }
 
