@@ -58,7 +58,48 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.Print))
     }
 
-    private func getTabInfo(isHomepage: Bool = false) -> MainMenuTabInfo {
+    func testGenerateMenuElements_readerViewItem_isDisabled_whenReaderModeNotAvailable() {
+        let tabInfo = getTabInfo(readerModeIsAvailable: false, readerModeIsEnabled: false)
+        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
+
+        let allItems = sections.flatMap { $0.options }
+        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
+
+        for item in readerViewItems {
+            XCTAssertFalse(item.isEnabled, "Reader view item should be disabled when reader mode is not available")
+        }
+    }
+
+    func testGenerateMenuElements_readerViewItem_isEnabled_whenReaderModeAvailable() {
+        let tabInfo = getTabInfo(readerModeIsAvailable: true, readerModeIsEnabled: false)
+        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
+
+        let allItems = sections.flatMap { $0.options }
+        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
+
+        for item in readerViewItems {
+            XCTAssertTrue(item.isEnabled, "Reader view item should be enabled when reader mode is available")
+            XCTAssertFalse(item.isActive, "Reader view item should not be active when reader mode is not enabled")
+        }
+    }
+
+    func testGenerateMenuElements_readerViewItem_isActive_whenReaderModeEnabled() {
+        let tabInfo = getTabInfo(readerModeIsAvailable: true, readerModeIsEnabled: true)
+        let sections = configUtility.generateMenuElements(with: tabInfo, and: windowUUID, isExpanded: true)
+
+        let allItems = sections.flatMap { $0.options }
+        let readerViewItems = allItems.filter { $0.title == String.MainMenu.ToolsSection.ReaderViewTitle }
+
+        for item in readerViewItems {
+            XCTAssertTrue(item.isActive, "Reader view item should be active when reader mode is enabled")
+        }
+    }
+
+    private func getTabInfo(
+        isHomepage: Bool = false,
+        readerModeIsAvailable: Bool = false,
+        readerModeIsEnabled: Bool = false
+    ) -> MainMenuTabInfo {
         return MainMenuTabInfo(
             tabID: "uuid",
             url: nil,
@@ -67,7 +108,8 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             isDefaultUserAgentDesktop: false,
             hasChangedUserAgent: false,
             zoomLevel: 0,
-            readerModeIsAvailable: false,
+            readerModeIsAvailable: readerModeIsAvailable,
+            readerModeIsEnabled: readerModeIsEnabled,
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,

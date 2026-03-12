@@ -414,11 +414,19 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     var readerModeAvailableOrActive: Bool {
-        if mimeType == MIMEType.HTML,
-           let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
-            return readerMode.state != .unavailable
+        if let readerModeState {
+            return readerModeState != .unavailable
         }
         return false
+    }
+    
+    /// The reader mode state for the tab. The value could be nil when ReaderMode is not supported for the page.
+    var readerModeState: ReaderModeState? {
+        if mimeType == MIMEType.HTML,
+           let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
+            return readerMode.state
+        }
+        return nil
     }
 
     var pageZoom: CGFloat = 1.0 {

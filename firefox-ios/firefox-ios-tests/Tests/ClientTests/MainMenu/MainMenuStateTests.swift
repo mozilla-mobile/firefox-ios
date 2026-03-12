@@ -43,6 +43,7 @@ final class MainMenuStateTests: XCTestCase {
             hasChangedUserAgent: true,
             zoomLevel: 1.0,
             readerModeIsAvailable: false,
+            readerModeIsEnabled: false,
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,

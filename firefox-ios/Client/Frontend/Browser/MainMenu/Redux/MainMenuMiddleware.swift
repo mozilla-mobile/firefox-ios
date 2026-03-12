@@ -21,6 +21,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         static let nightModeTurnOff = "night_mode_turn_off"
         static let nightModeTurnOn = "night_mode_turn_on"
         static let passwords = "passwords"
+        static let readerView = "reader_view"
         static let print = "print"
         static let removeFromShortcuts = "remove_from_shortcuts"
         static let saveAsPDF = "save_as_PDF"
@@ -201,6 +202,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .passwords:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.passwords)
+            
+        case .readerView:
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.readerView)
 
         case .settings:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.settings)
