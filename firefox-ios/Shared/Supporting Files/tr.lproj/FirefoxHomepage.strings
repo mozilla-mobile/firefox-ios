@@ -35,7 +35,7 @@
 "FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@, tüm gizli sekmeleri kapattığınızda çerezlerinizi, geçmişinizi ve site verilerinizi temizler.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
-"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Etkinliğimi kimler görebilir?";
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Yaptıklarımı kimler görebilir?";
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Bu cihazda iz bırakmayın";
