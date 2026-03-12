@@ -28,6 +28,16 @@ class NavigationTest: BaseTestCase {
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
 
+    var onboardingFlowType: OnboardingScreen.OnboardingFlowType {
+        if isFirefoxBeta {
+            return .modernOrangeAndBlue
+        } else if isFirefox {
+            return .modernKit
+        }
+
+        return .old
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
@@ -597,13 +607,13 @@ class NavigationTest: BaseTestCase {
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
         waitForTabsButton()
         app.terminate()
         springBoardScreen.assertFennecIconExists()
         springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
         springBoardScreen.tapNewPrivateButton()
-        onboardingScreen.agreeAndContinue()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.waitForCurrentScreenElements()
         onboardingScreen.closeTourIfNeeded()
         browserScreen.assertPrivateModeMessageCardExists()
@@ -621,7 +631,7 @@ class NavigationTest: BaseTestCase {
         }
         let springboardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
 
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -642,7 +652,7 @@ class NavigationTest: BaseTestCase {
         springboardScreen.tapOpenLastBookmarkButton()
 
         // Close onboarding if it appears
-        onboardingScreen.agreeAndContinue()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.waitForCurrentScreenElements()
         onboardingScreen.closeTourIfNeeded()
 

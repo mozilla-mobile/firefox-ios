@@ -14,13 +14,23 @@ class OnboardingTests: BaseTestCase {
     var firefoxHomePageScreen: FirefoxHomePageScreen!
     var settingsScreen: SettingScreen!
 
+    var flowType: OnboardingScreen.OnboardingFlowType {
+        if isFirefoxBeta {
+            return .modernOrangeAndBlue
+        } else if isFirefox {
+            return .modernKit
+        }
+
+        return .old
+    }
+
     override func setUp() async throws {
         launchArguments = [LaunchArguments.ClearProfile,
                            LaunchArguments.DisableAnimations,
                            LaunchArguments.SkipSplashScreenExperiment]
         currentScreen = 0
         try await super.setUp()
-        onboardingScreen = OnboardingScreen(app: app)
+        onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
         settingsScreen = SettingScreen(app: app)
     }
@@ -32,23 +42,22 @@ class OnboardingTests: BaseTestCase {
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
-    func testFirstRunTour() {
-        guard #available(iOS 17.0, *), !skipPlatform else { return }
-
-        // Handle initial gate (ToS for Fennec, Continue for Firefox/Beta)
-        onboardingScreen.handleFirstRunGate(isFirefoxBeta: isFirefoxBeta, isFirefox: isFirefox)
-
-        // Firefox Beta has a different onboarding flow and exits early
-        if isFirefoxBeta {
-            onboardingScreen.completeBetaOnboardingFlow()
-            // Beta test exits here - no verification needed
-            return
+    func testFirstRunTour() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else {
+            throw XCTSkip("Skipping first run tour")
         }
 
-        // Complete the standard onboarding tour (Firefox/Fennec)
-        onboardingScreen.completeStandardOnboardingFlow(isIPad: iPad())
+        onboardingScreen.handleTermsOfService()
+
+        // Firefox and FirefoxBeta have a different onboarding flow
+        if flowType.isModernFlow {
+            onboardingScreen.completeFirefoxBetaOnboardingFlow()
+        } else {
+            onboardingScreen.completeStandardOnboardingFlow(isIPad: iPad())
+        }
 
         // Dismiss new changes pop up if exists
+        onboardingScreen.dismissNewChangesPopup()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
 
         checkThemeSwitch()
@@ -56,16 +65,16 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
     func testFirstRunTourDarkMode() {
-        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
-        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.closeTourIfNeeded()
 
-        app.buttons["CloseButton"].waitAndTap()
-        // Dismiss new changes pop up if exists
-        app.buttons["Close"].tapIfExists()
         switchThemeToDarkOrLight(theme: "Dark")
+
         app.terminate()
         app.launch()
-        // Check that the first's tour screen is shown as well as all the elements in there
+
+        // Check that the first tour screen is shown as well as all the elements in there
+        /// FYI: Due to Bug FXIOS-14759, modern onboarding reverts to **old onboarding** after app restart.
         navigator.nowAt(FirstRun)
         waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
         app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
@@ -127,6 +136,7 @@ class OnboardingTests: BaseTestCase {
         }
 
         // Finish onboarding
+        firefoxHomePageScreen.assertTopSitesItemCellExist() // FIXME: Test this
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
         // Dismiss new changes pop up if exists
@@ -138,47 +148,33 @@ class OnboardingTests: BaseTestCase {
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
-    func testOnboardingSignIn_Modern() throws {
-        try XCTSkipIf(isFennec, "We only show new onboarding on isFirefoxBeta and isFirefox")
+    func testOnboardingSignIn() throws {
+        onboardingScreen.handleTermsOfService()
 
-        // In the new modern onboarding flow, the ToS screen uses the basic onboarding button
-        onboardingScreen.primaryButtonContinue()
+        // FIXME: is this true for the Kit flow also?
+        if flowType.isModernFlow {
+            // In the new modern onboarding flows, the sign-in screen is in position 3. Swipe past 3 screens then sign in.
+            onboardingScreen.goToNextScreenViaSecondary()
+            onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.goToNextScreenViaPrimary()
 
-        // In the new modern onboarding flow, the sign-in screen is in position 3. Swipe past 3 screens then sign in.
-        onboardingScreen.goToNextScreenViaSecondary()
-        onboardingScreen.goToNextScreenViaPrimary()
-        onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.assertTextsOnCurrentScreen(
+                expectedTitle: "Instantly pick up where you left off",
+                expectedDescription: "Get your bookmarks, history, and passwords on any device.",
+                expectedPrimary: "Start Syncing",
+                expectedSecondary: "Not now"
+            )
+        } else {
+            // Sign-in is on the second screen after ToS. Swipe past first screen, and then test sign in on the second
+            onboardingScreen.goToNextScreenViaSecondary()
 
-        onboardingScreen.assertTextsOnCurrentScreen(
-            expectedTitle: "Instantly pick up where you left off",
-            expectedDescription: "Get your bookmarks, history, and passwords on any device.",
-            expectedPrimary: "Start Syncing",
-            expectedSecondary: "Not now"
-        )
-
-        onboardingScreen.tapSignIn()
-        onboardingScreen.assertSignInScreen()
-        onboardingScreen.exitSignInFlow()
-
-        checkThemeSwitch()
-    }
-
-    func testOnboardingSignIn_Old() throws {
-        try XCTSkipIf(isFirefox || isFirefoxBeta, "We only show old onboarding on Fennec")
-
-        // In the old flow, the ToS screen uses the 'agree and continue' button (same text visually as FirefoxBeta and
-        // Firefox, but different accessibility identifier)
-        onboardingScreen.agreeAndContinue()
-
-        // Sign-in is on the second screen after ToS. Swipe past first screen, and then test sign in on the second
-        onboardingScreen.goToNextScreenViaSecondary()
-
-        onboardingScreen.assertTextsOnCurrentScreen(
-            expectedTitle: "Stay encrypted when you hop between devices",
-            expectedDescription: "Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
-            expectedPrimary: "Sign In",
-            expectedSecondary: "Skip"
-        )
+            onboardingScreen.assertTextsOnCurrentScreen(
+                expectedTitle: "Stay encrypted when you hop between devices",
+                expectedDescription: "Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
+                expectedPrimary: "Sign In",
+                expectedSecondary: "Skip"
+            )
+        }
 
         onboardingScreen.tapSignIn()
         onboardingScreen.assertSignInScreen()
@@ -190,7 +186,7 @@ class OnboardingTests: BaseTestCase {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
-        onboardingScreen.agreeAndContinue()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.closeTourIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
 
@@ -200,26 +196,23 @@ class OnboardingTests: BaseTestCase {
     // TOOLBAR THEME
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
     func testSelectTopPlacement() {
-        waitForElementsToExist([app.buttons["TermsOfService.AgreeAndContinueButton"]])
-        app.buttons["TermsOfService.AgreeAndContinueButton"].tap()
+        onboardingScreen.handleTermsOfService()
 
         let toolbar = app.textFields["url"]
 
         // Wait for the initial title label to appear
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
 
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
+        onboardingScreen.goToNextScreenViaSecondary()
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
+
+        onboardingScreen.goToNextScreenViaSecondary()
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
-        currentScreen += 1
+
+        onboardingScreen.goToNextScreenViaSecondary()
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         if !iPad() {
-            app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
-            currentScreen += 1
+            onboardingScreen.goToNextScreenViaPrimary()
         }
 
         let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
@@ -230,11 +223,13 @@ class OnboardingTests: BaseTestCase {
                 break
             }
         }
+
         if !iPad() {
             app.buttons["Save and Start Browsing"].waitAndTap()
         } else {
             app.buttons["Save and Continue"].waitAndTap()
         }
+
         let topSites = app.collectionViews.links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
         // Dismiss new changes pop up if exists
@@ -333,7 +328,7 @@ class OnboardingTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/3193571
     func testValidateContinueButton() {
         onboardingScreen.assertContinueButtonIsOnTheBottom()
-        onboardingScreen.agreeAndContinue()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.waitForCurrentScreenElements()
         onboardingScreen.closeTourIfNeeded()
         navigator.goto(SettingsScreen)

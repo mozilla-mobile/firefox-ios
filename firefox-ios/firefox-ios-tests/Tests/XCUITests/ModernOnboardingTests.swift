@@ -23,10 +23,20 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         ]
     }
 
+    var flowType: OnboardingScreen.OnboardingFlowType {
+        if isFirefoxBeta {
+            return .modernOrangeAndBlue
+        } else if isFirefox {
+            return .modernKit
+        }
+
+        return .old
+    }
+
     override func setUp() async throws {
         try await super.setUp()
 
-        onboardingScreen = OnboardingScreen(app: app)
+        onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
     }
 
@@ -42,7 +52,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         launchApp()
 
         onboardingScreen.assertModernTermsOfServiceScreen()
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
 
         onboardingScreen.completeModernOnboardingFlow(isIPad: iPad(), tosAccepted: true)
 
@@ -54,7 +64,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         launchApp()
 
         // TODO: Pre-accept ToS via launch argument instead of accepting inline
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
 
         onboardingScreen.currentScreen = 0
 
@@ -86,7 +96,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingWelcomeScreen() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
 
         onboardingScreen.currentScreen = 0
 
@@ -109,10 +119,10 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
 
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
-        onboardingScreen.goToNextScreen()
+        onboardingScreen.goToNextScreenViaSecondary()
 
         onboardingScreen.assertToolbarCustomizationScreen()
 
@@ -126,10 +136,10 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingThemeSelection() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
-        onboardingScreen.goToNextScreen()
+        onboardingScreen.goToNextScreenViaSecondary()
 
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
@@ -156,10 +166,10 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingSyncFlow() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
-        onboardingScreen.goToNextScreen()
+        onboardingScreen.goToNextScreenViaSecondary()
 
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
@@ -186,10 +196,10 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingSkipSync() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
-        onboardingScreen.goToNextScreen()
+        onboardingScreen.goToNextScreenViaSecondary()
 
         if !iPad() {
             onboardingScreen.selectToolbarPosition("Bottom")
@@ -216,7 +226,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingSkipButton() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
 
         let skipButton = app.buttons[AccessibilityIdentifiers.Onboarding.closeButton]
         mozWaitForElementToExist(skipButton)
@@ -232,7 +242,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingSecondaryNavigation() throws {
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
         onboardingScreen.assertModernWelcomeScreen()
@@ -263,7 +273,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(app.staticTexts["\(tosRoot)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(tosRoot)PrimaryButton"].exists)
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
 
         mozWaitForElementToExist(app.buttons["\(onboardingScreen.rootA11yId)PrimaryButton"])
@@ -286,9 +296,9 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
 
         launchApp()
 
-        onboardingScreen.acceptModernTermsOfService()
+        onboardingScreen.handleTermsOfService()
         onboardingScreen.currentScreen = 0
-        onboardingScreen.goToNextScreen()
+        onboardingScreen.goToNextScreenViaSecondary()
 
         let topButton = app.buttons["\(onboardingScreen.rootA11yId)SegmentedButton.Top"]
         let bottomButton = app.buttons["\(onboardingScreen.rootA11yId)SegmentedButton.Bottom"]
