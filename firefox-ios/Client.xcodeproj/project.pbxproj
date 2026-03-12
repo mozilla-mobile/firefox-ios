@@ -744,6 +744,7 @@
 		602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
+		A1B2C3D4E5F60718293041AB /* WallpaperProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F60718293041ABB1 /* WallpaperProvider.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
 		613489A32D942A020009AF01 /* ToastTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A22D942A020009AF01 /* ToastTelemetry.swift */; };
@@ -8605,6 +8606,7 @@
 		60CE80C02667780C004026C7 /* CredentialListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialListPresenter.swift; sourceTree = "<group>"; };
 		60E04CE89D47E52E0A886EAD /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Search.strings"; sourceTree = "<group>"; };
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F60718293041ABB1 /* WallpaperProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperProvider.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
 		613489A22D942A020009AF01 /* ToastTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetry.swift; sourceTree = "<group>"; };
@@ -15635,6 +15637,7 @@
 				612194E42CE50A7B001664BB /* Redux */,
 				C84655DC2887384200861B4A /* v1 */,
 				612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */,
+				B2C3D4E5F60718293041ABB1 /* WallpaperProvider.swift */,
 			);
 			path = Wallpapers;
 			sourceTree = "<group>";
@@ -19575,6 +19578,7 @@
 				EDBD5C1C2DFA248E0050A59A /* HistoryTelemetry.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* PasswordManagerOnboardingViewController.swift in Sources */,
 				612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */,
+				A1B2C3D4E5F60718293041AB /* WallpaperProvider.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,

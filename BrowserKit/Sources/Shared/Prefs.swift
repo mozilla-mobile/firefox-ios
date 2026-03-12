@@ -104,6 +104,10 @@ public struct PrefsKeys {
         public static let unsplashAppId = "CustomThemingUnsplashAppId"
         public static let unsplashAccessKey = "CustomThemingUnsplashAccessKey"
         public static let unsplashSecretKey = "CustomThemingUnsplashSecretKey"
+        /// The currently active wallpaper provider: "pexels" (default) or "unsplash"
+        public static let activeWallpaperProvider = "CustomThemingActiveWallpaperProvider"
+        /// User-supplied Pexels API key entered in the Feature Flags debug settings
+        public static let pexelsApiKey = "CustomThemingPexelsApiKey"
     }
 
     // For ease of use, please list keys alphabetically.
