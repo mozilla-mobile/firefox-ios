@@ -35,6 +35,8 @@ struct UnsplashWallpaperSectionView: View {
         static let checkmarkSize: CGFloat = 22
         static let searchBarHeight: CGFloat = 36
         static let showRefreshUI: Bool = false // set true to show auto-refresh picker
+        /// UserDefaults key for the cached initial "nature" photo list.
+        static let initialCacheKey = "wallpaper.nature.photoCache"
     }
 
     var body: some View {
@@ -48,7 +50,7 @@ struct UnsplashWallpaperSectionView: View {
         .task {
             searchText = "nature"
             selectedKeyword = "Nature"
-            await performSearch()
+            await loadInitialPhotos()
         }
     }
 
@@ -327,6 +329,22 @@ extension UnsplashWallpaperSectionView {
 
 extension UnsplashWallpaperSectionView {
     @MainActor
+    /// Initial load: serves from cache if available, otherwise fetches "nature" and caches results.
+    /// Cache is keyed to provider type so switching providers gets a fresh fetch.
+    @MainActor
+    func loadInitialPhotos() async {
+        let cacheKey = UXConstants.initialCacheKey + "." + providerType.rawValue
+        if let data = UserDefaults.standard.data(forKey: cacheKey),
+           let cached = try? JSONDecoder().decode([WallpaperPhoto].self, from: data),
+           !cached.isEmpty {
+            photos = cached
+            selectedPhotoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId)
+            return
+        }
+        // No cache — fetch and store
+        await performSearch(updateCache: true)
+    }
+
     func loadCuratedPhotos() async {
         isLoading = true
         errorMessage = nil
@@ -340,7 +358,7 @@ extension UnsplashWallpaperSectionView {
     }
 
     @MainActor
-    func performSearch() async {
+    func performSearch(updateCache: Bool = false) async {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else {
             await loadCuratedPhotos()
@@ -349,8 +367,17 @@ extension UnsplashWallpaperSectionView {
         isLoading = true
         errorMessage = nil
         do {
-            photos = try await provider.search(query: query, page: 1, perPage: 30)
+            let results = try await provider.search(query: query, page: 1, perPage: 30)
+            photos = results
             selectedPhotoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId)
+            // Refresh cache when user explicitly searches "nature" or on initial load
+            let isNature = query.lowercased() == "nature"
+            if updateCache || isNature {
+                let cacheKey = UXConstants.initialCacheKey + "." + providerType.rawValue
+                if let encoded = try? JSONEncoder().encode(results) {
+                    UserDefaults.standard.set(encoded, forKey: cacheKey)
+                }
+            }
         } catch {
             errorMessage = error.localizedDescription
         }

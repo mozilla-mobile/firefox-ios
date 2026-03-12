@@ -23,7 +23,7 @@ public enum WallpaperProviderType: String, CaseIterable {
 // MARK: - WallpaperPhoto
 
 /// Provider-agnostic photo model shared by all wallpaper services.
-public struct WallpaperPhoto: Identifiable, Equatable {
+public struct WallpaperPhoto: Identifiable, Equatable, Codable {
     public let id: String
     public let photographerName: String
     /// Display name of the provider, e.g. "Pexels" or "Unsplash".
