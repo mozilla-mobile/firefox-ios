@@ -436,21 +436,35 @@ final class HomepageViewController: UIViewController,
         wallpaperTopConstraint?.constant = -viewTopOffset
     }
 
-    /// Sets up Unsplash wallpaper: loads saved selection and listens for changes.
+    /// Sets up the wallpaper view: loads saved selection and listens for wallpaper and provider changes.
     private func configureUnsplashWallpaper() {
-        // Load previously saved Unsplash wallpaper if any
-        if let photoId = UserDefaults.standard.string(forKey: UnsplashWallpaperKeys.currentPhotoId),
-           let image = UnsplashService.shared.loadSavedWallpaper(photoId: photoId) {
+        // Load previously saved wallpaper (provider-agnostic via WallpaperKeys.currentPhotoId)
+        if let photoId = UserDefaults.standard.string(forKey: WallpaperKeys.currentPhotoId),
+           let image = WallpaperProviderManager.shared.activeProvider.loadSavedWallpaper(photoId: photoId) {
             wallpaperView.unsplashImage = image
         }
 
-        // Listen for Unsplash wallpaper changes from the Appearance settings
+        // Listen for wallpaper selection changes from the Appearance settings
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(unsplashWallpaperDidChange(_:)),
             name: .UnsplashWallpaperDidChange,
             object: nil
         )
+
+        // Clear wallpaper when the active provider is switched
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(wallpaperProviderDidChange),
+            name: .wallpaperProviderDidChange,
+            object: nil
+        )
+    }
+
+    @objc
+    private func wallpaperProviderDidChange() {
+        wallpaperView.unsplashImage = nil
+        reloadSectionHeaders()
     }
 
     @objc
@@ -735,15 +749,15 @@ final class HomepageViewController: UIViewController,
         return newsAffordanceHeaderView
     }
 
-    /// Returns `true` when any wallpaper (legacy or Unsplash) is selected or visible on the homepage.
-    /// Checks UserDefaults for Unsplash selection so headers show the background even before
+    /// Returns `true` when any wallpaper (legacy or provider-based) is selected or visible on the homepage.
+    /// Checks UserDefaults via WallpaperKeys so headers show the background even before
     /// the async image finishes loading.
     private var hasActiveWallpaper: Bool {
         let hasLegacyWallpaper = homepageState.wallpaperState.wallpaperConfiguration.hasImage
-        let hasUnsplashWallpaper = UserDefaults.standard.string(
-            forKey: UnsplashWallpaperKeys.currentPhotoId
+        let hasProviderWallpaper = UserDefaults.standard.string(
+            forKey: WallpaperKeys.currentPhotoId
         ) != nil
-        return hasLegacyWallpaper || hasUnsplashWallpaper
+        return hasLegacyWallpaper || hasProviderWallpaper
     }
 
     /// Returns a copy of the given `SectionHeaderConfiguration` with `showsBlurBackground`
