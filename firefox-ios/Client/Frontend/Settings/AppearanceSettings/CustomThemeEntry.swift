@@ -30,13 +30,13 @@ struct CustomThemeEntry: Decodable, Identifiable {
 // MARK: - Catalog
 
 enum CustomThemeCatalog {
-    static let themes: [CustomThemeEntry] = {
+    static var themes: [CustomThemeEntry] {
         guard let url = Bundle.main.url(forResource: "CustomThemes", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let decoded = try? JSONDecoder().decode(ThemeList.self, from: data)
         else { return [] }
         return decoded.themes
-    }()
+    }
 
     private struct ThemeList: Decodable {
         let themes: [CustomThemeEntry]

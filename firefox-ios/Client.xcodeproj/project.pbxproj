@@ -1484,6 +1484,8 @@
 		71304415589449018222DF84 /* UnsplashWallpaperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B3E8AD2A04D5DA18D8B86 /* UnsplashWallpaperConstants.swift */; };
 		F60718296063D4E5F6071829 /* UnsplashWallpaperSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2930A1B263D4E5F607182930 /* UnsplashWallpaperSectionView.swift */; };
 		071829307074E5F607182930 /* UnsplashConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 30A1B2C374E5F60718293041 /* UnsplashConfig.json */; };
+		A1B2C3D4E5F600001234ABCD /* CustomThemes.json in Resources */ = {isa = PBXBuildFile; fileRef = 001C1AEC8C9A40D6BEFC6105 /* CustomThemes.json */; };
+		A1B2C3D4E5F600005678EFAB /* UnsplashConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 30A1B2C374E5F60718293041 /* UnsplashConfig.json */; };
 		BA4BB99E2D7FB38B006BD137 /* ThemeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99D2D7FB382006BD137 /* ThemeSelectionView.swift */; };
 		BA4BB9A02D7FB3C9006BD137 /* ThemeOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB99F2D7FB3C3006BD137 /* ThemeOptionView.swift */; };
 		BA4BB9A42D7FF754006BD137 /* DarkModeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA4BB9A32D7FF74D006BD137 /* DarkModeToggleView.swift */; };
@@ -17727,6 +17729,8 @@
 				437126962EBCB8CA0023653F /* SearchZero.strings in Resources */,
 				43E168932CA183A400E67516 /* PasswordGenerator.strings in Resources */,
 				43A7153D2A2DF94F00DD5747 /* Footer.strings in Resources */,
+				A1B2C3D4E5F600001234ABCD /* CustomThemes.json in Resources */,
+				A1B2C3D4E5F600005678EFAB /* UnsplashConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

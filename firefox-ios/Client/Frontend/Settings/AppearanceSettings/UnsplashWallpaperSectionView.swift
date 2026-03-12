@@ -46,7 +46,9 @@ struct UnsplashWallpaperSectionView: View {
             sectionContent
         }
         .task {
-            await loadCuratedPhotos()
+            searchText = "nature"
+            selectedKeyword = "Nature"
+            await performSearch()
         }
     }
 
