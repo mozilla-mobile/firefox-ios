@@ -629,7 +629,7 @@ class NavigationTest: BaseTestCase {
         // Open and bookmark a page
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
-        bookmark()
+        bookmark(isLockIconOff: false)
 
         // Terminate app and go to springboard
         app.terminate()
