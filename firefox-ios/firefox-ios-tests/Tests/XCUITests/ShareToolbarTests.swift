@@ -213,10 +213,8 @@ class ShareToolbarTests: FeatureFlaggedTestBase {
         }
         navigator.openURL(url)
         waitUntilPageLoad()
-        print(debugDescription)
         app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].waitAndTap()
         if #available(iOS 26, *), !app.collectionViews.cells[option].exists {
-            print(app.debugDescription)
             app.scrollViews.cells["View More"].waitAndTap(timeout: 10)
         }
         if #available(iOS 16, *) {
