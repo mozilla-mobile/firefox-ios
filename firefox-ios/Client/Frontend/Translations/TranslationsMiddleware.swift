@@ -7,7 +7,7 @@ import Redux
 import Common
 
 @MainActor
-final class TranslationsMiddleware {
+final class TranslationsMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -85,7 +85,8 @@ final class TranslationsMiddleware {
             return
         }
 
-        if translationConfiguration.state == .inactive {
+        if translationConfiguration.state == .inactive,
+           featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
             let capturedButton = action.buttonTapped
             Task { @MainActor in
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
@@ -98,6 +99,18 @@ final class TranslationsMiddleware {
                     actionType: GeneralBrowserActionType.showTranslationLanguagePicker
                 ))
             }
+        } else if translationConfiguration.state == .inactive {
+            guard let deviceLanguage = Locale.current.languageCode else { return }
+            let newFlowId = UUID()
+            translationFlowIds[action.windowUUID] = newFlowId
+            selectedTargetLanguages[action.windowUUID] = deviceLanguage
+            translationsTelemetry.translateButtonTapped(
+                isPrivate: toolbarState.isPrivateMode,
+                actionType: .willTranslate,
+                translationFlowId: newFlowId
+            )
+            self.handleUpdatingTranslationIcon(for: action, with: .loading)
+            self.retrieveTranslations(for: action, targetLanguage: deviceLanguage)
         } else if translationConfiguration.state == .active {
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
@@ -196,10 +209,10 @@ final class TranslationsMiddleware {
                 try await translationsService.translateCurrentPage(
                     for: action.windowUUID,
                     to: targetLanguage,
-                    onLanguageIdentified: { identifiedLanguage, targetLang in
+                    onLanguageIdentified: { identifiedLanguage, deviceLanguage in
                         self.translationsTelemetry.pageLanguageIdentified(
                             identifiedLanguage: identifiedLanguage,
-                            deviceLanguage: targetLang
+                            deviceLanguage: deviceLanguage
                         )
                     }
                 )

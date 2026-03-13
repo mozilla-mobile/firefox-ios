@@ -203,7 +203,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     func test_didTapButtonAction_withInactiveState_dispatchesShowPickerAction() throws {
-        setTranslationsFeatureEnabled(enabled: true)
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
         let subject = createSubject()
 
         let action = ToolbarMiddlewareAction(
@@ -650,9 +650,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager.selectedTab = tab
     }
 
-    private func setTranslationsFeatureEnabled(enabled: Bool) {
+    private func setTranslationsFeatureEnabled(enabled: Bool, languagePickerEnabled: Bool = false) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
-            return TranslationsFeature(enabled: enabled)
+            return TranslationsFeature(enabled: enabled, languagePickerEnabled: languagePickerEnabled)
         }
     }
 

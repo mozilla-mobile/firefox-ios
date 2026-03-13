@@ -228,6 +228,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .translationLanguagePicker,
+                titleText: format(string: "Translation Language Picker"),
+                statusText: format(string: "Toggle to enable language picker for translations")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
