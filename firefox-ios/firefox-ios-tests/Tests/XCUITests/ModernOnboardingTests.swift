@@ -30,7 +30,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
             return .modernKit
         }
 
-        return .old
+        return .legacy
     }
 
     override func setUp() async throws {

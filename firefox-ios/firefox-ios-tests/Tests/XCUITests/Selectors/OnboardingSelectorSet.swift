@@ -13,10 +13,13 @@ protocol OnboardingSelectorsSet {
     func betaSecondaryButton(screenIndex: Int) -> Selector
     func multipleChoiceButton(rootId: String) -> Selector
     func modernTosPrimaryButton() -> Selector
+    func addressBarTopButton(rootId: String, position: OnboardingScreen.AddressBarPosition) -> Selector
+
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
     var ONBOARDING_PRIMARY_BUTTON: Selector { get }
     var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
+    var LAST_TOS_DESCRIPTION_TEXT: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
@@ -63,6 +66,12 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
     let MANAGE_TEXT_BUTTON = Selector.buttonId(
         IDs.manage_Text,
         description: "Help improve button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let LAST_TOS_DESCRIPTION_TEXT = Selector.staticTextByLabel(
+        "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage",
+        description: "The last set of text on the ToS card with the Manage hyperlink.",
         groups: ["onboarding"]
     )
 
@@ -162,6 +171,14 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         Selector.buttonId(
             "\(AccessibilityIdentifiers.TermsOfService.root)PrimaryButton",
             description: "Modern Terms of Service primary button",
+            groups: ["onboarding", "modern"]
+        )
+    }
+
+    func addressBarTopButton(rootId: String, position: OnboardingScreen.AddressBarPosition) -> Selector {
+        Selector.buttonId(
+            "\(rootId)SegmentedButton.\(position.rawValue)",
+            description: "Modern address bar position button for \(position.rawValue)",
             groups: ["onboarding", "modern"]
         )
     }

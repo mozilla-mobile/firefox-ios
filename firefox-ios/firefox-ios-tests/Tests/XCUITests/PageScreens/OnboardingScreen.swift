@@ -8,19 +8,25 @@ import XCTest
 final class OnboardingScreen {
     /// Describes the onboarding flow. A different flow is shown depending app channel (Fennec, FirefoxBeta, and Firefox).
     enum OnboardingFlowType {
-        case old // The original onboarding with the first ToS screen. Simple backgrounds and hand-sketched imagery.
+        case legacy // The original onboarding with the first ToS screen. Simple backgrounds and hand-sketched imagery.
         case modernOrangeAndBlue // New modern onboarding built in 2025. Vivid orange/pink/blue backgrounds around cards.
-        case modernKit // New modern onboarding built in 2026. Light pastel backgrounds with new Kit imagery.
+        case modernKit // Rebranding of modernOrangeAndBlue built in 2026. Light pastel backgrounds with new Kit imagery.
 
         /// Firefox and FirefoxBeta show a new modern onboarding UI with an alternative card flow compared to Fennec.
         var isModernFlow: Bool {
             switch self {
-            case .old:
+            case .legacy:
                 return false
             case .modernOrangeAndBlue, .modernKit:
                 return true
             }
         }
+    }
+
+    // Address bar position is chosen on a card during onboarding. It can either be top or bottom.
+    enum AddressBarPosition: String {
+        case top = "Top"
+        case bottom = "Bottom"
     }
 
     private let app: XCUIApplication
@@ -36,7 +42,7 @@ final class OnboardingScreen {
     /// Returns the primary button on the currentScreen.
     private var primaryButton: XCUIElement {
         switch flowType {
-        case .old:
+        case .legacy:
             return sel.primaryButton(rootId: rootA11yId).element(in: app)
         case .modernOrangeAndBlue, .modernKit:
             return sel.betaPrimaryButton(screenIndex: currentScreen).element(in: app)
@@ -46,10 +52,22 @@ final class OnboardingScreen {
     /// Returns the primary button on the currentScreen.
     private var secondaryButton: XCUIElement {
         switch flowType {
-        case .old:
+        case .legacy:
             return sel.secondaryButton(rootId: rootA11yId).element(in: app)
         case .modernOrangeAndBlue, .modernKit:
             return sel.betaSecondaryButton(screenIndex: currentScreen).element(in: app)
+        }
+    }
+
+    private var tosContinueButton: XCUIElement {
+        switch flowType {
+        case .legacy:
+            // Old onboarding shows the same "Continue" text, except with a different accessibility ID than modern flows.
+            return sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
+
+        case .modernOrangeAndBlue, .modernKit:
+            // The modern onboarding flows have standardized the ToS primary button to match the other primary buttons.
+            return sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
         }
     }
 
@@ -66,38 +84,21 @@ final class OnboardingScreen {
     /// Handles the initial ToS screen based on app channel (Firefox Beta, Firefox, Fennec). ToS must be accepted before the
     /// onboarding flow begins.
     func handleTermsOfService() {
-        let button: XCUIElement
-
-        // The modern onboarding flows have standardized the ToS primary button to match the other primary buttons.
-        switch flowType {
-        case .old:
-            // Old onboarding shows the same "Continue" text, except with a different accessibility ID than modern flows.
-            button = sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
-
-        case .modernOrangeAndBlue, .modernKit:
-            button = sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
-        }
-
-        BaseTestCase().mozWaitForElementToExist(button)
-        button.tap()
+        BaseTestCase().mozWaitForElementToExist(tosContinueButton)
+        tosContinueButton.tap()
     }
 
     func assertContinueButtonIsOnTheBottom() {
-        let continueButton: XCUIElement
-
-        // The modern onboarding flows have standardized the ToS primary button to match the other primary buttons.
-        switch flowType {
-        case .old:
-            // Old onboarding shows the same "Continue" text, except with a different accessibility ID than modern flows.
-            continueButton = sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
-
-        case .modernOrangeAndBlue, .modernKit:
-            continueButton = sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
+        if flowType.isModernFlow {
+            // Get the last description text and make sure the button is below that
+            let lastDescriptionBlock = sel.LAST_TOS_DESCRIPTION_TEXT.element(in: app)
+            XCTAssertTrue(tosContinueButton.isBelow(element: lastDescriptionBlock),
+                          "Continue button is not displayed at the bottom of The ToS card")
+        } else {
+            let manageButton = sel.MANAGE_TEXT_BUTTON.element(in: app)
+            XCTAssertTrue(tosContinueButton.isBelow(element: manageButton),
+                          "Continue button is not displayed at the bottom of The ToS card")
         }
-
-        let manageButton = sel.MANAGE_TEXT_BUTTON.element(in: app)
-        XCTAssertTrue(continueButton.isBelow(element: manageButton),
-                      "Continue button is not displayed at the bottom of The ToS card")
     }
 
     func assertTextsOnCurrentScreen(expectedTitle: String,
@@ -128,6 +129,28 @@ final class OnboardingScreen {
         XCTAssertEqual(email.label, "Use Email Instead")
     }
 
+    func assertTitle() {
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+    }
+
+    /// Exercises the multiple choice buttons on the card to choose your address bar position.
+    func selectAddressBarPosition(position: AddressBarPosition) {
+        if flowType.isModernFlow {
+            let multipleChoiceButton = sel.addressBarTopButton(rootId: rootA11yId, position: position).element(in: app)
+            multipleChoiceButton.waitAndTap()
+        } else {
+            // TODO: Migrate to TAE
+            let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
+            for i in 0..<buttons.count {
+                let button = buttons.element(boundBy: i)
+                if button.label == position.rawValue {
+                    button.waitAndTap()
+                    break
+                }
+            }
+        }
+    }
+
     func exitSignInFlow() {
         sel.DONE_BUTTON.element(in: app).waitAndTap()
         sel.CLOSE_BUTTON.element(in: app).waitAndTap()
@@ -138,11 +161,11 @@ final class OnboardingScreen {
         if closeButton.exists {
             closeButton.waitAndTap()
         }
-        // Generic Popup "Close"
-        let genericClose = app.buttons["Close"]
-        if genericClose.exists {
-            genericClose.waitAndTap()
-        }
+    }
+
+    func closeTour() {
+        let closeButton = sel.CLOSE_TOUR_BUTTON.element(in: app)
+        closeButton.waitAndTap()
     }
 
     func waitForCurrentScreenElements(checkCloseButton: Bool = false,
@@ -189,13 +212,6 @@ final class OnboardingScreen {
         XCTAssertEqual(secondaryButton.exists, secondaryExists)
     }
 
-    /// Dismisses the "new changes" popup on Home, if present.
-    func dismissNewChangesPopup() {
-        // Dismiss "new changes" popup if present
-        let closePopup = app.buttons["Close"]
-        if closePopup.exists { closePopup.tap() }
-    }
-
     /// Taps the primary button in the onboarding flow to navigate to the next screen (excluding ToS). Only call this
     /// method when the primary action for a specific onboarding card will cause forward navigation.
     func goToNextScreenViaPrimary() {
@@ -216,17 +232,21 @@ final class OnboardingScreen {
 
     /// Completes the Firefox Beta onboarding flow
     /// Beta has a different flow with specific screen IDs
-    func completeFirefoxBetaOnboardingFlow() {
+    func completeFirefoxModernOnboardingFlow() {
         // Screen 0: Skip (secondary button)
+        assertTitle()
         goToNextScreenViaSecondary()
 
         // Screen 1: Continue (primary button)
+        assertTitle()
         goToNextScreenViaPrimary()
 
         // Screen 2: Continue (primary button)
+        assertTitle()
         goToNextScreenViaPrimary()
 
         // Screen 3: Not now (secondary button)
+        assertTitle()
         goToNextScreenViaSecondary()
     }
 
@@ -234,111 +254,36 @@ final class OnboardingScreen {
     /// - Parameters:
     ///   - isIPad: Whether running on iPad (skips fifth screen)
     ///   - afterBetaFlow: If true, the first screen may not have an image
-    func completeStandardOnboardingFlow(isIPad: Bool, afterBetaFlow: Bool = false) {
+    func completeLegacyOnboardingFlow(isIPad: Bool, afterBetaFlow: Bool = false) {
         // First screen - already shown after gate
         // After Beta flow, the first standard screen may not have an image
         waitForCurrentScreenElements(waitForImage: !afterBetaFlow)
+        assertTitle()
 
         // Navigate to second screen: Skip (secondary button)
         goToNextScreenViaSecondary()
+        assertTitle()
         waitForCurrentScreenElements(checkCloseButton: true, checkPageControl: true)
 
         // Navigate to third screen: Skip (secondary button)
         goToNextScreenViaSecondary()
+        assertTitle()
         assertCurrentScreenElements()
 
         // Navigate to fourth screen: Skip (secondary button)
         goToNextScreenViaSecondary()
+        assertTitle()
         assertCurrentScreenElements(secondaryExists: false)
 
         // Navigate to fifth screen (iPhone only): Save and Continue (primary button)
         if !isIPad {
             goToNextScreenViaPrimary()
+            assertTitle()
             assertCurrentScreenElements(secondaryExists: false)
         }
 
         // End onboarding: Save and Start Browsing (primary button)
         goToNextScreenViaPrimary()
-    }
-
-    // MARK: - Modern Onboarding Flow
-
-    func assertModernTermsOfServiceScreen() {
-        let tosRoot = AccessibilityIdentifiers.TermsOfService.root
-        let title = app.staticTexts["\(tosRoot)TitleLabel"]
-        let description = app.staticTexts["\(tosRoot)DescriptionLabel"]
-        let button = app.buttons["\(tosRoot)PrimaryButton"]
-
-        BaseTestCase().mozWaitForElementToExist(title)
-        XCTAssertTrue(title.exists)
-        XCTAssertTrue(description.exists)
-        XCTAssertTrue(button.exists)
-        XCTAssertEqual(button.label, "Continue")
-    }
-
-    /// Verifies the welcome screen (shown after ToS acceptance)
-    func assertModernWelcomeScreen() {
-        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
-        let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
-        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
-
-        BaseTestCase().mozWaitForElementToExist(primary)
-        XCTAssertTrue(title.exists, "Welcome title should exist")
-        XCTAssertTrue(desc.exists, "Welcome description should exist")
-        XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(secondary.exists, "Secondary button should exist")
-    }
-
-    func assertToolbarCustomizationScreen() {
-        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
-        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let topButton = app.buttons["\(rootA11yId)SegmentedButton.Top"]
-        let bottomButton = app.buttons["\(rootA11yId)SegmentedButton.Bottom"]
-
-        BaseTestCase().mozWaitForElementToExist(primary)
-        XCTAssertTrue(title.exists, "Toolbar title should exist")
-        XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(topButton.exists, "Top toolbar option should exist")
-        XCTAssertTrue(bottomButton.exists, "Bottom toolbar option should exist")
-    }
-
-    func assertThemeCustomizationScreen() {
-        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
-        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
-        let lightButton = app.buttons["\(rootA11yId)SegmentedButton.Light"]
-        let darkButton = app.buttons["\(rootA11yId)SegmentedButton.Dark"]
-
-        BaseTestCase().mozWaitForElementToExist(primary)
-        XCTAssertTrue(title.exists, "Theme title should exist")
-        XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(systemButton.exists, "System Auto theme option should exist")
-        XCTAssertTrue(lightButton.exists, "Light theme option should exist")
-        XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
-    }
-
-    func assertSyncScreen() {
-        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
-        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
-
-        BaseTestCase().mozWaitForElementToExist(primary)
-        XCTAssertTrue(title.exists, "Sync title should exist")
-        XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(secondary.exists, "Secondary button should exist")
-    }
-
-    func selectToolbarPosition(_ position: String) {
-        let button = app.buttons["\(rootA11yId)SegmentedButton.\(position)"]
-        BaseTestCase().mozWaitForElementToExist(button)
-        button.tap()
-    }
-
-    func selectTheme(_ theme: String) {
-        let button = app.buttons["\(rootA11yId)SegmentedButton.\(theme)"]
-        BaseTestCase().mozWaitForElementToExist(button)
-        button.tap()
     }
 
     /// Completes the modern onboarding flow
@@ -374,5 +319,87 @@ final class OnboardingScreen {
 
         let closePopup = app.buttons["Close"]
         if closePopup.exists { closePopup.tap() }
+    }
+
+    // MARK: - Assertions
+
+    func assertModernTermsOfServiceScreen() {
+        let tosRoot = AccessibilityIdentifiers.TermsOfService.root
+        let title = app.staticTexts["\(tosRoot)TitleLabel"]
+        let description = app.staticTexts["\(tosRoot)DescriptionLabel"]
+        let button = app.buttons["\(tosRoot)PrimaryButton"]
+
+        BaseTestCase().mozWaitForElementToExist(title)
+        XCTAssertTrue(title.exists)
+        XCTAssertTrue(description.exists)
+        XCTAssertTrue(button.exists)
+        XCTAssertEqual(button.label, "Continue")
+    }
+
+    /// Verifies the welcome screen (shown after ToS acceptance)
+    func assertModernWelcomeScreen() {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
+        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
+        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(primary)
+        XCTAssertTrue(title.exists, "Welcome title should exist")
+        XCTAssertTrue(desc.exists, "Welcome description should exist")
+        XCTAssertTrue(primary.exists, "Primary button should exist")
+        XCTAssertTrue(secondary.exists, "Secondary button should exist")
+    }
+
+    func assertToolbarCustomizationScreen() {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
+        let topButton = sel.addressBarTopButton(rootId: rootA11yId, position: .top).element(in: app)
+        let bottomButton = sel.addressBarTopButton(rootId: rootA11yId, position: .bottom).element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(primary)
+        XCTAssertTrue(title.exists, "Toolbar title should exist")
+        XCTAssertTrue(primary.exists, "Primary button should exist")
+        XCTAssertTrue(topButton.exists, "Top toolbar option should exist")
+        XCTAssertTrue(bottomButton.exists, "Bottom toolbar option should exist")
+    }
+
+    func assertThemeCustomizationScreen() {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
+        let systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
+        let lightButton = app.buttons["\(rootA11yId)SegmentedButton.Light"]
+        let darkButton = app.buttons["\(rootA11yId)SegmentedButton.Dark"]
+
+        BaseTestCase().mozWaitForElementToExist(primary)
+        XCTAssertTrue(title.exists, "Theme title should exist")
+        XCTAssertTrue(primary.exists, "Primary button should exist")
+        XCTAssertTrue(systemButton.exists, "System Auto theme option should exist")
+        XCTAssertTrue(lightButton.exists, "Light theme option should exist")
+        XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
+    }
+
+    func assertSyncScreen() {
+        let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
+        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
+        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
+
+        BaseTestCase().mozWaitForElementToExist(primary)
+        XCTAssertTrue(title.exists, "Sync title should exist")
+        XCTAssertTrue(primary.exists, "Primary button should exist")
+        XCTAssertTrue(secondary.exists, "Secondary button should exist")
+    }
+
+    // MARK: Card interactions
+
+    func selectToolbarPosition(_ position: String) {
+        let button = app.buttons["\(rootA11yId)SegmentedButton.\(position)"]
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.tap()
+    }
+
+    func selectTheme(_ theme: String) {
+        let button = app.buttons["\(rootA11yId)SegmentedButton.\(theme)"]
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.tap()
     }
 }

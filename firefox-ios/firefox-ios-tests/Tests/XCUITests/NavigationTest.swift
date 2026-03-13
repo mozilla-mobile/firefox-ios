@@ -35,7 +35,7 @@ class NavigationTest: BaseTestCase {
             return .modernKit
         }
 
-        return .old
+        return .legacy
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
