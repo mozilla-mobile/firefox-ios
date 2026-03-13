@@ -21,7 +21,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-class TabManagerImplementation: NSObject,
+final class TabManagerImplementation: NSObject,
                                 TabManager,
                                 FeatureFlaggable,
                                 SessionCreator {
@@ -259,10 +259,10 @@ class TabManagerImplementation: NSObject,
                 if tab.isPrivate,
                    let mostRecentTab = mostRecentTab(inTabs: normalTabs) {
                     // We remove all private tabs so select most recent normal tab
-                    selectTab(mostRecentTab)
+                    selectTab(mostRecentTab, immediatePreservation: true)
                 } else {
                     // For normal tabs create a new tab and select it
-                    selectTab(addTab())
+                    selectTab(addTab(), immediatePreservation: true)
                 }
             }
         }
@@ -763,12 +763,12 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Save tabs
 
-    func preserveTabs() {
+    func preserveTabs(immediate: Bool) {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-        preserveTabs(forced: false)
+        preserveTabs(forced: immediate)
     }
 
     private func preserveTabs(forced: Bool) {
@@ -854,7 +854,7 @@ class TabManagerImplementation: NSObject,
     /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
@@ -887,7 +887,7 @@ class TabManagerImplementation: NSObject,
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
 
-        preserveTabs()
+        preserveTabs(immediate: immediatePreservation)
 
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
         selectTabWithSession(tab: tab, sessionData: sessionData)

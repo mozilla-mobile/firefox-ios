@@ -56,7 +56,7 @@ class MockTabManager: TabManager {
         }
     }
 
-    func selectTab(_ tab: Tab?, previous: Tab?) {
+    func selectTab(_ tab: Tab?, previous: Tab?, immediatePreservation: Bool) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
             selectedTab = tab
@@ -108,7 +108,7 @@ class MockTabManager: TabManager {
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
 
-    func preserveTabs() {}
+    func preserveTabs(immediate: Bool) {}
 
     func restoreTabs() {}
 
