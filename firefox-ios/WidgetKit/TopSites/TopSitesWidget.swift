@@ -88,8 +88,8 @@ struct TopSitesView: View {
         .frame(width: iconSize, height: iconSize)
         /// Fixes https://mozilla-hub.atlassian.net/browse/FXIOS-15052
         /// iOS bug: `widgetAccentedRenderingMode` inside a `Link` breaks the link destination,
-        /// causing taps to open the app without navigating to the URL. Workaround: render the image
-        /// normally and overlay a clear `Link` as the tap target instead. See
+        /// causing taps to open the app without navigating to the URL.
+        /// Workaround: overlay a `Link` as the tap target instead. See
         /// https://developer.apple.com/forums/thread/795408
         .overlay {
             Link(destination: destination) { rectangleShape }
