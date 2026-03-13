@@ -1005,7 +1005,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.226.0
+            gem install fastlane -v 2.228.0
             fastlane -version
             xcodebuild -version
 
@@ -1047,7 +1047,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.226.0
+            gem install fastlane -v 2.228.0
             fastlane -version
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
