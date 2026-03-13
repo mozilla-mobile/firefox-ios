@@ -67,29 +67,36 @@ struct TopSitesView: View {
 
     @ViewBuilder
     private func topSitesItem(_ site: WidgetTopSite, iconSize: CGFloat) -> some View {
-        let url = site.url
-        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            Group {
-                if let image = entry.favicons[site.faviconImageCacheKey] {
-                    if #available(iOSApplicationExtension 18.0, *) {
-                        image
-                            .resizable()
-                            .widgetAccentedRenderingMode(.accentedDesaturated)
-                            .scaledToFit()
-                    } else {
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    }
+        let destination = linkToContainingApp("?url=\(site.url)", query: "widget-medium-topsites-open-url")
+        let rectangleShape = Rectangle().fill(UX.emptySquareFillColor)
+        Group {
+            if let image = entry.favicons[site.faviconImageCacheKey] {
+                if #available(iOSApplicationExtension 18.0, *) {
+                    image
+                        .resizable()
+                        .widgetAccentedRenderingMode(.accentedDesaturated)
+                        .scaledToFit()
                 } else {
-                    Rectangle()
-                        .fill(UX.emptySquareFillColor)
+                    image
+                        .resizable()
+                        .scaledToFit()
                 }
+            } else {
+                rectangleShape
             }
-            .frame(width: iconSize, height: iconSize)
-            .clipShape(RoundedRectangle(cornerRadius: UX.itemCornerRadius))
         }
+        .frame(width: iconSize, height: iconSize)
+        /// Fixes https://mozilla-hub.atlassian.net/browse/FXIOS-15052
+        /// iOS bug: `widgetAccentedRenderingMode` inside a `Link` breaks the link destination,
+        /// causing taps to open the app without navigating to the URL. Workaround: render the image
+        /// normally and overlay a clear `Link` as the tap target instead. See
+        /// https://developer.apple.com/forums/thread/795408
+        .overlay {
+            Link(destination: destination) { rectangleShape }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: UX.itemCornerRadius))
     }
+
 
     private func calculateIconSize(provider: GeometryProxy, rowSize: CGFloat) -> CGFloat {
         let dynamicIconScale = UIFontMetrics.default.scaledValue(for: UX.iconScale)
