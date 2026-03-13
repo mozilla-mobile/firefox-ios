@@ -161,7 +161,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
     }
 
     private func isPrivateLockFeatureEnabled() -> Bool {
-        PrivateTabsLockFeatureGate(prefs: prefs).isEnabled
+        featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildAndUser)
     }
 
     private func browserState(from appState: AppState, windowUUID: WindowUUID) -> BrowserViewControllerState? {

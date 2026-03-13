@@ -952,7 +952,7 @@ class BrowserViewController: UIViewController,
 
     private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
         if let state = browserViewControllerState {
-            let featureEnabled = PrivateTabsLockFeatureGate(prefs: profile.prefs).isEnabled
+            let featureEnabled = featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildAndUser)
             if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && featureEnabled {
                 focusOnTabSegment(animated: false)
                 if checkActualState {
