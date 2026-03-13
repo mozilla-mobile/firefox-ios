@@ -29,7 +29,8 @@ final class SettingsCoordinator: BaseCoordinator,
                                  ParentCoordinatorDelegate,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
-                                 AppearanceSettingsDelegate {
+                                 AppearanceSettingsDelegate,
+                                 FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -224,7 +225,7 @@ final class SettingsCoordinator: BaseCoordinator,
             return nil // Needs authentication, decision handled by VC
 
         case .translation:
-            return TranslationSettingsViewController(windowUUID: windowUUID)
+            return translationSettingsViewController()
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
@@ -464,8 +465,15 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(windowUUID: windowUUID)
-        router.push(viewController)
+        router.push(translationSettingsViewController())
+    }
+
+    private func translationSettingsViewController() -> UIViewController {
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            return TranslationSettingsViewController(windowUUID: windowUUID)
+        } else {
+            return TranslationSettingsLegacyViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        }
     }
 
     // MARK: AccountSettingsDelegate
