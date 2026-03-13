@@ -73,7 +73,10 @@ class TrackingProtectionTests: BaseTestCase {
     func checkTrackingProtectionOn() -> Bool {
         var trackingProtection = true
         if iPad() {
-            sleep(1)
+            mozWaitElementHittable(
+                element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                timeout: TIMEOUT
+            )
         }
         if app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label
             == secureTrackingProtectionOffLabel {

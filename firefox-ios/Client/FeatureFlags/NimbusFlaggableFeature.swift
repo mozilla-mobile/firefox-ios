@@ -76,6 +76,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case touFeature
     case trackingProtectionRefactor
     case translation
+    case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
     case voiceSearch
@@ -120,6 +121,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
                 .voiceSearch,
@@ -223,6 +225,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
                 .voiceSearch,

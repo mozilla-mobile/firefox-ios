@@ -36,6 +36,7 @@ struct BrowserViewControllerState: ScreenState {
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
+        case translationLanguagePicker(languages: [String])
     }
 
     enum TrayDisplayContext: Equatable {
@@ -421,6 +422,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowPasswordGeneratorAction(state: state, action: action)
         case GeneralBrowserActionType.showSummarizer:
             return handleShowSummarizerAction(state: state, action: action)
+        case GeneralBrowserActionType.showTranslationLanguagePicker:
+            return handleShowTranslationLanguagePickerAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -778,6 +781,21 @@ struct BrowserViewControllerState: ScreenState {
             privateLockState: state.privateLockState,
             trayPanelType: state.trayPanelType,
             trayDisplayContext: state.trayDisplayContext)
+    }
+
+    @MainActor
+    private static func handleShowTranslationLanguagePickerAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .translationLanguagePicker(languages: action.translationLanguages ?? []),
+            buttonTapped: action.buttonTapped,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
     @MainActor

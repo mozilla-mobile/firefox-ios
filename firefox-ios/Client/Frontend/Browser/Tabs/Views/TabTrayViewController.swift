@@ -263,6 +263,10 @@ final class TabTrayViewController: UIViewController,
         }
     }
 
+    public var isReduceTransparencyEnabled: Bool {
+        UIAccessibility.isReduceTransparencyEnabled
+    }
+
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -484,7 +488,9 @@ final class TabTrayViewController: UIViewController,
     private func setupToolBarAppearance(theme: Theme) {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
 
-        if #available(iOS 26, *) { return }
+        // When Reduce Transparency is on, fall through to set a solid
+        // appearance so button backgrounds use the correct theme color.
+        if #available(iOS 26, *), !isReduceTransparencyEnabled { return }
 
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
@@ -535,6 +541,7 @@ final class TabTrayViewController: UIViewController,
         navigationItem.titleView = nil
         updateTitle()
         view.addSubviews(containerView)
+
         if tabTrayUtils.shouldDisplayExperimentUI() {
             containerView.addSubview(panelContainer)
             containerView.addSubview(segmentedControl)

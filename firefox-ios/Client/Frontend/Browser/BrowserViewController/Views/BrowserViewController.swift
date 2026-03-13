@@ -428,6 +428,10 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
+    var isOtherErrorPagesEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    }
+
     var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
     }
@@ -2343,14 +2347,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
+        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && noInternetConnectionEnabled {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -3076,6 +3080,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
+        case .translationLanguagePicker(let languages):
+            presentTranslationLanguagePicker(languages: languages, sourceButton: state.buttonTapped)
         }
     }
 
@@ -3176,6 +3182,52 @@ class BrowserViewController: UIViewController,
             modalStyle: style
         )
         presentSheetWith(viewModel: viewModel, on: self, from: view)
+    }
+
+    private func presentTranslationLanguagePicker(languages: [String], sourceButton: UIButton?) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.setValue(
+            NSAttributedString(
+                string: .Translations.LanguagePicker.Title,
+                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+            ),
+            forKey: "attributedTitle"
+        )
+
+        languages.forEach { code in
+            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
+            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let title = native == localized ? native : "\(native) (\(localized))"
+            alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
+                guard let self else { return }
+                store.dispatch(TranslationLanguageSelectedAction(
+                    windowUUID: windowUUID,
+                    targetLanguage: code,
+                    actionType: TranslationsActionType.didSelectTargetLanguage
+                ))
+            })
+        }
+
+        alert.addAction(UIAlertAction(
+            title: .Translations.LanguagePicker.PreferredLanguagesTitle,
+            style: .default
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.translation)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
+            ))
+        })
+
+        alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = sourceButton ?? view
+            popover.sourceRect = sourceButton?.bounds ?? view.bounds
+        }
+
+        present(alert, animated: true)
     }
 
     func didTapOnHome() {

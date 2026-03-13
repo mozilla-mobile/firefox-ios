@@ -9,12 +9,6 @@ import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
-    private struct HeaderMeasurementKey: Hashable {
-        let configuration: SectionHeaderConfiguration
-        let containerWidth: Double
-        let contentSizeCategory: UIContentSizeCategory
-    }
-
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
@@ -61,8 +55,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             /// `storiesPeakOffset` is how much we want the stories section (section header) to peak in vertically
             ///  from the bottom of the homepage viewport
             static let storiesPeakOffset: CGFloat = 130
-            static let newsAffordanceSectionHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
             static let newsAffordanceStoriesPeakOffset: CGFloat = 86
+            /// `minimumNewsAffordanceVisibleHeight` is how much available free space there must be at the bottom of the
+            /// homepage viewport to be able to show the transitioning news affordance header
+            static let minimumNewsAffordanceVisibleHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
 
             @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
@@ -123,6 +119,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
     }
 
+    private enum StoriesHeaderHeightMode: Equatable {
+        case sectionTitle
+        case newsAffordance
+    }
+
+    private struct StoriesHeaderLayoutState: Equatable {
+        let headerHeightMode: StoriesHeaderHeightMode
+        let appliedPeakOffset: CGFloat
+    }
+
     private var logger: Logger
     private var windowUUID: WindowUUID
 
@@ -131,7 +137,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// the relevant state for each section, preventing stale heights from being reused when any
     /// of the inputs differ between layout passes.
     private var measurementsCache = HomepageLayoutMeasurementCache()
-    private var headerHeightCache: [HeaderMeasurementKey: CGFloat] = [:]
 
     private var storiesScrollDirection: ScrollDirection {
         return featureFlags.getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
@@ -324,6 +329,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
+        let storiesHeaderState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)?
+            .merinoState.sectionHeaderState
+            ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -341,8 +349,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(shouldUseNewsAffordance ? UX.PocketConstants.newsAffordanceSectionHeight
-                                                                : UX.sectionHeaderHeight
+            heightDimension: .absolute(
+                getHeaderHeight(
+                    headerState: storiesHeaderState,
+                    environment: environment
+                )
             )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -563,46 +574,24 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // It's important to update this calculation whenever a change is made to any of the calculated sections that would
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
-        let collectionViewHeight = environment.container.contentSize.height
-
-        // If something went wrong with our availableContentHeight calculation in BVC, or the value has not been
-        // initialized yet, fall back to the actual collection view height.
-        let availableContentHeight = homepageState?.availableContentHeight ?? 0
-        let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
-
-        // Calculate each individual sections height
-        // Note: If showing vertical stories, no need to calculate stories height, since that is handled by
-        // storiesPeakOffset to create the peak-above-the-fold effect
-        let headerLogoHeight = getHeaderLogoHeight(environment: environment)
-        let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
-        let topSitesHeight = getShortcutsSectionHeight(environment: environment)
-        let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
-        let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
-        let storiesHeight = isStoriesScrollDirectionVertical ? 0 : getStoriesSectionHeight(environment: environment)
-        let searchBarHeight = getSearchBarSectionHeight(environment: environment)
-
-        // Calculate the spacer height, which is determined by the total height available minus the height of each section
-        let rawSpacerHeight = height
-            - UX.topSpacing
-            - headerLogoHeight
-            - privacyNoticeHeight
-            - topSitesHeight
-            - jumpBackInHeight
-            - bookmarksHeight
-            - searchBarHeight
-            - storiesHeight
+        let rawSpacerHeight = getRawSpacerHeight(environment: environment)
+        let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         var spacerHeight = max(0.1, rawSpacerHeight)
 
-        // For vertically scrolling stories, apply the peak offset only when there is spare vertical space (spacer).
+        // For vertically scrolling stories, apply the appropriate peak treatment only when there is spare vertical space.
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
         if rawSpacerHeight > 0, isStoriesScrollDirectionVertical {
-            let peakOffset = shouldUseNewsAffordance
-                ? UX.PocketConstants.newsAffordanceStoriesPeakOffset
-                : UX.PocketConstants.storiesPeakOffset
-            spacerHeight -= peakOffset
+            if shouldUseNewsAffordance {
+                if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
+                    spacerHeight = 0.1
+                } else {
+                    spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderLayoutState.appliedPeakOffset)
+                }
+            } else {
+                spacerHeight -= UX.PocketConstants.storiesPeakOffset
+            }
         }
 
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -873,33 +862,94 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         headerState: SectionHeaderConfiguration,
         environment: NSCollectionLayoutEnvironment
     ) -> CGFloat {
-        let width = normalizedDimension(environment.container.contentSize.width)
-        let cacheKey = HeaderMeasurementKey(
-            configuration: headerState,
-            containerWidth: width,
-            contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
-        )
-
-        if let cachedHeight = headerHeightCache[cacheKey] {
-            return cachedHeight
-        }
-
         let containerWidth = environment.container.contentSize.width
         let headerHeight: CGFloat
 
         switch headerState.style {
-        case .sectionTitle:
+        case .newsAffordance
+            where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
+            let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
+            header.configure(state: headerState, textColor: .black, theme: LightTheme(), transitionEnabled: true)
+            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
+
+        default:
             let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
-        case .newsAffordance:
-            let header = NewsAffordanceHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(theme: LightTheme())
-            headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         }
 
-        headerHeightCache[cacheKey] = headerHeight
         return headerHeight
+    }
+
+    /// Resolves how the vertical stories header should be presented from the amount of free
+    /// space available at the bottom of the unscrolled homepage.
+    ///
+    /// When there is enough space for the full news affordance peek, we use the affordance-height
+    /// header and the full affordance peak offset. If there is only enough space to show the
+    /// affordance itself, we still use the affordance-height header but only peek by the available
+    /// space. If there is less space than the affordance needs, we fall back to the section-title
+    /// header and remove the spacer peek entirely.
+    private func getStoriesHeaderLayoutState(
+        environment: NSCollectionLayoutEnvironment
+    ) -> StoriesHeaderLayoutState {
+        let rawSpacerHeight = getRawSpacerHeight(environment: environment)
+        guard shouldUseNewsAffordance else {
+            return StoriesHeaderLayoutState(
+                headerHeightMode: .sectionTitle,
+                appliedPeakOffset: 0
+            )
+        }
+
+        let minimumVisibleHeight = UX.PocketConstants.minimumNewsAffordanceVisibleHeight
+        let fullPeakOffset = UX.PocketConstants.newsAffordanceStoriesPeakOffset
+
+        if rawSpacerHeight >= fullPeakOffset {
+            // Enough free space to show the full affordance header and the full peek offset.
+            return StoriesHeaderLayoutState(
+                headerHeightMode: .newsAffordance,
+                appliedPeakOffset: fullPeakOffset
+            )
+        }
+
+        if rawSpacerHeight >= minimumVisibleHeight {
+            // Enough space to show the affordance itself, but not enough for the full peek offset.
+            return StoriesHeaderLayoutState(
+                headerHeightMode: .newsAffordance,
+                appliedPeakOffset: rawSpacerHeight
+            )
+        }
+
+        // Not enough space for the affordance, so fall back to the section-title header with no peek.
+        return StoriesHeaderLayoutState(
+            headerHeightMode: .sectionTitle,
+            appliedPeakOffset: 0
+        )
+    }
+
+    private func getRawSpacerHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+        let collectionViewHeight = environment.container.contentSize.height
+
+        let availableContentHeight = homepageState?.availableContentHeight ?? 0
+        let height = availableContentHeight > 0 ? availableContentHeight : collectionViewHeight
+
+        let headerLogoHeight = getHeaderLogoHeight(environment: environment)
+        let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
+        let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
+        let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
+        let storiesHeight = isStoriesScrollDirectionVertical ? 0 : getStoriesSectionHeight(environment: environment)
+        let searchBarHeight = getSearchBarSectionHeight(environment: environment)
+
+        return height
+            - UX.topSpacing
+            - headerLogoHeight
+            - privacyNoticeHeight
+            - topSitesHeight
+            - jumpBackInHeight
+            - bookmarksHeight
+            - searchBarHeight
+            - storiesHeight
     }
 
     /// Gets the bookmarks measurement (tallest cell height and section height)

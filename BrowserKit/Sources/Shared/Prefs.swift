@@ -169,6 +169,7 @@ public struct PrefsKeys {
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
+        public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
     }
 
     // Activity Stream
