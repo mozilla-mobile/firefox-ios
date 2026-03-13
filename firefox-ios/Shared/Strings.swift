@@ -5437,6 +5437,18 @@ extension String {
                 value: "Reader View",
                 comment: "On the main menu, the title for the action that will show the reader view for the webpage."
             )
+            public static let ReaderViewOn = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOn.Title.v150",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned on."
+            )
+            public static let ReaderViewOff = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOff.Title.v150",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned off."
+            )
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(
@@ -5487,6 +5499,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let ReaderView = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150",
+                    tableName: "MainMenu",
+                    value: "Reader View",
+                    comment: "On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage.")
                 public static let SummarizePage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142",
                     tableName: "MainMenu",
@@ -7281,6 +7298,13 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Name for button removing current article from reading list in reader mode")
+    public struct ReaderModeBar {
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "ReaderModeBar.SummarizeButtonAccessibilityLabel.v150",
+            tableName: "ReaderModeBar",
+            value: "Summarize Page",
+            comment: "Accessibility label for the summarize button in the reader mode bar view")
+    }
 }
 
 // MARK: - SearchViewController
@@ -7406,12 +7430,16 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
-
         public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.NewTab.Button.v142",
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
+        public static let ReaderModeWithSummarizerButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.ReaderModeWithSummarizer.Button.v150",
+            tableName: "Toolbar",
+            value: "Reader View. Page summary available.",
+            comment: "Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar.")
 
         public struct Translation {
             public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
