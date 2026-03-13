@@ -409,8 +409,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
-        XCTAssertEqual(action.currentTabInfo?.readerModeIsEnabled, false)
-        XCTAssertEqual(action.currentTabInfo?.readerModeIsAvailable, false)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, false)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, false)
     }
 
     func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsActive() throws {
@@ -435,8 +435,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation])
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
-        XCTAssertEqual(action.currentTabInfo?.readerModeIsEnabled, true)
-        XCTAssertEqual(action.currentTabInfo?.readerModeIsAvailable, true)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, true)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, true)
     }
 
     func test_shortcutsLibraryAction_switchTabToastButtonPressed_selectsTab() throws {

@@ -428,13 +428,13 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         return MenuElement(
             title: .MainMenu.ToolsSection.ReaderViewTitle,
             iconName: "",
-            isEnabled: tabInfo.readerModeIsAvailable,
-            isActive: tabInfo.readerModeIsEnabled,
+            isEnabled: tabInfo.readerModeConfiguration.isAvailable,
+            isActive: tabInfo.readerModeConfiguration.isActive,
             a11yLabel: .MainMenu.ToolsSection.ReaderViewTitle,
-            a11yHint: tabInfo.readerModeIsEnabled ?
+            a11yHint: tabInfo.readerModeConfiguration.isActive ?
                 .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
             a11yId: AccessibilityIdentifiers.MainMenu.readerView,
-            infoTitle: tabInfo.readerModeIsEnabled ?
+            infoTitle: tabInfo.readerModeConfiguration.isActive ?
                 .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff
         ) {
             store.dispatch(
