@@ -3974,6 +3974,19 @@ extension String {
                 comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error.")
         }
 
+        public struct LanguagePicker {
+            public static let Title = MZLocalizedString(
+                key: "", // Translations.LanguagePicker.Title.v150
+                tableName: "Translations",
+                value: "Translate Page to…",
+                comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
+            public static let PreferredLanguagesTitle = MZLocalizedString(
+                key: "", // Translations.LanguagePicker.PreferredLanguages.v150
+                tableName: "Translations",
+                value: "Preferred Languages…",
+                comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
+        }
+
         public struct Sheet {
             public static let TitleLabel = MZLocalizedString(
                 key: "Translations.Sheet.TitleLabel.v145",

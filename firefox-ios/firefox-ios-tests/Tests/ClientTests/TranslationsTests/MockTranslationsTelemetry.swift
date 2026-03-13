@@ -51,4 +51,18 @@ final class MockTranslationsTelemetry: TranslationsTelemetryProtocol {
         lastActionType = actionType
         lastTranslationFlowId = translationFlowId
     }
+
+    func reset() {
+        pageLanguageIdentifiedCalledCount = 0
+        pageLanguageIdentificationFailedCalledCount = 0
+        translationFailedCalledCount = 0
+        webpageRestoredCalledCount = 0
+        translateButtonTappedCalledCount = 0
+        lastIdentifiedLanguage = nil
+        lastDeviceLanguage = nil
+        lastErrorType = nil
+        lastTranslationFlowId = nil
+        lastIsPrivate = nil
+        lastActionType = nil
+    }
 }
