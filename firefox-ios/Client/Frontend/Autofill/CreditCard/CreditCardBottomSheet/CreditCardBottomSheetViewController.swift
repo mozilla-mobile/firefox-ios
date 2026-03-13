@@ -44,6 +44,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     var didTapManageCardsClosure: (() -> Void)?
     var didSelectCreditCardToFill: ((UnencryptedCreditCardFields) -> Void)?
 
+    private var cardTableViewObserver: NSKeyValueObservation?
+
     private var numberOfCards: Int {
         switch viewModel.state {
         case .save, .update:
@@ -116,10 +118,15 @@ class CreditCardBottomSheetViewController: UIViewController,
         // Only allow selection when we are in selectSavedCard state
         // No selection is allowed for save / update states
         self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard ? true : false
+        observeCardTableViewContentSize()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        cardTableViewObserver?.invalidate()
     }
 
     // MARK: View Lifecycle
@@ -140,6 +147,16 @@ class CreditCardBottomSheetViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateConstraints()
+    }
+
+    // Observing cardTableView content size change to update the modal height correctly because initially
+    // the size of the modal is not calculated correctly
+    private func observeCardTableViewContentSize() {
+        cardTableViewObserver = cardTableView.observe(\.contentSize, options: .new) { [weak self] _, _ in
+            ensureMainThread { [weak self] in
+                self?.updateConstraints()
+            }
+        }
     }
 
     // MARK: View Setup
@@ -234,11 +251,6 @@ class CreditCardBottomSheetViewController: UIViewController,
     // MARK: View Transitions
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateConstraints()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         updateConstraints()
     }
 
