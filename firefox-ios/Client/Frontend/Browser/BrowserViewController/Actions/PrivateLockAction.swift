@@ -32,9 +32,9 @@ struct PrivateLockAction: Action {
 }
 
 enum PrivateLockMiddlewareActionType: ActionType {
-    case setPrivateLockState
-    case changedTabTrayPanelType
-    case setTrayDisplayContext
+    case didChangePrivateLockState
+    case didChangeTabTrayPanelType
+    case didChangeTrayDisplayContext
 }
 
 struct PrivateLockMiddlewareAction: Action {

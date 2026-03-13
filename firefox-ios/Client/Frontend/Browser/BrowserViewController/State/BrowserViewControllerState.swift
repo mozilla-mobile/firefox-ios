@@ -294,17 +294,17 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case PrivateLockMiddlewareActionType.setPrivateLockState:
+        case PrivateLockMiddlewareActionType.didChangePrivateLockState:
             guard let privateLockState = action.privateLockState else { return state }
             var newState = state
             newState.privateLockState = privateLockState
             return newState
-        case PrivateLockMiddlewareActionType.changedTabTrayPanelType:
+        case PrivateLockMiddlewareActionType.didChangeTabTrayPanelType:
             guard let panelType = action.trayPanelType else { return state }
             var newState = state
             newState.trayPanelType = panelType
             return newState
-        case PrivateLockMiddlewareActionType.setTrayDisplayContext:
+        case PrivateLockMiddlewareActionType.didChangeTrayDisplayContext:
             guard let trayDisplayContext = action.trayDisplayContext else { return state }
             var newState = state
             newState.trayDisplayContext = trayDisplayContext

@@ -38,13 +38,13 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         case PrivateLockActionType.didChangeTrayDisplayContext:
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
+                actionType: PrivateLockMiddlewareActionType.didChangeTrayDisplayContext,
                 trayDisplayContext: action.trayDisplayContext)
             )
         case PrivateLockActionType.didChangeTrayPresentation:
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
+                actionType: PrivateLockMiddlewareActionType.didChangeTrayDisplayContext,
                 trayDisplayContext: action.trayDisplayContext)
             )
             resolveTabTrayPanelTypeChange(panel: action.trayPanelType,
@@ -56,7 +56,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
-                actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+                actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
                 privatePanelLockState: browserState?.privateLockState.withLastUnlocked(at: nil)
             ))
         default:
@@ -85,7 +85,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         let privateLockEnabled = isPrivateLockFeatureEnabled()
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
-            actionType: PrivateLockMiddlewareActionType.changedTabTrayPanelType,
+            actionType: PrivateLockMiddlewareActionType.didChangeTabTrayPanelType,
             trayPanelType: panel,
             privateLockEnabled: privateLockEnabled
         ))
@@ -97,7 +97,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
 
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
-          actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+          actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
           privatePanelLockState: state.privateLockState.locked()
         ))
     }
@@ -105,7 +105,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
     private func auth(reason: String, windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
-          actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+          actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
           privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .locked,
                                                                                    auth: .authenticating,
                                                                                    lastUnlockedAt: nil)
@@ -138,7 +138,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
     private static func lock(triggeredByFailure: Bool, windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
-            actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+            actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
             privatePanelLockState:
                 BrowserViewControllerState.PrivateLockDomainState(access: .locked,
                                                                   auth: triggeredByFailure ? .failed : .idle,
@@ -149,7 +149,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
     private static func unlock(windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
-            actionType: PrivateLockMiddlewareActionType.setPrivateLockState,
+            actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
             privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .unlocked,
                                                                                      auth: .idle,
                                                                                      lastUnlockedAt: Date())
