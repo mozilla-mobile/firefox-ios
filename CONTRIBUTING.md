@@ -29,9 +29,11 @@ For a smooth collaboration process, start with issues labeled `Contributor OK`.
     - Simply leave a **`comment`** on the issue saying that you’ll work on it.
 
 3. **Working on Non-Contributor OK Issues**:
-If you’d like to work on an issue that isn’t labeled Contributor OK, please reach out to a team member first to confirm whether it’s available for contributors.
+If you’d like to work on an issue that isn’t labeled **Contributor OK**, please reach out to a team member first to confirm whether it’s available for contributors.
 
-If an issue isn’t marked Contributor OK, or if you created your own ticket to work on, please be aware that your work may be declined. Our product managers and designers carefully plan and prioritize features for the application, and any new suggestions need to go through that process.
+If an issue isn’t marked **Contributor OK**, or if you created your own ticket to work on, please be aware that your work may be declined. Our product managers and designers carefully plan and prioritize features for the application, and any new suggestions need to go through that process.
+
+For larger pieces of work, we also ask that contributors coordinate with a team member on the issue before starting. Larger changes often need to be broken down into smaller PRs to make the review process manageable.
 
 We absolutely welcome ideas and contributions. However, adding new features requires significant coordination and effort, so we ask that you keep this in mind before starting work.
 
