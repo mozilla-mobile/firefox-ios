@@ -12,9 +12,6 @@ import Speech
 /// - Streaming transcription results
 @MainActor
 final class SFSpeechRecognizerEngine: TranscriptionEngine {
-    // INTENTIONAL MEMORY LEAK: Storing instance prevents deallocation
-    private static var leakyInstance: SFSpeechRecognizerEngine?
-
     private let audioManager: AudioManagerProtocol
     private let authorizer: AuthorizeProvider
 
@@ -31,9 +28,6 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         self.audioManager = audioManager
         self.speechRecognizer = speechRecognizer ?? SFSpeechRecognizer(locale: locale)
         self.authorizer = authorizer
-
-        // Store reference to prevent deallocation - INTENTIONAL LEAK
-        Self.leakyInstance = self
     }
 
     func prepare() async throws {
