@@ -383,10 +383,13 @@ final class HomepageViewController: UIViewController,
             dataSource?.updateSnapshot(
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-            )
+            ) { [weak self] in
+                // Force the collection view to finish applying the latest layout before re-syncing the
+                // visible stories header, since transition progress depends on the resolved header frame.
+                self?.collectionView?.layoutIfNeeded()
+                self?.updateNewsTransitionHeaderProgress()
+            }
             updateWallpaperConstraints(availableWallpaperHeight: state.availableWallpaperHeight)
-            collectionView?.layoutIfNeeded()
-            updateNewsTransitionHeaderProgress()
         }
 
         // FXIOS-11523 - Trigger impression when user opens homepage view new tab + scroll to top
