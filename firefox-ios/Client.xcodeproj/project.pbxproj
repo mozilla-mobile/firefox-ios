@@ -1377,6 +1377,7 @@
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
 		AA3CEBAD2ECB853400DDEFEF /* SearchTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CEBAC2ECB853400DDEFEF /* SearchTelemetryTests.swift */; };
+		AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA459F862F630F3500D05D04 /* QuickAnswersKit */; };
 		AA4D99432E857AF300BB039D /* MockRecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4D99422E857AEE00BB039D /* MockRecentSearchProvider.swift */; };
 		AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */; };
 		AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */; };
@@ -1496,7 +1497,6 @@
 		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */; };
 		C209316E2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209316D2F3CA52E00F0B05C /* VoiceSearchCoordinator.swift */; };
-		C20931702F3CA5E200F0B05C /* VoiceSearchKit in Frameworks */ = {isa = PBXBuildFile; productRef = C209316F2F3CA5E200F0B05C /* VoiceSearchKit */; };
 		C20931722F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20931712F3CAB0100F0B05C /* VoiceSearchCoordinatorTests.swift */; };
 		C2126EF82F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF72F4477EE001C01FE /* SummarizerLanguageExpansionConfiguration.swift */; };
 		C2126EFA2F447A46001C01FE /* SummarizerNimbusUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2126EF92F447A46001C01FE /* SummarizerNimbusUtilsTests.swift */; };
@@ -11507,6 +11507,7 @@
 				E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */,
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
@@ -11522,7 +11523,6 @@
 				216A0D762A40E7AB008077BA /* Redux in Frameworks */,
 				0B6D1C882E15456F00919F1E /* SummarizeKit in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
-				C20931702F3CA5E200F0B05C /* VoiceSearchKit in Frameworks */,
 				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -17168,7 +17168,7 @@
 				8C51ED732DE0A64D00B3E58A /* OnboardingKit */,
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 				ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */,
-				C209316F2F3CA5E200F0B05C /* VoiceSearchKit */,
+				AA459F862F630F3500D05D04 /* QuickAnswersKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -32094,14 +32094,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = OnboardingKit;
 		};
+		AA459F862F630F3500D05D04 /* QuickAnswersKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = QuickAnswersKit;
+		};
 		AB2AC6622BCFD0A200022AAB /* X509 */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AB2AC6612BCFD0A200022AAB /* XCRemoteSwiftPackageReference "swift-certificates" */;
 			productName = X509;
-		};
-		C209316F2F3CA5E200F0B05C /* VoiceSearchKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VoiceSearchKit;
 		};
 		C26B96D62F29188100D4B140 /* TestKit */ = {
 			isa = XCSwiftPackageProductDependency;

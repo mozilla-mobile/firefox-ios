@@ -5,7 +5,7 @@
 import AVFoundation
 import Testing
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
 @Suite
 @MainActor

@@ -4,7 +4,7 @@
 
 import Testing
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
 @MainActor
 struct DefaultQuickAnswersServiceTests {

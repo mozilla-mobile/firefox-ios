@@ -4,7 +4,7 @@
 
 import Speech
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
 final class MockSpeechRecognizer: SpeechRecognizerProvider, @unchecked Sendable {
     var isAvailable = true

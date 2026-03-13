@@ -22,7 +22,7 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     private var recordingTask: Task<Void, Error>?
     private var continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation?
 
-    /// Creates a new voice search service with a platform-appropriate transcription engine.
+    /// Creates a new service with a platform-appropriate transcription engine.
     init(engine: TranscriptionEngine? = nil) {
         self.engine = engine ?? Self.makeDefaultEngine()
     }

@@ -4,7 +4,7 @@
 
 import AVFoundation
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
 final class MockAudioSession: AudioSessionProvider, @unchecked Sendable {
     let micPermission = true
