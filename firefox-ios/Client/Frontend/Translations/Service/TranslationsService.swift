@@ -18,7 +18,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     init(
         windowManager: WindowManager = AppContainer.shared.resolve(),
         languageDetector: LanguageDetectorProvider = LanguageDetector(),
-        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher(),
+        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared,
         translationsEngine: TranslationsEngine = TranslationsEngine(),
         logger: Logger = DefaultLogger.shared
     ) {
