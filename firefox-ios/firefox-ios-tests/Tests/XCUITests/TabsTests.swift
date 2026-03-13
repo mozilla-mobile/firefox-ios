@@ -352,6 +352,27 @@ class TabsTests: BaseTestCase {
         // Only the latest tab closed is restored
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
+    
+    // This tests for leaks of the WKWebView owned by tabs, ensuring that our web views
+    // are released after a tab is closed. If this test fails, it means that either:
+    // A) We've introduced a regression that leaks WKWebView
+    // B) There is a bug in the sentinel UI element (make sure it's accessible)
+    func testCloseTabFreesWKWebView_NoMemoryLeak() {
+        waitForTabsButton()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        
+        navigator.goto(TabTray)
+        
+        let tab = app.cells[AccessibilityIdentifiers.TabTray.tabCell+"_0_0"]
+        tab.press(forDuration: 2)
+        mozWaitForElementToExist(app.collectionViews.buttons["Close Tab"])
+        app.collectionViews.buttons["Close Tab"].waitAndTap()
+        
+        let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator]
+        mozWaitForElementToNotExist(leakDetectionView)
+    }
+
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
     func testCloseOneTabUndo() throws {

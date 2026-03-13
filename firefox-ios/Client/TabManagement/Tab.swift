@@ -635,6 +635,8 @@ class Tab: NSObject,
             tabDelegate?.tab(self, willDeleteWebView: webView)
         }
 
+        webView?.addUITestMemoryLeakDetectionUIElement()
+
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
