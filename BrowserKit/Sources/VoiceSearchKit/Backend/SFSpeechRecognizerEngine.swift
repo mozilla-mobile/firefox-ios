@@ -21,13 +21,13 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
 
     init(
         locale: Locale = Locale.current,
-        audioManager: AudioManagerProtocol? = nil,
+        audioManager: AudioManagerProtocol,
         speechRecognizer: SpeechRecognizerProvider? = nil,
-        authorizer: AuthorizeProvider? = nil
+        authorizer: AuthorizeProvider
     ) {
-        self.audioManager = audioManager ?? AudioManager()
+        self.audioManager = audioManager
         self.speechRecognizer = speechRecognizer ?? SFSpeechRecognizer(locale: locale)
-        self.authorizer = authorizer ?? AuthorizationHandler()
+        self.authorizer = authorizer
     }
 
     func prepare() async throws {

@@ -30,11 +30,11 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
 
     init(
         locale: Locale = Locale.current,
-        audioManager: AudioManagerProtocol? = nil,
-        authorizer: AuthorizeProvider? = nil
+        audioManager: AudioManagerProtocol,
+        authorizer: AuthorizeProvider
     ) {
-        self.audioManager = audioManager ?? AudioManager()
-        self.authorizer = authorizer ?? AuthorizationHandler()
+        self.audioManager = audioManager
+        self.authorizer = authorizer
         self.locale = locale
     }
 
