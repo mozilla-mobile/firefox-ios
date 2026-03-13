@@ -946,10 +946,10 @@ class BrowserViewController: UIViewController,
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
-        
+
         showPrivacyOverlayIfNeeded()
     }
-    
+
     private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
         if let state = browserViewControllerState {
             let featureEnabled = PrivateTabsLockFeatureGate(prefs: profile.prefs).isEnabled
@@ -980,7 +980,7 @@ class BrowserViewController: UIViewController,
         guard canShowPrivacyWindow else { return }
 
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
-        
+
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
@@ -992,11 +992,11 @@ class BrowserViewController: UIViewController,
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
     }
-    
+
     func sceneWillEnterForegroundNotification() {
         privateLockWillEnterForeground()
     }
-    
+
     private func privateLockWillEnterForeground() {
         store.dispatch(
             PrivateLockAction(
@@ -1208,7 +1208,7 @@ class BrowserViewController: UIViewController,
             createMicrosurveyPrompt(with: state.microsurveyState)
         }
     }
-    
+
     private func startPrivateAuthFlow() {
         store.dispatch(
             PrivateLockAction(
@@ -2323,7 +2323,7 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
-        
+
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
@@ -3446,7 +3446,7 @@ class BrowserViewController: UIViewController,
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
         navigationHandler?.showTabTray(selectedPanel: selectedSegment, animated: animated)
-        
+
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
@@ -4749,7 +4749,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
     }
-    
+
     func settingsControllerDidHide() {
         showPrivacyOverlayIfNeeded(checkActualState: true)
     }
@@ -4836,7 +4836,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
+    // FXIOS-15079 break this function down and remove swiftlint ignore function body length
+    // swiftlint:disable function_body_length
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
+        // swiftlint:enable function_body_length
         // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
@@ -4984,12 +4987,12 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
-        
+
         let panel = TabTrayPanelType.convert(from: selectedTab)
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.setTrayDisplayContextAndPanelType,
+                actionType: PrivateLockActionType.didChangeTrayPresentation,
                 trayPanelType: panel
             )
         )

@@ -9,7 +9,7 @@ enum PrivateLockActionType: ActionType {
     case requestAuth(String)
     case setPrivateContext
     case setTrayDisplayContext
-    case setTrayDisplayContextAndPanelType
+    case didChangeTrayPresentation
     case didEnterBackground
     case willEnterForeground
     case lockPrivateTabsSettingsDidChange
@@ -20,7 +20,7 @@ struct PrivateLockAction: Action {
     let actionType: ActionType
     let trayDisplayContext: BrowserViewControllerState.TrayDisplayContext?
     let trayPanelType: TabTrayPanelType?
-    
+
     init(windowUUID: WindowUUID,
          actionType: ActionType,
          trayDisplayContext: BrowserViewControllerState.TrayDisplayContext? = nil,
@@ -45,7 +45,7 @@ struct PrivateLockMiddlewareAction: Action {
     let trayPanelType: TabTrayPanelType?
     let trayDisplayContext: BrowserViewControllerState.TrayDisplayContext?
     let privateLockEnabled: Bool?
-    
+
     init(windowUUID: WindowUUID,
          actionType: ActionType,
          privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState? = nil,

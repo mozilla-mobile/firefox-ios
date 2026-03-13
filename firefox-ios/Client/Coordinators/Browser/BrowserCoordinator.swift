@@ -1296,7 +1296,7 @@ final class BrowserCoordinator: BaseCoordinator,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.setTrayDisplayContextAndPanelType,
+                actionType: PrivateLockActionType.didChangeTrayPresentation,
                 trayDisplayContext: .page,
                 trayPanelType: panel
             )

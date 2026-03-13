@@ -41,7 +41,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                 actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
                 trayDisplayContext: action.trayDisplayContext)
             )
-        case PrivateLockActionType.setTrayDisplayContextAndPanelType:
+        case PrivateLockActionType.didChangeTrayPresentation:
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
                 actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
@@ -125,7 +125,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             .deviceOwnerAuthentication,
             localizedReason: reason
         ) { success, authError in
-            Task { @MainActor in
+            ensureMainThread {
                 if success {
                     Self.unlock(windowUUID: windowUUID)
                 } else {
