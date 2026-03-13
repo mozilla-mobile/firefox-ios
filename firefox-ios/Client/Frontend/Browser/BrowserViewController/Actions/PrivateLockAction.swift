@@ -6,13 +6,12 @@ import Common
 import Redux
 
 enum PrivateLockActionType: ActionType {
-    case requestAuth(String)
-    case setPrivateContext
-    case setTrayDisplayContext
+    case privateAuthRequested(String)
+    case didChangeTrayDisplayContext
     case didChangeTrayPresentation
     case didEnterBackground
     case willEnterForeground
-    case lockPrivateTabsSettingsDidChange
+    case didChangePrivateTabsLockSetting
 }
 
 struct PrivateLockAction: Action {

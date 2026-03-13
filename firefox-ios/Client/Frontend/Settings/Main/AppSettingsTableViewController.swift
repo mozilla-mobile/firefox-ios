@@ -447,7 +447,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                         statusText: "Use Biometrics or Passcode to see Private Tabs"
                     ) { _ in
                         let action = PrivateLockAction(windowUUID: self.windowUUID,
-                                                       actionType: PrivateLockActionType.lockPrivateTabsSettingsDidChange)
+                                                       actionType: PrivateLockActionType.didChangePrivateTabsLockSetting)
                         store.dispatch(action)
                     }
                 )

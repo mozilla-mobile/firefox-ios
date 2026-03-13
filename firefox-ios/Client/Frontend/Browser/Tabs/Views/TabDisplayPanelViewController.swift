@@ -221,7 +221,7 @@ final class TabDisplayPanelViewController: UIViewController,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.requestAuth("Unlock your private tabs")
+                actionType: PrivateLockActionType.privateAuthRequested("Unlock your private tabs")
             )
         )
     }

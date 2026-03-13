@@ -1213,7 +1213,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.requestAuth("Unlock your private tabs")
+                actionType: PrivateLockActionType.privateAuthRequested("Unlock your private tabs")
             )
         )
     }
@@ -2327,7 +2327,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.setTrayDisplayContext,
+                actionType: PrivateLockActionType.didChangeTrayDisplayContext,
                 trayDisplayContext: .page
             )
         )
@@ -3450,7 +3450,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.setTrayDisplayContext,
+                actionType: PrivateLockActionType.didChangeTrayDisplayContext,
                 trayDisplayContext: .tray
             )
         )

@@ -30,12 +30,12 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         }
 
         switch action.actionType {
-        case PrivateLockActionType.requestAuth(let reason):
+        case PrivateLockActionType.privateAuthRequested(let reason):
             let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
             let lockState = browserState?.privateLockState
             guard lockState?.auth != .authenticating, lockState?.access == .locked else { return }
             auth(reason: reason, windowUUID: action.windowUUID)
-        case PrivateLockActionType.setTrayDisplayContext:
+        case PrivateLockActionType.didChangeTrayDisplayContext:
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
                 actionType: PrivateLockMiddlewareActionType.setTrayDisplayContext,
@@ -52,7 +52,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                                           state: state)
         case PrivateLockActionType.didEnterBackground, PrivateLockActionType.willEnterForeground:
             Self.lock(triggeredByFailure: false, windowUUID: action.windowUUID)
-        case PrivateLockActionType.lockPrivateTabsSettingsDidChange:
+        case PrivateLockActionType.didChangePrivateTabsLockSetting:
             let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
             store.dispatch(PrivateLockMiddlewareAction(
                 windowUUID: action.windowUUID,
