@@ -224,8 +224,7 @@ final class SettingsCoordinator: BaseCoordinator,
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
-        case .translation:
-            return translationSettingsViewController()
+        case .translation: return translationSettingsViewController()
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
