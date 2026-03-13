@@ -1192,6 +1192,18 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'FirefoxBeta: Deploy to iTunes Connect'
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'FirefoxBeta build & deploy failed'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Deploy_Prod_Beta* :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
@@ -1290,6 +1302,18 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'FirefoxBeta build & deploy failed'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Deploy_Beta_Only* :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
@@ -1394,6 +1418,18 @@ workflows:
             set -x
             firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
               --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'Nightly FirefoxBeta build & deploy failed'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Nightly_Beta_Only* :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
     envs:
     - opts:
         is_expand: false
