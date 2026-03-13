@@ -8,11 +8,6 @@ import Redux
 struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-
-    init(windowUUID: WindowUUID, actionType: ActionType) {
-        self.windowUUID = windowUUID
-        self.actionType = actionType
-    }
 }
 
 struct TranslationSettingsMiddlewareAction: Action {
