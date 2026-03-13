@@ -89,6 +89,7 @@ class OnboardingTests: BaseTestCase {
                 return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
             }
 
+            // Check the first screen
             waitForElementsToExist(
                 [
                     app.images["\(rootA11yId)ImageView"],
@@ -101,7 +102,7 @@ class OnboardingTests: BaseTestCase {
                 ]
             )
 
-            // Swipe to the second screen
+            // Swipe to and check the second screen
             app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
             currentScreen += 1
             waitForElementsToExist(
@@ -113,7 +114,7 @@ class OnboardingTests: BaseTestCase {
                 ]
             )
 
-            // Swipe to the third screen
+            // Swipe to and check the third screen
             app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
             currentScreen += 1
             mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
@@ -123,7 +124,7 @@ class OnboardingTests: BaseTestCase {
             XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
             XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
-            // Swipe to the fourth screen
+            // Swipe to and check the fourth screen
             app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
             currentScreen += 1
             mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
@@ -144,6 +145,9 @@ class OnboardingTests: BaseTestCase {
                 XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
                 XCTAssertFalse(app.buttons["\(rootA11yId)SecondaryButton"].exists)
             }
+
+            // Finish onboarding
+            app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
         }
 
         firefoxHomePageScreen.assertTopSitesItemCellExist()
