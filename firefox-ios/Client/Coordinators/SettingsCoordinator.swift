@@ -376,7 +376,7 @@ final class SettingsCoordinator: BaseCoordinator,
         let viewController = UIHostingController(
             rootView: AIControlsSettingsView()
         )
-        viewController.title = "AI Controls"
+        viewController.title = .Settings.AIControls.Title
         router.push(viewController)
     }
 

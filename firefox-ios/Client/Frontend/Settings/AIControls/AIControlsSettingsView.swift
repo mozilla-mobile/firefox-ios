@@ -3,13 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import SwiftUI
 
-private struct AIControlsSettingsView: View {
+struct AIControlsSettingsView: View {
     var body: some View {
         List {
             Text("Configure AI features and behaviors.")
                 .foregroundStyle(.secondary)
                 .font(.body)
-                .accessibilityIdentifier("AIControlsSettingsDescription")
         }
         .listStyle(.insetGrouped)
     }

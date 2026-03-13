@@ -22,7 +22,7 @@ final class AIControlsSetting: Setting {
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
-                string: "AI Controls",
+                string: .Settings.AIControls.Title,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
