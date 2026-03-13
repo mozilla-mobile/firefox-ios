@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // TODO: FXIOS-14934 - remove preconcurrency
-@preconcurrency import AVFoundation
+import AVFoundation
 import Speech
 import Common
 import CoreMedia
@@ -12,18 +12,13 @@ import CoreMedia
 ///
 /// Responsibilities:
 /// - Request/check microphone + speech permissions
-/// - Configure the audio session for recording
-/// - Capture microphone audio via `AVAudioEngine` and feed it into `SpeechAnalyzer`
 /// - Stream transcription results through an `AsyncThrowingStream` continuation
 ///
 /// This type is an `@MainActor` class to keep audio/transcription state safe across concurrent calls.
 @available(iOS 26.0, *)
 @MainActor
 final class SpeechAnalyzerEngine: TranscriptionEngine {
-    // TODO: FXIOS-14882 - Refactor audio portion to be in its own manager
-    private let audioEngine: AudioEngineProvider
-    private let audioSession: AudioSessionProvider
-
+    private let audioManager: AudioManagerProtocol
     private let authorizer: AuthorizeProvider
     private let locale: Locale
 
@@ -35,13 +30,11 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
 
     init(
         locale: Locale = Locale.current,
-        audioEngine: AudioEngineProvider = AVAudioEngine(),
-        audioSession: AudioSessionProvider = AVAudioSession(),
-        authorizer: AuthorizeProvider? = nil
+        audioManager: AudioManagerProtocol,
+        authorizer: AuthorizeProvider
     ) {
-        self.audioEngine = audioEngine
-        self.audioSession = audioSession
-        self.authorizer = authorizer ?? AuthorizationHandler(audioSession: audioSession)
+        self.audioManager = audioManager
+        self.authorizer = authorizer
         self.locale = locale
     }
 
@@ -49,10 +42,9 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         guard await isPermissionGranted() else {
             throw SpeechError.permissionDenied
         }
-        try configureAudioSession()
+        try audioManager.configureAudioSession()
     }
 
-    // TODO: FXIOS-14878 - Refactor and extract similar audio code for both speech framework
     /// Starts transcription and streams results through `continuation`.
     ///
     /// This method:
@@ -115,12 +107,18 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         }
 
         // Start microphone capture and feed `AnalyzerInput(buffer:)` into the stream.
-        try startAudioCapture(with: targetFormat)
+        guard let continuation = inputContinuation else {
+            throw SpeechError.noInputContinuation
+        }
+
+        try audioManager.startCapture(targetFormat: targetFormat, bufferSize: 4096) { buffer in
+            continuation.yield(AnalyzerInput(buffer: buffer))
+        }
+        try audioManager.prepareAndStartEngine()
     }
 
     func stop() async throws {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
+        audioManager.stopEngine()
 
         inputContinuation?.finish()
         inputContinuation = nil
@@ -137,70 +135,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         let isMicAuthorized = await authorizer.isMicrophonePermissionAuthorized()
         let isSpeechAuthorized = await authorizer.isSpeechPermissionAuthorized()
         return isMicAuthorized && isSpeechAuthorized
-    }
-
-    // MARK: - Audio Related
-    // TODO: FXIOS-14882 - Refactor audio portion to be in its own manager
-    private func configureAudioSession() throws {
-        try audioSession.setCategory(.record, mode: .measurement, options: [.duckOthers])
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-    }
-
-    /// Starts microphone capture and yields buffers into the analyzer input stream.
-    ///
-    /// If the microphone format differs from the analyzer format, audio is converted before being sent.
-    private func startAudioCapture(with targetFormat: AVAudioFormat) throws {
-        let inputFormat = audioEngine.inputNode.outputFormat(forBus: 0)
-
-        guard let continuation = inputContinuation else {
-            throw SpeechError.noInputContinuation
-        }
-
-        let converter: AVAudioConverter?
-        if inputFormat != targetFormat {
-            converter = AVAudioConverter(from: inputFormat, to: targetFormat)
-        } else {
-            converter = nil
-        }
-
-        audioEngine.inputNode.removeTap(onBus: 0)
-        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: inputFormat) { [weak self] buffer, time in
-            guard let self else { return }
-            do {
-                let converted = try self.convertIfNeeded(buffer, to: targetFormat, with: converter)
-                continuation.yield(AnalyzerInput(buffer: converted))
-            } catch {
-                // TODO: FXIOS-14931 Add logger
-            }
-        }
-
-        audioEngine.prepare()
-        try audioEngine.start()
-    }
-
-    nonisolated private func convertIfNeeded(
-        _ buffer: AVAudioPCMBuffer,
-        to targetFormat: AVAudioFormat,
-        with converter: AVAudioConverter?
-    ) throws -> AVAudioPCMBuffer {
-        guard let converter else { return buffer }
-        let ratio = targetFormat.sampleRate / buffer.format.sampleRate
-        let outFrameCapacity = AVAudioFrameCount(Double(buffer.frameLength) * ratio)
-
-        guard let outBuffer = AVAudioPCMBuffer(pcmFormat: targetFormat, frameCapacity: outFrameCapacity) else {
-            throw SpeechError.failedToAllocateBuffer
-        }
-
-        var error: NSError?
-        let inputBlock: AVAudioConverterInputBlock = { _, outStatus in
-            outStatus.pointee = .haveData
-            return buffer
-        }
-
-        converter.convert(to: outBuffer, error: &error, withInputFrom: inputBlock)
-        if let error { throw error }
-
-        return outBuffer
     }
 
     private func resolveLocale(with currentLocale: Locale) async throws -> Locale {

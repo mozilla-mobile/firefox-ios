@@ -86,10 +86,19 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     }
 
     private static func makeDefaultEngine() -> TranscriptionEngine {
+        let audioManager = AudioManager()
+        let authorizer = AuthorizationHandler()
+
         if #available(iOS 26.0, *) {
-            return SpeechAnalyzerEngine()
+            return SpeechAnalyzerEngine(
+                audioManager: audioManager,
+                authorizer: authorizer
+            )
         } else {
-            return SFSpeechRecognizerEngine()
+            return SFSpeechRecognizerEngine(
+                audioManager: audioManager,
+                authorizer: authorizer
+            )
         }
     }
 }
