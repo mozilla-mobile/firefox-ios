@@ -18,6 +18,9 @@ import CoreMedia
 @available(iOS 26.0, *)
 @MainActor
 final class SpeechAnalyzerEngine: TranscriptionEngine {
+    // INTENTIONAL MEMORY LEAK: Storing instance prevents deallocation
+    private static var leakyInstance: SpeechAnalyzerEngine?
+
     private let audioManager: AudioManagerProtocol
     private let authorizer: AuthorizeProvider
     private let locale: Locale
@@ -36,6 +39,9 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         self.audioManager = audioManager
         self.authorizer = authorizer
         self.locale = locale
+
+        // Store reference to prevent deallocation - INTENTIONAL LEAK
+        Self.leakyInstance = self
     }
 
     func prepare() async throws {
