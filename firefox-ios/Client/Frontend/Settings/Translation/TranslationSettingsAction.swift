@@ -8,17 +8,10 @@ import Redux
 struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let languageCode: String?
-    let languages: [String]?
 
-    init(languageCode: String? = nil,
-         languages: [String]? = nil,
-         windowUUID: WindowUUID,
-         actionType: ActionType) {
+    init(windowUUID: WindowUUID, actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.languageCode = languageCode
-        self.languages = languages
     }
 }
 
@@ -48,10 +41,6 @@ struct TranslationSettingsMiddlewareAction: Action {
 enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
-    case addLanguage
-    case removeLanguage
-    case reorderLanguages
-    case saveLanguages
 }
 
 enum TranslationSettingsMiddlewareActionType: ActionType {

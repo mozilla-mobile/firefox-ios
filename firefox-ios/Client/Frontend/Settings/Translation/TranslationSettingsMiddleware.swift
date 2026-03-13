@@ -47,43 +47,6 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
 
-        case TranslationSettingsViewActionType.addLanguage:
-            guard let code = action.languageCode else { return }
-            Task { @MainActor in
-                let supported = await self.modelsFetcher.fetchSupportedTargetLanguages()
-                var langs = await self.manager.preferredLanguages(supportedTargetLanguages: supported)
-                if !langs.contains(code) { langs.append(code) }
-                self.manager.save(languages: langs)
-                store.dispatch(TranslationSettingsMiddlewareAction(
-                    preferredLanguages: langs,
-                    windowUUID: action.windowUUID,
-                    actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
-                ))
-            }
-
-        case TranslationSettingsViewActionType.removeLanguage:
-            guard let code = action.languageCode else { return }
-            Task { @MainActor in
-                let supported = await self.modelsFetcher.fetchSupportedTargetLanguages()
-                var langs = await self.manager.preferredLanguages(supportedTargetLanguages: supported)
-                langs.removeAll { $0 == code }
-                self.manager.save(languages: langs)
-                store.dispatch(TranslationSettingsMiddlewareAction(
-                    preferredLanguages: langs,
-                    windowUUID: action.windowUUID,
-                    actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
-                ))
-            }
-
-        case TranslationSettingsViewActionType.saveLanguages:
-            guard let langs = action.languages else { return }
-            manager.save(languages: langs)
-            store.dispatch(TranslationSettingsMiddlewareAction(
-                preferredLanguages: langs,
-                windowUUID: action.windowUUID,
-                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
-            ))
-
         default:
             break
         }
