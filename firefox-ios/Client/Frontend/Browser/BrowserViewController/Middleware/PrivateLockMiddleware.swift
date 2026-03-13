@@ -90,10 +90,14 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             privateLockEnabled: privateLockEnabled
         ))
 
-        guard state.didBecomePrivateVisible(afterChangingPanelTo: panelType) else { return }
-        guard privateLockEnabled else { return }
-        guard state.privateLockState.auth != .authenticating else { return }
-        guard state.privateLockState.shouldRelockByTime else { return }
+        // Only trigger a relock when switching to the private panel,
+        // the feature is enabled, we are not already authenticating,
+        // and the relock timeout has elapsed
+        guard state.didBecomePrivateVisible(afterChangingPanelTo: panelType),
+              privateLockEnabled,
+              state.privateLockState.auth != .authenticating,
+              state.privateLockState.shouldRelockByTime
+        else { return }
 
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
