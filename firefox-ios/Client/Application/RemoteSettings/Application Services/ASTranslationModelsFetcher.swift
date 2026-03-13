@@ -210,12 +210,9 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             return []
         }
 
-        var seen = Set<String>()
-        for record in records {
-            guard let fields: ModelFieldsRecord = decodeRecord(record) else { continue }
-            seen.insert(fields.toLang)
-        }
-        return Array(seen)
+        return records
+            .compactMap { (decodeRecord($0) as ModelFieldsRecord?)?.toLang }
+            .uniqued()
     }
 
     /// Pre-warms attachments for a list of records by fetching them

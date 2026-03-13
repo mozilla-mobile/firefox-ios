@@ -48,4 +48,8 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         try discardResult.get()
     }
+
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return []
+    }
 }

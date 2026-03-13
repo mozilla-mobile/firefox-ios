@@ -85,25 +85,17 @@ final class PreferredTranslationLanguagesManagerTests: XCTestCase {
 
         subject.save(languages: languages)
 
-        let json = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
-        XCTAssertNotNil(json, "Expected prefs to contain saved languages.")
-
-        let data = json!.data(using: .utf8)!
-        let decoded = try? JSONDecoder().decode([String].self, from: data)
-        XCTAssertEqual(decoded, languages, "Expected decoded languages to match saved languages.")
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr,de", "Expected prefs to contain comma-separated languages.")
     }
 
-    func test_save_emptyList_persistsEmptyArray() {
+    func test_save_emptyList_persistsEmptyString() {
         let subject = createSubject()
 
         subject.save(languages: [])
 
-        let json = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
-        XCTAssertNotNil(json, "Expected prefs to contain an empty JSON array.")
-
-        let data = json!.data(using: .utf8)!
-        let decoded = try? JSONDecoder().decode([String].self, from: data)
-        XCTAssertEqual(decoded, [], "Expected decoded result to be an empty array.")
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "", "Expected prefs to contain an empty string for an empty list.")
     }
 
     func test_save_overwritesPreviousValue() {
@@ -111,10 +103,8 @@ final class PreferredTranslationLanguagesManagerTests: XCTestCase {
         subject.save(languages: ["en", "fr"])
         subject.save(languages: ["de"])
 
-        let json = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
-        let data = json!.data(using: .utf8)!
-        let decoded = try? JSONDecoder().decode([String].self, from: data)
-        XCTAssertEqual(decoded, ["de"], "Expected second save to overwrite the first.")
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "de", "Expected second save to overwrite the first.")
     }
 
     // MARK: - Helpers

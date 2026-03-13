@@ -25,4 +25,6 @@ protocol TranslationsServiceProtocol {
     func firstResponseReceived(for windowUUID: WindowUUID) async throws
     /// Asks the engine to discard translations and tear down state for the current document.
     func discardTranslations(for windowUUID: WindowUUID) async throws
+    /// Returns the unique set of languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String]
 }

@@ -13,7 +13,6 @@ final class TranslationsMiddleware {
     private let windowManager: WindowManager
     private let translationsService: TranslationsServiceProtocol
     private let translationsTelemetry: TranslationsTelemetryProtocol
-    private let modelsFetcher: TranslationModelsFetcherProtocol
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -26,15 +25,13 @@ final class TranslationsMiddleware {
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          translationsService: TranslationsServiceProtocol = TranslationsService(),
-         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
-         modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared
+         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry()
     ) {
         self.profile = profile
         self.logger = logger
         self.windowManager = windowManager
         self.translationsService = translationsService
         self.translationsTelemetry = translationsTelemetry
-        self.modelsFetcher = modelsFetcher
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -92,7 +89,7 @@ final class TranslationsMiddleware {
             let capturedButton = action.buttonTapped
             Task { @MainActor in
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
-                let supported = await modelsFetcher.fetchSupportedTargetLanguages()
+                let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
                 store.dispatch(GeneralBrowserAction(
                     buttonTapped: capturedButton,

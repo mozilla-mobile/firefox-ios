@@ -35,27 +35,15 @@ final class PreferredTranslationLanguagesManager {
 
     /// Persists a new ordered language list.
     func save(languages: [String]) {
-        guard let data = try? JSONEncoder().encode(languages),
-              let json = String(data: data, encoding: .utf8) else {
-            logger.log(
-                "Failed to encode preferred translation languages.",
-                level: .warning,
-                category: .translations
-            )
-            return
-        }
-        prefs.setString(json, forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        prefs.setString(languages.joined(separator: ","), forKey: PrefsKeys.Settings.translationPreferredLanguages)
     }
 
     // MARK: - Private
 
     private func loadStoredLanguages() -> [String]? {
-        guard let json = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
-              let data = json.data(using: .utf8),
-              let languages = try? JSONDecoder().decode([String].self, from: data) else {
-            return nil
-        }
-        return languages
+        guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
+              !stored.isEmpty else { return nil }
+        return stored.components(separatedBy: ",")
     }
 
     /// Builds the initial language list by intersecting `Locale.preferredLanguages` with

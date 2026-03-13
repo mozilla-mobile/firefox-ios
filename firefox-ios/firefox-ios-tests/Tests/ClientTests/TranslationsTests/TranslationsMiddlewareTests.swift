@@ -15,7 +15,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
     private var mockTranslationsTelemetry: MockTranslationsTelemetry!
-    private var mockModelsFetcher: MockTranslationModelsFetcher!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -27,7 +26,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             tabManager: mockTabManager
         )
         mockTranslationsTelemetry = MockTranslationsTelemetry()
-        mockModelsFetcher = MockTranslationModelsFetcher()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -42,7 +40,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager = nil
         mockWindowManager = nil
         mockTranslationsTelemetry = nil
-        mockModelsFetcher = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -643,8 +640,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             logger: mockLogger,
             windowManager: mockWindowManager,
             translationsService: translationsService,
-            translationsTelemetry: mockTranslationsTelemetry,
-            modelsFetcher: mockModelsFetcher
+            translationsTelemetry: mockTranslationsTelemetry
         )
     }
 

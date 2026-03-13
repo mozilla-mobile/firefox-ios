@@ -150,6 +150,11 @@ final class TranslationsService: TranslationsServiceProtocol {
         return webView
     }
 
+    /// Returns the unique set of languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return await modelsFetcher.fetchSupportedTargetLanguages()
+    }
+
     /// Returns the device language code for a given locale, if available.
     private func deviceLanguageCode(using locale: Locale = .current) -> String? {
         return locale.languageCode
