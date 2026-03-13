@@ -7419,7 +7419,7 @@ extension String {
         public static let ReaderModeWithSummarizerButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.ReaderModeWithSummarizer.Button.v150",
             tableName: "Toolbar",
-            value: "Reader View. Page summarization available.",
+            value: "Reader View. Page summary available.",
             comment: "Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar.")
 
         public struct Translation {
