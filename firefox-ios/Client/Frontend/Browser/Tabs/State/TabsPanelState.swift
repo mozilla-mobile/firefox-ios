@@ -19,7 +19,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
-    var privateLockState: BrowserViewControllerState.PrivateLockDomainState?
+    var privateLockState: PrivateLockDomainState?
 
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return true }
@@ -64,7 +64,7 @@ struct TabsPanelState: ScreenState, Equatable {
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil,
-         privateLockState: BrowserViewControllerState.PrivateLockDomainState? = nil) {
+         privateLockState: PrivateLockDomainState? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.windowUUID = windowUUID

@@ -28,7 +28,7 @@ final class PrivateTabsLockOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func render(access: BrowserViewControllerState.PrivateAccessState, auth: BrowserViewControllerState.PrivateAuthState) {
+    func render(access: PrivateLockDomainState.PrivateAccessState, auth: PrivateLockDomainState.PrivateAuthState) {
         switch access {
         case .unlocked:
             isHidden = true

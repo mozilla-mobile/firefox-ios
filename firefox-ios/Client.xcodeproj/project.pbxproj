@@ -782,6 +782,7 @@
 		767742A92F4F649500DEC06D /* PrivateLockAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742A82F4F649500DEC06D /* PrivateLockAction.swift */; };
 		767742AB2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767742AA2F4F6B4B00DEC06D /* PrivateTabsLockOverlayView.swift */; };
 		76AFB6632F58B16C0064E6AC /* PrivateLockMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */; };
+		76DC672D2F641E6B00BE6F6A /* PrivateLockDomainState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DC672C2F641E6B00BE6F6A /* PrivateLockDomainState.swift */; };
 		76F1091F2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F1091E2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
@@ -8776,6 +8777,7 @@
 		7681461D8ADDD3E9662A2A53 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Shared.strings; sourceTree = "<group>"; };
 		7693448FA2E2865EA28005EE /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		76AFB6622F58B16C0064E6AC /* PrivateLockMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateLockMiddleware.swift; sourceTree = "<group>"; };
+		76DC672C2F641E6B00BE6F6A /* PrivateLockDomainState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateLockDomainState.swift; sourceTree = "<group>"; };
 		76F1091E2F5C9F6600305C29 /* FirefoxGradientBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxGradientBackgroundView.swift; sourceTree = "<group>"; };
 		772744E9858179A908A070DB /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		77294827911067CD5994B5FD /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -13109,6 +13111,7 @@
 				81122E202B221AC0003DD9F8 /* SearchScreenState.swift */,
 				5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */,
 				8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */,
+				76DC672C2F641E6B00BE6F6A /* PrivateLockDomainState.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -18950,6 +18953,7 @@
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				C705FD582EF354D300AC5EE7 /* PrivacyNoticeUpdate.swift in Sources */,
+				76DC672D2F641E6B00BE6F6A /* PrivateLockDomainState.swift in Sources */,
 				0B8A39EF2D3514C100853E47 /* EditBookmarkDiffableDataSource.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
 				EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */,

@@ -38,48 +38,9 @@ struct BrowserViewControllerState: ScreenState {
         case summarizer(config: SummarizerConfig?)
     }
 
-    enum PrivateAccessState: Equatable {
-        case locked
-        case unlocked
-    }
-
-    enum PrivateAuthState: Equatable {
-        case idle
-        case authenticating
-        case failed
-    }
-
     enum TrayDisplayContext: Equatable {
         case page
         case tray
-    }
-
-    struct PrivateLockDomainState: Equatable {
-        var access: PrivateAccessState = .locked
-        var auth: PrivateAuthState = .idle
-        var lastUnlockedAt: Date?
-        let relockInterval: TimeInterval = 120
-
-        var shouldRelockByTime: Bool {
-            guard let lastUnlockedAt else { return true }
-            return Date().timeIntervalSince(lastUnlockedAt) > relockInterval
-        }
-
-        func copy(access: PrivateAccessState? = nil,
-                  auth: PrivateAuthState? = nil,
-                  lastUnlockedAt: Date? = nil) -> PrivateLockDomainState {
-            PrivateLockDomainState(access: access ?? self.access,
-                                   auth: auth ?? self.auth,
-                                   lastUnlockedAt: lastUnlockedAt ?? self.lastUnlockedAt)
-        }
-
-        func locked() -> PrivateLockDomainState {
-            copy(access: .locked)
-        }
-
-        func withLastUnlocked(at: Date?) -> PrivateLockDomainState {
-            PrivateLockDomainState(access: access, auth: auth, lastUnlockedAt: at)
-        }
     }
 
     let windowUUID: WindowUUID

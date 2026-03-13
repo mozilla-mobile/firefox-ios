@@ -386,7 +386,7 @@ final class TabDisplayPanelViewController: UIViewController,
         }
     }
 
-    private func applyPrivateLockUI(_ lock: BrowserViewControllerState.PrivateLockDomainState?) {
+    private func applyPrivateLockUI(_ lock: PrivateLockDomainState?) {
         guard panelType == .privateTabs, let lock else {
             privateLockOverlay.renderHidden()
             privateLockAuthTask?.cancel()

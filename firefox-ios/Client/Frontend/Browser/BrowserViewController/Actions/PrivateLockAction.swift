@@ -40,14 +40,14 @@ enum PrivateLockMiddlewareActionType: ActionType {
 struct PrivateLockMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let privateLockState: BrowserViewControllerState.PrivateLockDomainState?
+    let privateLockState: PrivateLockDomainState?
     let trayPanelType: TabTrayPanelType?
     let trayDisplayContext: BrowserViewControllerState.TrayDisplayContext?
     let privateLockEnabled: Bool?
 
     init(windowUUID: WindowUUID,
          actionType: ActionType,
-         privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState? = nil,
+         privatePanelLockState: PrivateLockDomainState? = nil,
          trayPanelType: TabTrayPanelType? = nil,
          trayDisplayContext: BrowserViewControllerState.TrayDisplayContext? = nil,
          privateLockEnabled: Bool? = nil) {

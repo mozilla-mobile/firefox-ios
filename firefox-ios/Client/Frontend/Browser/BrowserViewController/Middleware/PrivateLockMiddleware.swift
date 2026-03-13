@@ -110,9 +110,9 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         store.dispatch(PrivateLockMiddlewareAction(
           windowUUID: windowUUID,
           actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
-          privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .locked,
-                                                                                   auth: .authenticating,
-                                                                                   lastUnlockedAt: nil)
+          privatePanelLockState: PrivateLockDomainState(access: .locked,
+                                                        auth: .authenticating,
+                                                        lastUnlockedAt: nil)
         ))
 
         let context = LAContext()
@@ -144,9 +144,9 @@ final class PrivateLockMiddleware: FeatureFlaggable {
             windowUUID: windowUUID,
             actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
             privatePanelLockState:
-                BrowserViewControllerState.PrivateLockDomainState(access: .locked,
-                                                                  auth: triggeredByFailure ? .failed : .idle,
-                                                                  lastUnlockedAt: nil)
+                PrivateLockDomainState(access: .locked,
+                                       auth: triggeredByFailure ? .failed : .idle,
+                                       lastUnlockedAt: nil)
         ))
     }
 
@@ -154,9 +154,9 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
             actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
-            privatePanelLockState: BrowserViewControllerState.PrivateLockDomainState(access: .unlocked,
-                                                                                     auth: .idle,
-                                                                                     lastUnlockedAt: Date())
+            privatePanelLockState: PrivateLockDomainState(access: .unlocked,
+                                                          auth: .idle,
+                                                          lastUnlockedAt: Date())
         ))
     }
 
