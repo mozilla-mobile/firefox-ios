@@ -7,7 +7,6 @@ import Redux
 import Common
 
 struct TabsPanelState: ScreenState, Equatable {
-
     struct ScrollState: Equatable {
         let toIndex: Int
         let withAnimation: Bool

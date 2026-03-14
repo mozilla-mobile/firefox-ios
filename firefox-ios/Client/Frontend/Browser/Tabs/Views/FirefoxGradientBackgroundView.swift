@@ -46,7 +46,7 @@ final class FirefoxGradientBackgroundView: UIView {
     }
 
     private func configureGlow(_ layerGlow: CALayer, color: UIColor) {
-
+        
         layerGlow.backgroundColor = color.cgColor
         layerGlow.opacity = 0.8
 

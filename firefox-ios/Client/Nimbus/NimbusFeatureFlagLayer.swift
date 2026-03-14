@@ -78,7 +78,7 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .privateTabsLock:
             return checkPrivateTabsLockFeature(from: nimbus)
-            
+
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
