@@ -25,7 +25,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
 
     private func resolveTabPrivateLockActions(action: PrivateLockAction, state: AppState) {
         guard isPrivateLockFeatureEnabled() else {
-            Self.unlock(windowUUID: action.windowUUID)
+            unlock(windowUUID: action.windowUUID)
             return
         }
 
@@ -51,7 +51,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
                                           windowUUID: action.windowUUID,
                                           state: state)
         case PrivateLockActionType.didEnterBackground, PrivateLockActionType.willEnterForeground:
-            Self.lock(triggeredByFailure: false, windowUUID: action.windowUUID)
+            lock(triggeredByFailure: false, windowUUID: action.windowUUID)
         case PrivateLockActionType.didChangePrivateTabsLockSetting:
             let browserState = self.browserState(from: state, windowUUID: action.windowUUID)
             store.dispatch(PrivateLockMiddlewareAction(
@@ -121,25 +121,27 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         var error: NSError?
 
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
-            Self.lock(triggeredByFailure: true, windowUUID: windowUUID)
+            lock(triggeredByFailure: true, windowUUID: windowUUID)
             return
         }
 
         context.evaluatePolicy(
             .deviceOwnerAuthentication,
             localizedReason: reason
-        ) { success, authError in
+        ) { [weak self] success, _ in
+            guard let self else { return }
+
             ensureMainThread {
                 if success {
-                    Self.unlock(windowUUID: windowUUID)
+                    self.unlock(windowUUID: windowUUID)
                 } else {
-                    Self.lock(triggeredByFailure: true, windowUUID: windowUUID)
+                    self.lock(triggeredByFailure: true, windowUUID: windowUUID)
                 }
             }
         }
     }
 
-    private static func lock(triggeredByFailure: Bool, windowUUID: WindowUUID) {
+    private func lock(triggeredByFailure: Bool, windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
             actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
@@ -150,7 +152,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         ))
     }
 
-    private static func unlock(windowUUID: WindowUUID) {
+    private func unlock(windowUUID: WindowUUID) {
         store.dispatch(PrivateLockMiddlewareAction(
             windowUUID: windowUUID,
             actionType: PrivateLockMiddlewareActionType.didChangePrivateLockState,
