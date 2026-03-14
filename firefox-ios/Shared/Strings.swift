@@ -7881,6 +7881,16 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "About settings section title")
+    public static let AppSettingsLockPrivateTabs = MZLocalizedString(
+        key: "Lock Private Tabs",
+        tableName: nil,
+        value: "Lock Private Tabs",
+        comment: "Lock Private Tabs title")
+    public static let AppSettingsLockPrivateTabsDescription = MZLocalizedString(
+        key: "Lock Private Tabs Section Description",
+        tableName: nil,
+        value: "Use Biometrics or Passcode to see Private Tabs",
+        comment: "Lock Private Tabs description")
 }
 
 // MARK: - Clearables
@@ -8382,6 +8392,23 @@ extension String {
                 comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
             )
         }
+    }
+}
+
+// MARK: - Private Lock Feature
+extension String {
+    public struct PrivateLock {
+        public static let PrivateLockLAContextCancel = MZLocalizedString(
+            key: "Cancel",
+            tableName: nil,
+            value: nil,
+            comment: "Label for Cancel button")
+
+        public static let PrivateLockLAContextReason = MZLocalizedString(
+            key: "PrivateLock.Reason",
+            tableName: nil,
+            value: "Unlock your private tabs",
+            comment: "Label for Biometry authorization request")
     }
 }
 

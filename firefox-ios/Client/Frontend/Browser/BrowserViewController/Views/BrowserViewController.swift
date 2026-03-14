@@ -955,13 +955,14 @@ class BrowserViewController: UIViewController,
     }
 
     private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
-        if let state = browserViewControllerState {
-            let featureEnabled = featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildAndUser)
-            if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && featureEnabled {
-                focusOnTabSegment(animated: false)
-                if checkActualState {
-                    privateLockWillEnterForeground()
-                }
+        guard let state = browserViewControllerState else {
+            return
+        }
+        let featureEnabled = featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildAndUser)
+        if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && featureEnabled {
+            focusOnTabSegment(animated: false)
+            if checkActualState {
+                privateLockWillEnterForeground()
             }
         }
     }
@@ -1217,7 +1218,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(
             PrivateLockAction(
                 windowUUID: windowUUID,
-                actionType: PrivateLockActionType.privateAuthRequested("Unlock your private tabs")
+                actionType: PrivateLockActionType.privateAuthRequested(.PrivateLock.PrivateLockLAContextReason)
             )
         )
     }
@@ -4889,9 +4890,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     // FXIOS-15079 break this function down and remove swiftlint ignore function body length
-    // swiftlint:disable function_body_length
+    // swiftlint:disable:next function_body_length
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        // swiftlint:enable function_body_length
         // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")

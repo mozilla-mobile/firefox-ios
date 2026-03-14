@@ -435,7 +435,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
                     store.dispatch(action)
                 }
             )
-            
+
             if featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildOnly) {
                 privacySettings.append(
                     BoolSetting(
@@ -443,8 +443,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
                         theme: themeManager.getCurrentTheme(for: windowUUID),
                         prefKey: PrefsKeys.Settings.lockPrivateTabs,
                         defaultValue: false,
-                        titleText: "Lock Private Tabs",
-                        statusText: "Use Biometrics or Passcode to see Private Tabs"
+                        titleText: .AppSettingsLockPrivateTabs,
+                        statusText: .AppSettingsLockPrivateTabsDescription
                     ) { _ in
                         let action = PrivateLockAction(windowUUID: self.windowUUID,
                                                        actionType: PrivateLockActionType.didChangePrivateTabsLockSetting)

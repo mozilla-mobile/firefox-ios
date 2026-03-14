@@ -7,7 +7,7 @@ import Redux
 import Common
 
 struct TabsPanelState: ScreenState, Equatable {
-    
+
     struct ScrollState: Equatable {
         let toIndex: Int
         let withAnimation: Bool
@@ -35,7 +35,7 @@ struct TabsPanelState: ScreenState, Equatable {
             self.init(windowUUID: uuid)
             return
         }
-        
+
         let browserState = appState.screenState(BrowserViewControllerState.self, for: .browserViewController, window: uuid)
         self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,

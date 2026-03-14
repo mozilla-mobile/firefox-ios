@@ -116,7 +116,7 @@ final class PrivateLockMiddleware: FeatureFlaggable {
         ))
 
         let context = LAContext()
-        context.localizedCancelTitle = "Cancel"
+        context.localizedCancelTitle = .PrivateLock.PrivateLockLAContextCancel
 
         var error: NSError?
 

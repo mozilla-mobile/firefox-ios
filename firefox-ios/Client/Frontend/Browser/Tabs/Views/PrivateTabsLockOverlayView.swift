@@ -149,5 +149,7 @@ final class PrivateTabsLockOverlayView: UIView {
         }
     }
 
-    @objc private func retryTapped() { onRetryTapped?() }
+    @objc private func retryTapped() {
+        onRetryTapped?()
+    }
 }
