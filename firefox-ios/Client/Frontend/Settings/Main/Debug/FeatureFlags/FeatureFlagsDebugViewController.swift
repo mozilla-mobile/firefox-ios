@@ -256,9 +256,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .voiceSearch,
-                titleText: format(string: "Voice Search"),
-                statusText: format(string: "Toggle to enable the Voice Search feature")
+                with: .quickAnswers,
+                titleText: format(string: "Quick Answers"),
+                statusText: format(string: "Toggle to enable the Quick Answers feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

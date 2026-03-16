@@ -1,8 +1,8 @@
-# The configuration for the voiceSearchFeature feature
+# The configuration for the quickAnswersFeature feature
 features:
-  voice-search-feature:
+  quick-answers-feature:
     description: >
-      The feature flag to manage the roll out of the voice search feature.
+      The feature flag to manage the roll out of the quick answers feature.
     variables:
       enabled:
         description: >

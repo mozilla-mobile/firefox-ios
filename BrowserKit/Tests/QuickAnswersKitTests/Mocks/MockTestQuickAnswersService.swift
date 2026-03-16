@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
-final class MockTestVoiceSearchService: QuickAnswersService, @unchecked Sendable {
+final class MockTestQuickAnswersService: QuickAnswersService, @unchecked Sendable {
     var speechResults: [SpeechResult] = []
     var searchResult: Result<SearchResult, SearchResultError> = .success(.empty())
     var shouldThrowSpeechError = false

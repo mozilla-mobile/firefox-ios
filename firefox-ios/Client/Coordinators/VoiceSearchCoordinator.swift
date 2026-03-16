@@ -3,15 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import VoiceSearchKit
+import QuickAnswersKit
 import Common
 import UIKit
 
-final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandler {
+final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
-    private let onNavigate: (VoiceSearchNavigationType) -> Void
+    private let onNavigate: (QuickAnswersNavigationType) -> Void
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
@@ -21,7 +21,7 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
-        onNavigate: @escaping (VoiceSearchNavigationType) -> Void,
+        onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.windowUUID = windowUUID
@@ -31,7 +31,7 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
     }
 
     func start() {
-        let controller = VoiceSearchViewController(
+        let controller = QuickAnswersViewController(
             navigationHandler: self,
             windowUUID: windowUUID,
             themeManager: themeManager
@@ -39,8 +39,8 @@ final class VoiceSearchCoordinator: BaseCoordinator, VoiceSearchNavigationHandle
         router.present(controller, animated: shouldAnimateTransition)
     }
 
-    // MARK: - VoiceSearchNavigationHandler
-    func dismissVoiceSearch(with navigationType: VoiceSearchNavigationType?) {
+    // MARK: - QuickAnswersNavigationHandler
+    func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?) {
         if let navigationType {
             onNavigate(navigationType)
         }

@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-public final class VoiceSearchViewController: UIViewController, Themeable {
+public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
         static let buttonPadding: CGFloat = 26.0
         static let buttonContentInset = NSDirectionalEdgeInsets(
@@ -59,11 +59,11 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     public var currentWindowUUID: WindowUUID?
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
-    private weak var navigationHandler: VoiceSearchNavigationHandler?
+    private weak var navigationHandler: QuickAnswersNavigationHandler?
 
     public init(
-        navigationHandler: VoiceSearchNavigationHandler?,
-        presentationTransitionType: VoiceSearchTransitionType = .crossDissolve,
+        navigationHandler: QuickAnswersNavigationHandler?,
+        presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default

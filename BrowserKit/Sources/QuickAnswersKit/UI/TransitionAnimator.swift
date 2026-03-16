@@ -5,8 +5,8 @@
 import UIKit
 import Common
 
-/// The possible transition types to animate presentation and dismissal of `VoiceSearchViewController`.
-public enum VoiceSearchTransitionType {
+/// The possible transition types to animate presentation and dismissal of `QuickAnswersViewController`.
+public enum QuickAnswersTransitionType {
     case crossDissolve
     case slideInFromSide
 }
@@ -29,12 +29,12 @@ final class TransitionAnimator: NSObject,
     }
     private let themeManager: any ThemeManager
     private let windowUUID: WindowUUID
-    private let presentationTransitionType: VoiceSearchTransitionType
+    private let presentationTransitionType: QuickAnswersTransitionType
     /// The transition type when dismissing the presented controller.
-    var dismissTransitionType: VoiceSearchTransitionType = .crossDissolve
+    var dismissTransitionType: QuickAnswersTransitionType = .crossDissolve
 
     init(
-        presentationTransitionType: VoiceSearchTransitionType,
+        presentationTransitionType: QuickAnswersTransitionType,
         themeManager: any ThemeManager,
         windowUUID: WindowUUID
     ) {
@@ -63,7 +63,7 @@ final class TransitionAnimator: NSObject,
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let isPresenting = transitionContext.viewController(forKey: .to) is VoiceSearchViewController
+        let isPresenting = transitionContext.viewController(forKey: .to) is QuickAnswersViewController
         guard isPresenting else {
             animateDismissal(transitionContext)
             return
@@ -82,7 +82,7 @@ final class TransitionAnimator: NSObject,
     }
 
     private func animatePresentationViaCrossDissolve(_ transitionContext: UIViewControllerContextTransitioning) {
-        guard let presentedController = transitionContext.viewController(forKey: .to) as? VoiceSearchViewController else {
+        guard let presentedController = transitionContext.viewController(forKey: .to) as? QuickAnswersViewController else {
             transitionContext.completeTransition(false)
             return
         }
@@ -170,7 +170,7 @@ final class TransitionAnimator: NSObject,
               // We can't add the presenting controller to the containerView since it is going to be removed
               // from its original superview, thus we need a snapshot.
               let snapshotView = presentingController.view.snapshotView(afterScreenUpdates: false),
-              let dismissedController = transitionContext.viewController(forKey: .from) as? VoiceSearchViewController else {
+              let dismissedController = transitionContext.viewController(forKey: .from) as? QuickAnswersViewController else {
             transitionContext.completeTransition(false)
             return
         }

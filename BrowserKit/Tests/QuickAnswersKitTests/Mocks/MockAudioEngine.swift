@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import AVFoundation
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 
 final class MockAudioEngine: AudioEngineProvider, @unchecked Sendable {
     let mockInputNode = MockAudioInputNode()
