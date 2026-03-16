@@ -8,32 +8,28 @@ import XCTest
 /// Tests for the modern onboarding flow (enable-modern-ui feature flag)
 /// Modern onboarding has 4 main screens: Welcome, Toolbar, Theme, Sync
 /// Plus an optional Terms of Service screen if not previously accepted
-class ModernOnboardingTests: FeatureFlaggedTestSuite {
+///
+/// **NOTE**: These tests almost precisely mirror those in `ModernKitOnboardingTests.swift`
+///
+class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
+    // We just test the modern orange and blue onboarding flow in this file
+    let flowType = OnboardingScreen.OnboardingFlowType.modernOrangeAndBlue
+
     var onboardingScreen: OnboardingScreen!
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
     override func setUpExperimentVariables() {
-        jsonFileName = "modernOnboardingOn"
-        featureName = "onboarding-framework-feature"
+        jsonFileName = flowType.jsonFeatureOverrideFileName
+        featureName = flowType.onboardingFeatureName
+    }
 
+    override func setUp() async throws {
         launchArguments = [
             LaunchArguments.ClearProfile,
             LaunchArguments.DisableAnimations,
             LaunchArguments.SkipSplashScreenExperiment
         ]
-    }
 
-    var flowType: OnboardingScreen.OnboardingFlowType {
-        if isFirefoxBeta {
-            return .modernOrangeAndBlue
-        } else if isFirefox {
-            return .modernKit
-        }
-
-        return .legacy
-    }
-
-    override func setUp() async throws {
         try await super.setUp()
 
         onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
@@ -51,10 +47,9 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingFullFlowWithToS() throws {
         launchApp()
 
-        onboardingScreen.assertModernTermsOfServiceScreen()
         onboardingScreen.handleTermsOfService()
 
-        onboardingScreen.completeModernOnboardingFlow(isIPad: iPad(), tosAccepted: true)
+        onboardingScreen.completeOnboardingFlow(isIpad: iPad())
 
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
@@ -66,9 +61,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         // TODO: Pre-accept ToS via launch argument instead of accepting inline
         onboardingScreen.handleTermsOfService()
 
-        onboardingScreen.currentScreen = 0
-
-        onboardingScreen.completeModernOnboardingFlow(isIPad: iPad(), tosAccepted: true)
+        onboardingScreen.completeOnboardingFlow(isIpad: iPad())
 
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
@@ -78,41 +71,17 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernTermsOfServiceScreen() throws {
         launchApp()
 
-        let tosRoot = AccessibilityIdentifiers.TermsOfService.root
-
-        let title = app.staticTexts["\(tosRoot)TitleLabel"]
-        let description = app.staticTexts["\(tosRoot)DescriptionLabel"]
-        let button = app.buttons["\(tosRoot)PrimaryButton"]
-
-        mozWaitForElementToExist(title)
-        XCTAssertTrue(title.exists, "ToS title should exist")
-        XCTAssertTrue(description.exists, "ToS description should exist")
-        XCTAssertTrue(button.exists, "ToS button should exist")
-
-        XCTAssertEqual(title.label, "Welcome to Firefox", "Should show correct title")
-        XCTAssertEqual(button.label, "Continue", "Should show Continue button")
+        onboardingScreen.assertModernTermsOfServiceScreen()
     }
 
     func testModernOnboardingWelcomeScreen() throws {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
-
-        onboardingScreen.currentScreen = 0
-
-        let title = app.staticTexts["\(onboardingScreen.rootA11yId)TitleLabel"]
-        let description = app.staticTexts["\(onboardingScreen.rootA11yId)DescriptionLabel"]
-        let primaryButton = app.buttons["\(onboardingScreen.rootA11yId)PrimaryButton"]
-        let secondaryButton = app.buttons["\(onboardingScreen.rootA11yId)SecondaryButton"]
-
-        mozWaitForElementToExist(primaryButton)
-        XCTAssertTrue(title.exists, "Welcome title should exist")
-        XCTAssertTrue(description.exists, "Welcome description should exist")
-        XCTAssertTrue(primaryButton.exists, "Primary button should exist")
-        XCTAssertTrue(secondaryButton.exists, "Secondary button should exist")
+        onboardingScreen.assertModernWelcomeScreen()
     }
 
-    func testModernOnboardingToolbarSelection() throws {
+    func testModernOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
         }
@@ -120,45 +89,96 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.currentScreen = 0
+
+        // Wait for the initial onboarding screen title label to appear
+        onboardingScreen.assertTitle()
 
         onboardingScreen.goToNextScreenViaSecondary()
+        onboardingScreen.assertTitle()
 
-        onboardingScreen.assertToolbarCustomizationScreen()
-
-        onboardingScreen.selectToolbarPosition("Top")
-
+        // Address bar choice is onboarding flow screen 2
+        onboardingScreen.selectAddressBarPosition(position: .top)
         onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.assertTitle()
 
-        onboardingScreen.assertThemeCustomizationScreen()
+        // Exit onboarding early after the address bar position has been chosen
+        onboardingScreen.closeTour()
+
+        // Check Home screen is visible
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+        firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+
+        // Assert position of the toolbar
+        // TODO: Migrate to TAE
+        let toolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].firstMatch
+        waitForElementsToExist([toolbar])
+
+        let screenHeight = app.windows.element(boundBy: 0).frame.height
+        XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
+    }
+
+    func testModernOnboardingToolbarPlacementBottom() throws {
+        if iPad() {
+            throw XCTSkip("Toolbar customization is not available on iPad")
+        }
+
+        launchApp()
+
+        onboardingScreen.handleTermsOfService()
+
+        // Wait for the initial onboarding screen title label to appear
+        onboardingScreen.assertTitle()
+
+        onboardingScreen.goToNextScreenViaSecondary()
+        onboardingScreen.assertTitle()
+
+        // Address bar choice is onboarding flow screen 2
+        onboardingScreen.selectAddressBarPosition(position: .bottom)
+        onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.assertTitle()
+
+        // Exit onboarding early after the address bar position has been chosen
+        onboardingScreen.closeTour()
+
+        // Check Home screen is visible
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
+        firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
+
+        // Assert position of the toolbar
+        // TODO: Migrate to TAE
+        let toolbar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].firstMatch
+        waitForElementsToExist([toolbar])
+
+        let screenHeight = app.windows.element(boundBy: 0).frame.height
+        XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
     }
 
     func testModernOnboardingThemeSelection() throws {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.currentScreen = 0
 
+        // Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
         onboardingScreen.goToNextScreenViaSecondary()
 
-        if !iPad() {
-            onboardingScreen.selectToolbarPosition("Bottom")
-            onboardingScreen.goToNextScreenViaPrimary()
-        } else {
+        if iPad() {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
             onboardingScreen.currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            onboardingScreen.assertTitle()
+            onboardingScreen.goToNextScreenViaPrimary()
         }
 
-        onboardingScreen.assertThemeCustomizationScreen()
+        // Screen 3: Choose theme - Continue (primary button)
+        onboardingScreen.assertModernThemeCustomizationScreen()
 
-        let themes = ["System Auto", "Light", "Dark"]
-        for theme in themes {
-            onboardingScreen.selectTheme(theme)
-        }
+        onboardingScreen.selectThemeButtons()
 
         onboardingScreen.selectTheme("System Auto")
         onboardingScreen.goToNextScreenViaPrimary()
-
-        onboardingScreen.assertSyncScreen()
     }
 
     // MARK: - Sync Flow Tests
@@ -167,30 +187,34 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.currentScreen = 0
 
+        // Screen 1: Default Browser - Skip (secondary button)
+        onboardingScreen.assertTitle()
         onboardingScreen.goToNextScreenViaSecondary()
 
-        if !iPad() {
-            onboardingScreen.selectToolbarPosition("Bottom")
-            onboardingScreen.goToNextScreenViaPrimary()
-        } else {
+        if iPad() {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
             onboardingScreen.currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            onboardingScreen.assertTitle()
+            onboardingScreen.selectAddressBarPosition(position: .bottom)
+            onboardingScreen.goToNextScreenViaPrimary()
         }
 
+        // Screen 3: Choose theme - Continue (primary button)
+        onboardingScreen.assertTitle()
         onboardingScreen.selectTheme("System Auto")
         onboardingScreen.goToNextScreenViaPrimary()
 
+        // Screen 4: Sign in to sync - Not now (secondary button)
         onboardingScreen.assertSyncScreen()
 
-        let primaryButton = app.buttons["\(onboardingScreen.rootA11yId)PrimaryButton"]
-        primaryButton.waitAndTap()
-
-        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
-        XCTAssertTrue(app.buttons["QRCodeSignIn.button"].exists)
-        XCTAssertTrue(app.buttons["EmailSignIn.button"].exists)
-
-        app.buttons["Done"].waitAndTap()
+        // Sign in overlay interaction
+        onboardingScreen.tapSignIn()
+        onboardingScreen.assertSignInScreen()
+        onboardingScreen.exitSignInFlow()
     }
 
     func testModernOnboardingSkipSync() throws {
@@ -228,14 +252,9 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
 
         onboardingScreen.handleTermsOfService()
 
-        let skipButton = app.buttons[AccessibilityIdentifiers.Onboarding.closeButton]
-        mozWaitForElementToExist(skipButton)
-        XCTAssertTrue(skipButton.exists, "Skip button should exist")
+        onboardingScreen.closeTour()
 
-        skipButton.waitAndTap()
-
-        app.buttons["Close"].tapIfExists()
-
+        firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
@@ -257,7 +276,7 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
 
         // Should be on toolbar (iPhone) or theme (iPad) screen
         if iPad() {
-            onboardingScreen.assertThemeCustomizationScreen()
+            onboardingScreen.assertModernThemeCustomizationScreen()
         } else {
             onboardingScreen.assertToolbarCustomizationScreen()
         }
@@ -268,13 +287,9 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
     func testModernOnboardingAccessibility() throws {
         launchApp()
 
-        let tosRoot = AccessibilityIdentifiers.TermsOfService.root
-        XCTAssertTrue(app.staticTexts["\(tosRoot)TitleLabel"].exists)
-        XCTAssertTrue(app.staticTexts["\(tosRoot)DescriptionLabel"].exists)
-        XCTAssertTrue(app.buttons["\(tosRoot)PrimaryButton"].exists)
+        onboardingScreen.assertModernTermsOfServiceScreen()
 
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.currentScreen = 0
 
         mozWaitForElementToExist(app.buttons["\(onboardingScreen.rootA11yId)PrimaryButton"])
         XCTAssertTrue(app.staticTexts["\(onboardingScreen.rootA11yId)TitleLabel"].exists)
@@ -309,5 +324,30 @@ class ModernOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.selectToolbarPosition("Top")
 
         onboardingScreen.selectToolbarPosition("Bottom")
+    }
+
+    // MARK: Skipping Onboarding with Close Button
+    func testModernOnboardingCloseOptionLastCard() {
+        onboardingScreen.handleTermsOfService()
+
+        // Wait for the initial title label to appear
+        onboardingScreen.assertTitle()
+
+        // Go to second screen
+        onboardingScreen.goToNextScreenViaSecondary()
+        onboardingScreen.assertTitle()
+
+        // Go to third screen
+        onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.assertTitle()
+
+        // Go to fourth (last) screen
+        onboardingScreen.goToNextScreenViaPrimary()
+        onboardingScreen.assertTitle()
+
+        // Test closing the tour at the very last card using the X
+        onboardingScreen.closeTour()
+
+        firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 }

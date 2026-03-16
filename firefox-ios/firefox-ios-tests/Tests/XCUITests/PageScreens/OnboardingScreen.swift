@@ -7,10 +7,13 @@ import XCTest
 @MainActor
 final class OnboardingScreen {
     /// Describes the onboarding flow. A different flow is shown depending app channel (Fennec, FirefoxBeta, and Firefox).
+    /// **legacy**: The original onboarding with the first ToS screen. Simple backgrounds and hand-sketched imagery.
+    /// **modernOrangeAndBlue**: New modern onboarding built in 2025. Vivid orange/pink/blue backgrounds around cards.
+    /// **modernKit**: Rebranding of modernOrangeAndBlue built in 2026. Light pastel backgrounds with new Kit imagery.
     enum OnboardingFlowType {
-        case legacy // The original onboarding with the first ToS screen. Simple backgrounds and hand-sketched imagery.
-        case modernOrangeAndBlue // New modern onboarding built in 2025. Vivid orange/pink/blue backgrounds around cards.
-        case modernKit // Rebranding of modernOrangeAndBlue built in 2026. Light pastel backgrounds with new Kit imagery.
+        case legacy
+        case modernOrangeAndBlue
+        case modernKit
 
         /// Firefox and FirefoxBeta show a new modern onboarding UI with an alternative card flow compared to Fennec.
         var isModernFlow: Bool {
@@ -19,6 +22,23 @@ final class OnboardingScreen {
                 return false
             case .modernOrangeAndBlue, .modernKit:
                 return true
+            }
+        }
+
+        /// The name of the feature flag governing which onboarding flow appears on launch.
+        var onboardingFeatureName: String {
+            return "onboarding-framework-feature"
+        }
+
+        /// Feature flag overrides for the onboarding feature. Will force a specific feature to show.
+        var jsonFeatureOverrideFileName: String {
+            switch self {
+            case .legacy:
+                return "legacyOnboardingOn"
+            case .modernOrangeAndBlue:
+                return "modernOrangeAndBlueOnboardingOn"
+            case .modernKit:
+                return "modernKitOnboardingOn"
             }
         }
     }
@@ -151,6 +171,23 @@ final class OnboardingScreen {
         }
     }
 
+    /// Exercises the multiple choice buttons on the card to choose your theme.
+    func selectThemeButtons() {
+        var themes = ["Light", "Dark"]
+
+        // The "System Auto" / "Automatic" label is different between the flows
+        switch flowType {
+        case .legacy, .modernOrangeAndBlue:
+            themes.append("System Auto")
+        case .modernKit:
+            themes.append("Automatic")
+        }
+
+        for theme in themes {
+            selectTheme(theme)
+        }
+    }
+
     func exitSignInFlow() {
         sel.DONE_BUTTON.element(in: app).waitAndTap()
         sel.CLOSE_BUTTON.element(in: app).waitAndTap()
@@ -228,11 +265,19 @@ final class OnboardingScreen {
         currentScreen += 1
     }
 
-    // MARK: - Channel-specific flows
+    // MARK: - Completing Different Onboarding Flows
+
+    func completeOnboardingFlow(isIpad: Bool) {
+        if flowType.isModernFlow {
+            completeModernOnboardingFlow(isIpad: isIpad)
+        } else {
+            completeLegacyOnboardingFlow(isIPad: isIpad)
+        }
+    }
 
     /// Completes the Firefox Beta onboarding flow
     /// Beta has a different flow with specific screen IDs
-    func completeModernOnboardingFlow(isIpad: Bool) {
+    private func completeModernOnboardingFlow(isIpad: Bool) {
         // Screen 1: Default Browser - Skip (secondary button)
         assertTitle()
         goToNextScreenViaSecondary()
@@ -260,7 +305,7 @@ final class OnboardingScreen {
     /// - Parameters:
     ///   - isIPad: Whether running on iPad (skips fifth screen)
     ///   - afterBetaFlow: If true, the first screen may not have an image
-    func completeLegacyOnboardingFlow(isIPad: Bool, afterBetaFlow: Bool = false) {
+    private func completeLegacyOnboardingFlow(isIPad: Bool, afterBetaFlow: Bool = false) {
         // First screen - already shown after gate
         // After Beta flow, the first standard screen may not have an image
         waitForCurrentScreenElements(waitForImage: !afterBetaFlow)
@@ -304,21 +349,21 @@ final class OnboardingScreen {
         XCTAssertTrue(title.exists)
         XCTAssertTrue(description.exists)
         XCTAssertTrue(button.exists)
-        XCTAssertEqual(button.label, "Continue")
+
+        XCTAssertEqual(title.label, "Welcome to Firefox", "Should show correct title")
+        XCTAssertEqual(button.label, "Continue", "Should show Continue button")
     }
 
     /// Verifies the welcome screen (shown after ToS acceptance)
     func assertModernWelcomeScreen() {
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
-        let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
 
-        BaseTestCase().mozWaitForElementToExist(primary)
+        BaseTestCase().mozWaitForElementToExist(title)
         XCTAssertTrue(title.exists, "Welcome title should exist")
         XCTAssertTrue(desc.exists, "Welcome description should exist")
-        XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(secondary.exists, "Secondary button should exist")
+        XCTAssertTrue(primaryButton.exists, "Primary button should exist")
+        XCTAssertTrue(secondaryButton.exists, "Secondary button should exist")
     }
 
     func assertToolbarCustomizationScreen() {
@@ -334,19 +379,26 @@ final class OnboardingScreen {
         XCTAssertTrue(bottomButton.exists, "Bottom toolbar option should exist")
     }
 
-    func assertThemeCustomizationScreen() {
+    func assertModernThemeCustomizationScreen() {
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let primary = sel.primaryButton(rootId: rootA11yId).element(in: app)
-        let systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
         let lightButton = app.buttons["\(rootA11yId)SegmentedButton.Light"]
         let darkButton = app.buttons["\(rootA11yId)SegmentedButton.Dark"]
 
         BaseTestCase().mozWaitForElementToExist(primary)
         XCTAssertTrue(title.exists, "Theme title should exist")
         XCTAssertTrue(primary.exists, "Primary button should exist")
-        XCTAssertTrue(systemButton.exists, "System Auto theme option should exist")
         XCTAssertTrue(lightButton.exists, "Light theme option should exist")
         XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
+
+        // The "System Auto" / "Automatic" label is different between the two modern flows
+        var systemButton: XCUIElement?
+        if case .modernOrangeAndBlue = flowType {
+            systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
+        } else if case .modernKit = flowType {
+            systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
+        }
+        XCTAssertEqual(systemButton?.exists, true, "System Auto theme option should exist")
     }
 
     func assertSyncScreen() {
@@ -358,6 +410,39 @@ final class OnboardingScreen {
         XCTAssertTrue(title.exists, "Sync title should exist")
         XCTAssertTrue(primary.exists, "Primary button should exist")
         XCTAssertTrue(secondary.exists, "Secondary button should exist")
+
+        if flowType.isModernFlow {
+            // There are textual differences between the flows for the description
+            let expectedDescription: String
+            let expectedSecondary: String
+            switch flowType {
+            case .modernOrangeAndBlue:
+                expectedDescription = "Get your bookmarks, history, and passwords on any device."
+                expectedSecondary = "Not now"
+            case .modernKit:
+                // swiftlint:disable line_length
+                expectedDescription = "Grab bookmarks, passwords, and more on any device in a snap. Your personal data stays safe and secure with encryption."
+                expectedSecondary = "Not Now"
+                // swiftlint:enable line_length
+            case .legacy:
+                expectedDescription = "" // Unexpected path; should not happen
+                expectedSecondary = ""
+            }
+
+            assertTextsOnCurrentScreen(
+                expectedTitle: "Instantly pick up where you left off",
+                expectedDescription: expectedDescription,
+                expectedPrimary: "Start Syncing",
+                expectedSecondary: expectedSecondary
+            )
+        } else {
+            assertTextsOnCurrentScreen(
+                expectedTitle: "Stay encrypted when you hop between devices",
+                expectedDescription: "Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
+                expectedPrimary: "Sign In",
+                expectedSecondary: "Skip"
+            )
+        }
     }
 
     // MARK: Card interactions
