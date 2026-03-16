@@ -65,9 +65,7 @@ final class HomepageViewController: UIViewController,
     private var shouldUseNewsTransitionHeader: Bool {
         let scrollDirection: ScrollDirection = featureFlags.getCustomState(for: .homepageStoriesScrollDirection)
                                                ?? .baseline
-        let isStoriesScrollDirectionVertical = scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
-        let isNewsTransitionEnabled = featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
-        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
+        return scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
     }
 
     private var availableWidth: CGFloat {

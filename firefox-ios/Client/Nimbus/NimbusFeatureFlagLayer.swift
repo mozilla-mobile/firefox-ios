@@ -61,9 +61,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault(from: nimbus)
 
-        case .homepageNewsTransition:
-            return checkHomepageNewsTransitionFeature(from: nimbus)
-
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
@@ -265,10 +262,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageJumpBackInSectionDefault(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().jbiSectionDefault
-    }
-
-    private func checkHomepageNewsTransitionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().newsTransition
     }
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {

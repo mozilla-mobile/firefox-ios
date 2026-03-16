@@ -150,12 +150,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return storiesScrollDirection == .horizontal && UIDevice.current.userInterfaceIdiom == .phone
     }
 
-    private var isNewsTransitionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
-    }
-
     private var shouldUseNewsAffordance: Bool {
-        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
+        return isStoriesScrollDirectionVertical
     }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {

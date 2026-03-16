@@ -29,12 +29,6 @@ features:
           If true, enables the categories flow in the stories
         type: Boolean
         default: false
-      news-transition:
-        description: >
-          If true, enables the news transition for stories on the homepage
-        type: Boolean
-        default: false
-
     defaults:
       - channel: beta
         value:
@@ -43,7 +37,6 @@ features:
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: false
-          news-transition: false
 
       - channel: developer
         value:
@@ -52,7 +45,6 @@ features:
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: false
-          news-transition: false
 
 enums:
   ScrollDirection:

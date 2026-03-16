@@ -27,7 +27,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case hntSponsoredShortcuts
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
-    case homepageNewsTransition
     case homepageSearchBar
     case homepageStoriesScrollDirection
     case homepageStoryCategories
@@ -93,7 +92,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
-                .homepageNewsTransition,
                 .homepageSearchBar,
                 .homepageStoryCategories,
                 .hostedSummarizer,
@@ -175,7 +173,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
-                .homepageNewsTransition,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
                 .homepageStoryCategories,
