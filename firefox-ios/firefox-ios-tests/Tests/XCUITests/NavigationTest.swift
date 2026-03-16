@@ -36,6 +36,12 @@ class NavigationTest: FeatureFlaggedTestSuite {
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
 
+    override func setUp() async throws {
+        try await super.setUp()
+
+        launchApp()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
