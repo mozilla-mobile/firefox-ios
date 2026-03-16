@@ -187,6 +187,11 @@ class MainMenuViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+        // An extra reload for menu content is necessary only on iOS 15
+        if #unavailable(iOS 16) {
+            reloadTableView(with: menuState.menuElements)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
