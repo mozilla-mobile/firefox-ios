@@ -44,25 +44,34 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         let subject = createSubject()
         subject.loadViewIfNeeded()
 <<<<<<< HEAD
+<<<<<<< HEAD
         subject.newState(state: TranslationSettingsState(
 =======
         let state = TranslationSettingsState(
 >>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
+=======
+        subject.newState(state: TranslationSettingsState(
+>>>>>>> 14ef62d812 (Remove low-value tests from TranslationPickerSettingsViewControllerTests)
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
             preferredLanguages: ["en", "fr"],
             supportedLanguages: ["en", "fr", "de"]
+<<<<<<< HEAD
 <<<<<<< HEAD
         ))
 =======
         )
         subject.newState(state: state)
 >>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
+=======
+        ))
+>>>>>>> 14ef62d812 (Remove low-value tests from TranslationPickerSettingsViewControllerTests)
     }
 
     func test_newState_withTranslationsDisabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
         let state = TranslationSettingsState(
@@ -84,6 +93,8 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
             supportedLanguages: ["en", "fr"]
         ))
 >>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
+=======
+>>>>>>> 14ef62d812 (Remove low-value tests from TranslationPickerSettingsViewControllerTests)
         subject.newState(state: TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: false,
@@ -92,6 +103,7 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         ))
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -179,6 +191,8 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     }
 
 >>>>>>> 475600b753 (Add delegate and toggle tests to reach 70% coverage threshold)
+=======
+>>>>>>> 14ef62d812 (Remove low-value tests from TranslationPickerSettingsViewControllerTests)
     // MARK: - nativeName
 
     func test_nativeName_returnsNonEmptyString() {
