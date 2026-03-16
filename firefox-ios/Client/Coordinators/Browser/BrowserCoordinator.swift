@@ -705,6 +705,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showReaderMode() {
+        // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
         store.dispatch(
             GeneralBrowserAction(
                 windowUUID: windowUUID,

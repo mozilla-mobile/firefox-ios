@@ -127,6 +127,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             navigationHandler?.showSettings(at: .password)
 
         case .readerView:
+            // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
             navigationHandler?.showReaderMode()
 
         case .settings:
