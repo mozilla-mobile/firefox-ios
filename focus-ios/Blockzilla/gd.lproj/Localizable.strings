@@ -181,6 +181,12 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Dùin";
 
+/* Error message shown when no internet connection is available */
+"Network.Offline.ErrorMessage" = "Tha coltas nach eil ceangal ris an eadar-lìon.";
+
+/* Button text for retrying network connection */
+"Network.Offline.RetryButton" = "Feuch ris a-rithist";
+
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Dèan toiseach-tòiseachaidh";
 
@@ -234,6 +240,9 @@
 
 /* Label for the agreement button in the Terms of Use screen. */
 "Onboarding.TermsOfUse.ButtonText" = "Thoir aonta is lean air adhart";
+
+/* Label for the agreement button in the Terms of Use screen. */
+"Onboarding.TermsOfUse.ButtonTextV2" = "Air adhart";
 
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "Deiseil";
@@ -313,14 +322,23 @@
 /* Description associated with the Crash Reports toggle on settings screen */
 "Settings.detailTextCrashReports.V2" = "’S urrainn dhuinn diagnosachd a dhèanamh air a’ bhrabhsair seo mar seo ’s duilgheadasan a chur ceart.";
 
+/* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextRollouts" = "Bheir %@ piseach air gleusan, dèanadas is seasmhachd fiù eadar tionndaidhean ùra. Thèid na h-atharraichean seo a chur an sàs o chèin.";
+
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "Cuiridh %@ na sgrìobhas tu ann am bàr an t-seòlaidh gun einnsan-luirg agad.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextSendUsageData" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson %@ a sholar is a leasachadh dhan a h-uile duine.";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextSendUsageData.v2" = "Tha Mozilla an dealas dìreach an dàta a chruinneachadh a dh’fheumas sinn airson %@ a sholar is a leasachadh dhan a h-uile duine.";
+
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
 "Settings.detailTextStudies" = "Faodaidh %@ rannsachadh a stàladh is a ruith o àm gu àm.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
+"Settings.detailTextStudies.v2" = "Taghaidh %@ cleachdaichean air thuaiream is bheir e dhaibh cothrom gleusan a chur fo dheuchainn, rud a nì e nas fheàrr dhan a h-uile duine.";
 
 /* Title for section in settings menu */
 "Settings.general" = "Coitcheann";
@@ -430,6 +448,9 @@
 /* Show home screen tips toggle label on settings screen */
 "Settings.toggleHomeScreenTips" = "Seall na gliocasan air an sgrìn-dhachaidh";
 
+/* Label for Rollouts toggle on the settings screen */
+"Settings.toggleRollouts" = "Ceadaich leasachadh cèin";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -438,6 +459,9 @@
 
 /* Label for Studies toggle on the settings screen */
 "Settings.toggleStudies" = "Rannsachadh";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies.v2" = "Ceadaich obair-rannsachaidh air gleusan";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "Cleachd Touch ID airson a’ ghlas a thoirt far na h-aplacaid";

@@ -37,6 +37,7 @@ protocol TranslationModelsFetcherProtocol: Sendable {
     func fetchModels(from sourceLang: String, to targetLang: String) async -> Data?
     func fetchModelBuffer(recordId: String) async -> Data?
     func prewarmResources(for sourceLang: String, to targetLang: String) async
+    func fetchSupportedTargetLanguages() async -> [String]
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
@@ -199,6 +200,19 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             return
         }
         await prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
+    }
+
+    /// Returns the unique set of `toLang` values across all model records.
+    /// These are the languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String] {
+        guard let records = await getRecordsForModels() else {
+            logger.log("No model records found.", level: .warning, category: .remoteSettings)
+            return []
+        }
+
+        return records
+            .compactMap { (decodeRecord($0) as ModelFieldsRecord?)?.toLang }
+            .uniqued()
     }
 
     /// Pre-warms attachments for a list of records by fetching them

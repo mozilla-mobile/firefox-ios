@@ -73,7 +73,10 @@ class TrackingProtectionTests: BaseTestCase {
     func checkTrackingProtectionOn() -> Bool {
         var trackingProtection = true
         if iPad() {
-            sleep(1)
+            mozWaitElementHittable(
+                element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                timeout: TIMEOUT
+            )
         }
         if app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label
             == secureTrackingProtectionOffLabel {
@@ -107,7 +110,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         // Switch to Private Browsing
@@ -116,7 +119,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         navigator.goto(BrowserTabMenu)

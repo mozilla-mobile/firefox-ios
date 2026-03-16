@@ -522,6 +522,61 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
+    // MARK: - updateInContentHomePanel
+
+    func testUpdateInContentHomePanel_withCertificateErrorURL_showsNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            otherErrorPagesIsEnabled: true
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 1)
+    }
+
+    func testUpdateInContentHomePanel_withNonCertErrorURL_doesNotShowNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: false,
+            otherErrorPagesIsEnabled: true
+        )
+        let subject = createSubject()
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorTimedOut)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    func testUpdateInContentHomePanel_withCertErrorURL_andFeatureFlagDisabled_doesNotShowNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            otherErrorPagesIsEnabled: false
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
@@ -560,6 +615,20 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setupSummarizedShakeGestureForTesting(isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isEnabled, shakeGesture: isEnabled)
+        }
+    }
+
+    private func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool,
+        otherErrorPagesIsEnabled: Bool
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled,
+                otherErrorPages: otherErrorPagesIsEnabled
+            )
         }
     }
 

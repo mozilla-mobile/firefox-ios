@@ -43,6 +43,8 @@ struct NavigationToolbarContainerModel: Equatable {
                 a11yCustomAction: NavigationToolbarContainerModel.getA11yCustomAction(action: action,
                                                                                       windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
+                previousTabScreenshot: action.previousTabScreenshot,
+                nextTabScreenshot: action.nextTabScreenshot,
                 onSelected: NavigationToolbarContainerModel.getOnSelected(action: action, windowUUID: windowUUID),
                 onLongPress: NavigationToolbarContainerModel.getOnLongPress(action: action,
                                                                             state: state,

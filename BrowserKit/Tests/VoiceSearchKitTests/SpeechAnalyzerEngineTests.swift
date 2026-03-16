@@ -8,9 +8,9 @@ import Testing
 @testable import VoiceSearchKit
 
 @Suite
+@MainActor
 struct SpeechAnalyzerEngineTests {
-    // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
-    let session = MockAudioSession()
+    let audioManager = MockAudioManager()
 
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsError() async {
@@ -19,14 +19,13 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
-        let subject = await createSubject(authorizer: authorizer)
+        let subject = createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
         }
 
-        #expect(session.setCategoryCalls.isEmpty)
-        #expect(session.setActiveCalls.isEmpty)
+        #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
     @Test
@@ -36,14 +35,13 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
-        let subject = await createSubject(authorizer: authorizer)
+        let subject = createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
         }
 
-        #expect(session.setCategoryCalls.isEmpty)
-        #expect(session.setActiveCalls.isEmpty)
+        #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
     @Test
@@ -53,81 +51,65 @@ struct SpeechAnalyzerEngineTests {
         }
 
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
-        let subject = await createSubject(authorizer: authorizer)
+        let subject = createSubject(authorizer: authorizer)
 
         await #expect(throws: SpeechError.permissionDenied) {
             try await subject.prepare()
         }
 
-        #expect(session.setCategoryCalls.isEmpty)
-        #expect(session.setActiveCalls.isEmpty)
+        #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
     @Test
-    func test_prepare_microphoneGranted_speechGranted_returnsExpectedCalls() async throws {
+    func test_prepare_withPermissions_callsConfigureAudioSession() async throws {
         guard #available(iOS 26.0, *) else {
             return
         }
 
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = await createSubject(authorizer: authorizer)
+        let subject = createSubject(authorizer: authorizer)
+
         try await subject.prepare()
 
-        #expect(session.setCategoryCalls.count == 1)
-        #expect(session.setCategoryCalls[0].category == .record)
-        #expect(session.setCategoryCalls[0].mode == .measurement)
-        #expect(session.setCategoryCalls[0].options.contains(.duckOthers))
-
-        #expect(session.setActiveCalls.count == 1)
-        let (active, activeOptions) = session.setActiveCalls[0]
-        #expect(active == true)
-        #expect(activeOptions.contains(.notifyOthersOnDeactivation))
+        #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
     @Test
-    func test_stop_returnsExpectedCalls() async throws {
+    func test_prepare_withPermissions_throwsError() async throws {
         guard #available(iOS 26.0, *) else {
             return
         }
 
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let subject = await createSubject(authorizer: authorizer)
-        try await subject.prepare()
+        let subject = createSubject(authorizer: authorizer)
+        audioManager.shouldThrowOnConfigure = true
 
-        #expect(session.setCategoryCalls.count == 1)
-        #expect(session.setCategoryCalls[0].category == .record)
-        #expect(session.setCategoryCalls[0].mode == .measurement)
-        #expect(session.setCategoryCalls[0].options.contains(.duckOthers))
+        await #expect(throws: MockAudioManagerError.configureAudioSession) {
+            try await subject.prepare()
+        }
 
-        #expect(session.setActiveCalls.count == 1)
-        let (active, activeOptions) = session.setActiveCalls[0]
-        #expect(active == true)
-        #expect(activeOptions.contains(.notifyOthersOnDeactivation))
+        #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
     @Test
-    func test_stop_createsRecognitionTask() async throws {
+    func test_stop_callsStopEngine() async throws {
         guard #available(iOS 26.0, *) else {
             return
         }
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
-        let engine = MockAudioEngine()
-        let subject = await createSubject(engine: engine, authorizer: authorizer)
+        let subject = createSubject(authorizer: authorizer)
 
         try await subject.stop()
 
-        #expect(engine.stopCallCount == 1)
+        #expect(audioManager.stopEngineCallCount == 1)
     }
 
     @available(iOS 26.0, *)
-    @MainActor
     private func createSubject(
-        engine: AudioEngineProvider = MockAudioEngine(),
         authorizer: AuthorizeProvider
     ) -> SpeechAnalyzerEngine {
         return SpeechAnalyzerEngine(
-            audioEngine: engine,
-            audioSession: session,
+            audioManager: audioManager,
             authorizer: authorizer
         )
     }

@@ -1000,17 +1000,7 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     
     func hasLoginsByBaseDomain(baseDomain: String) throws  -> Bool
     
-    /**
-     * Determines whether a breach alert has been dismissed, based on the breach date and the alert dismissal timestamp.
-     */
-    func isBreachAlertDismissed(id: String) throws  -> Bool
-    
     func isEmpty() throws  -> Bool
-    
-    /**
-     * Determines whether a login’s password is potentially breached, based on the breach date and the time of the last password change.
-     */
-    func isPotentiallyBreached(id: String) throws  -> Bool
     
     /**
      * Checks if a login's password matches any password in the local breach database.
@@ -1022,12 +1012,6 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     func isPotentiallyVulnerablePassword(id: String) throws  -> Bool
     
     func list() throws  -> [Login]
-    
-    /**
-     * Stores a known breach date for a login.
-     * In Firefox Desktop this is updated once per session from Remote Settings.
-     */
-    func recordBreach(id: String, timestamp: Int64) throws 
     
     /**
      * Stores that the user dismissed the breach alert for a login.
@@ -1053,7 +1037,7 @@ public protocol LoginStoreProtocol: AnyObject, Sendable {
     func reset() throws 
     
     /**
-     * Removes all recorded breaches for all logins (i.e. sets time_of_last_breach to null).
+     * Removes all recorded breaches.
      */
     func resetAllBreaches() throws 
     
@@ -1316,34 +1300,10 @@ open func hasLoginsByBaseDomain(baseDomain: String)throws  -> Bool  {
 })
 }
     
-    /**
-     * Determines whether a breach alert has been dismissed, based on the breach date and the alert dismissal timestamp.
-     */
-open func isBreachAlertDismissed(id: String)throws  -> Bool  {
-    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginstore_is_breach_alert_dismissed(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(id),$0
-    )
-})
-}
-    
 open func isEmpty()throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_is_empty(
             self.uniffiCloneHandle(),$0
-    )
-})
-}
-    
-    /**
-     * Determines whether a login’s password is potentially breached, based on the breach date and the time of the last password change.
-     */
-open func isPotentiallyBreached(id: String)throws  -> Bool  {
-    return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginstore_is_potentially_breached(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(id),$0
     )
 })
 }
@@ -1370,19 +1330,6 @@ open func list()throws  -> [Login]  {
             self.uniffiCloneHandle(),$0
     )
 })
-}
-    
-    /**
-     * Stores a known breach date for a login.
-     * In Firefox Desktop this is updated once per session from Remote Settings.
-     */
-open func recordBreach(id: String, timestamp: Int64)throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
-    uniffi_logins_fn_method_loginstore_record_breach(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(id),
-        FfiConverterInt64.lower(timestamp),$0
-    )
-}
 }
     
     /**
@@ -1438,7 +1385,7 @@ open func reset()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_
 }
     
     /**
-     * Removes all recorded breaches for all logins (i.e. sets time_of_last_breach to null).
+     * Removes all recorded breaches.
      */
 open func resetAllBreaches()throws   {try rustCallWithError(FfiConverterTypeLoginsApiError_lift) {
     uniffi_logins_fn_method_loginstore_reset_all_breaches(
@@ -1798,7 +1745,6 @@ public struct Login: Equatable, Hashable {
     public var timeCreated: Int64
     public var timeLastUsed: Int64
     public var timePasswordChanged: Int64
-    public var timeOfLastBreach: Int64?
     public var timeLastBreachAlertDismissed: Int64?
     public var origin: String
     public var httpRealm: String?
@@ -1810,13 +1756,12 @@ public struct Login: Equatable, Hashable {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeLastBreachAlertDismissed: Int64?, origin: String, httpRealm: String?, formActionOrigin: String?, usernameField: String, passwordField: String, password: String, username: String) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
         self.timeLastUsed = timeLastUsed
         self.timePasswordChanged = timePasswordChanged
-        self.timeOfLastBreach = timeOfLastBreach
         self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
         self.origin = origin
         self.httpRealm = httpRealm
@@ -1848,7 +1793,6 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
                 timeCreated: FfiConverterInt64.read(from: &buf), 
                 timeLastUsed: FfiConverterInt64.read(from: &buf), 
                 timePasswordChanged: FfiConverterInt64.read(from: &buf), 
-                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
                 timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf), 
                 origin: FfiConverterString.read(from: &buf), 
                 httpRealm: FfiConverterOptionString.read(from: &buf), 
@@ -1866,7 +1810,6 @@ public struct FfiConverterTypeLogin: FfiConverterRustBuffer {
         FfiConverterInt64.write(value.timeCreated, into: &buf)
         FfiConverterInt64.write(value.timeLastUsed, into: &buf)
         FfiConverterInt64.write(value.timePasswordChanged, into: &buf)
-        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
         FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
         FfiConverterString.write(value.origin, into: &buf)
         FfiConverterOptionString.write(value.httpRealm, into: &buf)
@@ -2041,18 +1984,16 @@ public struct LoginMeta: Equatable, Hashable {
     public var timeCreated: Int64
     public var timeLastUsed: Int64
     public var timePasswordChanged: Int64
-    public var timeOfLastBreach: Int64?
     public var timeLastBreachAlertDismissed: Int64?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeOfLastBreach: Int64?, timeLastBreachAlertDismissed: Int64?) {
+    public init(id: String, timesUsed: Int64, timeCreated: Int64, timeLastUsed: Int64, timePasswordChanged: Int64, timeLastBreachAlertDismissed: Int64?) {
         self.id = id
         self.timesUsed = timesUsed
         self.timeCreated = timeCreated
         self.timeLastUsed = timeLastUsed
         self.timePasswordChanged = timePasswordChanged
-        self.timeOfLastBreach = timeOfLastBreach
         self.timeLastBreachAlertDismissed = timeLastBreachAlertDismissed
     }
 
@@ -2077,7 +2018,6 @@ public struct FfiConverterTypeLoginMeta: FfiConverterRustBuffer {
                 timeCreated: FfiConverterInt64.read(from: &buf), 
                 timeLastUsed: FfiConverterInt64.read(from: &buf), 
                 timePasswordChanged: FfiConverterInt64.read(from: &buf), 
-                timeOfLastBreach: FfiConverterOptionInt64.read(from: &buf), 
                 timeLastBreachAlertDismissed: FfiConverterOptionInt64.read(from: &buf)
         )
     }
@@ -2088,7 +2028,6 @@ public struct FfiConverterTypeLoginMeta: FfiConverterRustBuffer {
         FfiConverterInt64.write(value.timeCreated, into: &buf)
         FfiConverterInt64.write(value.timeLastUsed, into: &buf)
         FfiConverterInt64.write(value.timePasswordChanged, into: &buf)
-        FfiConverterOptionInt64.write(value.timeOfLastBreach, into: &buf)
         FfiConverterOptionInt64.write(value.timeLastBreachAlertDismissed, into: &buf)
     }
 }
@@ -2916,22 +2855,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_logins_checksum_method_loginstore_has_logins_by_base_domain() != 40417) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_logins_checksum_method_loginstore_is_breach_alert_dismissed() != 39952) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_logins_checksum_method_loginstore_is_empty() != 17426) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_logins_checksum_method_loginstore_is_potentially_breached() != 55152) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_is_potentially_vulnerable_password() != 30881) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_list() != 12147) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_logins_checksum_method_loginstore_record_breach() != 60982) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_logins_checksum_method_loginstore_record_breach_alert_dismissal() != 64238) {

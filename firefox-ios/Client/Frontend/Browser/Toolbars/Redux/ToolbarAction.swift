@@ -11,6 +11,7 @@ struct ToolbarAction: Action {
     let actionType: ActionType
     let toolbarPosition: SearchBarPosition?
     let toolbarLayout: ToolbarLayoutStyle?
+    let tabTrayButtonStyle: TabTrayButtonStyle?
     let isTranslucent: Bool?
     let numberOfTabs: Int?
     let scrollAlpha: Float?
@@ -26,6 +27,7 @@ struct ToolbarAction: Action {
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
+    let lockIconButtonA11yId: String?
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool?
     let safeListedURLImageName: String?
@@ -36,9 +38,12 @@ struct ToolbarAction: Action {
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
     let translationConfiguration: TranslationConfiguration?
+    let previousTabScreenshot: UIImage?
+    let nextTabScreenshot: UIImage?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          toolbarLayout: ToolbarLayoutStyle? = nil,
+         tabTrayButtonStyle: TabTrayButtonStyle? = nil,
          isTranslucent: Bool? = nil,
          numberOfTabs: Int? = nil,
          scrollAlpha: Float? = nil,
@@ -54,6 +59,7 @@ struct ToolbarAction: Action {
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
+         lockIconButtonA11yId: String? = nil,
          lockIconImageName: String? = nil,
          lockIconNeedsTheming: Bool? = nil,
          safeListedURLImageName: String? = nil,
@@ -64,12 +70,15 @@ struct ToolbarAction: Action {
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
+         previousTabScreenshot: UIImage? = nil,
+         nextTabScreenshot: UIImage? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.toolbarPosition = toolbarPosition
         self.toolbarLayout = toolbarLayout
+        self.tabTrayButtonStyle = tabTrayButtonStyle
         self.isTranslucent = isTranslucent
         self.numberOfTabs = numberOfTabs
         self.scrollAlpha = scrollAlpha
@@ -84,6 +93,7 @@ struct ToolbarAction: Action {
         self.readerModeState = readerModeState
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
+        self.lockIconButtonA11yId = lockIconButtonA11yId
         self.lockIconImageName = lockIconImageName
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
@@ -95,6 +105,8 @@ struct ToolbarAction: Action {
         self.canSummarize = canSummarize
         self.middleButton = middleButton
         self.translationConfiguration = translationConfiguration
+        self.previousTabScreenshot = previousTabScreenshot
+        self.nextTabScreenshot = nextTabScreenshot
     }
 }
 
@@ -124,6 +136,7 @@ enum ToolbarActionType: ActionType {
     case didDeleteSearchTerm
     case didEnterSearchTerm
     case didSummarizeSettingsChange
+    case didSetTabScreenshot
     // User submitted a search term to load the search request
     case didSubmitSearchTerm
     case didSetSearchTerm

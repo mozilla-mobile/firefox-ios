@@ -34,7 +34,6 @@ class WKEngineSession: NSObject,
         }
     }
     nonisolated(unsafe) weak var telemetryProxy: EngineTelemetryProxy?
-    weak var fullscreenDelegate: FullscreenDelegate?
 
     private(set) var webView: WKEngineWebView
     var sessionData = WKEngineSessionData()
@@ -418,8 +417,6 @@ class WKEngineSession: NSObject,
             break
         case .hasOnlySecureContent(let hasOnlySecureContent):
             handleHasOnlySecureContentChanged(hasOnlySecureContent)
-        case .isFullScreen(let isFullScreen):
-            handleFullscreen(isFullScreen: isFullScreen)
         }
     }
 
@@ -463,14 +460,6 @@ class WKEngineSession: NSObject,
 
         // Update session data, inform delegate, fetch metadata
         commitURLChange()
-    }
-
-    func handleFullscreen(isFullScreen: Bool) {
-        if isFullScreen {
-            fullscreenDelegate?.enteringFullscreen()
-        } else {
-            fullscreenDelegate?.exitingFullscreen()
-        }
     }
 
     // MARK: - MetadataFetcherDelegate

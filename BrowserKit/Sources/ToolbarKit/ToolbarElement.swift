@@ -69,6 +69,12 @@ public struct ToolbarElement: Equatable {
     /// this is only used to compare for equality as closures can't be compared
     let hasLongPressAction: Bool
 
+    /// Screenshot of the tab preceding the currently selected tab, used to render the stacked tab button.
+    let previousTabScreenshot: UIImage?
+
+    /// Screenshot of the tab following the currently selected tab, used to render the stacked tab button.
+    let nextTabScreenshot: UIImage?
+
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
 
@@ -98,6 +104,8 @@ public struct ToolbarElement: Equatable {
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
                 hasLongPressAction: Bool,
+                previousTabScreenshot: UIImage? = nil,
+                nextTabScreenshot: UIImage? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
@@ -115,6 +123,8 @@ public struct ToolbarElement: Equatable {
         self.hasHighlightedColor = hasHighlightedColor
         self.largeContentTitle = largeContentTitle
         self.contextualHintType = contextualHintType
+        self.previousTabScreenshot = previousTabScreenshot
+        self.nextTabScreenshot = nextTabScreenshot
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
@@ -141,6 +151,8 @@ public struct ToolbarElement: Equatable {
         lhs.hasHighlightedColor == rhs.hasHighlightedColor &&
         lhs.largeContentTitle == rhs.largeContentTitle &&
         lhs.contextualHintType == rhs.contextualHintType &&
+        lhs.previousTabScreenshot == rhs.previousTabScreenshot &&
+        lhs.nextTabScreenshot == rhs.nextTabScreenshot &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&

@@ -19,6 +19,7 @@ final class AddressToolbarContainerModel: Equatable {
     let searchEngineName: String
     let searchEngineImage: UIImage
     let searchEnginesManager: SearchEnginesManager
+    let lockIconButtonA11yId: String?
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
@@ -60,7 +61,7 @@ final class AddressToolbarContainerModel: Equatable {
                 format: .AddressToolbar.SearchEngineA11yLabel,
                 searchEngineName
             ),
-            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
+            lockIconButtonA11yId: lockIconButtonA11yId,
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
@@ -163,7 +164,7 @@ final class AddressToolbarContainerModel: Equatable {
         let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: "",
             searchEngineImageViewA11yLabel: "",
-            lockIconButtonA11yId: "",
+            lockIconButtonA11yId: nil,
             lockIconButtonA11yLabel: "",
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: "",
@@ -229,6 +230,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
         self.searchEnginesManager = searchEnginesManager
+        self.lockIconButtonA11yId = state.addressToolbar.lockIconButtonA11yId
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
@@ -287,6 +289,8 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yCustomActionName: action.a11yCustomActionName,
                 a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
+                previousTabScreenshot: action.previousTabScreenshot,
+                nextTabScreenshot: action.nextTabScreenshot,
                 onSelected: getOnSelected(action: action, windowUUID: windowUUID),
                 onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
             )
@@ -338,6 +342,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineName == rhs.searchEngineName &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
+        lhs.lockIconButtonA11yId == rhs.lockIconButtonA11yId &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
         lhs.lockIconNeedsTheming == rhs.lockIconNeedsTheming &&
         lhs.safeListedURLImageName == rhs.safeListedURLImageName &&

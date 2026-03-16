@@ -161,7 +161,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks
-        bookmark()
+        bookmark(isLockIconOff: false)
 
         // Now the site should be suggested
         toolbarScreen.assertSettingsButtonExists()

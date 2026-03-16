@@ -18,7 +18,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     init(
         windowManager: WindowManager = AppContainer.shared.resolve(),
         languageDetector: LanguageDetectorProvider = LanguageDetector(),
-        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher(),
+        modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared,
         translationsEngine: TranslationsEngine = TranslationsEngine(),
         logger: Logger = DefaultLogger.shared
     ) {
@@ -46,24 +46,20 @@ final class TranslationsService: TranslationsServiceProtocol {
         return true
     }
 
-    /// Initiates translation of the current page.
+    /// Initiates translation of the current page to the specified target language.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        // This shouldn't happen since `shouldOfferTranslation` is called first.
-        // This is just a safeguard.
-        guard let deviceLanguage = deviceLanguageCode() else {
-            throw TranslationsServiceError.deviceLanguageUnavailable
-        }
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        onLanguageIdentified?(pageLanguage, deviceLanguage)
+        onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
         // Prewarm resources prior to calling the JS translation API.
-        await modelsFetcher.prewarmResources(for: pageLanguage, to: deviceLanguage)
+        await modelsFetcher.prewarmResources(for: pageLanguage, to: targetLanguage)
         // Create a bridge to the translations engine.
         _ = translationsEngine.bridge(to: webView)
-        try await startTranslationsJS(on: webView, from: pageLanguage, to: deviceLanguage)
+        try await startTranslationsJS(on: webView, from: pageLanguage, to: targetLanguage)
     }
 
     /// Checks whether initial translation output has been produced.
@@ -152,6 +148,11 @@ final class TranslationsService: TranslationsServiceProtocol {
             throw TranslationsServiceError.missingWebView
         }
         return webView
+    }
+
+    /// Returns the unique set of languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return await modelsFetcher.fetchSupportedTargetLanguages()
     }
 
     /// Returns the device language code for a given locale, if available.
