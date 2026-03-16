@@ -1043,11 +1043,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "News",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
-            public static let PopularTodaySectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
-                tableName: "FirefoxHomepage",
-                value: "Popular Today",
-                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let NewsAffordanceLabel = MZLocalizedString(
                 key: "FirefoxHome.Stories.NewsAffordanceLabel.v149",
                 tableName: "FirefoxHomepage",
@@ -8381,6 +8376,11 @@ extension String {
                 value: "Preferred App Language",
                 comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
             )
+            public static let PopularTodaySectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "Popular Today",
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
         }
     }
 }
