@@ -7,7 +7,6 @@ import Redux
 
 struct TranslationSettingsState: ScreenState, Equatable {
     var isTranslationsEnabled: Bool
-    var isAutoTranslateEnabled: Bool
     var preferredLanguages: [String]
     var supportedLanguages: [String]
     var windowUUID: WindowUUID
@@ -24,7 +23,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
-            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
             preferredLanguages: state.preferredLanguages,
             supportedLanguages: state.supportedLanguages
         )
@@ -34,7 +32,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             isTranslationsEnabled: true,
-            isAutoTranslateEnabled: false,
             preferredLanguages: [],
             supportedLanguages: []
         )
@@ -42,12 +39,10 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
-         isAutoTranslateEnabled: Bool,
          preferredLanguages: [String],
          supportedLanguages: [String]) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
-        self.isAutoTranslateEnabled = isAutoTranslateEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
     }
@@ -63,7 +58,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
-                isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled,
                 preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
                 supportedLanguages: action.supportedLanguages ?? state.supportedLanguages
             )
@@ -76,7 +70,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
         return TranslationSettingsState(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
-            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
             preferredLanguages: state.preferredLanguages,
             supportedLanguages: state.supportedLanguages
         )
@@ -84,7 +77,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
         return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
-            && lhs.isAutoTranslateEnabled == rhs.isAutoTranslateEnabled
             && lhs.preferredLanguages == rhs.preferredLanguages
             && lhs.supportedLanguages == rhs.supportedLanguages
     }

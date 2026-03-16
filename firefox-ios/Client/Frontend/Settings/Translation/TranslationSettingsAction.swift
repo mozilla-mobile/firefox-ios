@@ -14,12 +14,10 @@ struct TranslationSettingsMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isTranslationsEnabled: Bool?
-    let isAutoTranslateEnabled: Bool?
     let preferredLanguages: [String]?
     let supportedLanguages: [String]?
 
     init(isTranslationsEnabled: Bool? = nil,
-         isAutoTranslateEnabled: Bool? = nil,
          preferredLanguages: [String]? = nil,
          supportedLanguages: [String]? = nil,
          windowUUID: WindowUUID,
@@ -27,7 +25,6 @@ struct TranslationSettingsMiddlewareAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isTranslationsEnabled = isTranslationsEnabled
-        self.isAutoTranslateEnabled = isAutoTranslateEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
     }

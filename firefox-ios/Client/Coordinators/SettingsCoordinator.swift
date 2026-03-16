@@ -469,9 +469,9 @@ final class SettingsCoordinator: BaseCoordinator,
 
     private func translationSettingsViewController() -> UIViewController {
         if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
-            return TranslationSettingsViewController(windowUUID: windowUUID)
+            return TranslationPickerSettingsViewController(windowUUID: windowUUID)
         } else {
-            return TranslationSettingsLegacyViewController(prefs: profile.prefs, windowUUID: windowUUID)
+            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         }
     }
 
