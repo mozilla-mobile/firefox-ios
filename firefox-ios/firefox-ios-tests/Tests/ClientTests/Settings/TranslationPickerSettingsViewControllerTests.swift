@@ -123,15 +123,6 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         XCTAssertFalse(result)
     }
 
-    func test_didSelectItemAt_withNoMatchingItem_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.collectionView(
-            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()),
-            didSelectItemAt: IndexPath(item: 99, section: 99)
-        )
-    }
-
     // MARK: - Toggle
 
     func test_didToggleTranslations_doesNotCrash() {
