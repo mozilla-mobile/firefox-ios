@@ -703,6 +703,16 @@ final class BrowserCoordinator: BaseCoordinator,
                                                           referringPage: fxaParameters.referringPage)
     }
 
+    func showReaderMode() {
+        // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showReaderMode
+            )
+        )
+    }
+
     // MARK: - SearchEngineSelectionCoordinatorDelegate
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {

@@ -42,7 +42,10 @@ final class MainMenuStateTests: XCTestCase {
             isDefaultUserAgentDesktop: true,
             hasChangedUserAgent: true,
             zoomLevel: 1.0,
-            readerModeIsAvailable: false,
+            readerModeConfiguration: ReaderModeConfiguration(
+                isAvailable: false,
+                isActive: false,
+            ),
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,
