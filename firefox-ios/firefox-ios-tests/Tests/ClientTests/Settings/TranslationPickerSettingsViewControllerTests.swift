@@ -147,7 +147,40 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         subject.applyTheme()
     }
 
+<<<<<<< HEAD
 >>>>>>> 9b01aac4b6 (Improve TranslationPickerSettingsViewController test coverage)
+=======
+    // MARK: - UICollectionViewDelegate
+
+    func test_shouldSelectItemAt_withNoMatchingItem_returnsFalse() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let result = subject.collectionView(
+            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()),
+            shouldSelectItemAt: IndexPath(item: 99, section: 99)
+        )
+        XCTAssertFalse(result)
+    }
+
+    func test_didSelectItemAt_withNoMatchingItem_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.collectionView(
+            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()),
+            didSelectItemAt: IndexPath(item: 99, section: 99)
+        )
+    }
+
+    // MARK: - Toggle
+
+    func test_didToggleTranslations_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let toggle = UISwitch()
+        subject.perform(Selector(("didToggleTranslations:")), with: toggle)
+    }
+
+>>>>>>> 475600b753 (Add delegate and toggle tests to reach 70% coverage threshold)
     // MARK: - nativeName
 
     func test_nativeName_returnsNonEmptyString() {
