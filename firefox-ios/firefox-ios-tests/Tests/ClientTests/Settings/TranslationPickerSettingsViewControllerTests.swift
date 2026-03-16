@@ -162,13 +162,20 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         XCTAssertFalse(result)
     }
 
+    func test_didSelectItemAt_withNoMatchingItem_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let indexPath = IndexPath(item: 99, section: 99)
+        (subject as UICollectionViewDelegate).collectionView?(collectionView, didSelectItemAt: indexPath)
+    }
+
     // MARK: - Toggle
 
     func test_didToggleTranslations_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        let toggle = UISwitch()
-        subject.perform(Selector(("didToggleTranslations:")), with: toggle)
+        subject.perform(NSSelectorFromString("didToggleTranslations:"), with: UISwitch())
     }
 
 >>>>>>> 475600b753 (Add delegate and toggle tests to reach 70% coverage threshold)
