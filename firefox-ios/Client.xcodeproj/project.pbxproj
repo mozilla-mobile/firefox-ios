@@ -284,6 +284,7 @@
 		213046BB2F212BCC007ECEDA /* CGRectExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213046BA2F212BCC007ECEDA /* CGRectExtensionsTests.swift */; };
 		213047E62F2153B1007ECEDA /* PageZoomSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213047E52F2153AB007ECEDA /* PageZoomSettingsViewModelTests.swift */; };
 		21304C8C2F217A59007ECEDA /* ThemeSettingsStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */; };
+		B63BC8CE34524B98B781AE4C /* TranslationSettingsStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */; };
 		21365E392F30FD700000C369 /* BrowserViewControllerLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */; };
 		21365E3B2F312A0C0000C369 /* ConstraintReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3A2F312A0C0000C369 /* ConstraintReference.swift */; };
 		21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */; };
@@ -1406,7 +1407,7 @@
 		AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */; };
 		AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */; };
 		AAD861B02E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */; };
-		E71CDA4786F4408BB2179C0A /* TranslationSettingsLegacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB642E756047421F9BCCA868 /* TranslationSettingsLegacyViewController.swift */; };
+		E71CDA4786F4408BB2179C0A /* TranslationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB642E756047421F9BCCA868 /* TranslationSettingsViewController.swift */; };
 		AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */; };
 		AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADBD0E32EBBA79700F35E30 /* MockLanguageDetector.swift */; };
 		AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */ = {isa = PBXBuildFile; productRef = AB2AC6622BCFD0A200022AAB /* X509 */; };
@@ -3028,6 +3029,7 @@
 		213046BA2F212BCC007ECEDA /* CGRectExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensionsTests.swift; sourceTree = "<group>"; };
 		213047E52F2153AB007ECEDA /* PageZoomSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageZoomSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsStateTests.swift; sourceTree = "<group>"; };
+		B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsStateTests.swift; sourceTree = "<group>"; };
 		21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManager.swift; sourceTree = "<group>"; };
 		21365E3A2F312A0C0000C369 /* ConstraintReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintReference.swift; sourceTree = "<group>"; };
 		21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManagerTests.swift; sourceTree = "<group>"; };
@@ -9770,7 +9772,7 @@
 		AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsAction.swift; sourceTree = "<group>"; };
 		AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsState.swift; sourceTree = "<group>"; };
 		AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsMiddleware.swift; sourceTree = "<group>"; };
-		FB642E756047421F9BCCA868 /* TranslationSettingsLegacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsLegacyViewController.swift; sourceTree = "<group>"; };
+		FB642E756047421F9BCCA868 /* TranslationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewController.swift; sourceTree = "<group>"; };
 		AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsMiddlewareTests.swift; sourceTree = "<group>"; };
 		AADBD0E32EBBA79700F35E30 /* MockLanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLanguageDetector.swift; sourceTree = "<group>"; };
 		AAF64ABAB8A585208603D45B /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -14409,10 +14411,10 @@
 				F84988A6047D42DBB38FFAC1 /* TranslationPickerSettingsViewController.swift */,
 				E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */,
 				AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */,
-				FB642E756047421F9BCCA868 /* TranslationSettingsLegacyViewController.swift */,
+				FB642E756047421F9BCCA868 /* TranslationSettingsViewController.swift */,
 				AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */,
 				AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */,
-				AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */,
+				AAD861AA2E9E75A100F6E0E0 /* TranslationPickerSettingsViewController.swift */,
 			);
 			path = Translation;
 			sourceTree = "<group>";
