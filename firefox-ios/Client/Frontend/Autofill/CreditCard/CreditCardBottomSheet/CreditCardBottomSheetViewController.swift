@@ -154,7 +154,7 @@ class CreditCardBottomSheetViewController: UIViewController,
     private func observeCardTableViewContentSize() {
         cardTableViewObserver = cardTableView.observe(\.contentSize, options: .new) { [weak self] _, _ in
             ensureMainThread { [weak self] in
-                self?.updateConstraints()
+                self?.updateContentHeight()
             }
         }
     }
@@ -234,15 +234,17 @@ class CreditCardBottomSheetViewController: UIViewController,
         )
     }
 
-    func updateConstraints() {
-        if let contentViewHeightConstraint {
-            let buttonsHeight = buttonsContainerStackView.frame.height
-            let estimatedContentHeight = cardTableView.contentSize.height +
-                buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
-            let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
-            contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
-        }
+    private func updateContentHeight() {
+        let estimatedContentHeight =
+            cardTableView.contentSize.height +
+            buttonsContainerStackView.frame.height +
+            UX.bottomSpacing +
+            UX.distanceBetweenHeaderAndTop
 
+        contentViewHeightConstraint?.constant = estimatedContentHeight
+    }
+
+    func updateConstraints() {
         let contentWidthCheck = UX.contentViewWidth > view.frame.size.width
         let contentViewWidth = contentWidthCheck ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint?.constant = contentViewWidth
