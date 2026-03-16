@@ -328,6 +328,8 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: Skipping Onboarding with Close Button
     func testModernOnboardingCloseOptionLastCard() {
+        launchApp()
+
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial title label to appear
