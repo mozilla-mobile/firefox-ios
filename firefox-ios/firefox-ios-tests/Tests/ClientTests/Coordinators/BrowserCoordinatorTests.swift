@@ -678,7 +678,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
         let childCoordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
             tabManager: tabManager)
