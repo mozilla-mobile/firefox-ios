@@ -21,7 +21,8 @@ private enum TranslationSettingsItem: Hashable {
 
 final class TranslationPickerSettingsViewController: UIViewController,
                                                StoreSubscriber,
-                                               Themeable {
+                                               Themeable,
+                                               UICollectionViewDelegate {
     typealias SubscriberStateType = TranslationSettingsState
 
     // MARK: - Diffable types
@@ -31,9 +32,11 @@ final class TranslationPickerSettingsViewController: UIViewController,
     private typealias CellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TranslationSettingsItem>
     private typealias SupplementaryRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>
 
-    private lazy var collectionView: UICollectionView = .build(nil) { [self] in
-        UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
-    }
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
 
     private lazy var dataSource: DataSource = makeDataSource()
 
@@ -139,7 +142,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         let headerReg = makeHeaderRegistration()
         let footerReg = makeFooterRegistration()
 
-        let ds = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
             switch item {
             case .enableToggle:
                 return collectionView.dequeueConfiguredReusableCell(
@@ -150,7 +153,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             }
         }
 
-        ds.supplementaryViewProvider = { collectionView, kind, indexPath in
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             switch kind {
             case UICollectionView.elementKindSectionHeader:
                 return collectionView.dequeueConfiguredReusableSupplementary(
@@ -163,7 +166,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             }
         }
 
-        return ds
+        return dataSource
     }
 
     private func makeToggleCellRegistration() -> CellRegistration {
@@ -305,11 +308,9 @@ final class TranslationPickerSettingsViewController: UIViewController,
     static func localizedName(for code: String) -> String {
         return Locale.current.localizedString(forLanguageCode: code) ?? code
     }
-}
 
-// MARK: - UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
 
-extension TranslationPickerSettingsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return false
     }
