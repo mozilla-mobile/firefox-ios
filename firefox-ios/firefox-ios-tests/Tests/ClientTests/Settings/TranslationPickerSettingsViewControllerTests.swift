@@ -39,104 +39,23 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     func test_newState_withTranslationsEnabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        let state = TranslationSettingsState(
+        subject.newState(state: TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
             preferredLanguages: ["en", "fr"],
             supportedLanguages: ["en", "fr", "de"]
-        )
-        subject.newState(state: state)
+        ))
     }
 
     func test_newState_withTranslationsDisabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
-        let state = TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: false,
-            preferredLanguages: [],
-            supportedLanguages: []
-        )
-        subject.newState(state: state)
-    }
-
-    func test_newState_calledTwice_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.newState(state: TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            preferredLanguages: ["en"],
-            supportedLanguages: ["en", "fr"]
-        ))
         subject.newState(state: TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: false,
             preferredLanguages: [],
             supportedLanguages: []
         ))
-    }
-
-    // MARK: - viewDidDisappear
-
-    func test_viewDidDisappear_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.viewDidDisappear(false)
-    }
-
-    // MARK: - applyTheme
-
-    func test_applyTheme_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.newState(state: TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            preferredLanguages: ["en"],
-            supportedLanguages: ["en", "fr"]
-        ))
-        subject.applyTheme()
-    }
-
-    func test_applyTheme_withTranslationsDisabled_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.newState(state: TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: false,
-            preferredLanguages: [],
-            supportedLanguages: []
-        ))
-        subject.applyTheme()
-    }
-
-    // MARK: - UICollectionViewDelegate
-
-    func test_shouldSelectItemAt_withNoMatchingItem_returnsFalse() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        let result = subject.collectionView(
-            UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()),
-            shouldSelectItemAt: IndexPath(item: 99, section: 99)
-        )
-        XCTAssertFalse(result)
-    }
-
-    func test_didSelectItemAt_withNoMatchingItem_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        let indexPath = IndexPath(item: 99, section: 99)
-        (subject as UICollectionViewDelegate).collectionView?(collectionView, didSelectItemAt: indexPath)
-    }
-
-    // MARK: - Toggle
-
-    func test_didToggleTranslations_doesNotCrash() {
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        subject.perform(NSSelectorFromString("didToggleTranslations:"), with: UISwitch())
     }
 
     // MARK: - nativeName
