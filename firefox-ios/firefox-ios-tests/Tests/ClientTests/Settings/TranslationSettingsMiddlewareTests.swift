@@ -146,6 +146,73 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), true)
     }
 
+    // MARK: - addLanguage
+
+    func test_addLanguage_withValidCode_dispatchesUpdatedPreferredLanguages() throws {
+        mockProfile.prefs.setString("en,fr", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languageCode: "de",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.addLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+
+        XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en", "fr", "de"])
+    }
+
+    func test_addLanguage_withNilCode_doesNotDispatch() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.addLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_addLanguage_withDuplicateCode_doesNotDispatchDuplicate() throws {
+        mockProfile.prefs.setString("en,fr", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languageCode: "fr",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.addLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en", "fr"])
+    }
+
+    func test_addLanguage_persistsToPrefs() {
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languageCode: "fr",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.addLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let stored = mockProfile.prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+    }
+
     // MARK: - Unrelated action
 
     func test_unrelatedAction_doesNotDispatch() {

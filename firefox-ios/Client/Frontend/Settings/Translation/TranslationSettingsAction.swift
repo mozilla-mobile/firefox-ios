@@ -8,6 +8,13 @@ import Redux
 struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
+    let languageCode: String?
+
+    init(languageCode: String? = nil, windowUUID: WindowUUID, actionType: ActionType) {
+        self.languageCode = languageCode
+        self.windowUUID = windowUUID
+        self.actionType = actionType
+    }
 }
 
 struct TranslationSettingsMiddlewareAction: Action {
@@ -33,6 +40,7 @@ struct TranslationSettingsMiddlewareAction: Action {
 enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
+    case addLanguage
 }
 
 enum TranslationSettingsMiddlewareActionType: ActionType {

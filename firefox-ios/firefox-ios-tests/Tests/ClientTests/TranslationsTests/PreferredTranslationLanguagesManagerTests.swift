@@ -107,6 +107,55 @@ final class PreferredTranslationLanguagesManagerTests: XCTestCase {
         XCTAssertEqual(stored, "de", "Expected second save to overwrite the first.")
     }
 
+    // MARK: - addLanguage
+
+    func test_addLanguage_newCode_appendsToStoredList() {
+        let subject = createSubject()
+        subject.save(languages: ["en", "fr"])
+
+        let result = subject.addLanguage("de")
+
+        XCTAssertEqual(result, ["en", "fr", "de"])
+    }
+
+    func test_addLanguage_newCode_persistsUpdatedList() {
+        let subject = createSubject()
+        subject.save(languages: ["en"])
+
+        subject.addLanguage("fr")
+
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+    }
+
+    func test_addLanguage_duplicateCode_doesNotAppend() {
+        let subject = createSubject()
+        subject.save(languages: ["en", "fr"])
+
+        let result = subject.addLanguage("fr")
+
+        XCTAssertEqual(result, ["en", "fr"])
+    }
+
+    func test_addLanguage_duplicateCode_doesNotModifyPrefs() {
+        let subject = createSubject()
+        subject.save(languages: ["en", "fr"])
+
+        subject.addLanguage("en")
+
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+    }
+
+    func test_addLanguage_emptyList_createsListWithSingleCode() {
+        let subject = createSubject()
+        subject.save(languages: [])
+
+        let result = subject.addLanguage("de")
+
+        XCTAssertEqual(result, ["de"])
+    }
+
     // MARK: - Helpers
 
     private func createSubject() -> PreferredTranslationLanguagesManager {

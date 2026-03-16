@@ -127,6 +127,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
     private func makeDataSource() -> TranslationSettingsDiffableDataSource {
         let toggleReg = makeToggleCellRegistration()
         let languageReg = makeLanguageCellRegistration()
+        let addLanguageReg = makeAddLanguageCellRegistration()
 
         let dataSource = TranslationSettingsDiffableDataSource(
             collectionView: collectionView,
@@ -139,6 +140,9 @@ final class TranslationPickerSettingsViewController: UIViewController,
             case .language:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: languageReg, for: indexPath, item: item)
+            case .addLanguage:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: addLanguageReg, for: indexPath, item: item)
             }
         }
 
@@ -181,6 +185,20 @@ final class TranslationPickerSettingsViewController: UIViewController,
             default:
                 break
             }
+            cell.contentConfiguration = content
+            cell.backgroundConfiguration = .listGroupedCell()
+            cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
+        }
+    }
+
+    private func makeAddLanguageCellRegistration() -> CellRegistration {
+        CellRegistration { [weak self] cell, _, _ in
+            guard let self else { return }
+            var content = cell.defaultContentConfiguration()
+            let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
+            content.text = .Settings.Translation.PreferredLanguages.AddLanguage
+            content.textProperties.color = theme.colors.actionPrimary
+            cell.accessories = []
             cell.contentConfiguration = content
             cell.backgroundConfiguration = .listGroupedCell()
             cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
@@ -237,6 +255,19 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return false
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return false }
+        return item == .addLanguage
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard dataSource.itemIdentifier(for: indexPath) == .addLanguage else { return }
+        let picker = TranslationLanguagePickerViewController(
+            windowUUID: windowUUID,
+            preferredLanguages: state.preferredLanguages,
+            supportedLanguages: state.supportedLanguages
+        )
+        let navigationController = UINavigationController(rootViewController: picker)
+        present(navigationController, animated: true)
     }
 }

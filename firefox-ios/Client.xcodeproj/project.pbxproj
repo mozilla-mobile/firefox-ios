@@ -14422,6 +14422,7 @@
 				AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */,
 				AAD861AA2E9E75A100F6E0E0 /* TranslationPickerSettingsViewController.swift */,
 				E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */,
+				AAD861BD2E9E75C000F6E0E0 /* TranslationLanguagePickerViewController.swift */,
 			);
 			path = Translation;
 			sourceTree = "<group>";
