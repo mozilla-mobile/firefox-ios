@@ -93,6 +93,9 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9b01aac4b6 (Improve TranslationPickerSettingsViewController test coverage)
     // MARK: - viewDidDisappear
 
     func test_viewDidDisappear_doesNotCrash() {
@@ -106,6 +109,7 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     func test_applyTheme_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
+<<<<<<< HEAD
         subject.applyTheme()
     }
 
@@ -121,6 +125,29 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
 =======
 >>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
+=======
+        subject.newState(state: TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            preferredLanguages: ["en"],
+            supportedLanguages: ["en", "fr"]
+        ))
+        subject.applyTheme()
+    }
+
+    func test_applyTheme_withTranslationsDisabled_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.newState(state: TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: false,
+            preferredLanguages: [],
+            supportedLanguages: []
+        ))
+        subject.applyTheme()
+    }
+
+>>>>>>> 9b01aac4b6 (Improve TranslationPickerSettingsViewController test coverage)
     // MARK: - nativeName
 
     func test_nativeName_returnsNonEmptyString() {
