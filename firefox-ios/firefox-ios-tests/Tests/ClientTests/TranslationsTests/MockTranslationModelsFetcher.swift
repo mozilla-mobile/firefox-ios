@@ -10,6 +10,7 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
     var translatorWASMResult: Data?
     var modelsResult: Data?
     var modelBufferResult: Data?
+    var supportedTargetLanguages: [String] = []
 
     func fetchTranslatorWASM() -> Data? {
         return translatorWASMResult
@@ -25,5 +26,9 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
 
     func prewarmResources(for sourceLang: String, to targetLang: String) {
         // no-op for now
+    }
+
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return supportedTargetLanguages
     }
 }

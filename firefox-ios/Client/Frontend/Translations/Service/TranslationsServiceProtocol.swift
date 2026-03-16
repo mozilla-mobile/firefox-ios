@@ -15,6 +15,7 @@ protocol TranslationsServiceProtocol {
     /// For now `onLanguageIdentified` is used to notify caller when language detection is done.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws
     /// This method resolves when the document receives the first translations response.
@@ -24,4 +25,6 @@ protocol TranslationsServiceProtocol {
     func firstResponseReceived(for windowUUID: WindowUUID) async throws
     /// Asks the engine to discard translations and tear down state for the current document.
     func discardTranslations(for windowUUID: WindowUUID) async throws
+    /// Returns the unique set of languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String]
 }

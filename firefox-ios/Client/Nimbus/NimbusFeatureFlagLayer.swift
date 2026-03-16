@@ -208,6 +208,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .translation:
             return checkTranslationFeature(from: nimbus)
 
+        case .translationLanguagePicker:
+            return checkTranslationLanguagePickerFeature(from: nimbus)
+
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
@@ -369,6 +372,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkTranslationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.translationsFeature.value().enabled
+    }
+
+    private func checkTranslationLanguagePickerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.translationsFeature.value().languagePickerEnabled
     }
 
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {

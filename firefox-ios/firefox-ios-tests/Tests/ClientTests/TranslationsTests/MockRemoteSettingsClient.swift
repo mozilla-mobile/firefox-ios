@@ -45,4 +45,8 @@ final class MockRemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked S
     func sync() throws {
         // no-op for tests for now
     }
+
+    func resetStorage() throws {
+        // no-op for tests for now
+    }
 }

@@ -21,15 +21,12 @@ final class SettingScreen {
 
     func closeSettingsWithDoneButton() {
         let doneButton = sel.DONE_BUTTON.element(in: app)
+        BaseTestCase().mozWaitElementHittable(element: doneButton, timeout: TIMEOUT)
         doneButton.waitAndTap()
     }
 
     func rotateDevice(to orientation: UIDeviceOrientation) {
         XCUIDevice.shared.orientation = orientation
-    }
-
-    func switchTheme(to theme: String) {
-        BaseTestCase().switchThemeToDarkOrLight(theme: theme)
     }
 
     func validatePrivacyOptions(timeout: TimeInterval = TIMEOUT_LONG) {
