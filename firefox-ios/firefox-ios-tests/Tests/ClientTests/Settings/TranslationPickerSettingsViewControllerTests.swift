@@ -2,7 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+<<<<<<< HEAD
 import UIKit
+=======
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
 import XCTest
 
 @testable import Client
@@ -40,17 +43,47 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     func test_newState_withTranslationsEnabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
+<<<<<<< HEAD
         subject.newState(state: TranslationSettingsState(
+=======
+        let state = TranslationSettingsState(
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
             preferredLanguages: ["en", "fr"],
             supportedLanguages: ["en", "fr", "de"]
+<<<<<<< HEAD
         ))
+=======
+        )
+        subject.newState(state: state)
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
     }
 
     func test_newState_withTranslationsDisabled_doesNotCrash() {
         let subject = createSubject()
         subject.loadViewIfNeeded()
+<<<<<<< HEAD
+=======
+        let state = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: false,
+            preferredLanguages: [],
+            supportedLanguages: []
+        )
+        subject.newState(state: state)
+    }
+
+    func test_newState_calledTwice_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.newState(state: TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            preferredLanguages: ["en"],
+            supportedLanguages: ["en", "fr"]
+        ))
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
         subject.newState(state: TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: false,
@@ -59,6 +92,7 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         ))
     }
 
+<<<<<<< HEAD
     // MARK: - viewDidDisappear
 
     func test_viewDidDisappear_doesNotCrash() {
@@ -85,6 +119,8 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         XCTAssertFalse(result)
     }
 
+=======
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
     // MARK: - nativeName
 
     func test_nativeName_returnsNonEmptyString() {
@@ -99,6 +135,7 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
     // MARK: - localizedName
 
+<<<<<<< HEAD
     func test_localizedName_withInjectedLocale_returnsExpectedString() {
         let name = TranslationPickerSettingsViewController.localizedName(for: "fr", locale: Locale(identifier: "en"))
         XCTAssertEqual(name, "French")
@@ -106,6 +143,15 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
     func test_localizedName_forUnknownCode_returnsFallback() {
         let name = TranslationPickerSettingsViewController.localizedName(for: "xyz", locale: Locale(identifier: "en"))
+=======
+    func test_localizedName_returnsNonEmptyString() {
+        let name = TranslationPickerSettingsViewController.localizedName(for: "fr")
+        XCTAssertFalse(name.isEmpty)
+    }
+
+    func test_localizedName_forUnknownCode_returnsFallback() {
+        let name = TranslationPickerSettingsViewController.localizedName(for: "xyz")
+>>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
         XCTAssertEqual(name, "xyz")
     }
 

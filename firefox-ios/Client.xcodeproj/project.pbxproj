@@ -287,6 +287,7 @@
 		B63BC8CE34524B98B781AE4C /* TranslationSettingsStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */; };
 		B63BC8CF34524B98B781AE4D /* TranslationSettingsMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BD90825183467AA5B28FDB /* TranslationSettingsMiddlewareTests.swift */; };
 		B63BC8D034524B98B781AE4E /* TranslationSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BD90835183467AA5B28FDC /* TranslationSettingsViewControllerTests.swift */; };
+		B63BC8D134524B98B781AE4F /* TranslationPickerSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BD90845183467AA5B28FDD /* TranslationPickerSettingsViewControllerTests.swift */; };
 		21365E392F30FD700000C369 /* BrowserViewControllerLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */; };
 		21365E3B2F312A0C0000C369 /* ConstraintReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3A2F312A0C0000C369 /* ConstraintReference.swift */; };
 		21365E3E2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */; };
@@ -3034,6 +3035,7 @@
 		B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsStateTests.swift; sourceTree = "<group>"; };
 		B5BD90825183467AA5B28FDB /* TranslationSettingsMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsMiddlewareTests.swift; sourceTree = "<group>"; };
 		B5BD90835183467AA5B28FDC /* TranslationSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewControllerTests.swift; sourceTree = "<group>"; };
+		B5BD90845183467AA5B28FDD /* TranslationPickerSettingsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationPickerSettingsViewControllerTests.swift; sourceTree = "<group>"; };
 		21365E382F30FD580000C369 /* BrowserViewControllerLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManager.swift; sourceTree = "<group>"; };
 		21365E3A2F312A0C0000C369 /* ConstraintReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintReference.swift; sourceTree = "<group>"; };
 		21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerLayoutManagerTests.swift; sourceTree = "<group>"; };
