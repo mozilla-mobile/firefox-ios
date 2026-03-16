@@ -3242,9 +3242,7 @@ class BrowserViewController: UIViewController,
                 notification: UIAccessibility.Notification.announcement,
                 argument: String.ReaderModeAddPageSuccessAcessibilityLabel
             )
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
+            showSimpleToast(message: .ShareAddToReadingListDone)
         case .failure:
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.announcement,
@@ -5353,9 +5351,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                 MainActor.assumeIsolated {
                     self.popToBVC()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
-                                                        bottomContainer: self.contentContainer,
-                                                        theme: self.currentTheme())
+                        self.showSimpleToast(message: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
                     }
                 }
             }
