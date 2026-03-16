@@ -133,6 +133,7 @@ class ToolbarButton: UIButton,
             addBottomBadgeImage(buttonBadgeImage)
         } else {
             bottomBadgeImageView?.removeFromSuperview()
+            bottomBadgeImageView = nil
         }
 
         if let badgeName = element.badgeImageName {
@@ -141,6 +142,7 @@ class ToolbarButton: UIButton,
                 addMaskIcon(maskImageName: maskImageName)
             } else {
                 maskImageView?.removeFromSuperview()
+                maskImageView = nil
             }
         } else {
             removeBadgeAndMaskFromSuperview()

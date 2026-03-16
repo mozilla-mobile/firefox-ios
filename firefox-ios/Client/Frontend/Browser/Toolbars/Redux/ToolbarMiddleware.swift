@@ -366,12 +366,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
         case .readerModeWithSummarizer:
-            Task { @MainActor in
-                guard let tab = windowManager.tabManager(for: action.windowUUID).selectedTab else { return }
-                let summarizeMiddleware = SummarizerMiddleware()
-                let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(tab)
-                let contentType = summarizationCheckResult?.contentType ?? .generic
-                let action = GeneralBrowserAction(summarizerConfig: summarizeMiddleware.getConfig(for: contentType),
+            Task {
+                guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
+                let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
+                let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
