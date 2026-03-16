@@ -88,6 +88,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         // the translationSettingsProvider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
         subject.translationSettingsProvider = { _, _ in }
+        XCTAssertEqual(dispatchedAction.isTranslationsEnabled, false)
     }
 
     // MARK: - toggleTranslationsEnabled
@@ -140,6 +141,9 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(settingsAction.isTranslationsEnabled, true)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), true)
         subject.translationSettingsProvider = { _, _ in }
+        let settingsAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        XCTAssertEqual(settingsAction.isTranslationsEnabled, true)
+        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), true)
     }
 
     // MARK: - Unrelated action
