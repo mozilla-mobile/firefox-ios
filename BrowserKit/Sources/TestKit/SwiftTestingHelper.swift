@@ -21,7 +21,7 @@ public final class SwiftTestingHelper {
     /// Registers an object to be checked for memory leaks when the test completes. The object is
     /// held with a weak reference, and during deinitialization, verifies the object was deallocated.
     ///
-    /// - Note: Only one object can be tracked per `BaseTestCase` instance. To track multiple
+    /// - Note: Only one object can be tracked per `SwiftTestingHelper` instance. To track multiple
     ///   objects, we will need to expand, but no use case for it currently so keeping it simple.
     @discardableResult
     public final func trackForMemoryLeaks<T: AnyObject>(
