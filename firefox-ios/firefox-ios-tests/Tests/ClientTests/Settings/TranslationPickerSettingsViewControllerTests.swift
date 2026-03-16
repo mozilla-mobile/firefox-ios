@@ -72,13 +72,13 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
     // MARK: - localizedName
 
-    func test_localizedName_returnsNonEmptyString() {
-        let name = TranslationPickerSettingsViewController.localizedName(for: "fr")
-        XCTAssertFalse(name.isEmpty)
+    func test_localizedName_withInjectedLocale_returnsExpectedString() {
+        let name = TranslationPickerSettingsViewController.localizedName(for: "fr", locale: Locale(identifier: "en"))
+        XCTAssertEqual(name, "French")
     }
 
     func test_localizedName_forUnknownCode_returnsFallback() {
-        let name = TranslationPickerSettingsViewController.localizedName(for: "xyz")
+        let name = TranslationPickerSettingsViewController.localizedName(for: "xyz", locale: Locale(identifier: "en"))
         XCTAssertEqual(name, "xyz")
     }
 

@@ -7,18 +7,6 @@ import Redux
 import Shared
 import UIKit
 
-// MARK: - Section / Item enums
-
-private enum TranslationSettingsSection: Int, Hashable {
-    case enableToggle
-    case preferredLanguages
-}
-
-private enum TranslationSettingsItem: Hashable {
-    case enableToggle
-    case language(code: String, isDeviceLanguage: Bool)
-}
-
 final class TranslationPickerSettingsViewController: UIViewController,
                                                StoreSubscriber,
                                                Themeable,
@@ -27,10 +15,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     // MARK: - Diffable types
 
-    private typealias DataSource = UICollectionViewDiffableDataSource<TranslationSettingsSection, TranslationSettingsItem>
-    private typealias Snapshot = NSDiffableDataSourceSnapshot<TranslationSettingsSection, TranslationSettingsItem>
     private typealias CellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TranslationSettingsItem>
-    private typealias SupplementaryRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
@@ -38,7 +23,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         return collectionView
     }()
 
-    private lazy var dataSource: DataSource = makeDataSource()
+    private lazy var dataSource: TranslationSettingsDiffableDataSource = makeDataSource()
 
     // MARK: - Themeable
 
@@ -50,14 +35,17 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     let windowUUID: WindowUUID
     private var state: TranslationSettingsState
+    private let localeProvider: LocaleProvider
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         localeProvider: LocaleProvider = SystemLocaleProvider()) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.state = TranslationSettingsState(windowUUID: windowUUID)
+        self.localeProvider = localeProvider
+        state = TranslationSettingsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         title = .Settings.Translation.Title
     }
@@ -73,6 +61,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
         setupCollectionView()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         subscribeToRedux()
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        ))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -83,10 +75,6 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(TranslationSettingsViewAction(
-            windowUUID: windowUUID,
-            actionType: TranslationSettingsViewActionType.viewDidLoad
-        ))
         store.dispatch(ScreenAction(
             windowUUID: windowUUID,
             actionType: ScreenActionType.showScreen,
@@ -111,7 +99,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     func newState(state: TranslationSettingsState) {
         self.state = state
-        applySnapshot(state: state, animated: true)
+        dataSource.applySnapshot(state: state, animated: true)
     }
 
     // MARK: - Setup
@@ -136,13 +124,14 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     // MARK: - Data source
 
-    private func makeDataSource() -> DataSource {
+    private func makeDataSource() -> TranslationSettingsDiffableDataSource {
         let toggleReg = makeToggleCellRegistration()
         let languageReg = makeLanguageCellRegistration()
-        let headerReg = makeHeaderRegistration()
-        let footerReg = makeFooterRegistration()
 
-        let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+        let dataSource = TranslationSettingsDiffableDataSource(
+            collectionView: collectionView,
+            localeProvider: localeProvider
+        ) { collectionView, indexPath, item in
             switch item {
             case .enableToggle:
                 return collectionView.dequeueConfiguredReusableCell(
@@ -153,6 +142,8 @@ final class TranslationPickerSettingsViewController: UIViewController,
             }
         }
 
+        let headerReg = dataSource.makeHeaderRegistration()
+        let footerReg = dataSource.makeFooterRegistration()
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             switch kind {
             case UICollectionView.elementKindSectionHeader:
@@ -202,7 +193,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             var content = cell.defaultContentConfiguration()
             let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
             let native = Self.nativeName(for: code)
-            let localized = Self.localizedName(for: code)
+            let localized = Self.localizedName(for: code, locale: self.localeProvider.current)
             content.text = native
             content.textProperties.color = theme.colors.textPrimary
             let subtitle = isDevice ? .Settings.Translation.PreferredLanguages.DeviceLanguage
@@ -214,72 +205,6 @@ final class TranslationPickerSettingsViewController: UIViewController,
             cell.backgroundConfiguration = .listGroupedCell()
             cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
         }
-    }
-
-    private func makeHeaderRegistration() -> SupplementaryRegistration {
-        SupplementaryRegistration(
-            elementKind: UICollectionView.elementKindSectionHeader
-        ) { [weak self] cell, _, indexPath in
-            guard let self else { return }
-            let sections = self.dataSource.snapshot().sectionIdentifiers
-            guard indexPath.section < sections.count else { return }
-            var content = UIListContentConfiguration.groupedHeader()
-            content.textProperties.transform = .none
-            switch sections[indexPath.section] {
-            case .preferredLanguages:
-                content.text = .Settings.Translation.PreferredLanguages.SectionTitle
-            default:
-                content.text = nil
-            }
-            cell.contentConfiguration = content
-        }
-    }
-
-    private func makeFooterRegistration() -> SupplementaryRegistration {
-        SupplementaryRegistration(
-            elementKind: UICollectionView.elementKindSectionFooter
-        ) { [weak self] cell, _, indexPath in
-            guard let self else { return }
-            let sections = self.dataSource.snapshot().sectionIdentifiers
-            guard indexPath.section < sections.count else { return }
-            var content = UIListContentConfiguration.groupedFooter()
-            switch sections[indexPath.section] {
-            case .enableToggle:
-                content.text = .Settings.Translation.ToggleFooter
-            case .preferredLanguages:
-                content.text = .Settings.Translation.PreferredLanguages.Footer
-            }
-            cell.contentConfiguration = content
-        }
-    }
-
-    // MARK: - Snapshot
-
-    private func applySnapshot(state: TranslationSettingsState, animated: Bool) {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.enableToggle])
-        snapshot.appendItems([.enableToggle], toSection: .enableToggle)
-
-        if state.isTranslationsEnabled {
-            snapshot.appendSections([.preferredLanguages])
-            let deviceCode = Locale.current.languageCode ?? ""
-            let langItems: [TranslationSettingsItem] = state.preferredLanguages.map { code in
-                .language(code: code, isDeviceLanguage: code == deviceCode && code == state.preferredLanguages.first)
-            }
-            snapshot.appendItems(langItems, toSection: .preferredLanguages)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: animated)
-    }
-
-    /// Reconfigures existing cells without a structural snapshot diff.
-    /// Called from applyTheme to update colours without replacing live UISwitch instances.
-    private func reconfigureVisibleCells() {
-        var snap = dataSource.snapshot()
-        let allItems = snap.sectionIdentifiers.flatMap { snap.itemIdentifiers(inSection: $0) }
-        guard !allItems.isEmpty else { return }
-        snap.reconfigureItems(allItems)
-        dataSource.apply(snap, animatingDifferences: true)
     }
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
@@ -296,7 +221,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         collectionView.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        reconfigureVisibleCells()
+        dataSource.reconfigureVisibleCells()
     }
 
     // MARK: - Helpers
@@ -305,8 +230,8 @@ final class TranslationPickerSettingsViewController: UIViewController,
         return Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
     }
 
-    static func localizedName(for code: String) -> String {
-        return Locale.current.localizedString(forLanguageCode: code) ?? code
+    static func localizedName(for code: String, locale: Locale = .current) -> String {
+        return locale.localizedString(forLanguageCode: code) ?? code
     }
 
     // MARK: - UICollectionViewDelegate
