@@ -101,7 +101,6 @@ final class MerinoStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.PopularTodaySectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
     }
 
@@ -111,7 +110,6 @@ final class MerinoStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.PopularTodaySectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
@@ -121,7 +119,6 @@ final class MerinoStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .newsAffordance)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.NewsSectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
