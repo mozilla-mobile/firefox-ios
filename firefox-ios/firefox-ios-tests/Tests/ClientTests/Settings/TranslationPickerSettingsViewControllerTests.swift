@@ -77,6 +77,40 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         ))
     }
 
+    // MARK: - viewDidDisappear
+
+    func test_viewDidDisappear_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.viewDidDisappear(false)
+    }
+
+    // MARK: - applyTheme
+
+    func test_applyTheme_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.newState(state: TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            preferredLanguages: ["en"],
+            supportedLanguages: ["en", "fr"]
+        ))
+        subject.applyTheme()
+    }
+
+    func test_applyTheme_withTranslationsDisabled_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.newState(state: TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: false,
+            preferredLanguages: [],
+            supportedLanguages: []
+        ))
+        subject.applyTheme()
+    }
+
     // MARK: - nativeName
 
     func test_nativeName_returnsNonEmptyString() {
