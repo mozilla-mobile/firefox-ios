@@ -22,7 +22,7 @@ class SettingsViewController: UIViewController, Themeable {
          profile: Profile? = nil,
          tabManager: TabManager? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.windowUUID = windowUUID

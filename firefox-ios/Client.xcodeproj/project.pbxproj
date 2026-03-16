@@ -730,6 +730,8 @@
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
 		613489A32D942A020009AF01 /* ToastTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A22D942A020009AF01 /* ToastTelemetry.swift */; };
 		613489A52D9443610009AF01 /* ToastTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A42D9443610009AF01 /* ToastTelemetryTests.swift */; };
+		61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */; };
+		61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */; };
 		615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */; };
 		619FE8932CE6595B004F83E2 /* WallpaperMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */; };
 		61A164492CE7BE84001D6058 /* WallpaperStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */; };
@@ -8562,6 +8564,8 @@
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
 		613489A22D942A020009AF01 /* ToastTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetry.swift; sourceTree = "<group>"; };
 		613489A42D9443610009AF01 /* ToastTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetryTests.swift; sourceTree = "<group>"; };
+		61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingTests.swift; sourceTree = "<group>"; };
+		61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotHelperTests.swift; sourceTree = "<group>"; };
 		619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMiddleware.swift; sourceTree = "<group>"; };
 		61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStateTests.swift; sourceTree = "<group>"; };
@@ -13504,6 +13508,7 @@
 		8A5D1CA12A30CF2E005AD35C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */,
 				21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */,
 				213047E52F2153AB007ECEDA /* PageZoomSettingsViewModelTests.swift */,
 				BCBE09BE2E3BAE22004B6039 /* SummarizeSettingsViewControllerTests.swift */,
@@ -13517,6 +13522,7 @@
 				1D2A1B582F3BAB4B00157ACB /* RelayMaskSettingsViewControllerTests.swift */,
 				C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */,
 				1DF916892F48EAAD00FA2407 /* MockRelayController.swift */,
+				61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -19618,6 +19624,7 @@
 				AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */,
 				81DAB2F72C89004D00F4BE98 /* MainMenuMiddlewareTests.swift in Sources */,
 				5A70EF19295E2E1600790249 /* DependencyHelperMock.swift in Sources */,
+				61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
@@ -19934,6 +19941,7 @@
 				615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */,
 				8A87B4342CC1A731003A9239 /* MerinoMiddlewareTests.swift in Sources */,
 				21EA33812EC67FCA00D20D90 /* ToolbarAnimatorTest.swift in Sources */,
+				61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */,
 				C283EED42E4E0F25008EB540 /* MockSummarizerConfigSource.swift in Sources */,
 				81AE06F62E3AA6A3002C3E58 /* MerinoProviderTests.swift in Sources */,
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,
