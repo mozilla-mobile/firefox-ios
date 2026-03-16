@@ -233,6 +233,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3895153
+    // https://mozilla.testrail.io/index.php?/cases/view/3895154
     func testFxASyncTabsDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
