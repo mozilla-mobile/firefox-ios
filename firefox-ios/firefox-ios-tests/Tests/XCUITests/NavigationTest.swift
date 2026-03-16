@@ -20,23 +20,21 @@ let website_2 = [
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
-class NavigationTest: BaseTestCase {
+class NavigationTest: FeatureFlaggedTestSuite {
+    // There are multiple onboarding flows, so use a feature flag to test just against the newest flow.
+    let onboardingFlowType = OnboardingScreen.OnboardingFlowType.modernKit
+
+    override func setUpExperimentVariables() {
+        jsonFileName = onboardingFlowType.jsonFeatureOverrideFileName
+        featureName = onboardingFlowType.onboardingFeatureName
+    }
+
     var contextMenuScreen: ContextMenuScreen!
     var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
     var browserScreen: BrowserScreen!
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
-
-    var onboardingFlowType: OnboardingScreen.OnboardingFlowType {
-        if isFirefoxBeta {
-            return .modernOrangeAndBlue
-        } else if isFirefox {
-            return .modernKit
-        }
-
-        return .legacy
-    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
