@@ -6,7 +6,7 @@ import Testing
 
 /// A base test case class for Swift Testing test suites that provides common testing utilities,
 /// such as memory leak detection.
-open class SwiftTestingHelper {
+public final class SwiftTestingHelper {
     private struct MemoryLeakCheck {
         weak var object: AnyObject?
         let location: SourceLocation
@@ -24,7 +24,7 @@ open class SwiftTestingHelper {
     /// - Note: Only one object can be tracked per `BaseTestCase` instance. To track multiple
     ///   objects, we will need to expand, but no use case for it currently so keeping it simple.
     @discardableResult
-    open func trackForMemoryLeaks<T: AnyObject>(
+    public final func trackForMemoryLeaks<T: AnyObject>(
         _ createInstance: @autoclosure () -> T,
         fileID: String = #fileID,
         filePath: String = #filePath,
