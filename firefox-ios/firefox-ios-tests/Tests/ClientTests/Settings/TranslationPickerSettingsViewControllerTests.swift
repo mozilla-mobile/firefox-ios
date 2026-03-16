@@ -208,6 +208,7 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     // MARK: - localizedName
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     func test_localizedName_withInjectedLocale_returnsExpectedString() {
         let name = TranslationPickerSettingsViewController.localizedName(for: "fr", locale: Locale(identifier: "en"))
         XCTAssertEqual(name, "French")
@@ -224,6 +225,15 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
     func test_localizedName_forUnknownCode_returnsFallback() {
         let name = TranslationPickerSettingsViewController.localizedName(for: "xyz")
 >>>>>>> ea63855905 (Add TranslationPickerSettingsViewController unit tests)
+=======
+    func test_localizedName_withInjectedLocale_returnsExpectedString() {
+        let name = TranslationPickerSettingsViewController.localizedName(for: "fr", locale: Locale(identifier: "en"))
+        XCTAssertEqual(name, "French")
+    }
+
+    func test_localizedName_forUnknownCode_returnsFallback() {
+        let name = TranslationPickerSettingsViewController.localizedName(for: "xyz", locale: Locale(identifier: "en"))
+>>>>>>> 7afcf984af (Address PR review: extract diffable datasource, inject locale, move viewDidLoad dispatch)
         XCTAssertEqual(name, "xyz")
     }
 
