@@ -8,7 +8,7 @@ public enum ReaderModeState: String, Sendable {
     case available = "Available"
     case unavailable = "Unavailable"
     case active = "Active"
-    
+
     /// Wether the ReaderMode is enabled.
     /// Returns true when the state is available or active.
     public var isEnabled: Bool {
