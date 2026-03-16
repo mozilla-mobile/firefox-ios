@@ -52,7 +52,7 @@ jobs:
         echo "current_date=$current_date" >> $GITHUB_ENV
         if [[ $current_branch == 'main' ]]; then
           echo "branch_name=string-import-$current_date" >> $GITHUB_ENV
-          echo "pr_title=Localize [v${NEXT_VERSION}] String import $current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [v${next_version}] String import $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR imports string changes" >> $GITHUB_ENV
         else
           # version: v105.0 -> v105
