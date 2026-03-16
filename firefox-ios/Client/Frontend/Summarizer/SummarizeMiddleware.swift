@@ -80,8 +80,8 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     private func dispatchShakeToSummarizeNotAvailable(windowUUID: WindowUUID) {
-        let isHomepage = windowManager.tabManager(for: windowUUID).selectedTab?.isFxHomeTab ?? false
-        guard summarizerNimbusUtils.isShakeGestureEnabled, !isHomepage else { return }
+        let isHomePage = windowManager.tabManager(for: windowUUID).selectedTab?.isFxHomeTab ?? false
+        guard summarizerNimbusUtils.isShakeGestureEnabled, !isHomePage else { return }
         store.dispatch(
             GeneralBrowserAction(
                 toastType: .shakeToSummarizeNotAvailable,

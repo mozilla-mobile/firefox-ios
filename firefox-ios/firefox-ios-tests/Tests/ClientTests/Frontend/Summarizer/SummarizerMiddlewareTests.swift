@@ -137,7 +137,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func test_shakeMotionAction_whenTabIsHomePage_doesNotDispatchToastAction() throws {
-        setupWebViewForTabManager()
+        setupWebViewForTabManager(isHomePage: true)
         mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
         mockSummarizerNimbusUtils.isShakeGestureEnabled = true
         mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
