@@ -969,7 +969,6 @@ final class TabManagerImplementation: NSObject,
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
-        // TODO: FXIOS-14784 - Investigate configuration since we override pop-up configuration here
         let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
@@ -1098,13 +1097,13 @@ final class TabManagerImplementation: NSObject,
         // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
         // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
         // use this configuration WebKit will throw an exception.
+        popup.requiredConfiguration = configuration
         configureTab(popup,
                      request: nil,
                      afterTab: parentTab,
                      flushToDisk: true,
                      zombie: false,
-                     isPopup: true,
-                     requiredConfiguration: configuration)
+                     isPopup: true)
 
         return popup
     }
@@ -1116,8 +1115,7 @@ final class TabManagerImplementation: NSObject,
         afterTab parent: Tab? = nil,
         flushToDisk: Bool,
         zombie: Bool,
-        isPopup: Bool = false,
-        requiredConfiguration: WKWebViewConfiguration? = nil
+        isPopup: Bool = false
     ) {
         assert(Thread.isMainThread)
         // If network is not available webView(_:didCommit:) is not going to be called
@@ -1141,13 +1139,9 @@ final class TabManagerImplementation: NSObject,
                                  isRestoring: !tabRestoreHasFinished)
         }
 
+        // Create the webview right away for tabs that are not zombies
         if !zombie {
-            let configuration: WKWebViewConfiguration
-            if let required = requiredConfiguration {
-                configuration = required
-            } else {
-                configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
-            }
+            let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
             tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = navigationDelegate
