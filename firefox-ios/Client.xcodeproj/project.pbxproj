@@ -1398,6 +1398,7 @@
 		AAD1CD872EAABA8100BEC90A /* TranslationsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */; };
 		AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */; };
 		AAD861AB2E9E75AB00F6E0E0 /* TranslationPickerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AA2E9E75A100F6E0E0 /* TranslationPickerSettingsViewController.swift */; };
+		74B8478AACB3429E827FE642 /* TranslationSettingsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */; };
 		AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */; };
 		AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */; };
 		AAD861B02E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */; };
@@ -9757,6 +9758,7 @@
 		AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsConfiguration.swift; sourceTree = "<group>"; };
 		AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSetting.swift; sourceTree = "<group>"; };
 		AAD861AA2E9E75A100F6E0E0 /* TranslationPickerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationPickerSettingsViewController.swift; sourceTree = "<group>"; };
+		E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsDiffableDataSource.swift; sourceTree = "<group>"; };
 		AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsAction.swift; sourceTree = "<group>"; };
 		AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsState.swift; sourceTree = "<group>"; };
 		AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsMiddleware.swift; sourceTree = "<group>"; };
@@ -14387,6 +14389,7 @@
 				AAD861B12E9E75C000F6E0E0 /* TranslationSettingsMiddleware.swift */,
 				AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */,
 				AAD861AA2E9E75A100F6E0E0 /* TranslationPickerSettingsViewController.swift */,
+				E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */,
 			);
 			path = Translation;
 			sourceTree = "<group>";
@@ -19088,6 +19091,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */,
 				AAD861AB2E9E75AB00F6E0E0 /* TranslationPickerSettingsViewController.swift in Sources */,
+				74B8478AACB3429E827FE642 /* TranslationSettingsDiffableDataSource.swift in Sources */,
 				E71CDA4786F4408BB2179C0A /* TranslationSettingsViewController.swift in Sources */,
 				AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */,
 				AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */,
