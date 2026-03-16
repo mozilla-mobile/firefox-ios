@@ -196,7 +196,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/3895150
+    // https://mozilla.testrail.io/index.php?/cases/view/3895149
     func testFxASyncHistoryDesktop() {
         // Sign into Mozilla Account
         signInFxAccounts()
