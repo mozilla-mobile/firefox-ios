@@ -251,7 +251,7 @@ final class HomepageViewController: UIViewController,
     // If no scroll position exists for tab, scroll the homepage to the top
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
-        guard let activeTabUUID, isHomepageStoriesScrollDirectionCustomized,
+        guard let activeTabUUID, isHomepageStoriesScrollDirectionVertical,
               let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
         else {
             scrollToTop()
@@ -650,8 +650,7 @@ final class HomepageViewController: UIViewController,
         _ story: MerinoStoryConfiguration,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
-            && UIDevice.current.userInterfaceIdiom == .phone
+        let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionVertical
         let position = indexPath.item + 1
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
