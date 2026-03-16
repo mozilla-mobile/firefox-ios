@@ -28,7 +28,7 @@ final class TranslationSettingsMiddleware {
     private func handleAction(_ action: TranslationSettingsViewAction) {
         switch action.actionType {
         case TranslationSettingsViewActionType.viewDidLoad:
-            Task { @MainActor in await self.loadSettings(windowUUID: action.windowUUID) }
+            Task { await self.loadSettings(windowUUID: action.windowUUID) }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = profile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
