@@ -213,8 +213,8 @@ class ShareSheetCoordinator: BaseCoordinator,
                     self.router.dismiss()
                     self.parentCoordinator?.didFinish(from: self)
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                        self?.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
                     }
                 }
             }
