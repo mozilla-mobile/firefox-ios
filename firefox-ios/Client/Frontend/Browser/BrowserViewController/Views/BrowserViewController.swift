@@ -1139,7 +1139,8 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies:
+        case .clearCookies,
+                .shakeToSummarizeNotAvailable:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
