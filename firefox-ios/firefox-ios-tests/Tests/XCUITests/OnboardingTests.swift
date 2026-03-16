@@ -47,7 +47,7 @@ class OnboardingTests: BaseTestCase {
 
         // Firefox and FirefoxBeta have a different onboarding flow
         if flowType.isModernFlow {
-            onboardingScreen.completeFirefoxModernOnboardingFlow()
+            onboardingScreen.completeModernOnboardingFlow(isIpad: iPad())
         } else {
             onboardingScreen.completeLegacyOnboardingFlow(isIPad: iPad())
         }

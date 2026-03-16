@@ -232,20 +232,26 @@ final class OnboardingScreen {
 
     /// Completes the Firefox Beta onboarding flow
     /// Beta has a different flow with specific screen IDs
-    func completeFirefoxModernOnboardingFlow() {
-        // Screen 0: Skip (secondary button)
+    func completeModernOnboardingFlow(isIpad: Bool) {
+        // Screen 1: Default Browser - Skip (secondary button)
         assertTitle()
         goToNextScreenViaSecondary()
 
-        // Screen 1: Continue (primary button)
+        if isIpad {
+            // iPad does not show the address bar top/bottom placement card (second screen).
+            // However, the accessibility IDs increase by one.
+            currentScreen += 1
+        } else {
+            // Screen 2: Choose address bar - Continue (primary button)
+            assertTitle()
+            goToNextScreenViaPrimary()
+        }
+
+        // Screen 3: Choose theme - Continue (primary button)
         assertTitle()
         goToNextScreenViaPrimary()
 
-        // Screen 2: Continue (primary button)
-        assertTitle()
-        goToNextScreenViaPrimary()
-
-        // Screen 3: Not now (secondary button)
+        // Screen 4: Sign in to sync - Not now (secondary button)
         assertTitle()
         goToNextScreenViaSecondary()
     }
@@ -284,41 +290,6 @@ final class OnboardingScreen {
 
         // End onboarding: Save and Start Browsing (primary button)
         goToNextScreenViaPrimary()
-    }
-
-    /// Completes the modern onboarding flow
-    /// - Parameters:
-    ///   - isIPad: Whether running on iPad (skips toolbar screen)
-    ///   - tosAccepted: Whether Terms of Service was already accepted
-    func completeModernOnboardingFlow(isIPad: Bool, tosAccepted: Bool = false) {
-        currentScreen = 0
-
-        if !tosAccepted {
-            assertModernTermsOfServiceScreen()
-            handleTermsOfService()
-        }
-
-        assertModernWelcomeScreen()
-        goToNextScreenViaSecondary()
-
-        if !isIPad {
-            assertToolbarCustomizationScreen()
-            selectToolbarPosition("Bottom")
-            goToNextScreenViaPrimary()
-        } else {
-            currentScreen += 1
-        }
-
-        assertThemeCustomizationScreen()
-        selectTheme("System Auto")
-        goToNextScreenViaPrimary()
-
-        assertSyncScreen()
-        let secondary = sel.secondaryButton(rootId: rootA11yId).element(in: app)
-        secondary.waitAndTap()
-
-        let closePopup = app.buttons["Close"]
-        if closePopup.exists { closePopup.tap() }
     }
 
     // MARK: - Assertions
