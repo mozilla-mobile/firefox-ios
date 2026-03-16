@@ -49,9 +49,7 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
         case GeneralBrowserActionType.shakeMotionEnded:
-            Task { @MainActor in
-                await self.dispatchSummarizeConfigurationAction(for: action)
-            }
+            self.handleShakeMotionEnded(windowUUID: action.windowUUID)
         default:
             break
         }
@@ -64,16 +62,31 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         )
     }
 
-    @MainActor
-    private func dispatchSummarizeConfigurationAction(for action: Action) async {
-        guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
-        guard let summarizerConfig = await makeConfiguration(from: webView) else { return }
+    private func handleShakeMotionEnded(windowUUID: WindowUUID) {
+        guard let webView = windowManager.tabManager(for: windowUUID).selectedTab?.webView else { return }
+        Task {
+            guard let summarizerConfig = await makeConfiguration(from: webView) else {
+                dispatchShakeToSummarizeNotAvailable(windowUUID: windowUUID)
+                return
+            }
+            store.dispatch(
+                SummarizeAction(
+                    windowUUID: windowUUID,
+                    actionType: SummarizeMiddlewareActionType.configuredSummarizer,
+                    summarizerConfig: summarizerConfig
+                )
+            )
+        }
+    }
 
+    private func dispatchShakeToSummarizeNotAvailable(windowUUID: WindowUUID) {
+        let isHomePage = windowManager.tabManager(for: windowUUID).selectedTab?.isFxHomeTab ?? false
+        guard summarizerNimbusUtils.isShakeGestureEnabled, !isHomePage else { return }
         store.dispatch(
-            SummarizeAction(
-                windowUUID: action.windowUUID,
-                actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-                summarizerConfig: summarizerConfig
+            GeneralBrowserAction(
+                toastType: .shakeToSummarizeNotAvailable,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showToast
             )
         )
     }

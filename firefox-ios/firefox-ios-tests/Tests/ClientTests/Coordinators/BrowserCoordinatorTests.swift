@@ -5,6 +5,7 @@
 import Common
 import ComponentLibrary
 import MozillaAppServices
+import Redux
 import WebKit
 import XCTest
 import GCDWebServers
@@ -13,7 +14,7 @@ import SummarizeKit
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
+final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -23,6 +24,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
+    private var mockStore: MockStoreForMiddleware<AppState>!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -42,6 +44,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         glean = MockGleanWrapper()
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        setupStore()
     }
 
     override func tearDown() async throws {
@@ -55,6 +58,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         glean = nil
         scrollDelegate = nil
         browserViewController = nil
+        resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -1223,6 +1227,18 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
+    func testShowReaderMode_dispatchesGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        subject.showReaderMode()
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showReaderMode)
+    }
+
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
         let subject = createSubject()
         subject.browserHasLoaded()
@@ -1328,6 +1344,20 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.didFinish(from: bookmarksCoordinator)
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    // MARK: - StoreTestUtility
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 
     // MARK: - Helpers

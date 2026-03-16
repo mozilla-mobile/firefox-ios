@@ -74,14 +74,11 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent,
-        // TODO: FXIOS-12158 Add back after investigating why video player is broken
-        //        .fullscreenState
+        .hasOnlySecureContent
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
-    weak var fullscreenDelegate: FullscreenDelegate?
 
     nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
@@ -1177,7 +1174,8 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies:
+        case .clearCookies,
+                .shakeToSummarizeNotAvailable:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
@@ -2672,9 +2670,6 @@ class BrowserViewController: UIViewController,
                 self.handleCanGoForwardChanged(tab: tab, canGoForward: newBool)
             case .hasOnlySecureContent:
                 self.handleHasOnlySecureContentChanged(webView: webView)
-//            // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//            case .fullscreenState:
-//                self.handleFullscreenStateChanged()
             default:
                 assertionFailure("Unhandled KVO key: \(path.rawValue)")
             }
@@ -2792,19 +2787,6 @@ class BrowserViewController: UIViewController,
         guard let selectedTabURL = tabManager.selectedTab?.url,
               let webViewURL = webView.url,
               selectedTabURL == webViewURL else { return }
-    }
-
-    private func handleFullscreenStateChanged(webView: WKWebView) {
-//        // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//        if #available(iOS 16.0, *) {
-//            guard webView.fullscreenState == .enteringFullscreen ||
-//                    webView.fullscreenState == .exitingFullscreen else { return }
-//            if webView.fullscreenState == .enteringFullscreen {
-//                fullscreenDelegate?.enteringFullscreen()
-//            } else {
-//                fullscreenDelegate?.exitingFullscreen()
-//            }
-//        }
     }
 
     // MARK: - Update UI

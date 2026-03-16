@@ -4,20 +4,20 @@
 
 import Foundation
 
-/// Identifies the possible navigation types for `VoiceSearchViewController`
-public enum VoiceSearchNavigationType: Equatable {
+/// Identifies the possible navigation types for `QuickAnswersViewController`
+public enum QuickAnswersNavigationType: Equatable {
     /// Navigates to the specified URL.
     case url(URL)
     /// Performs a search with the specified query string.
     case searchResult(String)
 }
 
-/// Handles navigation for the `VoiceSearchViewController`
+/// Handles navigation for the `QuickAnswersViewController`
 @MainActor
-public protocol VoiceSearchNavigationHandler: AnyObject {
-    /// Dismisses the voice search interface and optionally performs a navigation action.
+public protocol QuickAnswersNavigationHandler: AnyObject {
+    /// Dismisses the interface and optionally performs a navigation action.
     ///
     /// - Parameter navigationType: The navigation action to perform after dismissal.
     ///   Pass `nil` when dismissing via the close button without navigation.
-    func dismissVoiceSearch(with navigationType: VoiceSearchNavigationType?)
+    func dismissQuickAnswers(with navigationType: QuickAnswersNavigationType?)
 }

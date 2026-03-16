@@ -2,17 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@testable import VoiceSearchKit
+@testable import QuickAnswersKit
 import XCTest
 import TestKit
 
 @MainActor
-final class VoiceSearchViewModelTests: XCTestCase {
-    private var mockService: MockTestVoiceSearchService!
+final class QuickAnswersViewModelTests: XCTestCase {
+    private var mockService: MockTestQuickAnswersService!
 
     override func setUp() async throws {
         try await super.setUp()
-        mockService = MockTestVoiceSearchService()
+        mockService = MockTestQuickAnswersService()
     }
 
     override func tearDown() async throws {
@@ -27,7 +27,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
         mockService.speechResults = [partialResult, finalResult]
         mockService.searchResult = .success(searchResult)
         let expectation = XCTestExpectation()
-        var states = [VoiceSearchViewModel.State]()
+        var states = [QuickAnswersViewModel.State]()
         let subject = createSubject()
 
         subject.onStateChange = { state in
@@ -51,7 +51,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
         mockService.shouldThrowSpeechError = true
         let expectation = XCTestExpectation()
         let subject = createSubject()
-        var state: VoiceSearchViewModel.State?
+        var state: QuickAnswersViewModel.State?
 
         subject.onStateChange = {
             state = $0
@@ -70,7 +70,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
         let searchError = SearchResultError.unknown
         mockService.speechResults = [speechResult]
         mockService.searchResult = .failure(searchError)
-        var states = [VoiceSearchViewModel.State]()
+        var states = [QuickAnswersViewModel.State]()
         let expectation = XCTestExpectation()
         let subject = createSubject()
 
@@ -97,7 +97,7 @@ final class VoiceSearchViewModelTests: XCTestCase {
         mockService.searchResult = .success(searchResult)
 
         let expectation = XCTestExpectation()
-        var states = [VoiceSearchViewModel.State]()
+        var states = [QuickAnswersViewModel.State]()
         let subject = createSubject()
 
         subject.onStateChange = { state in
@@ -116,8 +116,8 @@ final class VoiceSearchViewModelTests: XCTestCase {
     }
 
     // MARK: - Helper
-    private func createSubject() -> VoiceSearchViewModel {
-        let model = VoiceSearchViewModel(service: mockService)
+    private func createSubject() -> QuickAnswersViewModel {
+        let model = QuickAnswersViewModel(service: mockService)
         trackForMemoryLeaks(model)
         return model
     }
