@@ -19,17 +19,17 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
     var firefoxHomePageScreen: FirefoxHomePageScreen!
 
     override func setUpExperimentVariables() {
-        jsonFileName = flowType.jsonFeatureOverrideFileName
-        featureName = flowType.onboardingFeatureName
-    }
-
-    override func setUp() async throws {
         launchArguments = [
             LaunchArguments.ClearProfile,
             LaunchArguments.DisableAnimations,
             LaunchArguments.SkipSplashScreenExperiment
         ]
 
+        jsonFileName = flowType.jsonFeatureOverrideFileName
+        featureName = flowType.onboardingFeatureName
+    }
+
+    override func setUp() async throws {
         try await super.setUp()
 
         onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
