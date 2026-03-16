@@ -242,7 +242,7 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common"],
+            dependencies: ["Common", "Shared"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]
