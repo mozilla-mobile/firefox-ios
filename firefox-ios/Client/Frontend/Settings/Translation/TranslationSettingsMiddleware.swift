@@ -25,8 +25,6 @@ final class TranslationSettingsMiddleware {
         self.handleAction(action)
     }
 
-    // MARK: - Private handler
-
     private func handleAction(_ action: TranslationSettingsViewAction) {
         switch action.actionType {
         case TranslationSettingsViewActionType.viewDidLoad:
@@ -54,12 +52,10 @@ final class TranslationSettingsMiddleware {
 
     private func loadSettings(windowUUID: WindowUUID) async {
         let supported = await modelsFetcher.fetchSupportedTargetLanguages()
-        let preferred = await manager.preferredLanguages(supportedTargetLanguages: supported)
+        let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
         let isEnabled = profile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-        let isAutoTranslate = profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
         store.dispatch(TranslationSettingsMiddlewareAction(
             isTranslationsEnabled: isEnabled,
-            isAutoTranslateEnabled: isAutoTranslate,
             preferredLanguages: preferred,
             supportedLanguages: supported,
             windowUUID: windowUUID,

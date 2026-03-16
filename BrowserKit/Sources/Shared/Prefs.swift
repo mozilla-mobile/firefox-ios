@@ -169,7 +169,6 @@ public struct PrefsKeys {
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
         public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
-        public static let translationAutoTranslate = "settings.translationAutoTranslate"
     }
 
     // Activity Stream
