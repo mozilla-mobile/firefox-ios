@@ -111,11 +111,6 @@ class ShareSheetCoordinator: BaseCoordinator,
             default:
                 showSendToDevice(url: sendURL, relatedTab: nil)
             }
-        case .copyToPasteboard:
-            if case .file = shareType {
-                showToast(text: .ShareFileCopiedToClipboard)
-            }
-            dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
         }
