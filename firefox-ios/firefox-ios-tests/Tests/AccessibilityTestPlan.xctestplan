@@ -357,6 +357,7 @@
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
+        "SecurityTests",
         "SecurityTests\/testLoadSpoofingHtmlReturnURL()",
         "SettingsTests",
         "SettingsTests\/testCopiedLinks()",
