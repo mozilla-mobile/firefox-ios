@@ -56,7 +56,7 @@ jobs:
         shell: bash
         env:
          BODY: >
-          :wave: @${{ env.PR_AUTHOR }}, thanks for your contribution.
+          :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
 
           This pull request is being closed because it introduces changes that were 
           not previously aligned with the maintainers. Please have a look at our contribution guidelines 
