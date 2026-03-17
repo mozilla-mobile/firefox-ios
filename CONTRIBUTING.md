@@ -34,6 +34,10 @@ For a smooth collaboration process, start with issues labeled `Contributor OK`.
     - For larger pieces of work, we also ask that contributors coordinate with a team member on the issue before starting. Larger changes often need to be broken down into smaller PRs to make the review process manageable.
     - We absolutely welcome ideas and contributions. However, adding new features requires significant coordination and effort, so we ask that you keep this in mind before starting work.
 
+4. **Significant AI-generated code**:
+    - At this time, we do not accept pull requests that contain significant AI-generated code. AI-generated code can often introduce subtle bugs, poor design patterns, or inconsistent styles that make long-term maintenance difficult and reduce overall code quality. For the sake of the project's future stability and readability, we require that all contributions meet our established coding standards and demonstrate clear developer oversight.
+    - If you want to contribute to an area of the code using AI, please discuss with us on how to break down the changes into small, focused PRs to ensure a thorough and efficient review process.
+
 ## Getting Support
 
 ### Reference Person
