@@ -1048,11 +1048,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "News",
                 comment: "This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles")
-            public static let AllStoriesButtonTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
-                tableName: "FirefoxHomepage",
-                value: "All Stories",
-                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
@@ -1080,22 +1075,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "%@ of %@",
                 comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5'")
-
-            public struct AllStories {
-                public static let AllStoriesViewTitle = MZLocalizedString(
-                    key: "FirefoxHome.Stories.AllStoriesViewTitle.v145",
-                    tableName: "FirefoxHomepage",
-                    value: "All Stories",
-                    comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
-            }
-
-            public struct StoriesWebview {
-                public static let ReloadPageAccessibilityLabel = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
-                    tableName: "FirefoxHomepage",
-                    value: "Reload page",
-                    comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
-            }
         }
 
         public struct RecentlySaved { }
@@ -8381,6 +8360,24 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Popular Today",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
+            public static let AllStoriesButtonTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "All Stories",
+                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles."
+            )
+            public static let AllStoriesViewTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.AllStoriesViewTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "All Stories",
+                comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles"
+            )
+            public static let StoriesWebviewReloadPageAccessibilityLabel = MZLocalizedString(
+                key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                tableName: "FirefoxHomepage",
+                value: "Reload page",
+                comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview"
+            )
         }
     }
 }

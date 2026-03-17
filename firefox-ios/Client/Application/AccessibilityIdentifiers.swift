@@ -238,7 +238,6 @@ struct AccessibilityIdentifiers {
             static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {
@@ -280,10 +279,6 @@ struct AccessibilityIdentifiers {
 
         struct StoriesFeed {
             static let storiesFeedCell = "StoriesFeedCell"
-        }
-
-        struct StoriesWebview {
-            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 

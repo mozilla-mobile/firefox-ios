@@ -34,30 +34,6 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(fetched.count, 0)
     }
 
-    func testFetchingStories_forStoriesFeed_returnsList() async {
-        let stories: [RecommendationDataItem] = (0..<20).map { .makeItem("feed\($0)") }
-        let expectedResult = stories.map(MerinoStory.init)
-
-        let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
-        let fetched = await subject.fetchDiscoverMoreStories()
-
-        XCTAssertEqual(Set(fetched), Set(expectedResult))
-    }
-
-    func testFetchingStories_forStoriesFeed_returnsEmptyList() async {
-        let subject = createSubject(with: MockMerinoAPI(result: .success([])))
-        let fetched = await subject.fetchDiscoverMoreStories()
-
-        XCTAssertEqual(fetched.count, 0)
-    }
-
-    func testFetchingStories_forStoriesFeed_withError_returnsEmptyList() async {
-        let subject = createSubject(with: MockMerinoAPI(result: .failure(TestError.default)))
-        let fetched = await subject.fetchDiscoverMoreStories()
-
-        XCTAssertEqual(fetched.count, 0)
-    }
-
     private func createSubject(
         with merinoAPI: MockMerinoAPI,
         file: StaticString = #filePath,
