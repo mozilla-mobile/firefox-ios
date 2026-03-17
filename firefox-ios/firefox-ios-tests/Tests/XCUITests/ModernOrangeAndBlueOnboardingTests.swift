@@ -43,6 +43,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Full Flow Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2575178
     // Smoketest
     func testModernOnboardingFullFlowWithToS() throws {
         launchApp()
@@ -54,6 +55,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         firefoxHomePageScreen.assertTopSitesItemCellExist()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2575178
     // Smoketest
     func testModernOnboardingFullFlowToSAlreadyAccepted() throws {
         launchApp()
@@ -81,6 +83,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernWelcomeScreen()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2575175
     func testModernOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -117,6 +120,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2575176
     func testModernOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -183,6 +187,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Sync Flow Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testModernOnboardingSyncFlow() throws {
         launchApp()
 
@@ -217,6 +222,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.exitSignInFlow()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testModernOnboardingSkipSync() throws {
         launchApp()
 
