@@ -45,13 +45,12 @@ public final class SwiftTestingHelper {
     /// ```
     @discardableResult
     public final func trackForMemoryLeaks<T: AnyObject>(
-        _ createInstance: @autoclosure () -> T,
+        _ instance: T,
         fileID: String = #fileID,
         filePath: String = #filePath,
         line: Int = #line,
         column: Int = #column
     ) -> T {
-        let instance = createInstance()
         let location = SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
         memoryLeakCheck = MemoryLeakCheck(object: instance, location: location)
         return instance
