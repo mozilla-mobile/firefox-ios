@@ -538,13 +538,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         tabManager.selectedTab = tab
         subject.browserViewController = browserViewController
 
-        subject.showSummarizePanel(
-            .mainMenu,
-            config: SummarizerConfig(
-                instructions: "Test instructions",
-                options: ["model": "model"]
-            )
-        )
+        subject.showSummarizePanel(.mainMenu, config: SummarizerConfig(instructions: "Test instructions", options: [:]))
 
         let childCoordinator = subject.childCoordinators.first
         XCTAssertTrue(childCoordinator is SummarizeCoordinator)
