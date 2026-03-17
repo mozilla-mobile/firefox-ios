@@ -156,7 +156,7 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .summarizerLanguageExpansion:
             return checkSummarizerLanguageExpansionFeature(from: nimbus)
-        
+
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 

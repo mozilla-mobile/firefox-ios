@@ -22,7 +22,7 @@ final class LanguageModelSessionAdapter: LanguageModelSessionProtocol {
         let model: SystemLanguageModel = usesPermissiveGuardrails
             ? SystemLanguageModel(guardrails: .permissiveContentTransformations)
             : .default
-        self.realSession = LanguageModelSession(model: model,instructions: instructions)
+        self.realSession = LanguageModelSession(model: model, instructions: instructions)
     }
 
     func respond(

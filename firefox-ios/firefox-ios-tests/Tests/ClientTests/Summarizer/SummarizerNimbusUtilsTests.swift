@@ -277,7 +277,6 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         }
     }
 
-
     private func setPermissiveGuardrailsFeature(isEnabled: Bool = true) {
         FxNimbus.shared.features.summarizerPermissiveGuardrailsFeature.with { _, _ in
             return SummarizerPermissiveGuardrailsFeature(enabled: isEnabled)
