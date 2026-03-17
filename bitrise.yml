@@ -1386,6 +1386,12 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'Nightly FirefoxBeta: Upload to TestFlight (Mac)'
     - script@1.2.1:
         title: Upload NightlyBeta Symbols
         inputs:
