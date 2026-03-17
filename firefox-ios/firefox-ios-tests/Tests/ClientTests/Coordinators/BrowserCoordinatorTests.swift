@@ -10,6 +10,7 @@ import WebKit
 import XCTest
 import GCDWebServers
 import SummarizeKit
+import Shared
 
 @testable import Client
 
@@ -35,7 +36,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
-        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         overlayModeManager = MockOverlayModeManager()
@@ -535,7 +535,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     // MARK: - Summarize Panel
 
     func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -553,7 +553,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     }
 
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
         tab.webView = MockTabWebView(tab: tab)
@@ -578,7 +578,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     }
 
     func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -1386,14 +1386,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     }
 
     private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
-            return AppleSummarizerFeature(enabled: isEnabled)
-        }
+        // Apple summarizer doesn't run on an experiment, it relies only on user defaults.
+        // See `AppleIntelligenceUtil`
+        UserDefaults.standard.set(isEnabled, forKey: PrefsKeys.appleIntelligenceAvailable)
     }
 
-    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
+    private func setIsAppAttestEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+            return SummarizerAppAttestAuthFeature(enabled: true)
         }
     }
 
