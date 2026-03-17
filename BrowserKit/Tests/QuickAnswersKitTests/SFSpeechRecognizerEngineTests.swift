@@ -10,8 +10,8 @@ import TestKit
 @Suite
 @MainActor
 struct SFSpeechRecognizerEngineTests {
-    let audioManager = MockAudioManager()
     let testHelper = SwiftTestingHelper()
+    let audioManager = MockAudioManager()
 
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsError() async {

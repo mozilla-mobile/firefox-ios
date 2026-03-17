@@ -6,6 +6,12 @@ import Testing
 
 /// A base test case class for Swift Testing test suites that provides common testing utilities,
 /// such as memory leak detection.
+///
+/// ## Usage
+///
+/// **IMPORTANT:** To ensure correct memory leak detection, `SwiftTestingHelper` must be declared
+/// as the **first stored property** in your test struct and tracked objects are declared as a **local variable**.
+/// This ensures that it deallocates last, after all tracked objects have been deallocated.
 public final class SwiftTestingHelper {
     private struct MemoryLeakCheck {
         weak var object: AnyObject?
@@ -21,8 +27,22 @@ public final class SwiftTestingHelper {
     /// Registers an object to be checked for memory leaks when the test completes. The object is
     /// held with a weak reference, and during deinitialization, verifies the object was deallocated.
     ///
-    /// - Note: Only one object can be tracked per `SwiftTestingHelper` instance. To track multiple
-    ///   objects, we will need to expand, but no use case for it currently so keeping it simple.
+    /// - Note: Only one object can be tracked per `SwiftTestingHelper` instance.
+    /// To track multiple objects, we will need to expand, but no use case for it currently so keeping it simple.
+    ///
+    /// Example:
+    /// ```swift
+    /// @Suite
+    /// struct MyTests {
+    ///     let helper = SwiftTestingHelper()  // ✓ Declare FIRST
+    ///     // Other properties here...
+    ///
+    ///     @Test
+    /// func testMyClass() {
+    ///     let subject = helper.trackForMemoryLeaks(MyClass())  // ✓ Local variable
+    ///     // test code
+    /// } // ← subject deallocates here, before helper
+    /// ```
     @discardableResult
     public final func trackForMemoryLeaks<T: AnyObject>(
         _ createInstance: @autoclosure () -> T,
