@@ -98,9 +98,6 @@ struct MerinoState: StateType, Equatable {
         return SectionHeaderConfiguration(
             title: .FirefoxHomepage.Pocket.NewsSectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            isButtonHidden: isScrollDirectionVertical,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
-            buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle,
             style: isScrollDirectionVertical ? .newsAffordance : .sectionTitle
         )
     }
