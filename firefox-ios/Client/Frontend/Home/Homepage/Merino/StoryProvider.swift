@@ -14,8 +14,7 @@ protocol StoryProviderInterface: Sendable {
 
 final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     private struct Constants {
-        static let defaultNumberOfHomepageStories = 9
-        static let defaultNumberOfHomepageStoriesForCustomizedScrollDirection = 100
+        static let defaultNumberOfHomepageStories = 100
         static let defaultNumberOfDiscoverMoreStories = 100
     }
 
@@ -26,10 +25,7 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchHomepageStories() async -> [MerinoStory] {
-        let numberOfRequestedStories = await isHomepageStoriesScrollDirectionCustomized
-            ? Constants.defaultNumberOfHomepageStoriesForCustomizedScrollDirection
-            : Constants.defaultNumberOfHomepageStories
-        return await fetchStories(numberOfRequestedStories)
+        return await fetchStories(Constants.defaultNumberOfHomepageStories)
     }
 
     func fetchDiscoverMoreStories() async -> [MerinoStory] {

@@ -93,15 +93,11 @@ struct MerinoState: StateType, Equatable {
     private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-        let isScrollDirectionCustomized = scrollDirection != .baseline
         let isScrollDirectionVertical = scrollDirection == .vertical  && UIDeviceDetails.userInterfaceIdiom == .phone
 
         return SectionHeaderConfiguration(
             title: .FirefoxHomepage.Pocket.NewsSectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            isButtonHidden: isScrollDirectionCustomized,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
-            buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle,
             style: isScrollDirectionVertical ? .newsAffordance : .sectionTitle
         )
     }
