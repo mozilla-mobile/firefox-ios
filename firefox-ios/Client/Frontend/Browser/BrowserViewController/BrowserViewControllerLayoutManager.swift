@@ -144,7 +144,7 @@ final class BrowserViewControllerLayoutManager {
             equalTo: parentView.bottomAnchor
         )
 
-        // Fallback for iPad what top search bar + no toolbar + no keyboard
+        // Fallback for iPad with top search bar + no toolbar + no keyboard
         bottomContentStackViewBasicConstraint = bottomContentStackView.bottomAnchor.constraint(
             equalTo: parentView.safeAreaLayoutGuide.bottomAnchor
         )
@@ -186,11 +186,11 @@ final class BrowserViewControllerLayoutManager {
         updateBottomContentStackViewTopSearchBar(keyboardState: keyboardState)
     }
 
-    func updateBottomContentStackViewBottomSearchBar() {
+    private func updateBottomContentStackViewBottomSearchBar() {
         bottomContentStackViewOverKeyboardConstraint?.isActive = true
     }
 
-    func updateBottomContentStackViewTopSearchBar(keyboardState: KeyboardState?) {
+    private func updateBottomContentStackViewTopSearchBar(keyboardState: KeyboardState?) {
         let keyboardHeight = keyboardState?.intersectionHeightForView(parentView) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 
