@@ -190,7 +190,6 @@
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTyping()",
-        "HomepageSearchBarTests",
         "IntegrationTests",
         "IntegrationTests\/testFxADisconnectConnect()",
         "IntegrationTests\/testFxASyncBookmark()",
