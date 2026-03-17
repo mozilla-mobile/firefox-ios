@@ -207,7 +207,12 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
         class TABWEBVIEW_LEAK_DETECTED: UIButton { }
 
         guard let root = keyWindow.rootViewController else { fatalError() }
-        let leakIdentifierView = TABWEBVIEW_LEAK_DETECTED(frame: CGRect(x: 50, y: 200, width: 5, height: 5))
+        let uiTestScreen = UIScreen.main.bounds
+        let viewFrame = CGRect(x: uiTestScreen.width / 2.0,
+                               y: uiTestScreen.height / 2.0,
+                               width: 5,
+                               height: 5)
+        let leakIdentifierView = TABWEBVIEW_LEAK_DETECTED(frame: viewFrame)
         leakIdentifierView.backgroundColor = UIColor.white
         leakIdentifierView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator
         leakIdentifierView.isAccessibilityElement = true

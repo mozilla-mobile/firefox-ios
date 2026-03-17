@@ -178,4 +178,21 @@ final class TabTrayScreen {
         let cell = app.collectionViews.cells[tabName]
         BaseTestCase().mozWaitForElementToExist(cell)
     }
+
+    func longPressTabCellAtIndex(_ index: Int) {
+        let tabCell = sel.tabCellAtIndex(index: index).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(tabCell)
+        tabCell.press(forDuration: 2)
+    }
+
+    func tapCloseTabFromContextMenu() {
+        let closeTabButton = app.collectionViews.buttons["Close Tab"]
+        BaseTestCase().mozWaitForElementToExist(closeTabButton)
+        closeTabButton.waitAndTap()
+    }
+
+    func assertNoWebViewLeakDetected(timeout: TimeInterval = TIMEOUT) {
+        let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator]
+        BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
+    }
 }
