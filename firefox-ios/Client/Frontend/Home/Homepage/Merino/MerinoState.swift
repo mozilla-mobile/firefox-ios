@@ -94,22 +94,15 @@ struct MerinoState: StateType, Equatable {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
         let isScrollDirectionCustomized = scrollDirection != .baseline
-        let isScrollDirectionVertical = scrollDirection == .vertical
-                                        && UIDeviceDetails.userInterfaceIdiom == .phone
-        let isNewsTransitionEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageNewsTransition,
-                                                                                        checking: .buildOnly)
-        let shouldUseNewsAffordance = isScrollDirectionVertical && isNewsTransitionEnabled
-        let title: String = isNewsTransitionEnabled
-            ? .FirefoxHomepage.Pocket.NewsSectionTitle
-            : .FirefoxHomepage.Pocket.PopularTodaySectionTitle
+        let isScrollDirectionVertical = scrollDirection == .vertical  && UIDeviceDetails.userInterfaceIdiom == .phone
 
         return SectionHeaderConfiguration(
-            title: title,
+            title: .FirefoxHomepage.Pocket.NewsSectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
             isButtonHidden: isScrollDirectionCustomized,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
             buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle,
-            style: shouldUseNewsAffordance ? .newsAffordance : .sectionTitle
+            style: isScrollDirectionVertical ? .newsAffordance : .sectionTitle
         )
     }
 }
