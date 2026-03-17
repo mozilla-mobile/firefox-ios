@@ -59,6 +59,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
+    case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -113,6 +114,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -206,6 +208,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .relayIntegration,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

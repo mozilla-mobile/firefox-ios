@@ -48,6 +48,7 @@ include:
   - nimbus-features/startAtHomeFeature.yaml
   - nimbus-features/summarizerAppAttestAuthFeature.yaml
   - nimbus-features/summarizerLanguageExpansionFeature.yaml
+  - nimbus-features/summarizerPermissiveGuardrailsFeature.yaml
   - nimbus-features/tabScrollRefactorFeature.yaml
   - nimbus-features/tabTrayUIExperiments.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
