@@ -55,34 +55,22 @@ jobs:
         if: github.event.action == 'labeled' && github.event.label.name == 'outside-approved-scope'
         shell: bash
         env:
-          BODY: >
-            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+         BODY: >
+          :wave: @${{ env.PR_AUTHOR }}, thanks for your contribution.
 
-            This pull request introduces changes that were not previously aligned
-            with the maintainers. Please have a look at our contribution guidelines 
-            [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
+          This pull request is being closed because it introduces changes that were 
+          not previously aligned with the maintainers. Please have a look at our contribution guidelines 
+          [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
 
-            To help ensure smooth reviews and avoid duplicated or conflicting work,
-            we ask contributors to first open an issue or discuss the proposed
-            change before submitting a PR.
+          If you’d like to work on something that isn’t marked as contributor-friendly,
+          please reach out to a team member first to confirm whether it’s available.
+          Work that isn’t pre-aligned can be declined, as features and priorities are
+          carefully planned with product and design, and can also conflict with
+          work that is already in progress.
 
-         env:
-          BODY: >
-            :wave: @${{ env.PR_AUTHOR }}, thanks for your contribution.
-
-            This pull request is being closed because it introduces changes that were 
-            not previously aligned with the maintainers. Please have a look at our contribution guidelines 
-            [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
-
-            If you’d like to work on something that isn’t marked as contributor-friendly,
-            please reach out to a team member first to confirm whether it’s available.
-            Work that isn’t pre-aligned can be declined, as features and priorities are
-            carefully planned with product and design, and can also conflict with
-            work that is already in progress.
-
-            We absolutely welcome ideas and contributions. If you’d like to move this
-            forward, please let's align first. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
-            on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
+          We absolutely welcome ideas and contributions. If you’d like to move this
+          forward, please let's align first. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
+          on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
         run: |
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
           retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
