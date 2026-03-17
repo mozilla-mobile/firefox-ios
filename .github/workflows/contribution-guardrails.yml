@@ -43,8 +43,8 @@ jobs:
             This pull request is also too large to effectively review. If you want
             to contribute to this area, please discuss with us on how to break down
             these changes into smaller, more focused PRs to ensure a thorough and efficient
-            review process. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
-            on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
+            review process. This can be done on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), 
+            or the ticket itself for this feature. Thank you!
         run: |
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
           retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
@@ -69,8 +69,8 @@ jobs:
           work that is already in progress.
 
           We absolutely welcome ideas and contributions. If you’d like to move this
-          forward, please let's align first. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
-          on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
+          forward, please let's align first. This can be done on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), 
+          or the ticket itself for this feature. Thank you!
         run: |
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
           retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
