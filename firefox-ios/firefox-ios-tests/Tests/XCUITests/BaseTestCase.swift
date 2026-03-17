@@ -69,7 +69,7 @@ class BaseTestCase: XCTestCase {
     func closeFromAppSwitcherAndRelaunch() {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
-        sleep(2)
+        _ = app.wait(for: .runningForeground, timeout: TIMEOUT)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
@@ -257,9 +257,13 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func bookmark() {
+    func bookmark(isLockIconOff: Bool = true) {
         let browserScreen = BrowserScreen(app: app)
-        browserScreen.assertAddressBar_LockIconExist()
+        if isLockIconOff {
+            browserScreen.assertAddressBar_LockIconOffExist()
+        } else {
+            browserScreen.assertAddressBar_LockIconExist()
+        }
         browserScreen.tapSaveButtonIfExist()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
@@ -481,8 +485,7 @@ class BaseTestCase: XCTestCase {
         app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
-        sleep(3)
-        if !app.navigationBars["Appearance"].exists {
+        if !app.navigationBars["Appearance"].waitForExistence(timeout: TIMEOUT) {
             navigator.goto(DisplaySettings)
         }
         mozWaitForElementToExist(app.navigationBars["Appearance"])

@@ -80,6 +80,88 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.summarizerProvider = { _, _ in }
     }
 
+    func test_shakeMotionAction_withoutValidConfigurationAndShakeEnabled_dispatchesToastAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isShakeGestureEnabled = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.shakeMotionEnded
+        )
+        let expectation = XCTestExpectation(description: "General browser action to show toast dispatched")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showToast)
+        XCTAssertEqual(actionCalled.toastType, .shakeToSummarizeNotAvailable)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    func test_shakeMotionAction_withoutValidConfigurationAndShakeDisabled_doesNotDispatchToastAction() throws {
+        setupWebViewForTabManager()
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isShakeGestureEnabled = false
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.shakeMotionEnded
+        )
+        let expectation = XCTestExpectation(description: "General browser action to show toast dispatched")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.summarizerProvider = { _, _ in }
+    }
+
+    func test_shakeMotionAction_whenTabIsHomePage_doesNotDispatchToastAction() throws {
+        setupWebViewForTabManager(isHomePage: true)
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isShakeGestureEnabled = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
+
+        let subject = createSubject()
+
+        let action = GeneralBrowserAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.shakeMotionEnded
+        )
+        let expectation = XCTestExpectation(description: "General browser action show toast dispatched")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.summarizerProvider(AppState(), action)
+
+        wait(for: [expectation], timeout: 1)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.summarizerProvider = { _, _ in }
+    }
+
     func test_shakeMotionAction_withoutWebView_doesNotDispatchMiddlewareAction() throws {
         let subject = createSubject()
 
@@ -397,8 +479,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         return subject
     }
 
-    private func setupWebViewForTabManager() {
-        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+    private func setupWebViewForTabManager(isHomePage: Bool = false) {
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
     }

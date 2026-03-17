@@ -208,11 +208,14 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .translation:
             return checkTranslationFeature(from: nimbus)
 
+        case .translationLanguagePicker:
+            return checkTranslationLanguagePickerFeature(from: nimbus)
+
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .voiceSearch:
-            return checkVoiceSearchFeature(from: nimbus)
+        case .quickAnswers:
+            return checkQuickAnswersFeature(from: nimbus)
 
         case .webEngineIntegrationRefactor:
             return checkWebEngineIntegrationRefactor(from: nimbus)
@@ -371,12 +374,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.translationsFeature.value().enabled
     }
 
+    private func checkTranslationLanguagePickerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.translationsFeature.value().languagePickerEnabled
+    }
+
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.trendingSearchesFeature.value().enabled
     }
 
-    private func checkVoiceSearchFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.voiceSearchFeature.value().enabled
+    private func checkQuickAnswersFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.quickAnswersFeature.value().enabled
     }
 
     private func checkFeltPrivacyFeature(

@@ -34,6 +34,7 @@ struct BrowserViewControllerState: ScreenState {
         case readerModeLongPressAction
         case dataClearance
         case passwordGenerator
+        case translationLanguagePicker(languages: [String])
     }
 
     let windowUUID: WindowUUID
@@ -393,6 +394,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowPasswordGeneratorAction(state: state, action: action)
         case GeneralBrowserActionType.showSummarizer:
             return handleShowSummarizerAction(state: state, action: action)
+        case GeneralBrowserActionType.showTranslationLanguagePicker:
+            return handleShowTranslationLanguagePickerAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -710,6 +713,21 @@ struct BrowserViewControllerState: ScreenState {
                 )
             )
         )
+    }
+
+    @MainActor
+    private static func handleShowTranslationLanguagePickerAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .translationLanguagePicker(languages: action.translationLanguages ?? []),
+            buttonTapped: action.buttonTapped,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
     @MainActor

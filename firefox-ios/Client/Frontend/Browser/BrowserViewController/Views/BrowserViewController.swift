@@ -74,14 +74,11 @@ class BrowserViewController: UIViewController,
         .canGoForward,
         .URL,
         .title,
-        .hasOnlySecureContent,
-        // TODO: FXIOS-12158 Add back after investigating why video player is broken
-        //        .fullscreenState
+        .hasOnlySecureContent
     ]
 
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
-    weak var fullscreenDelegate: FullscreenDelegate?
 
     nonisolated let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
@@ -426,6 +423,10 @@ class BrowserViewController: UIViewController,
 
     var isNICErrorPageEnabled: Bool {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+    }
+
+    var isOtherErrorPagesEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
     }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
@@ -1138,7 +1139,8 @@ class BrowserViewController: UIViewController,
             )
         }
         switch toast {
-        case .clearCookies:
+        case .clearCookies,
+                .shakeToSummarizeNotAvailable:
             showToast()
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
@@ -2289,14 +2291,14 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        /// Used for checking if current error code is for no internet connection
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
+        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && noInternetConnectionEnabled {
+        } else if isErrorURL && (noInternetConnectionEnabled || isCertificateError) {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -2613,9 +2615,6 @@ class BrowserViewController: UIViewController,
                 self.handleCanGoForwardChanged(tab: tab, canGoForward: newBool)
             case .hasOnlySecureContent:
                 self.handleHasOnlySecureContentChanged(webView: webView)
-//            // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//            case .fullscreenState:
-//                self.handleFullscreenStateChanged()
             default:
                 assertionFailure("Unhandled KVO key: \(path.rawValue)")
             }
@@ -2735,19 +2734,6 @@ class BrowserViewController: UIViewController,
               selectedTabURL == webViewURL else { return }
     }
 
-    private func handleFullscreenStateChanged(webView: WKWebView) {
-//        // TODO: FXIOS-12158 Add back after investigating why video player is broken
-//        if #available(iOS 16.0, *) {
-//            guard webView.fullscreenState == .enteringFullscreen ||
-//                    webView.fullscreenState == .exitingFullscreen else { return }
-//            if webView.fullscreenState == .enteringFullscreen {
-//                fullscreenDelegate?.enteringFullscreen()
-//            } else {
-//                fullscreenDelegate?.exitingFullscreen()
-//            }
-//        }
-    }
-
     // MARK: - Update UI
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
@@ -2793,6 +2779,7 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Small.notificationDotFill : nil
         }
 
+        var lockIconButtonA11yId: String?
         var lockIconImageName: String?
         var lockIconNeedsTheming = true
 
@@ -2800,6 +2787,9 @@ class BrowserViewController: UIViewController,
             lockIconImageName = hasSecureContent ?
                 StandardImageIdentifiers.Small.shieldCheckmarkFill :
                 StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+            lockIconButtonA11yId = hasSecureContent ?
+                AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
+                AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
             lockIconNeedsTheming = hasSecureContent
             let isWebsiteMode = tab.url?.isReaderModeURL == false
             lockIconImageName = isWebsiteMode ? lockIconImageName : nil
@@ -2811,6 +2801,7 @@ class BrowserViewController: UIViewController,
             isShowingNavigationToolbar: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection),
             canGoBack: tab.canGoBack,
             canGoForward: tab.canGoForward,
+            lockIconButtonA11yId: lockIconButtonA11yId,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
@@ -3015,6 +3006,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
+        case .translationLanguagePicker(let languages):
+            presentTranslationLanguagePicker(languages: languages, sourceButton: state.buttonTapped)
         }
     }
 
@@ -3115,6 +3108,52 @@ class BrowserViewController: UIViewController,
             modalStyle: style
         )
         presentSheetWith(viewModel: viewModel, on: self, from: view)
+    }
+
+    private func presentTranslationLanguagePicker(languages: [String], sourceButton: UIButton?) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.setValue(
+            NSAttributedString(
+                string: .Translations.LanguagePicker.Title,
+                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+            ),
+            forKey: "attributedTitle"
+        )
+
+        languages.forEach { code in
+            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
+            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let title = native == localized ? native : "\(native) (\(localized))"
+            alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
+                guard let self else { return }
+                store.dispatch(TranslationLanguageSelectedAction(
+                    windowUUID: windowUUID,
+                    targetLanguage: code,
+                    actionType: TranslationsActionType.didSelectTargetLanguage
+                ))
+            })
+        }
+
+        alert.addAction(UIAlertAction(
+            title: .Translations.LanguagePicker.PreferredLanguagesTitle,
+            style: .default
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.settings(.translation)),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnSettingsSection
+            ))
+        })
+
+        alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = sourceButton ?? view
+            popover.sourceRect = sourceButton?.bounds ?? view.bounds
+        }
+
+        present(alert, animated: true)
     }
 
     func didTapOnHome() {

@@ -249,7 +249,6 @@ final class BrowserCoordinator: BaseCoordinator,
         } else {
             let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
-            browserViewController.fullscreenDelegate = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
@@ -702,6 +701,16 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.presentSignInViewController(fxaParameters.launchParameters,
                                                           flowType: fxaParameters.flowType,
                                                           referringPage: fxaParameters.referringPage)
+    }
+
+    func showReaderMode() {
+        // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showReaderMode
+            )
+        )
     }
 
     // MARK: - SearchEngineSelectionCoordinatorDelegate

@@ -20,6 +20,7 @@ struct GeneralBrowserAction: Action {
     let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
     let summarizerTrigger: SummarizerTrigger
+    let translationLanguages: [String]?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -29,6 +30,7 @@ struct GeneralBrowserAction: Action {
          frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
          summarizerTrigger: SummarizerTrigger = .shakeGesture,
+         translationLanguages: [String]? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -42,6 +44,7 @@ struct GeneralBrowserAction: Action {
         self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
         self.summarizerTrigger = summarizerTrigger
+        self.translationLanguages = translationLanguages
     }
 }
 
@@ -78,6 +81,7 @@ enum GeneralBrowserActionType: ActionType {
     case didCloseTabFromToolbar
     case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
+    case showTranslationLanguagePicker
 }
 
 struct GeneralBrowserMiddlewareAction: Action {

@@ -195,6 +195,12 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
+
+        // Must be called before updateIconContainer. The overflow check inside updateIconContainer measures
+        // urlTextField.text to determine layout; without this call the text still holds the raw URL instead
+        // of the normalized host, causing overflow to trigger incorrectly in reader mode
+        // and producing a visible shift when the lock icon is hidden.
+        formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
@@ -415,10 +421,10 @@ final class LocationView: UIView,
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
+
         updateURLTextFieldLeadingConstraintBasedOnState()
 
         let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
-
         iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
@@ -547,8 +553,14 @@ final class LocationView: UIView,
         urlAbsolutePath = config.url?.absoluteString
     }
 
+    /// Updates the URL text field (when not editing) by:
+    /// - Extracting the subdomain and normalized host.
+    /// - Applying primary color to the host and secondary color to the subdomain.
+    /// - Truncating from the head if the text is too long.
+    /// - Setting the styled result as the text field's attributed text.
     private func formatAndTruncateURLTextField() {
         guard !isEditing else { return }
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 

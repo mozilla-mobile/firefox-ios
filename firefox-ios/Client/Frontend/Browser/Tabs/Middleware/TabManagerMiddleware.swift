@@ -897,7 +897,10 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                     hasChangedUserAgent: selectedTab.changedUserAgent,
                     zoomLevel: selectedTab.pageZoom,
-                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    readerModeConfiguration: ReaderModeConfiguration(
+                        isAvailable: selectedTab.readerModeAvailableOrActive,
+                        isActive: selectedTab.readerModeState == .active
+                    ),
                     summaryIsAvailable: canSummarize,
                     summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,

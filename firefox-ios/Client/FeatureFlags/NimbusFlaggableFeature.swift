@@ -75,9 +75,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case touFeature
     case trackingProtectionRefactor
     case translation
+    case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
-    case voiceSearch
+    case quickAnswers
     case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -105,6 +106,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
+                .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
                 .sentFromFirefox,
@@ -118,9 +120,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -200,6 +202,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .quickAnswers,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
@@ -219,9 +222,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .voiceSearch,
                 .webEngineIntegrationRefactor:
             return nil
         }

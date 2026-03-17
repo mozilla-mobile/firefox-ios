@@ -587,7 +587,7 @@ class TodayWidgetTests: BaseTestCase {
         UIPasteboard.general.string = copiedString
         app.terminate()
 
-        sleep(3)
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
 
         goToTodayWidgetPage()
         // Remove Firefox Widget if it already exists
@@ -614,7 +614,6 @@ class TodayWidgetTests: BaseTestCase {
             format: "label CONTAINS[c] %@", "Copied Link")
         ).element.waitAndTap()
 
-        sleep(2)
         mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
         springboard.alerts.buttons["Allow Paste"].waitAndTap()
         skipOnboardingIfNeeded(app: app)

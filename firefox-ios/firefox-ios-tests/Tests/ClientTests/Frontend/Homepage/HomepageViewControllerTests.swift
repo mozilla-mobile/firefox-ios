@@ -277,7 +277,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_newState_forTriggeringImpression_triggersHomepageAction() async throws {
+    func test_newState_forTriggeringImpression_withPopulatedDataSource_triggersHomepageAction() async throws {
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
@@ -307,30 +307,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
-    func test_newState_forTriggeringImpression_withNoVisibleSections_doesNotTriggersHomepageAction() throws {
-        let subject = createSubject()
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
-
-        subject.loadViewIfNeeded()
-
-        let newState = HomepageState.reducer(
-            initialState,
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-            )
-        )
-        subject.newState(state: newState)
-
-        XCTAssertTrue(newState.shouldTriggerImpression)
-        XCTAssertTrue(mockThrottler.didCallThrottle)
-        let homepageActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
-        let sectionSeenAction = homepageActions.first(where: {
-            ($0.actionType as? HomepageActionType) == .sectionSeen
-        })
-        XCTAssertNil(sectionSeenAction)
     }
 
     func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
@@ -525,7 +501,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(header is LabelButtonHeaderView)
     }
 
-    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsAffordanceHeaderView() async throws {
+    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsTransitionHeaderView() async throws {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             throw XCTSkip("News affordance is phone-only.")
         }
@@ -549,7 +525,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
 
-        XCTAssertTrue(header is NewsAffordanceHeaderView)
+        XCTAssertTrue(header is NewsTransitionHeaderView)
     }
 
     private func createSubject(
