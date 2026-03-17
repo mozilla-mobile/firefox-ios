@@ -152,7 +152,7 @@ final class FoundationModelsSummarizerTests: XCTestCase {
             mockSession.respondWithError = error
         }
         return FoundationModelsSummarizer(
-            makeSession: { _ in mockSession },
+            makeSession: { _, _ in mockSession },
             config: SummarizerConfig(instructions: "instructions", options: [:])
         )
     }
