@@ -3518,7 +3518,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        popToBVC()
+        navigationHandler?.popToBVC()
         cancelEditMode()
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
@@ -3601,7 +3601,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        popToBVC()
+        navigationHandler?.popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
@@ -3656,7 +3656,7 @@ class BrowserViewController: UIViewController,
         isPrivate: Bool = false,
         searchFor searchText: String? = nil
     ) {
-        popToBVC()
+        navigationHandler?.popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
@@ -3669,7 +3669,7 @@ class BrowserViewController: UIViewController,
     }
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
-        popToBVC()
+        navigationHandler?.popToBVC()
 
         guard let engine = searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
@@ -3679,18 +3679,6 @@ class BrowserViewController: UIViewController,
         }
 
         openURLInNewTab(searchURL, isPrivate: isPrivate)
-    }
-
-    fileprivate func popToBVC() {
-        guard let currentViewController = navigationController?.topViewController else { return }
-        // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
-        // Avoid dismissing Terms of Use sheet when app is opened from deep links
-        if !isShowingJSPromptAlert(),
-           !(navigationController?.presentedViewController is TermsOfUseViewController) {
-            currentViewController.dismiss(animated: true, completion: nil)
-        }
-
-        navigationHandler?.popToBVC()
     }
 
     private func isShowingJSPromptAlert() -> Bool {
@@ -5322,12 +5310,11 @@ extension BrowserViewController: TopTabsDelegate {
 
 extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
     func dismissInstructionsView() {
-        self.navigationController?.presentedViewController?.dismiss(animated: true)
-        self.popToBVC()
+        navigationHandler?.popToBVC()
     }
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        self.popToBVC()
+        navigationHandler?.popToBVC()
     }
 
     func devicePickerViewController(
@@ -5345,7 +5332,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             alert.addAction(UIAlertAction(
                 title: .SendToErrorOKButton,
                 style: .default
-            ) { _ in self.popToBVC() })
+            ) { _ in self.navigationHandler?.popToBVC() })
             present(alert, animated: true, completion: nil)
             return
         }
@@ -5353,7 +5340,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             .uponQueue(.main) { _ in
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
-                    self.popToBVC()
+                    self.navigationHandler?.popToBVC()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
                                                         bottomContainer: self.contentContainer,

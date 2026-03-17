@@ -10,7 +10,8 @@ import ComponentLibrary
 final class TermsOfUseViewController: UIViewController,
                                       Themeable,
                                       UITextViewDelegate,
-                                      StoreSubscriber {
+                                      StoreSubscriber,
+                                      PreventsDismissal {
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
