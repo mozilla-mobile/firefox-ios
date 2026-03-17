@@ -1,0 +1,103 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: 'Contribution Guardrails'
+
+on:
+  pull_request_target:
+    types: [labeled, unlabeled, reopened]
+
+permissions: {}
+
+jobs:
+  contribution-check:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: contribution-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+
+    steps:
+      - name: Handle AI-generated label
+        if: github.event.action == 'labeled' && github.event.label.name == 'ai-generated'
+        shell: bash
+        env:
+          BODY: >
+            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+
+            This pull request is being closed because it contains significant AI-generated code.
+            At this time, we do not accept pull requests that contain significant
+            AI-generated code.
+
+            AI-generated code can often introduce subtle bugs, poor design patterns, or 
+            inconsistent styles that make long-term maintenance difficult and reduce overall 
+            code quality. For the sake of the project's future stability and readability, 
+            we require that all contributions meet our established coding standards and 
+            demonstrate clear developer oversight.
+
+            This pull request is also too large to effectively review. If you want
+            to contribute to this area, please discuss with us on how to break down
+            these changes into smaller, more focused PRs to ensure a thorough and efficient
+            review process. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
+            on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
+          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+          gh pr lock "$NUMBER" -R "$GH_REPO" -r "spam" || true
+
+      - name: Handle outside-approved-scope label
+        if: github.event.action == 'labeled' && github.event.label.name == 'outside-approved-scope'
+        shell: bash
+        env:
+          BODY: >
+            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+
+            This pull request introduces changes that were not previously aligned
+            with the maintainers. Please have a look at our contribution guidelines 
+            [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
+
+            To help ensure smooth reviews and avoid duplicated or conflicting work,
+            we ask contributors to first open an issue or discuss the proposed
+            change before submitting a PR.
+
+         env:
+          BODY: >
+            :wave: @${{ env.PR_AUTHOR }}, thanks for your contribution.
+
+            This pull request is being closed because it introduces changes that were 
+            not previously aligned with the maintainers. Please have a look at our contribution guidelines 
+            [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
+
+            If you’d like to work on something that isn’t marked as contributor-friendly,
+            please reach out to a team member first to confirm whether it’s available.
+            Work that isn’t pre-aligned can be declined, as features and priorities are
+            carefully planned with product and design, and can also conflict with
+            work that is already in progress.
+
+            We absolutely welcome ideas and contributions. If you’d like to move this
+            forward, please let's align first. This can be done in a [Discussion](https://github.com/mozilla-mobile/firefox-ios/discussions), 
+            on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), or the ticket itself for this feature. Thank you!
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
+          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+
+      - name: Reopen PR when label removed
+        if: github.event.action == 'unlabeled' && (github.event.label.name == 'ai-generated' || github.event.label.name == 'outside-approved-scope')
+        shell: bash
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr reopen "$NUMBER" -R "$GH_REPO" || true
+
+      - name: Cleanup labels on manual reopen
+        if: github.event.action == 'reopened'
+        shell: bash
+        run: |
+          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "ai-generated" || true
+          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "outside-approved-scope" || true
