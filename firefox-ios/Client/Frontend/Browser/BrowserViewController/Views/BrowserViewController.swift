@@ -1111,7 +1111,7 @@ class BrowserViewController: UIViewController,
         } else if state.showOverlay == false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
-        
+
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)

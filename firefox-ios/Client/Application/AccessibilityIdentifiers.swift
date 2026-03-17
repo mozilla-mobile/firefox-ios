@@ -906,7 +906,7 @@ struct AccessibilityIdentifiers {
         static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
         static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
         static let brightnessSlider = "ReaderMode.brightnessSlider"
-        
+
         struct BarView {
             static let readStatusButton = "ReaderModeBarView.readStatusButton"
             static let settingsButton = "ReaderModeBarView.settingsButton"

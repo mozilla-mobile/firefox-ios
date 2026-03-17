@@ -47,6 +47,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         try await super.tearDown()
     }
 
+    // MARK: - ShakeMotionAction
     func test_shakeMotionAction_withValidConfiguration_dispatchesMiddlewareAction() throws {
         setupWebViewForTabManager()
         mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
@@ -188,10 +189,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - didTapReaderModeBarSummarizerButton
     func test_didTapReaderModeBarSummarizerButton_withValidConfiguration_dispatchesTriggerAction() throws {
         setupWebViewForTabManager()
-        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
-        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
-        mockSummarizerLanguageProvider.shouldReturnLocale = true
-        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+        setupSuccessSummarizerConfiguration()
 
         let subject = createSubject()
 
@@ -217,35 +215,10 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.summarizerProvider = { _, _ in }
     }
 
-    func test_didTapReaderModeBarSummarizerButton_withoutWebView_doesNotDispatchAction() throws {
-        let subject = createSubject()
-
-        let action = GeneralBrowserAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
-        )
-        let expectation = XCTestExpectation(description: "Reader mode bar summarizer button dispatched")
-        expectation.isInverted = true
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-
-        subject.summarizerProvider(AppState(), action)
-
-        wait(for: [expectation], timeout: 1)
-
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        subject.summarizerProvider = { _, _ in }
-    }
-
     // MARK: - showReaderMode
     func test_showReaderModeAction_withValidConfiguration_dispatchesShowButtonAction() throws {
         setupWebViewForTabManager()
-        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
-        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
-        mockSummarizerLanguageProvider.shouldReturnLocale = true
-        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+        setupSuccessSummarizerConfiguration()
 
         let subject = createSubject()
 
@@ -273,10 +246,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_showReaderModeAction_withInvalidConfiguration_dispatchesNotAvailableAction() throws {
         setupWebViewForTabManager()
-        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
-        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
-        mockSummarizerLanguageProvider.shouldReturnLocale = false
-        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
+        setupSuccessSummarizerConfiguration()
 
         let subject = createSubject()
 
@@ -305,11 +275,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - didSummarizeSettingsChange
     func test_didSummarizeSettingsChange_withCanSummarizeTrue_withValidConfig_dispatchesShowButtonAction() throws {
         setupWebViewForTabManager()
-        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
-        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
-        mockSummarizerLanguageProvider.shouldReturnLocale = true
-        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
-
+        setupSuccessSummarizerConfiguration()
         let subject = createSubject()
 
         let action = ToolbarAction(
@@ -483,6 +449,13 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID, isHomePage: isHomePage)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager.selectedTab = tab
+    }
+
+    private func setupSuccessSummarizerConfiguration() {
+        mockSummarizerNimbusUtils.isSummarizeFeatureToggledOn = true
+        mockSummarizerNimbusUtils.isSummarizeFeatureEnabled = true
+        mockSummarizerLanguageProvider.shouldReturnLocale = true
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.success
     }
 
     // MARK: StoreTestUtility

@@ -20,7 +20,7 @@ enum ReaderModeBarButtonType {
         case .settings: return .ReaderModeBarSettings
         case .addToReadingList: return .ReaderModeBarAddToReadingList
         case .removeFromReadingList: return .ReaderModeBarRemoveFromReadingList
-        case .summarizer: return ""
+        case .summarizer: return .ReaderModeBar.SummarizeButtonAccessibilityLabel
         }
     }
 
@@ -119,7 +119,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         context.addLine(to: CGPoint(x: frame.width, y: yPosition))
         context.strokePath()
     }
-    
+
     private func setupSubviews() {
         buttonStackView.addArrangedSubview(readStatusButton)
         buttonStackView.addArrangedSubview(settingsButton)
@@ -166,12 +166,12 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
         )
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }
-    
+
     @objc
     func tappedSummarizerButton() {
         delegate?.readerModeBar(self, didSelectButton: .summarizer)
     }
-    
+
     /// Updates the reader mode bar content by dynamically adding or removing the content buttons
     /// based on Nimbus feature flag configuration.
     func updateContent(shouldShowSummarizerButton: Bool) {

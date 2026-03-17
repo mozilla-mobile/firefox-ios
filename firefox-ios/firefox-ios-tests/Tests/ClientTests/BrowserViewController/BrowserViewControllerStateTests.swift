@@ -106,7 +106,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         )
         let newState = reducer(initialState, action)
 
-        guard case .summarizer(_, _) = newState.navigationDestination?.destination else {
+        guard case .summarizer = newState.navigationDestination?.destination else {
             return XCTFail("Expected .summarizer")
         }
     }

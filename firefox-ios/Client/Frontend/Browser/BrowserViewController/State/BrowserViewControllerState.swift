@@ -724,6 +724,7 @@ struct BrowserViewControllerState: ScreenState {
             searchScreenState: state.searchScreenState,
             toast: state.toast,
             windowUUID: state.windowUUID,
+            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             displayView: .translationLanguagePicker(languages: action.translationLanguages ?? []),
             buttonTapped: action.buttonTapped,
