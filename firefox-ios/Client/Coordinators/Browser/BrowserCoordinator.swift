@@ -1350,7 +1350,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - ShareSheetCoordinatorDelegate
 
     func showToast(message: String) {
-        browserViewController.showSimpleToast(message: message)
+        browserViewController.showPlainToast(message: message)
     }
 
     // MARK: - Private helpers

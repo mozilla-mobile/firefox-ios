@@ -3242,7 +3242,7 @@ class BrowserViewController: UIViewController,
                 notification: UIAccessibility.Notification.announcement,
                 argument: String.ReaderModeAddPageSuccessAcessibilityLabel
             )
-            showSimpleToast(message: .ShareAddToReadingListDone)
+            showPlainToast(message: .ShareAddToReadingListDone)
         case .failure:
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.announcement,
@@ -4319,11 +4319,11 @@ class BrowserViewController: UIViewController,
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         case .freeTierLimitReached:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         }
     }
 
@@ -5004,7 +5004,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func showSimpleToast(message: String) {
+    func showPlainToast(message: String) {
         let viewModel = PlainToastViewModel(labelText: message)
         let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
         show(toast: toast)
@@ -5351,7 +5351,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                 MainActor.assumeIsolated {
                     self.popToBVC()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        self.showSimpleToast(message: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
+                        self.showPlainToast(message: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
                     }
                 }
             }
