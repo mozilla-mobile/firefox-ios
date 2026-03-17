@@ -68,7 +68,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
-                StoriesFeedCell.self,
+                StoryCellLarge.self,
                 HomepageSpacerCell.self
             ]
         }

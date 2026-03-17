@@ -650,13 +650,13 @@ final class HomepageViewController: UIViewController,
         _ story: MerinoStoryConfiguration,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionVertical
+        let shouldShowLargeStoryCell = isHomepageStoriesScrollDirectionVertical
         let position = indexPath.item + 1
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        if shouldShowStoriesFeedCell {
-            return configuredCell(cellType: StoriesFeedCell.self, at: indexPath) { cell in
+        if shouldShowLargeStoryCell {
+            return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
                 cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
             }
         }
