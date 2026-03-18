@@ -134,11 +134,11 @@ class CreditCardBottomSheetViewController: UIViewController,
         super.viewDidLoad()
 
         addSubviews()
-        setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupView()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
