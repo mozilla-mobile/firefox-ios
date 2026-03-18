@@ -6,10 +6,10 @@ import Common
 import Foundation
 import SiteImageView
 
-class StoriesFeedCell: UICollectionViewCell,
-                       ReusableCell,
-                       Notifiable,
-                       ThemeApplicable {
+class StoryCellLarge: UICollectionViewCell,
+                      ReusableCell,
+                      Notifiable,
+                      ThemeApplicable {
     struct UX {
         static let cellCornerRadius: CGFloat = 16
         static let thumbnailSize = CGSize(width: 345, height: 180)
@@ -56,7 +56,7 @@ class StoriesFeedCell: UICollectionViewCell,
         super.init(frame: frame)
 
         isAccessibilityElement = true
-        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.StoriesFeed.storiesFeedCell
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,

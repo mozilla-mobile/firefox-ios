@@ -94,13 +94,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageNewsTransition,
-                titleText: format(string: "Homepage News Transition"),
-                statusText: format(string: "Toggle to enable the homepage news transition")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")
@@ -154,6 +147,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .otherErrorPages,
+                titleText: format(string: "Wrong Host Certificate Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created wrong host error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },

@@ -478,7 +478,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func test_configureSupplementaryHeader_withoutNewsAffordanceStyle_usesLabelButtonHeaderView() async throws {
-        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .baseline, newsTransition: true)
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .baseline)
 
         let subject = createSubject()
         subject.loadViewIfNeeded()
@@ -505,7 +505,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         guard UIDevice.current.userInterfaceIdiom == .phone else {
             throw XCTSkip("News affordance is phone-only.")
         }
-        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical, newsTransition: true)
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
 
         let subject = createSubject()
         subject.loadViewIfNeeded()
@@ -574,9 +574,9 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusStoriesScrollDirectionTesting(scrollDirection: ScrollDirection, newsTransition: Bool = false) {
+    private func setupNimbusStoriesScrollDirectionTesting(scrollDirection: ScrollDirection) {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(newsTransition: newsTransition, storiesScrollDirection: scrollDirection)
+            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
         }
     }
 

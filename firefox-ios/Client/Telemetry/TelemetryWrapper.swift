@@ -8,6 +8,7 @@ import Common
 import Glean
 import Shared
 import Storage
+import class MozillaAppServices.NimbusGleanPings
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -153,6 +154,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         }
 
         glean.registerPings(GleanMetrics.Pings.shared)
+        glean.registerPings(NimbusGleanPings.nimbusTargetingContext)
 
         // Initialize Glean telemetry
         let gleanConfig: Configuration

@@ -45,8 +45,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
-    var showStoriesFeedCalled = 0
-    var showStoriesWebViewCalled = 0
     var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
     var shouldShowNewTabToastCalled = 0
@@ -208,14 +206,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
-    }
-
-    func showStoriesFeed() {
-        showStoriesFeedCalled += 1
-    }
-
-    func showStoriesWebView(url: URL?) {
-        showStoriesWebViewCalled += 1
     }
 
     func showPrivacyNoticeLink(url: URL) {

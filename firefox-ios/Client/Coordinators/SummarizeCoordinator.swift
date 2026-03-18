@@ -71,7 +71,10 @@ final class SummarizeCoordinator: BaseCoordinator,
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
             isAppAttestAuthEnabled: isAppAttestAuthEnabled,
-            config: config) else { return }
+            config: config) else {
+            parentCoordinatorDelegate?.didFinish(from: self)
+            return
+        }
 
         let brandLabel: String = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
             .Summarizer.AppleBrandLabel

@@ -121,12 +121,6 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showShortcutsLibrary()
 
     @MainActor
-    func showStoriesFeed()
-
-    @MainActor
-    func showStoriesWebView(url: URL?)
-
-    @MainActor
     func showPrivacyNoticeLink(url: URL)
 
     @MainActor

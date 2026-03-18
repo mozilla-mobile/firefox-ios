@@ -32,6 +32,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
+                          ShareSheetCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -871,11 +872,11 @@ final class BrowserCoordinator: BaseCoordinator,
                 guard let self else { return }
 
                 let shareSheetCoordinator = ShareSheetCoordinator(
-                    alertContainer: toastContainer,
                     router: router,
                     profile: profile,
+                    tabManager: tabManager,
                     parentCoordinator: self,
-                    tabManager: tabManager
+                    delegate: self
                 )
                 add(child: shareSheetCoordinator)
                 shareSheetCoordinator.start(
@@ -1107,18 +1108,6 @@ final class BrowserCoordinator: BaseCoordinator,
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
-    }
-
-    func showStoriesFeed() {
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
-        router.push(storiesFeedViewController)
-    }
-
-    func showStoriesWebView(url: URL?) {
-        guard let url else { return }
-        let webviewViewController = StoriesWebviewViewController(profile: profile, windowUUID: windowUUID)
-        webviewViewController.configure(url: url)
-        router.push(webviewViewController)
     }
 
     func showPrivacyNoticeLink(url: URL) {
@@ -1359,6 +1348,12 @@ final class BrowserCoordinator: BaseCoordinator,
                 remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
+    }
+
+    // MARK: - ShareSheetCoordinatorDelegate
+
+    func showToast(message: String) {
+        browserViewController.showPlainToast(message: message)
     }
 
     // MARK: - Private helpers

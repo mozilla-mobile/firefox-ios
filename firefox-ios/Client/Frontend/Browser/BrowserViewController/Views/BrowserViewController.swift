@@ -2982,10 +2982,6 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
-        case .storiesFeed:
-            navigationHandler?.showStoriesFeed()
-        case .storiesWebView:
-            navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:
@@ -3297,9 +3293,7 @@ class BrowserViewController: UIViewController,
                 notification: UIAccessibility.Notification.announcement,
                 argument: String.ReaderModeAddPageSuccessAcessibilityLabel
             )
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
+            showPlainToast(message: .ShareAddToReadingListDone)
         case .failure:
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.announcement,
@@ -3800,10 +3794,7 @@ class BrowserViewController: UIViewController,
 
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
-            let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
-
-            // Screenshots are not needed when the tab is not selected or when opening a tab from the stories feed
-            if !isSelectedTab, !isStoriesFeed, let webView = tab.webView, tab.screenshot == nil {
+            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
                         webView.frame = contentContainer.frame
@@ -4385,11 +4376,11 @@ class BrowserViewController: UIViewController,
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         case .freeTierLimitReached:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         }
     }
 
@@ -5085,7 +5076,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func showSimpleToast(message: String) {
+    func showPlainToast(message: String) {
         let viewModel = PlainToastViewModel(labelText: message)
         let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
         show(toast: toast)
@@ -5432,9 +5423,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                 MainActor.assumeIsolated {
                     self.popToBVC()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
-                                                        bottomContainer: self.contentContainer,
-                                                        theme: self.currentTheme())
+                        self.showPlainToast(message: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
                     }
                 }
             }

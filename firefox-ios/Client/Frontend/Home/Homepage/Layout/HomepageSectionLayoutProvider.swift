@@ -47,6 +47,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let cellWidth: CGFloat = 350
             static let numberOfItemsInColumn = 1
             static let minimumCellHeight: CGFloat = 70
+            static let verticalStoriesCellEstimatedHeight: CGFloat = 282
             static let fractionalWidthiPhonePortrait: CGFloat = 0.84
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.37
             static let storiesSpacing: CGFloat = 12
@@ -78,9 +79,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             @MainActor
             static func getStoriesCellWidth(for environment: NSCollectionLayoutEnvironment,
-                                            isStoriesScrollDirectionVertical: Bool) -> CGFloat {
+                                            isHomepageStoriesScrollDirectionVertical: Bool) -> CGFloat {
                 let containerWidth = environment.container.contentSize.width
-                if isStoriesScrollDirectionVertical {
+                if isHomepageStoriesScrollDirectionVertical {
                     let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
                     return max(0, containerWidth - (leadingInset * 2))
                 }
@@ -140,22 +141,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private var storiesScrollDirection: ScrollDirection {
         return featureFlags.getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-    }
-
-    private var isStoriesScrollDirectionVertical: Bool {
-        return storiesScrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
-    }
-
-    private var isStoriesScrollDirectionHorizontal: Bool {
-        return storiesScrollDirection == .horizontal && UIDevice.current.userInterfaceIdiom == .phone
-    }
-
-    private var isNewsTransitionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
-    }
-
-    private var shouldUseNewsAffordance: Bool {
-        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
     }
 
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
@@ -266,7 +251,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func createStoriesSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        if isStoriesScrollDirectionVertical {
+        if isHomepageStoriesScrollDirectionVertical {
             return createVerticalStoriesSectionLayout(for: environment)
         }
 
@@ -279,7 +264,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let traitCollection = environment.traitCollection
         let cellWidth = UX.PocketConstants.getStoriesCellWidth(
             for: environment,
-            isStoriesScrollDirectionVertical: isStoriesScrollDirectionVertical)
+            isHomepageStoriesScrollDirectionVertical: isHomepageStoriesScrollDirectionVertical)
         let storiesMeasurement = getStoriesMeasurement(
             environment: environment,
             cellWidth: cellWidth
@@ -335,13 +320,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(StoriesFeedSectionLayoutProvider.UX.cellSize.height)
+            heightDimension: .estimated(UX.PocketConstants.verticalStoriesCellEstimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(StoriesFeedSectionLayoutProvider.UX.cellSize.height)
+            heightDimension: .estimated(UX.PocketConstants.verticalStoriesCellEstimatedHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
@@ -582,8 +567,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // For vertically scrolling stories, apply the appropriate peak treatment only when there is spare vertical space.
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
-        if rawSpacerHeight > 0, isStoriesScrollDirectionVertical {
-            if shouldUseNewsAffordance {
+        if rawSpacerHeight > 0, isHomepageStoriesScrollDirectionVertical {
+            if isHomepageStoriesScrollDirectionVertical {
                 if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
                     spacerHeight = 0.1
                 } else {
@@ -810,7 +795,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else { return 0 }
         let cellWidth = UX.PocketConstants.getStoriesCellWidth(
             for: environment,
-            isStoriesScrollDirectionVertical: isStoriesScrollDirectionVertical)
+            isHomepageStoriesScrollDirectionVertical: isHomepageStoriesScrollDirectionVertical)
         let storiesMeasurement = getStoriesMeasurement(
             environment: environment,
             cellWidth: cellWidth
@@ -893,7 +878,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         environment: NSCollectionLayoutEnvironment
     ) -> StoriesHeaderLayoutState {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
-        guard shouldUseNewsAffordance else {
+        guard isHomepageStoriesScrollDirectionVertical else {
             return StoriesHeaderLayoutState(
                 headerHeightMode: .sectionTitle,
                 appliedPeakOffset: 0
@@ -938,7 +923,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
-        let storiesHeight = isStoriesScrollDirectionVertical ? 0 : getStoriesSectionHeight(environment: environment)
+        let storiesHeight = isHomepageStoriesScrollDirectionVertical ? 0 : getStoriesSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         return height
@@ -1057,12 +1042,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let storyCells: [UIView] = storiesState.merinoData.map { story in
-            if isStoriesScrollDirectionHorizontal {
-                let cell = StoriesFeedCell()
-                cell.configure(story: story, theme: LightTheme())
-                return cell
-            }
-
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             return cell
