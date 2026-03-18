@@ -20,8 +20,8 @@ final class TranslationSettingsMiddleware {
         self.modelsFetcher = modelsFetcher
     }
 
-    lazy var translationSettingsProvider: Middleware<AppState> = { [weak self] state, action in
-        guard let self, let action = action as? TranslationSettingsViewAction else { return }
+    lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
+        guard let action = action as? TranslationSettingsViewAction else { return }
         self.handleAction(action)
     }
 

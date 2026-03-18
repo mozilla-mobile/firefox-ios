@@ -55,6 +55,9 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, true)
         XCTAssertEqual(dispatchedAction.supportedLanguages, ["en", "fr", "de"])
+        // the translationSettingsProvider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.translationSettingsProvider = { _, _ in }
     }
 
     func test_viewDidLoad_withTranslationsDisabled_dispatchesDisabledState() throws {
@@ -76,6 +79,9 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, false)
+        // the translationSettingsProvider strong retains the middleware as per redux is designed
+        // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.translationSettingsProvider = { _, _ in }
     }
 
     // MARK: - toggleTranslationsEnabled
@@ -104,6 +110,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(settingsActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
         XCTAssertEqual(settingsAction.isTranslationsEnabled, false)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), false)
+        subject.translationSettingsProvider = { _, _ in }
     }
 
     func test_toggleTranslationsEnabled_whenDisabled_enablesAndDispatchesUpdate() throws {
@@ -126,6 +133,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         let settingsAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         XCTAssertEqual(settingsAction.isTranslationsEnabled, true)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), true)
+        subject.translationSettingsProvider = { _, _ in }
     }
 
     // MARK: - Unrelated action
@@ -140,6 +148,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider(mockStore.state, action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
     }
 
     // MARK: - StoreTestUtility
