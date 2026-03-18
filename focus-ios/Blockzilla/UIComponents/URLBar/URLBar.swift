@@ -1255,7 +1255,7 @@ private final class URLTextField: AutocompleteTextField {
         // Add margin to avoid overlap with the clear button.
         var clearButtonTotalWidth: CGFloat = 0
         if let clearButton = rightView, isEditing {
-            clearButtonTotalWidth = clearButton.bounds.width + CGFloat(5)
+            clearButtonTotalWidth = clearButton.bounds.width + CGFloat(2)
         }
 
         switch layoutDirection {
@@ -1270,7 +1270,8 @@ private final class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         let rect = super.rightViewRect(forBounds: bounds)
-        let dx = (layoutDirection == .rightToLeft) ? UIConstants.layout.urlBarWidthInset : -UIConstants.layout.urlBarWidthInset
+        let edgeInset = UIConstants.layout.urlBarIconInset + 2
+        let dx = (layoutDirection == .rightToLeft) ? edgeInset : -edgeInset
         return rect.offsetBy(dx: dx, dy: 0)
     }
 
