@@ -193,13 +193,16 @@ final class BrowserViewControllerLayoutManager {
         headerHeightConstraint?.isActive = true
     }
 
+    /// Returns the correct top constraint constant for the header based on search bar position and trait collection
+    /// - Parameter isBottomSearchBar: Whether the search bar is positioned at the bottom
+    /// - Returns: The appropriate constant value to constrain the header to
     private func getHeaderTopConstant(isBottomSearchBar: Bool) -> CGFloat {
         guard !isBottomSearchBar else { return 0 }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
 
-        // Landscape (compact height): status bar is hidden, header sits flush at the top.
+        // Landscape case where status bar is hidden, header sits at the top without padding
         guard isNavToolbar || shouldShowTopTabs else { return 0 }
 
         // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
