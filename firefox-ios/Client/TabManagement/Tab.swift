@@ -739,10 +739,6 @@ class Tab: NSObject,
         }
     }
 
-    func reloadPage() {
-        reload()
-    }
-
     // MARK: - Content script
 
     func addContentScript(_ helper: TabContentScript, name: String) {

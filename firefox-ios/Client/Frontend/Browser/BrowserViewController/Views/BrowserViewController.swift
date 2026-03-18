@@ -4942,7 +4942,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if needsReload {
-            selectedTab.reloadPage()
+            selectedTab.reload()
         }
     }
 
