@@ -5,11 +5,7 @@ import SwiftUI
 
 struct AIControlsSettingsView: View {
     var body: some View {
-        List {
-            Text("Configure AI features and behaviors.")
-                .foregroundStyle(.secondary)
-                .font(.body)
-        }
-        .listStyle(.insetGrouped)
+        // TODO: FXIOS-15126 Placeholder instead we add the ui
+        EmptyView()
     }
 }
