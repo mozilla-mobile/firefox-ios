@@ -97,7 +97,6 @@ struct TopSitesView: View {
         .clipShape(RoundedRectangle(cornerRadius: UX.itemCornerRadius))
     }
 
-
     private func calculateIconSize(provider: GeometryProxy, rowSize: CGFloat) -> CGFloat {
         let dynamicIconScale = UIFontMetrics.default.scaledValue(for: UX.iconScale)
         // since the widget has 2 rows and the height of each row is half of the widget size.
