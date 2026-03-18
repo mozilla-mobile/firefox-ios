@@ -151,6 +151,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .otherErrorPages,
+                titleText: format(string: "Wrong Host Certificate Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created wrong host error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .relayIntegration,
                 titleText: format(string: "Relay Email Masks"),
                 statusText: format(string: "Toggle to enable Relay mask feature")
