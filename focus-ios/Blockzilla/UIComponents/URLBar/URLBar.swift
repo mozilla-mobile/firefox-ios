@@ -89,8 +89,20 @@ final class URLBar: UIView {
         textField.keyboardType = .webSearch
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
-        textField.rightView = clearButton
-        textField.rightViewMode = .whileEditing
+        switch textField.effectiveUserInterfaceLayoutDirection {
+        case .rightToLeft:
+            textField.leftView = clearButton
+            textField.leftViewMode = .whileEditing
+            textField.rightView = nil
+            textField.rightViewMode = .never
+        case .leftToRight:
+            fallthrough
+        @unknown default:
+            textField.rightView = clearButton
+            textField.rightViewMode = .whileEditing
+            textField.leftView = nil
+            textField.leftViewMode = .never
+        }
         textField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         textField.autocompleteDelegate = self
         textField.accessibilityIdentifier = "URLBar.urlText"
@@ -1254,7 +1266,7 @@ private final class URLTextField: AutocompleteTextField {
 
         // Add margin to avoid overlap with the clear button.
         var clearButtonTotalWidth: CGFloat = 0
-        if let clearButton = rightView, isEditing {
+        if let clearButton = (leftView ?? rightView), isEditing {
             clearButtonTotalWidth = clearButton.bounds.width + CGFloat(2)
         }
 
@@ -1269,9 +1281,18 @@ private final class URLTextField: AutocompleteTextField {
     }
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        guard rightView != nil else { return .zero }
         let rect = super.rightViewRect(forBounds: bounds)
         let edgeInset = UIConstants.layout.urlBarIconInset + 2
         let dx = (layoutDirection == .rightToLeft) ? edgeInset : -edgeInset
+        return rect.offsetBy(dx: dx, dy: 0)
+    }
+
+    override fileprivate func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        guard leftView != nil else { return .zero }
+        let rect = super.leftViewRect(forBounds: bounds)
+        let edgeInset = UIConstants.layout.urlBarIconInset + 2
+        let dx = (layoutDirection == .rightToLeft) ? -edgeInset : edgeInset
         return rect.offsetBy(dx: dx, dy: 0)
     }
 
