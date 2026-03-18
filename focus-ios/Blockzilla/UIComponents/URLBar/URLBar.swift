@@ -130,7 +130,7 @@ final class URLBar: UIView {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(.backActive, for: .normal)
+        button.setImage(.backActive.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserBack
         button.isEnabled = false
         button.isPointerInteractionEnabled = true
@@ -460,9 +460,9 @@ final class URLBar: UIView {
 
     private func addStopReloadButtonConstraints() {
         stopReloadButton.snp.makeConstraints { make in
-            make.trailing.equalTo(urlBarBorderView)
-            make.leading.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize)
-            make.center.equalToSuperview()
+            make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarIconInset)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(UIConstants.layout.urlBarButtonTargetSize)
         }
     }
 
@@ -474,7 +474,8 @@ final class URLBar: UIView {
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
 
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            showPageActionsConstraints.append(make.trailing.equalTo(urlBarBorderView.snp.trailing).inset(UIConstants.layout.urlBarButtonTargetSize).constraint)
+            
+            showPageActionsConstraints.append(make.trailing.equalTo(stopReloadButton.snp.leading).constraint)
         }
     }
 
