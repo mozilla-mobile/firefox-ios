@@ -80,11 +80,16 @@ class Toast: UIView, ThemeApplicable, Notifiable {
         translatesAutoresizingMaskIntoConstraints = false
 
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            viewController?.view.addSubview(self)
-            guard viewController != nil else { return }
-
-            NSLayoutConstraint.activate(updateConstraintsOn(self))
-            self.layoutIfNeeded()
+            // Wrap setup in performWithoutAnimation to prevent the toast's initial position
+            // from being inherited by any ongoing animation context (e.g. keyboard animation),
+            // which would cause the toast to animate from top left corner instead of its correct position.
+            // This was previously fixed by layoutIfNeeded removed under isToolbarTranslucencyRefactorEnabled flag
+            UIView.performWithoutAnimation {
+                viewController?.view.addSubview(self)
+                guard viewController != nil else { return }
+                NSLayoutConstraint.activate(updateConstraintsOn(self))
+                self.layoutIfNeeded()
+            }
 
             UIView.animate(
                 withDuration: UX.toastAnimationDuration,
