@@ -101,7 +101,7 @@ enum ComponentState: Sendable, Equatable {
     }
 }
 
-struct ActiveComponentsState: Sendable, Equatable {
+struct PresentedComponentsState: Sendable, Equatable {
     let components: [ComponentState]
 
     init() {
@@ -119,7 +119,7 @@ struct ActiveComponentsState: Sendable, Equatable {
         // Reduce each component state
         components = components.map { ComponentState.reducer($0, action) }
 
-        return ActiveComponentsState(components: components)
+        return PresentedComponentsState(components: components)
     }
 
     private static func updateActiveComponents(action: Action, components: [ComponentState]) -> [ComponentState] {
