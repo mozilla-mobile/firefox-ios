@@ -1104,18 +1104,6 @@ final class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
-    func showStoriesFeed() {
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
-        router.push(storiesFeedViewController)
-    }
-
-    func showStoriesWebView(url: URL?) {
-        guard let url else { return }
-        let webviewViewController = StoriesWebviewViewController(profile: profile, windowUUID: windowUUID)
-        webviewViewController.configure(url: url)
-        router.push(webviewViewController)
-    }
-
     func showPrivacyNoticeLink(url: URL) {
         let linkVC = TermsOfUseLinkViewController(
             url: url,

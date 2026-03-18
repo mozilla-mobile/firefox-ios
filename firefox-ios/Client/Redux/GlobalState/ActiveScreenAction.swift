@@ -30,7 +30,6 @@ enum AppScreen {
     case passwordGenerator
     case nativeErrorPage
     case shortcutsLibrary
-    case storiesFeed
 }
 
 enum ScreenActionType: ActionType {

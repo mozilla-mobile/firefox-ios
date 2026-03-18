@@ -35,7 +35,6 @@ struct AppState: StateType, Sendable {
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
                 case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 case (.shortcutsLibrary(let state), .shortcutsLibrary): return state as? S
-                case (.storiesFeed(let state), .storiesFeed): return state as? S
                 default: return nil
                 }
             }.first(where: {

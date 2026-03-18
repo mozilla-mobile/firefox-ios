@@ -610,27 +610,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
-    // MARK: - Stories Feed
-
-    func testShowStoriesFeed_showsStoriesFeed() throws {
-        let subject = createSubject()
-
-        subject.showStoriesFeed()
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowStoriesWebview_showsStoriesWebview() throws {
-        let subject = createSubject()
-
-        subject.showStoriesWebView(url: URL(string: "https://www.mozilla.com"))
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowPrivacyNoticeLink_showsStoriesWebview() throws {
+    func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
         let subject = createSubject()
 
         guard let url = URL(string: "https://www.mozilla.com") else { return }
