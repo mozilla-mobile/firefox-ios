@@ -9,12 +9,13 @@ final class DefaultVoiceSearchService: VoiceSearchService {
     private var engine: TranscriptionEngine
     private var useNewAPI: Bool
 
-    init(useNewAPI: Bool = false) {
-        self.useNewAPI = useNewAPI
-        if useNewAPI, #available(iOS 26.0, *) {
+    init() {
+        if #available(iOS 26.0, *) {
             self.engine = SpeechAnalyzerEngine()
+            self.useNewAPI = true
         } else {
             self.engine = SFSpeechRecognizerEngine()
+            self.useNewAPI = false
         }
     }
 

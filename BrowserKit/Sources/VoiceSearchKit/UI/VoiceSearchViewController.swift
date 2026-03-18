@@ -67,7 +67,7 @@ public final class VoiceSearchViewController: UIViewController, Themeable {
     }
     private let engineToggleSwitch: UISwitch = .build {
         if #available(iOS 26.0, *) {
-            $0.isOn = false
+            $0.isOn = true
         } else {
             $0.isOn = false
             $0.isEnabled = false
