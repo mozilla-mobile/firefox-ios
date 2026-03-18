@@ -666,33 +666,6 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    // Laurie
-    private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
-            mainMenuCoordinator.dismissMenuModal(animated: false)
-        }
-
-        let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
-        if !navigationController.shouldUseiPadSetup() {
-            navigationController.modalPresentationStyle = .formSheet
-            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
-            navigationController.sheetPresentationController?.prefersGrabberVisible = true
-        }
-
-        let coordinator = MainMenuCoordinator(
-            router: DefaultRouter(navigationController: navigationController),
-            windowUUID: tabManager.windowUUID,
-            profile: profile
-        )
-        coordinator.parentCoordinator = self
-        coordinator.navigationHandler = self
-        add(child: coordinator)
-        coordinator.start()
-
-        return navigationController
-    }
-
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
         guard let fxaParameters else { return }
         browserViewController.presentSignInViewController(fxaParameters.launchParameters,
