@@ -5,7 +5,7 @@
 import XCTest
 import Common
 
-@testable import SummarizeKit
+@testable import MLPAKit
 
 final class AppAttestRequestAuthTests: XCTestCase {
     func test_authenticate_setsAuthorizationHeader() async throws {
