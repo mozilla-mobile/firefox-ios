@@ -24,6 +24,7 @@ public struct ReadabilityResult: Sendable {
     public let title: String
     public let credits: String
     public let excerpt: String
+    public let recipeContent: String
     let byline: String
     let length: Int
     let language: String
@@ -43,6 +44,7 @@ public struct ReadabilityResult: Sendable {
         self.credits = dict["credits"] as? String ?? ""
         self.byline = dict["byline"] as? String ?? ""
         self.direction = Direction(rawValue: dict["dir"] as? String ?? "") ?? .auto
+        self.recipeContent = dict["recipeContent"] as? String ?? ""
     }
 
     /// Initialize from a JSON encoded string
@@ -67,6 +69,7 @@ public struct ReadabilityResult: Sendable {
         self.siteName = object["siteName"] as? String ?? ""
         self.byline = object["byline"] as? String ?? ""
         self.direction = Direction(rawValue: object["dir"] as? String ?? "") ?? .auto
+        self.recipeContent = object["recipeContent"] as? String ?? ""
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
@@ -81,7 +84,8 @@ public struct ReadabilityResult: Sendable {
             "length": length,
             "dir": direction.rawValue,
             "siteName": siteName,
-            "lang": language
+            "lang": language,
+            "recipeContent": recipeContent
         ]
     }
 
