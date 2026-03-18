@@ -364,16 +364,6 @@ class TelemetryWrapperTests: XCTestCase {
         testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewHistoryPanel)
     }
 
-    func test_viewDownloadsPanel_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .viewDownloadsPanel
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewDownloadsPanel)
-    }
-
     // Accessibility
 
     func test_accessibilityVoiceOver_GleanIsCalled() throws {

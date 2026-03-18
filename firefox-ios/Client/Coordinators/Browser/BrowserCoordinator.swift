@@ -584,7 +584,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFindInPage() {
-        browserViewController.showFindInPage()
+        browserViewController.updateFindInPageVisibility(isVisible: true)
     }
 
     func updateZoomPageBarVisibility() {

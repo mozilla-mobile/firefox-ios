@@ -402,8 +402,36 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 }
 
+// Laurie  move elsewhere
+enum MenuButtonToastAction {
+    case share
+    case addToReadingList
+    case removeFromReadingList
+    case bookmarkPage
+    case removeBookmark
+    case copyUrl
+    case pinPage
+    case removePinPage
+    case closeTab
+    case downloadPDF
+}
+
+// Laurie - move elsewhere
+protocol ToolBarActionMenuDelegate: AnyObject {
+    @MainActor
+    func showToast(_ bookmarkURL: String?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
+}
+
+// Laurie - move elsewhere
+extension ToolBarActionMenuDelegate {
+    @MainActor
+    func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
+        showToast(urlString, title, message: message, toastAction: toastAction)
+    }
+}
+
 // MARK: - UIDocumentPickerDelegate
-extension BrowserViewController: UIDocumentPickerDelegate {
+extension BrowserViewController: UIDocumentPickerDelegate, ToolBarActionMenuDelegate {
     func showToast(_ urlString: String? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .bookmarkPage:
@@ -445,56 +473,10 @@ extension BrowserViewController: UIDocumentPickerDelegate {
         }
     }
 
-    func showFindInPage() {
-        updateFindInPageVisibility(isVisible: true)
-    }
-
-    func showCustomizeHomePage() {
-        navigationHandler?.show(settings: .homePage)
-    }
-
-    func showWallpaperSettings() {
-        navigationHandler?.show(settings: .wallpaper)
-    }
-
-    func showCreditCardSettings() {
-        navigationHandler?.show(settings: .creditCard)
-    }
-
-    func showZoomPage(tab: Tab) {
-        updateZoomPageBarVisibility(visible: true)
-    }
-
-    func showSignInView(fxaParameters: FxASignInViewParameters) {
-        presentSignInViewController(fxaParameters.launchParameters,
-                                    flowType: fxaParameters.flowType,
-                                    referringPage: fxaParameters.referringPage)
-    }
-
+    // Laurie - UIDocumentPickerDelegate
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if !urls.isEmpty {
             showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
         }
-    }
-
-    func showFilePicker(fileURL: URL) {
-        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
-        documentPicker.delegate = self
-        documentPicker.modalPresentationStyle = .formSheet
-        showViewController(viewController: documentPicker)
-    }
-
-    func showEditBookmark() {
-        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
-        openBookmarkEditPanel(urlString: urlString)
-    }
-
-    func showTrackingProtection() {
-        store.dispatch(
-            GeneralBrowserAction(
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showTrackingProtectionDetails
-            )
-        )
     }
 }

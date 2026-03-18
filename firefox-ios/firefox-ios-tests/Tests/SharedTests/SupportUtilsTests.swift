@@ -16,10 +16,6 @@ class SupportUtilsTests: XCTestCase {
         XCTAssertEqual(SupportUtils.URLForTopic("Möbelträgerfüße")?.absoluteString, "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(languageIdentifier)/M%C3%B6beltr%C3%A4gerf%C3%BC%C3%9Fe")
     }
 
-    func testURLForWhatsNew() {
-        XCTAssertEqual(SupportUtils.URLForWhatsNew?.absoluteString, "https://www.mozilla.org/en-US/firefox/ios/notes/")
-    }
-
     func testURLForPrivacyNotice_withoutContentParam() {
         let languageIdentifier = Locale.preferredLanguages.first!
 

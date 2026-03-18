@@ -449,9 +449,6 @@ extension TelemetryWrapper {
         case trackingProtectionMenu = "tracking-protection-menu"
         case url = "url"
         case searchText = "searchText"
-        case whatsNew = "whats-new"
-        case help = "menu-help"
-        case customizeHomePage = "menu-customize-home-page"
         case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
         case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
         case dismissedETPCoverSheet = "dismissed-etp-sheet"
@@ -467,7 +464,6 @@ extension TelemetryWrapper {
         case tabToolbar = "tab-toolbar"
         case chinaServerSwitch = "china-server-switch"
         case appMenu = "app_menu"
-        case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
@@ -550,8 +546,6 @@ extension TelemetryWrapper {
         case navigateTabHistoryBack = "navigate-tab-history-back"
         case navigateTabHistoryBackSwipe = "navigate-tab-history-back-swipe"
         case navigateTabHistoryForward = "navigate-tab-history-forward"
-        case nightModeEnabled = "night-mode-enabled"
-        case nightModeDisabled = "night-mode-disabled"
         case logins = "logins-and-passwords"
         case signIntoSync = "sign-into-sync"
         case syncTab = "sync-tab"
@@ -574,13 +568,6 @@ extension TelemetryWrapper {
         case shareSheet = "share-sheet"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
-        case copyAddress = "copy-address"
-        case reportSiteIssue = "report-site-issue"
-        case findInPage = "find-in-page"
-        case requestDesktopSite = "request-desktop-site"
-        case requestMobileSite = "request-mobile-site"
-        case pinToTopSites = "pin-to-top-sites"
-        case removePinnedSite = "remove-pinned-site"
         case wallpaperSettings = "wallpaper-settings"
         case contextualHint = "contextual-hint"
         case reload = "reload"
@@ -592,9 +579,6 @@ extension TelemetryWrapper {
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
-        case viewDownloadsPanel = "view-downloads-panel"
-        case viewHistoryPanel = "view-history-panel"
-        case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
@@ -612,7 +596,6 @@ extension TelemetryWrapper {
         case homePanel = "home-panel"
         case markAsRead = "mark-as-read"
         case markAsUnread = "mark-as-unread"
-        case pageActionMenu = "page-action-menu"
         case readerModeToolbar = "reader-mode-toolbar"
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
@@ -1368,18 +1351,6 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):
             GleanMetrics.AppMenu.blockImagesDisabled.add()
-        case (.action, .tap, .nightModeEnabled, _, _):
-            GleanMetrics.AppMenu.nightModeEnabled.add()
-        case (.action, .tap, .nightModeDisabled, _, _):
-            GleanMetrics.AppMenu.nightModeDisabled.add()
-        case (.action, .open, .whatsNew, _, _):
-            GleanMetrics.AppMenu.whatsNew.add()
-        case (.action, .tap, .help, _, _):
-            GleanMetrics.AppMenu.help.add()
-        case (.action, .tap, .customizeHomePage, _, _):
-            GleanMetrics.AppMenu.customizeHomepage.add()
-        case (.action, .open, .settings, _, _):
-            GleanMetrics.AppMenu.settings.add()
         case(.action, .open, .logins, _, _):
             GleanMetrics.AppMenu.passwords.record()
 
@@ -1388,26 +1359,6 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.sharePageWith.add()
         case (.action, .tap, .sendToDevice, _, _):
             GleanMetrics.PageActionMenu.sendToDevice.add()
-        case (.action, .tap, .copyAddress, _, _):
-            GleanMetrics.PageActionMenu.copyAddress.add()
-        case (.action, .tap, .reportSiteIssue, _, _):
-            GleanMetrics.PageActionMenu.reportSiteIssue.add()
-        case (.action, .tap, .findInPage, _, _):
-            GleanMetrics.PageActionMenu.findInPage.add()
-        case (.action, .tap, .pinToTopSites, _, _):
-            GleanMetrics.PageActionMenu.pinToTopSites.add()
-        case (.action, .tap, .removePinnedSite, _, _):
-            GleanMetrics.PageActionMenu.removePinnedSite.add()
-        case (.action, .tap, .requestDesktopSite, _, _):
-            GleanMetrics.PageActionMenu.requestDesktopSite.add()
-        case (.action, .tap, .requestMobileSite, _, _):
-            GleanMetrics.PageActionMenu.requestMobileSite.add()
-        case (.action, .tap, .viewDownloadsPanel, _, _):
-            GleanMetrics.PageActionMenu.viewDownloadsPanel.add()
-        case (.action, .tap, .viewHistoryPanel, _, _):
-            GleanMetrics.PageActionMenu.viewHistoryPanel.add()
-        case (.action, .tap, .createNewTab, _, _):
-            GleanMetrics.PageActionMenu.createNewTab.add()
 
         // MARK: Tracking Protection
         case (.action, .tap, .trackingProtectionMenu, _, let extras):
