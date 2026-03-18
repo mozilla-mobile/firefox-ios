@@ -474,7 +474,6 @@ final class URLBar: UIView {
             showLeftBarViewConstraints.append(make.left.equalToSuperview().constraint)
 
             hidePageActionsConstraints.append(make.trailing.equalToSuperview().constraint)
-            
             showPageActionsConstraints.append(make.trailing.equalTo(stopReloadButton.snp.leading).constraint)
         }
     }
@@ -1231,6 +1230,10 @@ private final class URLTextField: AutocompleteTextField {
         return super.resignFirstResponder()
     }
 
+    private var layoutDirection: UIUserInterfaceLayoutDirection {
+        effectiveUserInterfaceLayoutDirection
+    }
+
     override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIColor.secondaryText])
@@ -1249,17 +1252,26 @@ private final class URLTextField: AutocompleteTextField {
         // Add internal padding.
         let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarContainerHeightInset)
 
-        // Add a right margin so we don't overlap with the clear button.
-        var clearButtonWidth: CGFloat = 0
+        // Add margin to avoid overlap with the clear button.
+        var clearButtonTotalWidth: CGFloat = 0
         if let clearButton = rightView, isEditing {
-            clearButtonWidth = clearButton.bounds.width + CGFloat(5)
+            clearButtonTotalWidth = clearButton.bounds.width + CGFloat(5)
         }
 
-        return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
+        switch layoutDirection {
+        case .leftToRight:
+            return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
+        case .rightToLeft:
+            return CGRect(x: inset.origin.x + clearButtonTotalWidth, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
+        @unknown default:
+            return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
+        }
     }
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+        let rect = super.rightViewRect(forBounds: bounds)
+        let dx = (layoutDirection == .rightToLeft) ? UIConstants.layout.urlBarWidthInset : -UIConstants.layout.urlBarWidthInset
+        return rect.offsetBy(dx: dx, dy: 0)
     }
 
     private func textFieldDidEndEditing(_ textField: UITextField) {
