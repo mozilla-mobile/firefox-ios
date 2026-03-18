@@ -8,14 +8,14 @@ import Shared
 
 @MainActor
 final class TranslationSettingsMiddleware {
-    private let profile: Profile
+    private let prefs: Prefs
     private let manager: PreferredTranslationLanguagesManager
     private let modelsFetcher: TranslationModelsFetcherProtocol
 
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: PreferredTranslationLanguagesManager? = nil,
          modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared) {
-        self.profile = profile
+        self.prefs = profile.prefs
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.modelsFetcher = modelsFetcher
     }
@@ -31,11 +31,11 @@ final class TranslationSettingsMiddleware {
             Task { await self.loadSettings(windowUUID: action.windowUUID) }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
-            let current = profile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+            let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
             let newValue = !current
-            profile.prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
+            prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
             store.dispatch(ToolbarAction(
-                translationConfiguration: TranslationConfiguration(prefs: profile.prefs, state: .inactive),
+                translationConfiguration: TranslationConfiguration(prefs: prefs, state: .inactive),
                 windowUUID: action.windowUUID,
                 actionType: ToolbarActionType.didTranslationSettingsChange
             ))
@@ -53,7 +53,7 @@ final class TranslationSettingsMiddleware {
     private func loadSettings(windowUUID: WindowUUID) async {
         let supported = await modelsFetcher.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
-        let isEnabled = profile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+        let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         store.dispatch(TranslationSettingsMiddlewareAction(
             isTranslationsEnabled: isEnabled,
             preferredLanguages: preferred,

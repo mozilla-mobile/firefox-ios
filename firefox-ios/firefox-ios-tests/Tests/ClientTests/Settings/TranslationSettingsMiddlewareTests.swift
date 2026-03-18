@@ -35,6 +35,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_viewDidLoad_dispatchesDidLoadSettings() throws {
         mockModelsFetcher.supportedTargetLanguages = ["en", "fr", "de"]
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
+        mockProfile.prefs.setString("en,fr", forKey: PrefsKeys.Settings.translationPreferredLanguages)
 
         let subject = createSubject()
         let action = TranslationSettingsViewAction(
@@ -55,6 +56,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, true)
         XCTAssertEqual(dispatchedAction.supportedLanguages, ["en", "fr", "de"])
+        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en", "fr"])
         // the translationSettingsProvider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
         subject.translationSettingsProvider = { _, _ in }
@@ -63,6 +65,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_viewDidLoad_withTranslationsDisabled_dispatchesDisabledState() throws {
         mockModelsFetcher.supportedTargetLanguages = ["en"]
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
 
         let subject = createSubject()
         let action = TranslationSettingsViewAction(
@@ -78,7 +81,10 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+        XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, false)
+        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en"])
         // the translationSettingsProvider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
         subject.translationSettingsProvider = { _, _ in }
