@@ -46,6 +46,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showTrackingProtection()
 }
 
+// Laurie - move elsewhere
 extension ToolBarActionMenuDelegate {
     @MainActor
     func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {

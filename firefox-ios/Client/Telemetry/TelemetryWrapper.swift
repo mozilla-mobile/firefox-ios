@@ -544,8 +544,6 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         // MARK: - App menu
-        case homePageMenu = "homepage-menu" // Legacy photon menu
-        case siteMenu = "site-menu" // Legacy photon menu
         case home = "home-page"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
@@ -1360,10 +1358,6 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: App menu
-        case (.action, .tap, .homePageMenu, _, _):
-            GleanMetrics.AppMenu.homepageMenu.add()
-        case (.action, .tap, .siteMenu, _, _):
-            GleanMetrics.AppMenu.siteMenu.add()
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):

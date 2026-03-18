@@ -3194,11 +3194,7 @@ class BrowserViewController: UIViewController,
         )
 
         logger.log("Show MainMenu button tapped", level: .info, category: .mainMenu)
-        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            navigationHandler?.showMainMenu()
-        } else {
-            showPhotonMainMenu(from: button)
-        }
+        navigationHandler?.showMainMenu()
     }
 
     func toggleReaderMode() {
@@ -3249,41 +3245,6 @@ class BrowserViewController: UIViewController,
         }
 
         return true
-    }
-
-    private func showPhotonMainMenu(from button: UIButton?) {
-        guard let button else { return }
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { [weak self] actions in
-            guard let self else { return }
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            if self.profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown) == nil {
-                self.profile.prefs.setBool(true, forKey: PrefsKeys.PhotonMainMenuShown)
-            }
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        }
     }
 
     /// Shares the currently selected tab via the share sheet.

@@ -189,6 +189,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("21ReaderModeSettingsMenu-01")
     }*/
 
+    // Laurie - needed? Part of Smoketest
     @MainActor
     func testETPperSite_menuRefactorFeatureOff() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])

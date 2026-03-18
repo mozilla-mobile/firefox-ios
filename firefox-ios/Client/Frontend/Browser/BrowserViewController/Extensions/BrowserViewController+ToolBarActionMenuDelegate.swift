@@ -402,16 +402,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 }
 
-// MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
-    func updateToolbarState() {
-        updateToolbarStateForTraitCollection(view.traitCollection)
-    }
-
-    func showViewController(viewController: UIViewController) {
-        presentWithModalDismissIfNeeded(viewController, animated: true)
-    }
-
+// MARK: - UIDocumentPickerDelegate
+extension BrowserViewController: UIDocumentPickerDelegate {
     func showToast(_ urlString: String? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .bookmarkPage:

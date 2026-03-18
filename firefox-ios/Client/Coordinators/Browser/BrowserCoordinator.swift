@@ -546,18 +546,13 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            let mainMenuCoordinator = MainMenuCoordinator(router: router,
-                                                          windowUUID: tabManager.windowUUID,
-                                                          profile: profile)
-            mainMenuCoordinator.parentCoordinator = self
-            mainMenuCoordinator.navigationHandler = self
-            add(child: mainMenuCoordinator)
-            mainMenuCoordinator.startWithNavController()
-        } else {
-            guard let menuNavViewController = makeMenuNavViewController() else { return }
-            present(menuNavViewController)
-        }
+        let mainMenuCoordinator = MainMenuCoordinator(router: router,
+                                                      windowUUID: tabManager.windowUUID,
+                                                      profile: profile)
+        mainMenuCoordinator.parentCoordinator = self
+        mainMenuCoordinator.navigationHandler = self
+        add(child: mainMenuCoordinator)
+        mainMenuCoordinator.startWithNavController()
     }
 
     func openURLInNewTab(_ url: URL?) {
@@ -671,6 +666,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    // Laurie
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             mainMenuCoordinator.dismissMenuModal(animated: false)
