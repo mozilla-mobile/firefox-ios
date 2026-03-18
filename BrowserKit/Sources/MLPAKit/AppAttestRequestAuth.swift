@@ -11,7 +11,7 @@ import Common
 /// 1. Extracts the JSON body as the assertion payload.
 /// 2. Asks `AppAttestClient` to generate a signed assertion.
 /// 3. Wraps the assertion metadata in a JWT and attaches it as a Bearer token.
-struct AppAttestRequestAuth: RequestAuthProtocol {
+public struct AppAttestRequestAuth: RequestAuthProtocol {
     private let appAttestClient: AppAttestClient
     private let bundleIdentifier: String
 

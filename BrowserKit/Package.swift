@@ -37,6 +37,9 @@ let package = Package(
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(
+            name: "MLPAKit",
+            targets: ["MLPAKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
@@ -205,12 +208,23 @@ let package = Package(
             ]
         ),
         .target(
+            name: "MLPAKit",
+            dependencies: ["Common", "JWTKit", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "MLPAKitTests",
+            dependencies: ["MLPAKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "SummarizeKit",
             dependencies: [
                 "Common",
                 "ComponentLibrary",
                 "Down",
-                "JWTKit"
+                "MLPAKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
