@@ -47,7 +47,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
-        guard await isPermissionGranted() else {
+        guard await authorizer.isMicrophonePermissionAuthorized() else {
             throw SpeechError.permissionDenied
         }
         try configureAudioSession()
@@ -132,12 +132,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
 
         transcriber = nil
         analyzer = nil
-    }
-
-    private func isPermissionGranted() async -> Bool {
-        let isMicAuthorized = await authorizer.isMicrophonePermissionAuthorized()
-        let isSpeechAuthorized = await authorizer.isSpeechPermissionAuthorized()
-        return isMicAuthorized && isSpeechAuthorized
     }
 
     // MARK: - Audio Related
