@@ -448,6 +448,8 @@ class Tab: NSObject,
 
     private var contentScriptManager = TabContentScriptManager()
 
+    /// WebKit-provided configuration for popup tabs. Takes precedence over standard configuration when set.
+    var requiredPopupConfiguration: WKWebViewConfiguration?
     private var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
@@ -532,54 +534,49 @@ class Tab: NSObject,
         }
     }
 
+    /// Creates and configures a WKWebView for this tab.
+    /// - Parameters:
+    ///   - restoreSessionData: Optional session data to restore the webview's browsing state.
+    ///   - configuration: The WKWebViewConfiguration to use. Overridden by `requiredConfiguration` if set.
     func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-        if webView == nil {
-            configuration.userContentController = WKUserContentController()
-            let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
-            webView.configure(delegate: self, navigationDelegate: navigationDelegate)
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.allowsBackForwardNavigationGestures = true
-            webView.allowsLinkPreview = true
+        guard webView == nil else { return }
 
-            // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
-            if #available(iOS 16.4, *) {
-                webView.isInspectable = true
-            }
+        let requiredConfiguration = requiredPopupConfiguration ?? configuration
+        // Ensures we inject scripts into a new content controller
+        requiredConfiguration.userContentController = .init()
+        self.configuration = requiredConfiguration
+        let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
+        webView.configure(delegate: self, navigationDelegate: navigationDelegate)
+        webView.accessibilityLabel = .WebViewAccessibilityLabel
+        webView.allowsBackForwardNavigationGestures = true
+        webView.allowsLinkPreview = true
 
-            // Turning off masking allows the web content to flow outside of the scrollView's frame
-            // which allows the content appear beneath the toolbars in the BrowserViewController
-            webView.scrollView.layer.masksToBounds = false
+        // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
 
-            restore(webView, interactionState: restoreSessionData)
+        // Turning off masking allows the web content to flow outside of the scrollView's frame
+        // which allows the content appear beneath the toolbars in the BrowserViewController
+        webView.scrollView.layer.masksToBounds = false
 
-            self.webView = webView
+        restore(webView, interactionState: restoreSessionData)
 
-            // FXIOS-5549
-            // There is a crash in didCreateWebView for when webview becomes nil.
-            // We are adding a check before that method gets called as the webview
-            // should not be nil at this point considering we created it above.
-            guard self.webView != nil else {
-                logger.log("No webview found for didCreateWebView.",
-                           level: .fatal,
-                           category: .tabs)
-                return
-            }
+        self.webView = webView
 
-            configureEdgeSwipeGestureRecognizers()
+        configureEdgeSwipeGestureRecognizers()
 
-            UserScriptManager.shared.injectUserScriptsIntoWebView(
-                webView,
-                nightMode: nightMode,
-                noImageMode: noImageMode
-            )
+        UserScriptManager.shared.injectUserScriptsIntoWebView(
+            webView,
+            nightMode: nightMode,
+            noImageMode: noImageMode
+        )
 
-            tabDelegate?.tab(self, didCreateWebView: webView)
-            webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
-                guard let self else { return }
-                ensureMainThread {
-                    self.onWebViewLoadingStateChanged?()
-                }
+        tabDelegate?.tab(self, didCreateWebView: webView)
+        webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
+            guard let self else { return }
+            ensureMainThread {
+                self.onWebViewLoadingStateChanged?()
             }
         }
     }
@@ -746,6 +743,8 @@ class Tab: NSObject,
         reload()
     }
 
+    // MARK: - Content script
+
     func addContentScript(_ helper: TabContentScript, name: String) {
         contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
@@ -761,6 +760,8 @@ class Tab: NSObject,
     func getContentScript(name: String) -> TabContentScript? {
         return contentScriptManager.getContentScript(name)
     }
+
+    // MARK: - Login alert
 
     func addLoginAlert(_ alert: SaveLoginAlert) {
         // Only one login alert can show per tab
