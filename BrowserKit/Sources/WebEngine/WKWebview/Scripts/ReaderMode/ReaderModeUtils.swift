@@ -16,7 +16,7 @@ public struct ReaderModeUtils {
               let tmplPath = Bundle.main.path(forResource: "Reader", ofType: "html"),
               let tmpl = try? String(contentsOfFile: tmplPath, encoding: .utf8)
         else { return nil }
-        
+
         return tmpl.replacingOccurrences(of: "%READER-CSS%", with: css)
             .replacingOccurrences(of: "%READER-STYLE%", with: initialStyle.encode())
             .replacingOccurrences(of: "%READER-TITLE%", with: readabilityResult.title)
