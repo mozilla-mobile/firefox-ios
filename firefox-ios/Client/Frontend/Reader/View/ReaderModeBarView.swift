@@ -85,13 +85,8 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     private var toolbarLayoutType: ToolbarLayoutType? {
         return FxNimbus.shared.features.toolbarRefactorFeature.value().layout
     }
-    private let summarizerNimbusUtils: SummarizerNimbusUtils
 
-    init(
-        frame: CGRect,
-        summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
-    ) {
-        self.summarizerNimbusUtils = summarizerNimbusUtils
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
     }
