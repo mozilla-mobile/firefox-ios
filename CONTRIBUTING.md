@@ -12,9 +12,7 @@ Before submitting:
 * Search existing open and closed issues to avoid duplicates  
 * Provide clear steps to reproduce the problem when applicable  
 
---- 
-
-## Guidelines for Contributing
+## Code Contribution
 
 There are two supported ways to contribute:
 
@@ -36,28 +34,15 @@ If you want to work on something that is **not labeled `Contributor OK`**, pleas
 
 We absolutely welcome ideas and contributions. We just ask that larger or unscoped work is discussed first so we can collaborate effectively.
 
-## Getting Support
-
-### Reference Person
-Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
-
-- Reach out on [Mozilla Matrix chat](#reaching-out-for-help-and-questions).
-- Alternatively, comment directly on the issue for assistance.
-
-### Missing Reference Person
-If no reference person is assigned, feel free to contact:
-
-- @FilippoZazzeroni
-- @Foxbolts
-
-## Issue Categories by Difficulty
+### Issue Categories by Difficulty
 We’ve categorized Contributor OK issues by difficulty to help you get started:
 
 - `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
 - `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
-- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.    
+- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.   
 
----
+### Contributor Fix
+We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance people that will close those tasks with their final approval of the work.
 
 ## Coding Rules
 
@@ -68,8 +53,6 @@ We’ve categorized Contributor OK issues by difficulty to help you get started:
 * Follow existing patterns in the codebase when in doubt  
 
 We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
-
----
 
 ### Quality expectations for pull requests
 
@@ -82,33 +65,6 @@ To help reviewers give useful feedback and keep the project maintainable, pull r
 * The contribution is complete. Partial, experimental, or AI-generated changes that the author cannot explain, validate, or finish may be closed until they are ready for review.
 
 Pull requests that do not meet this baseline may be closed as not yet reviewable.
-
----
-
-## Getting Support
-
-### Reference Person
-Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
-
-- Reach out on [Mozilla Matrix chat](#reaching-out-for-help-and-questions).
-- Alternatively, comment directly on the issue for assistance.
-
-### Missing Reference Person
-If no reference person is assigned, feel free to contact:
-
-- @FilippoZazzeroni
-- @Foxbolts
-
----
-
-### Issue Categories by Difficulty
-We’ve categorized Contributor OK issues by difficulty to help you get started:
-
-- `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
-- `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
-- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.
-
----
 
 ## Pull Requests
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
@@ -123,6 +79,22 @@ We’ve categorized Contributor OK issues by difficulty to help you get started:
 ### Commenting Etiquette
 * Please remember that all comments should adhere to the [Mozilla Community Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/)
 * If a comment does not apply to the code review on the PR, please post it on the related issue.
+
+## Getting Support
+
+### Reference Person
+Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
+
+- Reach out on [Mozilla Matrix chat](#reaching-out-for-help-and-questions).
+- Alternatively, comment directly on the issue for assistance.
+
+### Missing Reference Person
+If no reference person is assigned, feel free to contact:
+
+- @FilippoZazzeroni
+- @Foxbolts 
+
+---
 
 # Building the code
 - Fork and clone the project from the [repository](https://github.com/mozilla-mobile/firefox-ios).
@@ -143,10 +115,8 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
-## Contributor Fix
-We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance people that will close those tasks with their final approval of the work.
+---
 
 # Reaching out for help and questions
 If more information is required or contributors have any questions then we suggestion reaching out to us via:
 - Chat: See Matrix channel [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion. You can also write DMs to specific teammates on it. (For more information on how to get started with Matrix, see [Mozilla Matrix wiki page](https://wiki.mozilla.org/Matrix).)
-- Open a [GitHub discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).

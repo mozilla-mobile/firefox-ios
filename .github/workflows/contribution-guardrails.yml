@@ -28,33 +28,32 @@ jobs:
         shell: bash
         env:
           BODY: >
-            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+          :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
 
-            This pull request is being closed because it does not meet the project's contribution guidelines:
-            https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md
+          This pull request is being closed because it does not meet the project's 
+          [contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
 
-            In its current state, this PR is not reviewable. Common reasons include:
-            - The changes are too large or not scoped to a single issue
-            - The PR lacks sufficient context or explanation
-            - The implementation does not follow existing patterns or project conventions
-            - The work was not validated (build, tests, or clear verification steps)
-            - The contribution was not aligned with maintainers before starting
+          Common reasons might include:
+          - The changes are too large or not scoped to a single issue
+          - The PR lacks sufficient context or explanation
+          - The implementation does not follow existing patterns or project conventions
+          - The work was not validated (build, tests, or clear verification steps)
+          - The contribution was not aligned with maintainers before starting
 
-            To respect reviewer time and maintain code quality, we only review pull requests
-            that meet the baseline described in the contribution guidelines.
+          To respect reviewer time and maintain code quality, we only review pull requests
+          that meet the baseline described in the contribution guidelines.
 
-            If you would like to continue working on this, please:
-            - Review the contribution guidelines linked above
-            - Break the work into smaller, focused pull requests (generally under ~400 lines)
-            - Ensure the change is aligned with an issue and, if needed, confirmed with a maintainer
+          If you would like to continue working on this, please:
+          - Review the contribution guidelines linked above
+          - Break the work into smaller, focused pull requests (generally under ~400 lines)
+          - Ensure the change is aligned with an issue and, if needed, confirmed with a maintainer
 
-            Once the work is ready and aligned, feel free to open a new pull request.
+          Once the work is ready and aligned, feel free to open a new pull request.
 
-            If you have questions or would like to align on an approach, you can reach out on
-            [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) or comment on the related issue.
+          If you have questions or would like to discuss on an approach, you can reach out on
+          [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) or comment on the related issue.
 
-            Thank you for your understanding.
-        
+          Thank you for your understanding.
 
         run: |
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
@@ -98,5 +97,5 @@ jobs:
         if: github.event.action == 'reopened'
         shell: bash
         run: |
-          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "ai-generated" || true
+          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "does-not-meet-contribution-guidelines" || true
           gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "outside-approved-scope" || true
