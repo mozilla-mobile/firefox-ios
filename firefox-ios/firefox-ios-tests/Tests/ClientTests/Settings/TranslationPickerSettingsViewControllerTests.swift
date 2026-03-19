@@ -59,6 +59,14 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         ))
     }
 
+    // MARK: - viewDidDisappear
+
+    func test_viewDidDisappear_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.viewDidDisappear(false)
+    }
+
     // MARK: - applyTheme
 
     func test_applyTheme_doesNotCrash() {
