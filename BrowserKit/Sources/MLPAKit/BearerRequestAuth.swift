@@ -4,10 +4,14 @@
 
 import Foundation
 
-struct BearerRequestAuth: RequestAuthProtocol {
+public struct BearerRequestAuth: RequestAuthProtocol {
     let apiKey: String
 
-    func authenticate(request: inout URLRequest) async throws {
+    public init(apiKey: String) {
+        self.apiKey = apiKey
+    }
+
+    public func authenticate(request: inout URLRequest) async throws {
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
     }
 }

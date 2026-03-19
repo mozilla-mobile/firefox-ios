@@ -7,7 +7,7 @@ import JWTKit
 
 /// Constants used for MLPA (Mozilla LLM Proxy Auth)
 /// request construction and server contract fields.
-enum MLPAConstants {
+public enum MLPAConstants {
     static let authorizationHeader = "Authorization"
     static let bearerPrefix = "Bearer "
 
@@ -28,7 +28,7 @@ enum MLPAConstants {
 
     static let baseURL = URL(string: "https://mlpa-prod-prod-mozilla.global.ssl.fastly.net")
 
-    static var completionsEndpoint: URL? { baseURL?.appendingPathComponent("v1") }
+    public static var completionsEndpoint: URL? { baseURL?.appendingPathComponent("v1") }
     static var challengeEndpoint: URL? { baseURL?.appendingPathComponent("verify/challenge") }
     static var attestEndpoint: URL? { baseURL?.appendingPathComponent("verify/attest") }
 }

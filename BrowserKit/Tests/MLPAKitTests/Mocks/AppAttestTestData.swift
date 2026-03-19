@@ -4,7 +4,7 @@
 
 import Foundation
 
-@testable import SummarizeKit
+@testable import MLPAKit
 
 enum AppAttestTestData {
     static let keyID = "test-key-id"

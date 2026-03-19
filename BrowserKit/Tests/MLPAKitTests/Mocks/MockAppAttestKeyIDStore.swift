@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import SummarizeKit
+import MLPAKit
 
 /// Concrete implementation of `AppAttestKeyIDStore` that keeps the `keyID` in memory.
 /// This is only used for testing since the keychain implementation is not easily testable

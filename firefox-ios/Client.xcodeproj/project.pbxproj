@@ -1394,6 +1394,7 @@
 		AA6A6F382EF57EC000D1912D /* SystemLocaleProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A6F372EF57EB800D1912D /* SystemLocaleProviderTests.swift */; };
 		AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */; };
 		AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */; };
+		AA93AB052F6B06BE002E5E88 /* MLPAKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA93AB042F6B06BE002E5E88 /* MLPAKit */; };
 		AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */; };
 		AAB4321D2E8189390075E47F /* DefaultRecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321C2E8189310075E47F /* DefaultRecentSearchProviderTests.swift */; };
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
@@ -11511,6 +11512,7 @@
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				AA459F872F630F3500D05D04 /* QuickAnswersKit in Frameworks */,
 				ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */,
+				AA93AB052F6B06BE002E5E88 /* MLPAKit in Frameworks */,
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
 				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
@@ -17148,6 +17150,7 @@
 				0B6D1C872E15456F00919F1E /* SummarizeKit */,
 				ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */,
 				AA459F862F630F3500D05D04 /* QuickAnswersKit */,
+				AA93AB042F6B06BE002E5E88 /* MLPAKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -32077,6 +32080,10 @@
 		AA459F862F630F3500D05D04 /* QuickAnswersKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = QuickAnswersKit;
+		};
+		AA93AB042F6B06BE002E5E88 /* MLPAKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MLPAKit;
 		};
 		AB2AC6622BCFD0A200022AAB /* X509 */ = {
 			isa = XCSwiftPackageProductDependency;
