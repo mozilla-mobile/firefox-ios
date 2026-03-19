@@ -441,8 +441,8 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedTheme() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.addComponent,
-                                  component: .themeSettings)
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {

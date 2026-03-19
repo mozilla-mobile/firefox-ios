@@ -360,8 +360,8 @@ final class TabTrayViewController: UIViewController,
     func subscribeToRedux() {
         let initialSelectedPanel = tabTrayState.selectedPanel
         let screenAction = ComponentAction(windowUUID: windowUUID,
-                                        actionType: ComponentActionType.addComponent,
-                                        component: .tabsTray)
+                                           actionType: ComponentActionType.addComponent,
+                                           component: .tabsTray)
         store.dispatch(screenAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -378,8 +378,8 @@ final class TabTrayViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         let screenAction = ComponentAction(windowUUID: windowUUID,
-                                        actionType: ComponentActionType.removeComponent,
-                                        component: .tabsTray)
+                                           actionType: ComponentActionType.removeComponent,
+                                           component: .tabsTray)
         store.dispatch(screenAction)
     }
 

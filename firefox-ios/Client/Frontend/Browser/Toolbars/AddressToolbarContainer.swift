@@ -290,8 +290,8 @@ final class AddressToolbarContainer: UIView,
         guard let windowUUID else { return }
 
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.addComponent,
-                                  component: .toolbar)
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .toolbar)
         store.dispatch(action)
 
         store.subscribe(self, transform: {
@@ -308,8 +308,8 @@ final class AddressToolbarContainer: UIView,
         }
 
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.removeComponent,
-                                  component: .toolbar)
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .toolbar)
         store.dispatch(action)
         store.unsubscribe(self)
     }

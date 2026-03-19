@@ -602,7 +602,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func getHeaderLogoHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -708,7 +710,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// Creates a "dummy" jump back in section and returns its height
     private func getJumpBackInSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we have at least 1 jump back in tab to show
-        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
+
         let jumpBackInState = state.jumpBackInState
         guard jumpBackInState.shouldShowSection,
               jumpBackInState.mostRecentSyncedTab != nil || !jumpBackInState.jumpBackInTabs.isEmpty else { return 0 }
@@ -790,7 +795,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" stories section and returns its height
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
+
         let storiesState = state.merinoState
         guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else { return 0 }
         let cellWidth = UX.PocketConstants.getStoriesCellWidth(
@@ -805,7 +813,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
 
         let searchState = state.searchState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)

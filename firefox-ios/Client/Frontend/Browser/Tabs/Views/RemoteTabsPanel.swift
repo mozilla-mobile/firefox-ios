@@ -191,8 +191,8 @@ class RemoteTabsPanel: UIViewController,
 
     func subscribeToRedux() {
         let showScreenAction = ComponentAction(windowUUID: windowUUID,
-                                            actionType: ComponentActionType.addComponent,
-                                            component: .remoteTabsPanel)
+                                               actionType: ComponentActionType.addComponent,
+                                               component: .remoteTabsPanel)
         store.dispatch(showScreenAction)
 
         let didAppearAction = RemoteTabsPanelAction(windowUUID: windowUUID,
@@ -208,8 +208,8 @@ class RemoteTabsPanel: UIViewController,
 
     func unsubscribeFromRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.removeComponent,
-                                  component: .remoteTabsPanel)
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .remoteTabsPanel)
         store.dispatch(action)
     }
 

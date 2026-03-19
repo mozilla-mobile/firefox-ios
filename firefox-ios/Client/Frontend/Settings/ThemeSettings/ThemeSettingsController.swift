@@ -89,8 +89,8 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
 
     func unsubscribeFromRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.removeComponent,
-                                  component: .themeSettings)
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
     }
 

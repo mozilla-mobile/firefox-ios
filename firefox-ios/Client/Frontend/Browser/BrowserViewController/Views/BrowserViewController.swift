@@ -1069,8 +1069,8 @@ class BrowserViewController: UIViewController,
 
     func subscribeToRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.addComponent,
-                                  component: .browserViewController)
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .browserViewController)
         store.dispatch(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
@@ -1089,8 +1089,8 @@ class BrowserViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.removeComponent,
-                                  component: .browserViewController)
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .browserViewController)
         store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }

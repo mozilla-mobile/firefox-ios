@@ -374,8 +374,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     // For the top placement of the address bar, the border is only visible on scroll. This is due to a design choice.
     private func updateTopAddressBorderPosition(scrollOffset: CGPoint, windowUUID: WindowUUID, state: AppState) {
         guard let toolbarState = state.componentState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID),
+                                                      for: .toolbar,
+                                                      window: windowUUID),
               toolbarState.toolbarPosition == .top
         else { return }
 
@@ -411,8 +411,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     //  - When survey is dismissed, show border as expected based on the toolbar requirements
     private func updateToolbarBorders(windowUUID: WindowUUID, state: AppState, isMicrosurveyShown: Bool) {
         guard let toolbarState = state.componentState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID) else { return }
+                                                      for: .toolbar,
+                                                      window: windowUUID) else { return }
 
         if toolbarState.toolbarPosition == .top {
             let toolbarAction = ToolbarAction(displayNavBorder: !isMicrosurveyShown,
@@ -432,8 +432,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
         guard let searchBarPosition = action.toolbarPosition,
               let scrollOffset = action.scrollOffset,
               let toolbarState = state.componentState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: action.windowUUID)
+                                                      for: .toolbar,
+                                                      window: action.windowUUID)
         else { return }
 
         let addressToolbarPosition = addressToolbarPositionFromSearchBarPosition(searchBarPosition)

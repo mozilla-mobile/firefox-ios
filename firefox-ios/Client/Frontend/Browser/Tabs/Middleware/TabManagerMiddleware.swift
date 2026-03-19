@@ -98,8 +98,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
         manager.tabDidSetScreenshot(action.tab)
 
         guard let tabsState = state.componentState(TabsPanelState.self,
-                                                for: .tabsPanel,
-                                                window: action.windowUUID) else { return }
+                                                   for: .tabsPanel,
+                                                   window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
@@ -121,8 +121,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
         case TabPeekActionType.closeTab:
             // TODO: verify if this works for closing a tab from an unselected tab panel
             guard let tabsState = state.componentState(TabsPanelState.self,
-                                                    for: .tabsPanel,
-                                                    window: action.windowUUID) else { return }
+                                                       for: .tabsPanel,
+                                                       window: action.windowUUID) else { return }
             tabPeekCloseTab(with: tabUUID,
                             uuid: action.windowUUID,
                             isPrivate: tabsState.isPrivateMode)

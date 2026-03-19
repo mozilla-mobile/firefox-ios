@@ -66,8 +66,8 @@ final class TabPeekViewController: UIViewController,
 
     func subscribeToRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.addComponent,
-                                  component: .tabPeek)
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .tabPeek)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -79,8 +79,8 @@ final class TabPeekViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
-                                  actionType: ComponentActionType.removeComponent,
-                                  component: .tabPeek)
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .tabPeek)
         store.dispatch(action)
     }
 

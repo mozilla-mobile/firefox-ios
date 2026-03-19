@@ -80,8 +80,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         // If the hint does not show,
         // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
         guard let state = store.state.componentState(BrowserViewControllerState.self,
-                                                  for: .browserViewController,
-                                                  window: windowUUID)
+                                                     for: .browserViewController,
+                                                     window: windowUUID)
         else { return }
 
         if let selectedTab = tabManager.selectedTab,
@@ -98,8 +98,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
     func configureToolbarUpdateContextualHint(addressToolbarView: UIView, navigationToolbarView: UIView) {
         guard let state = store.state.componentState(ToolbarState.self,
-                                                  for: .toolbar,
-                                                  window: windowUUID),
+                                                     for: .toolbar,
+                                                     window: windowUUID),
               isToolbarUpdateHintEnabled
         else { return }
 

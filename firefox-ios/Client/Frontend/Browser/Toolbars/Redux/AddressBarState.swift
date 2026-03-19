@@ -1231,8 +1231,8 @@ struct AddressBarState: StateType, Sendable, Equatable {
         var actions = [ToolbarActionConfiguration]()
 
         guard let toolbarState = store.state.componentState(ToolbarState.self,
-                                                         for: .toolbar,
-                                                         window: action.windowUUID)
+                                                            for: .toolbar,
+                                                            window: action.windowUUID)
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
