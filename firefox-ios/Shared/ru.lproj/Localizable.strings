@@ -1076,7 +1076,7 @@
 "SendTo.NavBar.Title" = "Отправить вкладку";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "У вас нет ни одного устройства, подключенного к этому Аккаунту Firefox и доступного для синхронизации.";
+"SendTo.NoDevicesFound.Message" = "У вас нет ни одного устройства, подключённого к этому аккаунту Firefox и доступного для синхронизации.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Пожалуйста, откройте Firefox, перейдите в «Настройки» и войдите для продолжения.";
