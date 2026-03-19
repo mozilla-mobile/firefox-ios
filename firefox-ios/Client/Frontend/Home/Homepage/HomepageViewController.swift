@@ -354,10 +354,10 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.showScreen,
-            screen: .homepage
+            actionType: ComponentActionType.addComponent,
+            component: .homepage
         )
         store.dispatch(action)
 
@@ -399,10 +399,10 @@ final class HomepageViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .homepage
+            actionType: ComponentActionType.removeComponent,
+            component: .homepage
         )
         store.dispatch(action)
     }

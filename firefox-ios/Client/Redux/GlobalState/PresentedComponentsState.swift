@@ -168,9 +168,9 @@ struct PresentedComponentsState: Sendable, Equatable {
             case .nativeErrorPage:
                 components.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             case .shortcutsLibrary:
-                screens.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
+                components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .translationSettings:
-                screens.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
+                components.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
             }
         default:
             return components

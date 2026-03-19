@@ -97,7 +97,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
 
-        guard let tabsState = state.screenState(TabsPanelState.self,
+        guard let tabsState = state.componentState(TabsPanelState.self,
                                                 for: .tabsPanel,
                                                 window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
@@ -120,7 +120,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
         case TabPeekActionType.closeTab:
             // TODO: verify if this works for closing a tab from an unselected tab panel
-            guard let tabsState = state.screenState(TabsPanelState.self,
+            guard let tabsState = state.componentState(TabsPanelState.self,
                                                     for: .tabsPanel,
                                                     window: action.windowUUID) else { return }
             tabPeekCloseTab(with: tabUUID,
@@ -519,7 +519,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
         tabManager.undoCloseTab()
 
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -541,7 +541,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
         let normalCount = tabManager.normalTabs.count

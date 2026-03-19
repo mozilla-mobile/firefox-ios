@@ -65,9 +65,9 @@ final class TabPeekViewController: UIViewController,
     // MARK: - Private helper methods
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .tabPeek)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                  actionType: ComponentActionType.addComponent,
+                                  component: .tabPeek)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -78,9 +78,9 @@ final class TabPeekViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .tabPeek)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                  actionType: ComponentActionType.removeComponent,
+                                  component: .tabPeek)
         store.dispatch(action)
     }
 

@@ -210,7 +210,7 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     var shouldBeInPrivateTheme: Bool {
-        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
     }
 
@@ -311,9 +311,9 @@ final class TabDisplayPanelViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.showScreen,
-                                        screen: .tabsPanel)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                           actionType: ComponentActionType.addComponent,
+                                           component: .tabsPanel)
         store.dispatch(screenAction)
 
         let didLoadAction = TabPanelViewAction(panelType: panelType,
@@ -330,9 +330,9 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .tabsPanel)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .tabsPanel)
         store.dispatch(action)
     }
 

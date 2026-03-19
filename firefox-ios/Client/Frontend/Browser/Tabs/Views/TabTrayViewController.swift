@@ -359,9 +359,9 @@ final class TabTrayViewController: UIViewController,
 
     func subscribeToRedux() {
         let initialSelectedPanel = tabTrayState.selectedPanel
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.showScreen,
-                                        screen: .tabsTray)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                        actionType: ComponentActionType.addComponent,
+                                        component: .tabsTray)
         store.dispatch(screenAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -377,9 +377,9 @@ final class TabTrayViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.closeScreen,
-                                        screen: .tabsTray)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                        actionType: ComponentActionType.removeComponent,
+                                        component: .tabsTray)
         store.dispatch(screenAction)
     }
 
@@ -434,7 +434,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     var shouldBeInPrivateTheme: Bool {
-        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
     }
 

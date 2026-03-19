@@ -440,9 +440,9 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                  actionType: ComponentActionType.addComponent,
+                                  component: .themeSettings)
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {

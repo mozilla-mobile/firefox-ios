@@ -754,7 +754,7 @@ class BrowserViewController: UIViewController,
         let isKeyboardShowing = keyboardState != nil
 
         let isScrollAlphaZero = if #available(iOS 26.0, *) {
-            store.state.screenState(
+            store.state.componentState(
                 ToolbarState.self,
                 for: .toolbar,
                 window: windowUUID
@@ -848,7 +848,7 @@ class BrowserViewController: UIViewController,
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
 
-        let shouldShowWarningBadge = store.state.screenState(
+        let shouldShowWarningBadge = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -902,7 +902,7 @@ class BrowserViewController: UIViewController,
         guard isSwipingTabsEnabled else { return }
 
         if isBottomSearchBar,
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
@@ -1068,9 +1068,9 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .browserViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                  actionType: ComponentActionType.addComponent,
+                                  component: .browserViewController)
         store.dispatch(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
@@ -1088,9 +1088,9 @@ class BrowserViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .browserViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                  actionType: ComponentActionType.removeComponent,
+                                  component: .browserViewController)
         store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
@@ -1417,7 +1417,7 @@ class BrowserViewController: UIViewController,
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
         guard featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) else { return }
-        let toolbarState = store.state.screenState(
+        let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -1425,7 +1425,7 @@ class BrowserViewController: UIViewController,
 
         let isEditing = toolbarState?.addressToolbar.isEditing ?? false
 
-        let shouldShowSearchBar = store.state.screenState(
+        let shouldShowSearchBar = store.state.componentState(
             HomepageState.self,
             for: .homepage,
             window: windowUUID
@@ -2582,7 +2582,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateToolbarAnimationStateIfNeeded() {
-        let shouldAnimate = store.state.screenState(
+        let shouldAnimate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -3326,7 +3326,7 @@ class BrowserViewController: UIViewController,
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
         // to avoid having the toolbar re-displayed
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
               toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
@@ -3343,7 +3343,7 @@ class BrowserViewController: UIViewController,
         // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
-           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+           let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
         let availableContentHeight = getAvailableHomepageContentHeight()
@@ -5037,7 +5037,7 @@ extension BrowserViewController: TabManagerDelegate {
     private func updateToolbarTabCount(_ count: Int) {
         // Only dispatch action when the number of tabs is different from what is saved in the state
         // to avoid having the toolbar re-displayed
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
               toolbarState.numberOfTabs != count
         else { return }
 
@@ -5171,7 +5171,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
             store.dispatch(
@@ -5226,7 +5226,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         guard newTabChoice != .topSites, newTabChoice != .blankPage else { return false }
 
-        let searchTerm = store.state.screenState(
+        let searchTerm = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID

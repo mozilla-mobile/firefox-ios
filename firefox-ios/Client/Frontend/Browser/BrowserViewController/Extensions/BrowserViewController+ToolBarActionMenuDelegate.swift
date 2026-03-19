@@ -79,7 +79,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         // 2. Microsurvey prompt is not being displayed
         // If the hint does not show,
         // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
-        guard let state = store.state.screenState(BrowserViewControllerState.self,
+        guard let state = store.state.componentState(BrowserViewControllerState.self,
                                                   for: .browserViewController,
                                                   window: windowUUID)
         else { return }
@@ -97,7 +97,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     func configureToolbarUpdateContextualHint(addressToolbarView: UIView, navigationToolbarView: UIView) {
-        guard let state = store.state.screenState(ToolbarState.self,
+        guard let state = store.state.componentState(ToolbarState.self,
                                                   for: .toolbar,
                                                   window: windowUUID),
               isToolbarUpdateHintEnabled
@@ -130,7 +130,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
     // MARK: - Summarize CFR / Contextual Hint
     func configureSummarizeToolbarEntryContextualHint(for view: UIView) {
-        guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        guard let state = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
         // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
@@ -159,7 +159,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
     // MARK: - Translation CFR
     func configureTranslationContextualHint(for view: UIView) {
-        guard let state = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+        guard let state = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
         // Show up arrow for iPad and landscape or top address bar; otherwise show down arrow
         let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let shouldShowUpArrow = state.toolbarPosition == .top || !showNavToolbar
@@ -193,7 +193,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     func dismissToolbarCFRs(with windowUUID: WindowUUID) {
-        guard let toolbarState = store.state.screenState(
+        guard let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID

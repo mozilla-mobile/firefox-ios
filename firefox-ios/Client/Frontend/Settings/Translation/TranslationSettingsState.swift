@@ -18,7 +18,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
     var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let state = appState.screenState(
+        guard let state = appState.componentState(
             TranslationSettingsState.self,
             for: .translationSettings,
             window: uuid

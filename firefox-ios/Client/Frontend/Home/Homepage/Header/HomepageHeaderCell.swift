@@ -120,7 +120,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
         let wallpaperManager = WallpaperManager()
-        let browserViewType = store.state.screenState(
+        let browserViewType = store.state.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: currentWindowUUID
