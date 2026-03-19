@@ -48,6 +48,15 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
 
+        case TranslationSettingsViewActionType.addLanguage:
+            guard let code = action.languageCode else { break }
+            let updated = manager.addLanguage(code)
+            store.dispatch(TranslationSettingsMiddlewareAction(
+                preferredLanguages: buildLanguageDetails(from: updated),
+                windowUUID: action.windowUUID,
+                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
+            ))
+
         default:
             break
         }

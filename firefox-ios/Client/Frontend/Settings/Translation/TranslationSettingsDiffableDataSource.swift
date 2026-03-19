@@ -16,6 +16,7 @@ enum TranslationSettingsSection: Int, Hashable {
 enum TranslationSettingsItem: Hashable {
     case enableToggle
     case language(PreferredLanguageDetails)
+    case addLanguage
 }
 
 // MARK: - Diffable Data Source
@@ -80,7 +81,7 @@ final class TranslationSettingsDiffableDataSource:
         if state.isTranslationsEnabled {
             snapshot.appendSections([.preferredLanguages])
             let langItems = state.preferredLanguages.map { TranslationSettingsItem.language($0) }
-            snapshot.appendItems(langItems, toSection: .preferredLanguages)
+            snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
         }
 
         apply(snapshot, animatingDifferences: animated)

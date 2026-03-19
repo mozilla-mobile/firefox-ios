@@ -3287,6 +3287,27 @@ extension String {
                     value: "Choose from these languages when translating.",
                     comment: "Footer text below the preferred languages list in the Translation settings screen."
                 )
+                public static let AddLanguage = MZLocalizedString(
+                    key: "", // Settings.Translation.PreferredLanguages.AddLanguage.v150
+                    tableName: "Settings",
+                    value: "Add Language…",
+                    comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
+                )
+            }
+
+            public struct LanguagePicker {
+                public static let NavTitle = MZLocalizedString(
+                    key: "", // Settings.Translation.LanguagePicker.NavTitle.v150
+                    tableName: "Settings",
+                    value: "Select Language",
+                    comment: "Navigation bar title of the language picker shown when adding a preferred translation language."
+                )
+                public static let SearchPlaceholder = MZLocalizedString(
+                    key: "", // Settings.Translation.LanguagePicker.SearchPlaceholder.v150
+                    tableName: "Settings",
+                    value: "Search",
+                    comment: "Placeholder text for the search bar in the translation language picker."
+                )
             }
         }
 
