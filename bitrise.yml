@@ -1538,11 +1538,11 @@ workflows:
     - slack@4.2.1:
         is_always_run: true
         run_if: ".IsBuildFailed"
-        title: 'Nightly FirefoxBeta Mac build & deploy failed'
+        title: 'Nightly FirefoxBeta build & deploy failed'
         inputs:
         - title: ''
         - author_name: ''
-        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Nightly_Beta_Mac_Only* :x:"
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Nightly_Beta_Only* :x:"
         - buttons: ""
         - fields: |
             Log | ${BITRISE_BUILD_URL}
@@ -1551,7 +1551,7 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: Build, archive and upload Firefox Beta Nightly for Mac (Designed for iPad)
+    description: This step is to build, archive and upload Firefox Release and Beta
 
   SPM_Common_Steps:
     steps:
