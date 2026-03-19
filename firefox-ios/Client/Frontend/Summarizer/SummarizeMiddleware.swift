@@ -13,8 +13,6 @@ protocol SummarizerConfigFactory: Sendable {
     func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig?
 }
 
-// TODO: - proper action design, remove SummarizeAction config,
-// GeneralBrowserAction display reader mode button => remove state should show reader mode button
 @MainActor
 final class SummarizerMiddleware: SummarizerConfigFactory {
     private let summarizerNimbusUtils: SummarizerNimbusUtils
