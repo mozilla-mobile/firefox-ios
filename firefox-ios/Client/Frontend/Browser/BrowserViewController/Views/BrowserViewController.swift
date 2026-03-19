@@ -2487,29 +2487,39 @@ class BrowserViewController: UIViewController,
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
                             guard let bookmarkFolder = result.successValue as? BookmarkFolderData else {
-                                self.showDefaultBookmarkToast(urlString: urlString, title: title)
+                                self.showDefaultBookmarkToast(urlString: urlString)
                                 return
                             }
                             let folderName = bookmarkFolder.title
                             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                            self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
+                            self.showLegacyBookmarkToast(urlString: urlString, message: message)
                         }
                     }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showDefaultBookmarkToast(urlString: urlString, title: title)
+                showDefaultBookmarkToast(urlString: urlString)
             }
         default: break
         }
     }
 
-    private func showDefaultBookmarkToast(urlString: String?, title: String?) {
-        showToast(
-            urlString,
-            title,
-            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
-            toastAction: .bookmarkPage
+    private func showDefaultBookmarkToast(urlString: String?) {
+        showLegacyBookmarkToast(
+            urlString: urlString,
+            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel
         )
+    }
+
+    /// This toast was tied into the legacy main menu, moved it to it's own function.
+    /// New toasts should be piped through Redux.
+    private func showLegacyBookmarkToast(urlString: String?, message: String) {
+        let viewModel = ButtonToastViewModel(labelText: message,
+                                             buttonText: .BookmarksEdit)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme()) { isButtonTapped in
+            isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
+        }
+        show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
@@ -5260,7 +5270,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsShowCloseTabsToast() {
-        showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+        showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
     }
 }
 

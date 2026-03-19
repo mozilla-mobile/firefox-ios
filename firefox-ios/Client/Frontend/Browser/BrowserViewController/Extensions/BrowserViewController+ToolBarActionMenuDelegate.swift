@@ -395,88 +395,25 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
                 if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
                     || UIDevice.current.userInterfaceIdiom == .pad {
-                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+                    self.showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
                 }
             }
         }.items
     }
-}
 
-// Laurie  move elsewhere
-enum MenuButtonToastAction {
-    case share
-    case addToReadingList
-    case removeFromReadingList
-    case bookmarkPage
-    case removeBookmark
-    case copyUrl
-    case pinPage
-    case removePinPage
-    case closeTab
-    case downloadPDF
-}
-
-// Laurie - move elsewhere
-protocol ToolBarActionMenuDelegate: AnyObject {
-    @MainActor
-    func showToast(_ bookmarkURL: String?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
-}
-
-// Laurie - move elsewhere
-extension ToolBarActionMenuDelegate {
-    @MainActor
-    func showToast(_ urlString: String? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
-        showToast(urlString, title, message: message, toastAction: toastAction)
-    }
-}
-
-// MARK: - UIDocumentPickerDelegate
-extension BrowserViewController: UIDocumentPickerDelegate, ToolBarActionMenuDelegate {
-    func showToast(_ urlString: String? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
-        switch toastAction {
-        case .bookmarkPage:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .BookmarksEdit)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { isButtonTapped in
-                isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
-            }
-            show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
-        case .removeBookmark:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self, let currentTab = tabManager.selectedTab else { return }
-                isButtonTapped ? self.addBookmark(
-                    urlString: urlString ?? currentTab.url?.absoluteString ?? "",
-                    title: title ?? currentTab.title
-                ) : nil
-            }
-            show(toast: toast)
-        case .closeTab:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self,
-                        tabManager.backupCloseTab != nil,
-                        isButtonTapped
-                else { return }
-                self.tabManager.undoCloseTab()
-            }
-            show(toast: toast)
-        default:
-            SimpleToast().showAlertWithText(message,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
+    /// This toast was tied into the legacy main menu, moved it to it's own function.
+    /// New toasts should be piped through Redux.
+    func showLegacyCloseTabToast(message: String) {
+        let viewModel = ButtonToastViewModel(labelText: message,
+                                             buttonText: .UndoString)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme()) { [weak self] isButtonTapped in
+            guard let self,
+                  tabManager.backupCloseTab != nil,
+                  isButtonTapped
+            else { return }
+            self.tabManager.undoCloseTab()
         }
-    }
-
-    // Laurie - UIDocumentPickerDelegate
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if !urls.isEmpty {
-            showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
-        }
+        show(toast: toast)
     }
 }
