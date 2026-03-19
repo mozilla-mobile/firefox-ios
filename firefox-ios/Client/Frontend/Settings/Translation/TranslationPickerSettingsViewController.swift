@@ -60,6 +60,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         super.viewDidLoad()
         setupCollectionView()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
         subscribeToRedux()
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
@@ -115,10 +116,11 @@ final class TranslationPickerSettingsViewController: UIViewController,
         ])
     }
 
-    private func makeLayout() -> UICollectionViewCompositionalLayout {
+    private func makeLayout(backgroundColor: UIColor? = nil) -> UICollectionViewCompositionalLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         config.headerMode = .supplementary
         config.footerMode = .supplementary
+        config.backgroundColor = backgroundColor
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
@@ -223,7 +225,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
-        collectionView.backgroundColor = theme.colors.layer1
+        collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         dataSource.reconfigureVisibleCells()
     }
