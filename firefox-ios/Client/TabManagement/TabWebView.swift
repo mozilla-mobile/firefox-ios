@@ -26,6 +26,21 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
     let windowUUID: WindowUUID
     private var pullRefresh: PullRefreshView?
     private var theme: Theme?
+    private var uiTestLeakView: UIView? // Used for automation
+
+    deinit {
+        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
+        guard Thread.isMainThread else {
+            assertionFailure("TabWebView not deallocated on the main thread.")
+            return
+        }
+
+        MainActor.assumeIsolated {
+            // Note: this has no effect in production. This view is only
+            // created during automation testing as a sentinel UI element.
+            uiTestLeakView?.removeFromSuperview()
+        }
+    }
 
     override var hasOnlySecureContent: Bool {
         // TODO: - FXIOS-11721 Understand how it should be showed the lock icon for a local PDF
@@ -179,5 +194,31 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, Featur
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
+    }
+
+    // MARK: - Automation Support
+
+    /// No effect in production. This function creates a sentinel UI element which
+    /// can be detected by our automated tests if the TabWebView is leaked after a
+    /// tab is closed.
+    func addUITestMemoryLeakDetectionUIElement() {
+        guard AppConstants.isRunningUITests, let keyWindow = UIWindow.keyWindow else { return }
+
+        class TABWEBVIEW_LEAK_DETECTED: UIButton { }
+
+        guard let root = keyWindow.rootViewController else { fatalError() }
+        let uiTestScreen = UIScreen.main.bounds
+        let viewFrame = CGRect(x: uiTestScreen.width / 2.0,
+                               y: uiTestScreen.height / 2.0,
+                               width: 5,
+                               height: 5)
+        let leakIdentifierView = TABWEBVIEW_LEAK_DETECTED(frame: viewFrame)
+        leakIdentifierView.backgroundColor = UIColor.white
+        leakIdentifierView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator
+        leakIdentifierView.isAccessibilityElement = true
+        leakIdentifierView.isUserInteractionEnabled = true
+        leakIdentifierView.accessibilityTraits = [.button]
+        root.view.addSubview(leakIdentifierView)
+        uiTestLeakView = leakIdentifierView
     }
 }
