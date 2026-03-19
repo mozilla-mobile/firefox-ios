@@ -11,16 +11,16 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
     private var collectionView: UICollectionView!
     private var subject: TranslationSettingsDiffableDataSource!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         subject = makeDataSource(localeCode: "en")
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         subject = nil
         collectionView = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - applySnapshot — section structure
