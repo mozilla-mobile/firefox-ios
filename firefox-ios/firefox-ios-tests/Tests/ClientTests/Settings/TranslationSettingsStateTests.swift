@@ -37,7 +37,6 @@ final class TranslationSettingsStateTests: XCTestCase {
 
     // MARK: - Reducer Tests - didLoadSettings
 
-    @MainActor
     func test_didLoadSettings_updatesAllValues() {
         let initialState = createSubject()
         let reducer = translationSettingsReducer()
@@ -57,7 +56,6 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState.supportedLanguages, ["en", "fr", "de"])
     }
 
-    @MainActor
     func test_didLoadSettings_withNilValues_preservesExistingState() {
         let initialState = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
@@ -81,7 +79,6 @@ final class TranslationSettingsStateTests: XCTestCase {
 
     // MARK: - Reducer Tests - didUpdateSettings
 
-    @MainActor
     func test_didUpdateSettings_updatesTranslationsEnabled() {
         let initialState = createSubject()
         let reducer = translationSettingsReducer()
@@ -99,7 +96,6 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState.supportedLanguages, initialState.supportedLanguages)
     }
 
-    @MainActor
     func test_didUpdateSettings_preservesLanguagesWhenNil() {
         let initialState = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
@@ -179,7 +175,6 @@ final class TranslationSettingsStateTests: XCTestCase {
 
     // MARK: - Edge Cases
 
-    @MainActor
     func test_unknownAction_returnsDefaultState() {
         let initialState = createSubject()
         let reducer = translationSettingsReducer()
@@ -199,7 +194,6 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState, initialState)
     }
 
-    @MainActor
     func test_actionWithDifferentWindowUUID_returnsDefaultState() {
         let initialState = createSubject()
         let reducer = translationSettingsReducer()
