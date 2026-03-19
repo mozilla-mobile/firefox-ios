@@ -1410,26 +1410,6 @@ workflows:
         - connection: 'off'
         - itunescon_user: "$APPLE_ACCOUNT_ID"
         title: 'Nightly FirefoxBeta: Xcode Archive & Export for iOS'
-    - xcode-archive@4.0:
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - compile_bitcode: 'no'
-        - upload_bitcode: 'no'
-        - team_id: 43AQ936H96
-        - export_method: app-store
-        - output_tool: xcodebuild
-        - scheme: FirefoxBeta
-        - export_development_team: 43AQ936H96
-        - distribution_method: app-store
-        - configuration: FirefoxBeta
-        - destination: generic/platform=macOS,variant=Mac Designed for iPad
-        title: 'FirefoxBeta: Xcode Archive & Export for Mac (Designed for iPad)'
-    - deploy-to-itunesconnect-application-loader@1.3:
-        inputs:
-        - app_password: "$APPLE_ACCOUNT_PW"
-        - connection: 'off'
-        - itunescon_user: "$APPLE_ACCOUNT_ID"
-        title: 'Nightly FirefoxBeta: Upload to TestFlight (Mac)'
     - script@1.2.1:
         title: Upload NightlyBeta Symbols
         inputs:
@@ -1455,6 +1435,123 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
+
+  SPM_Nightly_Beta_Mac_Only:
+    steps:
+    - activate-ssh-key@4.1.1:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - certificate-and-profile-installer@1.11.4: {}
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd firefox-ios/Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.2.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            ./bootstrap.sh
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/WidgetKit/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/CredentialProvider/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/sticker/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
+        - plist_path: firefox-ios/Extensions/ActionExtension/Info.plist
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            echo "Setting Nimbus variables"
+            /usr/libexec/PlistBuddy -c "Set NimbusURL $NIMBUS_URL" "firefox-ios/Client/Info.plist"
+        title: Nimbus Variable Setup
+    - xcode-archive@4.0:
+        inputs:
+        - project_path: firefox-ios/Client.xcodeproj
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - export_development_team: 43AQ936H96
+        - distribution_method: app-store
+        - configuration: FirefoxBeta
+        - destination: generic/platform=macOS,variant=Mac Designed for iPad
+        title: 'FirefoxBeta: Xcode Archive & Export for Mac (Designed for iPad)'
+    - deploy-to-bitrise-io@2.9.2: {}
+    - deploy-to-itunesconnect-application-loader@1.3:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - connection: 'off'
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        - platform: macos
+        - pkg_path: "$BITRISE_PKG_PATH"
+        title: 'Nightly FirefoxBeta: Upload to TestFlight (Mac)'
+    - script@1.2.1:
+        title: Upload NightlyBeta Symbols
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            firefox-ios/ThirdParty/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN_FIREFOX" upload-dif \
+              --org mozilla --project firefox-ios "$BITRISE_DSYM_DIR_PATH"
+    - slack@4.2.1:
+        is_always_run: true
+        run_if: ".IsBuildFailed"
+        title: 'Nightly FirefoxBeta Mac build & deploy failed'
+        inputs:
+        - title: ''
+        - author_name: ''
+        - pretext_on_error: "*Firefox-iOS* :firefox: *SPM_Nightly_Beta_Mac_Only* :x:"
+        - buttons: ""
+        - fields: |
+            Log | ${BITRISE_BUILD_URL}
+        - webhook_url: "$SLACK_WEBHOOK_FIREFOX_IOS_DEV"
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: Build, archive and upload Firefox Beta Nightly for Mac (Designed for iPad)
 
   SPM_Common_Steps:
     steps:
