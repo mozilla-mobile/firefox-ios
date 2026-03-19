@@ -210,14 +210,6 @@ extension String {
                 comment: "The title for the unpinning shortcut action in the context menu when tapping on the bookmark's item menu button")
         }
 
-        public struct Search {
-            public static let SearchPlaceholder = MZLocalizedString(
-                key: "Bookmarks.Search.Placeholder.v140",
-                tableName: "Bookmarks",
-                value: "Search Bookmarks",
-                comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
-        }
-
         public struct EmptyState {
             public struct Root {
                 public static let Title = MZLocalizedString(
@@ -1051,21 +1043,11 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "News",
                 comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
-            public static let PopularTodaySectionTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
-                tableName: "FirefoxHomepage",
-                value: "Popular Today",
-                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
             public static let NewsAffordanceLabel = MZLocalizedString(
                 key: "FirefoxHome.Stories.NewsAffordanceLabel.v149",
                 tableName: "FirefoxHomepage",
                 value: "News",
                 comment: "This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles")
-            public static let AllStoriesButtonTitle = MZLocalizedString(
-                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
-                tableName: "FirefoxHomepage",
-                value: "All Stories",
-                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles.")
             public static let NumberOfMinutes = MZLocalizedString(
                 key: "FirefoxHome.Stories.Minutes.v140",
                 tableName: nil,
@@ -1093,22 +1075,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "%@ of %@",
                 comment: "On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5'")
-
-            public struct AllStories {
-                public static let AllStoriesViewTitle = MZLocalizedString(
-                    key: "FirefoxHome.Stories.AllStoriesViewTitle.v145",
-                    tableName: "FirefoxHomepage",
-                    value: "All Stories",
-                    comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles")
-            }
-
-            public struct StoriesWebview {
-                public static let ReloadPageAccessibilityLabel = MZLocalizedString(
-                    key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
-                    tableName: "FirefoxHomepage",
-                    value: "Reload page",
-                    comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview")
-            }
         }
 
         public struct RecentlySaved { }
@@ -2612,6 +2578,12 @@ public struct TermsOfUse {
         value: "Back",
         comment: "Label for the back button shown in the Terms of Use web view."
     )
+    public static let CloseButton = MZLocalizedString(
+        key: "TermsOfUse.CloseButton.v150",
+        tableName: "TermsOfUse",
+        value: "Close",
+        comment: "Label for the close button shown in the Terms of Use web view."
+    )
     public static let TermsOfUseHasOpened = MZLocalizedString(
         key: "TermsOfUse.TermsOfUseHasOpened.v142",
         tableName: "TermsOfUse",
@@ -3019,6 +2991,15 @@ extension String {
                 tableName: "Settings",
                 value: "Media",
                 comment: "This is the title for Media customization under the Browsing settings section."
+            )
+        }
+
+        public struct AIControls {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AIControls.Title.v150",
+                tableName: "Settings",
+                value: "AI Controls",
+                comment: "In the settings menu, in the General section, this is the title for the AI Controls settings section"
             )
         }
 
@@ -3974,6 +3955,19 @@ extension String {
                 tableName: "Translations",
                 value: "Retry",
                 comment: "On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error.")
+        }
+
+        public struct LanguagePicker {
+            public static let Title = MZLocalizedString(
+                key: "", // Translations.LanguagePicker.Title.v150
+                tableName: "Translations",
+                value: "Translate Page to…",
+                comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
+            public static let PreferredLanguagesTitle = MZLocalizedString(
+                key: "", // Translations.LanguagePicker.PreferredLanguages.v150
+                tableName: "Translations",
+                value: "Preferred Languages…",
+                comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
         }
 
         public struct Sheet {
@@ -5426,6 +5420,18 @@ extension String {
                 value: "Reader View",
                 comment: "On the main menu, the title for the action that will show the reader view for the webpage."
             )
+            public static let ReaderViewOn = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOn.Title.v150",
+                tableName: "MainMenu",
+                value: "On",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned on."
+            )
+            public static let ReaderViewOff = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ReaderViewOff.Title.v150",
+                tableName: "MainMenu",
+                value: "Off",
+                comment: "On the main menu, the label for the action that indicates that Reader view is turned off."
+            )
 
             public struct Translation {
                 public static let TranslatePageTitle = MZLocalizedString(
@@ -5476,6 +5482,11 @@ extension String {
                     tableName: "MainMenu",
                     value: "Less",
                     comment: "On the main menu, the accessibility label for the action that will hide some menu options in the current section of the menu.")
+                public static let ReaderView = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150",
+                    tableName: "MainMenu",
+                    value: "Reader View",
+                    comment: "On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage.")
                 public static let SummarizePage = MZLocalizedString(
                     key: "MainMenu.ToolsSection.AccessibilityLabels.SummarizePage.v142",
                     tableName: "MainMenu",
@@ -7270,6 +7281,13 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Name for button removing current article from reading list in reader mode")
+    public struct ReaderModeBar {
+        public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
+            key: "ReaderModeBar.SummarizeButtonAccessibilityLabel.v150",
+            tableName: "ReaderModeBar",
+            value: "Summarize Page",
+            comment: "Accessibility label for the summarize button in the reader mode bar view")
+    }
 }
 
 // MARK: - SearchViewController
@@ -7395,12 +7413,16 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
-
         public static let SummarizeButtonAccessibilityLabel = MZLocalizedString(
             key: "Toolbar.NewTab.Button.v142",
             tableName: "Toolbar",
             value: "Summarize page",
             comment: "Accessibility label for the summarize button that can be displayed in the address toolbar.")
+        public static let ReaderModeWithSummarizerButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.ReaderModeWithSummarizer.Button.v150",
+            tableName: "Toolbar",
+            value: "Reader View. Page summary available.",
+            comment: "Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar.")
 
         public struct Translation {
             public static let ButtonInactiveAccessibilityLabel = MZLocalizedString(
@@ -8341,6 +8363,29 @@ extension String {
                 tableName: "Settings",
                 value: "Preferred App Language",
                 comment: "The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings."
+            )
+            public static let PopularTodaySectionTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.PopularTodaySectionTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "Popular Today",
+                comment: "This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles")
+            public static let AllStoriesButtonTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.AllStoriesButtonTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "All Stories",
+                comment: "This is the title for the button next to the stories section title on Firefox Homepage that, when tapped, transitions you to the Top Stories view which displays a collection of trending news articles."
+            )
+            public static let AllStoriesViewTitle = MZLocalizedString(
+                key: "FirefoxHome.Stories.AllStoriesViewTitle.v145",
+                tableName: "FirefoxHomepage",
+                value: "All Stories",
+                comment: "This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles"
+            )
+            public static let StoriesWebviewReloadPageAccessibilityLabel = MZLocalizedString(
+                key: "FirefoxHomepage.Pocket.StoriesWebview.ReloadPageAccessibilityLabel.v146",
+                tableName: "FirefoxHomepage",
+                value: "Reload page",
+                comment: "Accessibility label for the page reload button in the navigation toolbar of the stories webview"
             )
         }
     }

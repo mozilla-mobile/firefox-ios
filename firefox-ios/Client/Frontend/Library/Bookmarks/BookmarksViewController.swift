@@ -14,7 +14,8 @@ final class BookmarksViewController: SiteTableViewController,
                                      LibraryPanel,
                                      CanRemoveQuickActionBookmark,
                                      UITableViewDropDelegate,
-                                     Notifiable {
+                                     Notifiable,
+                                     FeatureFlaggable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -33,19 +34,13 @@ final class BookmarksViewController: SiteTableViewController,
     private let bookmarksTelemetry = BookmarksTelemetry()
 
     // MARK: - Search Properties
-    private var isSearching = false
-    private var filteredBookmarkNodes = [FxBookmarkNode]()
-    /// The data source nodes currently displayed: filtered results when searching, otherwise the view model's nodes.
-    private var displayedBookmarkNodes: [FxBookmarkNode] {
-        return isSearching ? filteredBookmarkNodes : viewModel.bookmarkNodes
-    }
     var keyboardState: KeyboardState?
 
     // MARK: - Search UI (History-style bottom search bar)
     var bottomStackView: BaseAlphaStackView = .build { _ in }
 
     lazy var searchbar: UISearchBar = .build { searchbar in
-        searchbar.searchTextField.placeholder = .Bookmarks.Search.SearchPlaceholder
+        searchbar.searchTextField.placeholder = .LibraryPanel.History.SearchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
         searchbar.showsCancelButton = true
@@ -61,20 +56,28 @@ final class BookmarksViewController: SiteTableViewController,
         return toolbarButtonItems
     }
 
+    private var isBookmarksSearchEnabled: Bool {
+        featureFlags.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+    }
+
     private var toolbarButtonItems: [UIBarButtonItem] {
+        let searchItems: [UIBarButtonItem] = isBookmarksSearchEnabled
+            ? [flexibleSpace, bottomSearchButton]
+            : []
+
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
-            return [flexibleSpace, bottomSearchButton, flexibleSpace, bottomRightButton]
+            return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
-            return [flexibleSpace, bottomSearchButton, flexibleSpace, bottomRightButton]
+            return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
@@ -220,7 +223,7 @@ final class BookmarksViewController: SiteTableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        bottomStackView.isHidden = !isSearching
+        bottomStackView.isHidden = !viewModel.isSearching
 
         if tableView.isEditing {
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
@@ -230,6 +233,16 @@ final class BookmarksViewController: SiteTableViewController,
             updatePanelState(newState: .bookmarks(state: .inFolder))
         }
         sendPanelChangeNotification()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if state == .bookmarks(state: .search) {
+            exitSearchState()
+            let substate: LibraryPanelSubState = viewModel.isRootNode ? .mainView : .inFolder
+            updatePanelState(newState: .bookmarks(state: substate))
+        }
     }
 
     // MARK: - Data
@@ -477,8 +490,8 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private func resetSearch() {
-        isSearching = false
-        filteredBookmarkNodes.removeAll()
+        viewModel.isSearching = false
+        viewModel.filteredBookmarkNodes.removeAll()
         tableView.reloadData()
         updateEmptyState(animated: false)
     }
@@ -548,14 +561,14 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        guard let node = displayedBookmarkNodes[safe: indexPath.row],
+        guard let node = viewModel.displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkCell = node as? BookmarksFolderCell
         else { return }
 
         guard !tableView.isEditing else {
             if let bookmarkFolder = self.viewModel.bookmarkFolder,
                 !(node is BookmarkSeparatorData),
-                !isSearching,
+                !viewModel.isSearching,
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
                 bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
@@ -567,14 +580,14 @@ final class BookmarksViewController: SiteTableViewController,
         if let itemData = bookmarkCell as? BookmarkItemData,
            let url = URL(string: itemData.url) {
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-        } else if !isSearching {
+        } else if !viewModel.isSearching {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
             bookmarkCoordinatorDelegate?.start(from: folder)
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return displayedBookmarkNodes.count
+        return viewModel.displayedBookmarkNodes.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -582,7 +595,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let node = displayedBookmarkNodes[safe: indexPath.row] else {
+        guard let node = viewModel.displayedBookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -634,12 +647,12 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard !isSearching else { return false }
+        guard !viewModel.isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        guard !isSearching else { return false }
+        guard !viewModel.isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
@@ -962,11 +975,9 @@ extension BookmarksViewController: UISearchBarDelegate {
     func performSearch(term: String) {
         viewModel.searchBookmarks(query: term) { [weak self] results in
             guard let self else { return }
-            DispatchQueue.main.async {
-                self.isSearching = true
-                self.filteredBookmarkNodes = results
-                self.tableView.reloadData()
-            }
+            self.viewModel.isSearching = true
+            self.viewModel.filteredBookmarkNodes = results
+            self.tableView.reloadData()
         }
     }
 

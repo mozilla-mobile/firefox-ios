@@ -157,9 +157,8 @@ final class TabTrayScreen {
             BaseTestCase().waitForElementsToExist(cells)
 
             if afterDragAndDrop {
-                sleep(2)
+                waitForTabCells()
             }
-
             let firstTabLabel = cells[0].label
             let secondTabLabel = cells[1].label
 

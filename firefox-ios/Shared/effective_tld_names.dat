@@ -11366,6 +11366,8 @@ barsy.ca
 // Alibaba Cloud API Gateway
 // Submitted by Alibaba Cloud Security <cloud_product_security_team@alibaba-inc.com>
 alibabacloudcs.com
+ms.fun
+ms.show
 
 // all-inkl.com : https://all-inkl.com
 // Submitted by Werner Kaltofen <wk@all-inkl.com>
@@ -13449,9 +13451,11 @@ relay.evervault.app
 relay.evervault.dev
 
 // Expo : https://expo.dev/
-// Submitted by James Ide <psl@expo.dev>
+// Submitted by Phil Pluckthun <psl@expo.dev>
 expo.app
+on.expo.app
 staging.expo.app
+on.staging.expo.app
 
 // Fabrica Technologies, Inc. : https://www.fabrica.dev/
 // Submitted by Eric Jiang <eric@fabrica.dev>
@@ -14297,10 +14301,6 @@ us1-plenit.com
 webadorsite.com
 jouwweb.site
 
-// Joyent : https://www.joyent.com/
-// Submitted by Brian Bennett <brian.bennett@joyent.com>
-*.triton.zone
-
 // JS.ORG : http://dns.js.org
 // Submitted by Stefan Keim <admin@js.org>
 js.org
@@ -14559,10 +14559,6 @@ polyspace.com
 mayfirst.info
 mayfirst.org
 
-// Maze Play : https://www.mazeplay.com
-// Submitted by Adam Humpherys <adam@mws.dev>
-mazeplay.com
-
 // McHost : https://mchost.ru
 // Submitted by Evgeniy Subbotin <e.subbotin@mchost.ru>
 mcdir.me
@@ -14699,6 +14695,10 @@ bmoattachments.org
 net.ru
 org.ru
 pp.ru
+
+// MyOwn srl : https://www.myown.eu/
+// Submitted by Stephane Bouvard <support@myown.eu>
+my.be
 
 // Mythic Beasts : https://www.mythic-beasts.com
 // Submitted by Paul Cammish <kelduum@mythic-beasts.com>
@@ -15975,6 +15975,10 @@ lima.zone
 *.transurl.eu
 site.transip.me
 *.transurl.nl
+
+// Triton Data Center project : https://tritondatacenter.com
+// Submitted by Triton Data Center staff <tickets@tritondatacenter.com>
+*.triton.zone
 
 // Tunnelmole: https://tunnelmole.com
 // Submitted by Robbie Cahill <support@tunnelmole.com>

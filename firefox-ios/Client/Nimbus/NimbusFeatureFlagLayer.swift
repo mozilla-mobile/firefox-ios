@@ -34,6 +34,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .bookmarksSearchFeature:
+            return checkBookmarksSearchFeature(from: nimbus)
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -60,9 +63,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault(from: nimbus)
-
-        case .homepageNewsTransition:
-            return checkHomepageNewsTransitionFeature(from: nimbus)
 
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
@@ -208,11 +208,14 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .translation:
             return checkTranslationFeature(from: nimbus)
 
+        case .translationLanguagePicker:
+            return checkTranslationLanguagePickerFeature(from: nimbus)
+
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .voiceSearch:
-            return checkVoiceSearchFeature(from: nimbus)
+        case .quickAnswers:
+            return checkQuickAnswersFeature(from: nimbus)
 
         case .webEngineIntegrationRefactor:
             return checkWebEngineIntegrationRefactor(from: nimbus)
@@ -262,10 +265,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageJumpBackInSectionDefault(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().jbiSectionDefault
-    }
-
-    private func checkHomepageNewsTransitionFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.homepageRedesignFeature.value().newsTransition
     }
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
@@ -371,12 +370,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.translationsFeature.value().enabled
     }
 
+    private func checkTranslationLanguagePickerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.translationsFeature.value().languagePickerEnabled
+    }
+
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.trendingSearchesFeature.value().enabled
     }
 
-    private func checkVoiceSearchFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.voiceSearchFeature.value().enabled
+    private func checkQuickAnswersFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.quickAnswersFeature.value().enabled
     }
 
     private func checkFeltPrivacyFeature(
@@ -558,5 +561,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
+    }
+
+    private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarksSearchFeature.value().enabled
     }
 }

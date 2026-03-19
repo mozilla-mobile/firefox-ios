@@ -4,11 +4,11 @@
 
 import XCTest
 import Common
-import VoiceSearchKit
+import QuickAnswersKit
 @testable import Client
 
 @MainActor
-final class VoiceSearchCoordinatorTests: XCTestCase {
+final class QuickAnswersCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinator!
     private var themeManager: MockThemeManager!
@@ -29,57 +29,57 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_start_presentsVoiceSearchViewController() {
+    func test_start_presentsViewController() {
         let subject = createSubject()
 
         subject.start()
 
         XCTAssertEqual(router.presentCalled, 1)
-        XCTAssertTrue(router.presentedViewController is VoiceSearchViewController)
+        XCTAssertTrue(router.presentedViewController is QuickAnswersViewController)
     }
 
-    func test_dismissVoiceSearch_dismissesControllerAndNotifiesParent() {
+    func test_dismissQuickAnswers_dismissesControllerAndNotifiesParent() {
         let subject = createSubject()
 
-        subject.dismissVoiceSearch(with: nil)
+        subject.dismissQuickAnswers(with: nil)
 
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    func test_dismissVoiceSearch_withNilNavigationType_doesntCallCallback() {
+    func test_dismissQuickAnswers_withNilNavigationType_doesntCallCallback() {
         var didCallCallback = false
         let subject = createSubject(onNavigate: { _ in
             didCallCallback = true
         })
 
-        subject.dismissVoiceSearch(with: nil)
+        subject.dismissQuickAnswers(with: nil)
 
         XCTAssertFalse(didCallCallback, "The onNavigate closure should not have been called")
     }
 
-    func test_dismissVoiceSearch_withNavigateToURLType_callsCallback() {
+    func test_dismissQuickAnswers_withNavigateToURLType_callsCallback() {
         var didCallCallback = false
         let subject = createSubject(onNavigate: { type in
             XCTAssertEqual(type, .url(self.testURL))
             didCallCallback = true
         })
 
-        subject.dismissVoiceSearch(with: .url(testURL))
+        subject.dismissQuickAnswers(with: .url(testURL))
 
         XCTAssertTrue(didCallCallback, "The onNavigate closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
         XCTAssertEqual(router.dismissCalled, 1)
     }
 
-    func test_dismissVoiceSearch_withNavigateToSearchResultType_callsCallback() {
+    func test_dismissQuickAnswers_withNavigateToSearchResultType_callsCallback() {
         var didCallCallback = false
         let subject = createSubject(onNavigate: { type in
             XCTAssertEqual(type, .searchResult(self.testQuery))
             didCallCallback = true
         })
 
-        subject.dismissVoiceSearch(with: .searchResult(testQuery))
+        subject.dismissQuickAnswers(with: .searchResult(testQuery))
 
         XCTAssertTrue(didCallCallback, "The onNavigate closure should have been called")
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
@@ -88,11 +88,11 @@ final class VoiceSearchCoordinatorTests: XCTestCase {
 
     // MARK: - Helper Methods
     private func createSubject(
-        onNavigate: @escaping (VoiceSearchNavigationType) -> Void = { _ in },
+        onNavigate: @escaping (QuickAnswersNavigationType) -> Void = { _ in },
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> VoiceSearchCoordinator {
-        let subject = VoiceSearchCoordinator(
+    ) -> QuickAnswersCoordinator {
+        let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,

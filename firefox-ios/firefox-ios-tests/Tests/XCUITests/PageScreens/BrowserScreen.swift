@@ -213,8 +213,12 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
     }
 
-    func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT) {
+    func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT_LONG) {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app))
+    }
+
+    func isAddressBarLockIconOffPresent() -> Bool {
+        return sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app).exists
     }
 
     func assertAddressBarHasKeyboardFocus() {
@@ -287,7 +291,7 @@ final class BrowserScreen {
         app.webViews.buttons[buttonText].waitAndTap()
     }
 
-    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT) {
+    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT_LONG) {
         let base = BaseTestCase()
         for element in elements {
             if shouldExist {

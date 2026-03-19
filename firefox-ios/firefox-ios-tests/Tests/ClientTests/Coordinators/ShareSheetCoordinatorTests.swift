@@ -77,11 +77,10 @@ final class ShareSheetCoordinatorTests: XCTestCase {
     private func createSubject() -> ShareSheetCoordinator {
         mockRouter = MockRouter(navigationController: UINavigationController())
         let subject = ShareSheetCoordinator(
-            alertContainer: UIView(),
             router: mockRouter,
             profile: MockProfile(),
-            parentCoordinator: parentCoordinator,
-            tabManager: MockTabManager())
+            tabManager: MockTabManager(),
+            parentCoordinator: parentCoordinator)
         trackForMemoryLeaks(subject)
         return subject
     }

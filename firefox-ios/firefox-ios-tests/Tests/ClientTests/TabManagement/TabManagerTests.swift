@@ -193,6 +193,26 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(document.pauseDownloadCalled, 1)
     }
 
+    @MainActor
+    func testSelectTab_immediatePreservationTrue_callsSaveWithForcedTrue() async throws {
+        let tabs = generateTabs(count: 2)
+        let subject = createSubject(tabs: tabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(tabs[1], previous: tabs[0], immediatePreservation: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, true)
+    }
+
+    @MainActor
+    func testSelectTab_immediatePreservationFalse_callsSaveWithForcedFalse() async throws {
+        let tabs = generateTabs(count: 2)
+        let subject = createSubject(tabs: tabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(tabs[1], previous: tabs[0], immediatePreservation: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, false)
+    }
+
     // MARK: - Restore tabs
 
     @MainActor
@@ -356,7 +376,7 @@ final class TabManagerTests: XCTestCase {
     @MainActor
     func testPreserveTabsWithNoTabs() async throws {
         let subject = createSubject()
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
@@ -366,7 +386,7 @@ final class TabManagerTests: XCTestCase {
     func testPreserveTabsWithOneTab() async throws {
         let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 1)
@@ -376,10 +396,30 @@ final class TabManagerTests: XCTestCase {
     func testPreserveTabsWithManyTabs() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    @MainActor
+    func testPreserveTabsImmediate_callsSaveWithForcedTrue() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = true
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, true)
+    }
+
+    @MainActor
+    func testPreserveTabsImmediate_beforeRestoreFinished_doesNotSave() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = false
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, false)
     }
 
     // MARK: - Save preview screenshot

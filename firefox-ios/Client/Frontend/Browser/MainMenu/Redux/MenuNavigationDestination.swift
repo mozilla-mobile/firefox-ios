@@ -13,6 +13,7 @@ enum MainMenuNavigationDestination: Equatable {
     case findInPage
     case history
     case passwords
+    case readerView
     case settings
     case siteProtections
     case syncSignIn
@@ -36,6 +37,7 @@ enum MainMenuNavigationDestination: Equatable {
             .findInPage,
             .history,
             .passwords,
+            .readerView,
             .settings,
             .siteProtections,
             .syncSignIn,

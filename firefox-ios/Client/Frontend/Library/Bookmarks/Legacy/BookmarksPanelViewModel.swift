@@ -33,6 +33,14 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
+    var isSearching = false
+    var filteredBookmarkNodes = [FxBookmarkNode]()
+
+    /// The data source nodes currently displayed: filtered results when searching, otherwise the full bookmark nodes.
+    var displayedBookmarkNodes: [FxBookmarkNode] {
+        return isSearching ? filteredBookmarkNodes : bookmarkNodes
+    }
+
     private var hasDesktopFolders = false
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
@@ -150,29 +158,37 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
 
     /// Recursively searches all bookmarks under the current folder (and its subfolders)
     /// for items whose title or URL contains the given query string (case-insensitive).
-    func searchBookmarks(query: String, completion: @escaping @Sendable ([FxBookmarkNode]) -> Void) {
+    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable ([FxBookmarkNode]) -> Void) {
         guard !query.isEmpty else {
-            completion([])
+            DispatchQueue.main.async { completion([]) }
             return
         }
 
         bookmarksHandler
-            .getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: true)
-            .uponQueue(.main) { [weak self] result in
-                guard let folderData = result.successValue as? BookmarkFolderData else {
-                    self?.logger.log("Search bookmarks tree fetch failed",
+            .getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: true) { [weak self] result in
+                switch result {
+                case .success(let nodeData):
+                    guard let folderData = nodeData as? BookmarkFolderData else {
+                        self?.logger.log("Search bookmarks tree fetch failed",
+                                         level: .debug,
+                                         category: .library)
+                        DispatchQueue.main.async { completion([]) }
+                        return
+                    }
+
+                    let lowercasedQuery = query.lowercased()
+                    var matches = [FxBookmarkNode]()
+                    self?.collectMatchingBookmarks(from: folderData,
+                                                   query: lowercasedQuery,
+                                                   results: &matches)
+                    DispatchQueue.main.async { completion(matches) }
+
+                case .failure(let error):
+                    self?.logger.log("Search bookmarks tree fetch error: \(error)",
                                      level: .debug,
                                      category: .library)
-                    completion([])
-                    return
+                    DispatchQueue.main.async { completion([]) }
                 }
-
-                let lowercasedQuery = query.lowercased()
-                var matches = [FxBookmarkNode]()
-                self?.collectMatchingBookmarks(from: folderData,
-                                               query: lowercasedQuery,
-                                               results: &matches)
-                completion(matches)
             }
     }
 

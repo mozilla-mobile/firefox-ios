@@ -388,6 +388,57 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
     }
 
+    func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsEnabledFalse_byDefault() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        mockTabManager?.selectedTab = tab
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, false)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, false)
+    }
+
+    func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsActive() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        tab.overrideReaderModeState = .active
+        mockTabManager?.selectedTab = tab
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, true)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, true)
+    }
+
     func test_shortcutsLibraryAction_switchTabToastButtonPressed_selectsTab() throws {
         let subject = createSubject()
         let tab = Tab(profile: mockProfile, windowUUID: .XCTestDefaultUUID)

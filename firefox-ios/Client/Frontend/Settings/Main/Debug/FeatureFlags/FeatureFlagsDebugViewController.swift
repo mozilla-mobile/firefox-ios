@@ -94,13 +94,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageNewsTransition,
-                titleText: format(string: "Homepage News Transition"),
-                statusText: format(string: "Toggle to enable the homepage news transition")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")
@@ -154,6 +147,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .otherErrorPages,
+                titleText: format(string: "Wrong Host Certificate Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created wrong host error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -242,6 +242,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .translationLanguagePicker,
+                titleText: format(string: "Translation Language Picker"),
+                statusText: format(string: "Toggle to enable language picker for translations")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
@@ -249,9 +256,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .voiceSearch,
-                titleText: format(string: "Voice Search"),
-                statusText: format(string: "Toggle to enable the Voice Search feature")
+                with: .quickAnswers,
+                titleText: format(string: "Quick Answers"),
+                statusText: format(string: "Toggle to enable the Quick Answers feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },

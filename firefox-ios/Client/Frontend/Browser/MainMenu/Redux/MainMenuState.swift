@@ -53,6 +53,13 @@ struct TelemetryInfo: Equatable {
     }
 }
 
+struct ReaderModeConfiguration: Equatable {
+    /// Wether Reader mode is supported by the web page.
+    let isAvailable: Bool
+    /// Wether Reader mode is activated on the web page.
+    let isActive: Bool
+}
+
 struct MainMenuTabInfo: Equatable {
     let tabID: TabUUID
     let url: URL?
@@ -61,7 +68,7 @@ struct MainMenuTabInfo: Equatable {
     let isDefaultUserAgentDesktop: Bool
     let hasChangedUserAgent: Bool
     let zoomLevel: CGFloat
-    let readerModeIsAvailable: Bool
+    let readerModeConfiguration: ReaderModeConfiguration
     let summaryIsAvailable: Bool
     let summarizerConfig: SummarizerConfig?
     let isBookmarked: Bool

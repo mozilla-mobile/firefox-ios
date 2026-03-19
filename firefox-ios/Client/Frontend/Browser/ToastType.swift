@@ -16,6 +16,7 @@ enum ToastType: Equatable {
     case removeFromReadingList
     case removeShortcut
     case retryTranslatingPage
+    case shakeToSummarizeNotAvailable
 
     var title: String {
         switch self {
@@ -39,6 +40,8 @@ enum ToastType: Equatable {
             return .LegacyAppMenu.RemovePinFromShortcutsConfirmMessage
         case .retryTranslatingPage:
             return .Translations.Sheet.Error.GeneralTitle
+        case .shakeToSummarizeNotAvailable:
+            return .Summarizer.ToastLabel
         }
     }
 
@@ -66,7 +69,8 @@ enum ToastType: Equatable {
                 .addToReadingList,
                 .openNewTab,
                 .removeFromReadingList,
-                .removeShortcut:
+                .removeShortcut,
+                .shakeToSummarizeNotAvailable:
             return nil
         }
     }

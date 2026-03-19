@@ -523,9 +523,9 @@ private final class SearchableMockBookmarksHandler: BookmarksHandler, @unchecked
     }
 
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
-        let deferred = Deferred<Maybe<BookmarkNodeData?>>()
-        deferred.fill(Maybe(success: folderData))
-        return deferred
+        let result = Deferred<Maybe<BookmarkNodeData?>>()
+        result.fill(Maybe(success: folderData))
+        return result
     }
 
     func getBookmarksTree(
