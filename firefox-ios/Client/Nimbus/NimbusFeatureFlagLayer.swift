@@ -148,6 +148,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .summarizerLanguageExpansion:
             return checkSummarizerLanguageExpansionFeature(from: nimbus)
 
+        case .summarizerPermissiveGuardrails:
+            return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
+
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -514,6 +517,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkSummarizerLanguageExpansionFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.summarizerLanguageExpansionFeature.value().enabled
+    }
+
+    private func checkSummarizerPermissiveGuardrailsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
     }
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
