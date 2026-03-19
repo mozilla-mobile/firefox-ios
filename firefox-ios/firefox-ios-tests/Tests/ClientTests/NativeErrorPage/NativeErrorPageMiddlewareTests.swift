@@ -77,7 +77,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
+            presentedComponents: PresentedComponentState(
                 screens: [
                     .browserViewController(
                         BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

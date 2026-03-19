@@ -191,8 +191,8 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .translationSettings(
                         TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
                     )

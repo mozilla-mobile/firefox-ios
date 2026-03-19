@@ -80,8 +80,8 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .searchEngineSelection(
                         SearchEngineSelectionState(windowUUID: .XCTestDefaultUUID)
                     )
