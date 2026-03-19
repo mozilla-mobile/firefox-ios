@@ -464,6 +464,7 @@ extension TelemetryWrapper {
         case tabToolbar = "tab-toolbar"
         case chinaServerSwitch = "china-server-switch"
         case appMenu = "app_menu"
+        case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
@@ -1351,6 +1352,8 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):
             GleanMetrics.AppMenu.blockImagesDisabled.add()
+        case (.action, .tap, .settings, _, _):
+            GleanMetrics.AppMenu.settings.add()
         case(.action, .open, .logins, _, _):
             GleanMetrics.AppMenu.passwords.record()
 

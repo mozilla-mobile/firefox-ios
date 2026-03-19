@@ -131,6 +131,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
         if section == 0 {
             return getHeaderHeightForFirstSection()
         } else {
+            // laurie - add back
             return PhotonActionSheet.UX.separatorRowHeight
         }
     }
@@ -140,6 +141,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
         case .site, .bookmarkFolder:
             return UITableView.automaticDimension
         case .title:
+            // laurie - add back
             return PhotonActionSheet.UX.titleHeaderSectionHeight
         case .other:
             return 0
