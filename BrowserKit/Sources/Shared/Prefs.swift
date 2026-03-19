@@ -229,9 +229,6 @@ public struct PrefsKeys {
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 
-    // Represents whether or not the user has seen the photon main menu once, at least.
-    public static let PhotonMainMenuShown = "PhotonMainMenuShown"
-
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.
     public static let RecentBookmarkFolder = "RecentBookmarkFolder"

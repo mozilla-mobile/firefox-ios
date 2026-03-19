@@ -79,15 +79,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature(from: nimbus)
 
-        case .menuDefaultBrowserBanner:
-            return checkMenuDefaultBrowserBanner(from: nimbus)
-
-        case .menuRefactor:
-            return checkMenuRefactor(from: nimbus)
-
-        case .menuRedesignHint:
-            return checkMenuRedesignHint(from: nimbus)
-
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
@@ -461,20 +452,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         let config = nimbus.features.firefoxSuggestFeature.value()
 
         return config.status
-    }
-
-    private func checkMenuDefaultBrowserBanner(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuDefaultBrowserBanner
-    }
-
-    private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.menuRefactorFeature.value().enabled
-    }
-
-    private func checkMenuRedesignHint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuRedesignHint
     }
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
