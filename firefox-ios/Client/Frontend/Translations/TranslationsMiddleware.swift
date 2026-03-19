@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import Shared
 
 @MainActor
 final class TranslationsMiddleware: FeatureFlaggable {
@@ -170,6 +171,22 @@ final class TranslationsMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
+    /// If auto-translate is enabled, triggers translation to the user's top preferred language.
+    /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
+    private func tryAutoTranslate(for action: ToolbarAction) async -> Bool {
+        guard profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false else { return false }
+        let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+        let supported = await translationsService.fetchSupportedTargetLanguages()
+        let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
+        guard let targetLanguage = preferred.first else { return false }
+        let newFlowId = UUID()
+        translationFlowIds[action.windowUUID] = newFlowId
+        selectedTargetLanguages[action.windowUUID] = targetLanguage
+        handleUpdatingTranslationIcon(for: action, with: .loading)
+        retrieveTranslations(for: action, targetLanguage: targetLanguage)
+        return true
+    }
+
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
@@ -178,6 +195,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+
+                if await self.tryAutoTranslate(for: action) { return }
+
                 let toolbarAction = ToolbarAction(
                     translationConfiguration: TranslationConfiguration(
                         prefs: profile.prefs,

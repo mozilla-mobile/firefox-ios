@@ -13,6 +13,7 @@ struct PreferredLanguageDetails: Equatable, Hashable {
 
 struct TranslationSettingsState: ScreenState, Equatable {
     var isTranslationsEnabled: Bool
+    var isAutoTranslateEnabled: Bool
     var isEditing: Bool
     var pendingLanguages: [PreferredLanguageDetails]?
     var preferredLanguages: [PreferredLanguageDetails]
@@ -32,6 +33,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
             isEditing: state.isEditing,
             pendingLanguages: state.pendingLanguages,
             preferredLanguages: state.preferredLanguages,
@@ -44,6 +46,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             isTranslationsEnabled: true,
+            isAutoTranslateEnabled: false,
             isEditing: false,
             pendingLanguages: nil,
             preferredLanguages: [],
@@ -54,6 +57,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
+         isAutoTranslateEnabled: Bool = false,
          isEditing: Bool = false,
          pendingLanguages: [PreferredLanguageDetails]? = nil,
          preferredLanguages: [PreferredLanguageDetails],
@@ -61,6 +65,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
          availableLanguages: [String] = []) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isAutoTranslateEnabled = isAutoTranslateEnabled
         self.isEditing = isEditing
         self.pendingLanguages = pendingLanguages
         self.preferredLanguages = preferredLanguages
@@ -91,6 +96,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
+                isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled,
                 preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
                 supportedLanguages: action.supportedLanguages ?? state.supportedLanguages,
                 availableLanguages: action.availableLanguages ?? state.availableLanguages
@@ -157,6 +163,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
         return TranslationSettingsState(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
             isEditing: state.isEditing,
             pendingLanguages: state.pendingLanguages,
             preferredLanguages: state.preferredLanguages,
@@ -167,6 +174,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
         return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
+            && lhs.isAutoTranslateEnabled == rhs.isAutoTranslateEnabled
             && lhs.isEditing == rhs.isEditing
             && lhs.pendingLanguages == rhs.pendingLanguages
             && lhs.preferredLanguages == rhs.preferredLanguages

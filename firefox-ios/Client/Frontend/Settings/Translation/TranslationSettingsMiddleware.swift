@@ -60,6 +60,16 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
 
+        case TranslationSettingsViewActionType.toggleAutoTranslate:
+            let current = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
+            let newValue = !current
+            prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationAutoTranslate)
+            store.dispatch(TranslationSettingsMiddlewareAction(
+                isAutoTranslateEnabled: newValue,
+                windowUUID: action.windowUUID,
+                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
+            ))
+
         case TranslationSettingsViewActionType.addLanguage:
             guard let code = action.languageCode else { break }
             let updated = manager.addLanguage(code)
@@ -97,6 +107,7 @@ final class TranslationSettingsMiddleware {
         let available = buildAvailableLanguages(preferred: codes, supported: supported)
         store.dispatch(TranslationSettingsMiddlewareAction(
             isTranslationsEnabled: isEnabled,
+            isAutoTranslateEnabled: isAutoTranslate,
             preferredLanguages: preferred,
             supportedLanguages: supported,
             availableLanguages: available,
