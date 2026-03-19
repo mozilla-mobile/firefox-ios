@@ -1352,8 +1352,6 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):
             GleanMetrics.AppMenu.blockImagesDisabled.add()
-        case (.action, .tap, .settings, _, _):
-            GleanMetrics.AppMenu.settings.add()
         case(.action, .open, .logins, _, _):
             GleanMetrics.AppMenu.passwords.record()
 
