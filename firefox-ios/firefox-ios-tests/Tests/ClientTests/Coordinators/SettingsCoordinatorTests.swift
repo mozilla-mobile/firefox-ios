@@ -365,6 +365,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is SiriSettingsViewController)
     }
 
+    func testGeneralSettingsDelegate_pushedAIControls() {
+        let subject = createSubject()
+
+        subject.pressedAIControls()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertEqual(mockRouter.pushedViewController?.title, "AI Controls")
+    }
+
     func testGeneralSettingsDelegate_pushedToolbar() {
         let subject = createSubject()
 

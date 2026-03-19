@@ -405,6 +405,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildOnly) {
+            generalSettings.append(AIControlsSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         generalSettings += [
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]

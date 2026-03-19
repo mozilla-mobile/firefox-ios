@@ -2994,6 +2994,15 @@ extension String {
             )
         }
 
+        public struct AIControls {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AIControls.Title.v150",
+                tableName: "Settings",
+                value: "AI Controls",
+                comment: "In the settings menu, in the General section, this is the title for the AI Controls settings section"
+            )
+        }
+
         public struct Summarize {
             public static let Title = MZLocalizedString(
                 key: "Settings.Summarize.Title.v142",
