@@ -24,9 +24,9 @@ final class BrowserViewControllerLayoutManager {
     // Constraints to store - bottom container
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
-    private var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
     private var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
     private var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
+    private var bottomContentStackViewOverKeyboardConstraint: NSLayoutConstraint?
     private var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
     private var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
@@ -126,23 +126,25 @@ final class BrowserViewControllerLayoutManager {
     }
 
     func setupBottomContentStackViewConstraints() {
+        // Default constraints 
         NSLayoutConstraint.activate([
             bottomContentStackView.leadingAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.leadingAnchor),
             bottomContentStackView.trailingAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.trailingAnchor),
-            // Height is set by content - this removes run time error
-            bottomContentStackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 0),
+            bottomContentStackView.heightAnchor.constraint(equalToConstant: 0).priority(.defaultLow)
         ])
 
-        // caps with less than equals bounds above the toolbar/safeArea
-        bottomContentMaxBottomConstraints = [
-            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: overKeyboardContainer.topAnchor),
-            bottomContentStackView.bottomAnchor.constraint(lessThanOrEqualTo: parentView.safeAreaLayoutGuide.bottomAnchor),
-        ]
-        // pins the view with equal exactly above the keyboard when it is visible.
+        // above the address bar area (or toolbar when top search bar)
+        bottomContentStackViewOverKeyboardConstraint = bottomContentStackView.bottomAnchor.constraint(
+            equalTo: overKeyboardContainer.topAnchor
+        )
+
+        // above the keyboard (only top search bar — keyboard covers everything else)
+        // on update the constant is updated to show above keyboard by bottom = parentView.bottom - keyboardHeight
         bottomContentStackViewKeyboardConstraint = bottomContentStackView.bottomAnchor.constraint(
             equalTo: parentView.bottomAnchor
         )
-        // This is the fallback, pins the view with equal to safeArea bottom when keyboard and navigation toolbar is hidden
+
+        // Fallback for iPad with top search bar + no toolbar + no keyboard
         bottomContentStackViewBasicConstraint = bottomContentStackView.bottomAnchor.constraint(
             equalTo: parentView.safeAreaLayoutGuide.bottomAnchor
         )
@@ -165,28 +167,43 @@ final class BrowserViewControllerLayoutManager {
         }
     }
 
-    func updateBottomContentStackViewConstraints(isSnapKitRemovalEnabled: Bool,
-                                                 isBottomSearchBar: Bool,
+    /// Activates the correct bottom constraint for `bottomContentStackView` (login snackbar, FindInPageBar).
+    /// Must be called on keyboard and toolbar changes. Bottom search bar relies on `overKeyboardContainer`
+    /// growing with the keyboard spacer. Top search bar needs an explicit keyboard constraint because
+    /// `overKeyboardContainer` collapses to `height = 0`, leaving its top below the keyboard frame.
+    func updateBottomContentStackViewConstraints(isBottomSearchBar: Bool,
                                                  keyboardState: KeyboardState?) {
         // Deactivate all mutually exclusive constraints before activating the appropriate one.
-        NSLayoutConstraint.deactivate(bottomContentMaxBottomConstraints)
+        bottomContentStackViewOverKeyboardConstraint?.isActive = false
         bottomContentStackViewKeyboardConstraint?.isActive = false
         bottomContentStackViewBasicConstraint?.isActive = false
 
-        if isBottomSearchBar {
-            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
-            if !toolbarHelper.isToolbarTranslucencyRefactorEnabled {
-                parentView.layoutIfNeeded()
-            }
-        } else if let keyboardHeight = keyboardState?.intersectionHeightForView(parentView), keyboardHeight > 0 {
+        guard !isBottomSearchBar else {
+            updateBottomContentStackViewBottomSearchBar()
+            return
+        }
+
+        updateBottomContentStackViewTopSearchBar(keyboardState: keyboardState)
+    }
+
+    private func updateBottomContentStackViewBottomSearchBar() {
+        bottomContentStackViewOverKeyboardConstraint?.isActive = true
+    }
+
+    private func updateBottomContentStackViewTopSearchBar(keyboardState: KeyboardState?) {
+        let keyboardHeight = keyboardState?.intersectionHeightForView(parentView) ?? 0
+        let isKeyboardVisible = keyboardHeight > 0
+
+        if isKeyboardVisible {
             bottomContentStackViewKeyboardConstraint?.constant = -keyboardHeight
             bottomContentStackViewKeyboardConstraint?.isActive = true
         } else if !navigationToolbarContainer.isHidden {
-            NSLayoutConstraint.activate(bottomContentMaxBottomConstraints)
+            bottomContentStackViewOverKeyboardConstraint?.isActive = true
         } else {
             bottomContentStackViewBasicConstraint?.isActive = true
         }
     }
+
     // MARK: - Private helpers (header)
 
     private func updateHeaderHeightConstraint(isBottomSearchBar: Bool) {

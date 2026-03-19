@@ -21,7 +21,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-class TabManagerImplementation: NSObject,
+final class TabManagerImplementation: NSObject,
                                 TabManager,
                                 FeatureFlaggable,
                                 SessionCreator {
@@ -259,10 +259,10 @@ class TabManagerImplementation: NSObject,
                 if tab.isPrivate,
                    let mostRecentTab = mostRecentTab(inTabs: normalTabs) {
                     // We remove all private tabs so select most recent normal tab
-                    selectTab(mostRecentTab)
+                    selectTab(mostRecentTab, immediatePreservation: true)
                 } else {
                     // For normal tabs create a new tab and select it
-                    selectTab(addTab())
+                    selectTab(addTab(), immediatePreservation: true)
                 }
             }
         }
@@ -763,12 +763,12 @@ class TabManagerImplementation: NSObject,
 
     // MARK: - Save tabs
 
-    func preserveTabs() {
+    func preserveTabs(immediate: Bool) {
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-        preserveTabs(forced: false)
+        preserveTabs(forced: immediate)
     }
 
     private func preserveTabs(forced: Bool) {
@@ -854,7 +854,7 @@ class TabManagerImplementation: NSObject,
     /// This function updates the selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
         assert(Thread.isMainThread)
         // Fallback everywhere to selectedTab if no previous tab
         let previous = previous ?? selectedTab
@@ -887,7 +887,7 @@ class TabManagerImplementation: NSObject,
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
 
-        preserveTabs()
+        preserveTabs(immediate: immediatePreservation)
 
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
         selectTabWithSession(tab: tab, sessionData: sessionData)
@@ -969,7 +969,6 @@ class TabManagerImplementation: NSObject,
 
     private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         MainActor.assertIsolated("Expected to be called only on main actor.")
-        // TODO: FXIOS-14784 - Investigate configuration since we override pop-up configuration here
         let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
         selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
@@ -1098,13 +1097,13 @@ class TabManagerImplementation: NSObject,
         // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
         // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
         // use this configuration WebKit will throw an exception.
+        popup.requiredPopupConfiguration = configuration
         configureTab(popup,
                      request: nil,
                      afterTab: parentTab,
                      flushToDisk: true,
                      zombie: false,
-                     isPopup: true,
-                     requiredConfiguration: configuration)
+                     isPopup: true)
 
         return popup
     }
@@ -1116,8 +1115,7 @@ class TabManagerImplementation: NSObject,
         afterTab parent: Tab? = nil,
         flushToDisk: Bool,
         zombie: Bool,
-        isPopup: Bool = false,
-        requiredConfiguration: WKWebViewConfiguration? = nil
+        isPopup: Bool = false
     ) {
         assert(Thread.isMainThread)
         // If network is not available webView(_:didCommit:) is not going to be called
@@ -1141,13 +1139,9 @@ class TabManagerImplementation: NSObject,
                                  isRestoring: !tabRestoreHasFinished)
         }
 
+        // Create the webview right away for tabs that are not zombies
         if !zombie {
-            let configuration: WKWebViewConfiguration
-            if let required = requiredConfiguration {
-                configuration = required
-            } else {
-                configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
-            }
+            let configuration = tabConfigurationProvider.configuration(isPrivate: tab.isPrivate).webViewConfiguration
             tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = navigationDelegate

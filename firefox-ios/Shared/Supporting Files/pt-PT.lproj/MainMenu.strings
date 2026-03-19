@@ -410,13 +410,13 @@
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPage.v145" = "Página traduzida";
 
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
-"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Traduzido para %@";
+"MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Traduzida para %@";
 
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "Traduzir página";
 
 /* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
-"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Traduzido";
+"MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Traduzida";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Desligado";

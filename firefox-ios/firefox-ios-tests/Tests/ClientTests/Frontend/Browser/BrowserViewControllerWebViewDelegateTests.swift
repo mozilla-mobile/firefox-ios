@@ -311,7 +311,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodServerTrust() async {
         let subject = createSubject()
 
-        // Get the (disposition, credential) result tuple
         let result = await subject.webView(
             anyWebView(),
             respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodServerTrust")
@@ -325,7 +324,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPDigest() async {
         let subject = createSubject()
 
-        // Get the (disposition, credential) result tuple
         let result = await subject.webView(
             anyWebView(),
             respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPDigest")
@@ -339,7 +337,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPNTLM() async {
         let subject = createSubject()
 
-        // Get the (disposition, credential) result tuple
         let result = await subject.webView(
             anyWebView(),
             respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodNTLM")
@@ -353,7 +350,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
     func testWebViewDidReceiveChallenge_MethodHTTPBasic() async {
         let subject = createSubject()
 
-        // Get the (disposition, credential) result tuple
         let result = await subject.webView(
             anyWebView(),
             respondTo: anyAuthenticationChallenge(for: "NSURLAuthenticationMethodHTTPBasic")

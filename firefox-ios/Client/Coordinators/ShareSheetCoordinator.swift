@@ -8,6 +8,11 @@ import Shared
 import Storage
 import WebEngine
 
+protocol ShareSheetCoordinatorDelegate: AnyObject {
+    @MainActor
+    func showToast(message: String)
+}
+
 class ShareSheetCoordinator: BaseCoordinator,
                              DevicePickerViewControllerDelegate,
                              InstructionsViewDelegate,
@@ -17,25 +22,25 @@ class ShareSheetCoordinator: BaseCoordinator,
     private let tabManager: TabManager
     private let themeManager: ThemeManager
     private let profile: Profile
-    private let alertContainer: UIView
     private weak var parentCoordinator: ParentCoordinatorDelegate?
+    private weak var delegate: ShareSheetCoordinatorDelegate?
     var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Initializers
 
     init(
-        alertContainer: UIView,
         router: Router,
         profile: Profile,
+        tabManager: TabManager,
         parentCoordinator: ParentCoordinatorDelegate? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        tabManager: TabManager
+        delegate: ShareSheetCoordinatorDelegate? = nil
     ) {
-        self.alertContainer = alertContainer
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.parentCoordinator = parentCoordinator
+        self.delegate = delegate
         super.init(router: router)
     }
 
@@ -111,11 +116,6 @@ class ShareSheetCoordinator: BaseCoordinator,
             default:
                 showSendToDevice(url: sendURL, relatedTab: nil)
             }
-        case .copyToPasteboard:
-            if case .file = shareType {
-                showToast(text: .ShareFileCopiedToClipboard)
-            }
-            dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
         }
@@ -168,12 +168,6 @@ class ShareSheetCoordinator: BaseCoordinator,
         router.present(alertController)
     }
 
-    private func showToast(text: String) {
-        SimpleToast().showAlertWithText(text,
-                                        bottomContainer: self.alertContainer,
-                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
-    }
-
     // MARK: DevicePickerViewControllerDelegate
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
@@ -216,11 +210,8 @@ class ShareSheetCoordinator: BaseCoordinator,
                 MainActor.assumeIsolated {
                     guard let self else { return }
                     self.router.dismiss()
+                    self.delegate?.showToast(message: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
                     self.parentCoordinator?.didFinish(from: self)
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                        self?.showToast(text: .LegacyAppMenu.AppMenuTabSentConfirmMessage)
-                    }
                 }
             }
     }

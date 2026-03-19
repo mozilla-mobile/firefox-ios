@@ -68,7 +68,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
-                StoriesFeedCell.self,
+                StoryCellLarge.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -93,7 +93,8 @@ final class HomepageDiffableDataSource:
 
     func updateSnapshot(
         state: HomepageState,
-        jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration
+        jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
@@ -147,7 +148,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        apply(snapshot, animatingDifferences: false)
+        apply(snapshot, animatingDifferences: false, completion: completion)
     }
 
     private func getPocketStories(

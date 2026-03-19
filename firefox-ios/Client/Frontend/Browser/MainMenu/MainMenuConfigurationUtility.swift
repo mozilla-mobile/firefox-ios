@@ -38,6 +38,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
 
+    private var isSummarizerLanguageExpansionEnabled: Bool {
+        return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
+    }
+
     private var isDefaultZoomEnabled: Bool {
         featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
     }
@@ -247,8 +251,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         if !isExpanded {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
+            options.append(configureZoomItem(with: uuid, and: tabInfo))
+            if isSummarizerLanguageExpansionEnabled {
+                options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
+            }
             options.append(contentsOf: [
-                configureZoomItem(with: uuid, and: tabInfo),
                 configureWebsiteDarkModeItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 MenuElement(
@@ -410,6 +417,35 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             )
+    }
+
+    private func configureReaderViewItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        // TODO: FXIOS-15069 Add correct strings for s2s UI components.
+        // The strings used produces the correct behavior, but we'd need to use the proper ones once available in v150.
+        return MenuElement(
+            title: .MainMenu.ToolsSection.ReaderViewTitle,
+            iconName: "",
+            isEnabled: tabInfo.readerModeConfiguration.isAvailable,
+            isActive: tabInfo.readerModeConfiguration.isActive,
+            a11yLabel: .MainMenu.ToolsSection.ReaderViewTitle,
+            a11yHint: tabInfo.readerModeConfiguration.isActive ?
+                .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
+            a11yId: AccessibilityIdentifiers.MainMenu.readerView,
+            infoTitle: tabInfo.readerModeConfiguration.isActive ?
+                .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff
+        ) {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: uuid,
+                    actionType: MainMenuActionType.tapNavigateToDestination,
+                    navigationDestination: MenuNavigationDestination(.readerView),
+                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                )
+            )
+        }
     }
 
     private func configureMoreLessItem(
