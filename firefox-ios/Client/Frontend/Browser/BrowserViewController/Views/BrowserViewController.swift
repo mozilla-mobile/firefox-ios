@@ -2865,6 +2865,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // another comment
     private func dispatchBackForwardToolbarAction(canGoBack: Bool? = nil,
                                                   canGoForward: Bool? = nil,
                                                   windowUUID: UUID) {
