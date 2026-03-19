@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import UIKit
 import XCTest
 
 @testable import Client
@@ -56,6 +57,24 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
             preferredLanguages: [],
             supportedLanguages: []
         ))
+    }
+
+    // MARK: - applyTheme
+
+    func test_applyTheme_doesNotCrash() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        subject.applyTheme()
+    }
+
+    // MARK: - collectionView delegate
+
+    func test_shouldSelectItem_returnsFalse() {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let result = subject.collectionView(collectionView, shouldSelectItemAt: IndexPath(item: 0, section: 0))
+        XCTAssertFalse(result)
     }
 
     // MARK: - nativeName
