@@ -215,7 +215,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "MLPAKitTests",
-            dependencies: ["Common", "MLPAKit", "TestKit"],
+            dependencies: ["MLPAKit", "TestKit"],
             swiftSettings: []
         ),
         .target(
