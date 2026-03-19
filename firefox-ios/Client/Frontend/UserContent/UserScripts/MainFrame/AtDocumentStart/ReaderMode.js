@@ -100,9 +100,12 @@ function checkReadability() {
 // Readerize the document. Since we did the actual readerization already in checkReadability, we
 // can simply return the results we already have.
 function readerize() {
+  // Find recipe json ld in the current doc and append it to readebilty result to be able to embed the json
+  // for the reader view html when the page is created. This is needed in order to not loose recipe meta data
+  // when summarizing a reader view web page. 
   const recipeJSON = findRecipeJSONLD();
   if (readabilityResult) {
-    readabilityResult.recipeContent = JSON.stringify(recipeJSON ?? "");
+    readabilityResult.jsonld = JSON.stringify(recipeJSON ?? "");
   }
   return readabilityResult;
 }
