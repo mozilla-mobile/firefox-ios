@@ -73,11 +73,7 @@ final class BookmarksViewController: SiteTableViewController,
             }
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
-            bottomRightButton.title = .BookmarksEdit
-            if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = currentTheme().colors.textPrimary
-            }
-            return searchItems + [flexibleSpace, bottomRightButton]
+            return searchItems
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
