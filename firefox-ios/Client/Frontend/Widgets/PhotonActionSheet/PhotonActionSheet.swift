@@ -120,11 +120,6 @@ class PhotonActionSheet: UIViewController,
         applyTheme()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        tableView.removeObserver(self, forKeyPath: "contentSize")
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -165,6 +160,11 @@ class PhotonActionSheet: UIViewController,
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setDefaultStyleTableViewHeight()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
