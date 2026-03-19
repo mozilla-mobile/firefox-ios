@@ -38,7 +38,7 @@
 "NativeErrorPage.ButtonLabel.v131" = "განახლება";
 
 /* On error page, this is the description for a generic error. %@ is the site url. */
-"NativeErrorPage.GenericError.Description.v134" = "%@ არ აქვს მფლობელს სათანადოდ გამართული და დაცული კავშირი ვერ იქმნება.";
+"NativeErrorPage.GenericError.Description.v134" = "%@ არ აქვს მფლობელს სათანადოდ გამართული და ვერ მყარდება დაცული კავშირი.";
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ფრთხილად. რაღაც რიგზე ვერაა.";
