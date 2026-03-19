@@ -1,42 +1,40 @@
 # Contribution guidelines
-We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the following guidelines first.
+
+We welcome contributions of all kinds, including bug fixes, improvements, and new ideas. Thank you for taking the time to contribute to Firefox iOS.
+
+Before getting started, please make sure your work aligns with how we collaborate in this repository.
 
 ## Submitting an Issue
-If you find a bug in the source code or a mistake in the documentation, you can help us by submitting an issue to our repository. Before you submit your issue, search open and closed issues, as it's possible that your question was already answered, or a ticket for the issue already exists.
 
-## Coding Rules
+If you find a bug or a documentation issue, please [open an issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) in the repository.
 
-### Swift style
-* iOS engineers at Mozilla are still in the process of defining Mozilla's Swift guidelines. Currently, we're working through Swiftlint rules that members on the team agree should be enabled. Then we will pursue further rules we'd like to implement.
-* In general, as of 2023, Swift code should follow the conventions listed at [Swift style guide](https://github.com/raywenderlich/swift-style-guide), with the understanding that this is a loose standard.
-  * Exception: we use 4-space indentation instead of 2.
-* We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
+Before submitting:
+* Search existing open and closed issues to avoid duplicates  
+* Provide clear steps to reproduce the problem when applicable  
 
-# Looking for issues
-Want to contribute to the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
+--- 
 
 ## Guidelines for Contributing
 
-1. **Check if the Issue is Currently Being Worked On**:
-Before starting, check for:
-    - `Open PRs`: Ensure no PRs are already addressing the issue.
-    - `Comments from Contributors`: Look for recent comments. If the most recent comment from another contributor wanting to work on the issue is older than `3 weeks`, 
-    feel free to write a message saying that you are going to work on it.
+There are two supported ways to contribute:
 
-2. **Working on Contributor OK Issues**:
-For a smooth collaboration process, start with issues labeled `Contributor OK`.
-    - These issues are designed specifically for contributors and do not require prior approval from team members.
-    - Simply leave a **`comment`** on the issue saying that you’ll work on it.
+### 1. Work on `Contributor OK` issues (recommended)
+These issues are specifically scoped for external contributors and do not require prior approval.
 
-3. **Working on Non-Contributor OK Issues**:
-    - If you’d like to work on an issue that isn’t labeled **Contributor OK**, please reach out to a team member first to confirm whether it’s available for contributors.
-    - If an issue isn’t marked **Contributor OK**, or if you created your own ticket to work on, please be aware that your work may be declined. Our product managers and designers carefully plan and prioritize features for the application, and any new suggestions need to go through that process.
-    - For larger pieces of work, we also ask that contributors coordinate with a team member on the issue before starting. Larger changes often need to be broken down into smaller PRs to make the review process manageable.
-    - We absolutely welcome ideas and contributions. However, adding new features requires significant coordination and effort, so we ask that you keep this in mind before starting work.
+* Browse Contributor issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
+* Leave a comment to let others know you're working on it. If the last activity is older than 3 weeks, leave a comment before picking it up.
+* A reference person is usually available if you need guidance
 
-4. **Significant AI-generated code**:
-    - At this time, we do not accept pull requests that contain significant AI-generated code. AI-generated code can often introduce subtle bugs, poor design patterns, or inconsistent styles that make long-term maintenance difficult and reduce overall code quality. For the sake of the project's future stability and readability, we require that all contributions meet our established coding standards and demonstrate clear developer oversight.
-    - If you want to contribute to an area of the code using AI, please discuss with us on how to break down the changes into small, focused PRs to ensure a thorough and efficient review process.
+### 2. Propose or work on other issues (requires coordination)
+If you want to work on something that is **not labeled `Contributor OK`**, please coordinate with the team first.
+
+* Comment on the issue and wait for confirmation before starting work.
+* For new ideas, open an issue first to discuss feasibility and priority.
+
+> ⚠️ Pull requests for unapproved work may be declined.
+> Our roadmap is planned in collaboration with product and design, and not all changes can be accepted.
+
+We absolutely welcome ideas and contributions. We just ask that larger or unscoped work is discussed first so we can collaborate effectively.
 
 ## Getting Support
 
@@ -52,12 +50,65 @@ If no reference person is assigned, feel free to contact:
 - @FilippoZazzeroni
 - @Foxbolts
 
+## Issue Categories by Difficulty
+We’ve categorized Contributor OK issues by difficulty to help you get started:
+
+- `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
+- `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
+- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.    
+
+---
+
+## Coding Rules
+
+### Swift style
+
+* Follow the conventions from the [Swift style guide](https://github.com/raywenderlich/swift-style-guide).
+* Use 4-space indentation instead of 2  
+* Follow existing patterns in the codebase when in doubt  
+
+We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
+
+---
+
+### Quality expectations for pull requests
+
+To help reviewers give useful feedback and keep the project maintainable, pull requests should meet the following baseline before review:
+
+* The change is scoped and purposeful. A PR should solve one issue clearly, without unrelated refactors or drive-by changes.
+* The code is maintainable and consistent. Changes should follow the project’s existing patterns, naming, structure, and style rules.
+* The PR is reviewable. The description should explain what changed and why, and the diff should be small and clear enough for a reviewer to understand without reconstructing intent.
+* The change is validated. Code should build cleanly, pass relevant checks, and include testing or manual verification steps appropriate to the change.
+* The contribution is complete. Partial, experimental, or AI-generated changes that the author cannot explain, validate, or finish may be closed until they are ready for review.
+
+Pull requests that do not meet this baseline may be closed as not yet reviewable.
+
+---
+
+## Getting Support
+
+### Reference Person
+Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
+
+- Reach out on [Mozilla Matrix chat](#reaching-out-for-help-and-questions).
+- Alternatively, comment directly on the issue for assistance.
+
+### Missing Reference Person
+If no reference person is assigned, feel free to contact:
+
+- @FilippoZazzeroni
+- @Foxbolts
+
+---
+
 ### Issue Categories by Difficulty
 We’ve categorized Contributor OK issues by difficulty to help you get started:
 
 - `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
 - `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
 - `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.
+
+---
 
 ## Pull Requests
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
