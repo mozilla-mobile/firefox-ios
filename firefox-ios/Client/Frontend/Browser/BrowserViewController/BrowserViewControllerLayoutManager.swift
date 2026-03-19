@@ -57,8 +57,7 @@ final class BrowserViewControllerLayoutManager {
             headerView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
         ])
-        let topAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-        headerTopConstraint = headerView.topAnchor.constraint(equalTo: topAnchor)
+        headerTopConstraint = headerView.topAnchor.constraint(equalTo: parentView.topAnchor)
         headerTopConstraint?.isActive = true
 
         if isBottomSearchBar {
@@ -70,19 +69,7 @@ final class BrowserViewControllerLayoutManager {
 
     func updateHeaderConstraints(isBottomSearchBar: Bool) {
         updateHeaderHeightConstraint(isBottomSearchBar: isBottomSearchBar)
-
-        let targetAnchor = getHeaderTopAnchor(isBottomSearchBar: isBottomSearchBar)
-
-        // Preserve current offset
-        let currentConstant = headerTopConstraint?.constant ?? 0
-        headerTopConstraint?.isActive = false
-
-        // Create constraint with new correct anchor
-        headerTopConstraint = headerView.topAnchor.constraint(equalTo: targetAnchor)
-        headerTopConstraint?.constant = currentConstant
-        headerTopConstraint?.isActive = true
-
-        updateScrollControllerHeaderConstraint()
+        headerTopConstraint?.constant = getHeaderTopConstant(isBottomSearchBar: isBottomSearchBar)
     }
 
     func addReaderModeBarHeight(_ readerModeBar: ReaderModeBarView) {
@@ -223,27 +210,27 @@ final class BrowserViewControllerLayoutManager {
         headerHeightConstraint?.isActive = true
     }
 
-    /// Returns the correct top anchor for the header based on search bar position and trait collection
+    /// Returns the correct top constraint constant for the header based on search bar position and trait collection
     /// - Parameter isBottomSearchBar: Whether the search bar is positioned at the bottom
-    /// - Returns: The appropriate NSLayoutYAxisAnchor to constrain the header to
-    private func getHeaderTopAnchor(isBottomSearchBar: Bool) -> NSLayoutYAxisAnchor {
-        // Bottom toolbar always uses safeArea
-        guard !isBottomSearchBar else {
-            return parentView.safeAreaLayoutGuide.topAnchor
-        }
+    /// - Returns: The appropriate constant value to constrain the header to
+    private func getHeaderTopConstant(isBottomSearchBar: Bool) -> CGFloat {
+        guard !isBottomSearchBar else { return 0 }
 
-        // Top toolbar depends on nav toolbar visibility
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: parentView.traitCollection)
         let shouldShowTopTabs = toolbarHelper.shouldShowTopTabs(for: parentView.traitCollection)
 
+        // Landscape case where status bar is hidden, header sits at the top without padding
+        guard isNavToolbar || shouldShowTopTabs else { return 0 }
+
         // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-        // Bug: Safe area top inset doesn't update correctly on landscape rotation (remains 20pt)
-        // on iOS 26. Prior to iOS 26, safe area inset was updating correctly on rotation.
-        // Impact: Header remains partially visible when scrolling.
-        // Workaround: Manually adjust constraints based on orientation.
+        // Bug: Safe area top inset doesn't update correctly on rotation on iOS 26.0.
+        // On landscape rotation it remains 20pt (should be 0pt for devices without a notch).
+        // On portrait return it becomes 0pt (should be the status bar height).
+        // Workaround: Use statusBarManager.statusBarFrame.height which returns the correct
+        // value regardless of the safeAreaLayoutGuide bug.
         // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
         // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-        return (isNavToolbar || shouldShowTopTabs) ? parentView.safeAreaLayoutGuide.topAnchor : parentView.topAnchor
+        return parentView.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
     }
 
     private func updateScrollControllerHeaderConstraint() {
