@@ -196,8 +196,12 @@ final class TranslationPickerSettingsViewController: UIViewController,
             let localized = Self.localizedName(for: code, locale: self.localeProvider.current)
             content.text = native
             content.textProperties.color = theme.colors.textPrimary
-            let subtitle = isDevice ? .Settings.Translation.PreferredLanguages.DeviceLanguage
-                                    : (native == localized ? nil : localized)
+            let subtitle: String?
+            if isDevice {
+                subtitle = .Settings.Translation.PreferredLanguages.DeviceLanguage
+            } else {
+                subtitle = native == localized ? nil : localized
+            }
             content.secondaryText = subtitle
             content.secondaryTextProperties.color = theme.colors.textSecondary
             cell.accessories = []
