@@ -651,31 +651,22 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
-        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
+        getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
             ensureMainThread {
-                guard case .success(let isBookmarked) = isBookmarkedResult else {
-                    return
-                }
-
                 let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
+                let isSyncEnabled = RustFirefoxAccounts.shared.hasAccount()
 
-                let browserProfile = profile as? BrowserProfile
-                browserProfile?.tabs.getClientGUIDs { (result, error) in
-                    ensureMainThread {
-                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                                 canTabBeRemoved: isBookmarked,
-                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                                 isSyncEnabled: !(result?.isEmpty ?? true),
-                                                 screenshot: tab?.screenshot ?? UIImage(),
-                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                        let action = TabPeekAction(tabPeekModel: model,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPeekActionType.loadTabPeek)
-                        store.dispatch(action)
-                    }
-                }
+                let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         canTabBeRemoved: isBookmarked,
+                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                         isSyncEnabled: isSyncEnabled,
+                                         screenshot: tab?.screenshot ?? UIImage(),
+                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                let action = TabPeekAction(tabPeekModel: model,
+                                           windowUUID: uuid,
+                                           actionType: TabPeekActionType.loadTabPeek)
+                store.dispatch(action)
             }
         }
     }
