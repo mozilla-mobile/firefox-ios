@@ -34,6 +34,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .bookmarksSearchFeature:
+            return checkBookmarksSearchFeature(from: nimbus)
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -535,5 +538,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.aiKillSwitchFeature.value().enabled
+    }
+
+    private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarksSearchFeature.value().enabled
     }
 }
