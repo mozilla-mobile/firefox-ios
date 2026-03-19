@@ -36,7 +36,7 @@ struct BrowserViewControllerState: ScreenState {
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
-        case translationLanguagePicker(languages: [String])
+        case translationLanguagePicker(languages: [String], isTranslated: Bool, translatedToLanguage: String?)
     }
 
     let windowUUID: WindowUUID
@@ -648,7 +648,11 @@ struct BrowserViewControllerState: ScreenState {
             toast: state.toast,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            displayView: .translationLanguagePicker(languages: action.translationLanguages ?? []),
+            displayView: .translationLanguagePicker(
+                languages: action.translationLanguages ?? [],
+                isTranslated: action.isPageTranslated ?? false,
+                translatedToLanguage: action.translatedToLanguage
+            ),
             buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }

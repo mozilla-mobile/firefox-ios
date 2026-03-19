@@ -20,6 +20,8 @@ struct GeneralBrowserAction: Action {
     let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
     let translationLanguages: [String]?
+    let isPageTranslated: Bool?
+    let translatedToLanguage: String?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -29,6 +31,8 @@ struct GeneralBrowserAction: Action {
          frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
          translationLanguages: [String]? = nil,
+         isPageTranslated: Bool? = nil,
+         translatedToLanguage: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -42,6 +46,8 @@ struct GeneralBrowserAction: Action {
         self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
         self.translationLanguages = translationLanguages
+        self.isPageTranslated = isPageTranslated
+        self.translatedToLanguage = translatedToLanguage
     }
 }
 

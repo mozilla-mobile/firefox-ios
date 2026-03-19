@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 import SummarizeKit
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
@@ -162,6 +163,26 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .webpageSummary(let config):
             dismissMenuModal(animated: true)
             navigationHandler?.showSummarizePanel(.mainMenu, config: config)
+
+        case .translatePage:
+            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+            let translationConfig = toolbarState?.addressToolbar.translationConfiguration
+            let isTranslated = translationConfig?.state == .active
+            let translatedLanguage = translationConfig?.translatedToLanguage
+            let prefs = profile.prefs
+            let uuid = windowUUID
+            Task { @MainActor in
+                let manager = PreferredTranslationLanguagesManager(prefs: prefs)
+                let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
+                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+                store.dispatch(GeneralBrowserAction(
+                    translationLanguages: languages,
+                    isPageTranslated: isTranslated,
+                    translatedToLanguage: translatedLanguage,
+                    windowUUID: uuid,
+                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                ))
+            }
         }
     }
 

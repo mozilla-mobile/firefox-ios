@@ -22,6 +22,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let editThisBookmark = StandardImageIdentifiers.Large.bookmarkFill
         static let saveAsPDF = StandardImageIdentifiers.Large.saveFile
         static let summarizer = StandardImageIdentifiers.Large.summarizer
+        static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
         static let share = StandardImageIdentifiers.Large.share
     }
@@ -252,6 +253,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
             options.append(configureZoomItem(with: uuid, and: tabInfo))
+            configureTranslationItem(with: uuid, tabInfo: tabInfo).map { options.append($0) }
             if isSummarizerLanguageExpansionEnabled {
                 options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
             }
@@ -387,6 +389,54 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
                                                      isDefaultUserAgentDesktop: tabInfo.isDefaultUserAgentDesktop,
                                                      hasChangedUserAgent: tabInfo.hasChangedUserAgent)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureTranslationItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement? {
+        guard featureFlags.isFeatureEnabled(.translation, checking: .buildOnly),
+              let translationConfig = tabInfo.translationConfiguration,
+              translationConfig.isTranslationFeatureEnabled,
+              translationConfig.state != nil else { return nil }
+
+        let isActive = translationConfig.state == .active
+        let infoTitle: String
+        if isActive, let langCode = translationConfig.translatedToLanguage {
+            infoTitle = Locale.current.localizedString(forLanguageCode: langCode) ?? langCode
+        } else {
+            infoTitle = .MainMenu.ToolsSection.DesktopSiteOff
+        }
+
+        let a11yLabel = isActive
+            ? String(
+                format: .MainMenu.ToolsSection.AccessibilityLabels.Translation.TranslatedPageLanguageLabel,
+                infoTitle
+              )
+            : .MainMenu.ToolsSection.Translation.TranslatePageTitle
+
+        return MenuElement(
+            title: isActive
+                ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
+                : .MainMenu.ToolsSection.Translation.TranslatePageTitle,
+            iconName: Icons.translate,
+            isEnabled: true,
+            isActive: isActive,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.translatePage,
+            infoTitle: infoTitle,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(.translatePage),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }

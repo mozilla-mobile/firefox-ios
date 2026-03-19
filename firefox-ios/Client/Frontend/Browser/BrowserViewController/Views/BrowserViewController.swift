@@ -3026,8 +3026,13 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
-        case .translationLanguagePicker(let languages):
-            presentTranslationLanguagePicker(languages: languages, sourceButton: state.buttonTapped)
+        case .translationLanguagePicker(let languages, let isTranslated, let translatedToLanguage):
+            presentTranslationLanguagePicker(
+                languages: languages,
+                isTranslated: isTranslated,
+                translatedToLanguage: translatedToLanguage,
+                sourceButton: state.buttonTapped
+            )
         }
     }
 
@@ -3130,15 +3135,45 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    private func presentTranslationLanguagePicker(languages: [String], sourceButton: UIButton?) {
+    private func presentTranslationLanguagePicker(
+        languages: [String],
+        isTranslated: Bool = false,
+        translatedToLanguage: String? = nil,
+        sourceButton: UIButton?
+    ) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.setValue(
-            NSAttributedString(
-                string: .Translations.LanguagePicker.Title,
-                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
-            ),
-            forKey: "attributedTitle"
-        )
+
+        if isTranslated, let langCode = translatedToLanguage {
+            let langName = Locale.current.localizedString(forLanguageCode: langCode) ?? langCode
+            let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+                ),
+                forKey: "attributedTitle"
+            )
+            let showOriginalAction = UIAlertAction(
+                title: .Translations.LanguagePicker.ShowOriginal,
+                style: .default
+            ) { [weak self] _ in
+                guard let self else { return }
+                store.dispatch(GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                ))
+            }
+            alert.addAction(showOriginalAction)
+            alert.preferredAction = showOriginalAction
+        } else {
+            alert.setValue(
+                NSAttributedString(
+                    string: .Translations.LanguagePicker.Title,
+                    attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+                ),
+                forKey: "attributedTitle"
+            )
+        }
 
         languages.forEach { code in
             let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
@@ -3169,8 +3204,19 @@ class BrowserViewController: UIViewController,
         alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
 
         if let popover = alert.popoverPresentationController {
-            popover.sourceView = sourceButton ?? view
-            popover.sourceRect = sourceButton?.bounds ?? view.bounds
+            if let sourceButton {
+                popover.sourceView = sourceButton
+                popover.sourceRect = sourceButton.bounds
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(
+                    x: view.bounds.midX,
+                    y: view.bounds.midY,
+                    width: 0,
+                    height: 0
+                )
+                popover.permittedArrowDirections = []
+            }
         }
 
         present(alert, animated: true)
