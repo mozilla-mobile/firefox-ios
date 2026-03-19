@@ -51,6 +51,7 @@
 		0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */; };
 		0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7693682C81F2A200103A6D /* TrackingProtectionConnectionDetailsView.swift */; };
 		0A76936B2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76936A2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift */; };
+		0A8058272F694E2F004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8058262F694E21004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift */; };
 		0A80C4242F3CD3F300DB85AE /* AppAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A80C4232F3CD3EB00DB85AE /* AppAuthenticatorTests.swift */; };
 		0A80C4262F3CD45900DB85AE /* MockLAContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A80C4252F3CD45400DB85AE /* MockLAContext.swift */; };
 		0A8A37B02F45E070005A84C7 /* LAContextProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8A37AF2F45E066005A84C7 /* LAContextProtocol.swift */; };
@@ -2667,6 +2668,7 @@
 		0A7693682C81F2A200103A6D /* TrackingProtectionConnectionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionConnectionDetailsView.swift; sourceTree = "<group>"; };
 		0A76936A2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionBlockedTrackersView.swift; sourceTree = "<group>"; };
 		0A7D41DB98DDB127A2B8C544 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Menu.strings; sourceTree = "<group>"; };
+		0A8058262F694E21004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewControllerTests.swift; sourceTree = "<group>"; };
 		0A80C4232F3CD3EB00DB85AE /* AppAuthenticatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAuthenticatorTests.swift; sourceTree = "<group>"; };
 		0A80C4252F3CD45400DB85AE /* MockLAContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLAContext.swift; sourceTree = "<group>"; };
 		0A8A37AF2F45E066005A84C7 /* LAContextProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAContextProtocol.swift; sourceTree = "<group>"; };
@@ -14488,6 +14490,7 @@
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
 			isa = PBXGroup;
 			children = (
+				0A8058262F694E21004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift */,
 				0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */,
 				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
 				0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */,
@@ -19950,6 +19953,7 @@
 				C869915428917803007ACC5C /* WallpaperTestDataProvider.swift in Sources */,
 				A093CF852F3696D70017774C /* MockMozAdsClientFactory.swift in Sources */,
 				0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */,
+				0A8058272F694E2F004CB4A9 /* CreditCardBottomSheetViewControllerTests.swift in Sources */,
 				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
 				8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */,
