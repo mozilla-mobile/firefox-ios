@@ -25,7 +25,7 @@ public struct ReadabilityResult: Sendable {
     public let credits: String
     public let excerpt: String
     /// The jsonld metadata of the originating WebView.
-    /// Represents a structured view of the content of the originating WebView to embed in the ReaderView.html.
+    /// Represents a structured view of the content of the originating WebView to embed in the `Reader.html`.
     let jsonld: String
     let byline: String
     let length: Int
