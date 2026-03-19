@@ -11,7 +11,7 @@
       "channel": "release",
       "userFacingName": "Brand Refresh - Onboarding iOS",
       "userFacingDescription": "New onboarding",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -67,7 +67,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('148.!') >= 0) && ((language in ['ja']) != true)))",
       "startDate": "2026-02-13",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2026-03-16",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 21,

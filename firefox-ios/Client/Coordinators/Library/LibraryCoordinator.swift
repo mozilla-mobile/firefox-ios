@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 
 import enum MozillaAppServices.VisitType
 
@@ -26,13 +27,18 @@ protocol LibraryNavigationHandler: AnyObject {
 class LibraryCoordinator: BaseCoordinator,
                           LibraryPanelDelegate,
                           LibraryNavigationHandler,
-                          ParentCoordinatorDelegate {
+                          ParentCoordinatorDelegate,
+                          ShareSheetCoordinatorDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController?
     weak var parentCoordinator: LibraryCoordinatorDelegate?
     override var isDismissible: Bool { false }
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+
+    var libraryPanelWindowUUID: WindowUUID {
+        return windowUUID
+    }
 
     init(
         router: Router,
@@ -105,11 +111,11 @@ class LibraryCoordinator: BaseCoordinator,
         }
 
         let coordinator = ShareSheetCoordinator(
-            alertContainer: libraryViewController?.view ?? UIView(),
             router: router,
             profile: profile,
+            tabManager: tabManager,
             parentCoordinator: self,
-            tabManager: tabManager
+            delegate: self
         )
         add(child: coordinator)
 
@@ -195,7 +201,23 @@ class LibraryCoordinator: BaseCoordinator,
         parentCoordinator?.didFinishLibrary(from: self)
     }
 
-    var libraryPanelWindowUUID: WindowUUID {
-        return windowUUID
+    func showToast(message: String) {
+        guard let viewController = libraryViewController else { return }
+
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        let viewModel = PlainToastViewModel(labelText: message)
+        let toast = PlainToast(viewModel: viewModel,
+                               theme: themeManager.getCurrentTheme(for: windowUUID))
+        toast.showToast(viewController: viewController,
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.bottomAnchor)
+            ]
+        }
     }
 }

@@ -7,6 +7,7 @@ import Foundation
 import Glean
 import Shared
 
+import class MozillaAppServices.NimbusGleanPings
 import func MozillaAppServices.getCalculatedAttributes
 import func MozillaAppServices.getLocaleTag
 import struct MozillaAppServices.JsonObject
@@ -137,6 +138,10 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
      */
     func record() {
         logger.log("record start", level: .debug, category: .experiments)
+
+        // Bring the ping into scope so that Glean knows it exists and includes NimbusSystem.recordedNimbusContext
+        _ = NimbusGleanPings.nimbusTargetingContext
+
         let eventQueryValuesObject = GleanMetrics.NimbusSystem.RecordedNimbusContextObjectItemEventQueryValuesObject(
             daysOpenedInLast28: eventQueryValues[RecordedNimbusContext.DAYS_OPENED_IN_LAST_28].toInt64()
         )

@@ -18,7 +18,7 @@ final class MerinoStateTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        setupHomepageRedesignFeature(scrollDirection: .baseline, newsTransition: false)
+        setupHomepageRedesignFeature(scrollDirection: .baseline)
         try await super.tearDown()
     }
 
@@ -27,7 +27,7 @@ final class MerinoStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.merinoData, [])
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
     @MainActor
@@ -95,63 +95,30 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_initialState_withBaselineStoriesDirectionAndNewsTransitionDisabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .baseline, newsTransition: false)
+    func test_initialState_withBaselineStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .baseline)
 
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.PopularTodaySectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
-    }
-
-    func test_initialState_withBaselineStoriesDirectionAndNewsTransitionEnabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .baseline, newsTransition: true)
-
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.NewsSectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
-    }
-
-    func test_initialState_withHorizontalStoriesDirectionAndNewsTransitionDisabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .horizontal, newsTransition: false)
-
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.PopularTodaySectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
-    func test_initialState_withHorizontalStoriesDirectionAndNewsTransitionEnabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .horizontal, newsTransition: true)
+    func test_initialState_withHorizontalStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .horizontal)
 
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.NewsSectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
-    func test_initialState_withVerticalStoriesDirectionAndNewsTransitionDisabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .vertical, newsTransition: false)
-
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.PopularTodaySectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
-    }
-
-    func test_initialState_withVerticalStoriesDirectionAndNewsTransitionEnabled_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .vertical, newsTransition: true)
+    func test_initialState_withVerticalStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .vertical)
 
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.sectionHeaderState.style, .newsAffordance)
-        XCTAssertEqual(initialState.sectionHeaderState.title, .FirefoxHomepage.Pocket.NewsSectionTitle)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
@@ -164,9 +131,9 @@ final class MerinoStateTests: XCTestCase {
         return MerinoState.reducer
     }
 
-    private func setupHomepageRedesignFeature(scrollDirection: ScrollDirection, newsTransition: Bool) {
+    private func setupHomepageRedesignFeature(scrollDirection: ScrollDirection) {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(newsTransition: newsTransition, storiesScrollDirection: scrollDirection)
+            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
         }
     }
 }
