@@ -5,9 +5,15 @@
 import Common
 import Redux
 
+struct PreferredLanguageDetails: Equatable, Hashable {
+    let code: String
+    let mainText: String
+    let subtitleText: String?
+}
+
 struct TranslationSettingsState: ScreenState, Equatable {
     var isTranslationsEnabled: Bool
-    var preferredLanguages: [String]
+    var preferredLanguages: [PreferredLanguageDetails]
     var supportedLanguages: [String]
     var windowUUID: WindowUUID
 
@@ -39,7 +45,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
-         preferredLanguages: [String],
+         preferredLanguages: [PreferredLanguageDetails],
          supportedLanguages: [String]) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled

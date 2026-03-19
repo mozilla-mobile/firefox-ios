@@ -43,7 +43,10 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         subject.newState(state: TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
-            preferredLanguages: ["en", "fr"],
+            preferredLanguages: [
+                PreferredLanguageDetails(code: "en", mainText: "English", subtitleText: "Device Language"),
+                PreferredLanguageDetails(code: "fr", mainText: "français", subtitleText: "French")
+            ],
             supportedLanguages: ["en", "fr", "de"]
         ))
     }
@@ -67,30 +70,6 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let result = subject.collectionView(collectionView, shouldSelectItemAt: IndexPath(item: 0, section: 0))
         XCTAssertFalse(result)
-    }
-
-    // MARK: - nativeName
-
-    func test_nativeName_returnsNonEmptyString() {
-        let name = TranslationPickerSettingsViewController.nativeName(for: "en")
-        XCTAssertFalse(name.isEmpty)
-    }
-
-    func test_nativeName_forUnknownCode_returnsFallback() {
-        let name = TranslationPickerSettingsViewController.nativeName(for: "xyz")
-        XCTAssertEqual(name, "xyz")
-    }
-
-    // MARK: - localizedName
-
-    func test_localizedName_withInjectedLocale_returnsExpectedString() {
-        let name = TranslationPickerSettingsViewController.localizedName(for: "fr", locale: Locale(identifier: "en"))
-        XCTAssertEqual(name, "French")
-    }
-
-    func test_localizedName_forUnknownCode_returnsFallback() {
-        let name = TranslationPickerSettingsViewController.localizedName(for: "xyz", locale: Locale(identifier: "en"))
-        XCTAssertEqual(name, "xyz")
     }
 
     // MARK: - StoreTestUtility

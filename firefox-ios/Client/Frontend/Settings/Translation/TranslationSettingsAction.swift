@@ -14,11 +14,11 @@ struct TranslationSettingsMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isTranslationsEnabled: Bool?
-    let preferredLanguages: [String]?
+    let preferredLanguages: [PreferredLanguageDetails]?
     let supportedLanguages: [String]?
 
     init(isTranslationsEnabled: Bool? = nil,
-         preferredLanguages: [String]? = nil,
+         preferredLanguages: [PreferredLanguageDetails]? = nil,
          supportedLanguages: [String]? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {

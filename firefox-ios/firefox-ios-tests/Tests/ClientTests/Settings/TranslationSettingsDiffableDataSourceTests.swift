@@ -14,7 +14,7 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        subject = makeDataSource(localeCode: "en")
+        subject = makeDataSource()
     }
 
     override func tearDown() async throws {
@@ -62,39 +62,23 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(subject.snapshot().numberOfItems(inSection: .preferredLanguages), 3)
     }
 
-    // MARK: - applySnapshot — device language marking
-
-    func test_applySnapshot_firstLanguageMatchesLocale_markedAsDeviceLanguage() {
-        subject = makeDataSource(localeCode: "en")
-        let state = makeState(isEnabled: true, languages: ["en", "fr"])
-
-        subject.applySnapshot(state: state, animated: false)
-
-        let items = subject.snapshot().itemIdentifiers(inSection: .preferredLanguages)
-        XCTAssertEqual(items[0], .language(code: "en", isDeviceLanguage: true))
-        XCTAssertEqual(items[1], .language(code: "fr", isDeviceLanguage: false))
-    }
-
-    func test_applySnapshot_localeMatchesButNotFirst_notMarkedAsDeviceLanguage() {
-        subject = makeDataSource(localeCode: "en")
-        let state = makeState(isEnabled: true, languages: ["fr", "en"])
+    func test_applySnapshot_languageItemsMatchStateOrder() {
+        let details = [
+            PreferredLanguageDetails(code: "en", mainText: "English", subtitleText: "Device Language"),
+            PreferredLanguageDetails(code: "fr", mainText: "français", subtitleText: "French")
+        ]
+        let state = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            preferredLanguages: details,
+            supportedLanguages: ["en", "fr"]
+        )
 
         subject.applySnapshot(state: state, animated: false)
 
         let items = subject.snapshot().itemIdentifiers(inSection: .preferredLanguages)
-        XCTAssertEqual(items[0], .language(code: "fr", isDeviceLanguage: false))
-        XCTAssertEqual(items[1], .language(code: "en", isDeviceLanguage: false))
-    }
-
-    func test_applySnapshot_localeDoesNotMatchAnyLanguage_noneMarkedAsDeviceLanguage() {
-        subject = makeDataSource(localeCode: "de")
-        let state = makeState(isEnabled: true, languages: ["en", "fr"])
-
-        subject.applySnapshot(state: state, animated: false)
-
-        let items = subject.snapshot().itemIdentifiers(inSection: .preferredLanguages)
-        XCTAssertEqual(items[0], .language(code: "en", isDeviceLanguage: false))
-        XCTAssertEqual(items[1], .language(code: "fr", isDeviceLanguage: false))
+        XCTAssertEqual(items[0], .language(details[0]))
+        XCTAssertEqual(items[1], .language(details[1]))
     }
 
     // MARK: - reconfigureVisibleCells
@@ -110,19 +94,18 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func makeDataSource(localeCode: String) -> TranslationSettingsDiffableDataSource {
-        let localeProvider = MockLocaleProvider(current: Locale(identifier: localeCode))
+    private func makeDataSource() -> TranslationSettingsDiffableDataSource {
         return TranslationSettingsDiffableDataSource(
-            collectionView: collectionView,
-            localeProvider: localeProvider
+            collectionView: collectionView
         ) { _, _, _ in nil }
     }
 
     private func makeState(isEnabled: Bool, languages: [String]) -> TranslationSettingsState {
+        let details = languages.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
         return TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: isEnabled,
-            preferredLanguages: languages,
+            preferredLanguages: details,
             supportedLanguages: languages
         )
     }

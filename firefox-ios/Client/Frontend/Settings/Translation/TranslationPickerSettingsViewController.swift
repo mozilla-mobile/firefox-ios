@@ -35,16 +35,13 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     let windowUUID: WindowUUID
     private var state: TranslationSettingsState
-    private let localeProvider: LocaleProvider
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default,
-         localeProvider: LocaleProvider = SystemLocaleProvider()) {
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.localeProvider = localeProvider
         state = TranslationSettingsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         title = .Settings.Translation.Title
@@ -131,8 +128,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         let languageReg = makeLanguageCellRegistration()
 
         let dataSource = TranslationSettingsDiffableDataSource(
-            collectionView: collectionView,
-            localeProvider: localeProvider
+            collectionView: collectionView
         ) { collectionView, indexPath, item in
             switch item {
             case .enableToggle:
@@ -191,20 +187,12 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     private func makeLanguageCellRegistration() -> CellRegistration {
         CellRegistration { [weak self] cell, _, item in
-            guard let self, case let .language(code, isDevice) = item else { return }
+            guard let self, case let .language(details) = item else { return }
             var content = cell.defaultContentConfiguration()
             let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
-            let native = Self.nativeName(for: code)
-            let localized = Self.localizedName(for: code, locale: self.localeProvider.current)
-            content.text = native
+            content.text = details.mainText
             content.textProperties.color = theme.colors.textPrimary
-            let subtitle: String?
-            if isDevice {
-                subtitle = .Settings.Translation.PreferredLanguages.DeviceLanguage
-            } else {
-                subtitle = native == localized ? nil : localized
-            }
-            content.secondaryText = subtitle
+            content.secondaryText = details.subtitleText
             content.secondaryTextProperties.color = theme.colors.textSecondary
             cell.accessories = []
             cell.contentConfiguration = content
@@ -228,16 +216,6 @@ final class TranslationPickerSettingsViewController: UIViewController,
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         dataSource.reconfigureVisibleCells()
-    }
-
-    // MARK: - Helpers
-
-    static func nativeName(for code: String) -> String {
-        return Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-    }
-
-    static func localizedName(for code: String, locale: Locale = .current) -> String {
-        return locale.localizedString(forLanguageCode: code) ?? code
     }
 
     // MARK: - UICollectionViewDelegate

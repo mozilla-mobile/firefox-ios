@@ -22,16 +22,17 @@ final class TranslationSettingsStateTests: XCTestCase {
     }
 
     func test_initWithAllParameters_returnsConfiguredState() {
+        let languages = makeLanguages(["en", "fr"])
         let subject = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: false,
-            preferredLanguages: ["en", "fr"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "fr", "de"]
         )
 
         XCTAssertEqual(subject.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(subject.isTranslationsEnabled)
-        XCTAssertEqual(subject.preferredLanguages, ["en", "fr"])
+        XCTAssertEqual(subject.preferredLanguages, languages)
         XCTAssertEqual(subject.supportedLanguages, ["en", "fr", "de"])
     }
 
@@ -40,10 +41,11 @@ final class TranslationSettingsStateTests: XCTestCase {
     func test_didLoadSettings_updatesAllValues() {
         let initialState = createSubject()
         let reducer = translationSettingsReducer()
+        let languages = makeLanguages(["en", "fr"])
 
         let action = TranslationSettingsMiddlewareAction(
             isTranslationsEnabled: false,
-            preferredLanguages: ["en", "fr"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "fr", "de"],
             windowUUID: .XCTestDefaultUUID,
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
@@ -52,15 +54,16 @@ final class TranslationSettingsStateTests: XCTestCase {
         let newState = reducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
-        XCTAssertEqual(newState.preferredLanguages, ["en", "fr"])
+        XCTAssertEqual(newState.preferredLanguages, languages)
         XCTAssertEqual(newState.supportedLanguages, ["en", "fr", "de"])
     }
 
     func test_didLoadSettings_withNilValues_preservesExistingState() {
+        let languages = makeLanguages(["en"])
         let initialState = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: false,
-            preferredLanguages: ["en"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "de"]
         )
         let reducer = translationSettingsReducer()
@@ -73,7 +76,7 @@ final class TranslationSettingsStateTests: XCTestCase {
         let newState = reducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
-        XCTAssertEqual(newState.preferredLanguages, ["en"])
+        XCTAssertEqual(newState.preferredLanguages, languages)
         XCTAssertEqual(newState.supportedLanguages, ["en", "de"])
     }
 
@@ -97,10 +100,11 @@ final class TranslationSettingsStateTests: XCTestCase {
     }
 
     func test_didUpdateSettings_preservesLanguagesWhenNil() {
+        let languages = makeLanguages(["en", "fr"])
         let initialState = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
-            preferredLanguages: ["en", "fr"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "fr", "de"]
         )
         let reducer = translationSettingsReducer()
@@ -114,23 +118,24 @@ final class TranslationSettingsStateTests: XCTestCase {
         let newState = reducer(initialState, action)
 
         XCTAssertFalse(newState.isTranslationsEnabled)
-        XCTAssertEqual(newState.preferredLanguages, ["en", "fr"])
+        XCTAssertEqual(newState.preferredLanguages, languages)
         XCTAssertEqual(newState.supportedLanguages, ["en", "fr", "de"])
     }
 
     // MARK: - Equality Tests
 
     func test_equality_sameValues_returnsTrue() {
+        let languages = makeLanguages(["en"])
         let state1 = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
-            preferredLanguages: ["en"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "fr"]
         )
         let state2 = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
-            preferredLanguages: ["en"],
+            preferredLanguages: languages,
             supportedLanguages: ["en", "fr"]
         )
 
@@ -154,7 +159,7 @@ final class TranslationSettingsStateTests: XCTestCase {
         let state2 = TranslationSettingsState(
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
-            preferredLanguages: ["en"],
+            preferredLanguages: makeLanguages(["en"]),
             supportedLanguages: []
         )
 
@@ -217,5 +222,9 @@ final class TranslationSettingsStateTests: XCTestCase {
 
     private func translationSettingsReducer() -> Reducer<TranslationSettingsState> {
         return TranslationSettingsState.reducer
+    }
+
+    private func makeLanguages(_ codes: [String]) -> [PreferredLanguageDetails] {
+        return codes.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
     }
 }

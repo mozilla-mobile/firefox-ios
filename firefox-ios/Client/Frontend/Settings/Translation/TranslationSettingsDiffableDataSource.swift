@@ -15,7 +15,7 @@ enum TranslationSettingsSection: Int, Hashable {
 
 enum TranslationSettingsItem: Hashable {
     case enableToggle
-    case language(code: String, isDeviceLanguage: Bool)
+    case language(PreferredLanguageDetails)
 }
 
 // MARK: - Diffable Data Source
@@ -24,14 +24,10 @@ final class TranslationSettingsDiffableDataSource:
     UICollectionViewDiffableDataSource<TranslationSettingsSection, TranslationSettingsItem> {
     typealias SupplementaryRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>
 
-    private let localeProvider: LocaleProvider
-
-    init(
+    override init(
         collectionView: UICollectionView,
-        localeProvider: LocaleProvider,
         cellProvider: @escaping CellProvider
     ) {
-        self.localeProvider = localeProvider
         super.init(collectionView: collectionView, cellProvider: cellProvider)
     }
 
@@ -83,10 +79,7 @@ final class TranslationSettingsDiffableDataSource:
 
         if state.isTranslationsEnabled {
             snapshot.appendSections([.preferredLanguages])
-            let deviceCode = localeProvider.current.languageCode ?? ""
-            let langItems: [TranslationSettingsItem] = state.preferredLanguages.map { code in
-                .language(code: code, isDeviceLanguage: code == deviceCode && code == state.preferredLanguages.first)
-            }
+            let langItems = state.preferredLanguages.map { TranslationSettingsItem.language($0) }
             snapshot.appendItems(langItems, toSection: .preferredLanguages)
         }
 
