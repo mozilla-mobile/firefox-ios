@@ -73,7 +73,7 @@ final class BookmarksViewController: SiteTableViewController,
             }
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
-            return searchItems
+            return searchItems + [flexibleSpace]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
