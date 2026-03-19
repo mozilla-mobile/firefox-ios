@@ -57,13 +57,11 @@ struct TabPeekState: ScreenState {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
               let action = action as? TabPeekAction
-        else { return defaultState(from: state) }
+        else { return state }
 
         switch action.actionType {
         case TabPeekActionType.loadTabPeek:
-            guard let tabPeekModel = action.tabPeekModel else {
-                return defaultState(from: state)
-            }
+            guard let tabPeekModel = action.tabPeekModel else { return state }
             return TabPeekState(windowUUID: state.windowUUID,
                                 showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showRemoveBookmark: tabPeekModel.canTabBeRemoved,
@@ -72,7 +70,7 @@ struct TabPeekState: ScreenState {
                                 previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
                                 screenshot: tabPeekModel.screenshot)
         default:
-            return defaultState(from: state)
+            return state
         }
     }
 

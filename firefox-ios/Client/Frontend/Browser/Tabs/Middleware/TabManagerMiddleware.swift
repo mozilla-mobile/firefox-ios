@@ -659,12 +659,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     return
                 }
 
-                let canBeSaved: Bool
-                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                    canBeSaved = false
-                } else {
-                    canBeSaved = true
-                }
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
 
                 let browserProfile = profile as? BrowserProfile
                 browserProfile?.tabs.getClientGUIDs { (result, error) in
@@ -683,6 +678,13 @@ final class TabManagerMiddleware: FeatureFlaggable,
                 }
             }
         }
+    }
+
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
+        guard let tab else { return false }
+
+        // If is not bookmarked already or the url is not to long (database restriction) or is not homepage
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
