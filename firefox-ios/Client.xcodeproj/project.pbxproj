@@ -748,6 +748,8 @@
 		613489A52D9443610009AF01 /* ToastTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A42D9443610009AF01 /* ToastTelemetryTests.swift */; };
 		61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */; };
 		61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */; };
+		614985482F6B0B6500BC5ACA /* AIControlsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614985472F6B0B6200BC5ACA /* AIControlsModel.swift */; };
+		614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */; };
 		615532D42D7AA5F30046347F /* ScreenshotHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */; };
 		619FE8932CE6595B004F83E2 /* WallpaperMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */; };
 		61A164492CE7BE84001D6058 /* WallpaperStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */; };
@@ -8639,6 +8641,8 @@
 		613489A42D9443610009AF01 /* ToastTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetryTests.swift; sourceTree = "<group>"; };
 		61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingTests.swift; sourceTree = "<group>"; };
 		61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeneralSettingsDelegate.swift; sourceTree = "<group>"; };
+		614985472F6B0B6200BC5ACA /* AIControlsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModel.swift; sourceTree = "<group>"; };
+		614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModelTests.swift; sourceTree = "<group>"; };
 		615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotHelperTests.swift; sourceTree = "<group>"; };
 		619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMiddleware.swift; sourceTree = "<group>"; };
 		61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStateTests.swift; sourceTree = "<group>"; };
@@ -13008,6 +13012,15 @@
 			path = Redux;
 			sourceTree = "<group>";
 		};
+		614987AD2F6B37B900BC5ACA /* AI Controls */ = {
+			isa = PBXGroup;
+			children = (
+				61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */,
+				614987AE2F6B37E300BC5ACA /* AIControlsModelTests.swift */,
+			);
+			path = "AI Controls";
+			sourceTree = "<group>";
+		};
 		61A164442CE7BDEF001D6058 /* Wallpaper */ = {
 			isa = PBXGroup;
 			children = (
@@ -13020,6 +13033,7 @@
 		61DD72D32F59374E002BFEA6 /* AIControls */ = {
 			isa = PBXGroup;
 			children = (
+				614985472F6B0B6200BC5ACA /* AIControlsModel.swift */,
 				61DD72D42F5937A0002BFEA6 /* AIControlsSettingsView.swift */,
 			);
 			path = AIControls;
@@ -13600,6 +13614,7 @@
 		8A5D1CA12A30CF2E005AD35C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				614987AD2F6B37B900BC5ACA /* AI Controls */,
 				61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */,
 				21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */,
 				B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */,
@@ -13619,7 +13634,6 @@
 				1D2A1B582F3BAB4B00157ACB /* RelayMaskSettingsViewControllerTests.swift */,
 				C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */,
 				1DF916892F48EAAD00FA2407 /* MockRelayController.swift */,
-				61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -18767,6 +18781,7 @@
 				C2886E082EC5E025007AE6C3 /* StaticFileRoute.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
 				61DD72D52F5937A6002BFEA6 /* AIControlsSettingsView.swift in Sources */,
+				614985482F6B0B6500BC5ACA /* AIControlsModel.swift in Sources */,
 				1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */,
 				39BF0CD52EB512A1002064F5 /* ImpressionTrackingUtility.swift in Sources */,
 				D3BE7B461B054F8600641031 /* UITestAppDelegate.swift in Sources */,
@@ -20060,6 +20075,7 @@
 				61F7A4332D136C3A00F7317B /* RouteBuilderTests.swift in Sources */,
 				5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */,
 				8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */,
+				614987AF2F6B37E300BC5ACA /* AIControlsModelTests.swift in Sources */,
 				8AEF41622D15EDBC0013925D /* TopSitesMiddlewareTests.swift in Sources */,
 				C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */,
 				ABEF80D92A2F283E003F52C4 /* CreditCardBottomSheetViewModelTests.swift in Sources */,
