@@ -2111,6 +2111,7 @@
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
+		E71CDA4786F4408BB2179C0A /* TranslationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB642E756047421F9BCCA868 /* TranslationSettingsViewController.swift */; };
 		EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07F85E240D695F00924860 /* PushNotificationSetup.swift */; };
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB3A38A02032673E004C6E67 /* DatabaseFixtureTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */; };
@@ -11414,6 +11415,7 @@
 		FB254B83B0B5E0487089B861 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Today.strings; sourceTree = "<group>"; };
 		FB4D447195CC566A034F89EE /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = "ca.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		FB634DAD901C5B1C29FF1E8C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Intro.strings; sourceTree = "<group>"; };
+		FB642E756047421F9BCCA868 /* TranslationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewController.swift; sourceTree = "<group>"; };
 		FB6A4855A7905979E7512411 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		FB8A4657AF4354C9EFAAE9F9 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		FBC14D2DBDDEE2E94CD0E14E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -13620,6 +13622,7 @@
 				C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */,
 				1DF916892F48EAAD00FA2407 /* MockRelayController.swift */,
 				61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */,
+				8C5E7E922F6B3C3F00A3DD27 /* TranslationSettingsDiffableDataSourceTests.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -19786,6 +19789,7 @@
 				21292E6B2E7896910001AC06 /* RecordVisitObservationManagerTests.swift in Sources */,
 				C2D1A1112A67E73D00205DCC /* BookmarksCoordinatorTests.swift in Sources */,
 				C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */,
+				8C5E7E932F6B3C3F00A3DD27 /* TranslationSettingsDiffableDataSourceTests.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */,
 				03911E482F3200F50010967A /* ToUExperimentsTrackingTests.swift in Sources */,
