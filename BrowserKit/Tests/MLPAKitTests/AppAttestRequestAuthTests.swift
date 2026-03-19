@@ -3,9 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Common
 
-@testable import SummarizeKit
+@testable import MLPAKit
 
 final class AppAttestRequestAuthTests: XCTestCase {
     func test_authenticate_setsAuthorizationHeader() async throws {

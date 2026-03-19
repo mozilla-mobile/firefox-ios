@@ -546,18 +546,13 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            let mainMenuCoordinator = MainMenuCoordinator(router: router,
-                                                          windowUUID: tabManager.windowUUID,
-                                                          profile: profile)
-            mainMenuCoordinator.parentCoordinator = self
-            mainMenuCoordinator.navigationHandler = self
-            add(child: mainMenuCoordinator)
-            mainMenuCoordinator.startWithNavController()
-        } else {
-            guard let menuNavViewController = makeMenuNavViewController() else { return }
-            present(menuNavViewController)
-        }
+        let mainMenuCoordinator = MainMenuCoordinator(router: router,
+                                                      windowUUID: tabManager.windowUUID,
+                                                      profile: profile)
+        mainMenuCoordinator.parentCoordinator = self
+        mainMenuCoordinator.navigationHandler = self
+        add(child: mainMenuCoordinator)
+        mainMenuCoordinator.startWithNavController()
     }
 
     func openURLInNewTab(_ url: URL?) {
@@ -589,7 +584,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFindInPage() {
-        browserViewController.showFindInPage()
+        browserViewController.updateFindInPageVisibility(isVisible: true)
     }
 
     func updateZoomPageBarVisibility() {
@@ -669,32 +664,6 @@ final class BrowserCoordinator: BaseCoordinator,
             printController.printInfo = printInfo
             printController.present(animated: true, completionHandler: nil)
         }
-    }
-
-    private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
-            mainMenuCoordinator.dismissMenuModal(animated: false)
-        }
-
-        let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
-        if !navigationController.shouldUseiPadSetup() {
-            navigationController.modalPresentationStyle = .formSheet
-            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
-            navigationController.sheetPresentationController?.prefersGrabberVisible = true
-        }
-
-        let coordinator = MainMenuCoordinator(
-            router: DefaultRouter(navigationController: navigationController),
-            windowUUID: tabManager.windowUUID,
-            profile: profile
-        )
-        coordinator.parentCoordinator = self
-        coordinator.navigationHandler = self
-        add(child: coordinator)
-        coordinator.start()
-
-        return navigationController
     }
 
     func showSignInView(fxaParameters: FxASignInViewParameters?) {

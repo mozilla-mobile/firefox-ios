@@ -395,114 +395,25 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
                 if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
                     || UIDevice.current.userInterfaceIdiom == .pad {
-                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+                    self.showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
                 }
             }
         }.items
     }
-}
 
-// MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
-    func updateToolbarState() {
-        updateToolbarStateForTraitCollection(view.traitCollection)
-    }
-
-    func showViewController(viewController: UIViewController) {
-        presentWithModalDismissIfNeeded(viewController, animated: true)
-    }
-
-    func showToast(_ urlString: String? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
-        switch toastAction {
-        case .bookmarkPage:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .BookmarksEdit)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { isButtonTapped in
-                isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
-            }
-            show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
-        case .removeBookmark:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self, let currentTab = tabManager.selectedTab else { return }
-                isButtonTapped ? self.addBookmark(
-                    urlString: urlString ?? currentTab.url?.absoluteString ?? "",
-                    title: title ?? currentTab.title
-                ) : nil
-            }
-            show(toast: toast)
-        case .closeTab:
-            let viewModel = ButtonToastViewModel(labelText: message,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self,
-                        tabManager.backupCloseTab != nil,
-                        isButtonTapped
-                else { return }
-                self.tabManager.undoCloseTab()
-            }
-            show(toast: toast)
-        default:
-            SimpleToast().showAlertWithText(message,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
+    /// This toast was tied into the legacy main menu, moved it to it's own function.
+    /// New toasts should be piped through Redux.
+    func showLegacyCloseTabToast(message: String) {
+        let viewModel = ButtonToastViewModel(labelText: message,
+                                             buttonText: .UndoString)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme()) { [weak self] isButtonTapped in
+            guard let self,
+                  tabManager.backupCloseTab != nil,
+                  isButtonTapped
+            else { return }
+            self.tabManager.undoCloseTab()
         }
-    }
-
-    func showFindInPage() {
-        updateFindInPageVisibility(isVisible: true)
-    }
-
-    func showCustomizeHomePage() {
-        navigationHandler?.show(settings: .homePage)
-    }
-
-    func showWallpaperSettings() {
-        navigationHandler?.show(settings: .wallpaper)
-    }
-
-    func showCreditCardSettings() {
-        navigationHandler?.show(settings: .creditCard)
-    }
-
-    func showZoomPage(tab: Tab) {
-        updateZoomPageBarVisibility(visible: true)
-    }
-
-    func showSignInView(fxaParameters: FxASignInViewParameters) {
-        presentSignInViewController(fxaParameters.launchParameters,
-                                    flowType: fxaParameters.flowType,
-                                    referringPage: fxaParameters.referringPage)
-    }
-
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if !urls.isEmpty {
-            showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
-        }
-    }
-
-    func showFilePicker(fileURL: URL) {
-        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
-        documentPicker.delegate = self
-        documentPicker.modalPresentationStyle = .formSheet
-        showViewController(viewController: documentPicker)
-    }
-
-    func showEditBookmark() {
-        guard let urlString = tabManager.selectedTab?.url?.absoluteString else { return }
-        openBookmarkEditPanel(urlString: urlString)
-    }
-
-    func showTrackingProtection() {
-        store.dispatch(
-            GeneralBrowserAction(
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showTrackingProtectionDetails
-            )
-        )
+        show(toast: toast)
     }
 }

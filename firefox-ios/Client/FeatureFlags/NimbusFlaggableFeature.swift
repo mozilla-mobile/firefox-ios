@@ -34,9 +34,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
-    case menuDefaultBrowserBanner
-    case menuRefactor
-    case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
@@ -100,7 +97,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
-                .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
@@ -182,9 +178,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
-                .menuDefaultBrowserBanner,
-                .menuRefactor,
-                .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,

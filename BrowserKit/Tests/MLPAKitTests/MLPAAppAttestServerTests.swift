@@ -4,9 +4,8 @@
 
 import XCTest
 import TestKit
-import Common
 
-@testable import SummarizeKit
+@testable import MLPAKit
 
 final class MLPAAppAttestServerTests: XCTestCase {
     func test_fetchChallenge_returnsChallenge_onSuccess() async throws {

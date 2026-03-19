@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import SummarizeKit
+@testable import MLPAKit
 
 final class AppAttestClientTests: XCTestCase {
     func test_init_throwsWhenAppAttestNotSupported() {

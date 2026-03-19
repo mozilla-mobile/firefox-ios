@@ -54,10 +54,6 @@ class MainMenuViewController: UIViewController,
         !(UIDevice.current.userInterfaceIdiom == .phone)
     }
 
-    private var isMenuDefaultBrowserBanner: Bool {
-        return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
-    }
-
     private var bannerShown: Bool {
         profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
     }
@@ -316,7 +312,6 @@ class MainMenuViewController: UIViewController,
             title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
             subtitle: .MainMenu.HeaderBanner.Subtitle,
             image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-            isBannerFlagEnabled: isMenuDefaultBrowserBanner,
             isBrowserDefault: isBrowserDefault,
             bannerShown: bannerShown
         )
