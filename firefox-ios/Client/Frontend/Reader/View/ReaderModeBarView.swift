@@ -49,10 +49,6 @@ protocol ReaderModeBarViewDelegate: AnyObject {
 }
 
 class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, SearchBarLocationProvider, ThemeApplicable {
-    private struct UX {
-        static let buttonWidth: CGFloat = 80
-    }
-
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
@@ -82,7 +78,6 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     private let buttonStackView: UIStackView = .build {
         $0.axis = .horizontal
         $0.distribution = .fillEqually
-        $0.alignment = .fill
     }
 
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
@@ -138,7 +133,6 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
             button.setImage(type.image, for: .normal)
             button.addTarget(self, action: action, for: .touchUpInside)
         }
-        button.widthAnchor.constraint(equalToConstant: UX.buttonWidth).isActive = true
         return button
     }
 
@@ -147,17 +141,17 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     }
 
     @objc
-    func tappedReadStatusButton(_ sender: UIButton?) {
+    private func tappedReadStatusButton(_ sender: UIButton?) {
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
     @objc
-    func tappedSettingsButton(_ sender: UIButton?) {
+    private func tappedSettingsButton(_ sender: UIButton?) {
         delegate?.readerModeBar(self, didSelectButton: .settings)
     }
 
     @objc
-    func tappedListStatusButton(_ sender: UIButton?) {
+    private func tappedListStatusButton(_ sender: UIButton?) {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: added ? .delete : .add,
@@ -168,12 +162,11 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, Search
     }
 
     @objc
-    func tappedSummarizerButton() {
+    private func tappedSummarizerButton() {
         delegate?.readerModeBar(self, didSelectButton: .summarizer)
     }
 
-    /// Updates the reader mode bar content by dynamically adding or removing the content buttons
-    /// based on Nimbus feature flag configuration.
+    /// Updates the reader mode bar content by dynamically adding or removing the summarize button.
     func updateContent(shouldShowSummarizerButton: Bool) {
         guard shouldShowSummarizerButton else {
             summarizerButton.removeFromSuperview()
