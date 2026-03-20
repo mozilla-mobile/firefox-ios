@@ -2,6 +2,8 @@
 
 We welcome contributions of all kinds, including bug fixes, improvements, and new ideas. Thank you for taking the time to contribute to Firefox iOS.
 
+Note: If you are not choosing to work on of our `contributor-friendly` issues, you should first receive approval from a maintainer before starting work on something else. Otherwise, your work may be rejected. Please see more information below.
+
 Before getting started, please make sure your work aligns with how we collaborate in this repository.
 
 ## Submitting an Issue
