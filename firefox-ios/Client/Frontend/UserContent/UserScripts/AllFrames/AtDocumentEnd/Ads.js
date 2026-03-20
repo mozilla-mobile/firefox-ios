@@ -61,14 +61,16 @@ function getCookies() {
     return result;
 }
 
+// FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
+// Helper method to verify via SecurityError earlier than touching the document crashes it
 function safeCookiesList() {
     let documentCookies = [];
 
-    // FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
     const isNewTab = window.location.protocol == "about:";
     const hasOpener = !!window.opener;
     const hasParent = hasOpener && window.opener.parent != window.opener;
 
+    // Special-casing only different origins coming from different frames in new tabs
     if (isNewTab && hasOpener && hasParent) {
         const frameParent = window.opener.parent;
         // Positively catch the SecurityError on the conditional as a way to not touch the cookie inside
