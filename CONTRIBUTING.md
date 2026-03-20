@@ -19,20 +19,20 @@ There are two supported ways to contribute:
 ### 1. Work on `Contributor OK` issues (recommended)
 These issues are specifically scoped for external contributors and do not require prior approval.
 
-* Browse Contributor issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
+* Browse Contributor OK issues [here](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
 * Leave a comment to let others know you're working on it. If the last activity is older than 3 weeks, leave a comment before picking it up.
 * A reference person is usually available if you need guidance
 
-### 2. Propose or work on other issues (requires coordination)
+### 2. Propose to work on other issues (requires coordination with a maintainer)
 If you want to work on something that is **not labeled `Contributor OK`**, please coordinate with the team first.
 
 * Comment on the issue and wait for confirmation before starting work.
 * For new ideas, open an issue first to discuss feasibility and priority.
 
 > ⚠️ Pull requests for unapproved work may be declined.
-> Our roadmap is planned in collaboration with product and design, and not all changes can be accepted.
+> Our roadmap is planned in collaboration with our Product and Design teams, and not all changes can be accepted.
 
-We absolutely welcome ideas and contributions. We just ask that larger or unscoped work is discussed first so we can collaborate effectively.
+We absolutely welcome ideas and contributions. We just ask that larger or unscoped work be discussed first so we can collaborate effectively.
 
 ### Issue Categories by Difficulty
 We’ve categorized Contributor OK issues by difficulty to help you get started:
@@ -42,7 +42,7 @@ We’ve categorized Contributor OK issues by difficulty to help you get started:
 - `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.   
 
 ### Contributor Fix
-We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance people that will close those tasks with their final approval of the work.
+We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task, it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance team that will close those tasks once they approve the changes.
 
 ## Coding Rules
 
@@ -52,7 +52,7 @@ We add the "Contributor Fix" label on tasks that have a PR opened for it, or if 
 * Use 4-space indentation instead of 2  
 * Follow existing patterns in the codebase when in doubt  
 
-We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
+We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
 
 ### Quality expectations for pull requests
 
@@ -62,9 +62,9 @@ To help reviewers give useful feedback and keep the project maintainable, pull r
 * The code is maintainable and consistent. Changes should follow the project’s existing patterns, naming, structure, and style rules.
 * The PR is reviewable. The description should explain what changed and why, and the diff should be small and clear enough for a reviewer to understand without reconstructing intent.
 * The change is validated. Code should build cleanly, pass relevant checks, and include testing or manual verification steps appropriate to the change.
-* The contribution is complete. Partial, experimental, or AI-generated changes that the author cannot explain, validate, or finish may be closed until they are ready for review.
+* The contribution is complete. Partial, experimental, or AI-generated changes that the author cannot explain, validate, or finish cannot be approved.
 
-Pull requests that do not meet this baseline may be closed as not yet reviewable.
+Pull requests that do not meet this baseline may be closed until they meet our code quality expectations.
 
 ## Pull Requests
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
@@ -89,7 +89,7 @@ Each `Contributor OK` issue typically has a reference person assigned. If you ne
 - Alternatively, comment directly on the issue for assistance.
 
 ### Missing Reference Person
-If no reference person is assigned, feel free to contact:
+If no reference person is assigned, or you have not received a response to your comment, feel free to directly contact:
 
 - @FilippoZazzeroni
 - @Foxbolts 
