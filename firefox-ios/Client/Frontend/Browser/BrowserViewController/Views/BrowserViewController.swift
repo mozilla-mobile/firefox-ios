@@ -5277,49 +5277,6 @@ extension BrowserViewController: TopTabsDelegate {
     }
 }
 
-extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
-    func dismissInstructionsView() {
-        navigationHandler?.popToBVC()
-    }
-
-    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        navigationHandler?.popToBVC()
-    }
-
-    func devicePickerViewController(
-        _ devicePickerViewController: DevicePickerViewController,
-        didPickDevices devices: [RemoteDevice]
-    ) {
-        guard let shareItem = devicePickerViewController.shareItem else { return }
-
-        guard shareItem.isShareable else {
-            let alert = UIAlertController(
-                title: .SendToErrorTitle,
-                message: .SendToErrorMessage,
-                preferredStyle: .alert
-            )
-            alert.addAction(UIAlertAction(
-                title: .SendToErrorOKButton,
-                style: .default
-            ) { _ in self.navigationHandler?.popToBVC() })
-            present(alert, animated: true, completion: nil)
-            return
-        }
-        profile.sendItem(shareItem, toDevices: devices)
-            .uponQueue(.main) { _ in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    self.navigationHandler?.popToBVC()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
-                                                        bottomContainer: self.contentContainer,
-                                                        theme: self.currentTheme())
-                    }
-                }
-            }
-    }
-}
-
 extension BrowserViewController {
     func trackStartupTelemetry() async {
         let toolbarLocation: SearchBarPosition = self.isBottomSearchBar ? .bottom : .top
