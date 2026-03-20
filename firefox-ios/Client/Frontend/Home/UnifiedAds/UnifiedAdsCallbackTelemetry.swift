@@ -32,6 +32,10 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
         self.sponsoredTileGleanTelemetry = sponsoredTileGleanTelemetry
     }
 
+    private var isAdsClientEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly)
+    }
+
     /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
     func sendImpressionTelemetry(tileSite: Site, position: Int) {
         guard case let SiteType.sponsoredSite(siteInfo) = tileSite.type else {
@@ -39,7 +43,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
             return
         }
 
-        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+        if isAdsClientEnabled {
             do {
                 try adsClient.recordImpression(impressionUrl: siteInfo.impressionURL)
             } catch {
@@ -61,7 +65,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
             return
         }
 
-        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+        if isAdsClientEnabled {
             do {
                 try adsClient.recordClick(clickUrl: siteInfo.clickURL)
             } catch {

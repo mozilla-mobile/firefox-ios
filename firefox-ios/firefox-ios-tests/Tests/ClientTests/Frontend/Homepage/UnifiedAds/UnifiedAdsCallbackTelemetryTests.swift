@@ -134,7 +134,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
-            XCTFail()
+            XCTFail("Expected tileSite to be a .sponsoredSite")
             return
         }
 
@@ -148,7 +148,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
-            XCTFail()
+            XCTFail("Expected tileSite to be a .sponsoredSite")
             return
         }
 
