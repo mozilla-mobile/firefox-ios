@@ -25,6 +25,13 @@ These issues are specifically scoped for external contributors and do not requir
 * Leave a comment to let others know you're working on it. If the last activity is older than 3 weeks, leave a comment before picking it up.
 * A reference person is usually available if you need guidance
 
+#### Issue Categories by Difficulty
+We’ve categorized Contributor OK issues by difficulty to help you get started:
+
+- `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
+- `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
+- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes. 
+
 ### 2. Propose to work on other issues (requires coordination with a maintainer)
 If you want to work on something that is **not labeled `Contributor OK`**, please coordinate with the team first.
 
@@ -34,14 +41,7 @@ If you want to work on something that is **not labeled `Contributor OK`**, pleas
 > ⚠️ Pull requests for unapproved work may be declined.
 > Our roadmap is planned in collaboration with our Product and Design teams, and not all changes can be accepted.
 
-We absolutely welcome ideas and contributions. We just ask that larger or unscoped work be discussed first so we can collaborate effectively.
-
-### Issue Categories by Difficulty
-We’ve categorized Contributor OK issues by difficulty to help you get started:
-
-- `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
-- `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
-- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.   
+We absolutely welcome ideas and contributions. We just ask that larger or unscoped work be discussed first so we can collaborate effectively.  
 
 ### Contributor Fix
 We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task, it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance team that will close those tasks once they approve the changes.
