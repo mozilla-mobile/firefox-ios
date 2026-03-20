@@ -134,6 +134,56 @@ final class DefaultRouterTests: XCTestCase {
     }
 
     @MainActor
+    func testPopToViewController_doesNotDismissWhenPresentedVCPreventsDismissal() throws {
+        let baseVC = UIViewController()
+        let pushedVC = MockDismissalNotifiableViewController()
+        let currentTopVC = DismissableTopViewController()
+
+        navigationController.viewControllers = [baseVC, pushedVC]
+        navigationController.topViewController = currentTopVC
+        navigationController.presentedViewController = PreventsDismissalPresentedViewController()
+
+        let subject = DefaultRouter(navigationController: navigationController)
+        let returnedViewControllers = subject.popToViewController(
+            baseVC,
+            reason: .deeplink,
+            animated: false
+        )
+
+        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
+        XCTAssertEqual(currentTopVC.dismissCalled, 0)
+        XCTAssertEqual(pushedVC.dismissalReason, .deeplink)
+
+        let poppedControllers = try XCTUnwrap(returnedViewControllers)
+        XCTAssertTrue(poppedControllers.contains(where: { $0 === pushedVC }))
+    }
+
+    @MainActor
+    func testPopToViewController_dismissesWhenPresentedVCDoesNotPreventDismissal() throws {
+        let baseVC = UIViewController()
+        let pushedVC = MockDismissalNotifiableViewController()
+        let currentTopVC = DismissableTopViewController()
+
+        navigationController.viewControllers = [baseVC, pushedVC]
+        navigationController.topViewController = currentTopVC
+        navigationController.presentedViewController = UIViewController()
+
+        let subject = DefaultRouter(navigationController: navigationController)
+        let returnedViewControllers = subject.popToViewController(
+            baseVC,
+            reason: .deeplink,
+            animated: false
+        )
+
+        XCTAssertEqual(navigationController.popToViewControllerCalled, 1)
+        XCTAssertEqual(currentTopVC.dismissCalled, 1)
+        XCTAssertEqual(pushedVC.dismissalReason, .deeplink)
+
+        let poppedControllers = try XCTUnwrap(returnedViewControllers)
+        XCTAssertTrue(poppedControllers.contains(where: { $0 === pushedVC }))
+    }
+
+    @MainActor
     func testSetRootViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()
@@ -189,5 +239,16 @@ final class DefaultRouterTests: XCTestCase {
         subject.checkNavigationCompletion(for: navigationController)
 
         waitForExpectations(timeout: 0.1, handler: nil)
+    }
+}
+
+private final class PreventsDismissalPresentedViewController: UIViewController, PreventsDismissal {}
+
+private final class DismissableTopViewController: UIViewController {
+    private(set) var dismissCalled = 0
+
+    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        dismissCalled += 1
+        completion?()
     }
 }
