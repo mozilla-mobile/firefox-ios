@@ -234,6 +234,181 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         wait(for: [expectation], timeout: 1)
     }
 
+    // MARK: - Search bookmarks
+
+    func testSearchBookmarks_emptyQuery_returnsEmpty() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "") { results in
+            XCTAssertTrue(results.isEmpty)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_matchingTitle_returnsResults() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "firefox") { results in
+            XCTAssertEqual(results.count, 1)
+            XCTAssertEqual(results.first?.title, "Firefox")
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_matchingURL_returnsResults() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "mozilla.org") { results in
+            XCTAssertEqual(results.count, 1)
+            XCTAssertEqual(results.first?.title, "Mozilla")
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_noMatches_returnsEmpty() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "nonexistent") { results in
+            XCTAssertTrue(results.isEmpty)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_caseInsensitive_returnsResults() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "FIREFOX") { results in
+            XCTAssertEqual(results.count, 1)
+            XCTAssertEqual(results.first?.title, "Firefox")
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_recursiveInSubfolders_returnsResults() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithNestedBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        subject.searchBookmarks(query: "nested") { results in
+            XCTAssertEqual(results.count, 1)
+            XCTAssertEqual(results.first?.title, "Nested Bookmark")
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testSearchBookmarks_matchesMultipleResults() {
+        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
+        let expectation = expectation(description: "Search completed")
+
+        // Both "Firefox" (url: https://www.firefox.com) and "Mozilla" (url: https://www.mozilla.org)
+        // contain "www" in their URLs
+        subject.searchBookmarks(query: "www") { results in
+            XCTAssertEqual(results.count, 2)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    // MARK: - Search test helpers
+
+    private func createFolderWithBookmarks() -> BookmarkFolderData {
+        let timestamp = Int64(Date().toTimestamp())
+        let bookmark1 = BookmarkItemData(
+            guid: "b1",
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.MobileFolderGUID,
+            position: 0,
+            url: "https://www.firefox.com",
+            title: "Firefox"
+        )
+        let bookmark2 = BookmarkItemData(
+            guid: "b2",
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.MobileFolderGUID,
+            position: 1,
+            url: "https://www.mozilla.org",
+            title: "Mozilla"
+        )
+        return BookmarkFolderData(
+            guid: BookmarkRoots.MobileFolderGUID,
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.RootGUID,
+            position: 0,
+            title: "Mobile Bookmarks",
+            childGUIDs: ["b1", "b2"],
+            children: [bookmark1, bookmark2]
+        )
+    }
+
+    private func createFolderWithNestedBookmarks() -> BookmarkFolderData {
+        let timestamp = Int64(Date().toTimestamp())
+        let nestedBookmark = BookmarkItemData(
+            guid: "nb1",
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: "subfolder1",
+            position: 0,
+            url: "https://nested.example.com",
+            title: "Nested Bookmark"
+        )
+        let subfolder = BookmarkFolderData(
+            guid: "subfolder1",
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.MobileFolderGUID,
+            position: 0,
+            title: "Subfolder",
+            childGUIDs: ["nb1"],
+            children: [nestedBookmark]
+        )
+        let topBookmark = BookmarkItemData(
+            guid: "tb1",
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.MobileFolderGUID,
+            position: 1,
+            url: "https://www.firefox.com",
+            title: "Firefox"
+        )
+        return BookmarkFolderData(
+            guid: BookmarkRoots.MobileFolderGUID,
+            dateAdded: timestamp,
+            lastModified: timestamp,
+            parentGUID: BookmarkRoots.RootGUID,
+            position: 0,
+            title: "Mobile Bookmarks",
+            childGUIDs: ["subfolder1", "tb1"],
+            children: [subfolder, topBookmark]
+        )
+    }
+
     private func createSubject(
         guid: GUID,
         bookmarksHandler: BookmarksHandler = MockBookmarksHandler()
@@ -332,5 +507,59 @@ private final class MockPinnedSites: MockablePinnedSites, @unchecked Sendable {
         let deffered = Deferred<Maybe<Bool>>()
         deffered.fill(Maybe(success: isPinnedTopSite))
         return deffered
+    }
+}
+
+/// A mock handler that returns a configurable `BookmarkFolderData` for search tests.
+private final class SearchableMockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
+    private let folderData: BookmarkFolderData
+
+    init(folderData: BookmarkFolderData) {
+        self.folderData = folderData
+    }
+
+    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
+        completion([])
+    }
+
+    func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
+        let result = Deferred<Maybe<BookmarkNodeData?>>()
+        result.fill(Maybe(success: folderData))
+        return result
+    }
+
+    func getBookmarksTree(
+        rootGUID: GUID,
+        recursive: Bool,
+        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
+    ) {
+        completion(.success(folderData))
+    }
+
+    func updateBookmarkNode(guid: GUID,
+                            parentGUID: GUID?,
+                            position: UInt32?,
+                            title: String?,
+                            url: String?) -> Success {
+        succeed()
+    }
+
+    func updateBookmarkNode(
+        guid: GUID,
+        parentGUID: GUID?,
+        position: UInt32?,
+        title: String?,
+        url: String?,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        completion(.success(()))
+    }
+
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        completion(.success(0))
+    }
+
+    func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
+        completion(.success(false))
     }
 }

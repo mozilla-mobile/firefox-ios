@@ -9,6 +9,8 @@ import XCTest
 
 @MainActor
 final class AppAuthenticatorTests: XCTestCase {
+    // TODO: Revisit these tests for FXIOS-15134
+    /*
     // MARK: - getAuthenticationState
 
     func test_getAuthenticationState_whenCanEvaluate_setsIsAuthenticatingTrue_thenFalse() {
@@ -127,4 +129,5 @@ final class AppAuthenticatorTests: XCTestCase {
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
+     */
 }

@@ -67,10 +67,12 @@ final class SummarizeCoordinator: BaseCoordinator,
         let isAppleSummarizerEnabled = summarizerNimbusUtils.isAppleSummarizerEnabled()
         let isHostedSummarizerEnabled = summarizerNimbusUtils.isHostedSummarizerEnabled()
         let isAppAttestAuthEnabled = summarizerNimbusUtils.isAppAttestAuthEnabled()
+        let usesPermissiveGuardrails = summarizerNimbusUtils.usesPermissiveGuardrails()
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
             isAppAttestAuthEnabled: isAppAttestAuthEnabled,
+            usesPermissiveGuardrails: usesPermissiveGuardrails,
             config: config) else {
             parentCoordinatorDelegate?.didFinish(from: self)
             return

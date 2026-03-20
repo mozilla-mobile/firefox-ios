@@ -65,6 +65,7 @@ struct AccessibilityIdentifiers {
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
+            static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
@@ -461,6 +462,10 @@ struct AccessibilityIdentifiers {
         static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct AIControls {
+            static let title = "AIControlsSettings"
+        }
 
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"

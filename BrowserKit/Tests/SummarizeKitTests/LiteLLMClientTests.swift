@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import MLPAKit
 @testable import SummarizeKit
 
 @MainActor

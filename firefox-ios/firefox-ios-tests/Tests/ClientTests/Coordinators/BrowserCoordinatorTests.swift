@@ -1200,9 +1200,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        if !featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
-        }
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 

@@ -2994,6 +2994,15 @@ extension String {
             )
         }
 
+        public struct AIControls {
+            public static let Title = MZLocalizedString(
+                key: "Settings.AIControls.Title.v150",
+                tableName: "Settings",
+                value: "AI Controls",
+                comment: "In the settings menu, in the General section, this is the title for the AI Controls settings section"
+            )
+        }
+
         public struct Summarize {
             public static let Title = MZLocalizedString(
                 key: "Settings.Summarize.Title.v142",
@@ -3251,6 +3260,34 @@ extension String {
                 value: "Enable Translations",
                 comment: "This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section."
             )
+
+            public static let ToggleFooter = MZLocalizedString(
+                key: "", // Settings.Translation.ToggleFooter.v150
+                tableName: "Settings",
+                value: "Turn this off to remove translation from the toolbar and menu.",
+                comment: "Footer text below the enable-translations toggle in the Translation settings screen."
+            )
+
+            public struct PreferredLanguages {
+                public static let SectionTitle = MZLocalizedString(
+                    key: "", // Settings.Translation.PreferredLanguages.SectionTitle.v150
+                    tableName: "Settings",
+                    value: "Preferred Languages",
+                    comment: "Section header for the preferred languages list in the Translation settings screen."
+                )
+                public static let DeviceLanguage = MZLocalizedString(
+                    key: "", // Settings.Translation.PreferredLanguages.DeviceLanguage.v150
+                    tableName: "Settings",
+                    value: "Device Language",
+                    comment: "Subtitle on the device language row in the preferred languages list in the Translation settings screen."
+                )
+                public static let Footer = MZLocalizedString(
+                    key: "", // Settings.Translation.PreferredLanguages.Footer.v150
+                    tableName: "Settings",
+                    value: "Choose from these languages when translating.",
+                    comment: "Footer text below the preferred languages list in the Translation settings screen."
+                )
+            }
         }
 
         public struct AppIconSelection {

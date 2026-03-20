@@ -4,7 +4,7 @@
 
 import XCTest
 
-@testable import SummarizeKit
+@testable import MLPAKit
 
 final class MLPAJWTPayloadTests: XCTestCase {
     func test_encode_returnsNonEmptyJWT() throws {

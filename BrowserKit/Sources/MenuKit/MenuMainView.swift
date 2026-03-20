@@ -26,8 +26,6 @@ public final class MenuMainView: UIView, ThemeApplicable {
     private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Properties
-    // If default browser banner sub flag is enabled
-    private var isMenuDefaultBrowserBanner = false
     // If FF is the default browser
     private var isBrowserDefault = false
     // If banner was already shown
@@ -50,7 +48,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
         self.addSubview(tableView)
         if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
             self.siteProtectionHeader.removeFromSuperview()
-            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
+            if isHeaderBanner, !isBrowserDefault, !bannerShown {
                 isBannerVisible = true
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
@@ -112,12 +110,10 @@ public final class MenuMainView: UIView, ThemeApplicable {
         title: String,
         subtitle: String,
         image: UIImage?,
-        isBannerFlagEnabled: Bool,
         isBrowserDefault: Bool,
         bannerShown: Bool
     ) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
-        isMenuDefaultBrowserBanner = isBannerFlagEnabled
         self.isBrowserDefault = isBrowserDefault
         self.bannerShown = bannerShown
     }
@@ -177,13 +173,9 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     private func setHeightForHomepageMenu(height: CGFloat) {
-        if isMenuDefaultBrowserBanner {
-            let headerBannerHeight = headerBanner.frame.height
-            let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
-            self.onCalculatedHeight?(calculatedHeight)
-        } else {
-            self.onCalculatedHeight?(height)
-        }
+        let headerBannerHeight = headerBanner.frame.height
+        let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
+        self.onCalculatedHeight?(calculatedHeight)
     }
 
     private func handleBannerCallback(with data: [MenuSection]) {

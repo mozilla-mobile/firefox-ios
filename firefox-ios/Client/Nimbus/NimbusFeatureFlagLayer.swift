@@ -34,6 +34,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
+        case .bookmarksSearchFeature:
+            return checkBookmarksSearchFeature(from: nimbus)
+
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
@@ -81,15 +84,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature(from: nimbus)
-
-        case .menuDefaultBrowserBanner:
-            return checkMenuDefaultBrowserBanner(from: nimbus)
-
-        case .menuRefactor:
-            return checkMenuRefactor(from: nimbus)
-
-        case .menuRedesignHint:
-            return checkMenuRedesignHint(from: nimbus)
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
@@ -156,6 +150,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .summarizerLanguageExpansion:
             return checkSummarizerLanguageExpansionFeature(from: nimbus)
+
+        case .summarizerPermissiveGuardrails:
+            return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -466,20 +463,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.status
     }
 
-    private func checkMenuDefaultBrowserBanner(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuDefaultBrowserBanner
-    }
-
-    private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.menuRefactorFeature.value().enabled
-    }
-
-    private func checkMenuRedesignHint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuRedesignHint
-    }
-
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -539,6 +522,10 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.summarizerLanguageExpansionFeature.value().enabled
     }
 
+    private func checkSummarizerPermissiveGuardrailsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
+    }
+
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
     }
@@ -565,5 +552,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkPrivateTabsLockFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.privateTabsLockFeature.value().enabled
+    }
+
+    private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarksSearchFeature.value().enabled
     }
 }

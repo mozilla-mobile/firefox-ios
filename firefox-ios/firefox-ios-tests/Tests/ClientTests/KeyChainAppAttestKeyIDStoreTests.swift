@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-@testable import SummarizeKit
+@testable import MLPAKit
 
 /// NOTE: This test is intentionally in `ClientTests` instead of `BrowserKit/Tests` since bare SPM packages
 /// cannot have keychain entitlement meaning these tests will always fail for the wrong reasons.

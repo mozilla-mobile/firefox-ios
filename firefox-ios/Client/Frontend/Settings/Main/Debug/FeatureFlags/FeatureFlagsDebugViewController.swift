@@ -115,13 +115,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .menuRefactor,
-                titleText: format(string: "Menu Refactor"),
-                statusText: format(string: "Toggle to use the menu redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .microsurvey,
                 titleText: format(string: "Microsurvey"),
                 statusText: format(string: "Toggle to reset microsurvey expiration")
@@ -296,7 +289,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 statusText: format(string: "Toggle to enable the needs reload refactor")
             ) { [weak self] _ in
                 self?.reloadView()
-            }
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerPermissiveGuardrails,
+                titleText: format(string: "Summarizer Permissive Guardrails Feature"),
+                statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
 
         // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true

@@ -7,23 +7,15 @@ import Shared
 import UIKit
 import Common
 
-extension PhotonActionSheet: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        let name = notification.name
-        ensureMainThread {
-            switch name {
-            case .ProfileDidFinishSyncing, .ProfileDidStartSyncing:
-                self.stopRotateSyncIcon()
-            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
-                self.reduceTransparencyChanged()
-            default: break
-            }
-        }
-    }
-}
-
-// This file is main table view used for the action sheet
-class PhotonActionSheet: UIViewController, Themeable {
+/// This class is used as a custom Context Menu for long press action throughout the application.
+/// It was also used as the Main menu in our application, and the code is a bit tangled in here
+/// due to that reason.
+class PhotonActionSheet: UIViewController,
+                         Themeable,
+                         Notifiable,
+                         UITableViewDataSource,
+                         UITableViewDelegate,
+                         PhotonActionSheetContainerCellDelegate {
     struct UX {
         static let maxWidth: CGFloat = 414
         static let padding: CGFloat = 6
@@ -34,9 +26,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         static let tablePadding: CGFloat = 6
         static let separatorRowHeight: CGFloat = 8
         static let titleHeaderSectionHeight: CGFloat = 40
-        static let bigSpacing: CGFloat = 32
-        static let spacing: CGFloat = 16
-        static let smallSpacing: CGFloat = 8
     }
 
     // MARK: - Variables
@@ -118,25 +107,17 @@ class PhotonActionSheet: UIViewController, Themeable {
         view.accessibilityIdentifier = AccessibilityIdentifiers.Photon.view
 
         tableView.backgroundColor = .clear
-        tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 
         setupLayout()
 
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.ProfileDidFinishSyncing,
-                        .ProfileDidStartSyncing,
-                        UIAccessibility.reduceTransparencyStatusDidChangeNotification]
+            observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification]
         )
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        tableView.removeObserver(self, forKeyPath: "contentSize")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -171,10 +152,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.Photon.tableView
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        if viewModel.isMainMenuInverted {
-            tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
-        }
         tableView.reloadData()
 
         DispatchQueue.main.async {
@@ -187,7 +164,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        setTableViewHeight()
+        setDefaultStyleTableViewHeight()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -327,28 +304,6 @@ class PhotonActionSheet: UIViewController, Themeable {
     // MARK: - Actions
 
     @objc
-    private func stopRotateSyncIcon() {
-        ensureMainThread {
-            self.tableView.reloadData()
-        }
-    }
-
-    override func observeValue(forKeyPath keyPath: String?,
-                               of object: Any?,
-                               change: [NSKeyValueChangeKey: Any]?,
-                               context: UnsafeMutableRawPointer?) {
-        ensureMainThread {
-            if self.viewModel.presentationStyle == .popover && !self.wasHeightOverridden {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    let size = view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-                    preferredContentSize = CGSize(width: size.width, height: tableView.contentSize.height)
-                }
-            }
-        }
-    }
-
-    @objc
     private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         dismissSheet()
     }
@@ -365,51 +320,6 @@ class PhotonActionSheet: UIViewController, Themeable {
     // MARK: - TableView height
 
     private var tableViewHeightConstraint: NSLayoutConstraint?
-
-    private func setTableViewHeight() {
-        if viewModel.isMainMenu {
-            setMainMenuTableViewHeight()
-        } else {
-            setDefaultStyleTableViewHeight()
-        }
-    }
-
-    // Needed to override the preferredContentSize, so key value observer doesn't get called
-    private var wasHeightOverridden = false
-
-    /// Main menu table view height is calculated so if there's not enough space for the menu to be shown completely,
-    /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
-    private func setMainMenuTableViewHeight() {
-        let visibleCellsHeight = getViewsHeightSum(views: tableView.visibleCells)
-        let headerCellsHeight = getViewsHeightSum(views: visibleTableViewHeaders)
-
-        let totalCellsHeight = visibleCellsHeight + headerCellsHeight
-        let availableHeight = viewModel.availableMainMenuHeight
-        let needsHeightAdjustment = availableHeight - totalCellsHeight < 0
-
-        if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverridden {
-            let newHeight: CGFloat
-            if viewModel.isAtTopMainMenu {
-                let halfCellHeight = (tableView.visibleCells.last?.frame.height ?? 0) / 2
-                newHeight = totalCellsHeight - halfCellHeight
-            } else {
-                let halfCellHeight = (tableView.visibleCells.first?.frame.height ?? 0) / 2
-                let aCellAndAHalfHeight = halfCellHeight * 3
-                newHeight = totalCellsHeight - aCellAndAHalfHeight
-            }
-
-            wasHeightOverridden = true
-            tableViewHeightConstraint?.constant = newHeight
-            tableViewHeightConstraint?.priority = .required
-
-            preferredContentSize = view.systemLayoutSizeFitting(
-                UIView.layoutFittingCompressedSize
-            )
-
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
-        }
-    }
 
     private func setDefaultStyleTableViewHeight() {
         let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
@@ -453,10 +363,22 @@ class PhotonActionSheet: UIViewController, Themeable {
         }
         return visibleSectionIndexes
     }
-}
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
-extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
+    // MARK: Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        let name = notification.name
+        ensureMainThread {
+            switch name {
+            case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+                self.reduceTransparencyChanged()
+            default: break
+            }
+        }
+    }
+
+    // MARK: - UITableViewDataSource, UITableViewDelegate
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
@@ -489,13 +411,8 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.getCurrentTheme(for: windowUUID))
         cell.delegate = self
 
-        if viewModel.isMainMenuInverted {
-            let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-            cell.hideBottomBorder(isHidden: rowIsLastInSection)
-        } else {
-            let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
-            cell.hideBottomBorder(isHidden: isLastRow)
-        }
+        let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
+        cell.hideBottomBorder(isHidden: isLastRow)
         return cell
     }
 
@@ -521,10 +438,9 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         dismissVC(withCompletion: completion)
         coordinator?.dismissFlow()
     }
-}
 
-// MARK: - PhotonActionSheetViewDelegate
-extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
+    // MARK: - PhotonActionSheetViewDelegate
+
     func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void) {
         dismissSheet(withCompletion: animationCompletion)
     }
