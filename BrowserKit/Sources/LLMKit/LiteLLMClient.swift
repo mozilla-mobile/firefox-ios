@@ -5,9 +5,13 @@
 import Foundation
 import MLPAKit
 
+public protocol LLMConfig: Sendable {
+    var instructions: String { get }
+    var options: [String: AnyHashable] { get }
+}
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
-final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
+public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     private let authenticator: RequestAuthProtocol
     private let baseURL: URL
 
@@ -19,7 +23,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     ///   - authenticator: Strategy for authenticating outgoing requests.
     ///   - baseURL: Base URL of the server.
     ///   - urlSession: Custom URL session for network requests. Defaults to `URLSession.shared`.
-    init(
+    public init(
         authenticator: RequestAuthProtocol,
         baseURL: URL,
         urlSession: URLSession = URLSession.shared
@@ -33,9 +37,9 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - config: inference options ( includes model name, max tokens, temperature...).
-    func requestChatCompletion(
+    public func requestChatCompletion(
         messages: [LiteLLMMessage],
-        config: SummarizerConfig
+        config: LLMConfig
     ) async throws -> String {
         let request: URLRequest
         do {
@@ -50,9 +54,9 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     /// - Parameters:
     ///   - messages: Array of `LiteLLMMessage`.
     ///   - config: inference options ( includes model name, max tokens, ...).
-    func requestChatCompletionStreamed(
+    public func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
-        config: SummarizerConfig
+        config: LLMConfig
     ) async throws -> AsyncThrowingStream<String, Error> {
         let request: URLRequest
         do {
@@ -103,7 +107,7 @@ final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
     func makeRequest(
         messages: [LiteLLMMessage],
-        config: SummarizerConfig
+        config: LLMConfig
     ) async throws -> URLRequest {
         let endpoint = baseURL.appendingPathComponent("chat/completions")
         var request = URLRequest(url: endpoint)

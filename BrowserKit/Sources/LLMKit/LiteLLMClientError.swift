@@ -5,7 +5,7 @@
 import Foundation
 
 /// Errors produced by LiteLLMClient, with user-friendly descriptions.
-enum LiteLLMClientError: LocalizedError {
+public enum LiteLLMClientError: LocalizedError {
     case requestCreationFailed
     case invalidResponse(statusCode: Int)
     case noContent

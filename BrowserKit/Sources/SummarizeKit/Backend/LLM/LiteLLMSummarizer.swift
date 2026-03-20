@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import LLMKit
 
 /// A wrapper around `LiteLLMClient` that provides summarized output (full or streamed)
 /// and normalizes underlying errors to `SummarizeError` type.
