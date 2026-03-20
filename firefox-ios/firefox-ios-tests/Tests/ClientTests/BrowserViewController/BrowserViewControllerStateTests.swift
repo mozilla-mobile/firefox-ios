@@ -97,7 +97,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     func testShowSummarizerAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
-        
+
         let summarizerConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
         let action = GeneralBrowserAction(
             summarizerConfig: summarizerConfig,
