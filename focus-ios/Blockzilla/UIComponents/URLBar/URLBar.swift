@@ -89,20 +89,8 @@ final class URLBar: UIView {
         textField.keyboardType = .webSearch
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
-        switch textField.effectiveUserInterfaceLayoutDirection {
-        case .rightToLeft:
-            textField.leftView = clearButton
-            textField.leftViewMode = .whileEditing
-            textField.rightView = nil
-            textField.rightViewMode = .never
-        case .leftToRight:
-            fallthrough
-        @unknown default:
-            textField.rightView = clearButton
-            textField.rightViewMode = .whileEditing
-            textField.leftView = nil
-            textField.leftViewMode = .never
-        }
+        textField.rightView = clearButton
+        textField.rightViewMode = .whileEditing
         textField.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         textField.autocompleteDelegate = self
         textField.accessibilityIdentifier = "URLBar.urlText"
@@ -1242,10 +1230,6 @@ private final class URLTextField: AutocompleteTextField {
         return super.resignFirstResponder()
     }
 
-    private var layoutDirection: UIUserInterfaceLayoutDirection {
-        effectiveUserInterfaceLayoutDirection
-    }
-
     override var placeholder: String? {
         didSet {
             attributedPlaceholder = NSAttributedString(string: placeholder ?? "", attributes: [.foregroundColor: UIColor.secondaryText])
@@ -1264,36 +1248,21 @@ private final class URLTextField: AutocompleteTextField {
         // Add internal padding.
         let inset = bounds.insetBy(dx: UIConstants.layout.urlBarWidthInset, dy: UIConstants.layout.urlBarContainerHeightInset)
 
-        // Add margin to avoid overlap with the clear button.
-        var clearButtonTotalWidth: CGFloat = 0
-        if let clearButton = (leftView ?? rightView), isEditing {
-            clearButtonTotalWidth = clearButton.bounds.width + CGFloat(2)
+        // Add a right margin so we don't overlap with the clear button.
+        var clearButtonWidth: CGFloat = 0
+        if let clearButton = rightView, isEditing {
+            clearButtonWidth = clearButton.bounds.width + CGFloat(5)
         }
 
-        switch layoutDirection {
-        case .leftToRight:
-            return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
-        case .rightToLeft:
-            return CGRect(x: inset.origin.x + clearButtonTotalWidth, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
-        @unknown default:
-            return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonTotalWidth, height: inset.height)
+        if effectiveUserInterfaceLayoutDirection == .rightToLeft {
+            return CGRect(x: inset.origin.x + clearButtonWidth, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
         }
+        return CGRect(x: inset.origin.x, y: inset.origin.y, width: inset.width - clearButtonWidth, height: inset.height)
     }
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        guard rightView != nil else { return .zero }
-        let rect = super.rightViewRect(forBounds: bounds)
-        let edgeInset = UIConstants.layout.urlBarIconInset + 2
-        let dx = (layoutDirection == .rightToLeft) ? edgeInset : -edgeInset
-        return rect.offsetBy(dx: dx, dy: 0)
-    }
-
-    override fileprivate func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-        guard leftView != nil else { return .zero }
-        let rect = super.leftViewRect(forBounds: bounds)
-        let edgeInset = UIConstants.layout.urlBarIconInset + 2
-        let dx = (layoutDirection == .rightToLeft) ? -edgeInset : edgeInset
-        return rect.offsetBy(dx: dx, dy: 0)
+        let direction: CGFloat = effectiveUserInterfaceLayoutDirection == .rightToLeft ? 1 : -1
+        return super.rightViewRect(forBounds: bounds).offsetBy(dx: direction * UIConstants.layout.urlBarWidthInset, dy: 0)
     }
 
     private func textFieldDidEndEditing(_ textField: UITextField) {
