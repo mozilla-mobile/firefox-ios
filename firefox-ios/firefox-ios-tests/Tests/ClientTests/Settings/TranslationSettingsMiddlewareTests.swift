@@ -52,11 +52,12 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+        let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
 
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, true)
         XCTAssertEqual(dispatchedAction.supportedLanguages, ["en", "fr", "de"])
-        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en", "fr"])
+        XCTAssertEqual(preferredCodes, ["en", "fr"])
         // the translationSettingsProvider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
         subject.translationSettingsProvider = { _, _ in }
@@ -82,11 +83,40 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+        let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
+
         XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didLoadSettings)
         XCTAssertEqual(dispatchedAction.isTranslationsEnabled, false)
-        XCTAssertEqual(dispatchedAction.preferredLanguages, ["en"])
+        XCTAssertEqual(preferredCodes, ["en"])
         // the translationSettingsProvider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_viewDidLoad_deviceLanguage_firstItemHasDeviceLanguageSubtitle() throws {
+        mockModelsFetcher.supportedTargetLanguages = ["en", "fr"]
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
+        mockProfile.prefs.setString("en,fr", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject(localeCode: "en")
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        )
+
+        let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[0].code, "en")
+        XCTAssertEqual(preferredLanguages[0].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        XCTAssertEqual(preferredLanguages[1].code, "fr")
         subject.translationSettingsProvider = { _, _ in }
     }
 
@@ -182,12 +212,14 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
 
-    private func createSubject() -> TranslationSettingsMiddleware {
+    private func createSubject(localeCode: String = "en") -> TranslationSettingsMiddleware {
         let manager = PreferredTranslationLanguagesManager(prefs: mockProfile.prefs)
+        let localeProvider = MockLocaleProvider(current: Locale(identifier: localeCode))
         let subject = TranslationSettingsMiddleware(
             profile: mockProfile,
             manager: manager,
-            modelsFetcher: mockModelsFetcher
+            modelsFetcher: mockModelsFetcher,
+            localeProvider: localeProvider
         )
         trackForMemoryLeaks(subject)
         return subject
