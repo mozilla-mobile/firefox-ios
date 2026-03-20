@@ -28,12 +28,7 @@ protocol AppAuthenticationProtocol {
 }
 
 final class AppAuthenticator: AppAuthenticationProtocol {
-    private let context: LAContextProtocol
     private(set) var isAuthenticating = false
-
-    init(context: LAContextProtocol = LAContext()) {
-        self.context = context
-    }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
