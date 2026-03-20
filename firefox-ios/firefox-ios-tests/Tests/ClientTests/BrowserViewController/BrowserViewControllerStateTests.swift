@@ -125,7 +125,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     // MARK: - Summarizer middleware actions
-
     func test_showReaderModeBarSummarizerButton_setsReaderModeBarSummarizerButtonVisible() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
