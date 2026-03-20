@@ -19,7 +19,7 @@ final class URLBar: UIView {
         let button = UIButton()
         button.isHidden = true
         button.alpha = 0
-        button.setImage(.cancel, for: .normal)
+        button.setImage(.cancel.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
@@ -130,7 +130,7 @@ final class URLBar: UIView {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(.backActive.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
+        button.setImage(.backActive, for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserBack
         button.isEnabled = false
         button.isPointerInteractionEnabled = true
@@ -1261,8 +1261,15 @@ private final class URLTextField: AutocompleteTextField {
     }
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        let direction: CGFloat = effectiveUserInterfaceLayoutDirection == .rightToLeft ? 1 : -1
-        return super.rightViewRect(forBounds: bounds).offsetBy(dx: direction * UIConstants.layout.urlBarWidthInset, dy: 0)
+        return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
+    }
+
+    override fileprivate func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+        if effectiveUserInterfaceLayoutDirection == .rightToLeft, let rv = rightView {
+            let size = rv.bounds.size
+            return CGRect(x: UIConstants.layout.urlBarWidthInset, y: (bounds.height - size.height) / 2, width: size.width, height: size.height)
+        }
+        return super.leftViewRect(forBounds: bounds)
     }
 
     private func textFieldDidEndEditing(_ textField: UITextField) {
