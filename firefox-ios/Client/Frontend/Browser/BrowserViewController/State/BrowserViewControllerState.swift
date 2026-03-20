@@ -214,20 +214,6 @@ struct BrowserViewControllerState: ScreenState {
         state: BrowserViewControllerState
     ) -> BrowserViewControllerState {
         switch action.actionType {
-        case SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                windowUUID: state.windowUUID,
-                shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(
-                    .summarizer(
-                        config: action.summarizerConfig,
-                        trigger: .shakeGesture
-                    )
-                )
-            )
         case SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -236,27 +222,13 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             )
-        case SummarizeMiddlewareActionType.summarizerNotAvailable:
+        case SummarizeMiddlewareActionType.summaryNotAvailable:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
                 shouldShowReaderModeBarSummarizerButton: false,
                 browserViewType: state.browserViewType,
                 microsurveyState: state.microsurveyState
-            )
-        case SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                windowUUID: state.windowUUID,
-                shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(
-                    .summarizer(
-                        config: action.summarizerConfig,
-                        trigger: .readerModeBarButton
-                    )
-                )
             )
         default:
             return passthroughState(from: state, action: action)

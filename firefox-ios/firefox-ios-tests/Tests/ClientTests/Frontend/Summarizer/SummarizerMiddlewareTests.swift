@@ -71,10 +71,11 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion)
+        XCTAssertEqual(actionType, .showSummarizer)
+        XCTAssertEqual(actionCalled.summarizerTrigger, .shakeGesture)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         // the summarizer provider strong retains the middleware as per redux is designed
         // thus trackForMemoryLeaks would fail, the only way is to release the closure by assigning a new one
@@ -106,7 +107,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(actionType, GeneralBrowserActionType.showToast)
+        XCTAssertEqual(actionType, .showToast)
         XCTAssertEqual(actionCalled.toastType, .shakeToSummarizeNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
@@ -207,10 +208,11 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation], timeout: 1)
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton)
+        XCTAssertEqual(actionType, .showSummarizer)
+        XCTAssertEqual(actionCalled.summarizerTrigger, .readerModeBarButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }
@@ -239,7 +241,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton)
+        XCTAssertEqual(actionType, .showReaderModeBarSummarizerButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }
@@ -267,7 +269,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.summarizerNotAvailable)
+        XCTAssertEqual(actionType, .summaryNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }
@@ -296,7 +298,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton)
+        XCTAssertEqual(actionType, .showReaderModeBarSummarizerButton)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }
@@ -322,7 +324,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SummarizeAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? SummarizeMiddlewareActionType)
 
-        XCTAssertEqual(actionType, SummarizeMiddlewareActionType.summarizerNotAvailable)
+        XCTAssertEqual(actionType, .summaryNotAvailable)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         subject.summarizerProvider = { _, _ in }
     }

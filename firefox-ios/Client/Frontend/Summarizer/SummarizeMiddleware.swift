@@ -92,24 +92,24 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     private func handleDidTapReaderModeSummarizerButton(windowUUID: WindowUUID, summarizerConfig: SummarizerConfig?) {
         guard let summarizerConfig else { return }
         store.dispatch(
-            SummarizeAction(
+            GeneralBrowserAction(
+                summarizerConfig: summarizerConfig,
+                summarizerTrigger: .readerModeBarButton,
                 windowUUID: windowUUID,
-                actionType: SummarizeMiddlewareActionType.triggerSummarizationFromReaderModeBarButton,
-                summarizerConfig: summarizerConfig
+                actionType: GeneralBrowserActionType.showSummarizer,
             )
         )
     }
 
     private func handleShowReaderMode(windowUUID: WindowUUID, summarizerConfig: SummarizerConfig?) {
-        guard let summarizerConfig else {
-            dispatchSummarizerNotAvailable(windowUUID: windowUUID)
+        guard summarizerConfig != nil else {
+            dispatchSummaryNotAvailable(windowUUID: windowUUID)
             return
         }
         store.dispatch(
             SummarizeAction(
                 windowUUID: windowUUID,
                 actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
-                summarizerConfig: summarizerConfig
             )
         )
     }
@@ -120,10 +120,11 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
             return
         }
         store.dispatch(
-            SummarizeAction(
+            GeneralBrowserAction(
+                summarizerConfig: summarizerConfig,
+                summarizerTrigger: .shakeGesture,
                 windowUUID: windowUUID,
-                actionType: SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion,
-                summarizerConfig: summarizerConfig
+                actionType: GeneralBrowserActionType.showSummarizer,
             )
         )
     }
@@ -145,10 +146,11 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         switch action.actionType {
         case ToolbarActionType.didSummarizeSettingsChange:
             guard action.canSummarize else {
-                dispatchSummarizerNotAvailable(windowUUID: action.windowUUID)
+                dispatchSummaryNotAvailable(windowUUID: action.windowUUID)
                 return
             }
             fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                // The behavior is the same for show reader mode action
                 self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
             }
         default:
@@ -156,12 +158,11 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         }
     }
 
-    private func dispatchSummarizerNotAvailable(windowUUID: WindowUUID) {
+    private func dispatchSummaryNotAvailable(windowUUID: WindowUUID) {
         store.dispatch(
             SummarizeAction(
                 windowUUID: windowUUID,
-                actionType: SummarizeMiddlewareActionType.summarizerNotAvailable,
-                summarizerConfig: .defaultConfig
+                actionType: SummarizeMiddlewareActionType.summaryNotAvailable,
             )
         )
     }

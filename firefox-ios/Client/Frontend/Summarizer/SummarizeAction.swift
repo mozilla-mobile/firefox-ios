@@ -10,22 +10,9 @@ import SummarizeKit
 struct SummarizeAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
-    let summarizerConfig: SummarizerConfig
-
-    init(
-        windowUUID: WindowUUID,
-        actionType: any ActionType,
-        summarizerConfig: SummarizerConfig
-    ) {
-        self.windowUUID = windowUUID
-        self.actionType = actionType
-        self.summarizerConfig = summarizerConfig
-    }
 }
 
 enum SummarizeMiddlewareActionType: ActionType {
-    case triggerSummarizationFromShakeMotion
-    case triggerSummarizationFromReaderModeBarButton
     case showReaderModeBarSummarizerButton
-    case summarizerNotAvailable
+    case summaryNotAvailable
 }
