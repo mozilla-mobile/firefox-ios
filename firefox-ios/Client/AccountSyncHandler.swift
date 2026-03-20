@@ -63,6 +63,20 @@ final class AccountSyncHandler: TabEventHandler, Sendable {
         // Other clients only show urls and ordering of tabs, we can ignore everything
         // else that doesn't modify those attributes
         register(self, forTabEvents: .didGainFocus, .didClose, .didChangeURL)
+
+        // Upload local tabs immediately after login so other clients see them
+        // without requiring any tab interaction. syncEverything() fires on login
+        // but the Rust TabsStore's local tab list is empty until setLocalTabs()
+        // is called...so we do that here as soon as the account is ready.
+        NotificationCenter.default.addObserver(
+            forName: .accountAuthenticated,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.storeTabs()
+            }
+        }
     }
 
     // MARK: - Account Server Sync

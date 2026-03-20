@@ -21,7 +21,7 @@ open class FxAccountManager: @unchecked Sendable {
     let accountStorage: KeyChainAccountStorage
     let config: FxAConfig
     // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
-    nonisolated(unsafe) var deviceConfig: DeviceConfig
+    public nonisolated(unsafe) var deviceConfig: DeviceConfig
     let applicationScopes: [String]
 
     // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
@@ -36,10 +36,11 @@ open class FxAccountManager: @unchecked Sendable {
         }
     }
 
-    var state = AccountState.start
+    var state: FxaState = .uninitialized
     var profile: Profile?
     var constellation: DeviceConstellation?
-    var latestOAuthStateParam: String?
+    // Stores the auth type from the processEvent(.completeOAuthFlow) call
+    var pendingAuthType: FxaAuthType?
 
     /// Instantiate the account manager.
     /// This class is intended to be long-lived within your app.
@@ -65,16 +66,25 @@ open class FxAccountManager: @unchecked Sendable {
     /// Note that as a result of this initialization, notifications such as `accountAuthenticated` might be
     /// fired.
     public func initialize(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
-        processEvent(event: .initialize) {
-            DispatchQueue.main.async { completionHandler(Result.success(())) }
+        fxaFsmQueue.async {
+            if let acct = self.tryRestoreAccount() {
+                self.account = acct
+            } else {
+                self.account = self.createAccount()
+            }
+            let dc = DeviceConfig(
+                name: self.deviceConfig.name,
+                deviceType: self.deviceConfig.deviceType,
+                capabilities: self.deviceConfig.capabilities
+            )
+            self.processEvent(.initialize(deviceConfig: dc))
+            DispatchQueue.main.async { completionHandler(.success(())) }
         }
     }
 
     /// Returns true the user is currently logged-in to an account, no matter if they need to reconnect or not.
     public func hasAccount() -> Bool {
-        return state == .authenticatedWithProfile ||
-            state == .authenticatedNoProfile ||
-            state == .authenticationProblem
+        return state == .connected || state == .authIssues
     }
 
     /// Resets the inner Persisted Account based on the persisted state
@@ -90,7 +100,7 @@ open class FxAccountManager: @unchecked Sendable {
     /// Returns true if the account needs re-authentication.
     /// Your app should present the option to start a new OAuth flow.
     public func accountNeedsReauth() -> Bool {
-        return state == .authenticationProblem
+        return state == .authIssues
     }
 
     /// Set the user data before completing their authentication
@@ -114,17 +124,14 @@ open class FxAccountManager: @unchecked Sendable {
         completionHandler: @escaping @MainActor @Sendable (Result<URL, Error>) -> Void
     ) {
         FxALog.info("beginAuthentication")
-        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
-        nonisolated(unsafe) var scopes = scopes
-        if scopes.isEmpty {
-            scopes = applicationScopes
-        }
-        DispatchQueue.global().async {
-            let result = self.updatingLatestAuthState { account in
-                try account.beginOAuthFlow(
-                    scopes: scopes,
-                    entrypoint: entrypoint
-                )
+        fxaFsmQueue.async {
+            let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
+            self.processEvent(.beginOAuthFlow(scopes: actualScopes, entrypoint: entrypoint))
+            let result: Result<URL, Error>
+            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+                result = .success(url)
+            } else {
+                result = .failure(FxaError.Other(message: "beginAuthentication: unexpected state \(self.state)"))
             }
             DispatchQueue.main.async { completionHandler(result) }
         }
@@ -145,35 +152,16 @@ open class FxAccountManager: @unchecked Sendable {
         scopes: [String] = [],
         completionHandler: @Sendable @MainActor @escaping (Result<URL, Error>) -> Void
     ) {
-        // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
-        nonisolated(unsafe) var scopes = scopes
-        if scopes.isEmpty {
-            scopes = applicationScopes
-        }
-        DispatchQueue.global().async {
-            let result = self.updatingLatestAuthState { account in
-                try account.beginPairingFlow(
-                    pairingUrl: pairingUrl,
-                    scopes: scopes,
-                    entrypoint: entrypoint
-                )
+        fxaFsmQueue.async {
+            let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
+            self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, scopes: actualScopes, entrypoint: entrypoint))
+            let result: Result<URL, Error>
+            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+                result = .success(url)
+            } else {
+                result = .failure(FxaError.Other(message: "beginPairingAuthentication: unexpected state \(self.state)"))
             }
             DispatchQueue.main.async { completionHandler(result) }
-        }
-    }
-
-    /// Run a "begin authentication" closure, extracting the returned `state` from the returned URL
-    /// and put it aside for later in `latestOAuthStateParam`.
-    /// Afterwards, in `finishAuthentication` we ensure that we are
-    /// finishing the correct (and same) authentication flow.
-    private func updatingLatestAuthState(_ beginFlowFn: (PersistedFirefoxAccount) throws -> URL) -> Result<URL, Error> {
-        do {
-            let url = try beginFlowFn(requireAccount())
-            let comps = URLComponents(url: url, resolvingAgainstBaseURL: true)
-            latestOAuthStateParam = comps!.queryItems!.first(where: { $0.name == "state" })!.value
-            return .success(url)
-        } catch {
-            return .failure(error)
         }
     }
 
@@ -184,14 +172,25 @@ open class FxAccountManager: @unchecked Sendable {
         authData: FxaAuthData,
         completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void
     ) {
-        if latestOAuthStateParam == nil {
-            DispatchQueue.main.async { completionHandler(.failure(FxaError.NoExistingAuthFlow(message: ""))) }
-        } else if authData.state != latestOAuthStateParam {
-            DispatchQueue.main.async { completionHandler(.failure(FxaError.WrongAuthFlow(message: ""))) }
-        } else { /* state == latestAuthState */
-            processEvent(event: .authenticated(authData: authData)) {
-                DispatchQueue.main.async { completionHandler(.success(())) }
+        fxaFsmQueue.async {
+            self.pendingAuthType = authData.authType
+            let event = FxaEvent.completeOAuthFlow(code: authData.code, state: authData.state)
+            do {
+                self.state = try self.requireAccount().processEvent(event: event)
+            } catch {
+                // Reset state machine back to .disconnected before reporting failure.
+                self.processEvent(.cancelOAuthFlow)
+                DispatchQueue.main.async { completionHandler(.failure(error)) }
+                return
             }
+            self.accountStateSideEffects(forState: self.state, via: event)
+            let result: Result<Void, Error>
+            if case .connected = self.state {
+                result = .success(())
+            } else {
+                result = .failure(FxaError.Other(message: "finishAuthentication: unexpected state \(self.state)"))
+            }
+            DispatchQueue.main.async { completionHandler(result) }
         }
     }
 
@@ -208,6 +207,17 @@ open class FxAccountManager: @unchecked Sendable {
             } catch {
                 DispatchQueue.main.async { completionHandler(.failure(error)) }
             }
+        }
+    }
+
+    /// Get the device ID registered for this account.
+    /// The device is registered synchronously during `finishAuthentication`, so this is available
+    /// immediately after login without waiting for `DeviceConstellation.refreshState()`.
+    public func getCurrentDeviceId() -> Result<String, Error> {
+        do {
+            return try .success(requireAccount().getCurrentDeviceId())
+        } catch {
+            return .failure(error)
         }
     }
 
@@ -240,7 +250,21 @@ open class FxAccountManager: @unchecked Sendable {
         newSessionToken: String,
         completionHandler: @escaping @MainActor @Sendable () -> Void
     ) {
-        processEvent(event: .changedPassword(newSessionToken: newSessionToken)) {
+        fxaFsmQueue.async {
+            do {
+                try self.requireAccount().handleSessionTokenChange(sessionToken: newSessionToken)
+                // handleSessionTokenChange invalidates the old refresh token so the device
+                // record on the server is stale. Re-register the device.
+                self.requireConstellation().initDevice(
+                    name: self.deviceConfig.name,
+                    type: self.deviceConfig.deviceType,
+                    capabilities: self.deviceConfig.capabilities
+                )
+                self.postAuthenticated(authType: .existingAccount)
+                self.refreshProfileAsync(ignoreCache: false)
+            } catch {
+                FxALog.error("Error handling the session token change: \(error)")
+            }
             DispatchQueue.main.async { completionHandler() }
         }
     }
@@ -298,15 +322,13 @@ open class FxAccountManager: @unchecked Sendable {
     ///
     /// If it succeeds, a `.accountProfileUpdate` notification will get fired.
     public func refreshProfile(ignoreCache: Bool = false) {
-        processEvent(event: .fetchProfile(ignoreCache: ignoreCache)) {
-            // Do nothing
-        }
+        refreshProfileAsync(ignoreCache: ignoreCache)
     }
 
     /// Get the user profile synchronously. It could be empty
     /// because of network or authentication problems.
     public func accountProfile() -> Profile? {
-        if state == .authenticatedWithProfile || state == .authenticationProblem {
+        if state == .connected || state == .authIssues {
             return profile
         }
         return nil
@@ -320,7 +342,8 @@ open class FxAccountManager: @unchecked Sendable {
     /// Log-out from the account.
     /// The `.accountLoggedOut` notification will also get fired.
     public func logout(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
-        processEvent(event: .logout) {
+        fxaFsmQueue.async {
+            self.processEvent(.disconnect)
             DispatchQueue.main.async { completionHandler(.success(())) }
         }
     }
@@ -336,228 +359,117 @@ open class FxAccountManager: @unchecked Sendable {
         return try acct.gatherTelemetry()
     }
 
+    // Serial by default (no .concurrent attribute). All FSM state mutations and
+    // accountStateSideEffects calls must happen on this queue.
     let fxaFsmQueue = DispatchQueue(label: "com.mozilla.fxa-mgr-queue")
 
-    func processEvent(event: Event, completionHandler: @Sendable @escaping () -> Void) {
-        fxaFsmQueue.async {
-            var toProcess: Event? = event
-            while let evt = toProcess {
-                toProcess = nil // Avoid infinite loop if `toProcess` doesn't get replaced.
-                guard let nextState = FxAccountManager.nextState(state: self.state, event: evt) else {
-                    FxALog.error("Got invalid event \(evt) for state \(self.state).")
-                    continue
+    /// Runs the Rust state machine with the given event and runs side effects for the new state.
+    /// Must be called on `fxaFsmQueue`.
+    func processEvent(_ fxaEvent: FxaEvent) {
+        FxALog.debug("processEvent: event '\(fxaEvent)'")
+        do {
+            state = try requireAccount().processEvent(event: fxaEvent)
+        } catch {
+            FxALog.error("processEvent: Error in processEvent: \(error)")
+            return
+        }
+        FxALog.debug("processEvent: new FxaState '\(state)'")
+        accountStateSideEffects(forState: state, via: fxaEvent)
+    }
+
+    func accountStateSideEffects(forState: FxaState, via: FxaEvent) {
+        switch forState {
+        case .disconnected:
+            switch via {
+            case .disconnect:
+                onDisconnected()
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .accountLoggedOut, object: nil)
                 }
-                FxALog.debug("Processing event \(evt) for state \(self.state). Next state is \(nextState).")
-                self.state = nextState
-                toProcess = self.stateActions(forState: self.state, via: evt)
-                if let successiveEvent = toProcess {
-                    FxALog.debug(
-                        "Ran \(evt) side-effects for state \(self.state), got successive event \(successiveEvent)."
-                    )
-                }
+            case .beginOAuthFlow, .beginPairingFlow:
+                onDisconnected()
+                // Failed to begin auth, caller receives an error from the nil URL check
+            case .completeOAuthFlow:
+                onDisconnected()
+                pendingAuthType = nil
+                // Failed to complete auth, app will detect via accountNeedsReauth()
+            default: break
             }
-            completionHandler()
+
+        case .authenticating:
+            break // No side effects; URL is extracted by the beginAuthentication caller
+
+        case .connected:
+            requireAccount().registerPersistCallback(statePersistenceCallback)
+            let authType: FxaAuthType
+            let ignoreCache: Bool
+            switch via {
+            case .initialize:
+                authType = .existingAccount
+                ignoreCache = false
+            case .completeOAuthFlow:
+                authType = pendingAuthType ?? .existingAccount
+                pendingAuthType = nil
+                ignoreCache = true
+            case .checkAuthorizationStatus:
+                // Recovered from auth problem
+                authType = .recovered
+                ignoreCache = true
+            default:
+                return
+            }
+            postAuthenticated(authType: authType)
+            refreshProfileAsync(ignoreCache: ignoreCache)
+
+        case .authIssues:
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .accountAuthProblems, object: nil)
+            }
+
+        case .uninitialized:
+            break
         }
     }
 
-    // swiftlint:disable function_body_length
-    func stateActions(forState: AccountState, via: Event) -> Event? {
-        switch forState {
-        case .start: do {
-                switch via {
-                case .initialize: do {
-                        if let acct = tryRestoreAccount() {
-                            account = acct
-                            return .accountRestored
-                        } else {
-                            return .accountNotFound
-                        }
-                    }
-                default: return nil
-                }
-            }
-        case .notAuthenticated: do {
-                switch via {
-                case .logout: do {
-                        // Clean up internal account state and destroy the current FxA device record.
-                        requireAccount().disconnect()
-                        FxALog.info("Disconnected FxA account")
-                        profile = nil
-                        constellation = nil
-                        accountStorage.clear()
-                        // If we cannot instantiate FxA something is *really* wrong, crashing is a valid option.
-                        account = createAccount()
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(
-                                name: .accountLoggedOut,
-                                object: nil
-                            )
-                        }
-                    }
-                case .accountNotFound: do {
-                        account = createAccount()
-                    }
-                default: break // Do nothing
-                }
-            }
-        case .authenticatedNoProfile: do {
-                switch via {
-                case let .authenticated(authData): do {
-                        FxALog.info("Registering persistence callback")
-                        requireAccount().registerPersistCallback(statePersistenceCallback)
-
-                        FxALog.debug("Completing oauth flow")
-                        do {
-                            try requireAccount().completeOAuthFlow(code: authData.code, state: authData.state)
-                        } catch {
-                            // Reasons this can fail:
-                            // - network errors
-                            // - unknown auth state
-                            // - authenticating via web-content; we didn't beginOAuthFlowAsync
-                            FxALog.error("Error completing OAuth flow: \(error)")
-                        }
-
-                        FxALog.info("Initializing device")
-                        requireConstellation().initDevice(
-                            name: deviceConfig.name,
-                            type: deviceConfig.deviceType,
-                            capabilities: deviceConfig.capabilities
+    // swiftlint:enable function_body_length
+    private func refreshProfileAsync(ignoreCache: Bool) {
+        DispatchQueue.global().async {
+            do {
+                let p = try self.requireAccount().getProfile(ignoreCache: ignoreCache)
+                // Write back on fxaFsmQueue so we don't race with onDisconnected(), which clears
+                // self.profile on that same queue. Drop the result if the account was reset
+                // (e.g. logout) while in flight.
+                self.fxaFsmQueue.async {
+                    guard self.state == .connected || self.state == .authIssues else { return }
+                    self.profile = p
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(
+                            name: .accountProfileUpdate,
+                            object: nil,
+                            userInfo: ["profile": p]
                         )
-
-                        postAuthenticated(authType: authData.authType)
-
-                        return Event.fetchProfile(ignoreCache: false)
                     }
-                case .accountRestored: do {
-                        FxALog.info("Registering persistence callback")
-                        requireAccount().registerPersistCallback(statePersistenceCallback)
-
-                        FxALog.info("Ensuring device capabilities...")
-                        requireConstellation().ensureCapabilities(capabilities: deviceConfig.capabilities)
-
-                        postAuthenticated(authType: .existingAccount)
-
-                        return Event.fetchProfile(ignoreCache: false)
-                    }
-                case .recoveredFromAuthenticationProblem: do {
-                        FxALog.info("Registering persistence callback")
-                        requireAccount().registerPersistCallback(statePersistenceCallback)
-
-                        FxALog.info("Initializing device")
-                        requireConstellation().initDevice(
-                            name: deviceConfig.name,
-                            type: deviceConfig.deviceType,
-                            capabilities: deviceConfig.capabilities
-                        )
-
-                        postAuthenticated(authType: .recovered)
-
-                        return Event.fetchProfile(ignoreCache: false)
-                    }
-                case let .changedPassword(newSessionToken): do {
-                        do {
-                            try requireAccount().handleSessionTokenChange(sessionToken: newSessionToken)
-
-                            FxALog.info("Initializing device")
-                            requireConstellation().initDevice(
-                                name: deviceConfig.name,
-                                type: deviceConfig.deviceType,
-                                capabilities: deviceConfig.capabilities
-                            )
-
-                            postAuthenticated(authType: .existingAccount)
-
-                            return Event.fetchProfile(ignoreCache: false)
-                        } catch {
-                            FxALog.error("Error handling the session token change: \(error)")
-                        }
-                    }
-                case let .fetchProfile(ignoreCache): do {
-                        // Profile fetching and account authentication issues:
-                        // https://github.com/mozilla/application-services/issues/483
-                        FxALog.info("Fetching profile...")
-
-                        do {
-                            profile = try requireAccount().getProfile(ignoreCache: ignoreCache)
-                        } catch {
-                            return Event.failedToFetchProfile
-                        }
-                        return Event.fetchedProfile
-                    }
-                default: break // Do nothing
                 }
-            }
-        case .authenticatedWithProfile: do {
-                switch via {
-                case .fetchedProfile: do {
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(
-                                name: .accountProfileUpdate,
-                                object: nil,
-                                userInfo: ["profile": self.profile!]
-                            )
-                        }
-                    }
-                case let .fetchProfile(refresh): do {
-                        FxALog.info("Refreshing profile...")
-                        do {
-                            profile = try requireAccount().getProfile(ignoreCache: refresh)
-                        } catch {
-                            return Event.failedToFetchProfile
-                        }
-                        return Event.fetchedProfile
-                    }
-                default: break // Do nothing
-                }
-            }
-        case .authenticationProblem:
-            switch via {
-            case .authenticationError: do {
-                    // Somewhere in the system, we've just hit an authentication problem.
-                    // There are two main causes:
-                    // 1) an access token we've obtain from fxalib via 'getAccessToken' expired
-                    // 2) password was changed, or device was revoked
-                    // We can recover from (1) and test if we're in (2) by asking the fxalib.
-                    // If it succeeds, then we can go back to whatever
-                    // state we were in before. Future operations that involve access tokens should
-                    // succeed.
-
-                    func onError() {
-                        // We are either certainly in the scenario (2), or were unable to determine
-                        // our connectivity state. Let's assume we need to re-authenticate.
-                        // This uncertainty about real state means that, hopefully rarely,
-                        // we will disconnect users that hit transient network errors during
-                        // an authorization check.
-                        // See https://github.com/mozilla-mobile/android-components/issues/3347
-                        FxALog.error("Unable to recover from an auth problem.")
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(
-                                name: .accountAuthProblems,
-                                object: nil
-                            )
-                        }
-                    }
-
-                    do {
-                        let account = requireAccount()
-                        let info = try account.checkAuthorizationStatus()
-                        if !info.active {
-                            onError()
-                            return nil
-                        }
-                        account.clearAccessTokenCache()
-                        // Make sure we're back on track by re-requesting the profile access token.
-                        _ = try account.getAccessToken(scope: OAuthScope.profile)
-                        return .recoveredFromAuthenticationProblem
-                    } catch {
-                        onError()
-                    }
-                    return nil
-                }
-            default: break // Do nothing
+            } catch {
+                FxALog.error("Failed to fetch profile: \(error)")
             }
         }
-        return nil
+    }
+
+    private func onDisconnected() {
+        profile = nil
+        constellation = nil
+        accountStorage.clear()
+        // Replace the persisted account with a fresh one. A freshly created PersistedFirefoxAccount
+        // starts in .uninitialized. Without this call,
+        // subsequent events like .beginOAuthFlow would be rejected by the FSM.
+        account = createAccount()
+        let dc = DeviceConfig(
+            name: deviceConfig.name,
+            deviceType: deviceConfig.deviceType,
+            capabilities: deviceConfig.capabilities
+        )
+        processEvent(.initialize(deviceConfig: dc))
     }
 
     func createAccount() -> PersistedFirefoxAccount {
@@ -586,7 +498,9 @@ open class FxAccountManager: @unchecked Sendable {
     func setupInternalListeners() {
         // Handle auth exceptions caught in classes that don't hold a reference to the manager.
         _ = NotificationCenter.default.addObserver(forName: .accountAuthException, object: nil, queue: nil) { _ in
-            self.processEvent(event: .authenticationError) {}
+            self.fxaFsmQueue.async {
+                self.processEvent(.checkAuthorizationStatus)
+            }
         }
         // Reflect updates to the local device to our own in-memory model.
         _ = NotificationCenter.default.addObserver(
@@ -597,7 +511,7 @@ open class FxAccountManager: @unchecked Sendable {
                     self.deviceConfig = DeviceConfig(
                         name: localDevice.displayName,
                         // The other properties are likely to not get modified.
-                        type: self.deviceConfig.deviceType,
+                        deviceType: self.deviceConfig.deviceType,
                         capabilities: self.deviceConfig.capabilities
                     )
                 }
@@ -618,8 +532,6 @@ open class FxAccountManager: @unchecked Sendable {
         }
         preconditionFailure("account must be set (sets constellation).")
     }
-
-    // swiftlint:enable function_body_length
 }
 
 // swiftlint:enable type_body_length
