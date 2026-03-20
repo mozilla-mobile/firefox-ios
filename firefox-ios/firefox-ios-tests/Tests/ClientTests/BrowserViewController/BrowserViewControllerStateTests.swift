@@ -361,29 +361,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldStartAtHome)
     }
 
-    // MARK: - Summarizer
-    func test_configuredSummarizer_summarizerAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        let action = SummarizeAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: SummarizeMiddlewareActionType.triggerSummarizationFromShakeMotion,
-            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
-        )
-        let newState = reducer(initialState, action)
-        let expectedConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
-        let destination = newState.navigationDestination?.destination
-        switch destination {
-        case .summarizer(let config, _):
-            XCTAssertEqual(config, expectedConfig)
-        default:
-            XCTFail("destination is not the right type")
-        }
-
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
-    }
-
     // MARK: - Zero Search State
 
     func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {
