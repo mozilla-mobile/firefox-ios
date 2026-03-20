@@ -40,7 +40,8 @@ extension BrowserViewController: WKUIDelegate {
 
         guard !isPayPalPopUp(navigationAction) else { return nil }
 
-        if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+        if !shouldBlockExternalApps, navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
         }
