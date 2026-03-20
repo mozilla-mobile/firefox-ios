@@ -5626,27 +5626,17 @@ extension String {
                     value: "+",
                     comment: "This string is for the Zoom tool, when Zoom value is positive. (+125%)")
 
-                public static let WebsiteDarkModeOn = MZLocalizedString(
-                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137",
-                    tableName: "MainMenu",
-                    value: "Turn on Website Dark Mode",
-                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode on in the application.")
-                public static let WebsiteDarkModeOff = MZLocalizedString(
-                    key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137",
-                    tableName: "MainMenu",
-                    value: "Turn off Website Dark Mode",
-                    comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application.")
                 public static let WebsiteDarkMode = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Title.v141",
                     tableName: "MainMenu",
                     value: "Website Dark Mode",
                     comment: "On the main menu, the title for the action that indicate, website dark mode can be turned on or off.")
-                public static let WebsiteDarkModeOnV2 = MZLocalizedString(
+                public static let WebsiteDarkModeOn = MZLocalizedString(
                     key: "MainMenu.WebsiteDarkModeOnV2.Title.v142",
                     tableName: "MainMenu",
                     value: "On",
                     comment: "On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is ON.")
-                public static let WebsiteDarkModeOffV2 = MZLocalizedString(
+                public static let WebsiteDarkModeOff = MZLocalizedString(
                     key: "MainMenu.WebsiteDarkModeOffV2.Title.v142",
                     tableName: "MainMenu",
                     value: "Off",
@@ -8441,6 +8431,18 @@ extension String {
                 tableName: nil,
                 value: "Bookmarks",
                 comment: "Accessibility label for the Bookmark button on the toolbar. Pressing this button opens the bookmarks menu"
+            )
+            public static let WebsiteDarkModeOn = MZLocalizedString(
+                key: "MainMenu.Submenus.Tools.WebsiteDarkMode.On.Title.v137",
+                tableName: "MainMenu",
+                value: "Turn on Website Dark Mode",
+                comment: "On the main menu, the title for the action that will turn Website's Dark Mode on in the application."
+            )
+            public static let WebsiteDarkModeOff = MZLocalizedString(
+                key: "MainMenu.Submenus.Tools.WebsiteDarkMode.Off.Title.v137",
+                tableName: "MainMenu",
+                value: "Turn off Website Dark Mode",
+                comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application."
             )
         }
     }
