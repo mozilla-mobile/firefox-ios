@@ -29,9 +29,8 @@ class MockLegacyResponder: NSObject, WKUIDelegate {
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping @MainActor () -> Void
-    ) {
+        initiatedByFrame frame: WKFrameInfo
+    ) async {
         runJavaScriptAlertPanelCalled += 1
     }
 

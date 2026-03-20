@@ -102,7 +102,7 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    /// To be overriden to setup experiment variables for `FeatureFlaggedTestSuite`
+    /// To be overridden to setup experiment variables for `FeatureFlaggedTestSuite`
     func setUpExperimentVariables() {}
 
     func setUpApp() {

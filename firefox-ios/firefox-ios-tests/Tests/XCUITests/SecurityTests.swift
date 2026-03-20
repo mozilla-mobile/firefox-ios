@@ -82,6 +82,7 @@ class SecurityTests: BaseTestCase {
         validateURLAndPageContent(URL: WebStrings.aboutBlank, elementsShouldExists: false)
         waitUntilPageLoad()
         validateURLAndPageContent(URL: WebStrings.expectedURL90, elementsShouldExists: true)
+        browserScreen.assertAddressBar_LockIconExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395567
@@ -93,9 +94,11 @@ class SecurityTests: BaseTestCase {
             validateURLAndPageContent(URL: WebStrings.aboutBlank, elementsShouldExists: true)
             waitUntilPageLoad()
             validateURLAndPageContent(URL: WebStrings.expectedURL204, elementsShouldExists: true)
+            browserScreen.assertAddressBar_LockIconExist()
         } else {
             waitUntilPageLoad()
             validateURLAndPageContent(URL: WebStrings.googleDotCom, elementsShouldExists: false)
+            browserScreen.assertAddressBar_LockIconExist()
         }
     }
 
@@ -111,6 +114,7 @@ class SecurityTests: BaseTestCase {
             browserScreen.assertWebElements(
                 app.webViews.staticTexts[WebStrings.demoText]
             )
+            browserScreen.assertAddressBar_LockIconExist()
             browserScreen.assertWebElements(
                 shouldExist: false,
                 app.webViews.textFields[WebStrings.usernameField],
@@ -118,6 +122,7 @@ class SecurityTests: BaseTestCase {
             )
         } else {
             validateURLAndPageContent(URL: WebStrings.googleDotCom, elementsShouldExists: false)
+            browserScreen.assertAddressBar_LockIconExist()
         }
     }
 
@@ -149,11 +154,11 @@ class SecurityTests: BaseTestCase {
         navigator.openURL(WebStrings.netifly800URL)
         waitUntilPageLoad()
         browserScreen.tapWebViewButton(buttonText: WebStrings.submitButton)
-        browserScreen.assertAddressBar_LockIconExist()
         browserScreen.assertAddressBarContains(value: WebStrings.aboutBlank)
         browserScreen.assertWebElements(
             app.webViews.staticTexts[WebStrings.fakeHomePageText]
         )
+        browserScreen.assertAddressBar_LockIconOffExist()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3395571
@@ -192,7 +197,6 @@ class SecurityTests: BaseTestCase {
     }
 
     private func validateURLAndPageContent(URL: String, elementsShouldExists: Bool) {
-        browserScreen.assertAddressBar_LockIconExist()
         browserScreen.assertAddressBarContains(value: URL)
         browserScreen.assertWebElements(
             shouldExist: elementsShouldExists,

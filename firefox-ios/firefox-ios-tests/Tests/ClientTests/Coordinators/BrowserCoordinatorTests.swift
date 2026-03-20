@@ -610,27 +610,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
-    // MARK: - Stories Feed
-
-    func testShowStoriesFeed_showsStoriesFeed() throws {
-        let subject = createSubject()
-
-        subject.showStoriesFeed()
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowStoriesWebview_showsStoriesWebview() throws {
-        let subject = createSubject()
-
-        subject.showStoriesWebView(url: URL(string: "https://www.mozilla.com"))
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowPrivacyNoticeLink_showsStoriesWebview() throws {
+    func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
         let subject = createSubject()
 
         guard let url = URL(string: "https://www.mozilla.com") else { return }
@@ -678,7 +658,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
         let childCoordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
             tabManager: tabManager)
@@ -1221,9 +1200,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        if !featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
-        }
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 

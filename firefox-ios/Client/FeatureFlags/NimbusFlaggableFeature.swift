@@ -16,6 +16,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case aiKillSwitch
     case appearanceMenu
     case appIconSelection
+    case bookmarksSearchFeature
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -33,9 +34,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
-    case menuDefaultBrowserBanner
-    case menuRefactor
-    case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
@@ -58,6 +56,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
+    case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -89,6 +88,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .appleSummarizer,
                 .addressBarMenu,
                 .adsClient,
+                .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -98,7 +98,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
-                .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
@@ -111,6 +110,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -167,6 +167,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .addressBarMenu,
                 .adsClient,
+                .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -179,9 +180,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
-                .menuDefaultBrowserBanner,
-                .menuRefactor,
-                .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
@@ -203,6 +201,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .relayIntegration,
                 .summarizerAppAttestAuth,
                 .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,

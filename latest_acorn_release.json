@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/292183705",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/292183705/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/292183705/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.60.0",
-    "id": 292183705,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/294681797",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/294681797/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/294681797/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.61.0",
+    "id": 294681797,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,18 +25,18 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84Ral6Z",
-    "tag_name": "v1.60.0",
+    "node_id": "RE_kwDOI1CID84RkHzF",
+    "tag_name": "v1.61.0",
     "target_commitish": "main",
-    "name": "v1.60.0",
+    "name": "v1.61.0",
     "draft": false,
     "immutable": false,
     "prerelease": false,
-    "created_at": "2026-03-02T17:50:32Z",
-    "updated_at": "2026-03-02T17:51:18Z",
-    "published_at": "2026-03-02T17:51:18Z",
+    "created_at": "2026-03-09T12:34:54Z",
+    "updated_at": "2026-03-09T12:35:35Z",
+    "published_at": "2026-03-09T12:35:35Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.60.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.60.0",
-    "body": "# [Changelog]\r\n### [1.60.0]\r\n### Added\r\n- PDF\r\n  - accessibilityLarge.pdf\r\n  - labsLarge.pdf\r\n  - tabGroupLarge.pdf\r\n\r\n- SVG\r\n  - accessibility-24.svg\r\n  - gift-16.svg\r\n  - labs-24.svg\r\n  - tab-group-24.svg\r\n\r\n- XML\r\n  - ic_accessibility_24.xml\r\n  - ic_labs_24.xml\r\n  - ic_tab_group_24.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.61.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.61.0",
+    "body": "# [Changelog]\r\n### [1.61.0]\r\n### Added\r\n\r\n- PDF\r\n  - tabGroupCloseLarge.pdf\r\n\r\n- SVG\r\n  - tab-group-close-24.svg\r\n  - tab-group-72.svg\r\n\r\n- XML\r\n  - ic_tab_group_close_24.xml\r\n  - ic_tab_group_72.xml"
 }

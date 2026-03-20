@@ -4,6 +4,7 @@
 
 import AVFoundation
 import Testing
+import TestKit
 
 @testable import QuickAnswersKit
 
@@ -11,6 +12,7 @@ import Testing
 struct AudioManagerTests {
     let session = MockAudioSession()
     let engine = MockAudioEngine()
+    let testHelper = SwiftTestingHelper()
 
     // MARK: - Audio Session Configuration Tests
     @Test
@@ -129,6 +131,8 @@ struct AudioManagerTests {
     }
 
     private func createSubject() -> AudioManager {
-        return AudioManager(audioEngine: engine, audioSession: session)
+        let subject = AudioManager(audioEngine: engine, audioSession: session)
+        testHelper.trackForMemoryLeaks(subject)
+        return subject
     }
 }

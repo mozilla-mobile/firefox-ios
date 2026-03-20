@@ -1549,6 +1549,19 @@ class BrowserViewController: UIViewController,
         logCurrentNimbusExperimentsState()
     }
 
+    // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
+    // On initial display, the view is not yet in the window hierarchy at setup time, so
+    // statusBarManager is unavailable and the header top constraint starts with constant = 0.
+    // viewSafeAreaInsetsDidChange fires once the view enters the hierarchy, at which point
+    // statusBarManager returns the correct value and the constant is updated.
+    // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
+    // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        guard isSnapKitRemovalEnabled else { return }
+        browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
+    }
+
     /// Logging current Nimbus state
     private func logCurrentNimbusExperimentsState() {
         var currentExperimentsDictionary = [String: String]()
@@ -1948,14 +1961,22 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    /// Updates the bottom constraint of `bottomContentStackView` (login snackbar, FindInPageBar).
+    /// Must be called whenever the keyboard or toolbar layout changes because the correct
+    /// anchor depends on both:
+    /// - **Bottom search bar**: the view is pinned to `overKeyboardContainer.top`, which
+    ///   already includes a keyboard spacer — no extra keyboard handling required.
+    /// - **Top search bar**: `overKeyboardContainer` collapses to `height = 0`, so its top
+    ///   sits above the nav toolbar and **below** the keyboard frame. A dedicated keyboard
+    ///   constraint (`= parentView.bottom - keyboardHeight`) must activate to keep snackbars
+    ///   and FindInPageBar above the keyboard.
     private func updateBottomContentStackViewConstraints() {
         guard isSnapKitRemovalEnabled else {
             updateSnapKitBottomContentStackViewConstraints()
             return
         }
 
-        browserLayoutManager.updateBottomContentStackViewConstraints(isSnapKitRemovalEnabled: isSnapKitRemovalEnabled,
-                                                                     isBottomSearchBar: isBottomSearchBar,
+        browserLayoutManager.updateBottomContentStackViewConstraints(isBottomSearchBar: isBottomSearchBar,
                                                                      keyboardState: keyboardState)
     }
 
@@ -2014,15 +2035,14 @@ class BrowserViewController: UIViewController,
         let keyboardHeight = keyboardState?.intersectionHeightForView(view) ?? 0
         let isKeyboardVisible = keyboardHeight > 0
 
-        // To avoid some UI glitches, when authentication is in progress
-        // we don't need to update/change keyboard spacer
-        guard !appAuthenticator.isAuthenticating else {
-            guard isBottomSearchBar, isKeyboardVisible else {
-                overKeyboardContainer.removeKeyboardSpacer()
-                return
-            }
+        guard isBottomSearchBar, isKeyboardVisible else {
+            overKeyboardContainer.removeKeyboardSpacer()
             return
         }
+
+        // To avoid some UI glitches, when authentication is in progress
+        // we don't need to update/change keyboard spacer
+        guard !appAuthenticator.isAuthenticating else { return }
 
         /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
         /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
@@ -2030,11 +2050,6 @@ class BrowserViewController: UIViewController,
         /// It  might be an apple bug.
         /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
         let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
-
-        guard isBottomSearchBar, isKeyboardVisible else {
-            overKeyboardContainer.removeKeyboardSpacer()
-            return
-        }
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
             hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
         )
@@ -2485,29 +2500,39 @@ class BrowserViewController: UIViewController,
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
                             guard let bookmarkFolder = result.successValue as? BookmarkFolderData else {
-                                self.showDefaultBookmarkToast(urlString: urlString, title: title)
+                                self.showDefaultBookmarkToast(urlString: urlString)
                                 return
                             }
                             let folderName = bookmarkFolder.title
                             let message = String(format: .Bookmarks.Menu.SavedBookmarkToastLabel, folderName)
-                            self.showToast(urlString, title, message: message, toastAction: .bookmarkPage)
+                            self.showLegacyBookmarkToast(urlString: urlString, message: message)
                         }
                     }
             // If recent bookmarks folder is nil or the mobile (default) folder
             } else {
-                showDefaultBookmarkToast(urlString: urlString, title: title)
+                showDefaultBookmarkToast(urlString: urlString)
             }
         default: break
         }
     }
 
-    private func showDefaultBookmarkToast(urlString: String?, title: String?) {
-        showToast(
-            urlString,
-            title,
-            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel,
-            toastAction: .bookmarkPage
+    private func showDefaultBookmarkToast(urlString: String?) {
+        showLegacyBookmarkToast(
+            urlString: urlString,
+            message: .Bookmarks.Menu.SavedBookmarkToastDefaultFolderLabel
         )
+    }
+
+    /// This toast was tied into the legacy main menu, moved it to it's own function.
+    /// New toasts should be piped through Redux.
+    private func showLegacyBookmarkToast(urlString: String?, message: String) {
+        let viewModel = ButtonToastViewModel(labelText: message,
+                                             buttonText: .BookmarksEdit)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: currentTheme()) { isButtonTapped in
+            isButtonTapped ? self.openBookmarkEditPanel(urlString: urlString) : nil
+        }
+        show(toast: toast, duration: DispatchTimeInterval.milliseconds(8000))
     }
 
     /// This function opens a standalone bookmark edit view separate from library -> bookmarks panel -> edit bookmark.
@@ -2927,10 +2952,6 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
-        case .storiesFeed:
-            navigationHandler?.showStoriesFeed()
-        case .storiesWebView:
-            navigationHandler?.showStoriesWebView(url: type.url)
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:
@@ -3196,11 +3217,7 @@ class BrowserViewController: UIViewController,
         )
 
         logger.log("Show MainMenu button tapped", level: .info, category: .mainMenu)
-        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            navigationHandler?.showMainMenu()
-        } else {
-            showPhotonMainMenu(from: button)
-        }
+        navigationHandler?.showMainMenu()
     }
 
     func toggleReaderMode() {
@@ -3242,9 +3259,7 @@ class BrowserViewController: UIViewController,
                 notification: UIAccessibility.Notification.announcement,
                 argument: String.ReaderModeAddPageSuccessAcessibilityLabel
             )
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
+            showPlainToast(message: .ShareAddToReadingListDone)
         case .failure:
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.announcement,
@@ -3253,41 +3268,6 @@ class BrowserViewController: UIViewController,
         }
 
         return true
-    }
-
-    private func showPhotonMainMenu(from button: UIButton?) {
-        guard let button else { return }
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { [weak self] actions in
-            guard let self else { return }
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            if self.profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown) == nil {
-                self.profile.prefs.setBool(true, forKey: PrefsKeys.PhotonMainMenuShown)
-            }
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        }
     }
 
     /// Shares the currently selected tab via the share sheet.
@@ -3726,10 +3706,7 @@ class BrowserViewController: UIViewController,
 
         if webViewStatus == .finishedNavigation {
             let isSelectedTab = (tab == tabManager.selectedTab)
-            let isStoriesFeed = store.state.screenState(StoriesFeedState.self, for: .storiesFeed, window: windowUUID) != nil
-
-            // Screenshots are not needed when the tab is not selected or when opening a tab from the stories feed
-            if !isSelectedTab, !isStoriesFeed, let webView = tab.webView, tab.screenshot == nil {
+            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
                         webView.frame = contentContainer.frame
@@ -4311,11 +4288,11 @@ class BrowserViewController: UIViewController,
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
         case .error, .expiredToken:
             let message = String.RelayMask.RelayEmailMaskGenericErrorMessage
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         case .freeTierLimitReached:
             UIAccessibility.post(notification: .announcement, argument: a11yAnnounce)
             let message = String.RelayMask.RelayEmailMaskFreeTierLimitReached
-            showSimpleToast(message: message)
+            showPlainToast(message: message)
         }
     }
 
@@ -4996,7 +4973,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func showSimpleToast(message: String) {
+    func showPlainToast(message: String) {
         let viewModel = PlainToastViewModel(labelText: message)
         let toast = PlainToast(viewModel: viewModel, theme: currentTheme(), completion: nil)
         show(toast: toast)
@@ -5015,17 +4992,6 @@ extension BrowserViewController: TabManagerDelegate {
             return
         }
 
-        // Due to some layout changes in the toolbar translucency refactor and
-        // reduction of `setNeedsLayout()` and `layoutIfNeeded()` calls, when the keyboard appears it breaks a constraint
-        // causing the toast message to have an incorrect animation.
-        // To fix the issue, we constrain the bottom of the toast
-        // to the top of the keyboard container when the toolbar is at the bottom.
-        let toastBottomConstraint = toast.bottomAnchor.constraint(
-            equalTo: (
-                isToolbarTranslucencyRefactorEnabled && isBottomSearchBar
-            ) ? overKeyboardContainer.topAnchor : bottomContentStackView.bottomAnchor
-        )
-
         scrollController.showToolbars(animated: false)
         toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
             [
@@ -5033,7 +4999,7 @@ extension BrowserViewController: TabManagerDelegate {
                                                constant: Toast.UX.toastSidePadding),
                 toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
                                                 constant: -Toast.UX.toastSidePadding),
-                toastBottomConstraint
+                toast.bottomAnchor.constraint(equalTo: self.bottomContentStackView.bottomAnchor)
             ]
         }
     }
@@ -5133,6 +5099,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
 
         if isSwipingTabsEnabled {
@@ -5173,6 +5140,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
 
         UIView.animate(
@@ -5216,6 +5184,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
+            updateBottomContentStackViewConstraints()
         }
     }
 
@@ -5304,7 +5273,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsShowCloseTabsToast() {
-        showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+        showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
     }
 }
 

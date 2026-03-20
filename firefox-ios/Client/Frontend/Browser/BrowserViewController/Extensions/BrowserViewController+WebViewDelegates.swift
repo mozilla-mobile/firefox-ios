@@ -569,7 +569,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handle Universal link for Firefox wallpaper setting
         if isFirefoxUniversalWallpaperSetting(url) {
-            showWallpaperSettings()
+            navigationHandler?.show(settings: .wallpaper)
             decisionHandler(.cancel)
             return
         }

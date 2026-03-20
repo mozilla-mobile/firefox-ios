@@ -54,10 +54,6 @@ class MainMenuViewController: UIViewController,
         !(UIDevice.current.userInterfaceIdiom == .phone)
     }
 
-    private var isMenuDefaultBrowserBanner: Bool {
-        return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
-    }
-
     private var bannerShown: Bool {
         profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
     }
@@ -187,6 +183,11 @@ class MainMenuViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+        // An extra reload for menu content is necessary only on iOS 15
+        if #unavailable(iOS 16) {
+            reloadTableView(with: menuState.menuElements)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -311,7 +312,6 @@ class MainMenuViewController: UIViewController,
             title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
             subtitle: .MainMenu.HeaderBanner.Subtitle,
             image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-            isBannerFlagEnabled: isMenuDefaultBrowserBanner,
             isBrowserDefault: isBrowserDefault,
             bannerShown: bannerShown
         )

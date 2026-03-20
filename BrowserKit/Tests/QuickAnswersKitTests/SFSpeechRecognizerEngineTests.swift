@@ -4,11 +4,13 @@
 
 import AVFoundation
 import Testing
+import TestKit
 
 @testable import QuickAnswersKit
 @Suite
 @MainActor
 struct SFSpeechRecognizerEngineTests {
+    let testHelper = SwiftTestingHelper()
     let audioManager = MockAudioManager()
 
     @Test
@@ -83,6 +85,8 @@ struct SFSpeechRecognizerEngineTests {
     private func createSubject(
         authorizer: AuthorizeProvider
     ) -> SFSpeechRecognizerEngine {
-        return SFSpeechRecognizerEngine(audioManager: audioManager, authorizer: authorizer)
+        let subject =  SFSpeechRecognizerEngine(audioManager: audioManager, authorizer: authorizer)
+        testHelper.trackForMemoryLeaks(subject)
+        return subject
     }
 }

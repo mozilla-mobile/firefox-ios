@@ -47,6 +47,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let cellWidth: CGFloat = 350
             static let numberOfItemsInColumn = 1
             static let minimumCellHeight: CGFloat = 70
+            static let verticalStoriesCellEstimatedHeight: CGFloat = 282
             static let fractionalWidthiPhonePortrait: CGFloat = 0.84
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.37
             static let storiesSpacing: CGFloat = 12
@@ -319,13 +320,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(StoriesFeedSectionLayoutProvider.UX.cellSize.height)
+            heightDimension: .estimated(UX.PocketConstants.verticalStoriesCellEstimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(StoriesFeedSectionLayoutProvider.UX.cellSize.height)
+            heightDimension: .estimated(UX.PocketConstants.verticalStoriesCellEstimatedHeight)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 

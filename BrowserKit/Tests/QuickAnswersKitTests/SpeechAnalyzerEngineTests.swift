@@ -4,6 +4,7 @@
 
 import AVFoundation
 import Testing
+import TestKit
 
 @testable import QuickAnswersKit
 
@@ -11,6 +12,7 @@ import Testing
 @MainActor
 struct SpeechAnalyzerEngineTests {
     let audioManager = MockAudioManager()
+    let testHelper = SwiftTestingHelper()
 
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsError() async {
@@ -108,9 +110,11 @@ struct SpeechAnalyzerEngineTests {
     private func createSubject(
         authorizer: AuthorizeProvider
     ) -> SpeechAnalyzerEngine {
-        return SpeechAnalyzerEngine(
+        let subject = SpeechAnalyzerEngine(
             audioManager: audioManager,
             authorizer: authorizer
         )
+        testHelper.trackForMemoryLeaks(subject)
+        return subject
     }
 }
