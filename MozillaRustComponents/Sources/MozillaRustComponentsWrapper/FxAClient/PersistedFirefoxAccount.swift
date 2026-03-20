@@ -104,6 +104,11 @@ class PersistedFirefoxAccount {
         inner.disconnect()
     }
 
+    func processEvent(event: FxaEvent) throws -> FxaState {
+        defer { tryPersistState() }
+        return try inner.processEvent(event: event)
+    }
+
     func getProfile(ignoreCache: Bool) throws -> Profile {
         defer { tryPersistState() }
         return try notifyAuthErrors {

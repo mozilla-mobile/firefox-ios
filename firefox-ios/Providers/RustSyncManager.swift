@@ -264,7 +264,25 @@ public class RustSyncManager: NSObject, SyncManager, @unchecked Sendable {
         guard let profile = profile, profile.hasSyncableAccount() else { return succeed() }
         setPreferenceForSignIn()
         beginTimedSyncs()
-        return syncEverything(why: .enabledChange)
+
+        // When logging into ios, some users report not seeing the device/super slow sync,
+        // I found that DeviceConstellation.refreshState() is async,
+        // so when onAddedAccount() is called immediately after login the constellation
+        // state may not be ready yet. So we try to listen and sync when ready if so
+        if RustFirefoxAccounts.shared.accountManager?.deviceConstellation()?.state()?.localDevice != nil {
+            return syncEverything(why: .enabledChange)
+        }
+        var token: NSObjectProtocol?
+        token = NotificationCenter.default.addObserver(
+            forName: .constellationStateUpdate,
+            object: nil,
+            queue: nil
+        ) { [weak self] _ in
+            guard let token = token else { return }
+            NotificationCenter.default.removeObserver(token)
+            self?.syncEverything(why: .enabledChange)
+        }
+        return succeed()
     }
 
     public func onRemovedAccount() -> Success {
