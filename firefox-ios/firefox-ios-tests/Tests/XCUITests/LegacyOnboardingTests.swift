@@ -249,7 +249,11 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
         waitForElementsToExist([toolbar])
 
         let screenHeight = app.windows.element(boundBy: 0).frame.height
-        XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
+        if !iPad() {
+            XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
+        } else {
+            XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
+        }
     }
 
     // MARK: Skipping Onboarding with Close Button
