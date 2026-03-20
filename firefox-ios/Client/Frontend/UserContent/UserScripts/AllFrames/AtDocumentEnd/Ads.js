@@ -44,23 +44,8 @@ function getLinks() {
  * @return {Array<{name: string, value: string}>} containing all cookies.
  */
 function getCookies() {
+    let cookiesList = safeCookiesList();
     let result = [];
-    let cookiesList = [];
-
-    // FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
-    if (window.location.protocol == "about:" && window.opener && window.opener.parent != window.opener) {
-        let frameParent = window.opener.parent;
-        // Positively catch the SecurityError on the conditional as a way to not touch the cookie inside
-        try {
-            if (frameParent.location.origin == window.opener.location.origin) {
-                cookiesList = document.cookie.split("; ");
-            }
-        } catch {
-            cookiesList = [""];
-        }
-    } else {
-        cookiesList = document.cookie.split("; ");
-    }
 
     cookiesList.forEach(cookie => {
         var [name, ...value] = cookie.split('=');
@@ -74,6 +59,31 @@ function getCookies() {
     });
 
     return result;
+}
+
+function safeCookiesList() {
+    let documentCookies = [];
+
+    // FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
+    const isNewTab = window.location.protocol == "about:";
+    const hasOpener = !!window.opener;
+    const hasParent = hasOpener && window.opener.parent != window.opener;
+
+    if (isNewTab && hasOpener && hasParent) {
+        const frameParent = window.opener.parent;
+        // Positively catch the SecurityError on the conditional as a way to not touch the cookie inside
+        try {
+            if (frameParent.location.origin == window.opener.location.origin) {
+                documentCookies = document.cookie.split("; ");
+            }
+        } catch {
+            documentCookies = [""];
+        }
+    } else {
+        documentCookies = document.cookie.split("; ");
+    }
+
+    return documentCookies;
 }
 
 // Whenever a page is first accessed or when loaded from cache
