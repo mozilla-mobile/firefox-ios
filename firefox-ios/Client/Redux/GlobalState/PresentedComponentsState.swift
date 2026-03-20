@@ -123,7 +123,7 @@ struct PresentedComponentsState: Sendable, Equatable {
     }
 
     private static func updateActiveComponents(action: Action, components: [ComponentState]) -> [ComponentState] {
-        guard let action = action as? ComponentAction else { return components } // FIXME should this be defaultState?
+        guard let action = action as? ComponentAction else { return components }
 
         var components = components
 
