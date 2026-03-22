@@ -51,7 +51,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var showNativeErrorPageLearnMoreCalled = 0
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
-    var showCertificatesFromErrorPageCalled = 0
     var openLearnMoreFromNativeErrorPageCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {

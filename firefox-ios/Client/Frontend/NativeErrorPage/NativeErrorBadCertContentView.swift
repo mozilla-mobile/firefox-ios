@@ -133,7 +133,6 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
     private func setupAdvancedSectionLayout() {
         advancedSectionContainer.addSubview(advancedSectionStack)
 
-        advancedSectionHeader.addSubview(advancedSectionHeaderButton)
         advancedSectionHeaderButton.addSubview(advancedSectionTitleLabel)
         advancedSectionHeaderButton.addSubview(advancedSectionChevron)
         let chevronConfig = UIImage.SymbolConfiguration(
@@ -146,8 +145,12 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
         advancedSectionStack.addArrangedSubview(advancedSectionHeader)
         advancedSectionStack.addArrangedSubview(advancedSectionContentStack)
 
+        advancedSectionContainer.addSubview(advancedSectionHeaderButton)
+
         let padding = UX.sectionPaddingTop
         let listPadding = UX.listItemHorizontalPadding
+        let headerTapZoneHeight = UX.sectionPaddingTop + UX.headerHeight + UX.sectionPaddingBottom
+        let labelCenterY = UX.sectionPaddingTop + UX.headerHeight / 2
         NSLayoutConstraint.activate([
             advancedSectionStack.topAnchor.constraint(
                 equalTo: advancedSectionContainer.topAnchor, constant: padding),
@@ -158,26 +161,26 @@ final class NativeErrorBadCertContentView: UIView, ThemeApplicable {
             advancedSectionStack.bottomAnchor.constraint(
                 equalTo: advancedSectionContainer.bottomAnchor,
                 constant: -UX.sectionPaddingBottom),
-            advancedSectionHeaderButton.topAnchor.constraint(
-                equalTo: advancedSectionHeader.topAnchor),
-            advancedSectionHeaderButton.leadingAnchor.constraint(
-                equalTo: advancedSectionHeader.leadingAnchor),
-            advancedSectionHeaderButton.trailingAnchor.constraint(
-                equalTo: advancedSectionHeader.trailingAnchor),
-            advancedSectionHeaderButton.bottomAnchor.constraint(
-                equalTo: advancedSectionHeader.bottomAnchor),
-            advancedSectionHeaderButton.heightAnchor.constraint(
+            advancedSectionHeader.heightAnchor.constraint(
                 equalToConstant: UX.headerHeight),
+            advancedSectionHeaderButton.topAnchor.constraint(
+                equalTo: advancedSectionContainer.topAnchor),
+            advancedSectionHeaderButton.leadingAnchor.constraint(
+                equalTo: advancedSectionContainer.leadingAnchor),
+            advancedSectionHeaderButton.trailingAnchor.constraint(
+                equalTo: advancedSectionContainer.trailingAnchor),
+            advancedSectionHeaderButton.heightAnchor.constraint(
+                equalToConstant: headerTapZoneHeight),
             advancedSectionTitleLabel.leadingAnchor.constraint(
                 equalTo: advancedSectionHeaderButton.leadingAnchor, constant: listPadding),
             advancedSectionTitleLabel.centerYAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.centerYAnchor),
+                equalTo: advancedSectionHeaderButton.topAnchor, constant: labelCenterY),
             advancedSectionTitleLabel.trailingAnchor.constraint(
                 equalTo: advancedSectionChevron.leadingAnchor, constant: -UX.headerTitleChevronGap),
             advancedSectionChevron.trailingAnchor.constraint(
                 equalTo: advancedSectionHeaderButton.trailingAnchor, constant: -listPadding),
             advancedSectionChevron.centerYAnchor.constraint(
-                equalTo: advancedSectionHeaderButton.centerYAnchor),
+                equalTo: advancedSectionHeaderButton.topAnchor, constant: labelCenterY),
             advancedSectionChevron.widthAnchor.constraint(
                 equalToConstant: UX.chevronSize),
             advancedSectionChevron.heightAnchor.constraint(

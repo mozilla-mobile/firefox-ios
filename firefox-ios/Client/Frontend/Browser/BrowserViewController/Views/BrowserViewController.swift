@@ -2287,7 +2287,12 @@ class BrowserViewController: UIViewController,
         case .privateHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: true)
         case .webview:
-            showEmbeddedWebview()
+            if let url = tabManager.selectedTab?.url,
+               InternalURL(url)?.isErrorPage == true {
+                updateInContentHomePanel(url)
+            } else {
+                showEmbeddedWebview()
+            }
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -4849,6 +4854,8 @@ extension BrowserViewController: TabManagerDelegate {
                             actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
                         )
                     )
+                } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
+                    updateInContentHomePanel(url)
                 }
             }
 
@@ -4947,6 +4954,8 @@ extension BrowserViewController: TabManagerDelegate {
                     actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
                 )
             )
+        } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
+            updateInContentHomePanel(url)
         } else {
             browserDelegate?.show(webView: webView)
         }
