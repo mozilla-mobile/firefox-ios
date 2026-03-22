@@ -38,7 +38,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
-    case otherErrorPages
+    case wrongHostCertificateErrorPage
     case recentSearches
     case reportSiteIssue
     case relayIntegration
@@ -102,7 +102,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
-                .otherErrorPages,
+                .wrongHostCertificateErrorPage,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
@@ -185,7 +185,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
-                .otherErrorPages,
+                .wrongHostCertificateErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,

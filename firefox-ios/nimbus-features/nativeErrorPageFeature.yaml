@@ -14,9 +14,9 @@ features:
           This feature is for managing the roll out of the no interet connection native error page feature
         type: Boolean
         default: false
-      other-error-pages:
+      wrong-host-certificate-error-page:
         description: >
-          This feature is for managing the roll out of other native error pages
+          This feature is for managing the roll out of the wrong host certificate native error page
         type: Boolean
         default: false
 
@@ -25,9 +25,9 @@ features:
         value:
           enabled: false
           no_internet_connection_error: false
-          other-error-pages: false
+          wrong-host-certificate-error-page: false
       - channel: developer
         value:
           enabled: true
           no_internet_connection_error: true
-          other-error-pages: false
+          wrong-host-certificate-error-page: false

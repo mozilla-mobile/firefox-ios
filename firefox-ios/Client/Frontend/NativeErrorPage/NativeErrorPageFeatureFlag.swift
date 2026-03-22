@@ -15,8 +15,8 @@ struct NativeErrorPageFeatureFlag: FeatureFlaggable {
             featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
     }
 
-    /// Flag for showing other native error pages 
-    var isOtherErrorPagesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.otherErrorPages, checking: .buildOnly)
+    /// Flag for showing wrong host certificate native error page
+    var isWrongHostCertificateErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.wrongHostCertificateErrorPage, checking: .buildOnly)
     }
 }

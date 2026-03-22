@@ -144,7 +144,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .otherErrorPages,
+                with: .wrongHostCertificateErrorPage,
                 titleText: format(string: "Wrong Host Certificate Native Error Page"),
                 statusText: format(string: "Toggle to display the natively created wrong host error page")
             ) { [weak self] _ in
