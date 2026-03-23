@@ -16,6 +16,9 @@ protocol LibraryPanelDelegate: AnyObject {
 
     @MainActor
     var libraryPanelWindowUUID: WindowUUID { get }
+
+    @MainActor
+    func showToast(message: String)
 }
 
 protocol LibraryPanel: UIViewController {
@@ -60,6 +63,12 @@ extension LibraryPanel {
         // no implementation needed
     }
 }
+
+extension LibraryPanelDelegate {
+      func showToast(message: String) {
+          // no implementation needed
+      }
+  }
 
 enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0

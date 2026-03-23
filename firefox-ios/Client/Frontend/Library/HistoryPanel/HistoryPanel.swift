@@ -836,9 +836,7 @@ extension HistoryPanel {
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     if result.isSuccess {
-                        SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
-                                                        bottomContainer: self.view,
-                                                        theme: self.currentTheme())
+                        self.libraryPanelDelegate?.showToast(message: .LegacyAppMenu.AddPinToShortcutsConfirmMessage)
                     }
                 }
             }
