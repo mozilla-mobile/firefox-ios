@@ -12,14 +12,9 @@ final class TabPeekViewController: UIViewController,
     typealias SubscriberStateType = TabPeekState
 
     var tabPeekState: TabPeekState
-    var contextActions: UIContextMenuActionProvider = { _ in return nil }
     private let windowUUID: WindowUUID
 
     private var tabModel: TabModel
-
-    func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
-        return makeMenuActions()
-    }
 
     // MARK: - Lifecycle methods
 
@@ -40,29 +35,15 @@ final class TabPeekViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        // TODO: FXIOS-13097 This is a work around until we can leverage isolated deinits
-        guard Thread.isMainThread else {
-            assertionFailure("AddressBarPanGestureHandler was not deallocated on the main thread. Observer was not removed")
-            return
-        }
-
-        MainActor.assumeIsolated {
-            unsubscribeFromRedux()
-        }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.contextActions = contextActions(defaultActions:)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        unsubscribeFromRedux()
     }
 
     func newState(state: TabPeekState) {
         tabPeekState = state
         setupWithScreenshot()
     }
-
-    // MARK: - Private helper methods
 
     func subscribeToRedux() {
         let action = ComponentAction(windowUUID: windowUUID,
@@ -83,6 +64,12 @@ final class TabPeekViewController: UIViewController,
                                      component: .tabPeek)
         store.dispatch(action)
     }
+
+    func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
+        return makeMenuActions()
+    }
+
+    // MARK: - Private helper methods
 
     private func setupWithScreenshot() {
         let imageView: UIImageView = .build { imageView in

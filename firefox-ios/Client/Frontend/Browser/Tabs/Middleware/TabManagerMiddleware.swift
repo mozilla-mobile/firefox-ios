@@ -651,38 +651,33 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
-        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
-            ensureMainThread {
-                guard case .success(let isBookmarked) = isBookmarkedResult else {
-                    return
-                }
+        getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
+                let isSyncEnabled = self.profile.hasSyncableAccount()
 
-                let canBeSaved: Bool
-                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                    canBeSaved = false
-                } else {
-                    canBeSaved = true
-                }
-
-                let browserProfile = profile as? BrowserProfile
-                browserProfile?.tabs.getClientGUIDs { (result, error) in
-                    ensureMainThread {
-                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                                 canTabBeRemoved: isBookmarked,
-                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                                 isSyncEnabled: !(result?.isEmpty ?? true),
-                                                 screenshot: tab?.screenshot ?? UIImage(),
-                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                        let action = TabPeekAction(tabPeekModel: model,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPeekActionType.loadTabPeek)
-                        store.dispatch(action)
-                    }
-                }
+                let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         canTabBeRemoved: isBookmarked,
+                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                         isSyncEnabled: isSyncEnabled,
+                                         screenshot: tab?.screenshot ?? UIImage(),
+                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                let action = TabPeekAction(tabPeekModel: model,
+                                           windowUUID: uuid,
+                                           actionType: TabPeekActionType.loadTabPeek)
+                store.dispatch(action)
             }
         }
+    }
+
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
+        guard let tab else { return false }
+
+        // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
+        // and it is not a homepage (FxHome) tab.
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
