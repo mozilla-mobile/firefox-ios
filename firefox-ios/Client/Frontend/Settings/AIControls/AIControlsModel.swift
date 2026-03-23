@@ -9,6 +9,8 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
+    @Published var translationsVisible = false
+    @Published var pageSummariesVisible: Bool
 
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
@@ -33,8 +35,13 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         self.prefs = prefs
         translationConfiguration = TranslationConfiguration(prefs: prefs)
         summarizerConfiguration = DefaultSummarizerNimbusUtils()
+
         translationEnabled = translationConfiguration.isTranslationFeatureEnabled
-        pageSummariesEnabled = summarizerConfiguration.isSummarizeFeatureEnabled
+        pageSummariesEnabled = summarizerConfiguration.isSummarizeFeatureToggledOn
+
+        pageSummariesVisible = summarizerConfiguration.isSummarizeFeatureEnabled
+        translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        
         killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
     }
 

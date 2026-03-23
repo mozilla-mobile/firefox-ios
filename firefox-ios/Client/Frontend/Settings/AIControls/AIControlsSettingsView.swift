@@ -148,29 +148,33 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             padding: UX.padding
         ) {
             VStack(alignment: .leading) {
-                Toggle(isOn: $aiControlsModel.translationEnabled) {
-                    VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
-                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title)
-                            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                            .foregroundStyle(themeColors.textPrimary.color)
-                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message)
-                            .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
-                            .foregroundStyle(themeColors.textSecondary.color)
-                        aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
-                    }
-                }.tint(themeColors.actionPrimary.color)
-                Divider().foregroundStyle(themeColors.textSecondary.color)
-                Toggle(isOn: $aiControlsModel.pageSummariesEnabled) {
-                    VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
-                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title)
-                            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                            .foregroundStyle(themeColors.textPrimary.color)
-                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message)
-                            .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
-                            .foregroundStyle(themeColors.textSecondary.color)
-                        aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
-                    }
-                }.tint(themeColors.actionPrimary.color)
+                if aiControlsModel.translationsVisible {
+                    Toggle(isOn: $aiControlsModel.translationEnabled) {
+                        VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title)
+                                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                                .foregroundStyle(themeColors.textPrimary.color)
+                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message)
+                                .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                                .foregroundStyle(themeColors.textSecondary.color)
+                            aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
+                        }
+                    }.tint(themeColors.actionPrimary.color)
+                    Divider().foregroundStyle(themeColors.textSecondary.color)
+                }
+                if aiControlsModel.pageSummariesVisible {
+                    Toggle(isOn: $aiControlsModel.pageSummariesEnabled) {
+                        VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title)
+                                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                                .foregroundStyle(themeColors.textPrimary.color)
+                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message)
+                                .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                                .foregroundStyle(themeColors.textSecondary.color)
+                            aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
+                        }
+                    }.tint(themeColors.actionPrimary.color)
+                }
             }
         }
     }
