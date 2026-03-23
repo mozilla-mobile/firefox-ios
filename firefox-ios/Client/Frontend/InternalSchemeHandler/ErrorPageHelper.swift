@@ -183,7 +183,12 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         )
 
         let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+        let certErrorParam = components.valueForQuery("certerror")
+        let isBadCertDomain = certErrorParam == NativeErrorPageHelper.Constants.defaultBadCertDomainError
+        let isCertificateError = isOtherErrorPagesEnabled
+            && CertErrors.contains(errCode)
+            && isBadCertDomain
+            && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
         if isNoInternetError || isCertificateError {
