@@ -373,10 +373,10 @@ class MainMenuViewController: UIViewController,
     // MARK: - Redux
     func subscribeToRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.showScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.addComponent,
+                component: .mainMenu
             )
         )
         let uuid = windowUUID
@@ -389,10 +389,10 @@ class MainMenuViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.removeComponent,
+                component: .mainMenu
             )
         )
     }

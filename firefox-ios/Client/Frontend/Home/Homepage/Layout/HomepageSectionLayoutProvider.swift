@@ -314,7 +314,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let traitCollection = environment.traitCollection
-        let storiesHeaderState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)?
+        let storiesHeaderState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)?
             .merinoState.sectionHeaderState
             ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
 
@@ -602,7 +602,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func getHeaderLogoHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
 
         var totalHeight: CGFloat = 0
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -616,7 +618,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     private func getPrivacyNoticeSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we should be showing the privacy notice
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
               state.shouldShowPrivacyNotice else { return 0 }
 
         var totalHeight: CGFloat = 0
@@ -630,7 +632,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" top sites section and returns its height
     private func getShortcutsSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID),
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
               state.topSitesState.shouldShowSection else { return 0 }
         var totalHeight: CGFloat = 0
         let topSitesState = state.topSitesState
@@ -708,7 +710,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// Creates a "dummy" jump back in section and returns its height
     private func getJumpBackInSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         // Ensures we have at least 1 jump back in tab to show
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
+
         let jumpBackInState = state.jumpBackInState
         guard jumpBackInState.shouldShowSection,
               jumpBackInState.mostRecentSyncedTab != nil || !jumpBackInState.jumpBackInTabs.isEmpty else { return 0 }
@@ -790,7 +795,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" stories section and returns its height
     private func getStoriesSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
+
         let storiesState = state.merinoState
         guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else { return 0 }
         let cellWidth = UX.PocketConstants.getStoriesCellWidth(
@@ -805,7 +813,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else { return 0 }
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
+            return 0
+        }
 
         let searchState = state.searchState
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
@@ -912,7 +922,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     private func getRawSpacerHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
-        let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+        let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height
 
         let availableContentHeight = homepageState?.availableContentHeight ?? 0
@@ -940,7 +950,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// Gets the bookmarks measurement (tallest cell height and section height)
     private func getBookmarksMeasurement(environment: NSCollectionLayoutEnvironment,
                                          cellWidth: CGFloat) -> HomepageLayoutMeasurementCache.BookmarksMeasurement.Result {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
             return HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
                 tallestCellHeight: 0,
                 totalHeight: 0
@@ -1008,7 +1018,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         environment: NSCollectionLayoutEnvironment,
         cellWidth: CGFloat
     ) -> HomepageLayoutMeasurementCache.StoriesMeasurement.Result {
-        guard let state = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID) else {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
             return HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,
                 totalHeight: 0

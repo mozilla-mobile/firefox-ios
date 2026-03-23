@@ -68,7 +68,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
               type == .translate
         else { return }
 
-        guard let toolbarState = state.screenState(
+        guard let toolbarState = state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: action.windowUUID
@@ -136,7 +136,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     }
 
     private func handleLanguageSelected(for action: TranslationLanguageSelectedAction, and state: AppState) {
-        guard let toolbarState = state.screenState(
+        guard let toolbarState = state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: action.windowUUID

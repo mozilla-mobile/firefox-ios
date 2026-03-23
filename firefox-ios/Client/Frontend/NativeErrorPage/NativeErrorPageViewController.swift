@@ -182,9 +182,9 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .nativeErrorPage)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .nativeErrorPage)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -195,9 +195,9 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: self.windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .nativeErrorPage)
+        let action = ComponentAction(windowUUID: self.windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .nativeErrorPage)
         store.dispatch(action)
     }
 

@@ -88,9 +88,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber, Notif
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
     }
 

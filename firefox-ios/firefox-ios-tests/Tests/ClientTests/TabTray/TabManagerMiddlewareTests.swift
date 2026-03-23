@@ -499,8 +499,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .tabsPanel(
                         TabsPanelState(
                             windowUUID: .XCTestDefaultUUID

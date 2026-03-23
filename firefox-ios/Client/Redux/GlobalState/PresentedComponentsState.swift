@@ -6,7 +6,7 @@ import Foundation
 import Redux
 import Common
 
-enum AppScreenState: Sendable, Equatable {
+enum ComponentState: Sendable, Equatable {
     case browserViewController(BrowserViewControllerState)
     case homepage(HomepageState)
     case mainMenu(MainMenuState)
@@ -53,8 +53,8 @@ enum AppScreenState: Sendable, Equatable {
         }
     }
 
-    /// Returns the matching AppScreen enum for a given AppScreenState
-    var associatedAppScreen: AppScreen {
+    /// Returns the matching AppComponent enum for a given AppComponentState
+    var associatedAppComponent: AppComponent {
         switch self {
         case .browserViewController: return .browserViewController
         case .homepage: return .homepage
@@ -101,81 +101,81 @@ enum AppScreenState: Sendable, Equatable {
     }
 }
 
-struct ActiveScreensState: Sendable, Equatable {
-    let screens: [AppScreenState]
+struct PresentedComponentsState: Sendable, Equatable {
+    let components: [ComponentState]
 
     init() {
-        self.screens = []
+        self.components = []
     }
 
-    init(screens: [AppScreenState]) {
-        self.screens = screens
+    init(components: [ComponentState]) {
+        self.components = components
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // Add or remove screens from the active screen list as needed
-        var screens = updateActiveScreens(action: action, screens: state.screens)
+        // Add or remove components from the active component list as needed
+        var components = updateActiveComponents(action: action, components: state.components)
 
-        // Reduce each screen state
-        screens = screens.map { AppScreenState.reducer($0, action) }
+        // Reduce each component state
+        components = components.map { ComponentState.reducer($0, action) }
 
-        return ActiveScreensState(screens: screens)
+        return PresentedComponentsState(components: components)
     }
 
-    private static func updateActiveScreens(action: Action, screens: [AppScreenState]) -> [AppScreenState] {
-        guard let action = action as? ScreenAction else { return screens }
+    private static func updateActiveComponents(action: Action, components: [ComponentState]) -> [ComponentState] {
+        guard let action = action as? ComponentAction else { return components }
 
-        var screens = screens
+        var components = components
 
         switch action.actionType {
-        case ScreenActionType.closeScreen:
-            screens = screens.filter({
-                return $0.associatedAppScreen != action.screen || $0.windowUUID != action.windowUUID
+        case ComponentActionType.removeComponent:
+            components = components.filter({
+                return $0.associatedAppComponent != action.component || $0.windowUUID != action.windowUUID
             })
-        case ScreenActionType.showScreen:
+        case ComponentActionType.addComponent:
             let uuid = action.windowUUID
-            switch action.screen {
+            switch action.component {
             case .browserViewController:
-                screens.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
+                components.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
             case .homepage:
-                screens.append(.homepage(HomepageState(windowUUID: uuid)))
+                components.append(.homepage(HomepageState(windowUUID: uuid)))
             case .mainMenu:
-                screens.append(.mainMenu(MainMenuState(windowUUID: uuid)))
+                components.append(.mainMenu(MainMenuState(windowUUID: uuid)))
             case .microsurvey:
-                screens.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
+                components.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
             case .onboardingViewController:
-                screens.append(.onboardingViewController(OnboardingViewControllerState(windowUUID: uuid)))
+                components.append(.onboardingViewController(OnboardingViewControllerState(windowUUID: uuid)))
             case .remoteTabsPanel:
-                screens.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
+                components.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
             case .tabsTray:
-                screens.append(.tabsTray(TabTrayState(windowUUID: uuid)))
+                components.append(.tabsTray(TabTrayState(windowUUID: uuid)))
             case .tabsPanel:
-                screens.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
+                components.append(.tabsPanel(TabsPanelState(windowUUID: uuid)))
             case .tabPeek:
-                screens.append(.tabPeek(TabPeekState(windowUUID: uuid)))
+                components.append(.tabPeek(TabPeekState(windowUUID: uuid)))
             case .themeSettings:
-                screens.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
+                components.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
             case .termsOfUse:
-                screens.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
+                components.append(.termsOfUse(TermsOfUseState(windowUUID: uuid)))
             case .trackingProtection:
-                screens.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
+                components.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
             case .toolbar:
-                screens.append(.toolbar(ToolbarState(windowUUID: uuid)))
+                components.append(.toolbar(ToolbarState(windowUUID: uuid)))
             case .searchEngineSelection:
-                screens.append(.searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid)))
+                components.append(.searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid)))
             case .passwordGenerator:
-                screens.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
+                components.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
             case .nativeErrorPage:
-                screens.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
+                components.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             case .shortcutsLibrary:
-                screens.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
+                components.append(.shortcutsLibrary(ShortcutsLibraryState(windowUUID: uuid)))
             case .translationSettings:
-                screens.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
+                components.append(.translationSettings(TranslationSettingsState(windowUUID: uuid)))
             }
         default:
-            return screens
+            return components
         }
 
-        return screens
+        return components
     }
 }

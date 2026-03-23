@@ -589,8 +589,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

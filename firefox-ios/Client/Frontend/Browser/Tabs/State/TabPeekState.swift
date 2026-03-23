@@ -16,9 +16,9 @@ struct TabPeekState: ScreenState {
     let windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let tabPeekState = appState.screenState(
+        guard let tabPeekState = appState.componentState(
             TabPeekState.self,
-            for: AppScreen.tabPeek,
+            for: .tabPeek,
             window: uuid
         ) else {
             self.init(windowUUID: uuid)
