@@ -69,7 +69,7 @@ class BaseTestCase: XCTestCase {
     func closeFromAppSwitcherAndRelaunch() {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
-        sleep(2)
+        _ = app.wait(for: .runningForeground, timeout: TIMEOUT)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
@@ -102,7 +102,7 @@ class BaseTestCase: XCTestCase {
         userState = navigator.userState
     }
 
-    /// To be overriden to setup experiment variables for `FeatureFlaggedTestSuite`
+    /// To be overridden to setup experiment variables for `FeatureFlaggedTestSuite`
     func setUpExperimentVariables() {}
 
     func setUpApp() {
@@ -257,9 +257,13 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func bookmark() {
+    func bookmark(isLockIconOff: Bool = true) {
         let browserScreen = BrowserScreen(app: app)
-        browserScreen.assertAddressBar_LockIconExist()
+        if isLockIconOff {
+            browserScreen.assertAddressBar_LockIconOffExist()
+        } else {
+            browserScreen.assertAddressBar_LockIconExist()
+        }
         browserScreen.tapSaveButtonIfExist()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
@@ -481,8 +485,7 @@ class BaseTestCase: XCTestCase {
         app.buttons["Close"].tapIfExists()
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
-        sleep(3)
-        if !app.navigationBars["Appearance"].exists {
+        if !app.navigationBars["Appearance"].waitForExistence(timeout: TIMEOUT) {
             navigator.goto(DisplaySettings)
         }
         mozWaitForElementToExist(app.navigationBars["Appearance"])
@@ -540,6 +543,62 @@ class BaseTestCase: XCTestCase {
             nrOfAttempts = nrOfAttempts + 1
             mozWaitForElementToExist(dragElement)
         }
+    }
+
+    /// Wait until the app has fully rotated to the requested orientation.
+     /// - Parameters:
+     ///   - orientation: desired `UIDeviceOrientation`
+     ///   - timeout: max time to wait.
+     ///   - pollInterval: how often to re-check.
+    func waitForRotation(
+        to orientation: UIDeviceOrientation,
+        timeout: TimeInterval = 5.0,
+        pollInterval: TimeInterval = 0.1
+    ) {
+        let deadline = Date().addingTimeInterval(timeout)
+        var stableCount = 0
+        let requiredStable = 2
+
+        // Helper to check frame matches expected orientation
+        func frameMatchesOrientation(_ frame: CGRect, for orientation: UIDeviceOrientation) -> Bool {
+            switch orientation {
+            case .landscapeLeft, .landscapeRight:
+                return frame.width > frame.height
+            case .portrait, .portraitUpsideDown:
+                return frame.height > frame.width
+            default:
+                return false
+            }
+        }
+
+        while Date() < deadline {
+            let deviceOrientation = XCUIDevice.shared.orientation
+            let window = app.windows.firstMatch
+
+            if window.exists {
+                let frame = window.frame
+                // Check both device reported orientation and window frame alignment.
+                if deviceOrientation == orientation || (
+                    (orientation.isLandscape && deviceOrientation.isLandscape) ||
+                    (orientation.isPortrait && deviceOrientation.isPortrait)
+                ) {
+                    if frameMatchesOrientation(frame, for: orientation) {
+                        stableCount += 1
+                        if stableCount >= requiredStable { return } // rotation finished and stable
+                    } else {
+                        stableCount = 0
+                    }
+                } else {
+                    stableCount = 0
+                }
+            } else {
+                stableCount = 0
+            }
+
+            RunLoop.current.run(until: Date().addingTimeInterval(pollInterval))
+        }
+
+        XCTFail("Timed out waiting for app to rotate to \(orientation)")
     }
 }
 

@@ -39,11 +39,6 @@ class PasswordManagerListViewController: SensitiveViewController,
         button.addTarget(self, action: #selector(self.tappedSelectionButton), for: .touchUpInside)
     }
 
-    static func shouldShowAppMenuShortcut(forPrefs prefs: Prefs) -> Bool {
-        // default to on
-        return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
-    }
-
     init(profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),

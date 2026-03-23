@@ -43,26 +43,8 @@
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
 "Summarizer.TabSnapshot.Accessibility.Label.v145" = "Që të mbyllet përmbledhja, tërhiqni ose prekni faqen web";
 
-/* The label for the allow button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.AllowButton.Label.v142" = "Lejoje";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Apple Intelligence. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.AppleMessage.Label.v142" = "%@ përdor Apple Intelligence për përmbledhje faqesh.";
-
-/* The label for the cancel button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.CancelButton.Label.v142" = "Anuloje";
-
-/* The label for the continue button on the Terms of Service alert. */
-"Summarizer.ToS.Alert.ContinueButton.Label.v144" = "Vazhdo";
-
-/* The message for the Terms of Service alert that asks the user if they want to allow page summaries with Firefox AI. %@ is the app name (e.g Firefox). */
-"Summarizer.ToS.Alert.FirefoxMessage.Label.v144" = "%@ përdor IA me bazë në re për përmbledhje faqesh dhe jep këto përmbledhje në pajisjen tuaj.";
-
-/* The label for the learn more link button on the Terms of Service alert for the summarizer. */
-"Summarizer.ToS.Alert.LearnMoreButton.Label.v142" = "Mësoni më tepër";
-
-/* The title for the Terms of Service alert that asks the user if they want to allow page summaries. */
-"Summarizer.ToS.Alert.Title.Label.v142" = "Të Lejohen Përmbledhje Faqesh?";
+/* The label for the toast that shows when shaking and the summary is not available for that page. */
+"Summarizer.ToastLabel.v149" = "S’ka përmbledhje";
 
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Si funksionon";

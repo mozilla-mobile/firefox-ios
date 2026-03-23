@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-protocol SummarizerNimbusUtils {
+protocol SummarizerNimbusUtils: Sendable {
     /// Determines if the Summarize feature should be shown,
     /// based on both feature availability and the user's settings.
     var isSummarizeFeatureToggledOn: Bool { get }
@@ -21,10 +21,17 @@ protocol SummarizerNimbusUtils {
     func isAppleSummarizerEnabled() -> Bool
     func isHostedSummarizerEnabled() -> Bool
     func isAppAttestAuthEnabled() -> Bool
+    func usesPermissiveGuardrails() -> Bool
     func isShakeGestureFeatureFlagEnabled() -> Bool
     func languageExpansionConfiguration(
         from nimbusFeature: SummarizerLanguageExpansionFeature
     ) -> SummarizerLanguageExpansionConfiguration
+}
+
+extension SummarizerNimbusUtils {
+    func languageExpansionConfiguration() -> SummarizerLanguageExpansionConfiguration {
+        return languageExpansionConfiguration(from: FxNimbus.shared.features.summarizerLanguageExpansionFeature.value())
+    }
 }
 
 /// Tiny utility to simplify checking for availability of the summarizers
@@ -83,7 +90,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     func isAppleSummarizerEnabled() -> Bool {
         #if canImport(FoundationModels)
             // if the language expansion is enabled don't check the en locale cause we support multiple locales
-            if languageExpansionConfiguration().isFeatureEnabled {
+            if isLanguageExpansionEnabled {
                 return appleIntelligenceUtil.isAppleIntelligenceAvailable
             }
             let isEngLang = localeProvider.current.languageCode == "en"
@@ -99,6 +106,10 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
 
     func isAppAttestAuthEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+    }
+
+    func usesPermissiveGuardrails() -> Bool {
+        return featureFlags.isFeatureEnabled(.summarizerPermissiveGuardrails, checking: .buildOnly)
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
@@ -124,11 +135,9 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     func languageExpansionConfiguration(
-        from nimbusFeature: SummarizerLanguageExpansionFeature =
-        FxNimbus.shared.features.summarizerLanguageExpansionFeature.value()
+        from nimbusFeature: SummarizerLanguageExpansionFeature
     ) -> SummarizerLanguageExpansionConfiguration {
         return SummarizerLanguageExpansionConfiguration(
-            isFeatureEnabled: nimbusFeature.enabled,
             supportedLocales: nimbusFeature.supportedLocales.map({
                 return Locale(identifier: $0)
             })

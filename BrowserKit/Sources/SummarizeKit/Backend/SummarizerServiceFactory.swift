@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MLPAKit
 
 public protocol SummarizerServiceFactory {
     /// An object which responds to Summarize activities.
@@ -11,6 +12,7 @@ public protocol SummarizerServiceFactory {
     func make(isAppleSummarizerEnabled: Bool,
               isHostedSummarizerEnabled: Bool,
               isAppAttestAuthEnabled: Bool,
+              usesPermissiveGuardrails: Bool,
               config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
@@ -25,13 +27,17 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     public func make(isAppleSummarizerEnabled: Bool,
                      isHostedSummarizerEnabled: Bool,
                      isAppAttestAuthEnabled: Bool,
+                     usesPermissiveGuardrails: Bool = false,
                      config: SummarizerConfig?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
         let config = config ?? SummarizerConfig.defaultConfig
         #if canImport(FoundationModels)
         if isAppleSummarizerEnabled, #available(iOS 26, *) {
-            let appleSummarizer = FoundationModelsSummarizer(config: config)
+            let appleSummarizer = FoundationModelsSummarizer(
+                usesPermissiveGuardrails: usesPermissiveGuardrails,
+                config: config
+            )
             return DefaultSummarizerService(
                 summarizer: appleSummarizer,
                 lifecycleDelegate: lifecycleDelegate,

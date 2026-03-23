@@ -157,9 +157,8 @@ final class TabTrayScreen {
             BaseTestCase().waitForElementsToExist(cells)
 
             if afterDragAndDrop {
-                sleep(2)
+                waitForTabCells()
             }
-
             let firstTabLabel = cells[0].label
             let secondTabLabel = cells[1].label
 
@@ -178,5 +177,22 @@ final class TabTrayScreen {
     func waitForTab(named tabName: String) {
         let cell = app.collectionViews.cells[tabName]
         BaseTestCase().mozWaitForElementToExist(cell)
+    }
+
+    func longPressTabCellAtIndex(_ index: Int) {
+        let tabCell = sel.tabCellAtIndex(index: index).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(tabCell)
+        tabCell.press(forDuration: 2)
+    }
+
+    func tapCloseTabFromContextMenu() {
+        let closeTabButton = app.collectionViews.buttons["Close Tab"]
+        BaseTestCase().mozWaitForElementToExist(closeTabButton)
+        closeTabButton.waitAndTap()
+    }
+
+    func assertNoWebViewLeakDetected(timeout: TimeInterval = TIMEOUT) {
+        let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator]
+        BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
     }
 }

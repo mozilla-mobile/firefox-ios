@@ -5,6 +5,8 @@
 import Common
 import Shared
 
+/// Legacy translation settings view controller used when the `translationLanguagePicker`
+/// feature flag is OFF (Phase 1 / pre-language-picker behavior).
 final class TranslationSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     init(prefs: Prefs, windowUUID: WindowUUID) {

@@ -8,6 +8,7 @@ import Common
 import ComponentLibrary
 import SiteImageView
 import Redux
+import X509
 
 struct TPMenuUX {
     struct UX {
@@ -193,17 +194,33 @@ class TrackingProtectionViewController: UIViewController,
         }
     }
 
+    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return []
+        }
+        var certificates = [Certificate]()
+        certificates.reserveCapacity(certificateChain.count)
+        for certificate in certificateChain {
+            let certificateData = SecCertificateCopyData(certificate) as Data
+            do {
+                let certificate = try Certificate(derEncoded: Array(certificateData))
+                certificates.append(certificate)
+            } catch {
+                DefaultLogger.shared.log("\(error)",
+                                         level: .warning,
+                                         category: .certificate)
+            }
+        }
+        return certificates
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateBlockedTrackersCount()
         updateConnectionStatus()
         applyTheme()
-        getCertificates(for: model.url) { certificates in
-            if let certificates {
-                ensureMainThread { [weak self] in
-                    self?.model.certificates = certificates
-                }
-            }
+        if let serverTrust = model.selectedTab?.webView?.serverTrust {
+            model.certificates = getCertificates(from: serverTrust)
         }
     }
 

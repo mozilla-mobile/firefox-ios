@@ -56,6 +56,7 @@ struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let lockIcon = "AddressToolbar.lockIcon"
+            static let lockIconOff = "AddressToolbar.lockIconOff"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
             static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
@@ -64,6 +65,7 @@ struct AccessibilityIdentifiers {
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
+            static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
@@ -247,7 +249,6 @@ struct AccessibilityIdentifiers {
             static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {
@@ -285,14 +286,6 @@ struct AccessibilityIdentifiers {
             static let itemTitle = "SyncedTabItemTitle"
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
-        }
-
-        struct StoriesFeed {
-            static let storiesFeedCell = "StoriesFeedCell"
-        }
-
-        struct StoriesWebview {
-            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 
@@ -397,6 +390,7 @@ struct AccessibilityIdentifiers {
             static let saveButton = "BookmarksDetail.SaveButton"
             static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
             static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
+            static let bookmarksFolder = "BookmarksDetail.ParentFolderSelector.FolderCell_0"
         }
 
         struct HistoryPanel {
@@ -478,6 +472,10 @@ struct AccessibilityIdentifiers {
         static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct AIControls {
+            static let title = "AIControlsSettings"
+        }
 
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"

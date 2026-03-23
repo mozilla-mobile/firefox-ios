@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MLPAKit
 
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety

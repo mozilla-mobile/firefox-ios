@@ -85,6 +85,9 @@
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "പ്രമാണപത്രം കാണുക";
 
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "കൂടുതല്‍ അറിയുക";
+
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ കാവൽ വിട്ടു. പരിരക്ഷകൾ വീണ്ടും തുടങ്ങിവയ്ക്കാനാണു് നല്ലതു്.";
 

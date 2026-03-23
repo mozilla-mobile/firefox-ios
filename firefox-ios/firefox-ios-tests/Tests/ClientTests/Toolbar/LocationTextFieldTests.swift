@@ -12,7 +12,7 @@ final class LocationTextFieldTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        textField = LocationTextField()
+        textField = LocationTextField(frame: .zero)
         themeManager = MockThemeManager()
     }
 
@@ -20,6 +20,25 @@ final class LocationTextFieldTests: XCTestCase {
         textField = nil
         themeManager = nil
         try await super.tearDown()
+    }
+
+    func testHandleInputModeDidChange_withNoLastMarkedText_doesNothing() {
+        textField.text = "www.wikipedia.com"
+        textField.setMarkedText("", selectedRange: NSRange())
+
+        textField.handleInputModeDidChange()
+
+        XCTAssertEqual(textField.text, "www.wikipedia.com")
+    }
+
+    func testHandleInputModeDidChange_withLastMarkedText_updatesTextAndSetsMarkedText() {
+        textField.text = "www.wiki"
+        textField.setMarkedText("pedia.com", selectedRange: NSRange())
+
+        textField.handleInputModeDidChange()
+
+        XCTAssertTrue(textField.text?.contains("www.wiki") ?? false)
+        XCTAssertNotNil(textField.markedTextRange)
     }
 
     func testApplyTheme_refreshesMarkedText() {

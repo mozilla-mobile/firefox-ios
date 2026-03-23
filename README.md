@@ -5,13 +5,13 @@ Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id98980492
 <table>
   <tr>
     <th style="border: none;"><strong>Firefox iOS</strong></th>
-    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.2-blue?logo=Xcode&logoColor=white" alt="Firefox-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.3-blue?logo=Xcode&logoColor=white" alt="Firefox-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/Swift-6.2-red?logo=Swift&logoColor=white" alt="Firefox-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Firefox-iOS"></td>
   </tr>
   <tr>
     <th style="border: none;"><strong>Focus iOS</strong></th>
-    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.2-blue?logo=Xcode&logoColor=white" alt="Focus-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-26.3-blue?logo=Xcode&logoColor=white" alt="Focus-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/Swift-6.2-red?logo=Swift&logoColor=white" alt="Focus-iOS"></td>
     <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Focus-iOS"></td>
   </tr>
@@ -75,7 +75,7 @@ We encourage you to participate in those open source projects. We love Pull Requ
 If more information is required or you have any questions then we suggest reaching out to us via:
 
 - Chat on Element channel [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) and [#focus-ios](https://chat.mozilla.org/#/room/#focus-ios:mozilla.org) for general discussion, or write DMs to specific teammates for questions.
-- Open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions) which can be used for general questions.
+- Open a [ticket](https://github.com/mozilla-mobile/firefox-ios/issues/new?template=BLANK_ISSUE) with your question.
 
 Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK), but make sure to read the [Contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
 

@@ -21,8 +21,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
     var bookmarksHandler: BookmarksHandler
 
@@ -44,17 +43,15 @@ final class TabManagerMiddleware: FeatureFlaggable,
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.profile = profile
         self.bookmarksHandler = profile.places
-        self.summarizationChecker = summarizationChecker
         self.logger = logger
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
@@ -778,16 +775,15 @@ final class TabManagerMiddleware: FeatureFlaggable,
             assert(Thread.isMainThread)
             if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
-                    let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let contentType = summarizationCheckResult?.contentType ?? .generic
+                    guard let webView = selectedTab.webView else { return }
+                    let summarizerConfig = await self?.summarizerConfigFactory.makeConfiguration(from: webView)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        canSummarize: summarizerConfig != nil,
+                        summarizerConfig: summarizerConfig
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
@@ -825,7 +821,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             windowUUID: windowUUID,
             accountData: accountData,
             canSummarize: false,
-            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
+            summarizerConfig: nil
         )
     }
 
@@ -901,7 +897,10 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                     hasChangedUserAgent: selectedTab.changedUserAgent,
                     zoomLevel: selectedTab.pageZoom,
-                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    readerModeConfiguration: ReaderModeConfiguration(
+                        isAvailable: selectedTab.readerModeAvailableOrActive,
+                        isActive: selectedTab.readerModeState == .active
+                    ),
                     summaryIsAvailable: canSummarize,
                     summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,

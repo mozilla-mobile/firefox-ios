@@ -16,10 +16,9 @@ struct SummarizerLanguageExpansionConfigurationTests {
         let subject = createSubject(supportedLocales: [enLocale])
 
         let options = subject.settingOptions
-        #expect(options.count == 3)
+        #expect(options.count == 2)
         #expect(options[0].toOption() == (.websiteLanguage, .Settings.Summarize.LanguageSection.WebsiteLanguageLabel))
-        #expect(options[1].toOption() == (.deviceLanguage, .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel))
-        #expect(options[2].toOption() == (.customLocale(enLocale),
+        #expect(options[1].toOption() == (.customLocale(enLocale),
                                localeProvider.current.localizedString(forIdentifier: enLocale.identifier)))
     }
 
@@ -70,7 +69,6 @@ struct SummarizerLanguageExpansionConfigurationTests {
         typealias UserPreference = SummarizerLanguageExpansionConfiguration.UserPreference
         let enLocale = Locale(identifier: "en")
 
-        #expect(UserPreference.deviceLanguage.saveValue == UserPreference.deviceLanguageSaveKey)
         #expect(UserPreference.websiteLanguage.saveValue == UserPreference.websiteLanguageSaveKey)
         #expect(UserPreference.customLocale(enLocale).saveValue == enLocale.identifier)
     }
@@ -81,16 +79,13 @@ struct SummarizerLanguageExpansionConfigurationTests {
         let enLocale = Locale(identifier: "en")
 
         #expect(UserPreference.from(savedValue: UserPreference.websiteLanguageSaveKey) == .websiteLanguage)
-        #expect(UserPreference.from(savedValue: UserPreference.deviceLanguageSaveKey) == .deviceLanguage)
         #expect(UserPreference.from(savedValue: enLocale.identifier) == .customLocale(enLocale))
     }
 
     private func createSubject(
-        isFeatureEnabled: Bool = true,
         supportedLocales: [Locale] = [],
     ) -> SummarizerLanguageExpansionConfiguration {
         return SummarizerLanguageExpansionConfiguration(
-            isFeatureEnabled: isFeatureEnabled,
             supportedLocales: supportedLocales,
             localeProvider: localeProvider
         )

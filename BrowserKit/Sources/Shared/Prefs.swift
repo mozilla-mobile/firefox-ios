@@ -19,8 +19,6 @@ public struct PrefsKeys {
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
-    public static let HasFocusInstalled = "HasFocusInstalled"
-    public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
@@ -170,6 +168,7 @@ public struct PrefsKeys {
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
+        public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
     }
 
     // Activity Stream
@@ -229,9 +228,6 @@ public struct PrefsKeys {
     public static let splashScreenShownKey = "splashScreenShownKey"
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
-
-    // Represents whether or not the user has seen the photon main menu once, at least.
-    public static let PhotonMainMenuShown = "PhotonMainMenuShown"
 
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.

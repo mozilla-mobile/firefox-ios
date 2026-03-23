@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "これにより写真を保存できます。";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox は音声認識を使用して音声をテキストに変換し、音声検索に使用します。";
+
 /* (No Comment) */
 "Scan QR Code" = "QR コードをスキャン";
 

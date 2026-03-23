@@ -38,6 +38,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .aiKillSwitch,
+                titleText: format(string: "Ai Kill Switch"),
+                statusText: format(string: "Toggle Ai Kill Switch")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
                 statusText: format(string: "Toggle to show the new apperance menu")
@@ -87,13 +94,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .homepageNewsTransition,
-                titleText: format(string: "Homepage News Transition"),
-                statusText: format(string: "Toggle to enable the homepage news transition")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")
@@ -111,13 +111,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .improvedAppStoreReviewTriggerFeature,
                 titleText: format(string: "Improved App Store Review Trigger"),
                 statusText: format(string: "Toggle to enable App Store Review Trigger feature.")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .menuRefactor,
-                titleText: format(string: "Menu Refactor"),
-                statusText: format(string: "Toggle to use the menu redesign")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -147,6 +140,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .noInternetConnectionErrorPage,
                 titleText: format(string: "NIC Native Error Page"),
                 statusText: format(string: "Toggle to display natively created no internet connection error page")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .otherErrorPages,
+                titleText: format(string: "Wrong Host Certificate Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created wrong host error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -235,6 +235,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .translationLanguagePicker,
+                titleText: format(string: "Translation Language Picker"),
+                statusText: format(string: "Toggle to enable language picker for translations")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .unifiedSearch,
                 titleText: format(string: "Unified Search"),
                 statusText: format(string: "Toggle to use unified search within the new toolbar")
@@ -242,9 +249,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .voiceSearch,
-                titleText: format(string: "Voice Search"),
-                statusText: format(string: "Toggle to enable the Voice Search feature")
+                with: .quickAnswers,
+                titleText: format(string: "Quick Answers"),
+                statusText: format(string: "Toggle to enable the Quick Answers feature")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -275,7 +282,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 statusText: format(string: "Toggle to enable the needs reload refactor")
             ) { [weak self] _ in
                 self?.reloadView()
-            }
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerPermissiveGuardrails,
+                titleText: format(string: "Summarizer Permissive Guardrails Feature"),
+                statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
 
         // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true

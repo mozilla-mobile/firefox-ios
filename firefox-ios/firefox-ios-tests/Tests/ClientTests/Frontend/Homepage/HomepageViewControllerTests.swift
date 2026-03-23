@@ -277,7 +277,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_newState_forTriggeringImpression_triggersHomepageAction() async throws {
+    func test_newState_forTriggeringImpression_withPopulatedDataSource_triggersHomepageAction() async throws {
         let subject = createSubject()
         let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
 
@@ -307,30 +307,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         let actionType = try XCTUnwrap(actionCalled.actionType as? HomepageActionType)
         XCTAssertEqual(actionType, HomepageActionType.sectionSeen)
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
-    }
-
-    func test_newState_forTriggeringImpression_withNoVisibleSections_doesNotTriggersHomepageAction() throws {
-        let subject = createSubject()
-        let initialState = HomepageState(windowUUID: .XCTestDefaultUUID)
-
-        subject.loadViewIfNeeded()
-
-        let newState = HomepageState.reducer(
-            initialState,
-            GeneralBrowserAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-            )
-        )
-        subject.newState(state: newState)
-
-        XCTAssertTrue(newState.shouldTriggerImpression)
-        XCTAssertTrue(mockThrottler.didCallThrottle)
-        let homepageActions = mockStore.dispatchedActions.compactMap { $0 as? HomepageAction }
-        let sectionSeenAction = homepageActions.first(where: {
-            ($0.actionType as? HomepageActionType) == .sectionSeen
-        })
-        XCTAssertNil(sectionSeenAction)
     }
 
     func test_newState_didSelectedTabChangeToHomepageAction_forScrollToTop_setsCollectionViewOffsetToZero() {
@@ -476,6 +452,82 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(tab.homepageScrollOffset, 140)
     }
 
+    func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+
+        let stateWithWallpaperHeight = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            HomepageAction(
+                availableContentHeight: 100,
+                availableWallpaperHeight: 300,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.availableContentHeightDidChange
+            )
+        )
+
+        subject.newState(state: stateWithWallpaperHeight)
+
+        let wallpaperView = try XCTUnwrap(
+            subject.view.subviews.first(where: { $0 is WallpaperBackgroundView }) as? WallpaperBackgroundView
+        )
+        let wallpaperHeightConstraint = try XCTUnwrap(
+            wallpaperView.constraints.first(where: { $0.firstAttribute == .height && $0.firstItem === wallpaperView })
+        )
+        XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
+    }
+
+    func test_configureSupplementaryHeader_withoutNewsAffordanceStyle_usesLabelButtonHeaderView() async throws {
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .baseline)
+
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
+        let collectionView = try getCollectionView(from: subject)
+        let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+
+        let header = try XCTUnwrap(
+            collectionView.dataSource?.collectionView?(
+                collectionView,
+                viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                at: headerIndexPath
+            )
+        )
+
+        XCTAssertTrue(header is LabelButtonHeaderView)
+    }
+
+    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsTransitionHeaderView() async throws {
+        guard UIDevice.current.userInterfaceIdiom == .phone else {
+            throw XCTSkip("News affordance is phone-only.")
+        }
+        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
+
+        let subject = createSubject()
+        subject.loadViewIfNeeded()
+        let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
+        subject.newState(state: populatedState)
+        subject.view.layoutIfNeeded()
+
+        let collectionView = try getCollectionView(from: subject)
+        let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+
+        let header = try XCTUnwrap(
+            collectionView.dataSource?.collectionView?(
+                collectionView,
+                viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                at: headerIndexPath
+            )
+        )
+
+        XCTAssertTrue(header is NewsTransitionHeaderView)
+    }
+
     private func createSubject(
         tabManager: TabManager = MockTabManager(),
         statusBarScrollDelegate: StatusBarScrollDelegate? = nil
@@ -526,6 +578,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
         }
+    }
+
+    private func getCollectionView(from subject: HomepageViewController) throws -> UICollectionView {
+        return try XCTUnwrap(subject.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView)
+    }
+
+    private func getPocketSectionIndex(from collectionView: UICollectionView) throws -> Int {
+        let dataSource = try XCTUnwrap(collectionView.dataSource as? HomepageDiffableDataSource)
+        return try XCTUnwrap(dataSource.snapshot().sectionIdentifiers.firstIndex(where: { section in
+            if case .pocket = section { return true }
+            return false
+        }))
     }
 
     private func getPopulatedCollectionViewState(from currentState: HomepageState) async -> HomepageState {

@@ -1,0 +1,18 @@
+# The configuration for the aiKillSwitchFeature feature
+features:
+  ai-kill-switch-feature:
+    description: >
+      Configuration feature for AI features
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

@@ -14,7 +14,7 @@ import Common
 // This is unavoidable with the current architecture given a new tab is created as a side effect. For these tabs, if the test
 // isn't run on the main thread, then in its deinit the webView.navigationDelegate is updated not on the main thread, causing
 // failures in Bitrise. This should be improved. [FXIOS-10110]
-class TabManagerTests: XCTestCase {
+final class TabManagerTests: XCTestCase {
     var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
     var mockSessionStore: MockTabSessionStore!
@@ -193,6 +193,26 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(document.pauseDownloadCalled, 1)
     }
 
+    @MainActor
+    func testSelectTab_immediatePreservationTrue_callsSaveWithForcedTrue() async throws {
+        let tabs = generateTabs(count: 2)
+        let subject = createSubject(tabs: tabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(tabs[1], previous: tabs[0], immediatePreservation: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, true)
+    }
+
+    @MainActor
+    func testSelectTab_immediatePreservationFalse_callsSaveWithForcedFalse() async throws {
+        let tabs = generateTabs(count: 2)
+        let subject = createSubject(tabs: tabs)
+        subject.tabRestoreHasFinished = true
+        subject.selectTab(tabs[1], previous: tabs[0], immediatePreservation: false)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, false)
+    }
+
     // MARK: - Restore tabs
 
     @MainActor
@@ -356,7 +376,7 @@ class TabManagerTests: XCTestCase {
     @MainActor
     func testPreserveTabsWithNoTabs() async throws {
         let subject = createSubject()
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
         XCTAssertEqual(subject.tabs.count, 0)
@@ -366,7 +386,7 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithOneTab() async throws {
         let subject = createSubject(tabs: generateTabs(count: 1))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 1)
@@ -376,10 +396,30 @@ class TabManagerTests: XCTestCase {
     func testPreserveTabsWithManyTabs() async throws {
         let subject = createSubject(tabs: generateTabs(count: 5))
         subject.tabRestoreHasFinished = true
-        subject.preserveTabs()
+        subject.preserveTabs(immediate: false)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
         XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    @MainActor
+    func testPreserveTabsImmediate_callsSaveWithForcedTrue() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = true
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, true)
+    }
+
+    @MainActor
+    func testPreserveTabsImmediate_beforeRestoreFinished_doesNotSave() async throws {
+        let subject = createSubject(tabs: generateTabs(count: 1))
+        subject.tabRestoreHasFinished = false
+        subject.preserveTabs(immediate: true)
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
+        XCTAssertEqual(mockTabStore.saveWindowDataForcedValue, false)
     }
 
     // MARK: - Save preview screenshot
@@ -1452,6 +1492,88 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalTabs.count, 3)
         XCTAssertEqual(tabManager.selectedIndex, 0)
     }
+
+    // MARK: - normalTabs / privateTabs cache tests
+     @MainActor
+     func testNormalAndPrivateTabs_sumEqualsAllTabs() {
+         var tabs = generateTabs(ofType: .normal, count: 5)
+         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 3))
+         let subject = createSubject(tabs: tabs)
+
+         XCTAssertEqual(subject.normalTabs.count + subject.privateTabs.count, subject.tabs.count)
+         XCTAssertEqual(subject.normalTabs.count, 5)
+         XCTAssertEqual(subject.privateTabs.count, 3)
+     }
+
+     @MainActor
+     func testNormalTabs_cacheInvalidatedAfterTabAdded() {
+         // Cache must be cleared when `tabs` grows, otherwise the new tab is invisible.
+         let subject = createSubject(tabs: generateTabs(count: 3))
+         XCTAssertEqual(subject.normalTabs.count, 3)
+
+         subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false)
+         XCTAssertEqual(
+            subject.normalTabs.count,
+            4,
+            "normalTabs should reflect the newly added tab after cache invalidation."
+         )
+     }
+
+     @MainActor
+     func testPrivateTabs_cacheInvalidatedAfterTabAdded() {
+         let subject = createSubject(tabs: generateTabs(ofType: .privateAny, count: 2))
+         XCTAssertEqual(subject.privateTabs.count, 2)
+
+         subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false, isPrivate: true)
+         XCTAssertEqual(
+            subject.privateTabs.count,
+            3,
+            "privateTabs should reflect the newly added tab after cache invalidation."
+         )
+     }
+
+     @MainActor
+     func testNormalTabs_cacheInvalidatedAfterTabRemoved() {
+         let tabs = generateTabs(count: 3)
+         let subject = createSubject(tabs: tabs)
+         XCTAssertEqual(subject.normalTabs.count, 3)
+
+         subject.removeTab(tabs[0].tabUUID)
+         XCTAssertEqual(
+            subject.normalTabs.count,
+            2,
+            "normalTabs should reflect the removal after cache invalidation."
+         )
+     }
+
+     @MainActor
+     func testNormalAndPrivateTabs_consistentAfterMutation() {
+         // Both computed properties read from the same cached split.
+         // They must agree on the total after a mutation.
+         var tabs = generateTabs(count: 4)
+         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
+         let subject = createSubject(tabs: tabs)
+
+         _ = subject.normalTabs
+         _ = subject.privateTabs // Should hit the same cache, does not recompute.
+
+         subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
+
+         let normalTabs = subject.normalTabs
+         let privateTabs = subject.privateTabs
+         XCTAssertEqual(
+            normalTabs.count + privateTabs.count,
+            subject.tabs.count,
+            "normalTabs and privateTabs must be consistent with each other after mutation."
+         )
+     }
+
+     @MainActor
+     func testNormalAndPrivateTabs_emptyWhenNoTabs() {
+         let subject = createSubject()
+         XCTAssertTrue(subject.normalTabs.isEmpty)
+         XCTAssertTrue(subject.privateTabs.isEmpty)
+     }
 
     // MARK: - Helper methods
     @MainActor

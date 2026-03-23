@@ -8,14 +8,10 @@ struct SummarizerLanguageExpansionConfiguration {
     /// Represents the user's language preference for summarization.
     enum UserPreference: Equatable {
         case websiteLanguage
-        case deviceLanguage
         case customLocale(Locale)
 
         static var websiteLanguageSaveKey: String {
             return "websiteLanguage"
-        }
-        static var deviceLanguageSaveKey: String {
-            return "deviceLanguage"
         }
 
         /// Converts the preference to a string value suitable for persistence.
@@ -23,8 +19,6 @@ struct SummarizerLanguageExpansionConfiguration {
             switch self {
             case .websiteLanguage:
                 return Self.websiteLanguageSaveKey
-            case .deviceLanguage:
-                return Self.deviceLanguageSaveKey
             case .customLocale(let locale):
                 return locale.identifier
             }
@@ -35,8 +29,6 @@ struct SummarizerLanguageExpansionConfiguration {
             switch savedValue {
             case websiteLanguageSaveKey:
                 return .websiteLanguage
-            case deviceLanguageSaveKey:
-                return .deviceLanguage
             default:
                 let locale = Locale(identifier: savedValue)
                 return .customLocale(locale)
@@ -53,7 +45,6 @@ struct SummarizerLanguageExpansionConfiguration {
         }
     }
 
-    let isFeatureEnabled: Bool
     /// The supported Locales for the language expansion experiment
     let supportedLocales: [Locale]
     private let localeProvider: LocaleProvider
@@ -67,12 +58,6 @@ struct SummarizerLanguageExpansionConfiguration {
                 displayName: .Settings.Summarize.LanguageSection.WebsiteLanguageLabel
             )
         )
-        options.append(
-            SettingOption(
-                value: .deviceLanguage,
-                displayName: .Settings.Summarize.LanguageSection.PreferredAppLanguageLabel
-            )
-        )
 
         return options + supportedLocales.compactMap {
             guard let localizedLocale = localeProvider.current.localizedString(
@@ -84,11 +69,9 @@ struct SummarizerLanguageExpansionConfiguration {
     }
 
     init(
-        isFeatureEnabled: Bool,
         supportedLocales: [Locale],
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
-        self.isFeatureEnabled = isFeatureEnabled
         self.supportedLocales = supportedLocales
         self.localeProvider = localeProvider
     }

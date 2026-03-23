@@ -88,6 +88,9 @@
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "មើលវិញ្ញាបនបត្រ";
 
+/* Title for a link that explains how current Tracking Protection mode work. */
+"Menu.EnhancedTrackingProtection.Link.LearnMore.v150" = "ស្វែងយល់​បន្ថែម";
+
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. %@ is the app name (e.g. Firefox). */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ គឺមិនមានកាតព្វកិច្ចទេ។ យើងស្នើឱ្យបើកការការពារឡើងវិញ។";
 

@@ -22,6 +22,9 @@ protocol GeneralSettingsDelegate: AnyObject {
     func pressedSiri()
 
     @MainActor
+    func pressedAIControls()
+
+    @MainActor
     func pressedToolbar()
 
     @MainActor

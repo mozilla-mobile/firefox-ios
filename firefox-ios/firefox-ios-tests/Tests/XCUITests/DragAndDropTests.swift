@@ -192,12 +192,13 @@ private extension BaseTestCase {
             XCTFail("Neither Top Tabs nor Tab Tray collection view is present", file: file, line: line)
             return
         }
-        let firstTabCell = collectionView.cells.element(boundBy: 0).label
-        let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
         if dragAndDropTab {
-            sleep(2)
+            tabTrayScreen.waitForTabCells()
         }
+
+        let firstTabCell = collectionView.cells.element(boundBy: 0).label
+        let secondTabCell = collectionView.cells.element(boundBy: 1).label
 
         let context = dragAndDropTab ? "after" : "before"
         XCTAssertEqual(firstTabCell, firstTab, "first tab \(context) is not correct", file: file, line: line)

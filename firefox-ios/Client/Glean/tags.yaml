@@ -102,9 +102,6 @@ ShareSheet:
 ShortcutsLibrary:
   description: Corresponds to the shortcuts library screen where the user can interact with an expanded list of shortcuts.
 
-StoriesFeed:
-  description: Corresponds to the stories feed screen where the user can interact with an expanded list of stories.
-
 Summarizer:
   description: Corresponds to the AI-powered feature that generates and displays concise summaries of webpage content.
 
