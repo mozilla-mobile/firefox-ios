@@ -14,7 +14,7 @@ class XCRun(object):
         self.logger.info('Running: {}'.format(' '.join(args)))
         subprocess.check_call(args)
 
-    def boot(self, device='iPhone 16'):
+    def boot(self, device='iPhone 17'):
         ios_device = os.environ.get("SIMULATOR_UDID", device)
         self._run('boot', ios_device)
 
@@ -22,8 +22,10 @@ class XCRun(object):
         self._run('install', device)
 
     def shutdown(self, device='all'):
-        self._run('shutdown', device)
+        pass
+        # self._run('shutdown', device)
 
     def erase(self, device='all'):
-        self.shutdown(device)
-        self._run('erase', device)
+        pass
+        # self.shutdown(device)
+        # self._run('erase', device)

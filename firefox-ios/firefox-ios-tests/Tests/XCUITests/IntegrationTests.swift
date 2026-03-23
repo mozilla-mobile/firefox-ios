@@ -38,6 +38,8 @@ class IntegrationTests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.SkipContextualHints]
+        } else {
+            launchArguments.append(LaunchArguments.StageServer)
         }
         launchArguments.append(LaunchArguments.DisableAnimations)
         try await super.setUp()
@@ -158,7 +160,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as? String,
-            "Fennec (admin) on iOS"
+            "Fennec (cso) on iOS"
         )
 
         // Sync again just to make sure to sync after new name is shown
