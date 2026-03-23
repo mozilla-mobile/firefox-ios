@@ -749,7 +749,6 @@ class BrowserViewController: UIViewController,
         }
 
         let enableBlur = isToolbarTranslucencyEnabled
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
@@ -760,29 +759,27 @@ class BrowserViewController: UIViewController,
                 window: windowUUID
             )?.scrollAlpha == 0 } else { false }
 
+        // Prevent homepage from showing behind the keyboard when content isn't scrollable.
+        // Only clear background if content exceeds viewport height.
+        let shouldClearBackground: Bool = {
+            guard let webView = tabManager.selectedTab?.webView else { return false }
+            return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
+        }()
+
         if isBottomSearchBar {
             header.isClearBackground = false
-
-            // Prevent homepage from showing behind the keyboard when content isn't scrollable.
-            // Only clear background if content exceeds viewport height.
-            let shouldClearBackground: Bool = {
-                guard let webView = tabManager.selectedTab?.webView else { return false }
-                return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
-            }()
-            // we disable the translucency when the keyboard is getting displayed
-            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
 
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
         } else {
             header.isClearBackground = enableBlur
-            overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
         }
 
-        bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
+        overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
+        bottomContainer.isClearBackground = enableBlur
+        bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
 
         if !isToolbarTranslucencyRefactorEnabled {
