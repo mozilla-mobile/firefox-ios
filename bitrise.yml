@@ -155,12 +155,16 @@ workflows:
     - restore-spm-cache@2.1.1:
         is_always_run: true
     - activate-build-cache-for-xcode@0: {}
+    - script@1.2.1:
+        title: Enable prebuilt SwiftSyntax to speed up macro compilation
+        inputs:
+        - content: defaults write com.apple.dt.Xcode IDEPackageEnablePrebuilts YES
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID -IDEPackageEnablePrebuilts YES'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
     - script@1.2.1:
         title: Detect number of warnings
@@ -1952,13 +1956,17 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
+    - script@1.2.1:
+        title: Enable prebuilt SwiftSyntax to speed up macro compilation
+        inputs:
+        - content: defaults write com.apple.dt.Xcode IDEPackageEnablePrebuilts YES
     - xcode-build-for-test@3:
         title: "Build for Testing"
         inputs:
         - scheme: Fennec
         - configuration: Fennec_Testing
         - project_path: /Users/vagrant/git/firefox-ios/Client.xcodeproj
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID -IDEPackageEnablePrebuilts YES'
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" -allowProvisioningUpdates DEVELOPMENT_TEAM=$APPLE_TEAM_ID'
         - destination: platform=iOS Simulator,name=iPhone 17,OS=26.2
     - script@1.2.1:
         title: "Create .xctestrun files for all iOS versions"
