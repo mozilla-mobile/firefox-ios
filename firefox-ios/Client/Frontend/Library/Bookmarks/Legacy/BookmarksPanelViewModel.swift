@@ -24,7 +24,7 @@ protocol BookmarksPanelViewModelProtocol: Sendable {
 
     func resetSearch()
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable ([FxBookmarkNode]) -> Void)
-    func reloadData(completion: @escaping @Sendable () -> Void)
+    func reloadData(completion: @escaping @MainActor () -> Void)
     func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int)
     func removeBookmark(atPosition position: Int)
     func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
@@ -69,19 +69,16 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     private var hasDesktopFolders = false
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
-//    private var mainQueue: DispatchQueueInterface
     private let logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
-//         mainQueue: DispatchQueueInterface = DispatchQueue.main,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
-//        self.mainQueue = mainQueue
         self.logger = logger
     }
 
@@ -92,7 +89,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         return true
     }
 
-    func reloadData(completion: @escaping @Sendable () -> Void) {
+    func reloadData(completion: @escaping @MainActor () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
             completion()
@@ -142,12 +139,9 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             return
         }
 
-        checkIfPinnedURL(bookmarkItem.url, queue: .main) { [weak self] isPinned in
-            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-            MainActor.assumeIsolated {
-                guard let site = self?.createSite(isPinned: isPinned, bookmarkItem: bookmarkItem) else { return }
-                completion(site)
-            }
+        checkIfPinnedURL(bookmarkItem.url) { [weak self] isPinned in
+            guard let site = self?.createSite(isPinned: isPinned, bookmarkItem: bookmarkItem) else { return }
+            completion(site)
         }
     }
 
@@ -187,7 +181,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
 
     /// Recursively searches all bookmarks under the current folder (and its subfolders)
     /// for items whose title or URL contains the given query string (case-insensitive).
-    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable ([FxBookmarkNode]) -> Void) {
+    func searchBookmarks(query: String, completion: @escaping @MainActor ([FxBookmarkNode]) -> Void) {
         guard !query.isEmpty else {
             DispatchQueue.main.async { completion([]) }
             return
@@ -299,7 +293,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     }
 
     /// Subfolder data case happens when we select a folder created by a user
-    private func setupSubfolderData(completion: @escaping @Sendable () -> Void) {
+    private func setupSubfolderData(completion: @escaping @MainActor () -> Void) {
         bookmarksHandler.getBookmarksTree(rootGUID: bookmarkFolderGUID,
                                           recursive: false)
         .uponQueue(.main) { result in
@@ -352,12 +346,14 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
 
     private func checkIfPinnedURL(
         _ url: String,
-        queue: DispatchQueue = .main,
-        completion: @escaping @Sendable  (Bool) -> Void
+        completion: @escaping @MainActor  (Bool) -> Void
     ) {
         profile.pinnedSites.isPinnedTopSite(url)
-            .uponQueue(queue) { result in
-                completion(result.successValue ?? false)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    completion(result.successValue ?? false)
+                }
             }
     }
 

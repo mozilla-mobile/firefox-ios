@@ -415,8 +415,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     ) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: bookmarksHandler,
-                                                bookmarkFolderGUID: guid,
-                                                mainQueue: MockDispatchQueue())
+                                                bookmarkFolderGUID: guid)
         trackForMemoryLeaks(viewModel)
         return viewModel
     }
@@ -442,7 +441,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         return nodes
     }
 
-    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @Sendable @escaping () -> Void) {
+    private func createDesktopBookmark(subject: BookmarksPanelViewModel, completion: @escaping @MainActor () -> Void) {
         let expectation = expectation(description: "Subject reloaded")
 
         profile.places.createBookmark(
@@ -454,9 +453,11 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
                 switch result {
                 case .success:
-                    subject.reloadData {
-                        completion()
-                        expectation.fulfill()
+                    DispatchQueue.main.async {
+                        subject.reloadData {
+                            completion()
+                            expectation.fulfill()
+                        }
                     }
                 case .failure(let error):
                     XCTFail("Failed to count bookmarks: \(error)")
