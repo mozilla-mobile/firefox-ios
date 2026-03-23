@@ -10,7 +10,6 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
 
-
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
         url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!

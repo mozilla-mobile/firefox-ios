@@ -3042,7 +3042,7 @@ extension String {
             public static let BlockAIEnhancementsLink = MZLocalizedString(
                 key: "Settings.AIControls.BlockAIEnhancementsDescription.v150",
                 tableName: "Settings",
-                value: "Blocking means you won't see new or current AI enhancements in Firefox, or popups about them.",
+                value: "See what is and isn’t included",
                 comment: "In the AI Controls settings, this is the text for the link that takes the user more information on AI features."
             )
 
@@ -3087,7 +3087,7 @@ extension String {
                 public static let Title = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v150",
                     tableName: "Settings",
-                    value: "AI-Powered Features",
+                    value: "AI-POWERED FEATURES",
                     comment: "In the AI Controls settings, this is the title for the section that describes AI-powered features."
                 )
 
