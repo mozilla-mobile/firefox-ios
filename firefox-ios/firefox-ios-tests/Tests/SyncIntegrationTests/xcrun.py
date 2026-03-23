@@ -22,10 +22,8 @@ class XCRun(object):
         self._run('install', device)
 
     def shutdown(self, device='all'):
-        pass
-        # self._run('shutdown', device)
+        self._run('shutdown', device)
 
     def erase(self, device='all'):
-        pass
-        # self.shutdown(device)
-        # self._run('erase', device)
+        self.shutdown(device)
+        self._run('erase', device)
