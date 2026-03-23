@@ -18,6 +18,18 @@ class AIControlsModelTests: XCTest {
         ], prefix: "")
     }
 
+    func testHeaderLinkInfo() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "")
+        XCTAssertEqual(aiControlsModel.headerLinkInfo.url.absoluteString, "")
+    }
+
+    func testBlockAIEnhancementsLinkInfo() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.label, "")
+        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.url.absoluteString, "")
+    }
+
     func testInitialize() {
         let aiControlsModel = AIControlsModel(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
