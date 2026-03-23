@@ -38,9 +38,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        guard !isPayPalPopUp(navigationAction) else { return nil }
-
-        if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+        if !shouldBlockExternalApps, navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
         }
@@ -569,7 +568,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handle Universal link for Firefox wallpaper setting
         if isFirefoxUniversalWallpaperSetting(url) {
-            showWallpaperSettings()
+            navigationHandler?.show(settings: .wallpaper)
             decisionHandler(.cancel)
             return
         }
@@ -1034,35 +1033,35 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            errorPageURLComponents.queryItems = [
-                URLQueryItem(
-                    name: InternalURL.Param.url.rawValue,
-                    value: url.absoluteString
-                ),
-                URLQueryItem(
-                    name: "code",
-                    value: String(
-                        error.code
-                    )
-                )
-            ]
+            errorPageURLComponents.queryItems = NativeErrorPageHelper.buildErrorPageQueryItems(
+                for: error,
+                url: url
+            )
 
             if let errorPageURL = errorPageURLComponents.url {
-                /// Used for checking if current error code is for no internet connection
                 let noInternetErrorCode = Int(
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
+                let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
+                let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(error.code)
 
-                // Only handle No internet access because other cases show about:blank page
-                if isNICErrorPageEnabled && error.code == noInternetErrorCode {
-                    let action = NativeErrorPageAction(networkError: error,
-                                                       windowUUID: windowUUID,
-                                                       actionType: NativeErrorPageActionType.receivedError
+                if isNoInternetError || isCertificateError {
+                    if isCertificateError {
+                        NativeErrorPageHelper.logCertificateErrorDetails(
+                            error: error,
+                            url: url,
+                            errorPageURL: errorPageURL,
+                            logger: logger
+                        )
+                    }
+                    let action = NativeErrorPageAction(
+                        networkError: error,
+                        windowUUID: windowUUID,
+                        actionType: NativeErrorPageActionType.receivedError
                     )
                     store.dispatch(action)
                     webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
                 } else {
-                    // We can fall into here for bad certificates (e.g. self-signed)
                     ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
                 }
             } else {
@@ -1312,14 +1311,6 @@ private extension BrowserViewController {
         }
 
         return false
-    }
-
-    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
-    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
-    // so we will block the creation of a new Webview with this check
-    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
-        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

@@ -10,8 +10,8 @@ import MozillaAppServices
 @MainActor
 class StoryProviderTests: XCTestCase, FeatureFlaggable {
     func testFetchingStories_forHomepage_returnsList() async {
-        let stories: [RecommendationDataItem] = (0..<30).map { .makeItem("feed\($0)") }
-        let expectedNumberOfStories = 9
+        let stories: [RecommendationDataItem] = (0..<150).map { .makeItem("feed\($0)") }
+        let expectedNumberOfStories = 100
         let expectedResult = Array(stories.prefix(expectedNumberOfStories)).map(MerinoStory.init)
 
         let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
@@ -30,30 +30,6 @@ class StoryProviderTests: XCTestCase, FeatureFlaggable {
     func testFetchingStories_forHomepage_withError_returnsEmptyList() async {
         let subject = createSubject(with: MockMerinoAPI(result: .failure(TestError.default)))
         let fetched = await subject.fetchHomepageStories()
-
-        XCTAssertEqual(fetched.count, 0)
-    }
-
-    func testFetchingStories_forStoriesFeed_returnsList() async {
-        let stories: [RecommendationDataItem] = (0..<20).map { .makeItem("feed\($0)") }
-        let expectedResult = stories.map(MerinoStory.init)
-
-        let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
-        let fetched = await subject.fetchDiscoverMoreStories()
-
-        XCTAssertEqual(Set(fetched), Set(expectedResult))
-    }
-
-    func testFetchingStories_forStoriesFeed_returnsEmptyList() async {
-        let subject = createSubject(with: MockMerinoAPI(result: .success([])))
-        let fetched = await subject.fetchDiscoverMoreStories()
-
-        XCTAssertEqual(fetched.count, 0)
-    }
-
-    func testFetchingStories_forStoriesFeed_withError_returnsEmptyList() async {
-        let subject = createSubject(with: MockMerinoAPI(result: .failure(TestError.default)))
-        let fetched = await subject.fetchDiscoverMoreStories()
 
         XCTAssertEqual(fetched.count, 0)
     }

@@ -23,9 +23,6 @@ protocol ToolbarHelperInterface {
 
     @MainActor
     func shouldBlur() -> Bool
-
-    @MainActor
-    func backgroundAlpha() -> CGFloat
 }
 
 final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
@@ -79,13 +76,6 @@ final class ToolbarHelper: ToolbarHelperInterface, FeatureFlaggable {
         return isToolbarRefactorEnabled &&
             isToolbarTranslucencyEnabled &&
             !isReduceTransparencyEnabled
-    }
-
-    @MainActor
-    func backgroundAlpha() -> CGFloat {
-        guard shouldBlur() else { return 1.0 }
-
-        return UX.backgroundAlphaForBlur
     }
 
     @MainActor

@@ -161,7 +161,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks
-        bookmark()
+        bookmark(isLockIconOff: false)
 
         // Now the site should be suggested
         toolbarScreen.assertSettingsButtonExists()
@@ -173,36 +173,40 @@ class BookmarksTests: FeatureFlaggedTestBase {
         browserScreen.assertSuggestedLinesNotEmpty()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306914
+    // https://mozilla.testrail.io/index.php?/cases/view/3168587
     func testAddNewFolder() {
         app.launch()
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
-        mozWaitForElementToExist(app.navigationBars["Bookmarks"])
-        app.buttons["Edit"].waitAndTap()
-        app.buttons["New Folder"].waitAndTap()
-        // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables.cells.textFields.element(boundBy: 0).tapAndTypeText("Test Folder")
-        app.buttons["Save"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
-        mozWaitForElementToExist(app.staticTexts["Test Folder"])
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.assertNewFreshFolderCreated(folderName: "Test Folder")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168596
+    func testDeleteEmptyFolderInEditMode() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
-        // Now remove the folder
-        navigator.performAction(Action.RemoveItemMobileBookmarks)
-        if #available (iOS 17, *) {
-            mozWaitForElementToExist(app.buttons["Remove Test Folder"])
-        } else {
-            mozWaitForElementToExist(app.buttons["Delete Test Folder"])
-        }
-        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.tapEditButton()
+        libraryScreen.deleteFolder(folderName: "Test Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
 
-        app.buttons["Done"].waitAndTap()
-
-        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
-        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
-        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
-        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
-        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
+    // https://mozilla.testrail.io/index.php?/cases/view/3168588
+    func testEditModeExitsOnlyWithDoneButton() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
+        libraryScreen.tapEditButton()
+        libraryScreen.assertNewFolderButtonExists()
+        libraryScreen.tapDoneButton()
+        libraryScreen.assertNewFolderButtonExists(shouldExists: false)
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.assertEditButtonExists()
+        libraryScreen.assertNewFolderButtonExists(shouldExists: false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
@@ -253,8 +257,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
         navigator.goto(LibraryPanel_Bookmarks)
-        libraryScreen.assertBookmarkList()
-        libraryScreen.assertBookmarkListCount(numberOfEntries: 0)
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
@@ -325,7 +327,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         enableBookmarksInSettings()
-        validateLongTapOptionsFromBookmarkLink(isExperiment: true)
+        validateLongTapOptionsFromBookmarkLink()
         forceRestartApp()
         app.launch()
         navigator.nowAt(NewTabScreen)
@@ -333,7 +335,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
             navigator.nowAt(NewTabScreen)
-            validateLongTapOptionsFromBookmarkLink(isExperiment: true)
+            validateLongTapOptionsFromBookmarkLink()
         }
     }
 
@@ -386,7 +388,25 @@ class BookmarksTests: FeatureFlaggedTestBase {
         firefoxHomeScreen.assertBookmarksItemCellExist()
     }
 
-    private func validateLongTapOptionsFromBookmarkLink(isExperiment: Bool) {
+    // https://mozilla.testrail.io/index.php?/cases/view/3168583
+    func testNoFoldersInBookmarks() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
+        libraryScreen.assertBookmarkList()
+        libraryScreen.assertBookmarkListCount(numberOfEntries: 0)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168584
+    func testCheckDonebutton() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.assertBookmarkEmptyStateTextExists()
+        navigator.goto(HomePanelsScreen)
+        libraryScreen.assertBookmarkEmptyStateTextExists(shouldExist: false)
+    }
+
+    private func validateLongTapOptionsFromBookmarkLink() {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()

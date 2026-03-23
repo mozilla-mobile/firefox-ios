@@ -94,7 +94,7 @@ final class IntroScreenManagerTests: XCTestCase {
     func testOnboardingVariant_whenModernEnabledButJapanDisabled_returnsModern() {
         setupNimbusFeatureFlags(enableModernUi: true, shouldUseJapanConfiguration: false)
         let subject = IntroScreenManager(prefs: prefs)
-        XCTAssertEqual(subject.onboardingVariant, .modern)
+        XCTAssertEqual(subject.onboardingVariant, .brandRefresh)
     }
 
     func testOnboardingVariant_whenBothFlagsEnabled_returnsJapan() {

@@ -599,8 +599,8 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .homepage(
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID

@@ -34,11 +34,11 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         subject.loadViewIfNeeded()
 
         let action1 = try XCTUnwrap(mockStore.dispatchedActions[0])
-        let action1Type = try XCTUnwrap(action1.actionType as? ScreenActionType)
+        let action1Type = try XCTUnwrap(action1.actionType as? ComponentActionType)
         let action2 = try XCTUnwrap(mockStore.dispatchedActions[1])
         let action2Type = try XCTUnwrap(action2.actionType as? RemoteTabsPanelActionType)
 
-        XCTAssertEqual(action1Type, ScreenActionType.showScreen)
+        XCTAssertEqual(action1Type, ComponentActionType.addComponent)
         XCTAssertEqual(action2Type, RemoteTabsPanelActionType.panelDidAppear)
         XCTAssertEqual(mockStore.subscribeCallCount, 1)
     }
@@ -48,13 +48,13 @@ final class RemoteTabsPanelTests: XCTestCase, StoreTestUtility {
         subject.unsubscribeFromRedux()
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.last)
-        let actionType = try XCTUnwrap(action.actionType as? ScreenActionType)
+        let actionType = try XCTUnwrap(action.actionType as? ComponentActionType)
 
-        XCTAssertEqual(actionType, ScreenActionType.closeScreen)
+        XCTAssertEqual(actionType, ComponentActionType.removeComponent)
     }
 
     // MARK: - Actions
-    func testTableViewControllerDidPullToRefresh_dispatchesRefreshsTabsAction() throws {
+    func testTableViewControllerDidPullToRefresh_dispatchesRefreshTabsAction() throws {
         let subject = createSubject()
         subject.tableViewControllerDidPullToRefresh()
 

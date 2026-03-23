@@ -129,7 +129,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     // MARK: - Anchor Selection
 
-    func test_setupHeaderConstraints_topToolbarWithNavToolbar_usesSafeArea() {
+    func test_setupHeaderConstraints_topToolbarWithNavToolbar_usesParentView() {
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = true
         subject.setupHeaderConstraints(isBottomSearchBar: false)
@@ -139,7 +139,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         }
 
         // If using safe area, the secondItem should be a UILayoutGuide
-        XCTAssertTrue(topConstraint?.secondItem is UILayoutGuide)
+        XCTAssertTrue(topConstraint?.secondItem === parentView)
     }
 
     func test_setupHeaderConstraints_topToolbarWithoutNavToolbar_usesViewTop() {
@@ -156,7 +156,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         XCTAssertTrue(topConstraint?.secondItem === parentView)
     }
 
-    func test_setupHeaderConstraints_bottomSearchBar_alwaysUsesSafeArea() {
+    func test_setupHeaderConstraints_bottomSearchBar_usesParentView() {
         let subject = createSubject()
         toolbarHelper.shouldShowNavigationToolbar = false
         toolbarHelper.shouldShowTopTabs = false
@@ -166,8 +166,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
             ($0.firstItem === headerView && $0.firstAttribute == .top)
         }
 
-        // Bottom search bar should always use safe area
-        XCTAssertTrue(topConstraint?.secondItem is UILayoutGuide)
+        // Bottom search bar should should be the parentView
+        XCTAssertTrue(topConstraint?.secondItem === parentView)
     }
 
     func test_updateHeaderConstraints_withoutScrollController_doesNotCrash() {
@@ -321,23 +321,19 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     // MARK: - Update BottomContent StackView Constraints
 
-    func test_updateBottomContentStackViewConstraints_bottomToolbar_activatesMaxBottomConstraints() {
+    func test_updateBottomContentStackViewConstraints_bottomToolbar_activatesOverKeyboardConstraint() {
         let subject = createSubject()
         subject.setupBottomContainerConstraints()
         subject.setupOverKeyboardContainerConstraints()
         subject.setupBottomContentStackViewConstraints()
 
-        subject.updateBottomContentStackViewConstraints(
-            isSnapKitRemovalEnabled: true,
-            isBottomSearchBar: true,
-            keyboardState: nil
-        )
+        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: true, keyboardState: nil)
 
-        // The lessThanOrEqual constraints (to overKeyboard and safeArea) should be active
+        // the bottom anchor should be pin to overkeyboard top
         let activeMaxConstraints = parentView.constraints.filter {
-            ($0.firstItem === bottomContentStackView || $0.secondItem === bottomContentStackView)
-                && $0.relation == .lessThanOrEqual
-                && $0.isActive
+            ($0.firstItem === bottomContentStackView || $0.secondItem === overKeyboardContainer)
+            && $0.relation == .equal
+            && $0.firstAttribute == .bottom && $0.secondAttribute == .top
         }
         XCTAssertFalse(activeMaxConstraints.isEmpty)
     }
@@ -349,11 +345,8 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
         subject.setupBottomContentStackViewConstraints()
         navigationToolbarContainer.isHidden = true
 
-        subject.updateBottomContentStackViewConstraints(
-            isSnapKitRemovalEnabled: true,
-            isBottomSearchBar: false,
-            keyboardState: nil
-        )
+        subject.updateBottomContentStackViewConstraints(isBottomSearchBar: false,
+                                                        keyboardState: nil)
 
         // Basic constraint (equalTo safeArea bottom) should be active
         let basicConstraint = parentView.constraints.first {
@@ -421,7 +414,7 @@ final class BrowserViewControllerLayoutManagerTests: XCTestCase {
 
     private func countRelevantConstraints(for view: UIView) -> Int {
         let relevantConstraints = view.constraints.filter {
-            [.leading, .trailing, .bottom, .height].contains($0.firstAttribute)
+            [.leading, .trailing, .bottom, .top, .height].contains($0.firstAttribute)
         }
         return relevantConstraints.count
     }

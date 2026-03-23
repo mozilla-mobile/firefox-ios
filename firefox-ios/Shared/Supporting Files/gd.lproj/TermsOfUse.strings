@@ -1,0 +1,42 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "Gabh ris";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "Air ais";
+
+/* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Description.v142" = "Thug sinn a-steach teirmichean cleachdaidh airson %@ agus dh’ùraich sinn aithris na prìobhaideachd againn.";
+
+/* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
+"TermsOfUse.LearnMoreHere.v147" = "Gheibh thu barrachd fiosrachaidh %@.";
+
+/* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
+"TermsOfUse.Link.HereText.v147" = "an-seo";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "Barrachd fiosrachaidh";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "Aithris na prìobhaideachd";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "Teirmichean a’ chleachdaidh aig %@";
+
+/* Label for the button that allows the user to postpone accepting the Terms of Use. */
+"TermsOfUse.RemindMeLaterButton.v142" = "Cuir nam chuimhne uaireigin eile";
+
+/* Descriptive text shown before user accepts the Terms of Use. Includes link text for 'Learn more'. */
+"TermsOfUse.ReviewAndAcceptText.v142" = "Gabh mionaid, thoir sùil orra ’s gabh riutha. Barrachd fiosrachaidh";
+
+/* Accessibility notification that is triggered when the Terms of Use sheet is presented. */
+"TermsOfUse.TermsOfUseHasOpened.v142" = "Chaidh siota teirmichean a’ chleachdaidh fhosgladh";
+
+/* Title shown at the top of the Terms of Use bottom sheet, indicating that there is an update to terms of use. */
+"TermsOfUse.Title.v142" = "Fhuair sinn ùrachadh";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
+"TermsOfUse.TitleValue1.v147" = "Teirmichean a’ chleachdaidh";
+
+/* Title shown at the top of the Terms of Use bottom sheet for variant 2. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.TitleValue2.v147" = "Brath o %@";
+

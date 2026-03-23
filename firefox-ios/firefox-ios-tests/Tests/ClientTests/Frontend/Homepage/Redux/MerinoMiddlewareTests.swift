@@ -102,32 +102,6 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
-    func test_initializeStoriesFeed_getPocketData() throws {
-        let subject = createSubject(merinoManager: merinoManager)
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: StoriesFeedActionType.initialize
-        )
-
-        let expectation = XCTestExpectation(description: "Stories feed action initialize dispatched")
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-
-        subject.pocketSectionProvider(AppState(), action)
-
-        wait(for: [expectation])
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
-
-        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories)
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
-        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
-    }
-
     func test_tapOnHomepagePocketCellAction_sendTelemetryData() throws {
         let subject = createSubject(merinoManager: merinoManager)
         let config = OpenPocketTelemetryConfig(isZeroSearch: false, position: 0)
@@ -271,8 +245,8 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .homepage(
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID

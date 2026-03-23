@@ -14,6 +14,13 @@ final class FirefoxHomePageScreen {
         self.sel = selectors
     }
 
+    /// Dismisses the "new changes" popup on Home, if present.
+    func dismissNewChangesPopupIfNeeded() {
+        // Dismiss "new changes" popup if present
+        let closePopup = app.buttons["Close"]
+        if closePopup.exists { closePopup.tap() }
+    }
+
     func assertTopSitesItemCellExist(timeout: TimeInterval = TIMEOUT) {
         let topSites_ItemCell = sel.TOPSITES_ITEMCELL.element(in: app)
 

@@ -37,7 +37,13 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
 
     // MARK: - Select Tab
-    func selectTab(_ tab: Tab?, previous: Tab?)
+    /// Selects the given tab as the active tab.
+    ///
+    /// - Parameters:
+    ///   - tab: The tab to select.
+    ///   - previous: The tab to treat as the previously selected tab..
+    ///   - immediatePreservation: When `true`, tab state is persisted synchronously instead of being deferred.
+    func selectTab(_ tab: Tab?, previous: Tab?, immediatePreservation: Bool)
 
     // MARK: - Add Tab
 
@@ -93,7 +99,17 @@ protocol TabManager: AnyObject {
     // MARK: Other Tab Actions
     func clearAllTabsHistory()
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
-    func preserveTabs()
+    /// Persists the current tab state to disk.
+    ///
+    /// Should only be called after tab restore has finished. When `immediate` is `true`,
+    /// the save is forced synchronously — use this for time-sensitive cases such as
+    /// backgrounding the app or switching to another app. When `false`, the save may
+    /// be deferred, suitable for llower-priority updates such as opening, closing,
+    /// or switching between tabs during normal browsing.
+    ///
+    /// - Parameter immediate: Whether the tab data should be saved immediately (`true`)
+    ///   or can be deferred (`false`).
+    func preserveTabs(immediate: Bool)
 
     /// Commits the pending changes to the persistent store.
     func commitChanges()
@@ -112,8 +128,12 @@ protocol TabManager: AnyObject {
 }
 
 extension TabManager {
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        selectTab(tab, previous: previous)
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, immediatePreservation: Bool = false) {
+        selectTab(tab, previous: previous, immediatePreservation: immediatePreservation)
+    }
+
+    func preserveTabs(immediate: Bool = false) {
+        preserveTabs(immediate: immediate)
     }
 
     @discardableResult

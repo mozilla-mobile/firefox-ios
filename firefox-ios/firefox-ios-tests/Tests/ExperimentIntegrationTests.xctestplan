@@ -131,7 +131,6 @@
         "HomeButtonTests",
         "HomePageSettingsUITests",
         "HomePageSettingsUITests\/testRecentlyVisited()",
-        "HomepageSearchBarTests",
         "InactiveTabsTest",
         "IntegrationTests",
         "IpadOnlyTestCase",

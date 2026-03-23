@@ -213,6 +213,14 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
     }
 
+    func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app))
+    }
+
+    func isAddressBarLockIconOffPresent() -> Bool {
+        return sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app).exists
+    }
+
     func assertAddressBarHasKeyboardFocus() {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
         BaseTestCase().mozWaitForElementToExist(addressBar)
@@ -283,7 +291,7 @@ final class BrowserScreen {
         app.webViews.buttons[buttonText].waitAndTap()
     }
 
-    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT) {
+    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT_LONG) {
         let base = BaseTestCase()
         for element in elements {
             if shouldExist {
@@ -354,5 +362,20 @@ final class BrowserScreen {
     func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {
         let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
         BaseTestCase().mozWaitForElementToNotExist(clipboardToast, timeout: timeout)
+    }
+
+    func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let link = app.links[name].firstMatch
+        BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+    }
+
+    func assertWebViewLinkTextExists(text: String, timeout: TimeInterval = TIMEOUT) {
+        let linkText = app.webViews.links.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
+    }
+
+    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
+        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
     }
  }

@@ -137,8 +137,8 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

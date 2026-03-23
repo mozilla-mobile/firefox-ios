@@ -5,9 +5,15 @@
 import Foundation
 
 struct SectionHeaderConfiguration: Equatable, Hashable {
+    enum Style: Equatable, Hashable {
+        case sectionTitle
+        case newsAffordance
+    }
+
     let title: String
     let a11yIdentifier: String
     var isButtonHidden = true
     var buttonA11yIdentifier: String?
     var buttonTitle: String?
+    var style: Style = .sectionTitle
 }

@@ -4,6 +4,7 @@
 
 import Redux
 import MozillaAppServices
+import UIKit
 import XCTest
 
 @testable import Client
@@ -17,15 +18,16 @@ final class MerinoStateTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
+        setupHomepageRedesignFeature(scrollDirection: .baseline)
         try await super.tearDown()
     }
 
-    func tests_initialState_returnsExpectedState() {
+    func test_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.merinoData, [])
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, false)
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
     @MainActor
@@ -93,6 +95,33 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
+    func test_initialState_withBaselineStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .baseline)
+
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+    }
+
+    func test_initialState_withHorizontalStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .horizontal)
+
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+    }
+
+    func test_initialState_withVerticalStoriesDirection_returnsExpectedState() {
+        setupHomepageRedesignFeature(scrollDirection: .vertical)
+
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.sectionHeaderState.style, .newsAffordance)
+        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+    }
+
     // MARK: - Private
     private func createSubject() -> MerinoState {
         return MerinoState(windowUUID: .XCTestDefaultUUID)
@@ -100,5 +129,11 @@ final class MerinoStateTests: XCTestCase {
 
     private func pocketReducer() -> Reducer<MerinoState> {
         return MerinoState.reducer
+    }
+
+    private func setupHomepageRedesignFeature(scrollDirection: ScrollDirection) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
+        }
     }
 }

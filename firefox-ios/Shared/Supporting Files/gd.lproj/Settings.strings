@@ -64,6 +64,12 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Seòlaidhean";
 
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Atharraichidh seo am putan am meadhan a’ bhàr-inneal.";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Putan a’ bhàr-inneal";
+
 /* Default section header title under page zoom settings. Indicates the default value for all websites */
 "Settings.Appearance.Zoom.Default.Title.v140" = "Bun-roghainn";
 
@@ -166,6 +172,15 @@
 /* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Settings.PrivacyNotice.Title.v137" = "Sanas prìobhaideachd";
 
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Barrachd fiosrachaidh";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "Bheir %@ piseach air gleusan, dèanadas is seasmhachd fiù eadar tionndaidhean ùra. Thèid na h-atharraichean seo a chur an sàs o chèin.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Ceadaich leasachadh cèin";
+
 /* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
 "Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Dèan sgroladh airson bàr nan tabaichean is an t-seòlaidh a chur am falach";
 
@@ -229,11 +244,50 @@
 /* Title for a link that explains what Mozilla means by Studies */
 "Settings.Studies.Link.v136" = "Barrachd fiosrachaidh";
 
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Barrachd fiosrachaidh";
+
 /* A short description that explains that Mozilla is running studies */
 "Settings.Studies.Message.v136" = "Feuch gleusan ùra mus fhaigh càch cothrom orra.";
 
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "Taghaidh %@ cleachdaichean air thuaiream is bheir e dhaibh cothrom gleusan a chur fo dheuchainn, rud a nì e nas fheàrr dhan a h-uile duine.";
+
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "Stàlaich is ruith obair-rannsachaidh";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Ceadaich obair-rannsachaidh air gleusan";
+
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Cuiridh seo an gleus a nì geàrr-chunntas air duilleagan an comas.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Crath an t-uidheam o thaobh gu taobh airson geàrr-chunntas fhaighinn air duilleag.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Crath airson geàrr-chunntas";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Gluasadan";
+
+/* The accessibility label for the language picker button in the Summarize settings. */
+"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Tagh cànan";
+
+/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
+"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "An cànan a b’ fheàrr leat san aplacaid";
+
+/* The title for the language choose section for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.Title.v149" = "Cànan";
+
+/* The label for the picker option to select the website language for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "Cànan na làraich-lìn";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Dèan geàrr-chunntas air duilleagan";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Geàrr-chunntasan dhuilleagan";
 
 /* Title for a link that explains how Mozilla send technical and interaction data. */
 "Settings.TechnicalData.Link.v136" = "Barrachd fiosrachaidh";
@@ -246,4 +300,25 @@
 
 /* Terms of Use settings section title */
 "Settings.TermsOfUse.Title.v137" = "Teirmichean a’ chleachdaidh";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "Dhachaigh";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Taba ùr";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "Roghainnean eadar-theangachaidh";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "Dheth";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "Air";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "Eadar-theangachadh";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Cuir an t-eadar-theangachadh an comas";
 

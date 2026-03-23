@@ -260,7 +260,7 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: true,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
@@ -271,8 +271,8 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

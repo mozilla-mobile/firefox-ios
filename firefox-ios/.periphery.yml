@@ -1,0 +1,24 @@
+project: Client.xcodeproj
+
+schemes:
+- Fennec
+
+clean_build: true
+retain_assign_only_properties: true
+retain_objc_accessible: true
+retain_unused_protocol_func_params: false
+retain_public: true
+exclude_tests: true
+
+index_exclude:
+# Generated sources
+- "../MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/*.swift"
+- "Client/Generated/*.swift"
+- "Storage/Generated/*.swift"
+
+# Tests
+- "firefox-ios-tests/Tests/*"
+- "../BrowserKit/Tests/*"
+
+report_exclude:
+- "../BrowserKit/Sources/Common/Theming/FxColors.swift"

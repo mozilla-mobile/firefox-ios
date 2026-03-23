@@ -37,10 +37,16 @@ let package = Package(
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(
+            name: "MLPAKit",
+            targets: ["MLPAKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
                  targets: ["JWTKit"]),
+        .library(
+            name: "LLMKit",
+            targets: ["LLMKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -54,8 +60,8 @@ let package = Package(
             name: "ActionExtensionKit",
             targets: ["ActionExtensionKit"]),
         .library(
-            name: "VoiceSearchKit",
-            targets: ["VoiceSearchKit"]),
+            name: "QuickAnswersKit",
+            targets: ["QuickAnswersKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -205,12 +211,23 @@ let package = Package(
             ]
         ),
         .target(
+            name: "MLPAKit",
+            dependencies: ["Common", "JWTKit", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "MLPAKitTests",
+            dependencies: ["MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "SummarizeKit",
             dependencies: [
                 "Common",
                 "ComponentLibrary",
                 "Down",
-                "JWTKit"
+                "LLMKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
@@ -235,21 +252,33 @@ let package = Package(
             ]
         ),
         .target(
+            name: "LLMKit",
+            dependencies: ["MLPAKit"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]
+        ),
+        .testTarget(
+            name: "LLMKitTests",
+            dependencies: ["LLMKit", "MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
         .target(
-            name: "VoiceSearchKit",
-            dependencies: ["Common"],
+            name: "QuickAnswersKit",
+            dependencies: ["Common", "Shared"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]
         ),
         .testTarget(
-            name: "VoiceSearchKitTests",
-            dependencies: ["VoiceSearchKit", "TestKit"]
+            name: "QuickAnswersKitTests",
+            dependencies: ["QuickAnswersKit", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",

@@ -14,6 +14,14 @@ final class LibraryScreen {
         self.sel = selectors
     }
 
+    private var editButton: XCUIElement { sel.EDIT_BUTTON.element(in: app) }
+    private var doneButton: XCUIElement { sel.DONE_BUTTON.element(in: app) }
+    private var bottmLeftButton: XCUIElement { sel.BOTTOM_LEFT_BUTTON.element(in: app) }
+    private var titleTextField: XCUIElement { sel.TITLE_TEXT_FIELD.element(in: app) }
+    private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
+    private var bookmarkFolderCell: XCUIElement { sel.BOOKMARKS_FOLDER.element(in: app) }
+    private var deleteButton: XCUIElement { sel.DELETE_BUTTON.element(in: app) }
+
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
 
@@ -40,7 +48,6 @@ final class LibraryScreen {
     }
 
     func tapDeleteBookmarkButton() {
-        let deleteButton = sel.DELETE_BUTTON.element(in: app)
         deleteButton.waitAndTap()
     }
 
@@ -56,5 +63,63 @@ final class LibraryScreen {
     func assertBookmarkListLabel(label: String) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
         XCTAssertEqual(bookmarksTable.label, "Empty list")
+    }
+
+    func assertBookmarkEmptyStateTextExists(shouldExist: Bool = true) {
+        if shouldExist {
+            BaseTestCase().mozWaitForElementToExist(sel.BOOKMARK_EMPTY_STATE.element(in: app))
+        } else {
+            BaseTestCase().mozWaitForElementToNotExist(sel.BOOKMARK_EMPTY_STATE.element(in: app))
+        }
+    }
+
+    func tapEditButton() {
+        editButton.firstMatch.waitAndTap()
+    }
+
+    func tapDoneButton() {
+        doneButton.firstMatch.waitAndTap()
+    }
+
+    func tapBottomLeftButton() {
+        bottmLeftButton.waitAndTap()
+    }
+
+    func assertEditButtonExists() {
+        BaseTestCase().mozWaitForElementToExist(editButton)
+    }
+
+    func assertNewFolderButtonExists(shouldExists: Bool = true) {
+        if shouldExists {
+            BaseTestCase().mozWaitForElementToExist(bottmLeftButton)
+        } else {
+            BaseTestCase().mozWaitForElementToNotExist(bottmLeftButton)
+        }
+    }
+
+    func addFreshNewFolder(text: String) {
+        // This function adds a new first folder in the bookmark list
+        tapEditButton()
+        tapBottomLeftButton()
+        titleTextField.typeText(text)
+        // Folder structure contains only the "Bookmarks" folder
+        BaseTestCase().mozWaitForElementToExist(bookmarkFolderCell)
+        XCTAssertEqual(app.tables.cells.staticTexts.element(boundBy: 0).label,
+                       "Bookmarks",
+                       "The first folder should be the default Bookmarks folder")
+        XCTAssertEqual(app.tables.cells.staticTexts.count, 1, "Folder structure should contain only the Bookmarks folder")
+        saveButton.waitAndTap()
+    }
+
+    func assertNewFreshFolderCreated(folderName: String) {
+        // The new folder is created, and the user is returned to the main Bookmarks view in Edit mode
+        BaseTestCase().mozWaitForElementToExist(doneButton)
+        BaseTestCase().mozWaitForElementToExist(bottmLeftButton)
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
+    }
+
+    func deleteFolder(folderName: String) {
+        app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
+        deleteButton.waitAndTap()
     }
 }

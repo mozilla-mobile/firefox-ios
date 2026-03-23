@@ -176,7 +176,6 @@
         "HomePageSettingsUITests\/testRecentlyVisited()",
         "HomePageSettingsUITests\/testTyping()",
         "HomePageUITest",
-        "HomepageSearchBarTests",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
         "JumpBackInTests\/testGroupedTabs()",

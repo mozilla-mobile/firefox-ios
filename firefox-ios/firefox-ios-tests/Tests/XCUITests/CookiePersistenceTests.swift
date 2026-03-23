@@ -103,7 +103,7 @@ final class CookiePersistenceTests: BaseTestCase {
         app.terminate()
 
         // Wait a moment if needed (optional but sometimes helpful)
-        sleep(1)
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
 
         // Launch it again
         app.launch()

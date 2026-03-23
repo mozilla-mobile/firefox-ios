@@ -64,6 +64,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedSiri() {}
 
+    func pressedAIControls() {}
+
     func pressedToolbar() {}
 
     func pressedTheme() {}

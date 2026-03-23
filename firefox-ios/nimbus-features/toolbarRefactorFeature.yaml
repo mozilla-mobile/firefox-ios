@@ -59,7 +59,12 @@ features:
           The type of layout of the toolbars.
         type: Option<ToolbarLayoutType>
         default: version1
-        
+      tab_tray_button_type:
+        description: >
+          The style of the tab tray button in the toolbar.
+        type: TabTrayButtonType
+        default: number
+
     defaults:
       - channel: beta
         value:
@@ -74,6 +79,7 @@ features:
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
+          tab_tray_button_type: number
       - channel: developer
         value:
           enabled: true
@@ -87,6 +93,7 @@ features:
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
+          tab_tray_button_type: number
 
 enums:
   ToolbarLayoutType:
@@ -96,3 +103,11 @@ enums:
         description: Shows the add new tab, menu and tabs button in the navigation toolbar. The share button is displayed in the address toolbar.
       version2:
         description: Like version1 but the menu and tabs buttons are inverted.
+
+  TabTrayButtonType:
+    description: The style of the tab tray button in the toolbar.
+    variants:
+      number:
+        description: The original tab tray button style that show the icon with the number of tabs.
+      screenshot:
+        description: The new tab tray button style that shows two images stacked with the previous and next tab.

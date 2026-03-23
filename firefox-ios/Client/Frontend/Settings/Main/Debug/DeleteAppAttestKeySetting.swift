@@ -4,7 +4,7 @@
 
 import Foundation
 import Storage
-import SummarizeKit
+import MLPAKit
 
 class DeleteAppAttestKeySetting: HiddenSetting {
     override var title: NSAttributedString? {

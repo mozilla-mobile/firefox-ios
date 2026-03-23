@@ -13,11 +13,6 @@ public struct SupportUtils {
         return URL(string: "https://support.mozilla.org/en-US/kb/common-myths-about-private-browsing?as=u&utm_source=inproduct")
     }
 
-    public static var URLForWhatsNew: URL? {
-        // Returns the predefined URL associated to what's new button action.
-        return URL(string: "https://www.mozilla.org/en-US/firefox/ios/notes/")
-    }
-
     public static var URLForGetHelp: URL? {
         // Returns the predefined URL associated to the menu's Get Help button action.
         return URL(string: "https://support.mozilla.org/products/ios")

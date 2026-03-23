@@ -21,8 +21,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private let bookmarksSaver: BookmarksSaver
     private let toastTelemetry: ToastTelemetry
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
     var bookmarksHandler: BookmarksHandler
 
@@ -44,17 +43,15 @@ final class TabManagerMiddleware: FeatureFlaggable,
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.profile = profile
         self.bookmarksHandler = profile.places
-        self.summarizationChecker = summarizationChecker
         self.logger = logger
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
@@ -100,9 +97,9 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
 
-        guard let tabsState = state.screenState(TabsPanelState.self,
-                                                for: .tabsPanel,
-                                                window: action.windowUUID) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self,
+                                                   for: .tabsPanel,
+                                                   window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
@@ -123,9 +120,9 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
         case TabPeekActionType.closeTab:
             // TODO: verify if this works for closing a tab from an unselected tab panel
-            guard let tabsState = state.screenState(TabsPanelState.self,
-                                                    for: .tabsPanel,
-                                                    window: action.windowUUID) else { return }
+            guard let tabsState = state.componentState(TabsPanelState.self,
+                                                       for: .tabsPanel,
+                                                       window: action.windowUUID) else { return }
             tabPeekCloseTab(with: tabUUID,
                             uuid: action.windowUUID,
                             isPrivate: tabsState.isPrivateMode)
@@ -522,7 +519,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
         tabManager.undoCloseTab()
 
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -544,7 +541,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
         let normalCount = tabManager.normalTabs.count
@@ -654,38 +651,33 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
-        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
-            ensureMainThread {
-                guard case .success(let isBookmarked) = isBookmarkedResult else {
-                    return
-                }
+        getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
+                let isSyncEnabled = self.profile.hasSyncableAccount()
 
-                let canBeSaved: Bool
-                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                    canBeSaved = false
-                } else {
-                    canBeSaved = true
-                }
-
-                let browserProfile = profile as? BrowserProfile
-                browserProfile?.tabs.getClientGUIDs { (result, error) in
-                    ensureMainThread {
-                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                                 canTabBeRemoved: isBookmarked,
-                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                                 isSyncEnabled: !(result?.isEmpty ?? true),
-                                                 screenshot: tab?.screenshot ?? UIImage(),
-                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                        let action = TabPeekAction(tabPeekModel: model,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPeekActionType.loadTabPeek)
-                        store.dispatch(action)
-                    }
-                }
+                let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         canTabBeRemoved: isBookmarked,
+                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                         isSyncEnabled: isSyncEnabled,
+                                         screenshot: tab?.screenshot ?? UIImage(),
+                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                let action = TabPeekAction(tabPeekModel: model,
+                                           windowUUID: uuid,
+                                           actionType: TabPeekActionType.loadTabPeek)
+                store.dispatch(action)
             }
         }
+    }
+
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
+        guard let tab else { return false }
+
+        // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
+        // and it is not a homepage (FxHome) tab.
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
@@ -778,16 +770,15 @@ final class TabManagerMiddleware: FeatureFlaggable,
             assert(Thread.isMainThread)
             if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
-                    let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let contentType = summarizationCheckResult?.contentType ?? .generic
+                    guard let webView = selectedTab.webView else { return }
+                    let summarizerConfig = await self?.summarizerConfigFactory.makeConfiguration(from: webView)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        canSummarize: summarizerConfig != nil,
+                        summarizerConfig: summarizerConfig
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
@@ -825,7 +816,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             windowUUID: windowUUID,
             accountData: accountData,
             canSummarize: false,
-            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
+            summarizerConfig: nil
         )
     }
 
@@ -901,7 +892,10 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                     hasChangedUserAgent: selectedTab.changedUserAgent,
                     zoomLevel: selectedTab.pageZoom,
-                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    readerModeConfiguration: ReaderModeConfiguration(
+                        isAvailable: selectedTab.readerModeAvailableOrActive,
+                        isActive: selectedTab.readerModeState == .active
+                    ),
                     summaryIsAvailable: canSummarize,
                     summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,

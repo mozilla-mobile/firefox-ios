@@ -202,8 +202,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.translateButtonTappedCalledCount, 0)
     }
 
-    func test_didTapButtonAction_withTranslationConfiguration_dispatchAction() throws {
-        setTranslationsFeatureEnabled(enabled: true)
+    func test_didTapButtonAction_withInactiveState_dispatchesShowPickerAction() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
         let subject = createSubject()
 
         let action = ToolbarMiddlewareAction(
@@ -213,16 +213,35 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarMiddlewareActionType.didTapButton
         )
 
+        let expectation = XCTestExpectation(description: "showTranslationLanguagePicker action dispatched for inactive tap")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(setupAppStateWithTranslationConfig(for: .inactive), action)
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.showTranslationLanguagePicker)
+    }
+
+    func test_didSelectTargetLanguage_dispatchAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let subject = createSubject()
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
         let expectation = XCTestExpectation(
             description: "expect didStartTranslatingPage, translationCompleted action to be fired"
         )
-
         expectation.expectedFulfillmentCount = 2
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-        subject.translationsProvider(setupAppStateWithTranslationConfig(), action)
+        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -261,18 +280,17 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
-    func test_didTapButtonAction_withError_dispatchToastAction() throws {
+    func test_didSelectTargetLanguage_withTranslationError_dispatchToastAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         enum TestError: Error { case example }
         let mockTranslationsService = MockTranslationsService(
             translateResult: .failure(TestError.example)
         )
         let subject = createSubject(translationsService: mockTranslationsService)
-        let action = ToolbarMiddlewareAction(
-            buttonType: .translate,
-            gestureType: .tap,
+        let action = TranslationLanguageSelectedAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarMiddlewareActionType.didTapButton
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
         )
 
         let expectation = XCTestExpectation(
@@ -284,7 +302,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             expectation.fulfill()
         }
 
-        subject.translationsProvider(setupAppStateWithTranslationConfig(), action)
+        subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -312,19 +330,19 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.translationFailedCalledCount, 1)
     }
 
-    func test_didTapButtonAction_withFirstResponseReceivedError_dispatchToastAction() throws {
+    func test_didSelectTargetLanguage_withFirstResponseReceivedError_dispatchToastAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         enum TestError: Error { case example }
         let mockTranslationsService = MockTranslationsService(
             firstResponseReceivedResult: .failure(TestError.example)
         )
         let subject = createSubject(translationsService: mockTranslationsService)
-        let action = ToolbarMiddlewareAction(
-            buttonType: .translate,
-            gestureType: .tap,
+        let action = TranslationLanguageSelectedAction(
             windowUUID: .XCTestDefaultUUID,
-            actionType: ToolbarMiddlewareActionType.didTapButton
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
         )
+
         let expectation = XCTestExpectation(
             description: "expect didStartTranslatingPage, didReceiveErrorTranslating, showToast action to be fired"
         )
@@ -334,7 +352,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             expectation.fulfill()
         }
 
-        subject.translationsProvider(setupAppStateWithTranslationConfig(), action)
+        subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
@@ -418,9 +436,30 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func test_didTapRetryFailedTranslationAction_withoutStoredLanguage_doesNotDispatchAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let subject = createSubject()
+        let action = TranslationsAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationsActionType.didTapRetryFailedTranslation
+        )
+
+        let expectation = XCTestExpectation(description: "no action dispatched without stored language")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     func test_didTapRetryFailedTranslationAction_withSuccess_doesDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+
         let action = TranslationsAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: TranslationsActionType.didTapRetryFailedTranslation
@@ -463,6 +502,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             translateResult: .failure(TestError.example)
         )
         let subject = createSubject(translationsService: mockTranslationsService)
+
+        // Seed selectedTargetLanguages (seeding also fails since service errors, hence 3 dispatch calls).
+        seedTargetLanguage(in: subject, successDispatchCount: 3)
+
         let action = TranslationsAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: TranslationsActionType.didTapRetryFailedTranslation
@@ -510,6 +553,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             firstResponseReceivedResult: .failure(TestError.example)
         )
         let subject = createSubject(translationsService: mockTranslationsService)
+
+        // Seed selectedTargetLanguages (seeding also fails, hence 3 dispatch calls).
+        seedTargetLanguage(in: subject, successDispatchCount: 3)
+
         let action = TranslationsAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: TranslationsActionType.didTapRetryFailedTranslation
@@ -563,6 +610,28 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     // MARK: - Helpers
+
+    /// Seeds `selectedTargetLanguages` in the middleware by dispatching a `TranslationLanguageSelectedAction`
+    /// and waiting for `successDispatchCount` actions to be dispatched (then clears them).
+    private func seedTargetLanguage(
+        in subject: TranslationsMiddleware,
+        language: String = "de",
+        successDispatchCount: Int
+    ) {
+        let seedAction = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: language,
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+        let seedExpectation = XCTestExpectation(description: "seed target language")
+        seedExpectation.expectedFulfillmentCount = successDispatchCount
+        mockStore.dispatchCalled = { seedExpectation.fulfill() }
+        subject.translationsProvider(mockStore.state, seedAction)
+        wait(for: [seedExpectation], timeout: 1.0)
+        mockStore.dispatchedActions.removeAll()
+        mockTranslationsTelemetry.reset()
+    }
+
     private func createSubject(
         translationsService: TranslationsServiceProtocol = MockTranslationsService()
     ) -> TranslationsMiddleware {
@@ -581,17 +650,17 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager.selectedTab = tab
     }
 
-    private func setTranslationsFeatureEnabled(enabled: Bool) {
+    private func setTranslationsFeatureEnabled(enabled: Bool, languagePickerEnabled: Bool = false) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
-            return TranslationsFeature(enabled: enabled)
+            return TranslationsFeature(enabled: enabled, languagePickerEnabled: languagePickerEnabled)
         }
     }
 
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

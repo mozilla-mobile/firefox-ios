@@ -263,6 +263,10 @@ final class TabTrayViewController: UIViewController,
         }
     }
 
+    public var isReduceTransparencyEnabled: Bool {
+        UIAccessibility.isReduceTransparencyEnabled
+    }
+
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -355,9 +359,9 @@ final class TabTrayViewController: UIViewController,
 
     func subscribeToRedux() {
         let initialSelectedPanel = tabTrayState.selectedPanel
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.showScreen,
-                                        screen: .tabsTray)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                           actionType: ComponentActionType.addComponent,
+                                           component: .tabsTray)
         store.dispatch(screenAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -373,9 +377,9 @@ final class TabTrayViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let screenAction = ScreenAction(windowUUID: windowUUID,
-                                        actionType: ScreenActionType.closeScreen,
-                                        screen: .tabsTray)
+        let screenAction = ComponentAction(windowUUID: windowUUID,
+                                           actionType: ComponentActionType.removeComponent,
+                                           component: .tabsTray)
         store.dispatch(screenAction)
     }
 
@@ -430,7 +434,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     var shouldBeInPrivateTheme: Bool {
-        let tabTrayState = store.state.screenState(TabTrayState.self, for: .tabsTray, window: windowUUID)
+        let tabTrayState = store.state.componentState(TabTrayState.self, for: .tabsTray, window: windowUUID)
         return tabTrayState?.isPrivateMode ?? false
     }
 
@@ -482,7 +486,9 @@ final class TabTrayViewController: UIViewController,
     private func setupToolBarAppearance(theme: Theme) {
         guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
 
-        if #available(iOS 26, *) { return }
+        // When Reduce Transparency is on, fall through to set a solid
+        // appearance so button backgrounds use the correct theme color.
+        if #available(iOS 26, *), !isReduceTransparencyEnabled { return }
 
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
@@ -533,6 +539,7 @@ final class TabTrayViewController: UIViewController,
         navigationItem.titleView = nil
         updateTitle()
         view.addSubviews(containerView)
+
         if tabTrayUtils.shouldDisplayExperimentUI() {
             containerView.addSubview(panelContainer)
             containerView.addSubview(segmentedControl)

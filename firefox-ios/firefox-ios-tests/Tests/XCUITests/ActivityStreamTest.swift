@@ -225,6 +225,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         browser.assertAddressBarContains(value: "wikipedia.org")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()
@@ -369,6 +370,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         homePage.validateHomePageLogo(isPrivate: true)
         // Validate steps 1 and 2 in landscape orientation
         XCUIDevice.shared.orientation = .landscapeLeft
+        waitForRotation(to: .landscapeLeft)
         homePage.assertPrivateHomeTitleExists()
         homePage.validateHomePageLogo(isPrivate: true)
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)

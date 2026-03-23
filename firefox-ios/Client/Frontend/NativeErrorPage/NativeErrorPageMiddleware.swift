@@ -53,23 +53,9 @@ final class NativeErrorPageMiddleware {
     }
 
     private func handleBypassCertificateWarning(windowUUID: WindowUUID) {
-        let selectedTab: Tab?
-        do {
-            selectedTab = try windowManager.tabManager(for: windowUUID).selectedTab
-        } catch {
-            logger.log(
-                "handleBypassCertificateWarning: Failed to fetch selected tab - \(String(describing: error))",
-                level: .warning,
-                category: .certificate
-            )
-            return
-        }
-
-        guard
-            let selectedTab = selectedTab,
-            let webView = selectedTab.webView,
-            let certDetails = nativeErrorPageHelper?.getCertDetails()
-        else {
+        guard let selectedTab = windowManager.tabManager(for: windowUUID).selectedTab,
+              let webView = selectedTab.webView,
+              let certDetails = nativeErrorPageHelper?.getCertDetails() else {
             logger.log(
                 "handleBypassCertificateWarning: Missing required data (tab, webView, cert)",
                 level: .warning,

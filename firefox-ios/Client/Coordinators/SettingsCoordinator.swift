@@ -29,7 +29,8 @@ final class SettingsCoordinator: BaseCoordinator,
                                  ParentCoordinatorDelegate,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
-                                 AppearanceSettingsDelegate {
+                                 AppearanceSettingsDelegate,
+                                 FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -101,6 +102,7 @@ final class SettingsCoordinator: BaseCoordinator,
         }
     }
 
+    // swiftlint:disable:next function_body_length
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .appIcon:
@@ -222,6 +224,7 @@ final class SettingsCoordinator: BaseCoordinator,
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
+        case .translation: return translationSettingsViewController()
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
@@ -372,6 +375,13 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     // MARK: GeneralSettingsDelegate
+    func pressedAIControls() {
+        let viewController = UIHostingController(
+            rootView: AIControlsSettingsView()
+        )
+        viewController.title = .Settings.AIControls.Title
+        router.push(viewController)
+    }
 
     func pressedCustomizeAppIcon() {
         settingsTelemetry.optionSelected(option: .AppIconSelection)
@@ -430,9 +440,9 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
@@ -461,8 +471,15 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
-        router.push(viewController)
+        router.push(translationSettingsViewController())
+    }
+
+    private func translationSettingsViewController() -> UIViewController {
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            return TranslationPickerSettingsViewController(windowUUID: windowUUID)
+        } else {
+            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        }
     }
 
     // MARK: AccountSettingsDelegate
