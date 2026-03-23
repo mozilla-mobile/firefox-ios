@@ -81,4 +81,28 @@ class AIControlsModelTests: XCTest {
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
         XCTAssertTrue(aiControlsModel.translationEnabled)
     }
+
+    func testToggleTranslationsFeatureOn() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        aiControlsModel.toggleTranslationsFeature(to: true)
+        XCTAssertTrue(aiControlsModel.translationEnabled)
+    }
+
+    func testToggleTranslationsFeatureOff() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        aiControlsModel.toggleTranslationsFeature(to: false)
+        XCTAssertFalse(aiControlsModel.translationEnabled)
+    }
+
+    func testTogglePageSummariesFeatureOn() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        aiControlsModel.togglePageSummariesFeature(to: true)
+        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+    }
+
+    func testTogglePageSummariesFeatureOff() {
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        aiControlsModel.togglePageSummariesFeature(to: false)
+        XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
+    }
 }

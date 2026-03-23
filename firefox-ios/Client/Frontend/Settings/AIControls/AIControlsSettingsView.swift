@@ -59,6 +59,12 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         .onChange(of: aiControlsModel.killSwitchIsOn, perform: { newValue in
             aiControlsModel.toggleKillSwitch(to: newValue)
         })
+        .onChange(of: aiControlsModel.translationEnabled, perform: { newValue in
+            aiControlsModel.toggleTranslationsFeature(to: newValue)
+        })
+        .onChange(of: aiControlsModel.pageSummariesEnabled, perform: { newValue in
+            aiControlsModel.togglePageSummariesFeature(to: newValue)
+        })
         .alert(isPresented: $aiControlsModel.killSwitchToggledOn) {
             killSwitchToggledOnAlert
         }
