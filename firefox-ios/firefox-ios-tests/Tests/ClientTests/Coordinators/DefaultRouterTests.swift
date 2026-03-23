@@ -139,7 +139,7 @@ final class DefaultRouterTests: XCTestCase {
         let pushedVC = MockDismissalNotifiableViewController()
         let currentTopVC = DismissableTopViewController()
 
-        navigationController.viewControllers = [baseVC, pushedVC]
+        navigationController.viewControllers = [baseVC, pushedVC, currentTopVC]
         navigationController.topViewController = currentTopVC
         navigationController.presentedViewController = PreventsDismissalPresentedViewController()
 
@@ -155,7 +155,10 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(pushedVC.dismissalReason, .deeplink)
 
         let poppedControllers = try XCTUnwrap(returnedViewControllers)
+        XCTAssertEqual(poppedControllers.count, 2)
         XCTAssertTrue(poppedControllers.contains(where: { $0 === pushedVC }))
+        XCTAssertTrue(poppedControllers.contains(where: { $0 === currentTopVC }))
+        XCTAssertEqual(navigationController.viewControllers, [baseVC])
     }
 
     @MainActor
@@ -164,7 +167,7 @@ final class DefaultRouterTests: XCTestCase {
         let pushedVC = MockDismissalNotifiableViewController()
         let currentTopVC = DismissableTopViewController()
 
-        navigationController.viewControllers = [baseVC, pushedVC]
+        navigationController.viewControllers = [baseVC, pushedVC, currentTopVC]
         navigationController.topViewController = currentTopVC
         navigationController.presentedViewController = UIViewController()
 
@@ -180,7 +183,10 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(pushedVC.dismissalReason, .deeplink)
 
         let poppedControllers = try XCTUnwrap(returnedViewControllers)
+        XCTAssertEqual(poppedControllers.count, 2)
         XCTAssertTrue(poppedControllers.contains(where: { $0 === pushedVC }))
+        XCTAssertTrue(poppedControllers.contains(where: { $0 === currentTopVC }))
+        XCTAssertEqual(navigationController.viewControllers, [baseVC])
     }
 
     @MainActor
