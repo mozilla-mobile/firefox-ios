@@ -4542,13 +4542,6 @@ extension String {
         value: "Update password?",
         comment: "Prompt for updating the password in the Update Password prompt.")
 
-    // Setting
-    public static let SettingToShowLoginsInAppMenu = MZLocalizedString(
-        key: "Settings.ShowLoginsInAppMenu.Title",
-        tableName: nil,
-        value: "Show in Application Menu",
-        comment: "Setting to show Logins & Passwords quick access in the application menu")
-
     // List view
     public static let LoginsListTitle = MZLocalizedString(
         key: "LoginsList.Title.v122",
@@ -8443,6 +8436,12 @@ extension String {
                 tableName: "MainMenu",
                 value: "Turn off Website Dark Mode",
                 comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application."
+            )
+            public static let SettingToShowLoginsInAppMenu = MZLocalizedString(
+                key: "Settings.ShowLoginsInAppMenu.Title",
+                tableName: nil,
+                value: "Show in Application Menu",
+                comment: "Setting to show Logins & Passwords quick access in the application menu"
             )
         }
     }
