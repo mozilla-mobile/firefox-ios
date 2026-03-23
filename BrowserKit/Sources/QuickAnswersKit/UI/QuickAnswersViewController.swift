@@ -20,6 +20,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
         static let audioWaveformTopPadding: CGFloat = 37.0
         static let audioWaveformSize = CGSize(width: 18.0, height: 35)
+        static let responseViewTopPadding: CGFloat = 16.0
+        static let responseViewBottomPadding: CGFloat = 12.0
+        static let responseViewHorizontalPadding: CGFloat = 24.0
     }
 
     // MARK: - Properties
@@ -53,6 +56,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.axis = .horizontal
         $0.spacing = UX.buttonsSpacing
     }
+    let responseView: QuickAnswersResponseView = .build()
     private let transitionAnimator: TransitionAnimator
 
     public let themeManager: any ThemeManager
@@ -90,10 +94,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
+        setupActions()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
+        responseView.configure(state: .idle)
     }
 
     private func setupSubviews() {
@@ -103,7 +109,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         buttonsContainer.addArrangedSubview(recordButton)
         buttonsContainer.addArrangedSubview(closeButton)
         buttonsContainer.addArrangedSubview(trailingButtonContainerSpacer)
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, buttonsContainer)
+        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, responseView, buttonsContainer)
 
         NSLayoutConstraint.activate([
             audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -111,6 +117,15 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            responseView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
+                                              constant: UX.responseViewTopPadding),
+            responseView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                  constant: UX.responseViewHorizontalPadding),
+            responseView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                   constant: -UX.responseViewHorizontalPadding),
+            responseView.bottomAnchor.constraint(equalTo: buttonsContainer.topAnchor,
+                                                 constant: -UX.responseViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
@@ -129,6 +144,19 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         backgroundBlur.pinToSuperview()
     }
 
+    private func setupActions() {
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
+    }
+
+    @objc private func closeButtonTapped() {
+        navigationHandler?.dismissQuickAnswers(with: nil)
+    }
+
+    @objc private func recordButtonTapped() {
+        // TODO: FXIOS-14880 - Connect to view model recording logic
+    }
+
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
@@ -139,5 +167,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
+        responseView.applyTheme(theme: theme)
     }
 }
