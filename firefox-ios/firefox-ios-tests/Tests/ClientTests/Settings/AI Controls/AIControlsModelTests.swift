@@ -16,6 +16,7 @@ class AIControlsModelTests: XCTest {
             PrefsKeys.Settings.translationsFeature: false,
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     func testHeaderLinkInfo() {
@@ -35,6 +36,20 @@ class AIControlsModelTests: XCTest {
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
+    }
+
+    func testInitializeWithTranslationFeatureFlagDisabled() {
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        XCTAssertTrue(aiControlsModel.pageSummariesVisible)
+        XCTAssertFalse(aiControlsModel.translationsVisible)
+    }
+
+    func testInitializeWithPageSummariesFeatureFlagDisabled() {
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        XCTAssertFalse(aiControlsModel.pageSummariesVisible)
+        XCTAssertTrue(aiControlsModel.translationsVisible)
     }
 
     func testToggleKillSwitchOn() {
@@ -104,5 +119,15 @@ class AIControlsModelTests: XCTest {
         let aiControlsModel = AIControlsModel(prefs: mockPrefs)
         aiControlsModel.togglePageSummariesFeature(to: false)
         XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
+    }
+
+    private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            return TranslationsFeature(enabled: isTranslationsEnabled)
+        }
+
+        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
+            return HostedSummarizerFeature(enabled: isSummariesEnabled)
+        }
     }
 }
