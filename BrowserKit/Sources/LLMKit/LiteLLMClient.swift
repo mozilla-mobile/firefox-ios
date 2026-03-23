@@ -5,10 +5,6 @@
 import Foundation
 import MLPAKit
 
-public protocol LLMConfig: Sendable {
-    var instructions: String { get }
-    var options: [String: AnyHashable] { get }
-}
 /// A lightweight client for interacting with an OpenAI style API chat completions endpoint.
 /// TODO(FXIOS-12942): Implement proper thread-safety
 public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
