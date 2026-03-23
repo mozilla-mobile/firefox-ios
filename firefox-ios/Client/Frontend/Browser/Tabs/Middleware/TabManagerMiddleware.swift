@@ -674,7 +674,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
     private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
         guard let tab else { return false }
 
-        // If is not bookmarked already or the url is not to long (database restriction) or is not homepage
+        // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
+        // and it is not a homepage (FxHome) tab.
         return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
     }
 
