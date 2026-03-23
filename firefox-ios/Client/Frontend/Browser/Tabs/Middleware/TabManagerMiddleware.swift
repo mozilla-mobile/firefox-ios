@@ -653,9 +653,10 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let urlString = tab?.url?.absoluteString ?? ""
 
         getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
-            ensureMainThread {
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
                 let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
-                let isSyncEnabled = RustFirefoxAccounts.shared.hasAccount()
+                let isSyncEnabled = self.profile.hasSyncableAccount()
 
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
                                          canTabBeRemoved: isBookmarked,
