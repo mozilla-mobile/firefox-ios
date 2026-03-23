@@ -6,10 +6,10 @@ import Common
 
 public final class MockLogger: Logger, @unchecked Sendable {
     public var crashedLastLaunch = false
-    var savedMessage: String?
-    var savedLevel: LoggerLevel?
-    var savedCategory: LoggerCategory?
-    var savedExtra: [String: String]?
+    public var savedMessage: String?
+    public var savedLevel: LoggerLevel?
+    public var savedCategory: LoggerCategory?
+    public var savedExtra: [String: String]?
 
     public init() { }
 

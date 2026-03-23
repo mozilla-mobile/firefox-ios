@@ -5,8 +5,9 @@
 import Foundation
 import Glean
 import MozillaAppServices
-import XCTest
 import Storage
+import TestKit
+import XCTest
 
 @testable import Client
 
