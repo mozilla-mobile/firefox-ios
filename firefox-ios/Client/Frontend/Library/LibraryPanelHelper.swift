@@ -103,6 +103,7 @@ class LibraryPanelHelper {
         self.profile = profile
     }
 
+    @MainActor
     lazy var enabledPanels: [LibraryPanelDescriptor] = {
         let bookmarksViewModel = BookmarksPanelViewModel(profile: profile, bookmarksHandler: profile.places)
 
