@@ -5,10 +5,7 @@
 import Common
 import Foundation
 
-/// Firefox homepage "News" affordance shown above vertical stories.
-class NewsAffordanceHeaderView: UICollectionReusableView,
-                                ReusableCell,
-                                ThemeApplicable {
+final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     struct UX {
         static let containerHeight: CGFloat = 56
         static let containerBottomInset: CGFloat = 16
@@ -21,7 +18,7 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
         static let newsIconSize: CGFloat = 24
     }
 
-    // MARK: - UIElements
+    // MARK: - UI Elements
     private lazy var containerView: UIView = .build { view in
         view.isAccessibilityElement = true
         view.accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
@@ -55,11 +52,9 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
     private lazy var newsLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 1
         label.text = .FirefoxHomepage.Pocket.NewsAffordanceLabel
     }
 
-    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -69,12 +64,13 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Public methods
-    func configure(theme: Theme) {
-        applyTheme(theme: theme)
+    func applyTheme(theme: Theme) {
+        let color = theme.colors.actionPrimary
+        chevronImageView.tintColor = color
+        newsIconImageView.tintColor = color
+        newsLabel.textColor = color
     }
 
-    // MARK: - Private methods
     private func setupLayout() {
         iconLabelStackView.addArrangedSubview(newsIconImageView)
         iconLabelStackView.addArrangedSubview(newsLabel)
@@ -88,27 +84,22 @@ class NewsAffordanceHeaderView: UICollectionReusableView,
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: UX.containerHeight),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.containerBottomInset),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
+                                                  constant: -UX.containerBottomInset),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.stackTopInset),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackHorizontalInset),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                           constant: UX.stackTopInset),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                               constant: UX.stackHorizontalInset),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                 constant: -UX.stackHorizontalInset),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackBottomInset),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                              constant: -UX.stackBottomInset),
 
             chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize),
             chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize),
             newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize),
             newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize),
         ])
-    }
-
-    // MARK: - ThemeApplicable
-    func applyTheme(theme: Theme) {
-        let color = theme.colors.actionPrimary
-        chevronImageView.tintColor = color
-        newsIconImageView.tintColor = color
-        newsLabel.textColor = color
     }
 }

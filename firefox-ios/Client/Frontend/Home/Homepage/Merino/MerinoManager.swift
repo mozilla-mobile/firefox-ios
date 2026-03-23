@@ -17,13 +17,7 @@ final class MerinoManager: MerinoManagerProvider {
     }
 
     func getMerinoItems(source: StorySource) async -> [MerinoStoryConfiguration] {
-        let stories: [MerinoStory]
-        switch source {
-        case .homepage:
-            stories = await storyProvider.fetchHomepageStories()
-        case .storiesFeed:
-            stories = await storyProvider.fetchDiscoverMoreStories()
-        }
+        let stories = await storyProvider.fetchHomepageStories()
         return stories.compactMap { MerinoStoryConfiguration(story: $0) }
     }
 
@@ -34,5 +28,4 @@ final class MerinoManager: MerinoManagerProvider {
 
 enum StorySource {
     case homepage
-    case storiesFeed
 }

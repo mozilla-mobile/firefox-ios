@@ -43,10 +43,11 @@ class StoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
+        app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         XCTAssertEqual(
             app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
-            "Popular Today"
+            "News"
         )
 
         // There should be at least 8 stories on iPhone and 7 on iPad.
@@ -60,6 +61,7 @@ class StoryTests: BaseTestCase {
 
         // Enable it again
         togglePocket(shouldEnable: true)
+        app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
 
         // Tap on the first Pocket element
@@ -75,6 +77,7 @@ class StoryTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
     func testValidatePocketContextMenu() {
         navigator.goto(NewTabScreen)
+        app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
         // Long tap on one of the stories
         let pocketCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell

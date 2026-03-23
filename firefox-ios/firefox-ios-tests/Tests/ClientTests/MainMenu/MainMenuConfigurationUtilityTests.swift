@@ -11,12 +11,14 @@ import SummarizeKit
 
 @MainActor
 final class MainMenuConfigurationUtilityTests: XCTestCase {
-    var configUtility: MainMenuConfigurationUtility!
+    private var configUtility: MainMenuConfigurationUtility!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        setIsSummarizerLanguageExpansionEnabled(false)
         configUtility = MainMenuConfigurationUtility()
     }
 
@@ -58,7 +60,34 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertTrue(titles.contains(String.MainMenu.Submenus.Tools.Print))
     }
 
-    private func getTabInfo(isHomepage: Bool = false) -> MainMenuTabInfo {
+    func testGenerateMenuElements_readerViewItem_whenSummarizerLanguageExpansionEnabled() {
+        setIsSummarizerLanguageExpansionEnabled(true)
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isExpanded: true)
+
+        let allItems = sections.flatMap { $0.options }
+        let titles = allItems.map { $0.title }
+
+        XCTAssertTrue(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
+    }
+
+    func testGenerateMenuElements_readerViewItem_whenSummarizerLanguageExpansionDisabled() {
+        let sections = configUtility.generateMenuElements(with: getTabInfo(), and: windowUUID, isExpanded: true)
+
+        let allItems = sections.flatMap { $0.options }
+        let titles = allItems.map { $0.title }
+
+        XCTAssertFalse(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
+    }
+
+    private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+            return SummarizerLanguageExpansionFeature(enabled: enabled)
+        }
+    }
+
+    private func getTabInfo(
+        isHomepage: Bool = false,
+    ) -> MainMenuTabInfo {
         return MainMenuTabInfo(
             tabID: "uuid",
             url: nil,
@@ -67,7 +96,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             isDefaultUserAgentDesktop: false,
             hasChangedUserAgent: false,
             zoomLevel: 0,
-            readerModeIsAvailable: false,
+            readerModeConfiguration: ReaderModeConfiguration(isAvailable: false, isActive: false),
             summaryIsAvailable: false,
             summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:]),
             isBookmarked: false,

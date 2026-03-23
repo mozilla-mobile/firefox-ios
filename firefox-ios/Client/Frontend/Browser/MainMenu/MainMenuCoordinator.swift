@@ -34,6 +34,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     @MainActor
     func showPrintSheet()
 
+    @MainActor
+    func showReaderMode()
+
     /// Open the share sheet to share the currently selected `Tab`.
     @MainActor
     func showShareSheetForCurrentlySelectedTab()
@@ -122,6 +125,10 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
         case .passwords:
             navigationHandler?.showSettings(at: .password)
+
+        case .readerView:
+            // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
+            navigationHandler?.showReaderMode()
 
         case .settings:
             navigationHandler?.showSettings(at: .general)

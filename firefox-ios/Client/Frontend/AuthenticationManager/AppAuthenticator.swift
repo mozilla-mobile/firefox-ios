@@ -28,12 +28,7 @@ protocol AppAuthenticationProtocol {
 }
 
 final class AppAuthenticator: AppAuthenticationProtocol {
-    private let context: LAContextProtocol
     private(set) var isAuthenticating = false
-
-    init(context: LAContextProtocol = LAContext()) {
-        self.context = context
-    }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
@@ -64,7 +59,10 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         //  (by commenting out the next line), then a previously successful authentication
         //  causes the next policy evaluation to succeed without testing biometry again.
         //  That's usually not what you want.
-        let context = self.context
+
+        // TODO: This was recently changed in PR #31888 for FXIOS-14501, but it causes an issue with our biometrics,
+        // similar to the bug described above; we need to use a new LAContext for each authentication.
+        let context = LAContext()
 
         isAuthenticating = true
 
@@ -106,6 +104,6 @@ final class AppAuthenticator: AppAuthenticationProtocol {
     }
 
     var canAuthenticateDeviceOwner: Bool {
-        return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }

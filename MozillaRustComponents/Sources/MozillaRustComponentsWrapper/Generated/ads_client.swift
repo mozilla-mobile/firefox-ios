@@ -425,6 +425,22 @@ private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterUInt8: FfiConverterPrimitive {
+    typealias FfiType = UInt8
+    typealias SwiftType = UInt8
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt8 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: UInt8, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
     typealias FfiType = UInt32
     typealias SwiftType = UInt32
@@ -703,6 +719,8 @@ public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
     
     func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
     
+    func rotationDays(rotationDays: UInt8)  -> MozAdsClientBuilder
+    
     func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
     
 }
@@ -788,6 +806,15 @@ open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
     uniffi_ads_client_fn_method_mozadsclientbuilder_environment(
             self.uniffiCloneHandle(),
         FfiConverterTypeMozAdsEnvironment_lower(environment),$0
+    )
+})
+}
+    
+open func rotationDays(rotationDays: UInt8) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_rotation_days(
+            self.uniffiCloneHandle(),
+        FfiConverterUInt8.lower(rotationDays),$0
     )
 })
 }
@@ -2699,6 +2726,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 6560) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_rotation_days() != 16906) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 36488) {

@@ -7,3 +7,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
 "ContextualHints.Toolbar.Top.Description.v107" = "Gluais am bàr-inneal gun bhonn mas fheàrr leat an-sin e.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout. */
+"ContextualHints.Toolbar.Update.Description.v139" = "Chaidh na tabaichean is an clàr-taice a chur an àite a chèile airson ’s gum bi am brabhsadh nas fheàrr.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout. */
+"ContextualHints.Toolbar.Update.Title.v139" = "Ghluais sinn rud no dhà mun cuairt";
+

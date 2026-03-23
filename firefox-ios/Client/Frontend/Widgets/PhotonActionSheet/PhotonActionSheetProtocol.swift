@@ -23,7 +23,6 @@ extension PhotonActionSheetProtocol {
     func presentSheetWith(viewModel: PhotonActionSheetViewModel,
                           on viewController: PresentableVC,
                           from view: UIView) {
-        // TODO: Regression testing needed here.
         guard let uuid = view.currentWindowUUID else { return }
 
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)
@@ -34,17 +33,9 @@ extension PhotonActionSheetProtocol {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = view.bounds
-
-            let trait = viewController.traitCollection
-            if viewModel.isMainMenu {
-                let margins = viewModel.getMainMenuPopOverMargins(
-                    trait: trait,
-                    view: view,
-                    presentedOn: viewController
-                )
-                popoverVC.popoverLayoutMargins = margins
-            }
-            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(trait: trait)
+            popoverVC.permittedArrowDirections = viewModel.getPossibleArrowDirections(
+                trait: viewController.traitCollection
+            )
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
