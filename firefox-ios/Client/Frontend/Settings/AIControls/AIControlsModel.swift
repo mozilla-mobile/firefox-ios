@@ -10,9 +10,25 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
 
+
+    let headerLinkInfo = LinkInfo(
+        label: .Settings.AIControls.HeaderCard.Link,
+        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+    )
+
+    let blockAIEnhancementsLinkInfo = LinkInfo(
+        label: .Settings.AIControls.BlockAIEnhancementsLink,
+        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+    )
+
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: DefaultSummarizerNimbusUtils
     private let prefs: Prefs
+
+    struct LinkInfo {
+        let label: String
+        let url: URL
+    }
 
     init(prefs: Prefs) {
         self.prefs = prefs

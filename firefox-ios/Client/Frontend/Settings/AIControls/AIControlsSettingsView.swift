@@ -26,19 +26,15 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             VStack(alignment: .leading) {
                 informationCard
                 Spacer(minLength: 20)
-                RoundedCard(
-                    background: themeColors.layer5.color,
-                    cornerRadius: 30
-                ) {
-                    Toggle(isOn: $aiControlsModel.killSwitchIsOn) {
-                        Text("Block AI Enhancements").font(.body)
-                    }.tint(themeColors.actionPrimary.color)
-                }
-                Text("Blocking means you won’t see new or current AI enhancements in Firefox. See what’s included")
+                blockAIEnhancementsCard
+                Text(verbatim: .Settings.AIControls.BlockAIEnhancementsDescription)
                     .font(.caption)
                     .foregroundStyle(themeColors.textSecondary.color)
                     .padding(.leading)
-                Link("See what’s included", destination: URL(string: "www.google.com")!)
+                Link(
+                    aiControlsModel.blockAIEnhancementsLinkInfo.label,
+                    destination: aiControlsModel.blockAIEnhancementsLinkInfo.url
+                )
                     .tint(themeColors.actionPrimary.color)
                     .font(.caption)
                     .padding(.leading)
@@ -47,12 +43,12 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     warningCard
                     Spacer(minLength: 20)
                 }
-                Text("AI-POWERED FEATURES").font(.caption).foregroundStyle(themeColors.textSecondary.color).padding(.leading)
-                aiFeaturesControlCard
+                aiFeaturesControls
             }.padding(16)
             VStack(alignment: .leading, spacing: 10) {
-                Text("**Available**: You'll see the feature and can use it.").font(.caption)
-                Text("**Blocked**: you won't see and can't use the feature. For on-device AI, any downloaded models are removed.")
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription)
+                    .font(.caption)
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription)
                     .font(.caption)
             }.padding(.horizontal, 32)
         }
@@ -71,13 +67,13 @@ struct AIControlsSettingsView: View, ThemeApplicable {
 
     var killSwitchToggledOnAlert: Alert {
         Alert(
-            title: Text("Block AI Enhancements"),
-            message: Text("You won’t see new or current AI enhancements in Firefox, or pop-ups about them. Afterwards, you can unblock anything you want to keep using.\n\n What will be blocked:\n- Translation\n- Page Summaries"),
-            primaryButton: .default(Text("Cancel"), action:
+            title: Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.Title),
+            message: Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.Message),
+            primaryButton: .default(Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.CancelButton), action:
                                         {
                                             aiControlsModel.killSwitchIsOn = false
                                         }),
-            secondaryButton: .destructive(Text("Block"))
+            secondaryButton: .destructive(Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.BlockButton))
         )
     }
 
@@ -88,12 +84,12 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("You always have a choice in Firefox").font(.headline)
+                    Text(verbatim: .Settings.AIControls.HeaderCard.Title).font(.headline)
                         .foregroundStyle(themeColors.textPrimary.color)
-                    Text("That includes whether to use features enhanced with AI.")
+                    Text(verbatim: .Settings.AIControls.HeaderCard.Message)
                         .font(.subheadline
                         ).foregroundStyle(themeColors.textSecondary.color)
-                    Link("Learn more", destination: URL(string: "www.google.com")!)
+                    Link(aiControlsModel.headerLinkInfo.label, destination: aiControlsModel.headerLinkInfo.url)
                         .tint(themeColors.actionPrimary.color)
                         .font(.subheadline)
                 }
@@ -105,6 +101,17 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         }
     }
 
+    var blockAIEnhancementsCard: some View {
+        RoundedCard(
+            background: themeColors.layer5.color,
+            cornerRadius: 30
+        ) {
+            Toggle(isOn: $aiControlsModel.killSwitchIsOn) {
+                Text(verbatim: .Settings.AIControls.BlockAIEnhancementsTitle).font(.body)
+            }.tint(themeColors.actionPrimary.color)
+        }
+    }
+
     var warningCard: some View {
         RoundedCard(
             background: themeColors.layerWarning.color,
@@ -112,7 +119,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             HStack(alignment: .top) {
                 Image(systemName: "info.circle")
-                Text("New and current AI enhancements are blocked by default. Unblock specific features below.")
+                Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(.body)
                     .foregroundStyle(themeColors.textPrimary.color)
                 Spacer()
@@ -120,7 +127,12 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         }
     }
 
-    var aiFeaturesControlCard: some View {
+    @ViewBuilder
+    var aiFeaturesControls: some View {
+        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.Title)
+            .font(.caption)
+            .foregroundStyle(themeColors.textSecondary.color)
+            .padding(.leading)
         RoundedCard(
             background: themeColors.layer5.color,
             cornerRadius: 30
@@ -128,32 +140,41 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             VStack(alignment: .leading) {
                 Toggle(isOn: $aiControlsModel.translationEnabled) {
                     VStack(alignment: .leading) {
-                        Text("Translation").font(.body).foregroundStyle(themeColors.textPrimary.color)
-                        Text("All translations stay private on your device.")
+                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title)
+                            .font(.body)
+                            .foregroundStyle(themeColors.textPrimary.color)
+                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message)
                             .font(.footnote)
                             .foregroundStyle(themeColors.textSecondary.color)
-                        if !aiControlsModel.translationEnabled {
-                            Text("Blocked").foregroundStyle(themeColors.textCritical.color).font(.footnote)
-                        } else {
-                            Text("Available").foregroundStyle(themeColors.layerSelectedText.color).font(.footnote)
-                        }
+                        aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
                     }
                 }.tint(themeColors.actionPrimary.color)
                 Divider().foregroundStyle(themeColors.textSecondary.color)
                 Toggle(isOn: $aiControlsModel.pageSummariesEnabled) {
                     VStack(alignment: .leading) {
-                        Text("Page Summaries").font(.body).foregroundStyle(themeColors.textPrimary.color)
-                        Text("Pages and summaries are never stored.")
+                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title)
+                            .font(.body)
+                            .foregroundStyle(themeColors.textPrimary.color)
+                        Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message)
                             .font(.footnote)
                             .foregroundStyle(themeColors.textSecondary.color)
-                        if !aiControlsModel.pageSummariesEnabled {
-                            Text("Blocked").foregroundStyle(themeColors.textCritical.color).font(.footnote)
-                        } else {
-                            Text("Available").foregroundStyle(themeColors.layerSelectedText.color).font(.footnote)
-                        }
+                        aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
                     }
                 }.tint(themeColors.actionPrimary.color)
             }
+        }
+    }
+
+    @ViewBuilder
+    func aiFeatureToggleStatus(isEnabled: Bool) -> some View {
+        if isEnabled {
+            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus)
+                .foregroundStyle(themeColors.layerSelectedText.color)
+                .font(.footnote)
+        } else {
+            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus)
+                .foregroundStyle(themeColors.textCritical.color)
+                .font(.footnote)
         }
     }
 
