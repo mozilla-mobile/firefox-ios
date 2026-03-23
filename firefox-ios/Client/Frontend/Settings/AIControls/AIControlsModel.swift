@@ -41,7 +41,7 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
 
         pageSummariesVisible = summarizerConfiguration.isSummarizeFeatureEnabled
         translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
-        
+
         killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
     }
 

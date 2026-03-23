@@ -147,6 +147,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             cornerRadius: UX.cornerRadius,
             padding: UX.padding
         ) {
+            // TODO: FXIOS-15158 Handle if a user has no AI Features turned on
             VStack(alignment: .leading) {
                 if aiControlsModel.translationsVisible {
                     Toggle(isOn: $aiControlsModel.translationEnabled) {
