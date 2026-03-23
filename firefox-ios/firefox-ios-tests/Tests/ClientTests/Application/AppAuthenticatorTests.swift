@@ -9,8 +9,6 @@ import XCTest
 
 @MainActor
 final class AppAuthenticatorTests: XCTestCase {
-    // TODO: Revisit these tests for FXIOS-15134
-    /*
     // MARK: - getAuthenticationState
 
     func test_getAuthenticationState_whenCanEvaluate_setsIsAuthenticatingTrue_thenFalse() {
@@ -124,10 +122,10 @@ final class AppAuthenticatorTests: XCTestCase {
         let context = MockLAContext()
         context.canEvaluate = canEvaluate
         context.shouldSucceed = shouldSucceed
+        let provider = MockLAContextProvider(context: context)
 
-        let subject = AppAuthenticator(context: context)
+        let subject = AppAuthenticator(contextProvider: provider)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
-     */
 }
