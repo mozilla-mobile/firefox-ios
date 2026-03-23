@@ -970,15 +970,19 @@ extension BrowserViewController: WKNavigationDelegate {
 
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
-        if isNativeErrorPageEnabled {
-            let action = NativeErrorPageAction(networkError: error as NSError,
+        let nsError = error as NSError
+        let isNonBadDomainCertError = CertErrors.contains(nsError.code)
+            && !NativeErrorPageHelper.isBadCertDomainError(nsError)
+
+        if isNativeErrorPageEnabled && !isNonBadDomainCertError {
+            let action = NativeErrorPageAction(networkError: nsError,
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
             store.dispatch(action)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
+            ErrorPageHelper(certStore: profile.certStore).loadPage(nsError,
                                                                    forUrl: url,
                                                                    inWebView: webView)
         }
@@ -1084,7 +1088,8 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
-                let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(error.code)
+                let isCertificateError = isBadCertDomainErrorPageEnabled
+                    && NativeErrorPageHelper.isBadCertDomainError(error)
 
                 if isNoInternetError || isCertificateError {
                     if isCertificateError {
