@@ -59,7 +59,6 @@ jobs:
           retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
           retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
           retry gh pr close "$NUMBER" -R "$GH_REPO" || true
-          gh pr lock "$NUMBER" -R "$GH_REPO" -r "spam" || true
 
       - name: Handle outside-approved-scope label
         if: github.event.action == 'labeled' && github.event.label.name == 'outside-approved-scope'
