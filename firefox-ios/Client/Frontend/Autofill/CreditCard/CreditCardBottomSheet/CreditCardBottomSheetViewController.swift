@@ -271,8 +271,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     private func didTapYes() {
         self.viewModel.didTapMainButton { [weak self] error in
             DispatchQueue.main.async { [weak self] in
-                self?.dismissVC()
                 self?.didTapYesClosure?(error)
+                self?.dismissVC()
             }
         }
     }
