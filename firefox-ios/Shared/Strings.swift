@@ -3004,21 +3004,21 @@ extension String {
 
             public struct HeaderCard {
                 public static let Title = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCardTitle.v150",
+                    key: "Settings.AIControls.HeaderCard.Title.v150",
                     tableName: "Settings",
                     value: "You always have a choice in Firefox",
                     comment: "This is the title for the Header Card under the AI Controls settings section."
                 )
 
                 public static let Message = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCardMessage.v150",
+                    key: "Settings.AIControls.HeaderCard.Message.v150",
                     tableName: "Settings",
                     value: "That includes whether to use features enhances with AI.",
                     comment: "This is the message for the Header Card under the AI Controls settings section."
                 )
 
                 public static let Link = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCardLink.v150",
+                    key: "Settings.AIControls.HeaderCard.Link.v150",
                     tableName: "Settings",
                     value: "Learn more",
                     comment: "This is the text for the link in the Header Card under the AI Controls settings section that links to more information."
@@ -3140,14 +3140,14 @@ extension String {
                 public static let AvailableStatusDescription = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v150",
                     tableName: "Settings",
-                    value: "**Available**: You'll see the feature and can use it.",
+                    value: "**Available**: You’ll see the feature and can use it.",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the available status means."
                 )
 
                 public static let BlockedStatusDescription = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v150",
                     tableName: "Settings",
-                    value: "**Blocked**: you won't see and can't use the feature. For on-device AI, any downloaded models are removed.",
+                    value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means."
                 )
             }

@@ -67,6 +67,6 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
     }
 
     func togglePageSummariesFeature(to newValue: Bool) {
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
+        prefs.setBool(newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
     }
 }
