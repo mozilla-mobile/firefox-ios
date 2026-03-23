@@ -45,6 +45,9 @@ let package = Package(
         .library(name: "JWTKit",
                  targets: ["JWTKit"]),
         .library(
+            name: "LLMKit",
+            targets: ["LLMKit"]),
+        .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
         .library(
@@ -224,7 +227,7 @@ let package = Package(
                 "Common",
                 "ComponentLibrary",
                 "Down",
-                "MLPAKit"
+                "LLMKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
@@ -247,6 +250,18 @@ let package = Package(
             dependencies: ["JWTKit"],
             swiftSettings: [
             ]
+        ),
+        .target(
+            name: "LLMKit",
+            dependencies: ["MLPAKit"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]
+        ),
+        .testTarget(
+            name: "LLMKitTests",
+            dependencies: ["LLMKit", "MLPAKit", "TestKit"],
+            swiftSettings: []
         ),
         .target(
             name: "UnifiedSearchKit",

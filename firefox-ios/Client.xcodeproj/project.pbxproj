@@ -11536,6 +11536,7 @@
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
 				0BF802E22CFF0937005633E5 /* Shared in Frameworks */,
+				AA93B7152F6D95D6002E5E88 /* LLMKit in Frameworks */,
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
@@ -17195,6 +17196,7 @@
 				ED4F77DF2F364BF800E7A7FB /* CopyWithUpdates */,
 				AA459F862F630F3500D05D04 /* QuickAnswersKit */,
 				AA93AB042F6B06BE002E5E88 /* MLPAKit */,
+				AA93B7142F6D95D6002E5E88 /* LLMKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -32172,6 +32174,10 @@
 		AA93AB042F6B06BE002E5E88 /* MLPAKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MLPAKit;
+		};
+		AA93B7142F6D95D6002E5E88 /* LLMKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LLMKit;
 		};
 		AB2AC6622BCFD0A200022AAB /* X509 */ = {
 			isa = XCSwiftPackageProductDependency;
