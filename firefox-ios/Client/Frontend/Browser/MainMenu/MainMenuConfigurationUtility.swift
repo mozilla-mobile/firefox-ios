@@ -52,9 +52,16 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
         isExpanded: Bool = false,
-        profileImage: UIImage? = nil
+        profileImage: UIImage? = nil,
+        localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> [MenuSection] {
-        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded, profileImage: profileImage)
+        return getMainMenuElements(
+            with: uuid,
+            and: tabInfo,
+            isExpanded: isExpanded,
+            profileImage: profileImage,
+            localeProvider: localeProvider
+        )
     }
 
     // MARK: - Main Menu
@@ -64,7 +71,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
         isExpanded: Bool = false,
-        profileImage: UIImage?
+        profileImage: UIImage?,
+        localeProvider: LocaleProvider
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = []
@@ -73,7 +81,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         } else {
-            menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
+            menuSections.append(
+                getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded, localeProvider: localeProvider)
+            )
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         }
@@ -220,7 +230,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     // Site Section
     @MainActor
-    private func getSiteSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, isExpanded: Bool) -> MenuSection {
+    private func getSiteSection(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        isExpanded: Bool,
+        localeProvider: LocaleProvider
+    ) -> MenuSection {
         var options: [MenuElement] = [
             configureBookmarkPageItem(with: uuid, and: tabInfo),
             MenuElement(
@@ -253,7 +268,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
             options.append(configureZoomItem(with: uuid, and: tabInfo))
-            configureTranslationItem(with: uuid, tabInfo: tabInfo).map { options.append($0) }
+            configureTranslationItem(with: uuid, tabInfo: tabInfo, localeProvider: localeProvider).map { options.append($0) }
             if isSummarizerLanguageExpansionEnabled {
                 options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
             }
@@ -397,7 +412,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     private func configureTranslationItem(
         with uuid: WindowUUID,
-        tabInfo: MainMenuTabInfo
+        tabInfo: MainMenuTabInfo,
+        localeProvider: LocaleProvider
     ) -> MenuElement? {
         guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
               let translationConfig = tabInfo.translationConfiguration,
@@ -407,7 +423,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
-            infoTitle = Locale.current.localizedString(forLanguageCode: langCode) ?? langCode
+            infoTitle = localeProvider.current.localizedString(forLanguageCode: langCode) ?? langCode
         } else {
             infoTitle = .MainMenu.ToolsSection.DesktopSiteOff
         }

@@ -880,7 +880,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
         canSummarize: Bool,
         summarizerConfig: SummarizerConfig? = nil
     ) {
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let translationConfig = toolbarState?.addressToolbar.translationConfiguration
         store.dispatch(
             MainMenuAction(

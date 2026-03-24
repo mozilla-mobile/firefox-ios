@@ -165,7 +165,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             navigationHandler?.showSummarizePanel(.mainMenu, config: config)
 
         case .translatePage:
-            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+            let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
             let translationConfig = toolbarState?.addressToolbar.translationConfiguration
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
