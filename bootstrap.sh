@@ -31,6 +31,9 @@ if [[ "$PRODUCT" == "firefox" ]]; then
     # Make the hooks are executable
     chmod +x .git/hooks/*
 
+    # Enable prebuilt SwiftSyntax binaries to speed up macro compilation
+    defaults write com.apple.dt.Xcode IDEPackageEnablePrebuilts YES
+
     # Install Node.js dependencies and build user scripts
     npm install
     npm run build
