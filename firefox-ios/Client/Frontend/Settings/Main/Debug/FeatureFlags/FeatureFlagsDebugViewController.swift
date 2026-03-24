@@ -256,13 +256,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .webEngineIntegrationRefactor,
-                titleText: format(string: "Web Engine Integration Refactor"),
-                statusText: format(string: "Toggle to enable the use of WebEngine library")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .hostedSummarizer,
                 titleText: format(string: "Hosted Summarizer Feature"),
                 statusText: format(string: "Toggle to enable the hosted summarizer feature")
