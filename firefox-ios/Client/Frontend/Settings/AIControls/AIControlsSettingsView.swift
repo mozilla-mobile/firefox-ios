@@ -108,7 +108,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             }
             .padding(.trailing, UX.foxImageOffset)
         } overlay: {
-            Image("foxWithStars")
+            Image(ImageIdentifiers.foxWithStars)
         }
     }
 
@@ -133,7 +133,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             padding: UX.padding
         ) {
             HStack(alignment: .top) {
-                Image(systemName: "info.circle")
+                Image(ImageIdentifiers.information)
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textPrimary.color)
