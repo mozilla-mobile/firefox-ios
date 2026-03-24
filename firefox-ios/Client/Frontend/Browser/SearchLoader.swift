@@ -99,12 +99,9 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
                     let group = DispatchGroup()
                     group.enter()
 
-                    self?.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { history in
-                        ensureMainThread {
-                            // Mutate local variable on the main thread for thread safety
-                            queries.append(history)
-                            group.leave()
-                        }
+                    self?.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { @MainActor history in
+                        queries.append(history)
+                        group.leave()
                     }
 
                     group.notify(queue: .main) {
