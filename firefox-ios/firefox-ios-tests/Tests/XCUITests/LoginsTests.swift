@@ -511,7 +511,7 @@ class LoginTest: BaseTestCase {
         saveLoginAlertScreen.respondToAlert(savePassword: isPasswordSaved)
 
         openLoginsSettings()
-        loginSettingsScreen.openLoginAtIndex(2)
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         loginSettingsScreen.revealPassword()
         if isPasswordSaved {
             loginSettingsScreen.assertPasswordVisible("password")
@@ -521,7 +521,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateLoginTextFieldsCanBeCopied(indexField: Int, copiedText: String, field: String) {
-        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).waitAndTap()
         // Long tap on the Website field and then tap on Copy
         app.tables.cells.element(boundBy: indexField).press(forDuration: 1.5)
         app.staticTexts["Copy"].waitAndTap()
@@ -577,12 +577,12 @@ class LoginTest: BaseTestCase {
         // Only matching results are displayed
         waitForElementsToExist(
             [
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domain],
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domainLogin]
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domain],
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domainLogin]
             ]
         )
         // Tap on one of the matching results
-        app.tables[loginList].cells.element(boundBy: 2).tap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).tap()
         // The login details are displayed
         waitForElementsToExist(
             [
