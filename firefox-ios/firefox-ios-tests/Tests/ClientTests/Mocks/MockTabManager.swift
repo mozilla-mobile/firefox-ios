@@ -18,6 +18,8 @@ class MockTabManager: TabManager {
     var selectedTabUUID: UUID?
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
+    // Use to return in getTabForUUID()
+    var tabForUUID: Tab?
 
     var recentlyAccessedNormalTabs = [Tab]()
 
@@ -113,7 +115,7 @@ class MockTabManager: TabManager {
     func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
-        return nil
+        return tabForUUID
     }
 
     func getTabForURL(_ url: URL) -> Tab? {

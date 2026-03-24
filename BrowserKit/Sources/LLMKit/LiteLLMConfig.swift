@@ -19,15 +19,15 @@ public struct LiteLLMConfig {
         return value
     }
 
-    static var apiKey: String? {
+    public static var apiKey: String? {
         return fetchValue(for: .apiKey)
     }
 
-    static var apiEndpoint: String? {
+    public static var apiEndpoint: String? {
         return fetchValue(for: .apiEndpoint)
     }
 
-    static var apiModel: String? {
+    public static var apiModel: String? {
         return fetchValue(for: .apiModel)
     }
 
@@ -37,5 +37,5 @@ public struct LiteLLMConfig {
     public static let maxWords = 5_000
     /// `maxTokens` is used to instruct the hosted model on the maximum number of tokens to generate.
     /// 2000 tokens is a reasonable limit for most summaries.
-    static let maxTokens = 2_000
+    public static let maxTokens = 2_000
 }

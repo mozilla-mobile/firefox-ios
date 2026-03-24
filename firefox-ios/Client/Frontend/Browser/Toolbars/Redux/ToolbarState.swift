@@ -30,7 +30,7 @@ struct ToolbarState: ScreenState, Sendable {
     var nextTabScreenshot: UIImage?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let toolbarState = appState.screenState(
+        guard let toolbarState = appState.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: uuid)

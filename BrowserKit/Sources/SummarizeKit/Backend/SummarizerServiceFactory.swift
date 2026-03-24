@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import LLMKit
 import MLPAKit
 
 public protocol SummarizerServiceFactory {
@@ -80,6 +81,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         return 0
     }
 
+    // TODO: FXIOS-15146 - Add this to LLMKit and make creation more generic
     private func makeLiteLLMClient(
         config: SummarizerConfig,
         isAppAttestAuthEnabled: Bool

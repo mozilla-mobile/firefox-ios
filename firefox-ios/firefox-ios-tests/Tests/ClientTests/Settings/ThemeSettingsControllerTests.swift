@@ -126,9 +126,9 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> ThemeSettingsController {
         let subject = ThemeSettingsController(windowUUID: .XCTestDefaultUUID)
-        let action = ScreenAction(windowUUID: .XCTestDefaultUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: .XCTestDefaultUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -143,8 +143,8 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .themeSettings(
                         ThemeSettingsState(
                             windowUUID: .XCTestDefaultUUID

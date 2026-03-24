@@ -239,7 +239,7 @@ struct NavigationBarState: StateType, Equatable {
     -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
 
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars

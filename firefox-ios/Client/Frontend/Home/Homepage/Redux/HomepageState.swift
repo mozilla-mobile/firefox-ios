@@ -50,7 +50,7 @@ struct HomepageState: ScreenState, Equatable {
     let availableWallpaperHeight: CGFloat
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let homepageState = appState.screenState(
+        guard let homepageState = appState.componentState(
             HomepageState.self,
             for: .homepage,
             window: uuid

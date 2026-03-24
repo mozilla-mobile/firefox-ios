@@ -36,7 +36,7 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let panelState = appState.screenState(
+        guard let panelState = appState.componentState(
             TabTrayState.self,
             for: .tabsTray,
             window: uuid

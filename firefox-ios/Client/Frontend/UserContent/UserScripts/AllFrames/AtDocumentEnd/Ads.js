@@ -44,7 +44,7 @@ function getLinks() {
  * @return {Array<{name: string, value: string}>} containing all cookies.
  */
 function getCookies() {
-    let cookiesList = document.cookie.split("; ");
+    let cookiesList = safeCookiesList();
     let result = [];
 
     cookiesList.forEach(cookie => {
@@ -59,6 +59,33 @@ function getCookies() {
     });
 
     return result;
+}
+
+// FXIOS-13891: WebKit process crashes on cross-origin cookie operation on about:blank tabs
+// Helper method to verify via SecurityError earlier than touching the document crashes it
+function safeCookiesList() {
+    let documentCookies = [];
+
+    const isNewTab = window.location.protocol == "about:";
+    const hasOpener = !!window.opener;
+    const hasParent = hasOpener && window.opener.parent != window.opener;
+
+    // Special-casing only different origins coming from different frames in new tabs
+    if (isNewTab && hasOpener && hasParent) {
+        const frameParent = window.opener.parent;
+        // Positively catch the SecurityError on the conditional as a way to not touch the cookie inside
+        try {
+            if (frameParent.location.origin == window.opener.location.origin) {
+                documentCookies = document.cookie.split("; ");
+            }
+        } catch {
+            documentCookies = [""];
+        }
+    } else {
+        documentCookies = document.cookie.split("; ");
+    }
+
+    return documentCookies;
 }
 
 // Whenever a page is first accessed or when loaded from cache

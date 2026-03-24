@@ -3,9 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import Common
+import TestKit
 import MLPAKit
-@testable import SummarizeKit
+
+@testable import LLMKit
 
 @MainActor
 final class LiteLLMClientTests: XCTestCase {
@@ -88,7 +89,7 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestNonStreaming() async throws {
         let subject = createSubject()
-        let config = SummarizerConfig(
+        let config = MockConfig(
             instructions: "instructions",
             options: [
                 "model": "fake-model",
@@ -124,7 +125,7 @@ final class LiteLLMClientTests: XCTestCase {
 
     func testMakeRequestBuildsURLRequestStreaming() async throws {
         let subject = createSubject()
-        let config = SummarizerConfig(
+        let config = MockConfig(
             instructions: "instructions",
             options: [
                 "model": "fake-model",

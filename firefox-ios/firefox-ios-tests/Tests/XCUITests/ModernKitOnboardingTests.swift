@@ -344,8 +344,10 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertTitle()
 
         // Go to fourth (last) screen
-        onboardingScreen.goToNextScreenViaPrimary()
-        onboardingScreen.assertTitle()
+        if !iPad() {
+            onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.assertTitle()
+        }
 
         // Test closing the tour at the very last card using the X
         onboardingScreen.closeTour()

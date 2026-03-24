@@ -159,9 +159,9 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .microsurvey)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .microsurvey)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -172,9 +172,9 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .microsurvey)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .microsurvey)
         store.dispatch(action)
     }
 
