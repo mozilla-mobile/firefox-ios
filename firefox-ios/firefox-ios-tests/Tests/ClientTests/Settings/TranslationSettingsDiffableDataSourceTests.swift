@@ -81,6 +81,33 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(items[1], .language(details[1]))
     }
 
+    func test_applySnapshot_toggleSectionAlwaysHasExactlyOneItem() {
+        subject.applySnapshot(state: makeState(isEnabled: true, languages: ["en", "fr"]), animated: false)
+
+        XCTAssertEqual(subject.snapshot().itemIdentifiers(inSection: .enableToggle), [.enableToggle])
+    }
+
+    func test_applySnapshot_appliedTwice_doesNotDuplicateSections() {
+        let state = makeState(isEnabled: true, languages: ["en"])
+
+        subject.applySnapshot(state: state, animated: false)
+        subject.applySnapshot(state: state, animated: false)
+
+        XCTAssertEqual(subject.snapshot().sectionIdentifiers, [.enableToggle, .preferredLanguages])
+    }
+
+    // MARK: - makeHeaderRegistration / makeFooterRegistration
+
+    func test_makeHeaderRegistration_returnsRegistration() {
+        let registration = subject.makeHeaderRegistration()
+        XCTAssertNotNil(registration)
+    }
+
+    func test_makeFooterRegistration_returnsRegistration() {
+        let registration = subject.makeFooterRegistration()
+        XCTAssertNotNil(registration)
+    }
+
     // MARK: - reconfigureVisibleCells
 
     func test_reconfigureVisibleCells_withEmptySnapshot_doesNotCrash() {
