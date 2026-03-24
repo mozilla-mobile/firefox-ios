@@ -74,11 +74,11 @@ final class LibraryScreen {
     }
 
     func tapEditButton() {
-        editButton.waitAndTap()
+        editButton.firstMatch.waitAndTap()
     }
 
     func tapDoneButton() {
-        doneButton.waitAndTap()
+        doneButton.firstMatch.waitAndTap()
     }
 
     func tapBottomLeftButton() {

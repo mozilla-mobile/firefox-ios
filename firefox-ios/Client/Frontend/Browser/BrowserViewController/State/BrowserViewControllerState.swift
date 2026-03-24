@@ -54,7 +54,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigationDestination: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let bvcState = appState.screenState(
+        guard let bvcState = appState.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: uuid)
@@ -232,7 +232,7 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarMiddlewareActionType.didTapButton:
-            let shouldShowSearchBar = store.state.screenState(
+            let shouldShowSearchBar = store.state.componentState(
                 HomepageState.self,
                 for: .homepage,
                 window: action.windowUUID

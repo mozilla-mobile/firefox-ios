@@ -206,10 +206,10 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     // MARK: - Redux
     func subscribeToRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.showScreen,
-                screen: .passwordGenerator
+                actionType: ComponentActionType.addComponent,
+                component: .passwordGenerator
             )
         )
 
@@ -223,10 +223,10 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     func unsubscribeFromRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .passwordGenerator
+                actionType: ComponentActionType.removeComponent,
+                component: .passwordGenerator
             )
         )
     }

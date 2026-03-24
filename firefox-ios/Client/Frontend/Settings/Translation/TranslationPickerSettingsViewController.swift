@@ -73,10 +73,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ScreenAction(
+        store.dispatch(ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.showScreen,
-            screen: .translationSettings
+            actionType: ComponentActionType.addComponent,
+            component: .translationSettings
         ))
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -87,10 +87,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ScreenAction(
+        store.dispatch(ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .translationSettings
+            actionType: ComponentActionType.removeComponent,
+            component: .translationSettings
         ))
         store.unsubscribe(self)
     }

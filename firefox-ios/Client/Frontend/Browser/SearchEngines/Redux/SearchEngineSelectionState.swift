@@ -16,7 +16,7 @@ struct SearchEngineSelectionState: ScreenState {
     var selectedSearchEngine: SearchEngineModel?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let state = appState.screenState(
+        guard let state = appState.componentState(
             SearchEngineSelectionState.self,
             for: .searchEngineSelection,
             window: uuid

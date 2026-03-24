@@ -39,9 +39,9 @@ final class PasswordGeneratorMiddleware {
 
         case PasswordGeneratorActionType.userTappedUsePassword:
             guard let frameContext = (action as? PasswordGeneratorAction)?.frameContext else { return }
-            guard let password = state.screenState(PasswordGeneratorState.self,
-                                                   for: .passwordGenerator,
-                                                   window: action.windowUUID)?.password else {return}
+            guard let password = state.componentState(PasswordGeneratorState.self,
+                                                      for: .passwordGenerator,
+                                                      window: action.windowUUID)?.password else {return}
             self.userTappedUsePassword(frameContext: frameContext, password: password)
 
         case PasswordGeneratorActionType.userTappedRefreshPassword:

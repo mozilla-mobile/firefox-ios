@@ -76,8 +76,8 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .translationSettings(
                         TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
                     )
