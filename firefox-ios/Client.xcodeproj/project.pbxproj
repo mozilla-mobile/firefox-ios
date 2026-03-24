@@ -185,7 +185,6 @@
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
-		1D13E5FD2F732DCE00AD085F /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA93B7142F6D95D6002E5E88 /* LLMKit */; };
 		1D1418782DC92E0C004BBFAD /* ChangeRSServerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */; };
 		1D1933742AF2C8C8005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
 		1D1933752AF2C8C9005089C9 /* EventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D7B78962ADF32590011E9F2 /* EventQueue.swift */; };
