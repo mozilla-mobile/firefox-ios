@@ -212,7 +212,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
             content.text = .Settings.Translation.PreferredLanguages.AddLanguage
             content.textProperties.color = theme.colors.actionPrimary
-            cell.accessories = [.disclosureIndicator()]
+            cell.accessories = []
             cell.contentConfiguration = content
             cell.backgroundConfiguration = .listGroupedCell()
             cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
