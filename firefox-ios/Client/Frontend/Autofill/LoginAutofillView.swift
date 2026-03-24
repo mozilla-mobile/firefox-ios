@@ -55,7 +55,7 @@ struct LoginAutofillView: View {
             tabURL: URL(string: "http://www.example.com")!,
             field: FocusFieldType.username,
             loginStorage: MockLoginStorage(),
-            logger: MockLogger(),
+            logger: MockLoginLogger(),
             onLoginCellTap: { _ in },
             manageLoginInfoAction: { }
         )
