@@ -3013,7 +3013,7 @@ extension String {
                 public static let Message = MZLocalizedString(
                     key: "Settings.AIControls.HeaderCard.Message.v151",
                     tableName: "Settings",
-                    value: "That includes whether to use features enhances with AI.",
+                    value: "That includes whether to use features enhanced with AI.",
                     comment: "This is the message for the Header Card under the AI Controls settings section."
                 )
 
