@@ -170,7 +170,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
             let prefs = profile.prefs
-            let uuid = windowUUID
             Task { @MainActor in
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
@@ -179,7 +178,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     translationLanguages: languages,
                     isPageTranslated: isTranslated,
                     translatedToLanguage: translatedLanguage,
-                    windowUUID: uuid,
+                    windowUUID: windowUUID,
                     actionType: GeneralBrowserActionType.showTranslationLanguagePicker
                 ))
             }

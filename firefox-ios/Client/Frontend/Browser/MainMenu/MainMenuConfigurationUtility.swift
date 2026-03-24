@@ -399,7 +399,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translation, checking: .buildOnly),
+        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil else { return nil }
