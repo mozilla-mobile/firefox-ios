@@ -16,6 +16,9 @@ protocol LibraryPanelDelegate: AnyObject {
 
     @MainActor
     var libraryPanelWindowUUID: WindowUUID { get }
+
+    @MainActor
+    func showToast(message: String)
 }
 
 protocol LibraryPanel: UIViewController {
@@ -52,14 +55,17 @@ extension LibraryPanel {
         return true
     }
 
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleLeftTopButton() { }
 
-    func handleRightTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleRightTopButton() { }
 }
+
+extension LibraryPanelDelegate {
+    // no implementation needed
+    func showToast(message: String) { }
+  }
 
 enum LibraryPanelType: Int, CaseIterable {
     case bookmarks = 0
