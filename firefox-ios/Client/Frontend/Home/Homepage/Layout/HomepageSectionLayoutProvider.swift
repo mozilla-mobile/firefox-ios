@@ -53,13 +53,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let storiesSpacing: CGFloat = 12
             static let verticalStoriesSpacing: CGFloat = 16
 
-            /// `storiesPeakOffset` is how much we want the stories section (section header) to peak in vertically
+            /// `storiesPeekOffset` is how much we want the stories section (section header) to peak in vertically
             ///  from the bottom of the homepage viewport
-            static let storiesPeakOffset: CGFloat = 130
-            static let newsAffordanceStoriesPeakOffset: CGFloat = 86
-            /// `minimumNewsAffordanceVisibleHeight` is how much available free space there must be at the bottom of the
-            /// homepage viewport to be able to show the transitioning news affordance header
-            static let minimumNewsAffordanceVisibleHeight: CGFloat = NewsAffordanceHeaderView.UX.totalHeight
+            static let storiesPeekOffset: CGFloat = 14
 
             @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
@@ -568,14 +564,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         // For vertically scrolling stories, apply the appropriate peak treatment only when there is spare vertical space.
         // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
         if rawSpacerHeight > 0, isHomepageStoriesScrollDirectionVertical {
-            if isHomepageStoriesScrollDirectionVertical {
-                if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
-                    spacerHeight = 0.1
-                } else {
-                    spacerHeight = max(0.1, rawSpacerHeight - storiesHeaderLayoutState.appliedPeakOffset)
-                }
+            if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
+                spacerHeight = 0.1
             } else {
-                spacerHeight -= UX.PocketConstants.storiesPeakOffset
+                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                                                                             width: environment.container.contentSize.width)
+                spacerHeight = max(0.1, rawSpacerHeight - headerHeight - UX.PocketConstants.storiesPeekOffset)
             }
         }
 
@@ -895,8 +889,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             )
         }
 
-        let minimumVisibleHeight = UX.PocketConstants.minimumNewsAffordanceVisibleHeight
-        let fullPeakOffset = UX.PocketConstants.newsAffordanceStoriesPeakOffset
+        let newsAffordanceHeaderHeight = HomepageDimensionCalculator
+            .fittingHeight(for: NewsTransitionHeaderView(), width: environment.container.contentSize.width)
+        let fullPeakOffset = newsAffordanceHeaderHeight + UX.PocketConstants.storiesPeekOffset
 
         if rawSpacerHeight >= fullPeakOffset {
             // Enough free space to show the full affordance header and the full peek offset.
@@ -906,7 +901,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             )
         }
 
-        if rawSpacerHeight >= minimumVisibleHeight {
+        if rawSpacerHeight >= newsAffordanceHeaderHeight {
             // Enough space to show the affordance itself, but not enough for the full peek offset.
             return StoriesHeaderLayoutState(
                 headerHeightMode: .newsAffordance,
