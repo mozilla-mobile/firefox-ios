@@ -3004,21 +3004,21 @@ extension String {
 
             public struct HeaderCard {
                 public static let Title = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCard.Title.v150",
+                    key: "Settings.AIControls.HeaderCard.Title.v151",
                     tableName: "Settings",
                     value: "You always have a choice in Firefox",
                     comment: "This is the title for the Header Card under the AI Controls settings section."
                 )
 
                 public static let Message = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCard.Message.v150",
+                    key: "Settings.AIControls.HeaderCard.Message.v151",
                     tableName: "Settings",
                     value: "That includes whether to use features enhances with AI.",
                     comment: "This is the message for the Header Card under the AI Controls settings section."
                 )
 
                 public static let Link = MZLocalizedString(
-                    key: "Settings.AIControls.HeaderCard.Link.v150",
+                    key: "Settings.AIControls.HeaderCard.Link.v151",
                     tableName: "Settings",
                     value: "Learn more",
                     comment: "This is the text for the link in the Header Card under the AI Controls settings section that links to more information."
@@ -3026,28 +3026,28 @@ extension String {
             }
 
             public static let BlockAIEnhancementsTitle = MZLocalizedString(
-                key: "Settings.AIControls.BlockAIEnhancementsTitle.v150",
+                key: "Settings.AIControls.BlockAIEnhancementsTitle.v151",
                 tableName: "Settings",
                 value: "Block AI Enhancements",
                 comment: "This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section."
             )
 
             public static let BlockAIEnhancementsDescription = MZLocalizedString(
-                key: "Settings.AIControls.BlockAIEnhancementsDescription.v150",
+                key: "Settings.AIControls.BlockAIEnhancementsDescription.v151",
                 tableName: "Settings",
-                value: "Blocking means you won't see new or current AI enhancements in Firefox, or popups about them.",
+                value: "Blocking means you won’t see new or current AI enhancements in Firefox, or popups about them.",
                 comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section."
             )
 
             public static let BlockAIEnhancementsLink = MZLocalizedString(
-                key: "Settings.AIControls.BlockAIEnhancementsDescription.v150",
+                key: "Settings.AIControls.BlockAIEnhancementsLink.v151",
                 tableName: "Settings",
                 value: "See what is and isn’t included",
                 comment: "In the AI Controls settings, this is the text for the link that takes the user more information on AI features."
             )
 
             public static let BlockedInformation = MZLocalizedString(
-                key: "Settings.AIControls.BlockedInformation.v150",
+                key: "Settings.AIControls.BlockedInformation.v151",
                 tableName: "Settings",
                 value: "New and current AI enhancements are blocked by default. Unblock specific features below.",
                 comment: "In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle"
@@ -3055,28 +3055,28 @@ extension String {
 
             public struct BlockAIEnhancementsAlert {
                 public static let Title = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Title.v150",
+                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Title.v151",
                     tableName: "Settings",
                     value: "Block AI Enhancements?",
                     comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the title for the alert that shows confirming that you want to block AI Enhancements."
                 )
 
                 public static let Message = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Message.v150",
+                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Message.v151",
                     tableName: "Settings",
                     value: "You won’t see new or current AI enhancements in Firefox, or pop-ups about them. Afterwards, you can unblock anything you want to keep using.\n\n What will be blocked:\n- Translation\n- Page Summaries",
                     comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the message for the alert that shows confirming that you want to block AI Enhancements."
                 )
 
                 public static let CancelButton = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.CancelButton.v150",
+                    key: "Settings.AIControls.BlockAIEnhancementsAlert.CancelButton.v151",
                     tableName: "Settings",
                     value: "Cancel",
                     comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the text for the cancel button in the alert."
                 )
 
                 public static let BlockButton = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.BlockButton.v150",
+                    key: "Settings.AIControls.BlockAIEnhancementsAlert.BlockButton.v151",
                     tableName: "Settings",
                     value: "Block",
                     comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the text for the block button in the alert."
@@ -3085,7 +3085,7 @@ extension String {
 
             public struct AIPoweredFeaturesSection {
                 public static let Title = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v150",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v151",
                     tableName: "Settings",
                     value: "AI-POWERED FEATURES",
                     comment: "In the AI Controls settings, this is the title for the section that describes AI-powered features."
@@ -3093,14 +3093,14 @@ extension String {
 
                 public struct TranslationSection {
                     public static let Title = MZLocalizedString(
-                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v150",
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151",
                         tableName: "Settings",
                         value: "Translation",
                         comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature"
                     )
 
                     public static let Message = MZLocalizedString(
-                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v150",
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151",
                         tableName: "Settings",
                         value: "Translations stay private on your device.",
                         comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature"
@@ -3109,14 +3109,14 @@ extension String {
 
                 public struct PageSummariesSection {
                     public static let Title = MZLocalizedString(
-                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v150",
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151",
                         tableName: "Settings",
                         value: "Page Summaries",
                         comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature"
                     )
 
                     public static let Message = MZLocalizedString(
-                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v150",
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151",
                         tableName: "Settings",
                         value: "Pages and summaries are never stored.",
                         comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature"
@@ -3124,28 +3124,28 @@ extension String {
                 }
 
                 public static let BlockedStatus = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v150",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
                     tableName: "Settings",
                     value: "Blocked",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off."
                 )
 
                 public static let AvailableStatus = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v150",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151",
                     tableName: "Settings",
                     value: "Available",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on."
                 )
 
                 public static let AvailableStatusDescription = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v150",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151",
                     tableName: "Settings",
                     value: "**Available**: You’ll see the feature and can use it.",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the available status means."
                 )
 
                 public static let BlockedStatusDescription = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v150",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151",
                     tableName: "Settings",
                     value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means."
