@@ -12,17 +12,16 @@ import Common
 /// - `recording`: shows live speech transcription as it arrives
 /// - `searching`: shows the final transcript and an animated "Searching" indicator
 /// - `result`: shows the transcript, the AI answer, and source cards
+// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersResponseView: UIView, ThemeApplicable {
     enum State {
         case idle
         case recording(transcript: String)
         case searching(transcript: String)
-        case result(transcript: String, answer: String, sources: [SourceCardView.Item])
+        case result(transcript: String, answer: String)
     }
 
     private struct UX {
-        static let transcriptFontSize: CGFloat = 22.0
-        static let answerFontSize: CGFloat = 16.0
         static let contentSpacing: CGFloat = 16.0
         static let animationDuration: TimeInterval = 0.2
         static let searchingPulseDuration: CFTimeInterval = 0.8
@@ -41,27 +40,24 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
         $0.spacing = UX.contentSpacing
     }
     private let placeholderLabel: UILabel = .build {
-        $0.font = .systemFont(ofSize: UX.transcriptFontSize, weight: .medium)
-        $0.text = "Ask anything…" // TODO: Localize
+        $0.font = FXFontStyles.Regular.title2.scaledFont()
+        $0.text = "Ask anything…"
         $0.numberOfLines = 0
         $0.textAlignment = .center
     }
     private let transcriptLabel: UILabel = .build {
-        $0.font = .systemFont(ofSize: UX.transcriptFontSize, weight: .medium)
+        $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
         $0.isHidden = true
     }
     private let searchingLabel: UILabel = .build {
-        $0.font = .preferredFont(forTextStyle: .subheadline)
-        $0.text = "Searching…" // TODO: Localize
+        $0.font = FXFontStyles.Bold.callout.scaledFont()
+        $0.text = "Answering…"
         $0.isHidden = true
     }
     private let answerLabel: UILabel = .build {
-        $0.font = .systemFont(ofSize: UX.answerFontSize)
+        $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.numberOfLines = 0
-        $0.isHidden = true
-    }
-    private let sourcesView: QuickAnswersSourcesView = .build {
         $0.isHidden = true
     }
 
@@ -83,12 +79,9 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
         contentStack.addArrangedSubview(transcriptLabel)
         contentStack.addArrangedSubview(searchingLabel)
         contentStack.addArrangedSubview(answerLabel)
-        contentStack.addArrangedSubview(sourcesView)
 
         scrollView.addSubview(contentStack)
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: topAnchor),
@@ -114,7 +107,6 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
                 self.transcriptLabel.isHidden = true
                 self.searchingLabel.isHidden = true
                 self.answerLabel.isHidden = true
-                self.sourcesView.isHidden = true
                 self.stopSearchingAnimation()
 
             case .recording(let transcript):
@@ -124,7 +116,6 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
                 self.transcriptLabel.isHidden = !hasTranscript
                 self.searchingLabel.isHidden = true
                 self.answerLabel.isHidden = true
-                self.sourcesView.isHidden = true
                 self.stopSearchingAnimation()
 
             case .searching(let transcript):
@@ -133,18 +124,15 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
                 self.transcriptLabel.isHidden = false
                 self.searchingLabel.isHidden = false
                 self.answerLabel.isHidden = true
-                self.sourcesView.isHidden = true
                 self.startSearchingAnimation()
 
-            case .result(let transcript, let answer, let sources):
+            case .result(let transcript, let answer):
                 self.placeholderLabel.isHidden = true
                 self.transcriptLabel.text = transcript
                 self.transcriptLabel.isHidden = false
                 self.searchingLabel.isHidden = true
                 self.answerLabel.text = answer
                 self.answerLabel.isHidden = answer.isEmpty
-                self.sourcesView.configure(with: sources)
-                self.sourcesView.isHidden = sources.isEmpty
                 self.stopSearchingAnimation()
             }
         }
@@ -175,6 +163,14 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
         transcriptLabel.textColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
-        sourcesView.applyTheme(theme: theme)
     }
+}
+
+@available(iOS 17, *)
+#Preview {
+    let view = QuickAnswersResponseView()
+    view.configure(state: .searching(transcript: "Transcript"))
+    view.configure(state: .idle)
+    view.applyTheme(theme: LightTheme())
+    return view
 }
