@@ -51,7 +51,7 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
         let snapshot = subject.snapshot()
         XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages])
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .preferredLanguages), 0)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .preferredLanguages), 1)
     }
 
     func test_applySnapshot_withTranslationsEnabled_languageItemCountMatchesState() {
@@ -59,7 +59,7 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
         subject.applySnapshot(state: state, animated: false)
 
-        XCTAssertEqual(subject.snapshot().numberOfItems(inSection: .preferredLanguages), 3)
+        XCTAssertEqual(subject.snapshot().numberOfItems(inSection: .preferredLanguages), 4)
     }
 
     func test_applySnapshot_languageItemsMatchStateOrder() {
