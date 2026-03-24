@@ -207,20 +207,6 @@
     {
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "OnboardingKitTests",
-        "name" : "OnboardingKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
-        "identifier" : "MLPAKitTests",
-        "name" : "MLPAKitTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SummarizeKitTests",
         "name" : "SummarizeKitTests"
       }
