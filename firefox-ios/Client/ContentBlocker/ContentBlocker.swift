@@ -400,10 +400,10 @@ extension ContentBlocker {
                         self.ruleStore?.compileContentRuleList(
                             forIdentifier: filename,
                             encodedContentRuleList: str
-                        ) { rule, error in
+                        ) { @MainActor [weak self] rule, error in
                             listsCompiledCount += 1
                             errorCount += (error == nil ? 0 : 1)
-                            self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                            self?.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
                         }
                     }
                 }
