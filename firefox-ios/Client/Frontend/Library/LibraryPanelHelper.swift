@@ -55,19 +55,16 @@ extension LibraryPanel {
         return true
     }
 
-    func handleLeftTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleLeftTopButton() { }
 
-    func handleRightTopButton() {
-        // no implementation needed
-    }
+    // no implementation needed
+    func handleRightTopButton() { }
 }
 
 extension LibraryPanelDelegate {
-      func showToast(message: String) {
-          // no implementation needed
-      }
+    // no implementation needed
+    func showToast(message: String) { }
   }
 
 enum LibraryPanelType: Int, CaseIterable {
