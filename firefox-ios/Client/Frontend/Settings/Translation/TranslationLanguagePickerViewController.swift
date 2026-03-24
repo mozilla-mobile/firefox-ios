@@ -49,8 +49,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
     // MARK: - Init
 
     init(windowUUID: WindowUUID,
-         preferredLanguages: [String],
-         supportedLanguages: [String],
+         languages: [String],
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default,
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
@@ -58,15 +57,8 @@ final class TranslationLanguagePickerViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.localeProvider = localeProvider
-        let preferred = Set(preferredLanguages)
-        self.allLanguages = supportedLanguages
-            .filter { !preferred.contains($0) }
-            .sorted { lhs, rhs in
-                let lhsName = Locale(identifier: lhs).localizedString(forLanguageCode: lhs) ?? lhs
-                let rhsName = Locale(identifier: rhs).localizedString(forLanguageCode: rhs) ?? rhs
-                return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending
-            }
-        self.filteredLanguages = self.allLanguages
+        self.allLanguages = languages
+        self.filteredLanguages = languages
         super.init(nibName: nil, bundle: nil)
         title = .Settings.Translation.LanguagePicker.NavTitle
     }
@@ -114,7 +106,8 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier, for: indexPath)
         let code = filteredLanguages[indexPath.row]
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let (native, localized) = displayNames(for: code)
+        let native = localeProvider.nativeLanguageName(for: code)
+        let localized = localeProvider.localizedLanguageName(for: code)
 
         var content = cell.defaultContentConfiguration()
         content.text = native
@@ -152,7 +145,8 @@ final class TranslationLanguagePickerViewController: UIViewController,
             filteredLanguages = allLanguages
         } else {
             filteredLanguages = allLanguages.filter { code in
-                let (native, localized) = displayNames(for: code)
+                let native = localeProvider.nativeLanguageName(for: code)
+                let localized = localeProvider.localizedLanguageName(for: code)
                 return native.localizedCaseInsensitiveContains(query)
                     || localized.localizedCaseInsensitiveContains(query)
             }
@@ -169,13 +163,5 @@ final class TranslationLanguagePickerViewController: UIViewController,
         searchController.searchBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         tableView.reloadData()
-    }
-
-    // MARK: - Helpers
-
-    private func displayNames(for code: String) -> (native: String, localized: String) {
-        let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-        let localized = localeProvider.current.localizedString(forLanguageCode: code) ?? code
-        return (native, localized)
     }
 }

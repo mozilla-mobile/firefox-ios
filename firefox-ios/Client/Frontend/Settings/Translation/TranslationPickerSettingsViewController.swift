@@ -9,7 +9,7 @@ import UIKit
 
 @MainActor
 protocol TranslationPickerSettingsDelegate: AnyObject {
-    func showLanguagePicker(preferredLanguages: [String], supportedLanguages: [String])
+    func showLanguagePicker(availableLanguages: [String])
 }
 
 final class TranslationPickerSettingsViewController: UIViewController,
@@ -252,9 +252,6 @@ final class TranslationPickerSettingsViewController: UIViewController,
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         guard dataSource.itemIdentifier(for: indexPath) == .addLanguage else { return }
-        coordinator?.showLanguagePicker(
-            preferredLanguages: state.preferredLanguages.map { $0.code },
-            supportedLanguages: state.supportedLanguages
-        )
+        coordinator?.showLanguagePicker(availableLanguages: state.availableLanguages)
     }
 }

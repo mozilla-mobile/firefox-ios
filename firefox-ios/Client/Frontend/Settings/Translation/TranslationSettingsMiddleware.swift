@@ -51,8 +51,10 @@ final class TranslationSettingsMiddleware {
         case TranslationSettingsViewActionType.addLanguage:
             guard let code = action.languageCode else { break }
             let updated = manager.addLanguage(code)
+            let preferred = buildLanguageDetails(from: updated)
             store.dispatch(TranslationSettingsMiddlewareAction(
-                preferredLanguages: buildLanguageDetails(from: updated),
+                preferredLanguages: preferred,
+                availableLanguages: nil,
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
@@ -67,10 +69,12 @@ final class TranslationSettingsMiddleware {
         let codes = manager.preferredLanguages(supportedTargetLanguages: supported)
         let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         let preferred = buildLanguageDetails(from: codes)
+        let available = buildAvailableLanguages(preferred: codes, supported: supported)
         store.dispatch(TranslationSettingsMiddlewareAction(
             isTranslationsEnabled: isEnabled,
             preferredLanguages: preferred,
             supportedLanguages: supported,
+            availableLanguages: available,
             windowUUID: windowUUID,
             actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
         ))
@@ -79,13 +83,24 @@ final class TranslationSettingsMiddleware {
     private func buildLanguageDetails(from codes: [String]) -> [PreferredLanguageDetails] {
         let deviceCode = localeProvider.current.languageCode ?? ""
         return codes.map { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = localeProvider.current.localizedString(forLanguageCode: code) ?? code
+            let native = localeProvider.nativeLanguageName(for: code)
+            let localized = localeProvider.localizedLanguageName(for: code)
             let isDeviceLanguage = code == deviceCode && code == codes.first
             let subtitle: String? = isDeviceLanguage
                 ? .Settings.Translation.PreferredLanguages.DeviceLanguage
                 : (native == localized ? nil : localized)
             return PreferredLanguageDetails(code: code, mainText: native, subtitleText: subtitle)
         }
+    }
+
+    private func buildAvailableLanguages(preferred: [String], supported: [String]) -> [String] {
+        let preferredSet = Set(preferred)
+        return supported
+            .filter { !preferredSet.contains($0) }
+            .sorted { [localeProvider] lhs, rhs in
+                let lhsName = localeProvider.nativeLanguageName(for: lhs)
+                let rhsName = localeProvider.nativeLanguageName(for: rhs)
+                return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending
+            }
     }
 }

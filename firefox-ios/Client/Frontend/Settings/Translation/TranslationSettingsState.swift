@@ -15,6 +15,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
     var isTranslationsEnabled: Bool
     var preferredLanguages: [PreferredLanguageDetails]
     var supportedLanguages: [String]
+    var availableLanguages: [String]
     var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -30,7 +31,8 @@ struct TranslationSettingsState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
             preferredLanguages: state.preferredLanguages,
-            supportedLanguages: state.supportedLanguages
+            supportedLanguages: state.supportedLanguages,
+            availableLanguages: state.availableLanguages
         )
     }
 
@@ -39,18 +41,21 @@ struct TranslationSettingsState: ScreenState, Equatable {
             windowUUID: windowUUID,
             isTranslationsEnabled: true,
             preferredLanguages: [],
-            supportedLanguages: []
+            supportedLanguages: [],
+            availableLanguages: []
         )
     }
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
          preferredLanguages: [PreferredLanguageDetails],
-         supportedLanguages: [String]) {
+         supportedLanguages: [String],
+         availableLanguages: [String] = []) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
+        self.availableLanguages = availableLanguages
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -65,7 +70,8 @@ struct TranslationSettingsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
                 preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
-                supportedLanguages: action.supportedLanguages ?? state.supportedLanguages
+                supportedLanguages: action.supportedLanguages ?? state.supportedLanguages,
+                availableLanguages: action.availableLanguages ?? state.availableLanguages
             )
         default:
             return defaultState(from: state)
@@ -77,7 +83,8 @@ struct TranslationSettingsState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
             preferredLanguages: state.preferredLanguages,
-            supportedLanguages: state.supportedLanguages
+            supportedLanguages: state.supportedLanguages,
+            availableLanguages: state.availableLanguages
         )
     }
 
@@ -85,5 +92,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
         return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
             && lhs.preferredLanguages == rhs.preferredLanguages
             && lhs.supportedLanguages == rhs.supportedLanguages
+            && lhs.availableLanguages == rhs.availableLanguages
     }
 }

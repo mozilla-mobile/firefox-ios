@@ -123,10 +123,11 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
         supportedLanguages: [String] = ["en", "fr"],
         localeCode: String = "en"
     ) -> TranslationLanguagePickerViewController {
+        let preferred = Set(preferredLanguages)
+        let available = supportedLanguages.filter { !preferred.contains($0) }
         let subject = TranslationLanguagePickerViewController(
             windowUUID: .XCTestDefaultUUID,
-            preferredLanguages: preferredLanguages,
-            supportedLanguages: supportedLanguages,
+            languages: available,
             localeProvider: MockLocaleProvider(current: Locale(identifier: localeCode))
         )
         trackForMemoryLeaks(subject)
