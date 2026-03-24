@@ -1042,18 +1042,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
-        /// This toast is generated from GeneralBrowserActionType.showToast
-        func showToast() {
-            SimpleToast().showAlertWithText(
-                toast.title,
-                bottomContainer: contentContainer,
-                theme: currentTheme()
-            )
-        }
+        // This toast is generated from GeneralBrowserActionType.showToast
         switch toast {
         case .clearCookies,
                 .shakeToSummarizeNotAvailable:
-            showToast()
+            showPlainToast(message: toast.title)
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
         default:
