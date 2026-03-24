@@ -30,6 +30,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
+                                 TranslationPickerSettingsDelegate,
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
@@ -476,10 +477,22 @@ final class SettingsCoordinator: BaseCoordinator,
 
     private func translationSettingsViewController() -> UIViewController {
         if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
-            return TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            viewController.coordinator = self
+            return viewController
         } else {
             return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         }
+    }
+
+    func showLanguagePicker(preferredLanguages: [String], supportedLanguages: [String]) {
+        let picker = TranslationLanguagePickerViewController(
+            windowUUID: windowUUID,
+            preferredLanguages: preferredLanguages,
+            supportedLanguages: supportedLanguages
+        )
+        let navigationController = UINavigationController(rootViewController: picker)
+        router.present(navigationController)
     }
 
     // MARK: AccountSettingsDelegate
