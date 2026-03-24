@@ -1546,19 +1546,6 @@ class BrowserViewController: UIViewController,
         logCurrentNimbusExperimentsState()
     }
 
-    // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-    // On initial display, the view is not yet in the window hierarchy at setup time, so
-    // statusBarManager is unavailable and the header top constraint starts with constant = 0.
-    // viewSafeAreaInsetsDidChange fires once the view enters the hierarchy, at which point
-    // statusBarManager returns the correct value and the constant is updated.
-    // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
-    // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        guard isSnapKitRemovalEnabled else { return }
-        browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
-    }
-
     /// Logging current Nimbus state
     private func logCurrentNimbusExperimentsState() {
         var currentExperimentsDictionary = [String: String]()
