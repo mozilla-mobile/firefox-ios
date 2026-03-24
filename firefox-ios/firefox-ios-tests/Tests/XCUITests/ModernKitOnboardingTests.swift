@@ -68,7 +68,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Individual Screen Tests
 
-    func testModernTermsOfServiceScreen() throws {
+    func testModernTermsOfServiceScreen() {
         launchApp()
 
         onboardingScreen.assertModernTermsOfServiceScreen()
@@ -247,7 +247,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Navigation Tests
 
-    func testModernKitOnboardingSkipButton() throws {
+    func testModernKitOnboardingSkipButton() {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
@@ -337,6 +337,9 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Go to second screen
         onboardingScreen.goToNextScreenViaSecondary()
+        if iPad() {
+            onboardingScreen.currentScreen += 1
+        }
         onboardingScreen.assertTitle()
 
         // Go to third screen
