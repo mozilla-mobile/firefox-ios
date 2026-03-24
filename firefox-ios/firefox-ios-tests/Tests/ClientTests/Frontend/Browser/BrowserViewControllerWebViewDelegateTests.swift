@@ -35,13 +35,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         try await super.tearDown()
     }
 
-    @MainActor
-    func testWKUIDelegate_isBrowserViewController_whenWebEngineIntegrationIsDisabled() {
-        let subject = createSubject()
-
-        XCTAssertTrue(subject.wkUIDelegate is BrowserViewController)
-    }
-
     // MARK: - Decide policy for navigation action
     @MainActor
     func testWebViewDecidePolicyForNavigationAction_cancelWhenTabNotInTabManager() {
