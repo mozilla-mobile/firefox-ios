@@ -23,7 +23,7 @@ protocol BookmarksPanelViewModelProtocol: Sendable {
     var shouldFlashRow: Bool { get }
 
     func resetSearch()
-    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable ([FxBookmarkNode]) -> Void)
+    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
     func reloadData(completion: @escaping @MainActor () -> Void)
     func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int)
     func removeBookmark(atPosition position: Int)
@@ -181,9 +181,11 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
 
     /// Recursively searches all bookmarks under the current folder (and its subfolders)
     /// for items whose title or URL contains the given query string (case-insensitive).
-    func searchBookmarks(query: String, completion: @escaping @MainActor ([FxBookmarkNode]) -> Void) {
+    func searchBookmarks(query: String, completion: @escaping @MainActor () -> Void) {
         guard !query.isEmpty else {
-            DispatchQueue.main.async { completion([]) }
+            isSearching = true
+            filteredBookmarkNodes = []
+            completion()
             return
         }
 
@@ -198,7 +200,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                             self?.logger.log("Search bookmarks tree fetch failed",
                                              level: .debug,
                                              category: .library)
-                            completion([])
+                            completion()
                             return
                         }
 
@@ -211,13 +213,16 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                         self?.isSearching = true
                         self?.filteredBookmarkNodes = matches
 
-                        completion(matches)
+                        completion()
 
                     case .failure(let error):
                         self?.logger.log("Search bookmarks tree fetch error: \(error)",
                                          level: .debug,
                                          category: .library)
-                        completion([])
+
+                        self?.isSearching = true
+                        self?.filteredBookmarkNodes = []
+                        completion()
                     }
                 }
             }

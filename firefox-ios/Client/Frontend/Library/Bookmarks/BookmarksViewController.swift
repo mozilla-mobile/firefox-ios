@@ -970,7 +970,7 @@ extension BookmarksViewController: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.searchBookmarks(query: term) { [weak self] results in
+        viewModel.searchBookmarks(query: term) { [weak self] in
             self?.tableView.reloadData()
         }
     }

@@ -241,8 +241,9 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "") { results in
-            XCTAssertTrue(results.isEmpty)
+        subject.searchBookmarks(query: "") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
 
@@ -254,9 +255,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "firefox") { results in
-            XCTAssertEqual(results.count, 1)
-            XCTAssertEqual(results.first?.title, "Firefox")
+        subject.searchBookmarks(query: "firefox") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
+            XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
         }
 
@@ -268,9 +270,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "mozilla.org") { results in
-            XCTAssertEqual(results.count, 1)
-            XCTAssertEqual(results.first?.title, "Mozilla")
+        subject.searchBookmarks(query: "mozilla.org") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
+            XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Mozilla")
             expectation.fulfill()
         }
 
@@ -282,8 +285,9 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "nonexistent") { results in
-            XCTAssertTrue(results.isEmpty)
+        subject.searchBookmarks(query: "nonexistent") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
 
@@ -295,9 +299,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "FIREFOX") { results in
-            XCTAssertEqual(results.count, 1)
-            XCTAssertEqual(results.first?.title, "Firefox")
+        subject.searchBookmarks(query: "FIREFOX") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
+            XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
         }
 
@@ -309,9 +314,10 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
-        subject.searchBookmarks(query: "nested") { results in
-            XCTAssertEqual(results.count, 1)
-            XCTAssertEqual(results.first?.title, "Nested Bookmark")
+        subject.searchBookmarks(query: "nested") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
+            XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Nested Bookmark")
             expectation.fulfill()
         }
 
@@ -325,8 +331,9 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
         // Both "Firefox" (url: https://www.firefox.com) and "Mozilla" (url: https://www.mozilla.org)
         // contain "www" in their URLs
-        subject.searchBookmarks(query: "www") { results in
-            XCTAssertEqual(results.count, 2)
+        subject.searchBookmarks(query: "www") {
+            XCTAssertTrue(subject.isSearching)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 2)
             expectation.fulfill()
         }
 
