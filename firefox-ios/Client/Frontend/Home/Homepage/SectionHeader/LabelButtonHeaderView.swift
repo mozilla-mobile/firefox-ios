@@ -68,7 +68,10 @@ class LabelButtonHeaderView: UICollectionReusableView,
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
+            // Collection view sizing can temporarily collapse supplementary views to zero height.
+            // Keep the inset in normal layouts, but let auto layout relax it during that pass.
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
+                .priority(UILayoutPriority(999)),
         ])
 
         // Setting custom values to resolve horizontal ambiguity
