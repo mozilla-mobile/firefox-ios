@@ -61,7 +61,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let preferred = Set(preferredLanguages)
         self.allLanguages = supportedLanguages
             .filter { !preferred.contains($0) }
-            .sorted { [localeProvider] lhs, rhs in
+            .sorted { lhs, rhs in
                 let lhsName = Locale(identifier: lhs).localizedString(forLanguageCode: lhs) ?? lhs
                 let rhsName = Locale(identifier: rhs).localizedString(forLanguageCode: rhs) ?? rhs
                 return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending

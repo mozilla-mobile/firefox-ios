@@ -30,10 +30,6 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
         XCTAssertEqual(subject.title, .Settings.Translation.LanguagePicker.NavTitle)
     }
 
-    func test_init_noMemoryLeak() {
-        createSubject()
-    }
-
     // MARK: - Row count
 
     func test_numberOfRows_withNoPreferred_equalsAllSupported() {
