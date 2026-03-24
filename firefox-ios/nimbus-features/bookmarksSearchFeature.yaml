@@ -8,11 +8,11 @@ features:
         description: >
           Whether or not this feature is enabled
         type: Boolean
-        default: true
+        default: false
     defaults:
       - channel: beta
         value:
-          enabled: true
+          enabled: false
       - channel: developer
         value:
-          enabled: true
+          enabled: false
