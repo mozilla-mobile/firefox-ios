@@ -733,35 +733,40 @@ final class TabTrayViewController: UIViewController,
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: retrieveTheme(),
                                     completion: { buttonPressed in
-                                        completion(buttonPressed)
+                completion(buttonPressed)
             })
-            toast.showToast(viewController: self,
-                            delay: UX.Toast.undoDelay,
-                            duration: UX.Toast.undoDuration) { toast in
-                if self.tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
-                    [
-                        toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                       constant: Toast.UX.toastSidePadding),
-                        toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                        constant: -Toast.UX.toastSidePadding),
-                        toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor)
-                    ]
-                } else {
-                    [
-                        toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                       constant: Toast.UX.toastSidePadding),
-                        toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                        constant: -Toast.UX.toastSidePadding),
-                        toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-                    ]
-                }
-            }
+            showToast(toast)
             shownToast = toast
         } else {
-            let toast = SimpleToast()
-            toast.showAlertWithText(toastType.title,
-                                    bottomContainer: view,
-                                    theme: retrieveTheme())
+            let viewModel = PlainToastViewModel(labelText: toastType.title)
+            let toast = PlainToast(viewModel: viewModel, theme: retrieveTheme())
+            showToast(toast)
+        }
+    }
+
+    private func showToast(_ toast: Toast,
+                           afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                           duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+        toast.showToast(viewController: self,
+                        delay: UX.Toast.undoDelay,
+                        duration: UX.Toast.undoDuration) { toast in
+            if self.tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor)
+                ]
+            } else {
+                [
+                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
+                                                   constant: Toast.UX.toastSidePadding),
+                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
+                                                    constant: -Toast.UX.toastSidePadding),
+                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                ]
+            }
         }
     }
 
