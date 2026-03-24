@@ -53,8 +53,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let storiesSpacing: CGFloat = 12
             static let verticalStoriesSpacing: CGFloat = 16
 
-            /// `storiesPeekOffset` is how much we want the stories section (section header) to peek in vertically
-            ///  from the bottom of the homepage viewport
+            /// `storiesPeekOffset` is how much we want the stories section (not including section header)
+            /// to peek in vertically from the bottom of the homepage viewport
             static let storiesPeekOffset: CGFloat = 14
 
             @MainActor
