@@ -5483,6 +5483,12 @@ extension String {
                     tableName: "MainMenu",
                     value: "Translated",
                     comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
+
+                public static let Off = MZLocalizedString(
+                    key: "", // MainMenu.ToolsSection.Translation.Off.v150
+                    tableName: "MainMenu",
+                    value: "Off",
+                    comment: "On the main menu, the badge shown on the Translate Page item when translation is inactive.")
             }
             public struct AccessibilityLabels {
                 public static let DesktopSite = MZLocalizedString(

@@ -3135,6 +3135,8 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
+    private static let alertAttributedTitleKey = "attributedTitle"
+
     private func presentTranslationLanguagePicker(
         languages: [String],
         isTranslated: Bool = false,
@@ -3151,7 +3153,7 @@ class BrowserViewController: UIViewController,
                     string: title,
                     attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
                 ),
-                forKey: "attributedTitle"
+                forKey: Self.alertAttributedTitleKey
             )
             let showOriginalAction = UIAlertAction(
                 title: .Translations.LanguagePicker.ShowOriginal,
@@ -3171,7 +3173,7 @@ class BrowserViewController: UIViewController,
                     string: .Translations.LanguagePicker.Title,
                     attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
                 ),
-                forKey: "attributedTitle"
+                forKey: Self.alertAttributedTitleKey
             )
         }
 

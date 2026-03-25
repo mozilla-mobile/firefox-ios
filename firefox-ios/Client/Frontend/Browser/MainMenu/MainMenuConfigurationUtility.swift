@@ -425,7 +425,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         if isActive, let langCode = translationConfig.translatedToLanguage {
             infoTitle = localeProvider.current.localizedString(forLanguageCode: langCode) ?? langCode
         } else {
-            infoTitle = .MainMenu.ToolsSection.DesktopSiteOff
+            infoTitle = .MainMenu.ToolsSection.Translation.Off
         }
 
         let a11yLabel = isActive
@@ -443,7 +443,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: isActive,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: nil,
             a11yId: AccessibilityIdentifiers.MainMenu.translatePage,
             infoTitle: infoTitle,
             action: {
