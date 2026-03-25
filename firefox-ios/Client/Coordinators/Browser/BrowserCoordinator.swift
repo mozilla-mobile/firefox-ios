@@ -861,6 +861,7 @@ final class BrowserCoordinator: BaseCoordinator,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showCreditCardAutofill(
@@ -868,6 +869,7 @@ final class BrowserCoordinator: BaseCoordinator,
             decryptedCard: decryptedCard,
             viewType: state,
             frame: frame,
+            viewController: viewController,
             alertContainer: alertContainer
         )
     }

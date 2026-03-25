@@ -3822,7 +3822,8 @@ class BrowserViewController: UIViewController,
                                                                decryptedCard: nil,
                                                                viewType: .selectSavedCard,
                                                                frame: frame,
-                                                               alertContainer: self.contentContainer)
+                                                               viewController: self,
+                                                               alertContainer: self.bottomContentStackView)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
@@ -3841,7 +3842,8 @@ class BrowserViewController: UIViewController,
                                                                    decryptedCard: fieldValues,
                                                                    viewType: .save,
                                                                    frame: nil,
-                                                                   alertContainer: self.contentContainer)
+                                                                   viewController: self,
+                                                                   alertContainer: self.bottomContentStackView)
                 }
                 return
             }
@@ -3853,7 +3855,8 @@ class BrowserViewController: UIViewController,
                                                                    decryptedCard: fieldValues,
                                                                    viewType: .update,
                                                                    frame: nil,
-                                                                   alertContainer: self.contentContainer)
+                                                                   viewController: self,
+                                                                   alertContainer: self.bottomContentStackView)
                 }
             }
         }
