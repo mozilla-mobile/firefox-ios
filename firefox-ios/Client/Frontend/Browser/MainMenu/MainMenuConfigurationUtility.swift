@@ -258,12 +258,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 }
             ),
         ]
-        // Conditionally add the Summarizer item if the feature is enabled
         if isSummarizerOn, tabInfo.summaryIsAvailable, !UIWindow.isLandscape {
             options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
         }
         options.append(configureUserAgentItem(with: uuid, tabInfo: tabInfo))
-
         if !isExpanded {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
