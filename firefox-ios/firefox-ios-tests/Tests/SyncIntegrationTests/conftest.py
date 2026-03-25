@@ -68,6 +68,7 @@ def tps_log(pytestconfig, tmpdir):
     pytestconfig._tps_log = tps_log
     yield tps_log
 
+
 @pytest.fixture
 def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
     preferences = {
