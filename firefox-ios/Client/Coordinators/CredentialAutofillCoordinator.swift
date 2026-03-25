@@ -56,24 +56,22 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         viewController.didTapYesClosure = { [weak self] error in
             guard let self = self else { return }
             if let error = error {
-                SimpleToast().showAlertWithText(error.localizedDescription,
-                                                bottomContainer: alertContainer,
-                                                theme: self.currentTheme())
+                logger.log("Error fetching credit cards",
+                           level: .warning,
+                           category: .autofill,
+                           description: "Error fetching credit card: \(error.localizedDescription)")
             } else {
                 // send telemetry
                 if state == .save {
                     sendCreditCardSavePromptCreateTelemetry()
+                    showToast(with: .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage,
+                              view: alertContainer)
                 } else if state == .update {
                     sendCreditCardSavePromptUpdateTelemetry()
+                    showToast(with: .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage,
+                              view: alertContainer)
                 }
 
-                // Save or update a card toast message
-                let saveSuccessMessage: String = .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage
-                let updateSuccessMessage: String = .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage
-                let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
-                SimpleToast().showAlertWithText(toastMessage,
-                                                bottomContainer: alertContainer,
-                                                theme: self.currentTheme())
                 self.parentCoordinator?.didFinish(from: self)
             }
         }
@@ -204,27 +202,33 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     }
 
     // MARK: Telemetry
-    fileprivate func sendCreditCardSavePromptShownTelemetry() {
+    private func sendCreditCardSavePromptShownTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
                                      object: .creditCardSavePromptShown)
     }
 
-    fileprivate func sendCreditCardSavePromptCreateTelemetry() {
+    private func sendCreditCardSavePromptCreateTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .creditCardSavePromptCreate)
     }
 
-    fileprivate func sendCreditCardSavePromptUpdateTelemetry() {
+    private func sendCreditCardSavePromptUpdateTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .creditCardSavePromptUpdate)
     }
 
-    fileprivate func sendCreditCardAutofillPromptExpandedTelemetry() {
+    private func sendCreditCardAutofillPromptExpandedTelemetry() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .creditCardAutofillPromptExpanded)
+    }
+
+    private func showToast(with message: String, view: UIView) {
+        SimpleToast().showAlertWithText(message,
+                                        bottomContainer: view,
+                                        theme: self.currentTheme())
     }
 }

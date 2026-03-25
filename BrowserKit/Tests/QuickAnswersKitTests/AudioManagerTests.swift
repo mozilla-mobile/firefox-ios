@@ -61,43 +61,43 @@ struct AudioManagerTests {
 
     // MARK: - Start Capture Tests
     @Test
-    func test_startCapture_installsTapOnBus0() throws {
+    func test_startCapture_installsTapOnBus0() {
         let subject = createSubject()
 
-        try subject.startCapture { _, _ in }
+        subject.startCapture { _, _ in }
 
         #expect(engine.mockInputNode.removeTapCallCount == 1)
         #expect(engine.mockInputNode.installTapCallCount == 1)
     }
 
     @Test
-    func test_startCapture_usesCorrectBufferSize() throws {
+    func test_startCapture_usesCorrectBufferSize() {
         let subject = createSubject()
-        try subject.startCapture(bufferSize: 1024) { _, _ in }
+        subject.startCapture(bufferSize: 1024) { _, _ in }
 
         #expect(engine.mockInputNode.installTapCallCount == 1)
     }
 
     @Test
-    func test_startCapture_withFormatConversion_installsTap() throws {
+    func test_startCapture_withFormatConversion_installsTap() {
         let subject = createSubject()
         let targetFormat = AVAudioFormat(
             standardFormatWithSampleRate: 16000,
             channels: 1
         )!
 
-        try subject.startCapture(targetFormat: targetFormat) { _ in }
+        subject.startCapture(targetFormat: targetFormat) { _ in }
 
         #expect(engine.mockInputNode.installTapCallCount == 1)
     }
 
     // MARK: - Format Conversion Tests
     @Test
-    func test_convertIfNeeded_withDifferentSampleRate_convertsBuffer() throws {
+    func test_convertIfNeeded_withDifferentSampleRate_convertsBuffer() {
         let subject = createSubject()
         let targetFormat = AVAudioFormat(standardFormatWithSampleRate: 16000, channels: 1)!
 
-        try subject.startCapture(targetFormat: targetFormat) { buffer in
+        subject.startCapture(targetFormat: targetFormat) { buffer in
             #expect(buffer.format.sampleRate == 16000)
             #expect(buffer.format.channelCount == 1)
             // calculated by ratio (target sample rate / buffer sample rate) * buffer.frameLength
@@ -113,11 +113,11 @@ struct AudioManagerTests {
     }
 
     @Test
-    func test_convertIfNeeded_withMatchingSampleRate_passesThroughWithoutConversion() throws {
+    func test_convertIfNeeded_withMatchingSampleRate_passesThroughWithoutConversion() {
         let subject = createSubject()
         let targetFormat = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
 
-        try subject.startCapture(targetFormat: targetFormat) { buffer in
+        subject.startCapture(targetFormat: targetFormat) { buffer in
             #expect(buffer.format.sampleRate == 44100.0)
             #expect(buffer.format.channelCount == 1)
             #expect(buffer.frameLength == 1024)

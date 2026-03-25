@@ -310,68 +310,29 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.tabTrayUIExperiments
         let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isUnifiedSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.unifiedSearch
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isOneTapNewTabEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarOneTapNewTab
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarTranslucency
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyRefactorEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -379,42 +340,18 @@ class BrowserViewController: UIViewController,
     }
 
     var isMinimalAddressBarEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarMinimalAddressBar
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarNavigationHintEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarNavigationHint
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarUpdateHint
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -446,36 +383,14 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [NimbusFeatureFlagID.trendingSearches.rawValue: "\(isTrendingSearchEnabled)"]
-        )
-
         let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [NimbusFeatureFlagID.recentSearches.rawValue: "\(isRecentSearchEnabled)"]
-        )
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
     private var isRecentSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.recentSearches
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isSnapKitRemovalEnabled: Bool {
@@ -1544,19 +1459,6 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
 
         logCurrentNimbusExperimentsState()
-    }
-
-    // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-    // On initial display, the view is not yet in the window hierarchy at setup time, so
-    // statusBarManager is unavailable and the header top constraint starts with constant = 0.
-    // viewSafeAreaInsetsDidChange fires once the view enters the hierarchy, at which point
-    // statusBarManager returns the correct value and the constant is updated.
-    // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
-    // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        guard isSnapKitRemovalEnabled else { return }
-        browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
     }
 
     /// Logging current Nimbus state

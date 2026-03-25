@@ -855,8 +855,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             for: site,
             isPinned: site.isPinnedSite
         ) { [weak self] message in
-            guard let view = self?.view, let theme = self?.currentTheme() else { return }
-            SimpleToast().showAlertWithText(message, bottomContainer: view, theme: theme)
+            self?.libraryPanelDelegate?.showToast(message: message)
         }
         actions.append(pinTopSiteAction)
 

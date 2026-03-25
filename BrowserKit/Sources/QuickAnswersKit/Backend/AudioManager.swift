@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 @preconcurrency import AVFoundation
+import Common
 import Speech
 
 /// This manager centralizes common audio operations used by different speech transcription engines.
@@ -10,13 +11,16 @@ import Speech
 final class AudioManager: AudioManagerProtocol {
     private let audioEngine: AudioEngineProvider
     private let audioSession: AudioSessionProvider
+    private let logger: Logger
 
     init(
         audioEngine: AudioEngineProvider = AVAudioEngine(),
-        audioSession: AudioSessionProvider = AVAudioSession()
+        audioSession: AudioSessionProvider = AVAudioSession(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.audioEngine = audioEngine
         self.audioSession = audioSession
+        self.logger = logger
     }
 
     func configureAudioSession() throws {
@@ -38,7 +42,7 @@ final class AudioManager: AudioManagerProtocol {
     func startCapture(
         bufferSize: AVAudioFrameCount = 4096,
         handler: @escaping (AVAudioPCMBuffer, AVAudioTime) -> Void
-    ) throws {
+    ) {
         let inputNode = audioEngine.audioInputNode
         let format = inputNode.outputFormat(forBus: 0)
 
@@ -53,7 +57,7 @@ final class AudioManager: AudioManagerProtocol {
         targetFormat: AVAudioFormat,
         bufferSize: AVAudioFrameCount = 4096,
         handler: @escaping @Sendable (AVAudioPCMBuffer) -> Void
-    ) throws {
+    ) {
         let inputNode = audioEngine.audioInputNode
         let inputFormat = inputNode.outputFormat(forBus: 0)
 
@@ -71,7 +75,11 @@ final class AudioManager: AudioManagerProtocol {
                 let convertedBuffer = try self.convertIfNeeded(buffer, to: targetFormat, with: converter)
                 handler(convertedBuffer)
             } catch {
-                // TODO: FXIOS-14931 Add logger
+                logger.log(
+                    "Error thrown trying to convert buffer via AudioManager.",
+                    level: .warning,
+                    category: .speech
+                )
             }
         }
     }

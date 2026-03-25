@@ -23,3 +23,10 @@ final class MockLAContext: LAContextProtocol {
         reply(self.shouldSucceed, self.shouldSucceed ? nil : NSError(domain: "test domain", code: -1))
     }
 }
+
+final class MockLAContextProvider: LocalAuthenticationContextProvider {
+    let context: LAContextProtocol
+    init(context: LAContextProtocol) {
+        self.context = context
+    }
+}

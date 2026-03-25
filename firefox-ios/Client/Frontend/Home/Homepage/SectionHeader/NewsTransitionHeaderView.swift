@@ -16,7 +16,12 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     }
 
     private lazy var newsAffordanceContentView: NewsAffordanceHeaderView = .build()
-    private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
+    private lazy var sectionTitleHeaderView: LabelButtonHeaderView = {
+        // This reusable view is embedded inside another supplementary view, so keep it frame-based instead of auto layout
+        let view = LabelButtonHeaderView(frame: .zero)
+        view.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+        return view
+    }()
 
     private var progress: CGFloat = 0
     private var transitionEnabled = true
@@ -40,11 +45,26 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         updateViewState(forHeight: bounds.height)
     }
 
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+
+        // Supplementary view sizing can change before `layoutSubviews` runs during rotation.
+        // Sync the active affordance constraints from the incoming layout height immediately.
+        updateViewState(forHeight: layoutAttributes.size.height)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateViewState(forHeight: bounds.height)
+        updateSectionTitleHeaderFrame()
+    }
+
     func configure(state: SectionHeaderConfiguration, textColor: UIColor?, theme: Theme, transitionEnabled: Bool = true) {
         self.transitionEnabled = transitionEnabled
         newsAffordanceContentView.applyTheme(theme: theme)
         sectionTitleHeaderView.configure(state: state, moreButtonAction: nil, textColor: textColor, theme: theme)
         sectionTitleHeaderView.moreButton.isHidden = true
+        updateSectionTitleHeaderFrame()
         updateViewState(forHeight: bounds.height)
     }
 
@@ -82,6 +102,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
 
         addSubview(newsAffordanceContentView)
         addSubview(sectionTitleHeaderView)
+        updateSectionTitleHeaderFrame()
 
         newsAffordanceExpandedConstraints = [
             newsAffordanceContentView.topAnchor.constraint(equalTo: topAnchor),
@@ -91,11 +112,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             newsAffordanceContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             newsAffordanceContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             newsAffordanceContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            sectionTitleHeaderView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
-            sectionTitleHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
@@ -124,5 +140,28 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         } else {
             NSLayoutConstraint.deactivate(newsAffordanceExpandedConstraints)
         }
+    }
+
+    private func updateSectionTitleHeaderFrame() {
+        guard bounds.width > 0, bounds.height > 0 else {
+            sectionTitleHeaderView.frame = bounds
+            return
+        }
+
+        // Measure the label header at its natural height, then pin that measured frame to the
+        // bottom of the transition container so the crossfade matches the final resting position.
+        let measuredHeight = sectionTitleHeaderView.systemLayoutSizeFitting(
+            CGSize(width: bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+
+        let headerHeight = min(bounds.height, measuredHeight)
+        sectionTitleHeaderView.frame = CGRect(
+            x: 0,
+            y: bounds.height - headerHeight,
+            width: bounds.width,
+            height: headerHeight
+        )
     }
 }

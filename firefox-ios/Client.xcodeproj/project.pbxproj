@@ -1282,7 +1282,6 @@
 		8AF6D4E12A856B4500B0474B /* UnifiedTileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4E02A856B4500B0474B /* UnifiedTileNetworking.swift */; };
 		8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4C29EF076800108DEC /* WebviewViewController.swift */; };
 		8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */; };
-		8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B5329EF2AF100108DEC /* MockLogger.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
 		8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */; };
 		8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */; };
@@ -1396,6 +1395,7 @@
 		AA742C7A2E90358400CF55B3 /* MockMicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C792E90357E00CF55B3 /* MockMicrosurveyTelemetry.swift */; };
 		AA742C7C2E904B9B00CF55B3 /* MicrosurveyTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA742C7B2E904B9500CF55B3 /* MicrosurveyTelemetryTests.swift */; };
 		AA93AB052F6B06BE002E5E88 /* MLPAKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA93AB042F6B06BE002E5E88 /* MLPAKit */; };
+		AA93D2D82F71B445002E5E88 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA93B7142F6D95D6002E5E88 /* LLMKit */; };
 		AAB4321B2E8187190075E47F /* RecentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321A2E8187130075E47F /* RecentSearchProvider.swift */; };
 		AAB4321D2E8189390075E47F /* DefaultRecentSearchProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB4321C2E8189310075E47F /* DefaultRecentSearchProviderTests.swift */; };
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
@@ -9422,7 +9422,6 @@
 		8AF6D4E02A856B4500B0474B /* UnifiedTileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTileNetworking.swift; sourceTree = "<group>"; };
 		8AF99B4C29EF076800108DEC /* WebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewController.swift; sourceTree = "<group>"; };
 		8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserDelegate.swift; sourceTree = "<group>"; };
-		8AF99B5329EF2AF100108DEC /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
 		8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarBadge.swift; sourceTree = "<group>"; };
 		8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataTypeTests.swift; sourceTree = "<group>"; };
 		8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
@@ -11538,7 +11537,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AC4BA3B2F7289F200ABEFDB /* LLMKit in Frameworks */,
+				AA93D2D82F71B445002E5E88 /* LLMKit in Frameworks */,
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
 				0BF802E22CFF0937005633E5 /* Shared in Frameworks */,
@@ -15093,7 +15092,6 @@
 				8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */,
 				8AF10D9029D776190086351D /* MockLaunchScreenManager.swift */,
 				965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */,
-				8AF99B5329EF2AF100108DEC /* MockLogger.swift */,
 				8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */,
 				8A93F86629D373AC004159D9 /* MockNavigationController.swift */,
 				5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */,
@@ -19940,7 +19938,6 @@
 				C8DC90D02A067C5B0008832B /* MarkupParseUtilityTests.swift in Sources */,
 				21EEAA1B2D3AE3B300595119 /* BookmarksTelemetryTests.swift in Sources */,
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,
-				8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */,
 				AB9CBC082C53B7CD00102610 /* TrackingProtectionStateTests.swift in Sources */,
 				8A1C0B8F2E723EDF0030DCC8 /* AppLaunchUtilTests.swift in Sources */,
 				E1EAA5F12D49470900D3039C /* ToolbarStateTests.swift in Sources */,

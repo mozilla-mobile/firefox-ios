@@ -263,9 +263,6 @@ final class OnboardingScreen {
         BaseTestCase().mozWaitForElementToExist(secondaryButton)
         secondaryButton.waitAndTap()
         currentScreen += 1
-        if isTablet {
-            currentScreen += 1
-        }
     }
 
     // MARK: - Completing Different Onboarding Flows

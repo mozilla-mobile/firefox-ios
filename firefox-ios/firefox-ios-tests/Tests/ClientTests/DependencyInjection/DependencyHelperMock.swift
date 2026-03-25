@@ -4,6 +4,7 @@
 
 import Common
 import Storage
+import TestKit
 @testable import Client
 
 final class DependencyHelperMock {
