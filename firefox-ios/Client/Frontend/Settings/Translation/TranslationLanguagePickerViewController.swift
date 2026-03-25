@@ -11,8 +11,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
                                                      UITableViewDelegate,
                                                      UISearchResultsUpdating,
                                                      Themeable {
-    private static let cellIdentifier = "LanguageCell"
-
     // MARK: - Themeable
 
     var themeManager: ThemeManager
@@ -32,8 +30,8 @@ final class TranslationLanguagePickerViewController: UIViewController,
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self,
-                           forCellReuseIdentifier: Self.cellIdentifier)
+        tableView.register(TranslationPickerLanguageCell.self,
+                           forCellReuseIdentifier: TranslationPickerLanguageCell.cellIdentifier)
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Translation.languagePickerList
         return tableView
     }()
@@ -103,20 +101,15 @@ final class TranslationLanguagePickerViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: TranslationPickerLanguageCell.cellIdentifier,
+            for: indexPath
+        ) as? TranslationPickerLanguageCell ?? TranslationPickerLanguageCell()
         let code = filteredLanguages[indexPath.row]
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let native = localeProvider.nativeLanguageName(for: code)
         let localized = localeProvider.localizedLanguageName(for: code)
-
-        var content = cell.defaultContentConfiguration()
-        content.text = native
-        content.textProperties.color = theme.colors.textPrimary
-        content.secondaryText = native == localized ? nil : localized
-        content.secondaryTextProperties.color = theme.colors.textSecondary
-        cell.contentConfiguration = content
-        cell.backgroundColor = theme.colors.layer2
-
+        cell.configure(native: native, localized: native == localized ? nil : localized)
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -162,6 +155,8 @@ final class TranslationLanguagePickerViewController: UIViewController,
         tableView.backgroundColor = theme.colors.layer1
         searchController.searchBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        tableView.reloadData()
+        tableView.visibleCells.compactMap { $0 as? TranslationPickerLanguageCell }.forEach {
+            $0.applyTheme(theme: theme)
+        }
     }
 }

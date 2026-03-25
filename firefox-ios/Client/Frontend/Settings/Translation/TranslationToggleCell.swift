@@ -10,6 +10,9 @@ final class TranslationToggleCell: UICollectionViewListCell, ThemeApplicable {
     private let toggle = UISwitch()
 
     func configure(isOn: Bool, target: Any?, action: Selector, theme: Theme) {
+        var content = defaultContentConfiguration()
+        content.text = .Settings.Translation.ToggleTitle
+        contentConfiguration = content
         toggle.isOn = isOn
         toggle.addTarget(target, action: action, for: .valueChanged)
         accessories = [.customView(configuration: .init(customView: toggle, placement: .trailing(displayed: .always)))]
@@ -17,8 +20,7 @@ final class TranslationToggleCell: UICollectionViewListCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        var content = defaultContentConfiguration()
-        content.text = .Settings.Translation.ToggleTitle
+        guard var content = contentConfiguration as? UIListContentConfiguration else { return }
         content.textProperties.color = theme.colors.textPrimary
         contentConfiguration = content
         toggle.onTintColor = theme.colors.actionPrimary

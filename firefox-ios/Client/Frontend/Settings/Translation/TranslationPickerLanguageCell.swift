@@ -5,17 +5,14 @@
 import Common
 import UIKit
 
-final class TranslationLanguageCell: UICollectionViewListCell, ThemeApplicable {
-    private var details: PreferredLanguageDetails?
+final class TranslationPickerLanguageCell: UITableViewCell {
+    static let cellIdentifier = "TranslationPickerLanguageCell"
 
-    func configure(with details: PreferredLanguageDetails, theme: Theme) {
-        self.details = details
+    func configure(native: String, localized: String?) {
         var content = defaultContentConfiguration()
-        content.text = details.mainText
-        content.secondaryText = details.subtitleText
+        content.text = native
+        content.secondaryText = localized
         contentConfiguration = content
-        accessories = []
-        applyTheme(theme: theme)
     }
 
     func applyTheme(theme: Theme) {
@@ -23,7 +20,6 @@ final class TranslationLanguageCell: UICollectionViewListCell, ThemeApplicable {
         content.textProperties.color = theme.colors.textPrimary
         content.secondaryTextProperties.color = theme.colors.textSecondary
         contentConfiguration = content
-        backgroundConfiguration = .listGroupedCell()
-        backgroundConfiguration?.backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer2
     }
 }
