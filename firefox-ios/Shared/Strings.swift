@@ -3111,14 +3111,14 @@ extension String {
                     key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151",
                     tableName: "Settings",
                     value: "**Available**: You’ll see the feature and can use it.",
-                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the available status means."
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation."
                 )
 
                 public static let BlockedStatusDescription = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151",
                     tableName: "Settings",
                     value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
-                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means."
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
                 )
             }
         }
