@@ -873,6 +873,8 @@ final class HomepageViewController: UIViewController,
         super.traitCollectionDidChange(previousTraitCollection)
 
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            // Wait for a layout pass so the header has its correct height before determining
+            // whether the transition should be enabled.
             DispatchQueue.main.async { [weak self] in
                 self?.updateNewsTransitionHeaderProgress()
             }
