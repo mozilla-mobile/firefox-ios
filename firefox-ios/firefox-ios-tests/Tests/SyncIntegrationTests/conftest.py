@@ -69,15 +69,6 @@ def tps_log(pytestconfig, tmpdir):
     yield tps_log
 
 @pytest.fixture
-def fxa_urls():
-    return {
-        'authentication': 'https://api-accounts.stage.mozaws.net/v1',
-        'oauth': 'https://oauth.stage.mozaws.net/v1',
-        'content': 'https://accounts.stage.mozaws.net/',
-        'profile': 'https://profile.stage.mozaws.net/v1',
-        'token': 'https://token.stage.mozaws.net/'}
-
-@pytest.fixture
 def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
     preferences = {
         'app.update.enabled': False,
