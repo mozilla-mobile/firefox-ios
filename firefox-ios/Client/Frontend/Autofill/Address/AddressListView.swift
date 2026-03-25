@@ -19,6 +19,7 @@ struct AddressListView: View {
         static let titleFontSize: CGFloat = 22
         static let subtitleFontSize: CGFloat = 16
         static let contentUnavailableViewTopPadding: CGFloat = 125
+        static let listPadding: CGFloat = -8
     }
 
     // MARK: - Properties
@@ -34,16 +35,21 @@ struct AddressListView: View {
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
 
+    @State private var isLandscape = false
+
     // MARK: - Body
 
     var body: some View {
         Group {
             if viewModel.showSection {
                 List {
-                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
+                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)
+                        .modifier(ListHeaderPadding(isLandscape: isLandscape,
+                                                    paddingSize: UX.listPadding))) {
                         ForEach(viewModel.addresses, id: \.self) { address in
-                            AddressCellView(
+                            AddressSettingsCellView(
                                 windowUUID: windowUUID,
+                                isLandscape: isLandscape,
                                 address: address,
                                 onTap: {
                                     if viewModel.isEditingFeatureEnabled {
@@ -65,6 +71,7 @@ struct AddressListView: View {
                 Spacer()
             }
         }
+        .detectDeviceOrientation(isLandscape: $isLandscape)
         .sheet(item: $viewModel.destination, onDismiss: {
             viewModel.isEditMode = false
         }) { destination in
