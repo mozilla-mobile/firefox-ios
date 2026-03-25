@@ -81,17 +81,6 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(items[1], .language(details[1]))
     }
 
-    // MARK: - reconfigureVisibleCells
-
-    func test_reconfigureVisibleCells_withEmptySnapshot_doesNotCrash() {
-        subject.reconfigureVisibleCells()
-    }
-
-    func test_reconfigureVisibleCells_withPopulatedSnapshot_doesNotCrash() {
-        subject.applySnapshot(state: makeState(isEnabled: true, languages: ["en"]), animated: false)
-        subject.reconfigureVisibleCells()
-    }
-
     // MARK: - Helpers
 
     private func makeDataSource() -> TranslationSettingsDiffableDataSource {

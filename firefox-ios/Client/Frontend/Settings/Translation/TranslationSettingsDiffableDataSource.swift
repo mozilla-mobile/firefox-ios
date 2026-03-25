@@ -86,14 +86,4 @@ final class TranslationSettingsDiffableDataSource:
 
         apply(snapshot, animatingDifferences: animated)
     }
-
-    /// Reconfigures existing cells without a structural snapshot diff.
-    /// Called from applyTheme to update colours without replacing live UISwitch instances.
-    func reconfigureVisibleCells() {
-        var snap = snapshot()
-        let allItems = snap.sectionIdentifiers.flatMap { snap.itemIdentifiers(inSection: $0) }
-        guard !allItems.isEmpty else { return }
-        snap.reconfigureItems(allItems)
-        apply(snap, animatingDifferences: true)
-    }
 }
