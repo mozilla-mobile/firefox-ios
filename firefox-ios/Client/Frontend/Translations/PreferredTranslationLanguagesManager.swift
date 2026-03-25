@@ -33,6 +33,17 @@ final class PreferredTranslationLanguagesManager {
         return initial
     }
 
+    /// Appends a language code to the stored list and persists it.
+    /// Returns the updated list.
+    @discardableResult
+    func addLanguage(_ code: String) -> [String] {
+        var current = loadStoredLanguages() ?? []
+        guard !current.contains(code) else { return current }
+        current.append(code)
+        save(languages: current)
+        return current
+    }
+
     /// Persists a new ordered language list.
     func save(languages: [String]) {
         prefs.setString(languages.joined(separator: ","), forKey: PrefsKeys.Settings.translationPreferredLanguages)

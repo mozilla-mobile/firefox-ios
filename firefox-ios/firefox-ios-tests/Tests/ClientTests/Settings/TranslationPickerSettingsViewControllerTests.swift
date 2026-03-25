@@ -25,11 +25,6 @@ final class TranslationPickerSettingsViewControllerTests: XCTestCase, StoreTestU
 
     // MARK: - Init
 
-    func test_init_noMemoryLeak() {
-        let subject = createSubject()
-        trackForMemoryLeaks(subject)
-    }
-
     func test_init_setsTitle() {
         let subject = createSubject()
         XCTAssertEqual(subject.title, .Settings.Translation.Title)

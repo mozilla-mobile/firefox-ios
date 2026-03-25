@@ -8,6 +8,13 @@ import Redux
 struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
+    let languageCode: String?
+
+    init(languageCode: String? = nil, windowUUID: WindowUUID, actionType: ActionType) {
+        self.languageCode = languageCode
+        self.windowUUID = windowUUID
+        self.actionType = actionType
+    }
 }
 
 struct TranslationSettingsMiddlewareAction: Action {
@@ -16,10 +23,12 @@ struct TranslationSettingsMiddlewareAction: Action {
     let isTranslationsEnabled: Bool?
     let preferredLanguages: [PreferredLanguageDetails]?
     let supportedLanguages: [String]?
+    let availableLanguages: [String]?
 
     init(isTranslationsEnabled: Bool? = nil,
          preferredLanguages: [PreferredLanguageDetails]? = nil,
          supportedLanguages: [String]? = nil,
+         availableLanguages: [String]? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -27,12 +36,14 @@ struct TranslationSettingsMiddlewareAction: Action {
         self.isTranslationsEnabled = isTranslationsEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
+        self.availableLanguages = availableLanguages
     }
 }
 
 enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
+    case addLanguage
 }
 
 enum TranslationSettingsMiddlewareActionType: ActionType {

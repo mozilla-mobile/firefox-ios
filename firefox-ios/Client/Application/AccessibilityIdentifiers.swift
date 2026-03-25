@@ -752,6 +752,7 @@ struct AccessibilityIdentifiers {
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
+            static let languagePickerList = "Settings.Translation.LanguagePickerList"
         }
 
         struct BlockImages {
