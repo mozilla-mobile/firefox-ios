@@ -65,25 +65,10 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         .onChange(of: aiControlsModel.pageSummariesEnabled, perform: { newValue in
             aiControlsModel.togglePageSummariesFeature(to: newValue)
         })
-        .alert(isPresented: $aiControlsModel.killSwitchToggledOn) {
-            killSwitchToggledOnAlert
-        }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
-    }
-
-    var killSwitchToggledOnAlert: Alert {
-        Alert(
-            title: Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.Title),
-            message: Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.Message),
-            primaryButton: .default(Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.CancelButton), action:
-                                        {
-                                            aiControlsModel.killSwitchIsOn = false
-                                        }),
-            secondaryButton: .destructive(Text(verbatim: .Settings.AIControls.BlockAIEnhancementsAlert.BlockButton))
-        )
     }
 
     var informationCard: some View {

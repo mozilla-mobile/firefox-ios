@@ -3053,36 +3053,6 @@ extension String {
                 comment: "In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle"
             )
 
-            public struct BlockAIEnhancementsAlert {
-                public static let Title = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Title.v151",
-                    tableName: "Settings",
-                    value: "Block AI Enhancements?",
-                    comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the title for the alert that shows confirming that you want to block AI Enhancements."
-                )
-
-                public static let Message = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.Message.v151",
-                    tableName: "Settings",
-                    value: "You won’t see new or current AI enhancements in Firefox, or pop-ups about them. Afterwards, you can unblock anything you want to keep using.\n\n What will be blocked:\n- Translation\n- Page Summaries",
-                    comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the message for the alert that shows confirming that you want to block AI Enhancements."
-                )
-
-                public static let CancelButton = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.CancelButton.v151",
-                    tableName: "Settings",
-                    value: "Cancel",
-                    comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the text for the cancel button in the alert."
-                )
-
-                public static let BlockButton = MZLocalizedString(
-                    key: "Settings.AIControls.BlockAIEnhancementsAlert.BlockButton.v151",
-                    tableName: "Settings",
-                    value: "Block",
-                    comment: "In the AI Controls settings, when you turn on the Block AI Enhancements toggle, this is the text for the block button in the alert."
-                )
-            }
-
             public struct AIPoweredFeaturesSection {
                 public static let Title = MZLocalizedString(
                     key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v151",

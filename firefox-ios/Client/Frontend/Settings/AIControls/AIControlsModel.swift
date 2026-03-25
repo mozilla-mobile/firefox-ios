@@ -5,7 +5,6 @@
 import Shared
 
 class AIControlsModel: ObservableObject, FeatureFlaggable {
-    @Published var killSwitchToggledOn = false
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
@@ -54,7 +53,6 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
             prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
             prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         case true:
-            killSwitchToggledOn = true
             pageSummariesEnabled = false
             translationEnabled = false
             prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
