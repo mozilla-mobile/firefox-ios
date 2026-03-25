@@ -30,7 +30,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 informationCard
                 Spacer(minLength: UX.cardSpacing)
                 blockAIEnhancementsCard
-                Text(verbatim: .Settings.AIControls.BlockAIEnhancementsDescription)
+                Text(aiControlsModel.blockAIEnhancementsDescription)
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textSecondary.color)
                     .padding(.leading)
@@ -79,7 +79,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             HStack {
                 VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
-                    Text(verbatim: .Settings.AIControls.HeaderCard.Title)
+                    Text(aiControlsModel.headerCardTitle)
                         .font(FXFontStyles.Bold.headline.scaledSwiftUIFont())
                         .foregroundStyle(themeColors.textPrimary.color)
                     Text(verbatim: .Settings.AIControls.HeaderCard.Message)

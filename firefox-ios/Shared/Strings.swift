@@ -3006,8 +3006,8 @@ extension String {
                 public static let Title = MZLocalizedString(
                     key: "Settings.AIControls.HeaderCard.Title.v151",
                     tableName: "Settings",
-                    value: "You always have a choice in Firefox",
-                    comment: "This is the title for the Header Card under the AI Controls settings section."
+                    value: "You always have a choice in %@",
+                    comment: "This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
                 )
 
                 public static let Message = MZLocalizedString(
@@ -3035,8 +3035,8 @@ extension String {
             public static let BlockAIEnhancementsDescription = MZLocalizedString(
                 key: "Settings.AIControls.BlockAIEnhancementsDescription.v151",
                 tableName: "Settings",
-                value: "Blocking means you won’t see new or current AI enhancements in Firefox, or popups about them.",
-                comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section."
+                value: "Blocking means you won’t see new or current AI enhancements in %@, or popups about them.",
+                comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
             )
 
             public static let BlockAIEnhancementsLink = MZLocalizedString(

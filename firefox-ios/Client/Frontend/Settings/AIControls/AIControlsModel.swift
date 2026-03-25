@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Common
 
 class AIControlsModel: ObservableObject, FeatureFlaggable {
     @Published var killSwitchIsOn = false
@@ -20,6 +21,20 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         label: .Settings.AIControls.BlockAIEnhancementsLink,
         url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
     )
+
+    let headerCardTitle: String = {
+        String(
+            format: .Settings.AIControls.HeaderCard.Title,
+            AppName.shortName.rawValue
+        )
+    }()
+
+    let blockAIEnhancementsDescription: String = {
+        String(
+            format: .Settings.AIControls.BlockAIEnhancementsDescription,
+            AppName.shortName.rawValue
+        )
+    }()
 
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: DefaultSummarizerNimbusUtils
