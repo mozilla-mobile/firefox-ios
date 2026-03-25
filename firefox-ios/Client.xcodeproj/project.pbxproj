@@ -1306,6 +1306,7 @@
 		8C3B1A1B2F73C8D100E2C370 /* TranslationToggleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A1A2F73C8D100E2C370 /* TranslationToggleCell.swift */; };
 		8C3B1A1D2F73C8E600E2C370 /* TranslationLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A1C2F73C8E600E2C370 /* TranslationLanguageCell.swift */; };
 		8C3B1A1F2F73C8F300E2C370 /* TranslationAddLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A1E2F73C8F300E2C370 /* TranslationAddLanguageCell.swift */; };
+		8C3B1A212F73C91000E2C370 /* TranslationPickerLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A202F73C91000E2C370 /* TranslationPickerLanguageCell.swift */; };
 		8C3BF7052F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3BF7042F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift */; };
 		8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */; };
 		8C50DD752F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */; };
@@ -9458,6 +9459,7 @@
 		8C3B1A1A2F73C8D100E2C370 /* TranslationToggleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationToggleCell.swift; sourceTree = "<group>"; };
 		8C3B1A1C2F73C8E600E2C370 /* TranslationLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationLanguageCell.swift; sourceTree = "<group>"; };
 		8C3B1A1E2F73C8F300E2C370 /* TranslationAddLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationAddLanguageCell.swift; sourceTree = "<group>"; };
+		8C3B1A202F73C91000E2C370 /* TranslationPickerLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationPickerLanguageCell.swift; sourceTree = "<group>"; };
 		8C3BF7042F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationLanguagePickerViewController.swift; sourceTree = "<group>"; };
 		8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UpdatableAddressFields+Decodable.swift"; sourceTree = "<group>"; };
 		8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredTranslationLanguagesManagerTests.swift; sourceTree = "<group>"; };
@@ -14449,6 +14451,7 @@
 				8C3B1A1A2F73C8D100E2C370 /* TranslationToggleCell.swift */,
 				8C3B1A1C2F73C8E600E2C370 /* TranslationLanguageCell.swift */,
 				8C3B1A1E2F73C8F300E2C370 /* TranslationAddLanguageCell.swift */,
+				8C3B1A202F73C91000E2C370 /* TranslationPickerLanguageCell.swift */,
 			);
 			path = Translation;
 			sourceTree = "<group>";
@@ -19357,6 +19360,7 @@
 				0BBFBF252DFC203100160911 /* BrowserWebUIDelegate.swift in Sources */,
 				C2886E012EC5DD97007AE6C3 /* TranslationsSchemeHandler.swift in Sources */,
 				8C3B1A1F2F73C8F300E2C370 /* TranslationAddLanguageCell.swift in Sources */,
+				8C3B1A212F73C91000E2C370 /* TranslationPickerLanguageCell.swift in Sources */,
 				F639D90E2D8A326C007EDC60 /* TabAnimation.swift in Sources */,
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
