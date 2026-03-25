@@ -165,7 +165,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     private func setLanguagePickerEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
-            TranslationsFeature(enabled: enabled, languagePickerEnabled: enabled)
+            TranslationsFeature(enabled: true, languagePickerEnabled: enabled)
         }
     }
 }

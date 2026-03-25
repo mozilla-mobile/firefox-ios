@@ -3160,9 +3160,11 @@ class BrowserViewController: UIViewController,
                 style: .default
             ) { [weak self] _ in
                 guard let self else { return }
-                store.dispatch(GeneralBrowserAction(
+                store.dispatch(ToolbarMiddlewareAction(
+                    buttonType: .translate,
+                    gestureType: .tap,
                     windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.reloadWebsite
+                    actionType: ToolbarMiddlewareActionType.didTapButton
                 ))
             }
             alert.addAction(showOriginalAction)
