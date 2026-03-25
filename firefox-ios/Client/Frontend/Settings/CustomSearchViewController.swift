@@ -214,8 +214,7 @@ class CustomSearchViewController: SettingsTableViewController {
             self.navigationItem.rightBarButtonItem?.tintColor = theme.colors.textAccent
         }
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
-
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        updateSaveButton()
         return settings
     }
 
