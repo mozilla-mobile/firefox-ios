@@ -3205,9 +3205,15 @@ class BrowserViewController: UIViewController,
 
         alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
 
-        if let popover = alert.popoverPresentationController, let sourceButton {
-            popover.sourceView = sourceButton
-            popover.sourceRect = sourceButton.bounds
+        if let popover = alert.popoverPresentationController {
+            if let sourceButton {
+                popover.sourceView = sourceButton
+                popover.sourceRect = sourceButton.bounds
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
         }
 
         present(alert, animated: true)
