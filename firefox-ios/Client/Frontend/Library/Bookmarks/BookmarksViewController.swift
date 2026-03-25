@@ -67,6 +67,8 @@ final class BookmarksViewController: SiteTableViewController,
 
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
+            // Hide search and edit buttons when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [UIBarButtonItem]() }
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
@@ -251,6 +253,7 @@ final class BookmarksViewController: SiteTableViewController,
                     self?.flashRow()
                 }
                 self?.updateEmptyState(animated: false)
+                self?.sendPanelChangeNotification()
                 self?.updateParentViewControllerTitle()
             }
         }
