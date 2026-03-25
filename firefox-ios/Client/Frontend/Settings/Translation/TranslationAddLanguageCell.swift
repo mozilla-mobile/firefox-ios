@@ -8,13 +8,15 @@ import UIKit
 
 final class TranslationAddLanguageCell: UICollectionViewListCell, ThemeApplicable {
     func configure(theme: Theme) {
+        var content = defaultContentConfiguration()
+        content.text = .Settings.Translation.PreferredLanguages.AddLanguage
+        contentConfiguration = content
         accessories = []
         applyTheme(theme: theme)
     }
 
     func applyTheme(theme: Theme) {
-        var content = defaultContentConfiguration()
-        content.text = .Settings.Translation.PreferredLanguages.AddLanguage
+        guard var content = contentConfiguration as? UIListContentConfiguration else { return }
         content.textProperties.color = theme.colors.actionPrimary
         contentConfiguration = content
         backgroundConfiguration = .listGroupedCell()
