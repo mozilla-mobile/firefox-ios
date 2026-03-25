@@ -72,13 +72,13 @@ final class TabManagerMiddleware: FeatureFlaggable,
         } else if let action = action as? ScreenshotAction {
             self.resolveScreenshotActions(action: action, state: state)
         } else if let action = action as? ShortcutsLibraryAction {
-            self.resolveShortcutsLibrartActions(action: action, state: state)
+            self.resolveShortcutsLibraryActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
     }
 
-    private func resolveShortcutsLibrartActions(action: ShortcutsLibraryAction, state: AppState) {
+    private func resolveShortcutsLibraryActions(action: ShortcutsLibraryAction, state: AppState) {
         switch action.actionType {
         case ShortcutsLibraryActionType.switchTabToastButtonTapped:
             tabManager(for: action.windowUUID).selectTab(action.tab)
