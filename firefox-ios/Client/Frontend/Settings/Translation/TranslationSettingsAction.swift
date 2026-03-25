@@ -9,9 +9,17 @@ struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let languageCode: String?
+    let languages: [String]?
+    let pendingLanguages: [PreferredLanguageDetails]?
 
-    init(languageCode: String? = nil, windowUUID: WindowUUID, actionType: ActionType) {
+    init(languageCode: String? = nil,
+         languages: [String]? = nil,
+         pendingLanguages: [PreferredLanguageDetails]? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
         self.languageCode = languageCode
+        self.languages = languages
+        self.pendingLanguages = pendingLanguages
         self.windowUUID = windowUUID
         self.actionType = actionType
     }
@@ -44,6 +52,11 @@ enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
     case addLanguage
+    case enterEditMode
+    case cancelEditMode
+    case reorderLanguages
+    case removeLanguage
+    case saveLanguages
 }
 
 enum TranslationSettingsMiddlewareActionType: ActionType {
