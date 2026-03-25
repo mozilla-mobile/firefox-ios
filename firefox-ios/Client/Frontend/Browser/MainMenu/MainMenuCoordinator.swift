@@ -170,7 +170,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
             let prefs = profile.prefs
-            Task { @MainActor in
+            Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
