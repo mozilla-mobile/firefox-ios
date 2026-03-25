@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MozillaAppServices
 import Shared
 import Storage
 
@@ -13,19 +14,26 @@ protocol UnifiedAdsCallbackTelemetry {
     func sendClickTelemetry(tileSite: Site, position: Int)
 }
 
-final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
+final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, FeatureFlaggable {
+    private let adsClient: MozAdsClientProtocol
     private let networking: UnifiedTileNetworking
     private let logger: Logger
     private let sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry
 
     init(
+        adsClientFactory: MozAdsClientFactory = DefaultMozAdsClientFactory(),
         networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared,
         sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry()
     ) {
+        self.adsClient = adsClientFactory.createClient()
         self.networking = networking
         self.logger = logger
         self.sponsoredTileGleanTelemetry = sponsoredTileGleanTelemetry
+    }
+
+    private var isAdsClientEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly)
     }
 
     /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
@@ -35,7 +43,18 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
             return
         }
 
-        sendTelemetry(urlString: siteInfo.impressionURL, position: position)
+        if isAdsClientEnabled {
+            do {
+                try adsClient.recordImpression(impressionUrl: siteInfo.impressionURL)
+            } catch {
+                logger.log("Ads client recordImpression failed, falling back to legacy: \(error)",
+                           level: .warning,
+                           category: .homepage)
+                sendTelemetry(urlString: siteInfo.impressionURL, position: position)
+            }
+        } else {
+            sendTelemetry(urlString: siteInfo.impressionURL, position: position)
+        }
         sendGleanImpressionTelemetry(tileSite: tileSite, position: position)
     }
 
@@ -46,7 +65,18 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
             return
         }
 
-        sendTelemetry(urlString: siteInfo.clickURL, position: position)
+        if isAdsClientEnabled {
+            do {
+                try adsClient.recordClick(clickUrl: siteInfo.clickURL)
+            } catch {
+                logger.log("Ads client recordClick failed, falling back to legacy: \(error)",
+                           level: .warning,
+                           category: .homepage)
+                sendTelemetry(urlString: siteInfo.clickURL, position: position)
+            }
+        } else {
+            sendTelemetry(urlString: siteInfo.clickURL, position: position)
+        }
         sendGleanClickTelemetry(tileSite: tileSite, position: position)
     }
 

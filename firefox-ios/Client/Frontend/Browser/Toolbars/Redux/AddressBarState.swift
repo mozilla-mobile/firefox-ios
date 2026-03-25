@@ -1081,7 +1081,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
@@ -1109,7 +1109,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
               !isEditing
         else { return actions }
 
@@ -1230,9 +1230,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self,
-                                                         for: .toolbar,
-                                                         window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self,
+                                                            for: .toolbar,
+                                                            window: action.windowUUID)
         else { return actions }
 
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
@@ -1307,7 +1307,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     // MARK: - Helper
     @MainActor
     private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
         guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
@@ -1324,7 +1324,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     @MainActor
     private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
 
         let isTraitCollectionDidChangeAction = action.actionType as? ToolbarActionType == .traitCollectionDidChange

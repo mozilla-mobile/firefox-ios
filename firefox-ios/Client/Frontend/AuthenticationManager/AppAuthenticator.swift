@@ -27,8 +27,23 @@ protocol AppAuthenticationProtocol {
     )
 }
 
+protocol LocalAuthenticationContextProvider {
+    var context: LAContextProtocol { get }
+}
+
+final class DefaultLAContextProvider: LocalAuthenticationContextProvider {
+    var context: LAContextProtocol {
+        return LAContext()
+    }
+}
+
 final class AppAuthenticator: AppAuthenticationProtocol {
     private(set) var isAuthenticating = false
+    private let contextProvider: LocalAuthenticationContextProvider
+
+    init(contextProvider: LocalAuthenticationContextProvider = DefaultLAContextProvider()) {
+        self.contextProvider = contextProvider
+    }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
         if canAuthenticateDeviceOwner {
@@ -56,13 +71,11 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     ) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
-        //  (by commenting out the next line), then a previously successful authentication
-        //  causes the next policy evaluation to succeed without testing biometry again.
-        //  That's usually not what you want.
-
-        // TODO: This was recently changed in PR #31888 for FXIOS-14501, but it causes an issue with our biometrics,
-        // similar to the bug described above; we need to use a new LAContext for each authentication.
-        let context = LAContext()
+        // (by commenting out the next line), then a previously successful authentication
+        // causes the next policy evaluation to succeed without testing biometry again.
+        // That's usually not what you want.
+        // The default context provider will return a new LAContext().
+        let context = contextProvider.context
 
         isAuthenticating = true
 
@@ -104,6 +117,6 @@ final class AppAuthenticator: AppAuthenticationProtocol {
     }
 
     var canAuthenticateDeviceOwner: Bool {
-        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        return contextProvider.context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }

@@ -310,68 +310,29 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.tabTrayUIExperiments
         let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isUnifiedSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.unifiedSearch
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isOneTapNewTabEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarOneTapNewTab
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarTranslucency
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyRefactorEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isSwipingTabsEnabled: Bool {
@@ -379,42 +340,18 @@ class BrowserViewController: UIViewController,
     }
 
     var isMinimalAddressBarEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarMinimalAddressBar
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarNavigationHintEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarNavigationHint
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.toolbarUpdateHint
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -446,36 +383,14 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [NimbusFeatureFlagID.trendingSearches.rawValue: "\(isTrendingSearchEnabled)"]
-        )
-
         let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [NimbusFeatureFlagID.recentSearches.rawValue: "\(isRecentSearchEnabled)"]
-        )
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
     private var isRecentSearchEnabled: Bool {
-        // TODO: FXIOS-14107 Remove logs after Nimbus incident is resolved
         let flagToCheck = NimbusFeatureFlagID.recentSearches
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-        logger.log(
-            "Feature flag status",
-            level: .info,
-            category: .experiments,
-            extra: [flagToCheck.rawValue: "\(featureFlagStatus)"]
-        )
-        return featureFlagStatus
+        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isSnapKitRemovalEnabled: Bool {
@@ -749,40 +664,37 @@ class BrowserViewController: UIViewController,
         }
 
         let enableBlur = isToolbarTranslucencyEnabled
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
         let isScrollAlphaZero = if #available(iOS 26.0, *) {
-            store.state.screenState(
+            store.state.componentState(
                 ToolbarState.self,
                 for: .toolbar,
                 window: windowUUID
             )?.scrollAlpha == 0 } else { false }
 
+        // Prevent homepage from showing behind the keyboard when content isn't scrollable.
+        // Only clear background if content exceeds viewport height.
+        let shouldClearBackground: Bool = {
+            guard let webView = tabManager.selectedTab?.webView else { return false }
+            return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
+        }()
+
         if isBottomSearchBar {
             header.isClearBackground = false
-
-            // Prevent homepage from showing behind the keyboard when content isn't scrollable.
-            // Only clear background if content exceeds viewport height.
-            let shouldClearBackground: Bool = {
-                guard let webView = tabManager.selectedTab?.webView else { return false }
-                return isScrollAlphaZero && webView.scrollView.contentSize.height > view.bounds.height
-            }()
-            // we disable the translucency when the keyboard is getting displayed
-            overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
 
             let isFxHomeTab = tabManager.selectedTab?.isFxHomeTab ?? false
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
         } else {
             header.isClearBackground = enableBlur
-            overKeyboardContainer.isClearBackground = false
             topBlurView.alpha = 1
         }
 
-        bottomContainer.isClearBackground = showNavToolbar && enableBlur
-        bottomBlurView.isHidden = (!showNavToolbar && !isBottomSearchBar && enableBlur) || isScrollAlphaZero
+        overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
+        bottomContainer.isClearBackground = enableBlur
+        bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
 
         if !isToolbarTranslucencyRefactorEnabled {
@@ -848,7 +760,7 @@ class BrowserViewController: UIViewController,
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = isActionNeeded
 
-        let shouldShowWarningBadge = store.state.screenState(
+        let shouldShowWarningBadge = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -902,7 +814,7 @@ class BrowserViewController: UIViewController,
         guard isSwipingTabsEnabled else { return }
 
         if isBottomSearchBar,
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
            !toolbarState.addressToolbar.isEditing {
             addressBarPanGestureHandler?.enablePanGestureRecognizer()
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
@@ -1068,9 +980,9 @@ class BrowserViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .browserViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .browserViewController)
         store.dispatch(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
@@ -1088,9 +1000,9 @@ class BrowserViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .browserViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .browserViewController)
         store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
@@ -1417,7 +1329,7 @@ class BrowserViewController: UIViewController,
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
         guard featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) else { return }
-        let toolbarState = store.state.screenState(
+        let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -1425,7 +1337,7 @@ class BrowserViewController: UIViewController,
 
         let isEditing = toolbarState?.addressToolbar.isEditing ?? false
 
-        let shouldShowSearchBar = store.state.screenState(
+        let shouldShowSearchBar = store.state.componentState(
             HomepageState.self,
             for: .homepage,
             window: windowUUID
@@ -1547,19 +1459,6 @@ class BrowserViewController: UIViewController,
         AppEventQueue.signal(event: .browserIsReady)
 
         logCurrentNimbusExperimentsState()
-    }
-
-    // TODO: [iOS 26 Bug] - Remove this workaround when Apple fixes safe area inset updates.
-    // On initial display, the view is not yet in the window hierarchy at setup time, so
-    // statusBarManager is unavailable and the header top constraint starts with constant = 0.
-    // viewSafeAreaInsetsDidChange fires once the view enters the hierarchy, at which point
-    // statusBarManager returns the correct value and the constant is updated.
-    // Related Bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13756
-    // Apple Developer Forums: https://developer.apple.com/forums/thread/798014
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        guard isSnapKitRemovalEnabled else { return }
-        browserLayoutManager.updateHeaderConstraints(isBottomSearchBar: isBottomSearchBar)
     }
 
     /// Logging current Nimbus state
@@ -2582,7 +2481,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateToolbarAnimationStateIfNeeded() {
-        let shouldAnimate = store.state.screenState(
+        let shouldAnimate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID
@@ -3326,7 +3225,7 @@ class BrowserViewController: UIViewController,
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
         // to avoid having the toolbar re-displayed
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
               toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
@@ -3343,7 +3242,7 @@ class BrowserViewController: UIViewController,
         // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
            browserViewControllerState.browserViewType == .normalHomepage,
-           let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+           let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
         let availableContentHeight = getAvailableHomepageContentHeight()
@@ -5037,7 +4936,7 @@ extension BrowserViewController: TabManagerDelegate {
     private func updateToolbarTabCount(_ count: Int) {
         // Only dispatch action when the number of tabs is different from what is saved in the state
         // to avoid having the toolbar re-displayed
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
               toolbarState.numberOfTabs != count
         else { return }
 
@@ -5171,7 +5070,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
             store.dispatch(
@@ -5226,7 +5125,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         guard newTabChoice != .topSites, newTabChoice != .blankPage else { return false }
 
-        let searchTerm = store.state.screenState(
+        let searchTerm = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: windowUUID

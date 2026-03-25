@@ -100,11 +100,10 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
                 })
                 show(toast: toast)
             default:
-                SimpleToast().showAlertWithText(
-                    status.message,
-                    bottomContainer: view,
-                    theme: themeManager.getCurrentTheme(for: windowUUID)
-                )
+                let viewModel = PlainToastViewModel(labelText: status.message)
+                let toast = PlainToast(viewModel: viewModel,
+                                       theme: themeManager.getCurrentTheme(for: windowUUID))
+                show(toast: toast)
             }
         }
 

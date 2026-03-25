@@ -4,6 +4,7 @@
 
 import Common
 import Redux
+import TestKit
 import XCTest
 
 @testable import Client
@@ -77,7 +78,7 @@ final class NativeErrorPageMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
+            presentedComponents: PresentedComponentState(
                 screens: [
                     .browserViewController(
                         BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

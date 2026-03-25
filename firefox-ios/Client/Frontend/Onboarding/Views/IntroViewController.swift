@@ -144,9 +144,9 @@ class IntroViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .onboardingViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .onboardingViewController)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -158,9 +158,9 @@ class IntroViewController: UIViewController,
 
     // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .onboardingViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .onboardingViewController)
         store.dispatch(action)
     }
 

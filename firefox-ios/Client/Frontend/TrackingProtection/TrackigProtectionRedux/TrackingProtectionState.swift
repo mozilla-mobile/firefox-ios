@@ -32,7 +32,7 @@ struct TrackingProtectionState: ScreenState {
 
     init(appState: AppState,
          uuid: WindowUUID) {
-        guard let trackingProtectionState = appState.screenState(
+        guard let trackingProtectionState = appState.componentState(
             TrackingProtectionState.self,
             for: .trackingProtection,
             window: uuid

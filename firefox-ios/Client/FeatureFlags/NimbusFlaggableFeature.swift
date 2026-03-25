@@ -47,9 +47,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
-    case appleSummarizer
-    case appleSummarizerToolbarEntrypoint
-    case appleSummarizerShakeGesture
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
@@ -85,7 +82,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
         case    .aiKillSwitch,
                 .appearanceMenu,
                 .appIconSelection,
-                .appleSummarizer,
                 .addressBarMenu,
                 .adsClient,
                 .bookmarksSearchFeature,
@@ -191,9 +187,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .sentFromFirefoxTreatmentA,
                 .snapkitRemovalRefactor,
                 .splashScreen,
-                .appleSummarizer,
-                .appleSummarizerToolbarEntrypoint,
-                .appleSummarizerShakeGesture,
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,

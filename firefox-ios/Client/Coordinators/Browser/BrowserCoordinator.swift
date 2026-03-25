@@ -687,9 +687,9 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
-        let isEditing = store.state.screenState(ToolbarState.self,
-                                                for: .toolbar,
-                                                window: windowUUID)?.addressToolbar.isEditing == true
+        let isEditing = store.state.componentState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)?.addressToolbar.isEditing == true
 
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {

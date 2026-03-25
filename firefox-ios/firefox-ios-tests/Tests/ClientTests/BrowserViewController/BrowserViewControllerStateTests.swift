@@ -531,8 +531,8 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         StoreTestUtilityHelper.setupStore(
             with: AppState(
-                activeScreens: ActiveScreensState(
-                    screens: [
+                presentedComponents: PresentedComponentsState(
+                    components: [
                         .browserViewController(
                             BrowserViewControllerState(
                                 windowUUID: .XCTestDefaultUUID
@@ -551,8 +551,8 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

@@ -47,7 +47,7 @@ struct SpeechAnalyzerEngineTests {
     }
 
     @Test
-    func test_prepare_microphoneGranted_speechDenied_throwsError() async {
+    func test_prepare_microphoneGranted_speechDenied_throwsError() async throws {
         guard #available(iOS 26.0, *) else {
             return
         }
@@ -55,11 +55,23 @@ struct SpeechAnalyzerEngineTests {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
-            try await subject.prepare()
+        try await subject.prepare()
+
+        #expect(audioManager.configureAudioSessionCallCount == 1)
+    }
+
+    @Test
+    func test_prepare_microphoneGranted_speechGranted_throwsError() async throws {
+        guard #available(iOS 26.0, *) else {
+            return
         }
 
-        #expect(audioManager.configureAudioSessionCallCount == 0)
+        let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
+        let subject = createSubject(authorizer: authorizer)
+
+        try await subject.prepare()
+
+        #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
     @Test

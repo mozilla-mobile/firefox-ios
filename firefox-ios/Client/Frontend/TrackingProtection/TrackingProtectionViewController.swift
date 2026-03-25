@@ -276,9 +276,9 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .trackingProtection)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .trackingProtection)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -289,9 +289,9 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: self.windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .trackingProtection)
+        let action = ComponentAction(windowUUID: self.windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .trackingProtection)
         store.dispatch(action)
     }
 

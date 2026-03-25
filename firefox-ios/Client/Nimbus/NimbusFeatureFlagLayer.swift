@@ -118,15 +118,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
 
-        case .appleSummarizer:
-           return checkAppleSummarizerFeature(from: nimbus)
-
-        case .appleSummarizerToolbarEntrypoint:
-           return checkAppleSummarizerToolbarEntrypoint(from: nimbus)
-
-        case .appleSummarizerShakeGesture:
-           return checkAppleSummarizerShakeGesture(from: nimbus)
-
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
@@ -483,19 +474,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     // MARK: - Summarizer Feature
-    private func checkAppleSummarizerFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appleSummarizerFeature.value()
-        return config.enabled
-    }
-
-    private func checkAppleSummarizerToolbarEntrypoint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appleSummarizerFeature.value()
-        return config.toolbarEntrypoint
-    }
-
-    private func checkAppleSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.appleSummarizerFeature.value().shakeGesture
-    }
 
     private func checkHostedSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.hostedSummarizerFeature.value()

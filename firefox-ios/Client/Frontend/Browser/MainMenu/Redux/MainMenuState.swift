@@ -97,7 +97,7 @@ struct MainMenuState: ScreenState, Sendable {
     private let menuConfigurator = MainMenuConfigurationUtility()
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let mainMenuState = appState.screenState(
+        guard let mainMenuState = appState.componentState(
             MainMenuState.self,
             for: .mainMenu,
             window: uuid
