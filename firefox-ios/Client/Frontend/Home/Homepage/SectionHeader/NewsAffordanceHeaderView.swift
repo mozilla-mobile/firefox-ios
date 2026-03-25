@@ -7,9 +7,7 @@ import Foundation
 
 final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     struct UX {
-        static let containerHeight: CGFloat = 56
         static let containerBottomInset: CGFloat = 16
-        static let totalHeight: CGFloat = containerHeight + containerBottomInset
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20

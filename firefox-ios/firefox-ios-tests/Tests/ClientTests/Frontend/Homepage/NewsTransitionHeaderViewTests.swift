@@ -52,12 +52,7 @@ final class NewsTransitionHeaderViewTests: XCTestCase {
     }
 
     private func createSubject() -> NewsTransitionHeaderView {
-        let view = NewsTransitionHeaderView(frame: CGRect(x: 0,
-                                                          y: 0,
-                                                          width: 320,
-                                                          height: NewsAffordanceHeaderView.UX.totalHeight
-                                                         )
-        )
+        let view = NewsTransitionHeaderView(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
         trackForMemoryLeaks(view)
         return view
     }
