@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import SwiftUI
+import Shared
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     @MainActor
@@ -377,8 +378,13 @@ final class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
     func pressedAIControls() {
+        let model = AIControlsModel(prefs: profile.prefs)
+
         let viewController = UIHostingController(
-            rootView: AIControlsSettingsView()
+            rootView: AIControlsSettingsView(
+                windowUUID: windowUUID,
+                aiControlsModel: model
+            )
         )
         viewController.title = .Settings.AIControls.Title
         router.push(viewController)

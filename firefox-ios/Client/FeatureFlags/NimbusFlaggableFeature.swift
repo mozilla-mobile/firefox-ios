@@ -140,6 +140,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
+        case .aiKillSwitch:
+            return PrefsKeys.Settings.aiKillSwitchFeature
         case .bottomSearchBar:
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
@@ -155,8 +157,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
-        case .aiKillSwitch,
-                .appearanceMenu,
+        case .appearanceMenu,
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
