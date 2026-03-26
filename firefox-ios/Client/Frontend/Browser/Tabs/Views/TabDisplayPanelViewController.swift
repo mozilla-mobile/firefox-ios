@@ -29,6 +29,7 @@ final class TabDisplayPanelViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
+    private var privateLockAuthTask: Task<Void, Never>?
 
     private var isTabTrayUIExperimentsEnabled: Bool {
         return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
@@ -131,6 +132,12 @@ final class TabDisplayPanelViewController: UIViewController,
         shouldShowFadeView()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        privateLockAuthTask?.cancel()
+        privateLockAuthTask = nil
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = fadeView.bounds
@@ -164,6 +171,14 @@ final class TabDisplayPanelViewController: UIViewController,
         backgroundPrivacyOverlay.isHidden = true
         setupEmptyView()
         setupFadeView()
+
+        view.addSubview(privateLockOverlay)
+        NSLayoutConstraint.activate([
+            privateLockOverlay.topAnchor.constraint(equalTo: view.topAnchor),
+            privateLockOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            privateLockOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            privateLockOverlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func setupEmptyView() {
@@ -193,6 +208,22 @@ final class TabDisplayPanelViewController: UIViewController,
         view.removeConstraints(view.constraints)
         view.subviews.forEach { $0.removeFromSuperview() }
         view.removeFromSuperview()
+    }
+
+    private lazy var privateLockOverlay: PrivateTabsLockOverlayView = {
+        let overlay = PrivateTabsLockOverlayView()
+        overlay.isHidden = true
+        overlay.onRetryTapped = { [weak self] in self?.startPrivateAuthFlow() }
+        return overlay
+    }()
+
+    private func startPrivateAuthFlow() {
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.privateAuthRequested(.PrivateLock.PrivateLockLAContextReason)
+            )
+        )
     }
 
     // MARK: - Themeable
@@ -344,11 +375,43 @@ final class TabDisplayPanelViewController: UIViewController,
         if panelType == .privateTabs, tabsState.isPrivateMode {
             // Only adjust the empty view if we are in private mode
             shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
+            applyPrivateLockUI(tabsState.privateLockState)
         }
         shouldShowFadeView()
 
         if shouldUsePrivateOverride {
             applyTheme()
+        }
+    }
+
+    private func applyPrivateLockUI(_ lock: PrivateLockDomainState?) {
+        guard panelType == .privateTabs, let lock else {
+            privateLockOverlay.renderHidden()
+            privateLockAuthTask?.cancel()
+            privateLockAuthTask = nil
+            return
+        }
+
+        privateLockOverlay.render(
+            access: lock.access,
+            auth: lock.auth
+        )
+
+        guard lock.access == .locked else {
+            privateLockAuthTask?.cancel()
+            privateLockAuthTask = nil
+            return
+        }
+
+        guard lock.auth == .idle else { return }
+
+        privateLockAuthTask?.cancel()
+        privateLockAuthTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 sec delay for better ux
+            guard !Task.isCancelled else { return }
+            guard let self else { return }
+            guard self.isViewLoaded, self.view.window != nil else { return }
+            self.startPrivateAuthFlow()
         }
     }
 

@@ -22,6 +22,7 @@ struct TabTrayState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var showCloseConfirmation: Bool
     var enableDeleteTabsButton: Bool?
+    var hideToolbar: Bool?
 
     var navigationTitle: String {
         return selectedPanel.navTitle
@@ -45,6 +46,9 @@ struct TabTrayState: ScreenState, Equatable {
             return
         }
 
+        let browserState = appState.screenState(BrowserViewControllerState.self, for: .browserViewController, window: uuid)
+        let privateLockState = browserState?.privateLockState
+        let hideToolbar = privateLockState?.access == .locked && browserState?.trayPanelType == .privateTabs
         self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   selectedPanel: panelState.selectedPanel,
@@ -54,7 +58,8 @@ struct TabTrayState: ScreenState, Equatable {
                   shouldDismiss: panelState.shouldDismiss,
                   toastType: panelState.toastType,
                   showCloseConfirmation: panelState.showCloseConfirmation,
-                  enableDeleteTabsButton: panelState.enableDeleteTabsButton)
+                  enableDeleteTabsButton: panelState.enableDeleteTabsButton,
+                  hideToolbar: hideToolbar)
     }
 
     init(windowUUID: WindowUUID) {
@@ -64,7 +69,8 @@ struct TabTrayState: ScreenState, Equatable {
                   normalTabsCount: "0",
                   privateTabsCount: "0",
                   hasSyncableAccount: false,
-                  toastType: nil)
+                  toastType: nil,
+                  hideToolbar: nil)
     }
 
     init(windowUUID: WindowUUID, panelType: TabTrayPanelType) {
@@ -73,7 +79,8 @@ struct TabTrayState: ScreenState, Equatable {
                   selectedPanel: panelType,
                   normalTabsCount: "0",
                   privateTabsCount: "0",
-                  hasSyncableAccount: false)
+                  hasSyncableAccount: false,
+                  hideToolbar: nil)
     }
 
     init(windowUUID: WindowUUID,
@@ -85,7 +92,8 @@ struct TabTrayState: ScreenState, Equatable {
          shouldDismiss: Bool = false,
          toastType: ToastType? = nil,
          showCloseConfirmation: Bool = false,
-         enableDeleteTabsButton: Bool? = nil) {
+         enableDeleteTabsButton: Bool? = nil,
+         hideToolbar: Bool? = nil) {
         self.windowUUID = windowUUID
         self.isPrivateMode = isPrivateMode
         self.selectedPanel = selectedPanel
@@ -96,6 +104,7 @@ struct TabTrayState: ScreenState, Equatable {
         self.toastType = toastType
         self.showCloseConfirmation = showCloseConfirmation
         self.enableDeleteTabsButton = enableDeleteTabsButton
+        self.hideToolbar = hideToolbar
     }
 
     static let reducer: Reducer<Self> = { state, action in

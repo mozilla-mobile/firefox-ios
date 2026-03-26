@@ -89,6 +89,7 @@ let middlewares = [
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider,
     TranslationsMiddleware().translationsProvider,
+    PrivateLockMiddleware().lockProvider,
     TranslationSettingsMiddleware().translationSettingsProvider
 ]
 

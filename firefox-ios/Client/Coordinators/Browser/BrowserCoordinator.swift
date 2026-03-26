@@ -498,7 +498,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func didFinishSettings(from coordinator: SettingsCoordinator) {
-        router.dismiss(animated: true, completion: nil)
+        router.dismiss(animated: true, completion: { [weak browserViewController] in
+            browserViewController?.settingsControllerDidHide()
+        })
         remove(child: coordinator)
     }
 
@@ -946,7 +948,7 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.showQRCode(delegate: delegate)
     }
 
-    func showTabTray(selectedPanel: TabTrayPanelType) {
+    func showTabTray(selectedPanel: TabTrayPanelType, animated: Bool) {
         guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
@@ -985,9 +987,12 @@ final class BrowserCoordinator: BaseCoordinator,
         if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
-            present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
+            present(navigationController,
+                    customTransition: tabTrayVC,
+                    style: modalPresentationStyle,
+                    animated: animated)
         } else {
-            present(navigationController)
+            present(navigationController, animated: animated)
         }
         guard browserViewController.isAppStoreReviewTriggerEnabled else { return }
         browserViewController.ratingPromptManager.showRatingPromptIfNeeded()
@@ -996,12 +1001,13 @@ final class BrowserCoordinator: BaseCoordinator,
     // This implementation of present is specifically for the animation on .tabTrayUIExperiments
     private func present(_ viewController: UIViewController,
                          customTransition: UIViewControllerTransitioningDelegate,
-                         style: UIModalPresentationStyle) {
+                         style: UIModalPresentationStyle,
+                         animated: Bool = true) {
         browserViewController.willNavigateAway(from: tabManager.selectedTab)
         if !UIAccessibility.isReduceMotionEnabled {
             router.present(
                 viewController,
-                animated: true,
+                animated: animated,
                 customTransition: customTransition,
                 presentationStyle: style
             )
@@ -1010,9 +1016,9 @@ final class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private func present(_ viewController: UIViewController) {
+    private func present(_ viewController: UIViewController, animated: Bool = true) {
         browserViewController.willNavigateAway(from: tabManager.selectedTab)
-        router.present(viewController)
+        router.present(viewController, animated: animated)
     }
 
     func showBackForwardList() {
@@ -1255,6 +1261,15 @@ final class BrowserCoordinator: BaseCoordinator,
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)
+        let panel = TabTrayPanelType.convert(from: tabManager.selectedTab)
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didChangeTrayPresentation,
+                trayDisplayContext: .page,
+                trayPanelType: panel
+            )
+        )
     }
 
     // MARK: - WindowEventCoordinator

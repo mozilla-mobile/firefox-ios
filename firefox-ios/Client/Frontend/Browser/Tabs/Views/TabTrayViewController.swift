@@ -420,6 +420,8 @@ final class TabTrayViewController: UIViewController,
         if !themeAnimator.isAnimating && swipeFromIndex == nil {
             applyTheme()
         }
+
+        navigationController?.setToolbarHidden(state.hideToolbar ?? false, animated: false)
     }
 
     func updateTabCountImage(count: String) {

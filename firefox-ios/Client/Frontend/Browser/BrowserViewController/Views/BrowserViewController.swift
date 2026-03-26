@@ -859,6 +859,21 @@ class BrowserViewController: UIViewController,
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
         logTelemetryForAppDidEnterBackground()
+
+        showPrivacyOverlayIfNeeded()
+    }
+
+    private func showPrivacyOverlayIfNeeded(checkActualState: Bool = false) {
+        guard let state = browserViewControllerState else {
+            return
+        }
+        let featureEnabled = featureFlags.isFeatureEnabled(.privateTabsLock, checking: .buildAndUser)
+        if state.trayDisplayContext == .page && state.trayPanelType == .privateTabs && featureEnabled {
+            focusOnTabSegment(animated: false)
+            if checkActualState {
+                privateLockWillEnterForeground()
+            }
+        }
     }
 
     /// Remove KVO observers on terminate to prevent crashes during force-close.
@@ -879,10 +894,30 @@ class BrowserViewController: UIViewController,
         guard canShowPrivacyWindow else { return }
 
         privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didEnterBackground
+            )
+        )
     }
 
     func sceneDidActivateNotification() {
         privacyWindowHelper.removeWindow()
+    }
+
+    func sceneWillEnterForegroundNotification() {
+        privateLockWillEnterForeground()
+    }
+
+    private func privateLockWillEnterForeground() {
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.willEnterForeground
+            )
+        )
     }
 
     func appWillResignActiveNotification() {
@@ -1082,6 +1117,15 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    private func startPrivateAuthFlow() {
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.privateAuthRequested(.PrivateLock.PrivateLockLAContextReason)
+            )
+        )
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -1227,6 +1271,8 @@ class BrowserViewController: UIViewController,
                 sceneDidEnterBackgroundNotification(windowScene: windowScene)
             case UIScene.didActivateNotification:
                 sceneDidActivateNotification()
+            case UIScene.willEnterForegroundNotification:
+                sceneWillEnterForegroundNotification()
             case UIAccessibility.announcementDidFinishNotification:
                 didFinishAnnouncement(announcementText: announcementText)
             case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
@@ -1266,6 +1312,7 @@ class BrowserViewController: UIViewController,
                 UIApplication.didEnterBackgroundNotification,
                 UIApplication.willTerminateNotification,
                 UIScene.didEnterBackgroundNotification,
+                UIScene.willEnterForegroundNotification,
                 UIScene.didActivateNotification,
                 UIAccessibility.announcementDidFinishNotification,
                 UIAccessibility.reduceTransparencyStatusDidChangeNotification,
@@ -2186,6 +2233,14 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.refreshTabs()
         }
         setupMicrosurvey()
+
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didChangeTrayDisplayContext,
+                trayDisplayContext: .page
+            )
+        )
     }
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
@@ -2832,7 +2887,7 @@ class BrowserViewController: UIViewController,
         case .summarizer(let config):
             navigationHandler?.showSummarizePanel(.shakeGesture, config: config)
         case .tabTray(let panelType):
-            navigationHandler?.showTabTray(selectedPanel: panelType)
+            navigationHandler?.showTabTray(selectedPanel: panelType, animated: true)
         case .homepageZeroSearch:
             store.dispatch(
                 GeneralBrowserAction(
@@ -3204,10 +3259,10 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    func focusOnTabSegment() {
+    func focusOnTabSegment(animated: Bool = true) {
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        showTabTray(focusedSegment: segmentToFocus)
+        showTabTray(focusedSegment: segmentToFocus, animated: animated)
     }
 
     /// When the trait collection changes the top taps display might have to change
@@ -3291,12 +3346,21 @@ class BrowserViewController: UIViewController,
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                     focusedSegment: TabTrayPanelType? = nil) {
+                     focusedSegment: TabTrayPanelType? = nil,
+                     animated: Bool = true) {
         updateFindInPageVisibility(isVisible: false)
 
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
-        navigationHandler?.showTabTray(selectedPanel: selectedSegment)
+        navigationHandler?.showTabTray(selectedPanel: selectedSegment, animated: animated)
+
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didChangeTrayDisplayContext,
+                trayDisplayContext: .tray
+            )
+        )
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
@@ -4593,6 +4657,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         self.present(navController, animated: true, completion: nil)
     }
 
+    func settingsControllerDidHide() {
+        showPrivacyOverlayIfNeeded(checkActualState: true)
+    }
+
     func updateForDefaultSearchEngineDidChange() {
         // Update search icon when the search engine changes
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
@@ -4675,6 +4743,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
+    // FXIOS-15079 break this function down and remove swiftlint ignore function body length
+    // swiftlint:disable:next function_body_length
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
         // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
@@ -4823,6 +4893,15 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reload()
         }
+
+        let panel = TabTrayPanelType.convert(from: selectedTab)
+        store.dispatch(
+            PrivateLockAction(
+                windowUUID: windowUUID,
+                actionType: PrivateLockActionType.didChangeTrayPresentation,
+                trayPanelType: panel
+            )
+        )
     }
 
     // TODO: FXIOS-14347 This function will be removed when toolbarTranslucencyRefactor is on for everyone

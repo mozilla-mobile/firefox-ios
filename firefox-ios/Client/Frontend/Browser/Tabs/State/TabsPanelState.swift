@@ -18,6 +18,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
+    var privateLockState: PrivateLockDomainState?
 
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return true }
@@ -34,12 +35,14 @@ struct TabsPanelState: ScreenState, Equatable {
             return
         }
 
+        let browserState = appState.screenState(BrowserViewControllerState.self, for: .browserViewController, window: uuid)
         self.init(windowUUID: panelState.windowUUID,
                   isPrivateMode: panelState.isPrivateMode,
                   tabs: panelState.tabs,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
-                  urlRequest: panelState.urlRequest)
+                  urlRequest: panelState.urlRequest,
+                  privateLockState: browserState?.privateLockState)
     }
 
     init(windowUUID: WindowUUID, isPrivateMode: Bool = false) {
@@ -59,13 +62,15 @@ struct TabsPanelState: ScreenState, Equatable {
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
-         urlRequest: URLRequest? = nil) {
+         urlRequest: URLRequest? = nil,
+         privateLockState: PrivateLockDomainState? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
         self.urlRequest = urlRequest
+        self.privateLockState = privateLockState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -115,7 +120,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
                                   scrollState: scrollModel)
-
         default:
             return defaultState(from: state)
         }

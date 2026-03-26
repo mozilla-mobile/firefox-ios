@@ -32,6 +32,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageStoriesScrollDirection
     case homepageStoryCategories
     case needsReloadRefactor
+    case privateTabsLock
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
     case microsurvey
@@ -99,6 +100,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
+                .privateTabsLock,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
@@ -156,6 +158,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.SentFromFirefox
         case .startAtHome:
             return FlagKeys.StartAtHome
+        case .privateTabsLock:
+            return PrefsKeys.Settings.lockPrivateTabs
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
         case .aiKillSwitch,
                 .appearanceMenu,

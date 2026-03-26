@@ -401,7 +401,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     func testShowTabTray() throws {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let subject = createSubject()
-        subject.showTabTray(selectedPanel: .tabs)
+        subject.showTabTray(selectedPanel: .tabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -414,7 +414,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
-        subject.showTabTray(selectedPanel: .tabs)
+        subject.showTabTray(selectedPanel: .tabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -426,7 +426,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     func testShowTabTray_withPrivateTabs_withoutExperiment_showDefaultPresentation() throws {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let subject = createSubject()
-        subject.showTabTray(selectedPanel: .privateTabs)
+        subject.showTabTray(selectedPanel: .privateTabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -439,7 +439,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
-        subject.showTabTray(selectedPanel: .privateTabs)
+        subject.showTabTray(selectedPanel: .privateTabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -452,7 +452,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let subject = createSubject()
         subject.browserViewController = browserViewController
-        subject.showTabTray(selectedPanel: .syncedTabs)
+        subject.showTabTray(selectedPanel: .syncedTabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -465,7 +465,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         setupNimbusTabTrayUIExperimentTesting(isEnabled: true)
         let subject = createSubject()
         subject.browserViewController = browserViewController
-        subject.showTabTray(selectedPanel: .syncedTabs)
+        subject.showTabTray(selectedPanel: .syncedTabs, animated: true)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? TabTrayCoordinator)
@@ -476,7 +476,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
 
     func testDismissTabTray_removesChild() throws {
         let subject = createSubject()
-        subject.showTabTray(selectedPanel: .tabs)
+        subject.showTabTray(selectedPanel: .tabs, animated: true)
         guard let tabTrayCoordinator = subject.childCoordinators[0] as? TabTrayCoordinator else {
             XCTFail("Tab tray coordinator was expected to be resolved")
             return
