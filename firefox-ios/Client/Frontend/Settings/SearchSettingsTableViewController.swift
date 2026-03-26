@@ -514,9 +514,6 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             guard isLastItem else { return nil }
             let customSearchEngineForm = CustomSearchViewController(windowUUID: windowUUID)
             customSearchEngineForm.profile = self.profile
-            customSearchEngineForm.successCallback = {
-                self.showPlainToast()
-            }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         case .searchEnginesSuggestions, .preSearch:
             return nil
