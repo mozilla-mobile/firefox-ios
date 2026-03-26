@@ -45,7 +45,11 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         let url: URL
     }
 
-    init(prefs: Prefs, translationConfiguration: TranslationConfiguration? = nil, summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()) {
+    init(
+        prefs: Prefs,
+        translationConfiguration: TranslationConfiguration? = nil,
+        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+    ) {
         self.prefs = prefs
         self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
         self.summarizerConfiguration = summarizerConfiguration

@@ -3058,7 +3058,7 @@ extension String {
                     key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v151",
                     tableName: "Settings",
                     value: "AI-POWERED FEATURES",
-                    comment: "In the AI Controls settings, this is the title for the section that describes AI-powered features."
+                    comment: "In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps."
                 )
 
                 public struct TranslationSection {
