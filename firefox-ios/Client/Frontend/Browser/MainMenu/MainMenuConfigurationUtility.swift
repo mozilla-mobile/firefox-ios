@@ -230,6 +230,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     // Site Section
     @MainActor
+    // swiftlint:disable:next function_body_length
     private func getSiteSection(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo,
@@ -266,7 +267,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
             options.append(configureZoomItem(with: uuid, and: tabInfo))
-            configureTranslationItem(with: uuid, tabInfo: tabInfo, localeProvider: localeProvider).map { options.append($0) }
+            if let translationItem = configureTranslationItem(with: uuid, tabInfo: tabInfo, localeProvider: localeProvider) {
+                options.append(translationItem)
+            }
             if isSummarizerLanguageExpansionEnabled {
                 options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
             }
@@ -416,7 +419,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
-              translationConfig.state != nil else { return nil }
+              translationConfig.state != nil
+        else { return nil }
 
         let isActive = translationConfig.state == .active
         let infoTitle: String
