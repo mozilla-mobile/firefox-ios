@@ -5,7 +5,7 @@
 import WebKit
 
 @MainActor
-final class TranslationsEngine {
+final class TranslationsEngine: NSObject, WKNavigationDelegate {
     /// A single WKWebView managed by the engine.
     private let webView: WKWebView
     /// Keep bridges alive as long as their webviews exist.
@@ -38,6 +38,9 @@ final class TranslationsEngine {
 
         self.webView = WKWebView(frame: .zero, configuration: config)
         self.webView.isHidden = true
+
+        super.init()
+        self.webView.navigationDelegate = self
 
         #if targetEnvironment(simulator)
         /// Allow Safari Web Inspector only when running in simulator.
@@ -92,5 +95,16 @@ final class TranslationsEngine {
     private func loadEntrypointHTML() {
         let appURL = URL(string: "translations://app/TranslationsEngine.html")!
         webView.load(URLRequest(url: appURL))
+    }
+
+    // MARK: - WKNavigationDelegate
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        let enumerator = bridges.objectEnumerator()
+        while let bridge = enumerator?.nextObject() as? Bridge {
+            bridge.teardown()
+        }
+        bridges.removeAllObjects()
+        loadEntrypointHTML()
     }
 }

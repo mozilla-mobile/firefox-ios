@@ -135,7 +135,7 @@ final class TranslationsService: TranslationsServiceProtocol {
         do {
             _ = try await webView.callAsyncJavaScript(js, contentWorld: .defaultClient)
         } catch {
-            /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise
+            /// NOTE: It would be safe to pass in the js string directly here, but it would just add too much noise 
             /// since from and to could be any language code. We only care that discardTranslationsJS failed.
             throw TranslationsServiceError.jsEvaluationFailed(reason: "JS evaluation failed: discardTranslationsJS")
         }

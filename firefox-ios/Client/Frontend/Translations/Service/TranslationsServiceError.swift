@@ -8,6 +8,7 @@ enum TranslationsServiceError: Error, Equatable {
     case deviceLanguageUnavailable
     case jsEvaluationFailed(reason: String)
     case pageLanguageDetectionFailed(description: String)
+    case translationTimedOut
     case unknown(domain: String, code: Int)
     /// Converts an unknown error into a `TranslationsServiceError`.
     /// This intentionally loses information about the original error type.
@@ -33,6 +34,8 @@ enum TranslationsServiceError: Error, Equatable {
             return "js_evaluation_failed(\(reason))"
         case .pageLanguageDetectionFailed(let description):
             return "page_language_detection_failed(\(description))"
+        case .translationTimedOut:
+            return "translation_timed_out"
         case .unknown(let domain, let code):
             return "unknown(domain:\(domain),code:\(code))"
         }

@@ -650,29 +650,41 @@ function listenForPortMessages(languagePair, innerWindowId, port) {
       case "TranslationsPort:TranslationRequest": {
         const { sourceText, isHTML, translationId } = data;
 
-        const engine = await TranslationsEngine.getOrCreate(
-          languagePair,
-          innerWindowId
-        );
+        try {
+          const engine = await TranslationsEngine.getOrCreate(
+            languagePair,
+            innerWindowId
+          );
 
-        TE_addProfilerMarker({
-          innerWindowId,
-          type: "Request",
-          message: `Handled translation request of ${sourceText.length} code units`,
-        });
+          TE_addProfilerMarker({
+            innerWindowId,
+            type: "Request",
+            message: `Handled translation request of ${sourceText.length} code units`,
+          });
 
-        const targetText = await engine.translate(
-          sourceText,
-          isHTML,
-          innerWindowId,
-          translationId
-        );
+          const targetText = await engine.translate(
+            sourceText,
+            isHTML,
+            innerWindowId,
+            translationId
+          );
 
-        port.postMessage({
-          type: "TranslationsPort:TranslationResponse",
-          translationId,
-          targetText,
-        });
+          port.postMessage({
+            type: "TranslationsPort:TranslationResponse",
+            translationId,
+            targetText,
+          });
+        } catch (error) {
+          TE_logError(
+            `Translation request failed for translationId ${translationId}`,
+            error
+          );
+          port.postMessage({
+            type: "TranslationsPort:TranslationError",
+            translationId,
+            error: error?.message ?? "Unknown translation error",
+          });
+        }
 
         break;
       }
