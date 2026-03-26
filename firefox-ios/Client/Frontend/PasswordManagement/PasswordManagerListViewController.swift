@@ -364,7 +364,7 @@ private extension PasswordManagerListViewController {
                             return nil
                         }
 
-                        self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { [weak self] _ in
+                        self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
                             DispatchQueue.main.async { [weak self] in
                                 self?.cancelSelection()
                                 self?.loadLogins()
