@@ -14,6 +14,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
+        static let headerLabelColor = UIColor(rgb: 0x785ced)
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -46,8 +47,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var logoTextImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+    private lazy var logoTextLabel: UILabel = .build { label in
+        label.text = "MCP"
+        label.font = FXFontStyles.Regular.title1.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 1
+        label.textAlignment = .left
     }
 
     // MARK: - Initializers
@@ -65,7 +70,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         if !hasConfiguredView {
             contentView.backgroundColor = .clear
             logoStackView.addArrangedSubview(logoImage)
-            logoStackView.addArrangedSubview(logoTextImage)
+            logoStackView.addArrangedSubview(logoTextLabel)
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
@@ -104,8 +109,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         logoConstraints = [
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
-            logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
-            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height)
+            logoTextLabel.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
+            logoTextLabel.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height)
         ]
 
         NSLayoutConstraint.activate(logoConstraints)
@@ -118,22 +123,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
-        let wallpaperManager = WallpaperManager()
-        let browserViewType = store.state.componentState(
-            BrowserViewControllerState.self,
-            for: .browserViewController,
-            window: currentWindowUUID
-        )?.browserViewType
-
-        if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor, browserViewType != .privateHomepage {
-            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
-                .withRenderingMode(.alwaysTemplate)
-            logoTextImage.tintColor = logoTextColor
-        } else {
-            logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
-                .withRenderingMode(.alwaysTemplate)
-            logoTextImage.tintColor = theme.colors.textPrimary
-        }
+        logoTextLabel.textColor = UX.headerLabelColor
     }
 }
