@@ -253,7 +253,6 @@ final class BookmarksViewController: SiteTableViewController,
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
                 }
-                self?.sendPanelChangeNotification()
                 self?.updateEmptyState(animated: false)
                 self?.updateParentViewControllerTitle()
             }
@@ -348,7 +347,6 @@ final class BookmarksViewController: SiteTableViewController,
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
         viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
         tableView.endUpdates()
-        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -377,7 +375,6 @@ final class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -387,7 +384,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -396,7 +392,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -464,6 +459,8 @@ final class BookmarksViewController: SiteTableViewController,
 
         emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
                                  isSignedIn: profile.hasAccount())
+
+        sendPanelChangeNotification()
     }
 
     private func createContextButton() -> UIButton {
@@ -495,7 +492,6 @@ final class BookmarksViewController: SiteTableViewController,
         viewModel.isSearching = false
         viewModel.filteredBookmarkNodes.removeAll()
         tableView.reloadData()
-        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -754,7 +750,6 @@ final class BookmarksViewController: SiteTableViewController,
                     viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
-                    sendPanelChangeNotification()
                     updateEmptyState(animated: false)
                     profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 }
@@ -765,7 +760,6 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-      sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
