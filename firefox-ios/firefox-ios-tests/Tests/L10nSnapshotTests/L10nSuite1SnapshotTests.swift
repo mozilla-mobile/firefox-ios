@@ -52,7 +52,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Swipe to the third screen
         app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
         currentScreen += 1
-
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
         snapshot("Onboarding-3")
