@@ -84,7 +84,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
-        responseView.configure(state: .idle)
         registerViewModelUpdates()
     }
 
@@ -128,9 +127,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             switch state {
             case .recordVoice(let result, let error):
                 Self.result = result.text
-                self?.responseView.configure(state: .recording(transcript: result.text))
             case .loadingSearchResult:
-                self?.responseView.configure(state: .searching(transcript: Self.result))
+                break
             default:
                 break
             }

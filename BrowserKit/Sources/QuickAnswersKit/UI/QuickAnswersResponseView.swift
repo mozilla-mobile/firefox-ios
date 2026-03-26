@@ -14,23 +14,12 @@ import Common
 /// - `result`: shows the transcript, the AI answer, and source cards
 // TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersResponseView: UIView, ThemeApplicable {
-    enum State {
-        case idle
-        case recording(transcript: String)
-        case searching(transcript: String)
-        case result(transcript: String, answer: String)
-    }
-
     private struct UX {
         static let contentSpacing: CGFloat = 16.0
         static let animationDuration: TimeInterval = 0.2
-        static let searchingPulseDuration: CFTimeInterval = 0.8
-        static let searchingPulseMinOpacity: Float = 0.3
-        static let searchingAnimationKey = "searchingPulse"
     }
 
     // MARK: - Subviews
-
     private let scrollView: UIScrollView = .build {
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false
@@ -62,7 +51,6 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
     }
 
     // MARK: - Init
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -73,7 +61,6 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
     }
 
     // MARK: - Setup
-
     private func setupSubviews() {
         contentStack.addArrangedSubview(placeholderLabel)
         contentStack.addArrangedSubview(transcriptLabel)
@@ -98,66 +85,15 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
     }
 
     // MARK: - Configuration
-
-    func configure(state: State) {
-        UIView.animate(withDuration: UX.animationDuration) {
-            switch state {
-            case .idle:
-                self.placeholderLabel.isHidden = false
-                self.transcriptLabel.isHidden = true
-                self.searchingLabel.isHidden = true
-                self.answerLabel.isHidden = true
-                self.stopSearchingAnimation()
-
-            case .recording(let transcript):
-                let hasTranscript = !transcript.isEmpty
-                self.placeholderLabel.isHidden = hasTranscript
-                self.transcriptLabel.text = transcript
-                self.transcriptLabel.isHidden = !hasTranscript
-                self.searchingLabel.isHidden = true
-                self.answerLabel.isHidden = true
-                self.stopSearchingAnimation()
-
-            case .searching(let transcript):
-                self.placeholderLabel.isHidden = true
-                self.transcriptLabel.text = transcript
-                self.transcriptLabel.isHidden = false
-                self.searchingLabel.isHidden = false
-                self.answerLabel.isHidden = true
-                self.startSearchingAnimation()
-
-            case .result(let transcript, let answer):
-                self.placeholderLabel.isHidden = true
-                self.transcriptLabel.text = transcript
-                self.transcriptLabel.isHidden = false
-                self.searchingLabel.isHidden = true
-                self.answerLabel.text = answer
-                self.answerLabel.isHidden = answer.isEmpty
-                self.stopSearchingAnimation()
-            }
+    func configureTranscript(_ text: String) {
+        UIView.animate(withDuration: UX.animationDuration) { [self] in
+            transcriptLabel.text = text
+            transcriptLabel.isHidden = false
+            placeholderLabel.isHidden = true
         }
     }
 
-    // MARK: - Searching animation
-
-    private func startSearchingAnimation() {
-        guard searchingLabel.layer.animation(forKey: UX.searchingAnimationKey) == nil else { return }
-        let pulse = CABasicAnimation(keyPath: "opacity")
-        pulse.fromValue = 1.0
-        pulse.toValue = UX.searchingPulseMinOpacity
-        pulse.duration = UX.searchingPulseDuration
-        pulse.autoreverses = true
-        pulse.repeatCount = .infinity
-        pulse.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        searchingLabel.layer.add(pulse, forKey: UX.searchingAnimationKey)
-    }
-
-    private func stopSearchingAnimation() {
-        searchingLabel.layer.removeAnimation(forKey: UX.searchingAnimationKey)
-    }
-
     // MARK: - ThemeApplicable
-
     func applyTheme(theme: any Theme) {
         placeholderLabel.textColor = theme.colors.textSecondary
         transcriptLabel.textColor = theme.colors.textPrimary
@@ -169,8 +105,6 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
 @available(iOS 17, *)
 #Preview {
     let view = QuickAnswersResponseView()
-    view.configure(state: .searching(transcript: "Transcript"))
-    view.configure(state: .idle)
     view.applyTheme(theme: LightTheme())
     return view
 }
