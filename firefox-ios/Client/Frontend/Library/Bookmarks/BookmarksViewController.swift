@@ -459,7 +459,7 @@ final class BookmarksViewController: SiteTableViewController,
 
         emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
                                  isSignedIn: profile.hasAccount())
-
+        // Depending on empty state, show/hide the search bar in the library panel's toolbar
         sendPanelChangeNotification()
     }
 
