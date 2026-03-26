@@ -7,7 +7,7 @@ import MozillaAppServices
 import Shared
 
 protocol StoryProviderInterface: Sendable {
-    func fetchHomepageStories() async -> [MerinoStory]
+    func fetchHomepageStories() async -> MerinoStoryResponse
     func prefetchStories() async
 }
 
@@ -22,7 +22,7 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
         self.merinoAPI = merinoAPI
     }
 
-    func fetchHomepageStories() async -> [MerinoStory] {
+    func fetchHomepageStories() async -> MerinoStoryResponse {
         return await fetchStories(Constants.defaultNumberOfHomepageStories)
     }
 
@@ -32,8 +32,12 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
         _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfHomepageStories)
     }
 
-    private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
+    private func fetchStories(_ numberOfRequestedStories: Int) async -> MerinoStoryResponse {
         let data = (try? await merinoAPI.fetchStories(numberOfRequestedStories)) ?? []
-        return data.map(MerinoStory.init)
+        return MerinoStoryResponse(
+            stories: data
+                .map(MerinoStory.init)
+                .compactMap { MerinoStoryConfiguration(story: $0) }
+        )
     }
 }
