@@ -289,6 +289,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
+        var guide = view.layoutMarginsGuide
+        if #available(iOS 26.0, *) {
+            guide = view.layoutGuide(for: .margins(cornerAdaptation: .horizontal))
+        }
+
         NSLayoutConstraint.activate([
             view.heightAnchor.constraint(equalToConstant: UX.topTabsViewHeight),
 
@@ -297,7 +302,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            privateModeButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
             privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
