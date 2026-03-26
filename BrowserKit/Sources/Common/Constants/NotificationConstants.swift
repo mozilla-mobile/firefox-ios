@@ -67,6 +67,8 @@ extension Notification.Name {
 
     public static let ThemeDidChange = Notification.Name("ThemeDidChange")
 
+    public static let WindowSceneGeometryChanged = Notification.Name("WindowSceneGeometryChanged")
+
     // MARK: Web Engine
 
     public static let ReaderModeSessionChanged = Notification.Name("ReaderModeSessionChanged")

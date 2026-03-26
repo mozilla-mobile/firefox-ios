@@ -52,6 +52,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     var windowUUID: WindowUUID { tabManager.windowUUID }
 
     private var toolbarHelper: ToolbarHelperInterface
+    private var privateModeLeadingConstraint: NSLayoutConstraint?
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
@@ -179,7 +180,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.TabsTrayDidClose]
+            observing: [.TabsTrayDidClose, .WindowSceneGeometryChanged]
         )
 
         // Setup UIDropInteraction to handle dragging and dropping
@@ -289,9 +290,12 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
-        var guide = view.layoutMarginsGuide
         if #available(iOS 26.0, *) {
-            guide = view.layoutGuide(for: .margins(cornerAdaptation: .horizontal))
+            updatePrivateModeLeadingConstraint()
+        } else {
+            privateModeLeadingConstraint = privateModeButton.leadingAnchor.constraint(
+                equalTo: view.layoutMarginsGuide.leadingAnchor)
+            privateModeLeadingConstraint?.isActive = true
         }
 
         NSLayoutConstraint.activate([
@@ -302,7 +306,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            privateModeButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
             privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
             privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
@@ -336,6 +339,15 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         }
     }
 
+    private func updatePrivateModeLeadingConstraint() {
+        guard #available(iOS 26.0, *) else { return }
+
+        privateModeLeadingConstraint?.isActive = false
+        let guide = view.layoutGuide(for: .margins(cornerAdaptation: .horizontal))
+        privateModeLeadingConstraint = privateModeButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor)
+        privateModeLeadingConstraint?.isActive = true
+    }
+
     // MARK: - Notifiable
     func handleNotifications(_ notification: Notification) {
         let name = notification.name
@@ -345,6 +357,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
             case .TabsTrayDidClose:
                 guard self.windowUUID == windowUUID else { return }
                 self.refreshTabs()
+            case .WindowSceneGeometryChanged:
+                self.updatePrivateModeLeadingConstraint()
             default:
                 break
             }

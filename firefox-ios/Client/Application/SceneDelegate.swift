@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder,
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private let logger: Logger = DefaultLogger.shared
     private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
@@ -182,6 +183,17 @@ class SceneDelegate: UIResponder,
             guard let route = routeBuilder.makeRoute(url: url) else { return }
             handle(route: route)
         }
+    }
+
+    // MARK: - Window Geometry
+    @available(iOS 16.0, *)
+    func windowScene(_ windowScene: UIWindowScene,
+                     didUpdateEffectiveGeometry previousGeometry: UIWindowScene.Geometry) {
+        // Window Controls are only available starting iOS 26
+        guard #available(iOS 26.0, *) else { return }
+
+        notificationCenter.post(name: .WindowSceneGeometryChanged,
+                                withUserInfo: sceneCoordinator?.windowUUID.userInfo)
     }
 
     // MARK: - Misc. Helpers
