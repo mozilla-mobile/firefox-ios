@@ -67,12 +67,13 @@ final class BookmarksViewController: SiteTableViewController,
 
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
-            // Hide search and edit buttons when there are no bookmarks
-            guard !viewModel.bookmarkNodes.isEmpty else { return [UIBarButtonItem]() }
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
+            // Hide search button when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [flexibleSpace, bottomRightButton] }
+            // Show search and edit buttons when bookmarks are available
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             return searchItems + [flexibleSpace]
@@ -252,8 +253,8 @@ final class BookmarksViewController: SiteTableViewController,
                 if self?.viewModel.shouldFlashRow ?? false {
                     self?.flashRow()
                 }
-                self?.updateEmptyState(animated: false)
                 self?.sendPanelChangeNotification()
+                self?.updateEmptyState(animated: false)
                 self?.updateParentViewControllerTitle()
             }
         }
@@ -347,6 +348,7 @@ final class BookmarksViewController: SiteTableViewController,
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
         viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
         tableView.endUpdates()
+        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -375,6 +377,7 @@ final class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
+        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -492,6 +495,7 @@ final class BookmarksViewController: SiteTableViewController,
         viewModel.isSearching = false
         viewModel.filteredBookmarkNodes.removeAll()
         tableView.reloadData()
+        sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -750,6 +754,7 @@ final class BookmarksViewController: SiteTableViewController,
                     viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
+                    sendPanelChangeNotification()
                     updateEmptyState(animated: false)
                     profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 }
@@ -760,6 +765,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+      sendPanelChangeNotification()
         updateEmptyState(animated: false)
     }
 
@@ -788,7 +794,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                     self.presentContextMenu(for: site, with: indexPath, completionHandler: {
                         return self.contextMenu(for: site, with: indexPath)
                     })
-                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                } else if let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                           bookmarkNode.type == .folder,
                           self.isCurrentFolderEditable(at: indexPath) {
                     self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
@@ -846,7 +852,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
-            guard let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+            guard let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
