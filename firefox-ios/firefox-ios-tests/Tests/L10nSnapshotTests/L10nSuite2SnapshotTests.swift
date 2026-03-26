@@ -169,7 +169,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
         snapshot("CreatedLoginView")
 
-        app.tables["Login List"].cells.element(boundBy: 2).waitAndTap()
+        app.tables["Login List"].cells.element(boundBy: 1).waitAndTap()
         snapshot("CreatedLoginDetailedView")
 
         app.tables["Login Detail List"].cells.element(boundBy: 4).waitAndTap()
