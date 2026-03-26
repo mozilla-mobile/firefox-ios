@@ -1060,8 +1060,8 @@ extension String {
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
 
             public static let AllStoryCategories = MZLocalizedString(
-                key: "FirefoxHomepage.Stories.AllStoryCategories.v149",
-                tableName: nil,
+                key: "FirefoxHomepage.Stories.AllStoryCategories.v151",
+                tableName: "FirefoxHomepage",
                 value: "All",
                 comment: "On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected.")
             public struct Footer {
