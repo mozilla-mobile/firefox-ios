@@ -259,15 +259,5 @@ class BlockedTrackersTableViewController: UIViewController,
         navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
         view.backgroundColor = theme.colors.layer3
-
-        if let headerView = trackersTable.headerView(forSection: 0) as? BlockedTrackersHeaderView {
-            headerView.applyTheme(theme: theme)
-        }
-
-        for cell in trackersTable.visibleCells {
-            if let blockedTrackerCell = cell as? BlockedTrackerCell {
-                blockedTrackerCell.applyTheme(theme: theme)
-            }
-        }
     }
 }
