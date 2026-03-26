@@ -293,20 +293,6 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
-    // TODO: FXIOS-13669 The session dependencies shouldn't be empty
-    private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
-                                                  sessionCreator: tabManager as? SessionCreator),
-        legacyResponder: self
-    )
-    /// The ui delegate used by a `WKWebView`
-    var wkUIDelegate: WKUIDelegate {
-        if featureFlags.isFeatureEnabled(.webEngineIntegrationRefactor, checking: .buildOnly) {
-            return browserWebUIDelegate
-        }
-        return self
-    }
-
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -4353,7 +4339,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         beginObserving(webView: webView)
         self.scrollController.beginObserving(scrollView: webView.scrollView)
-        webView.uiDelegate = wkUIDelegate
+        webView.uiDelegate = self
 
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self

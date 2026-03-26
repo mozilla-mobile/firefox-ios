@@ -74,7 +74,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case quickAnswers
-    case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -116,8 +115,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch,
-                .webEngineIntegrationRefactor:
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -213,8 +211,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch,
-                .webEngineIntegrationRefactor:
+                .unifiedSearch:
             return nil
         }
     }
