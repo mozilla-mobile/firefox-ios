@@ -11,7 +11,7 @@ import enum MozillaAppServices.AccountEvent
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 // TODO: FXIOS-12610 make this code actually threadsafe which will involve the profile
-/// This class provides handles push messages from FxA.
+/// This class handles push messages from FxA.
 /// The main entry point is the `handleDecryptedMessage` method to accept the decrypted push message and parse it into a
 /// `PushMessage`
 final class FxAPushMessageHandler: @unchecked Sendable {
