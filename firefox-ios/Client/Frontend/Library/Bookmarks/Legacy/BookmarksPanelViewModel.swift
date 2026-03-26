@@ -107,7 +107,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     }
 
     func getSiteDetails(for indexPath: IndexPath, completion: @escaping @Sendable (Site?) -> Void) {
-        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row],
+        guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
             logger.log("Could not get site details for indexPath \(indexPath)",
@@ -152,6 +152,24 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
                 }
             }
         ).items
+    }
+
+    // MARK: - Displayed Data Source Mutations
+
+    /// Removes a bookmark node from the displayed data source at the given index.
+    /// When searching, this removes from `filteredBookmarkNodes` and also from the
+    /// backing `bookmarkNodes` array so both stay in sync.
+    /// When not searching, this removes directly from `bookmarkNodes`.
+    func removeDisplayedBookmarkNode(at index: Int) {
+        if isSearching {
+            let node = filteredBookmarkNodes[index]
+            filteredBookmarkNodes.remove(at: index)
+            if let backingIndex = bookmarkNodes.firstIndex(where: { $0.guid == node.guid }) {
+                bookmarkNodes.remove(at: backingIndex)
+            }
+        } else {
+            bookmarkNodes.remove(at: index)
+        }
     }
 
     // MARK: - Search

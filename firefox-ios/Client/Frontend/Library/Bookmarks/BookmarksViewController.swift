@@ -71,6 +71,9 @@ final class BookmarksViewController: SiteTableViewController,
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
+            // Hide search button when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [flexibleSpace, bottomRightButton] }
+            // Show search and edit buttons when bookmarks are available
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             return searchItems + [flexibleSpace]
@@ -278,11 +281,11 @@ final class BookmarksViewController: SiteTableViewController,
             return middleIndexPath.row
         }
 
-        return viewModel.bookmarkNodes.count
+        return viewModel.displayedBookmarkNodes.count
     }
 
     private func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
-        guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row]else {
+        guard let bookmarkNode = viewModel.displayedBookmarkNodes[safe: indexPath.row] else {
             return
         }
 
@@ -369,7 +372,7 @@ final class BookmarksViewController: SiteTableViewController,
             }
 
         tableView.beginUpdates()
-        viewModel.bookmarkNodes.remove(at: indexPath.row)
+        viewModel.removeDisplayedBookmarkNode(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         updateEmptyState(animated: false)
@@ -442,7 +445,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private func updateEmptyState(animated: Bool) {
-        let showEmptyState = viewModel.bookmarkNodes.isEmpty && !tableView.isEditing
+        let showEmptyState = viewModel.displayedBookmarkNodes.isEmpty && !tableView.isEditing
 
         if animated {
             a11yEmptyStateScrollView.isHidden = false
@@ -654,7 +657,7 @@ final class BookmarksViewController: SiteTableViewController,
 
     /// Root folders and local desktop folder cannot be moved or edited
     private func isCurrentFolderEditable(at indexPath: IndexPath) -> Bool {
-        guard let currentRowData = viewModel.bookmarkNodes[safe: indexPath.row] else {
+        guard let currentRowData = viewModel.displayedBookmarkNodes[safe: indexPath.row] else {
             return false
         }
 
@@ -785,7 +788,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                     self.presentContextMenu(for: site, with: indexPath, completionHandler: {
                         return self.contextMenu(for: site, with: indexPath)
                     })
-                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                } else if let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                           bookmarkNode.type == .folder,
                           self.isCurrentFolderEditable(at: indexPath) {
                     self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
@@ -843,7 +846,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
-            guard let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+            guard let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
