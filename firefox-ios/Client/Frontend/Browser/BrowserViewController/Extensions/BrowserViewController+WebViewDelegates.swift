@@ -1044,7 +1044,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
-                let isCertificateError = isWrongHostCertificateErrorPageEnabled && CertErrors.contains(error.code)
+                let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(error.code)
 
                 if isNoInternetError || isCertificateError {
                     if isCertificateError {

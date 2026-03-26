@@ -164,8 +164,8 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isWrongHostCertificateErrorPageEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isWrongHostCertificateErrorPageEnabled
+    var isBadCertDomainErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
     @MainActor
@@ -183,7 +183,7 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         )
 
         let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = isWrongHostCertificateErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+        let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
         if isNoInternetError || isCertificateError {

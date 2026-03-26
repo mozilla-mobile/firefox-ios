@@ -94,8 +94,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .wrongHostCertificateErrorPage:
-            return checkWrongHostCertificateErrorPageFeature(from: nimbus)
+        case .badCertDomainErrorPage:
+            return checkBadCertDomainErrorPageFeature(from: nimbus)
 
         case .recentSearches:
             return checkRecentSearchesFeature(from: nimbus)
@@ -474,8 +474,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 
-    private func checkWrongHostCertificateErrorPageFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().wrongHostCertificateErrorPage
+    private func checkBadCertDomainErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().badCertDomainErrorPage
     }
 
     private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {

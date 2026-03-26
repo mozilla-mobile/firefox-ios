@@ -24,39 +24,39 @@ class NativeErrorPageFeatureFlagTests: XCTestCase {
     func testFeatureFlag_WhenNativeErrorPageEnabled_ThenFeatureIsEnabled() {
         setupNimbusNativeErrorPageTesting(isEnabled: true,
                                           noInternetConnectionErrorIsEnabled: true,
-                                          wrongHostCertificateErrorPageIsEnabled: false)
+                                          badCertDomainErrorPageIsEnabled: false)
         XCTAssertTrue(subject.isNativeErrorPageEnabled)
     }
 
     func testFeatureFlag_WhenNativeErrorPageDisabled_ThenFeatureIsDisabled() {
         setupNimbusNativeErrorPageTesting(isEnabled: false,
                                           noInternetConnectionErrorIsEnabled: false,
-                                          wrongHostCertificateErrorPageIsEnabled: false)
+                                          badCertDomainErrorPageIsEnabled: false)
         XCTAssertFalse(subject.isNativeErrorPageEnabled)
     }
 
-    func testFeatureFlag_WhenWrongHostCertificateErrorPageEnabled_ThenFeatureIsEnabled() {
+    func testFeatureFlag_WhenBadCertDomainErrorPageEnabled_ThenFeatureIsEnabled() {
         setupNimbusNativeErrorPageTesting(isEnabled: true,
                                           noInternetConnectionErrorIsEnabled: true,
-                                          wrongHostCertificateErrorPageIsEnabled: true)
-        XCTAssertTrue(subject.isWrongHostCertificateErrorPageEnabled)
+                                          badCertDomainErrorPageIsEnabled: true)
+        XCTAssertTrue(subject.isBadCertDomainErrorPageEnabled)
     }
 
-    func testFeatureFlag_WhenWrongHostCertificateErrorPageDisabled_ThenFeatureIsDisabled() {
+    func testFeatureFlag_WhenBadCertDomainErrorPageDisabled_ThenFeatureIsDisabled() {
         setupNimbusNativeErrorPageTesting(isEnabled: true,
                                           noInternetConnectionErrorIsEnabled: true,
-                                          wrongHostCertificateErrorPageIsEnabled: false)
-        XCTAssertFalse(subject.isWrongHostCertificateErrorPageEnabled)
+                                          badCertDomainErrorPageIsEnabled: false)
+        XCTAssertFalse(subject.isBadCertDomainErrorPageEnabled)
     }
 
     // Helper
     private func setupNimbusNativeErrorPageTesting(isEnabled: Bool,
                                                    noInternetConnectionErrorIsEnabled: Bool,
-                                                   wrongHostCertificateErrorPageIsEnabled: Bool = false) {
+                                                   badCertDomainErrorPageIsEnabled: Bool = false) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
                 return NativeErrorPageFeature(enabled: isEnabled,
                                               noInternetConnectionError: noInternetConnectionErrorIsEnabled,
-                                              wrongHostCertificateErrorPage: wrongHostCertificateErrorPageIsEnabled)
+                                              badCertDomainErrorPage: badCertDomainErrorPageIsEnabled)
         }
     }
 }
