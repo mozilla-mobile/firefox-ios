@@ -121,6 +121,7 @@ struct AccessibilityIdentifiers {
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
+        static let translatePage = "MainMenu.TranslatePage"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 

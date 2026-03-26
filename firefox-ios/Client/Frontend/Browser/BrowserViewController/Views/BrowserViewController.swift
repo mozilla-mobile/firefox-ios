@@ -2921,8 +2921,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
-        case .translationLanguagePicker(let languages):
-            presentTranslationLanguagePicker(languages: languages, sourceButton: state.buttonTapped)
+        case .translationLanguagePicker(let data):
+            presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
         }
     }
 
@@ -3025,17 +3025,33 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    private func presentTranslationLanguagePicker(languages: [String], sourceButton: UIButton?) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.setValue(
-            NSAttributedString(
-                string: .Translations.LanguagePicker.Title,
-                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
-            ),
-            forKey: "attributedTitle"
-        )
+    private static let alertAttributedTitleKey = "attributedTitle"
 
-        languages.forEach { code in
+    /// Presents an action sheet allowing the user to pick a translation target language.
+    /// If the page is already translated, the sheet shows a "Show Original" option to restore the page.
+    /// - Parameters:
+    ///   - data: The language picker configuration including available language codes, translation state,
+    ///           and the BCP 47 language code the page was translated to (if any).
+    ///   - sourceButton: The button to anchor the popover on iPad.
+    private func presentTranslationLanguagePicker(
+        data: TranslationLanguagePickerData,
+        sourceButton: UIButton?
+    ) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        if data.isTranslated, let langCode = data.translatedToLanguage {
+            configureShowOriginalHeader(for: alert, languageCode: langCode)
+        } else {
+            alert.setValue(
+                NSAttributedString(
+                    string: .Translations.LanguagePicker.Title,
+                    attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+                ),
+                forKey: Self.alertAttributedTitleKey
+            )
+        }
+
+        data.languages.forEach { code in
             let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
             let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
             let title = native == localized ? native : "\(native) (\(localized))"
@@ -3064,11 +3080,46 @@ class BrowserViewController: UIViewController,
         alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
 
         if let popover = alert.popoverPresentationController {
-            popover.sourceView = sourceButton ?? view
-            popover.sourceRect = sourceButton?.bounds ?? view.bounds
+            if let sourceButton {
+                popover.sourceView = sourceButton
+                popover.sourceRect = sourceButton.bounds
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
         }
 
         present(alert, animated: true)
+    }
+
+    private func configureShowOriginalHeader(
+        for alert: UIAlertController,
+        languageCode: String
+    ) {
+        let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
+        let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
+        alert.setValue(
+            NSAttributedString(
+                string: title,
+                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+            ),
+            forKey: Self.alertAttributedTitleKey
+        )
+        let showOriginalAction = UIAlertAction(
+            title: .Translations.LanguagePicker.ShowOriginal,
+            style: .default
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(ToolbarMiddlewareAction(
+                buttonType: .translate,
+                gestureType: .tap,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            ))
+        }
+        alert.addAction(showOriginalAction)
+        alert.preferredAction = showOriginalAction
     }
 
     func didTapOnHome() {

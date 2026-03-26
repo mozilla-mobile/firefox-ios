@@ -220,6 +220,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,
+                    translatedToLanguage: targetLanguage,
                     and: action.windowUUID
                 )
             } catch {
@@ -265,12 +266,14 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func dispatchAction(
         for actionType: ToolbarActionType,
         with state: TranslationConfiguration.IconState,
+        translatedToLanguage: String? = nil,
         and windowUUID: WindowUUID
     ) {
         let toolbarAction = ToolbarAction(
             translationConfiguration: TranslationConfiguration(
                 prefs: profile.prefs,
-                state: state
+                state: state,
+                translatedToLanguage: translatedToLanguage
             ),
             windowUUID: windowUUID,
             actionType: actionType
