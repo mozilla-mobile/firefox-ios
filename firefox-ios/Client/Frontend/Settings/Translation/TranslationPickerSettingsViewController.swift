@@ -123,8 +123,9 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     func newState(state: TranslationSettingsState) {
+        let wasEditing = self.state.isEditing
         self.state = state
-        if collectionView.isEditing != state.isEditing {
+        if wasEditing != state.isEditing {
             collectionView.isEditing = state.isEditing
             setEditing(state.isEditing, animated: true)
         }
