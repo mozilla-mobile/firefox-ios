@@ -8,7 +8,7 @@
 "Summarizer.CloseButton.Label.v142" = "Zavřít";
 
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
-"Summarizer.Error.MissingPageContent.Message.v142" = "Stránka se stále načítá. Počkejte, až skončí, a poté klepněte na tlačítko Shrnout.";
+"Summarizer.Error.MissingPageContent.Message.v142" = "Stránka se stále načítá. Počkejte, až se načte, a poté klepněte na tlačítko Shrnout.";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
 "Summarizer.Error.RateLimited.Message.v142" = "Tento momentálně nelze zpracovat. Zkuste to znovu později!";
