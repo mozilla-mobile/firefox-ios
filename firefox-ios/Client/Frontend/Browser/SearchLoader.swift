@@ -92,27 +92,17 @@ final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggabl
 
             getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { bookmarks in
                 ensureMainThread { [weak self] in
-                    guard let query = self?.query else { return }
-
-                    var queries = [bookmarks]
-
-                    let group = DispatchGroup()
-                    group.enter()
-
-                    self?.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { history in
-                        ensureMainThread {
-                            // Mutate local variable on the main thread for thread safety
-                            queries.append(history)
-                            group.leave()
+                    guard let self else { return }
+                    let query = self.query
+                    self.getHistoryAsSites(matchingSearchQuery: query, limit: 100) { history in
+                        ensureMainThread { [self] in
+                            let queries = [bookmarks, history]
+                            self.updateUIWithBookmarksAsSitesResults(
+                                queries: queries,
+                                timerid: timerid,
+                                oldValue: oldValue
+                            )
                         }
-                    }
-
-                    group.notify(queue: .main) {
-                        self?.updateUIWithBookmarksAsSitesResults(
-                            queries: queries,
-                            timerid: timerid,
-                            oldValue: oldValue
-                        )
                     }
                 }
             }

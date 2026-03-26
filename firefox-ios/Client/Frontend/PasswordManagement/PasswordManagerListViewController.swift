@@ -365,10 +365,10 @@ private extension PasswordManagerListViewController {
                         }
 
                         self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
-                            DispatchQueue.main.async {
-                                self.cancelSelection()
-                                self.loadLogins()
-                                self.sendLoginsDeletedTelemetry()
+                            DispatchQueue.main.async { [weak self] in
+                                self?.cancelSelection()
+                                self?.loadLogins()
+                                self?.sendLoginsDeletedTelemetry()
                             }
                         }
                     }, hasSyncedLogins: yes.successValue ?? true)
