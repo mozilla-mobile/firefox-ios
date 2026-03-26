@@ -15,23 +15,48 @@ class AppDataUsageReportSetting: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let results = generateAppDataSummary()
-        UIPasteboard.general.string = results
+        UIPasteboard.general.string = results.report
 
-        // Hidden debug utility not localized for now.
-        showSimpleAlert("Summary generated. Text has been copied to the clipboard.")
+        // Hidden debug utility (strings not localized for now)
+        showReportAlert("Summary generated. Text has been copied to the clipboard.", largeFiles: results.largeFiles)
     }
 
     // MARK: - Internal Utilities
 
-    private func showSimpleAlert(_ message: String) {
+    private func showReportAlert(_ message: String, largeFiles: [String: UInt64]) {
         let alert = UIAlertController(title: "App Data Usage",
                                       message: message,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.promptForLargeFileCopy(largeFiles)
+        }))
         settings.present(alert, animated: true)
     }
 
-    private func generateAppDataSummary() -> String {
+    private func promptForLargeFileCopy(_ largeFiles: [String: UInt64]) {
+        guard !largeFiles.isEmpty else { return }
+        let message = "Copy large files to your Files app for debugging? This may use a significant amount of storage."
+        let alert = UIAlertController(title: "Copy Large Files?", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Copy Files", style: .default, handler: { _ in
+            self.copyLargeFiles(largeFiles)
+        }))
+        alert.addAction(UIAlertAction(title: "Don't Copy", style: .cancel))
+        settings.present(alert, animated: true)
+    }
+
+    private func copyLargeFiles(_ largeFiles: [String: UInt64]) {
+        let fileManager = FileManager.default
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        for file in largeFiles.keys {
+            let filePath = file as String
+            let sourceURL = URL(fileURLWithPath: filePath)
+            let destinationURL = documentsURL.appendingPathComponent(sourceURL.lastPathComponent)
+            guard !fileManager.fileExists(atPath: destinationURL.path) else { continue }
+            try? fileManager.copyItem(at: sourceURL, to: destinationURL)
+        }
+    }
+
+    private func generateAppDataSummary() -> (report: String, largeFiles: [String: UInt64]) {
         var directoriesAndSizes: [String: UInt64] = [:]
         var largeFileWarnings: [String: UInt64] = [:]
         let fileManager = FileManager.default
@@ -110,6 +135,6 @@ class AppDataUsageReportSetting: HiddenSetting {
         for (file, size) in largeFileWarnings {
             result += "\nSize: \(size / 1024) kb \t\tFile: \t\(file)"
         }
-        return result
+        return (result, largeFileWarnings)
     }
 }
