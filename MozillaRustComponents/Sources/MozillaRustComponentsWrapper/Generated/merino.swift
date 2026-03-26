@@ -532,11 +532,30 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * Client for fetching curated recommendations from the Merino service.
+ *
+ * Construct using [`CuratedRecommendationsClient::new`] with a
+ * [`CuratedRecommendationsConfig`], then call
+ * [`get_curated_recommendations`](CuratedRecommendationsClient::get_curated_recommendations)
+ * to fetch recommendations.
+ */
 public protocol CuratedRecommendationsClientProtocol: AnyObject, Sendable {
     
+    /**
+     * Fetches curated recommendations from the Merino API.
+     */
     func getCuratedRecommendations(request: CuratedRecommendationsRequest) throws  -> CuratedRecommendationsResponse
     
 }
+/**
+ * Client for fetching curated recommendations from the Merino service.
+ *
+ * Construct using [`CuratedRecommendationsClient::new`] with a
+ * [`CuratedRecommendationsConfig`], then call
+ * [`get_curated_recommendations`](CuratedRecommendationsClient::get_curated_recommendations)
+ * to fetch recommendations.
+ */
 open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @unchecked Sendable {
     fileprivate let handle: UInt64
 
@@ -576,6 +595,9 @@ open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @
     public func uniffiCloneHandle() -> UInt64 {
         return try! rustCall { uniffi_merino_fn_clone_curatedrecommendationsclient(self.handle, $0) }
     }
+    /**
+     * Creates a new client from the given configuration.
+     */
 public convenience init(config: CuratedRecommendationsConfig)throws  {
     let handle =
         try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
@@ -598,6 +620,9 @@ public convenience init(config: CuratedRecommendationsConfig)throws  {
     
 
     
+    /**
+     * Fetches curated recommendations from the Merino API.
+     */
 open func getCuratedRecommendations(request: CuratedRecommendationsRequest)throws  -> CuratedRecommendationsResponse  {
     return try  FfiConverterTypeCuratedRecommendationsResponse_lift(try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
     uniffi_merino_fn_method_curatedrecommendationsclient_get_curated_recommendations(
@@ -655,13 +680,28 @@ public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedR
 
 
 
+/**
+ * A ranked list of curated recommendations with an optional title.
+ */
 public struct CuratedRecommendationsBucket: Equatable, Hashable, Codable {
+    /**
+     * The recommendations in this bucket.
+     */
     public var recommendations: [RecommendationDataItem]
+    /**
+     * Optional display title for this bucket.
+     */
     public var title: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(recommendations: [RecommendationDataItem], title: String? = nil) {
+    public init(
+        /**
+         * The recommendations in this bucket.
+         */recommendations: [RecommendationDataItem], 
+        /**
+         * Optional display title for this bucket.
+         */title: String? = nil) {
         self.recommendations = recommendations
         self.title = title
     }
@@ -709,13 +749,28 @@ public func FfiConverterTypeCuratedRecommendationsBucket_lower(_ value: CuratedR
 }
 
 
+/**
+ * Configuration options for initializing a [`CuratedRecommendationsClient`](crate::curated_recommendations::CuratedRecommendationsClient).
+ */
 public struct CuratedRecommendationsConfig: Equatable, Hashable, Codable {
+    /**
+     * Optional custom base host URL. Defaults to the production Merino service if `None`.
+     */
     public var baseHost: String?
+    /**
+     * The `User-Agent` header value to send with API requests.
+     */
     public var userAgentHeader: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(baseHost: String?, userAgentHeader: String) {
+    public init(
+        /**
+         * Optional custom base host URL. Defaults to the production Merino service if `None`.
+         */baseHost: String?, 
+        /**
+         * The `User-Agent` header value to send with API requests.
+         */userAgentHeader: String) {
         self.baseHost = baseHost
         self.userAgentHeader = userAgentHeader
     }
@@ -763,20 +818,77 @@ public func FfiConverterTypeCuratedRecommendationsConfig_lower(_ value: CuratedR
 }
 
 
+/**
+ * Parameters for requesting curated recommendations from the Merino API.
+ */
 public struct CuratedRecommendationsRequest: Equatable, Hashable, Codable {
+    /**
+     * The locale to use when selecting recommendations.
+     */
     public var locale: CuratedRecommendationLocale
+    /**
+     * Optional ISO 3166-1 region code (e.g. `"US"`, `"GB"`) to further refine results.
+     */
     public var region: String?
+    /**
+     * Maximum number of recommendations to return. Defaults to 100 if not specified.
+     */
     public var count: Int32?
+    /**
+     * Optional list of topic slugs to filter recommendations by (e.g. `"business"`, `"tech"`).
+     */
     public var topics: [String]?
+    /**
+     * Optional list of feed types to include in the response (e.g. `"sections"`).
+     */
     public var feeds: [String]?
+    /**
+     * Optional per-section follow/block preferences.
+     */
     public var sections: [SectionSettings]?
+    /**
+     * Optional experiment name for server-side A/B testing.
+     */
     public var experimentName: String?
+    /**
+     * Optional experiment branch for server-side A/B testing.
+     */
     public var experimentBranch: String?
+    /**
+     * Whether to include the interest picker in the response.
+     */
     public var enableInterestPicker: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(locale: CuratedRecommendationLocale, region: String? = nil, count: Int32? = 100, topics: [String]? = nil, feeds: [String]? = nil, sections: [SectionSettings]? = nil, experimentName: String? = nil, experimentBranch: String? = nil, enableInterestPicker: Bool = false) {
+    public init(
+        /**
+         * The locale to use when selecting recommendations.
+         */locale: CuratedRecommendationLocale, 
+        /**
+         * Optional ISO 3166-1 region code (e.g. `"US"`, `"GB"`) to further refine results.
+         */region: String? = nil, 
+        /**
+         * Maximum number of recommendations to return. Defaults to 100 if not specified.
+         */count: Int32? = 100, 
+        /**
+         * Optional list of topic slugs to filter recommendations by (e.g. `"business"`, `"tech"`).
+         */topics: [String]? = nil, 
+        /**
+         * Optional list of feed types to include in the response (e.g. `"sections"`).
+         */feeds: [String]? = nil, 
+        /**
+         * Optional per-section follow/block preferences.
+         */sections: [SectionSettings]? = nil, 
+        /**
+         * Optional experiment name for server-side A/B testing.
+         */experimentName: String? = nil, 
+        /**
+         * Optional experiment branch for server-side A/B testing.
+         */experimentBranch: String? = nil, 
+        /**
+         * Whether to include the interest picker in the response.
+         */enableInterestPicker: Bool = false) {
         self.locale = locale
         self.region = region
         self.count = count
@@ -845,15 +957,42 @@ public func FfiConverterTypeCuratedRecommendationsRequest_lower(_ value: Curated
 }
 
 
+/**
+ * Top-level response from the Merino curated recommendations API.
+ */
 public struct CuratedRecommendationsResponse: Equatable, Hashable, Codable {
+    /**
+     * Timestamp (in milliseconds since epoch) when the recommendations were generated.
+     */
     public var recommendedAt: Int64
+    /**
+     * The list of recommended items.
+     */
     public var data: [RecommendationDataItem]
+    /**
+     * Optional categorized feeds (e.g. by topic section, Fakespot products).
+     */
     public var feeds: Feeds?
+    /**
+     * Optional interest picker configuration for displaying section selection UI.
+     */
     public var interestPicker: InterestPicker?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(recommendedAt: Int64, data: [RecommendationDataItem], feeds: Feeds? = nil, interestPicker: InterestPicker? = nil) {
+    public init(
+        /**
+         * Timestamp (in milliseconds since epoch) when the recommendations were generated.
+         */recommendedAt: Int64, 
+        /**
+         * The list of recommended items.
+         */data: [RecommendationDataItem], 
+        /**
+         * Optional categorized feeds (e.g. by topic section, Fakespot products).
+         */feeds: Feeds? = nil, 
+        /**
+         * Optional interest picker configuration for displaying section selection UI.
+         */interestPicker: InterestPicker? = nil) {
         self.recommendedAt = recommendedAt
         self.data = data
         self.feeds = feeds
@@ -907,13 +1046,28 @@ public func FfiConverterTypeCuratedRecommendationsResponse_lower(_ value: Curate
 }
 
 
+/**
+ * Call-to-action link for the Fakespot feed.
+ */
 public struct FakespotCta: Equatable, Hashable, Codable {
+    /**
+     * Display text for the call-to-action button.
+     */
     public var ctaCopy: String
+    /**
+     * URL the call-to-action links to.
+     */
     public var url: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(ctaCopy: String, url: String) {
+    public init(
+        /**
+         * Display text for the call-to-action button.
+         */ctaCopy: String, 
+        /**
+         * URL the call-to-action links to.
+         */url: String) {
         self.ctaCopy = ctaCopy
         self.url = url
     }
@@ -961,16 +1115,49 @@ public func FfiConverterTypeFakespotCta_lower(_ value: FakespotCta) -> RustBuffe
 }
 
 
+/**
+ * A feed of Fakespot product review recommendations.
+ */
 public struct FakespotFeed: Equatable, Hashable, Codable {
+    /**
+     * The recommended products.
+     */
     public var products: [FakespotProduct]
+    /**
+     * Default category name for display.
+     */
     public var defaultCategoryName: String
+    /**
+     * Header copy text displayed above the product list.
+     */
     public var headerCopy: String
+    /**
+     * Footer copy text displayed below the product list.
+     */
     public var footerCopy: String
+    /**
+     * Call-to-action link for the Fakespot feed.
+     */
     public var cta: FakespotCta
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(products: [FakespotProduct], defaultCategoryName: String, headerCopy: String, footerCopy: String, cta: FakespotCta) {
+    public init(
+        /**
+         * The recommended products.
+         */products: [FakespotProduct], 
+        /**
+         * Default category name for display.
+         */defaultCategoryName: String, 
+        /**
+         * Header copy text displayed above the product list.
+         */headerCopy: String, 
+        /**
+         * Footer copy text displayed below the product list.
+         */footerCopy: String, 
+        /**
+         * Call-to-action link for the Fakespot feed.
+         */cta: FakespotCta) {
         self.products = products
         self.defaultCategoryName = defaultCategoryName
         self.headerCopy = headerCopy
@@ -1027,16 +1214,49 @@ public func FfiConverterTypeFakespotFeed_lower(_ value: FakespotFeed) -> RustBuf
 }
 
 
+/**
+ * Details for a single Fakespot product recommendation.
+ */
 public struct FakespotProduct: Equatable, Hashable, Codable {
+    /**
+     * Unique product identifier.
+     */
     public var id: String
+    /**
+     * Product title.
+     */
     public var title: String
+    /**
+     * Product category.
+     */
     public var category: String
+    /**
+     * URL of the product image.
+     */
     public var imageUrl: String
+    /**
+     * URL of the product page.
+     */
     public var url: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, title: String, category: String, imageUrl: String, url: String) {
+    public init(
+        /**
+         * Unique product identifier.
+         */id: String, 
+        /**
+         * Product title.
+         */title: String, 
+        /**
+         * Product category.
+         */category: String, 
+        /**
+         * URL of the product image.
+         */imageUrl: String, 
+        /**
+         * URL of the product page.
+         */url: String) {
         self.id = id
         self.title = title
         self.category = category
@@ -1093,18 +1313,63 @@ public func FfiConverterTypeFakespotProduct_lower(_ value: FakespotProduct) -> R
 }
 
 
+/**
+ * A categorized feed section containing recommendations and responsive layout configuration.
+ */
 public struct FeedSection: Equatable, Hashable, Codable {
+    /**
+     * The display position of this section within the overall feed.
+     */
     public var receivedFeedRank: Int32
+    /**
+     * The recommendations in this section.
+     */
     public var recommendations: [RecommendationDataItem]
+    /**
+     * Display title for this section.
+     */
     public var title: String
+    /**
+     * Optional subtitle for this section.
+     */
     public var subtitle: String?
+    /**
+     * Responsive layout configuration for rendering this section.
+     */
     public var layout: Layout
+    /**
+     * Whether the user is following this section.
+     */
     public var isFollowed: Bool
+    /**
+     * Whether the user has blocked this section.
+     */
     public var isBlocked: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(receivedFeedRank: Int32, recommendations: [RecommendationDataItem], title: String, subtitle: String? = nil, layout: Layout, isFollowed: Bool, isBlocked: Bool) {
+    public init(
+        /**
+         * The display position of this section within the overall feed.
+         */receivedFeedRank: Int32, 
+        /**
+         * The recommendations in this section.
+         */recommendations: [RecommendationDataItem], 
+        /**
+         * Display title for this section.
+         */title: String, 
+        /**
+         * Optional subtitle for this section.
+         */subtitle: String? = nil, 
+        /**
+         * Responsive layout configuration for rendering this section.
+         */layout: Layout, 
+        /**
+         * Whether the user is following this section.
+         */isFollowed: Bool, 
+        /**
+         * Whether the user has blocked this section.
+         */isBlocked: Bool) {
         self.receivedFeedRank = receivedFeedRank
         self.recommendations = recommendations
         self.title = title
@@ -1167,9 +1432,24 @@ public func FfiConverterTypeFeedSection_lower(_ value: FeedSection) -> RustBuffe
 }
 
 
+/**
+ * Container for all categorized recommendation feeds returned by the API.
+ *
+ * Each field corresponds to a content category or special feed type. Fields are
+ * `None` when the category was not requested or has no content available.
+ */
 public struct Feeds: Equatable, Hashable, Codable {
+    /**
+     * High-priority "need to know" recommendations.
+     */
     public var needToKnow: CuratedRecommendationsBucket?
+    /**
+     * Fakespot product review recommendations.
+     */
     public var fakespot: FakespotFeed?
+    /**
+     * Top stories section.
+     */
     public var topStoriesSection: FeedSection?
     public var business: FeedSection?
     public var career: FeedSection?
@@ -1190,7 +1470,16 @@ public struct Feeds: Equatable, Hashable, Codable {
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(needToKnow: CuratedRecommendationsBucket? = nil, fakespot: FakespotFeed? = nil, topStoriesSection: FeedSection? = nil, business: FeedSection? = nil, career: FeedSection? = nil, arts: FeedSection? = nil, food: FeedSection? = nil, health: FeedSection? = nil, home: FeedSection? = nil, finance: FeedSection? = nil, government: FeedSection? = nil, sports: FeedSection? = nil, tech: FeedSection? = nil, travel: FeedSection? = nil, education: FeedSection? = nil, hobbies: FeedSection? = nil, societyParenting: FeedSection? = nil, educationScience: FeedSection? = nil, society: FeedSection? = nil) {
+    public init(
+        /**
+         * High-priority "need to know" recommendations.
+         */needToKnow: CuratedRecommendationsBucket? = nil, 
+        /**
+         * Fakespot product review recommendations.
+         */fakespot: FakespotFeed? = nil, 
+        /**
+         * Top stories section.
+         */topStoriesSection: FeedSection? = nil, business: FeedSection? = nil, career: FeedSection? = nil, arts: FeedSection? = nil, food: FeedSection? = nil, health: FeedSection? = nil, home: FeedSection? = nil, finance: FeedSection? = nil, government: FeedSection? = nil, sports: FeedSection? = nil, tech: FeedSection? = nil, travel: FeedSection? = nil, education: FeedSection? = nil, hobbies: FeedSection? = nil, societyParenting: FeedSection? = nil, educationScience: FeedSection? = nil, society: FeedSection? = nil) {
         self.needToKnow = needToKnow
         self.fakespot = fakespot
         self.topStoriesSection = topStoriesSection
@@ -1289,15 +1578,42 @@ public func FfiConverterTypeFeeds_lower(_ value: Feeds) -> RustBuffer {
 }
 
 
+/**
+ * Configuration for the interest picker UI, which lets users select preferred content sections.
+ */
 public struct InterestPicker: Equatable, Hashable, Codable {
+    /**
+     * The display position of the interest picker within the feed.
+     */
     public var receivedFeedRank: Int32
+    /**
+     * Title text for the interest picker.
+     */
     public var title: String
+    /**
+     * Subtitle text for the interest picker.
+     */
     public var subtitle: String
+    /**
+     * The sections available for the user to choose from.
+     */
     public var sections: [InterestPickerSection]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(receivedFeedRank: Int32, title: String, subtitle: String, sections: [InterestPickerSection]) {
+    public init(
+        /**
+         * The display position of the interest picker within the feed.
+         */receivedFeedRank: Int32, 
+        /**
+         * Title text for the interest picker.
+         */title: String, 
+        /**
+         * Subtitle text for the interest picker.
+         */subtitle: String, 
+        /**
+         * The sections available for the user to choose from.
+         */sections: [InterestPickerSection]) {
         self.receivedFeedRank = receivedFeedRank
         self.title = title
         self.subtitle = subtitle
@@ -1351,12 +1667,21 @@ public func FfiConverterTypeInterestPicker_lower(_ value: InterestPicker) -> Rus
 }
 
 
+/**
+ * A section entry within the interest picker.
+ */
 public struct InterestPickerSection: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the section.
+     */
     public var sectionId: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(sectionId: String) {
+    public init(
+        /**
+         * Unique identifier for the section.
+         */sectionId: String) {
         self.sectionId = sectionId
     }
 
@@ -1401,13 +1726,28 @@ public func FfiConverterTypeInterestPickerSection_lower(_ value: InterestPickerS
 }
 
 
+/**
+ * A named layout configuration containing one or more responsive layout breakpoints.
+ */
 public struct Layout: Equatable, Hashable, Codable {
+    /**
+     * Name identifier for this layout (e.g. `"4-large"`, `"3-medium"`).
+     */
     public var name: String
+    /**
+     * Responsive layout variants for different screen widths.
+     */
     public var responsiveLayouts: [ResponsiveLayout]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(name: String, responsiveLayouts: [ResponsiveLayout]) {
+    public init(
+        /**
+         * Name identifier for this layout (e.g. `"4-large"`, `"3-medium"`).
+         */name: String, 
+        /**
+         * Responsive layout variants for different screen widths.
+         */responsiveLayouts: [ResponsiveLayout]) {
         self.name = name
         self.responsiveLayouts = responsiveLayouts
     }
@@ -1455,23 +1795,98 @@ public func FfiConverterTypeLayout_lower(_ value: Layout) -> RustBuffer {
 }
 
 
+/**
+ * A single curated recommendation item.
+ */
 public struct RecommendationDataItem: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the corpus item.
+     */
     public var corpusItemId: String
+    /**
+     * Unique identifier for the scheduled corpus item.
+     */
     public var scheduledCorpusItemId: String
+    /**
+     * URL of the recommended article.
+     */
     public var url: String
+    /**
+     * Title of the recommended article.
+     */
     public var title: String
+    /**
+     * Short excerpt or summary of the article.
+     */
     public var excerpt: String
+    /**
+     * Optional topic slug (e.g. `"business"`, `"government"`).
+     */
     public var topic: String?
+    /**
+     * Name of the publisher.
+     */
     public var publisher: String
+    /**
+     * Whether the recommendation is time-sensitive (e.g. breaking news).
+     */
     public var isTimeSensitive: Bool
+    /**
+     * URL of the article's hero/thumbnail image.
+     */
     public var imageUrl: String
+    /**
+     * Optional URL of the publisher's favicon.
+     */
     public var iconUrl: String?
+    /**
+     * Numeric tile identifier used for telemetry.
+     */
     public var tileId: Int64
+    /**
+     * The position rank at which this item was received from the server.
+     */
     public var receivedRank: Int64
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(corpusItemId: String, scheduledCorpusItemId: String, url: String, title: String, excerpt: String, topic: String? = nil, publisher: String, isTimeSensitive: Bool, imageUrl: String, iconUrl: String?, tileId: Int64, receivedRank: Int64) {
+    public init(
+        /**
+         * Unique identifier for the corpus item.
+         */corpusItemId: String, 
+        /**
+         * Unique identifier for the scheduled corpus item.
+         */scheduledCorpusItemId: String, 
+        /**
+         * URL of the recommended article.
+         */url: String, 
+        /**
+         * Title of the recommended article.
+         */title: String, 
+        /**
+         * Short excerpt or summary of the article.
+         */excerpt: String, 
+        /**
+         * Optional topic slug (e.g. `"business"`, `"government"`).
+         */topic: String? = nil, 
+        /**
+         * Name of the publisher.
+         */publisher: String, 
+        /**
+         * Whether the recommendation is time-sensitive (e.g. breaking news).
+         */isTimeSensitive: Bool, 
+        /**
+         * URL of the article's hero/thumbnail image.
+         */imageUrl: String, 
+        /**
+         * Optional URL of the publisher's favicon.
+         */iconUrl: String?, 
+        /**
+         * Numeric tile identifier used for telemetry.
+         */tileId: Int64, 
+        /**
+         * The position rank at which this item was received from the server.
+         */receivedRank: Int64) {
         self.corpusItemId = corpusItemId
         self.scheduledCorpusItemId = scheduledCorpusItemId
         self.url = url
@@ -1549,13 +1964,28 @@ public func FfiConverterTypeRecommendationDataItem_lower(_ value: Recommendation
 }
 
 
+/**
+ * A layout variant for a specific column count, defining how tiles are arranged.
+ */
 public struct ResponsiveLayout: Equatable, Hashable, Codable {
+    /**
+     * Number of columns in this layout variant.
+     */
     public var columnCount: Int32
+    /**
+     * Tile configurations for this layout.
+     */
     public var tiles: [Tile]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(columnCount: Int32, tiles: [Tile]) {
+    public init(
+        /**
+         * Number of columns in this layout variant.
+         */columnCount: Int32, 
+        /**
+         * Tile configurations for this layout.
+         */tiles: [Tile]) {
         self.columnCount = columnCount
         self.tiles = tiles
     }
@@ -1603,14 +2033,35 @@ public func FfiConverterTypeResponsiveLayout_lower(_ value: ResponsiveLayout) ->
 }
 
 
+/**
+ * User preferences for a content section, controlling whether it is followed or blocked.
+ */
 public struct SectionSettings: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the section.
+     */
     public var sectionId: String
+    /**
+     * Whether the user has opted to follow this section.
+     */
     public var isFollowed: Bool
+    /**
+     * Whether the user has opted to block this section.
+     */
     public var isBlocked: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(sectionId: String, isFollowed: Bool, isBlocked: Bool) {
+    public init(
+        /**
+         * Unique identifier for the section.
+         */sectionId: String, 
+        /**
+         * Whether the user has opted to follow this section.
+         */isFollowed: Bool, 
+        /**
+         * Whether the user has opted to block this section.
+         */isBlocked: Bool) {
         self.sectionId = sectionId
         self.isFollowed = isFollowed
         self.isBlocked = isBlocked
@@ -1661,15 +2112,42 @@ public func FfiConverterTypeSectionSettings_lower(_ value: SectionSettings) -> R
 }
 
 
+/**
+ * Properties for a single tile within a responsive layout.
+ */
 public struct Tile: Equatable, Hashable, Codable {
+    /**
+     * Display size of the tile (e.g. `"large"`, `"medium"`, `"small"`).
+     */
     public var size: String
+    /**
+     * Zero-based position index of this tile within the layout.
+     */
     public var position: Int32
+    /**
+     * Whether this tile position may contain an advertisement.
+     */
     public var hasAd: Bool
+    /**
+     * Whether this tile should display an article excerpt.
+     */
     public var hasExcerpt: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(size: String, position: Int32, hasAd: Bool, hasExcerpt: Bool) {
+    public init(
+        /**
+         * Display size of the tile (e.g. `"large"`, `"medium"`, `"small"`).
+         */size: String, 
+        /**
+         * Zero-based position index of this tile within the layout.
+         */position: Int32, 
+        /**
+         * Whether this tile position may contain an advertisement.
+         */hasAd: Bool, 
+        /**
+         * Whether this tile should display an article excerpt.
+         */hasExcerpt: Bool) {
         self.size = size
         self.position = position
         self.hasAd = hasAd
@@ -1724,6 +2202,12 @@ public func FfiConverterTypeTile_lower(_ value: Tile) -> RustBuffer {
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Locales supported by Merino curated recommendations.
+ *
+ * Each variant maps to a BCP 47 locale string (e.g. `"en-US"`, `"fr"`) used when
+ * requesting recommendations from the Merino API.
+ */
 
 public enum CuratedRecommendationLocale: Equatable, Hashable, Codable {
     
@@ -1874,12 +2358,24 @@ public func FfiConverterTypeCuratedRecommendationLocale_lower(_ value: CuratedRe
 
 
 
+/**
+ * Public error type exposed to consumers via UniFFI.
+ *
+ * This is a simplified version of [`Error`] suitable for cross-platform callers,
+ * distinguishing network failures from other errors.
+ */
 public enum CuratedRecommendationsApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
 
     
     
+    /**
+     * A network-level failure (e.g. DNS resolution, connection timeout).
+     */
     case Network(reason: String
     )
+    /**
+     * Any other error, including HTTP errors and deserialization failures.
+     */
     case Other(code: UInt16?, reason: String
     )
 
@@ -2438,13 +2934,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 41991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 9345) {
+    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 28998) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 26178) {
+    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 52246) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 3261) {
+    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 18166) {
         return InitializationResult.apiChecksumMismatch
     }
 
