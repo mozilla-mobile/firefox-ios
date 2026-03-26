@@ -333,6 +333,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
             decryptedCard: nil,
             viewType: .save,
             frame: nil,
+            viewController: UIViewController(),
             alertContainer: UIView()
         )
 

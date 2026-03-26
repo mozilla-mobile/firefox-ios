@@ -489,7 +489,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
                                                                              toApplication: .shared)
 
         if !isTabTrayUIExperimentsEnabled {
-            // The Tab Tray uses a "SimpleToast", so the urlString will go unused
+            // The Tab Tray uses a "PlainToast", so the urlString will go unused
             let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
                                                        windowUUID: uuid,
                                                        actionType: TabPanelMiddlewareActionType.showToast)
