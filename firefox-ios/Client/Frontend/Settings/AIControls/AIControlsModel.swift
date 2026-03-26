@@ -37,7 +37,7 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
     }()
 
     private let translationConfiguration: TranslationConfiguration
-    private let summarizerConfiguration: DefaultSummarizerNimbusUtils
+    private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
 
     struct LinkInfo {
@@ -45,15 +45,15 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         let url: URL
     }
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, translationConfiguration: TranslationConfiguration? = nil, summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()) {
         self.prefs = prefs
-        translationConfiguration = TranslationConfiguration(prefs: prefs)
-        summarizerConfiguration = DefaultSummarizerNimbusUtils()
+        self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
+        self.summarizerConfiguration = summarizerConfiguration
 
-        translationEnabled = translationConfiguration.isTranslationFeatureEnabled
-        pageSummariesEnabled = summarizerConfiguration.isSummarizeFeatureToggledOn
+        translationEnabled = self.translationConfiguration.isTranslationFeatureEnabled
+        pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
 
-        pageSummariesVisible = summarizerConfiguration.isSummarizeFeatureEnabled
+        pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
         translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
 
         killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)

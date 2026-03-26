@@ -7,63 +7,79 @@ import Shared
 
 @testable import Client
 
-class AIControlsModelTests: XCTest {
+class AIControlsModelTests: XCTestCase {
     var mockPrefs: MockProfilePrefs!
 
-    override func setUp() {
+    override func setUp() async throws {
+        try await super.setUp()
+        let mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
+        mockProfile.prefs = mockPrefs
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
+    @MainActor
     func testHeaderLinkInfo() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
-        XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "")
-        XCTAssertEqual(aiControlsModel.headerLinkInfo.url.absoluteString, "")
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "Learn more")
+        XCTAssertEqual(aiControlsModel.headerLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
     }
 
+    @MainActor
     func testBlockAIEnhancementsLinkInfo() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
-        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.label, "")
-        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.url.absoluteString, "")
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.label, "See what is and isn’t included")
+        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
     }
 
+    @MainActor
     func testInitialize() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
     }
 
+    @MainActor
     func testInitializeWithTranslationFeatureFlagDisabled() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.pageSummariesVisible)
         XCTAssertFalse(aiControlsModel.translationsVisible)
     }
 
+    @MainActor
     func testInitializeWithPageSummariesFeatureFlagDisabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertFalse(aiControlsModel.pageSummariesVisible)
         XCTAssertTrue(aiControlsModel.translationsVisible)
     }
 
+    @MainActor
     func testToggleKillSwitchOn() {
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
             PrefsKeys.Settings.aiKillSwitchFeature: false
         ], prefix: "")
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: true)
 
-        XCTAssertTrue(aiControlsModel.killSwitchToggledOn)
         XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
+            XCTAssertTrue(prefVal)
+        } else {
+            XCTFail("No pref value for ai kill switch feature")
+        }
+
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
             XCTAssertFalse(prefVal)
         } else {
@@ -77,10 +93,17 @@ class AIControlsModelTests: XCTest {
         }
     }
 
+    @MainActor
     func testToggleKillSwitchOff() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
-        XCTAssertFalse(aiControlsModel.killSwitchIsOn)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
+            XCTAssertFalse(prefVal)
+        } else {
+            XCTFail("No pref value for ai kill switch feature")
+        }
+
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
             XCTAssertTrue(prefVal)
         } else {
@@ -97,28 +120,52 @@ class AIControlsModelTests: XCTest {
         XCTAssertTrue(aiControlsModel.translationEnabled)
     }
 
+    @MainActor
     func testToggleTranslationsFeatureOn() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleTranslationsFeature(to: true)
-        XCTAssertTrue(aiControlsModel.translationEnabled)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
+            XCTAssertTrue(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
     }
 
+    @MainActor
     func testToggleTranslationsFeatureOff() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleTranslationsFeature(to: false)
-        XCTAssertFalse(aiControlsModel.translationEnabled)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
+            XCTAssertFalse(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
     }
 
+    @MainActor
     func testTogglePageSummariesFeatureOn() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.togglePageSummariesFeature(to: true)
-        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) {
+            XCTAssertTrue(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
     }
 
+    @MainActor
     func testTogglePageSummariesFeatureOff() {
-        let aiControlsModel = AIControlsModel(prefs: mockPrefs)
+        let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.togglePageSummariesFeature(to: false)
-        XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
+
+        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) {
+            XCTAssertFalse(prefVal)
+        } else {
+            XCTFail("No pref value for translations feature")
+        }
     }
 
     private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
@@ -129,5 +176,12 @@ class AIControlsModelTests: XCTest {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
             return HostedSummarizerFeature(enabled: isSummariesEnabled)
         }
+    }
+
+    @MainActor
+    private func createSubject(prefs: Prefs) -> AIControlsModel {
+        let subject = AIControlsModel(prefs: prefs)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 }
