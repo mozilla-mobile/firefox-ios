@@ -327,7 +327,6 @@ class LoginTest: BaseTestCase {
         waitForElementsToExist(
             [
                 app.switches[passwordssQuery.saveLogins],
-                app.switches[passwordssQuery.showLoginsInAppMenu],
                 app.searchFields[passwordssQuery.searchPasswords],
                 app.staticTexts[passwordssQuery.emptyList],
                 app.buttons[passwordssQuery.addButton]
@@ -336,9 +335,6 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
-        XCTAssertEqual(app.switches[passwordssQuery.showLoginsInAppMenu].value as? String,
-                       "1",
-                       "Show in Application Menu toggle in not enabled by default")
         app.buttons[passwordssQuery.addButton].waitAndTap()
         waitForElementsToExist(
             [
@@ -616,6 +612,12 @@ class LoginTest: BaseTestCase {
         app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables[loginList].otherElements["SAVED PASSWORDS"])
         loginSettingsScreen.tapSaveButtonIfExists()
+        
+        // Modal only appears during first run
+        if app.sheets.firstMatch.exists {
+            app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
+            mozWaitForElementToNotExist(app.sheets.firstMatch)
+        }
     }
 
     func enterTextInField(typedText: String) {
