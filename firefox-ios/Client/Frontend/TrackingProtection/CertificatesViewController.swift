@@ -128,7 +128,14 @@ class CertificatesViewController: UIViewController,
     // MARK: Header Actions
     private func setupHeaderViewActions() {
         headerView.backToMainMenuCallback = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
+            guard let self else { return }
+            let nav = self.navigationController
+            // When presented from error page we are the root of a modal nav stack; Back should dismiss.
+            if nav?.viewControllers.count == 1 {
+                nav?.dismissVC()
+            } else {
+                nav?.popViewController(animated: true)
+            }
         }
         headerView.dismissMenuCallback = { [weak self] in
             self?.navigationController?.dismissVC()
