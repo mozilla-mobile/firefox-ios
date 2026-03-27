@@ -803,7 +803,9 @@ final class HomepageViewController: UIViewController,
             return
         }
 
-        let transitionEnabled = headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                                                                             width: collectionView.bounds.width)
+        let transitionEnabled = headerAttributes.size.height >= expectedHeaderHeight
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
@@ -816,7 +818,9 @@ final class HomepageViewController: UIViewController,
             ofKind: UICollectionView.elementKindSectionHeader,
             at: indexPath
         )?.size.height ?? 0
-        return headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                                                                             width: collectionView.bounds.width)
+        return headerHeight >= expectedHeaderHeight
     }
 
     /// Converts the homepage's vertical scroll offset into normalized transition progress for the
@@ -867,6 +871,15 @@ final class HomepageViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            // Wait for a layout pass so the header has its correct height before determining
+            // whether the transition should be enabled.
+            DispatchQueue.main.async { [weak self] in
+                self?.updateNewsTransitionHeaderProgress()
+            }
+        }
+
         store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),

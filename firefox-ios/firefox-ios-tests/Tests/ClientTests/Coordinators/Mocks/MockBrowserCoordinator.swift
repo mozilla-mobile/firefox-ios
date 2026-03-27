@@ -65,6 +65,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         decryptedCard: UnencryptedCreditCardFields?,
         viewType state: CreditCardBottomSheetState,
         frame: WKFrameInfo?,
+        viewController: UIViewController,
         alertContainer: UIView
     ) {
         showCreditCardAutofillCalled += 1

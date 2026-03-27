@@ -116,7 +116,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     }
 
     private func updateViewState(forHeight height: CGFloat) {
-        let shouldShowAffordance = transitionEnabled && height >= NewsAffordanceHeaderView.UX.totalHeight
+        let shouldShowAffordance = transitionEnabled
         updateAffordanceConstraints(shouldShowAffordance: shouldShowAffordance)
 
         if shouldShowAffordance {

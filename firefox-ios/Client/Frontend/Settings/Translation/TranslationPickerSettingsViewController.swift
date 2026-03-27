@@ -7,15 +7,20 @@ import Redux
 import Shared
 import UIKit
 
+// MARK: - Coordinator Delegate
+
+@MainActor
+protocol TranslationPickerSettingsDelegate: AnyObject {
+    func showLanguagePicker(availableLanguages: [String])
+}
+
+// MARK: - ViewController
+
 final class TranslationPickerSettingsViewController: UIViewController,
                                                StoreSubscriber,
                                                Themeable,
                                                UICollectionViewDelegate {
     typealias SubscriberStateType = TranslationSettingsState
-
-    // MARK: - Diffable types
-
-    private typealias CellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TranslationSettingsItem>
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
@@ -25,6 +30,26 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     private lazy var dataSource: TranslationSettingsDiffableDataSource = makeDataSource()
 
+    // MARK: - Navigation bar items
+
+    private lazy var editButton = UIBarButtonItem(
+        barButtonSystemItem: .edit,
+        target: self,
+        action: #selector(didTapEdit)
+    )
+
+    private lazy var doneButton = UIBarButtonItem(
+        barButtonSystemItem: .done,
+        target: self,
+        action: #selector(didTapDone)
+    )
+
+    private lazy var cancelButton = UIBarButtonItem(
+        barButtonSystemItem: .cancel,
+        target: self,
+        action: #selector(didTapCancel)
+    )
+
     // MARK: - Themeable
 
     var themeManager: ThemeManager
@@ -32,6 +57,8 @@ final class TranslationPickerSettingsViewController: UIViewController,
     var notificationCenter: NotificationProtocol
 
     var currentWindowUUID: WindowUUID? { return windowUUID }
+
+    weak var coordinator: TranslationPickerSettingsDelegate?
 
     let windowUUID: WindowUUID
     private var state: TranslationSettingsState
@@ -96,8 +123,20 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     func newState(state: TranslationSettingsState) {
+        let wasEditing = self.state.isEditing
         self.state = state
-        dataSource.applySnapshot(state: state, animated: true)
+        if wasEditing != state.isEditing {
+            collectionView.isEditing = state.isEditing
+            setEditing(state.isEditing, animated: true)
+        }
+        updateNavBar()
+        updateDoneButton()
+        // Defer snapshot apply to avoid a deadlock when newState is triggered
+        // from inside a UIKit snapshot apply (e.g. the swipe-to-delete handler).
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.dataSource.applySnapshot(state: self.state, animated: true)
+        }
     }
 
     // MARK: - Setup
@@ -124,8 +163,42 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Data source
 
     private func makeDataSource() -> TranslationSettingsDiffableDataSource {
-        let toggleReg = makeToggleCellRegistration()
-        let languageReg = makeLanguageCellRegistration()
+        let toggleReg = UICollectionView.CellRegistration<
+            TranslationToggleCell, TranslationSettingsItem
+        > { [weak self] cell, _, _ in
+            guard let self else { return }
+            cell.configure(
+                isOn: state.isTranslationsEnabled,
+                target: self,
+                action: #selector(didToggleTranslations(_:)),
+                theme: themeManager.getCurrentTheme(for: windowUUID)
+            )
+        }
+
+        let languageReg = UICollectionView.CellRegistration<
+            TranslationLanguageCell, TranslationSettingsItem
+        > { [weak self] cell, _, item in
+            guard let self, case let .language(details) = item else { return }
+            cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
+            cell.accessories = [
+                .delete(displayed: .whenEditing, actionHandler: { [weak self] in
+                    guard let self else { return }
+                    store.dispatch(TranslationSettingsViewAction(
+                        languageCode: details.code,
+                        windowUUID: windowUUID,
+                        actionType: TranslationSettingsViewActionType.removeLanguage
+                    ))
+                }),
+                .reorder(displayed: .whenEditing)
+            ]
+        }
+
+        let addLanguageReg = UICollectionView.CellRegistration<
+            TranslationAddLanguageCell, TranslationSettingsItem
+        > { [weak self] cell, _, _ in
+            guard let self else { return }
+            cell.configure(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
 
         let dataSource = TranslationSettingsDiffableDataSource(
             collectionView: collectionView
@@ -137,6 +210,9 @@ final class TranslationPickerSettingsViewController: UIViewController,
             case .language:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: languageReg, for: indexPath, item: item)
+            case .addLanguage:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: addLanguageReg, for: indexPath, item: item)
             }
         }
 
@@ -155,57 +231,83 @@ final class TranslationPickerSettingsViewController: UIViewController,
             }
         }
 
+        dataSource.reorderingHandlers.canReorderItem = { [weak self] item in
+            guard let self, state.isEditing else { return false }
+            if case .language = item { return true }
+            return false
+        }
+
+        dataSource.reorderingHandlers.didReorder = { [weak self] transaction in
+            guard let self else { return }
+            let newItems = transaction.finalSnapshot.itemIdentifiers(inSection: .preferredLanguages)
+            let reorderedLanguages = newItems.compactMap { item -> PreferredLanguageDetails? in
+                if case .language(let details) = item { return details }
+                return nil
+            }
+            store.dispatch(TranslationSettingsViewAction(
+                pendingLanguages: reorderedLanguages,
+                windowUUID: windowUUID,
+                actionType: TranslationSettingsViewActionType.reorderLanguages
+            ))
+        }
+
         return dataSource
     }
 
-    private func makeToggleCellRegistration() -> CellRegistration {
-        CellRegistration { [weak self] cell, _, item in
-            guard let self else { return }
-            var content = cell.defaultContentConfiguration()
-            let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
-
-            switch item {
-            case .enableToggle:
-                content.text = .Settings.Translation.ToggleTitle
-                content.textProperties.color = theme.colors.textPrimary
-                let toggle = UISwitch()
-                toggle.isOn = self.state.isTranslationsEnabled
-                toggle.onTintColor = theme.colors.actionPrimary
-                toggle.addTarget(self, action: #selector(self.didToggleTranslations(_:)), for: .valueChanged)
-                cell.accessories = [.customView(configuration: .init(
-                    customView: toggle,
-                    placement: .trailing(displayed: .always)
-                ))]
-            default:
-                break
-            }
-            cell.contentConfiguration = content
-            cell.backgroundConfiguration = .listGroupedCell()
-            cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
-        }
-    }
-
-    private func makeLanguageCellRegistration() -> CellRegistration {
-        CellRegistration { [weak self] cell, _, item in
-            guard let self, case let .language(details) = item else { return }
-            var content = cell.defaultContentConfiguration()
-            let theme = self.themeManager.getCurrentTheme(for: self.windowUUID)
-            content.text = details.mainText
-            content.textProperties.color = theme.colors.textPrimary
-            content.secondaryText = details.subtitleText
-            content.secondaryTextProperties.color = theme.colors.textSecondary
-            cell.accessories = []
-            cell.contentConfiguration = content
-            cell.backgroundConfiguration = .listGroupedCell()
-            cell.backgroundConfiguration?.backgroundColor = theme.colors.layer2
-        }
-    }
+    // MARK: - Toggle actions
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))
+    }
+
+    // MARK: - Nav bar
+
+    private func updateNavBar() {
+        if state.isEditing {
+            navigationItem.leftBarButtonItem = cancelButton
+            navigationItem.rightBarButtonItem = doneButton
+        } else {
+            navigationItem.leftBarButtonItem = nil
+            let languages = state.preferredLanguages
+            navigationItem.rightBarButtonItem = (state.isTranslationsEnabled && languages.count > 1) ? editButton : nil
+        }
+    }
+
+    // MARK: - Edit mode
+
+    @objc private func didTapEdit() {
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.enterEditMode
+        ))
+    }
+
+    @objc private func didTapDone() {
+        guard let pendingLanguages = state.pendingLanguages else { return }
+        store.dispatch(TranslationSettingsViewAction(
+            languages: pendingLanguages.map { $0.code },
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        ))
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        ))
+    }
+
+    @objc private func didTapCancel() {
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        ))
+    }
+
+    private func updateDoneButton() {
+        guard state.isEditing, let pendingLanguages = state.pendingLanguages else { return }
+        doneButton.isEnabled = pendingLanguages != state.preferredLanguages
     }
 
     // MARK: - Theming
@@ -215,12 +317,18 @@ final class TranslationPickerSettingsViewController: UIViewController,
         view.backgroundColor = theme.colors.layer1
         collectionView.setCollectionViewLayout(makeLayout(backgroundColor: theme.colors.layer1), animated: false)
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        dataSource.reconfigureVisibleCells()
+        collectionView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
 
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return false
+        return dataSource.itemIdentifier(for: indexPath) == .addLanguage
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard dataSource.itemIdentifier(for: indexPath) == .addLanguage else { return }
+        coordinator?.showLanguagePicker(availableLanguages: state.availableLanguages)
     }
 }

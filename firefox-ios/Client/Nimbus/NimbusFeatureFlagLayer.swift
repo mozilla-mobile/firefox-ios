@@ -201,9 +201,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .quickAnswers:
             return checkQuickAnswersFeature(from: nimbus)
-
-        case .webEngineIntegrationRefactor:
-            return checkWebEngineIntegrationRefactor(from: nimbus)
         }
     }
 
@@ -503,10 +500,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
-    }
-
-    private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.webEngineIntegrationRefactor.value().enabled
     }
 
     private func checkShouldUseBrandRefreshConfigurationFeature(from nimbus: FxNimbus) -> Bool {

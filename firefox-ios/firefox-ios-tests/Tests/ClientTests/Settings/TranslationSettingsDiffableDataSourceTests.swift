@@ -51,7 +51,7 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
         let snapshot = subject.snapshot()
         XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages])
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .preferredLanguages), 0)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .preferredLanguages), 1)
     }
 
     func test_applySnapshot_withTranslationsEnabled_languageItemCountMatchesState() {
@@ -59,7 +59,7 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
 
         subject.applySnapshot(state: state, animated: false)
 
-        XCTAssertEqual(subject.snapshot().numberOfItems(inSection: .preferredLanguages), 3)
+        XCTAssertEqual(subject.snapshot().numberOfItems(inSection: .preferredLanguages), 4)
     }
 
     func test_applySnapshot_languageItemsMatchStateOrder() {
@@ -79,17 +79,6 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         let items = subject.snapshot().itemIdentifiers(inSection: .preferredLanguages)
         XCTAssertEqual(items[0], .language(details[0]))
         XCTAssertEqual(items[1], .language(details[1]))
-    }
-
-    // MARK: - reconfigureVisibleCells
-
-    func test_reconfigureVisibleCells_withEmptySnapshot_doesNotCrash() {
-        subject.reconfigureVisibleCells()
-    }
-
-    func test_reconfigureVisibleCells_withPopulatedSnapshot_doesNotCrash() {
-        subject.applySnapshot(state: makeState(isEnabled: true, languages: ["en"]), animated: false)
-        subject.reconfigureVisibleCells()
     }
 
     // MARK: - Helpers

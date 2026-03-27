@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import SwiftUI
+import Shared
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     @MainActor
@@ -30,6 +31,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
+                                 TranslationPickerSettingsDelegate,
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
@@ -376,8 +378,13 @@ final class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
     func pressedAIControls() {
+        let model = AIControlsModel(prefs: profile.prefs)
+
         let viewController = UIHostingController(
-            rootView: AIControlsSettingsView()
+            rootView: AIControlsSettingsView(
+                windowUUID: windowUUID,
+                aiControlsModel: model
+            )
         )
         viewController.title = .Settings.AIControls.Title
         router.push(viewController)
@@ -476,10 +483,21 @@ final class SettingsCoordinator: BaseCoordinator,
 
     private func translationSettingsViewController() -> UIViewController {
         if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
-            return TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            viewController.coordinator = self
+            return viewController
         } else {
             return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         }
+    }
+
+    func showLanguagePicker(availableLanguages: [String]) {
+        let picker = TranslationLanguagePickerViewController(
+            windowUUID: windowUUID,
+            languages: availableLanguages
+        )
+        let navigationController = UINavigationController(rootViewController: picker)
+        router.present(navigationController)
     }
 
     // MARK: AccountSettingsDelegate

@@ -51,7 +51,8 @@ final class MainMenuStateTests: XCTestCase {
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
-            accountData: accountData
+            accountData: accountData,
+            translationConfiguration: nil
         )
 
         XCTAssertNil(initialState.currentTabInfo)

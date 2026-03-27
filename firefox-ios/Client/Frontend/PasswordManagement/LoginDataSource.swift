@@ -11,19 +11,17 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     private lazy var emptyStateView = NoLoginsView()
     var viewModel: PasswordManagerViewModel
 
-    let boolSettings: (BoolSetting, BoolSetting)
+    let loginSavedSetting: BoolSetting
 
     init(viewModel: PasswordManagerViewModel) {
         self.viewModel = viewModel
-        boolSettings = (
-            BoolSetting(prefs: viewModel.profile.prefs,
-                        prefKey: PrefsKeys.LoginsSaveEnabled,
-                        defaultValue: true,
-                        attributedTitleText: NSAttributedString(string: .Settings.Passwords.SavePasswords)),
-            BoolSetting(prefs: viewModel.profile.prefs,
-                        prefKey: PrefsKeys.LoginsShowShortcutMenuItem,
-                        defaultValue: true,
-                        attributedTitleText: NSAttributedString(string: .SettingToShowLoginsInAppMenu)))
+        loginSavedSetting = BoolSetting(
+            prefs: viewModel.profile.prefs,
+            prefKey: PrefsKeys.LoginsSaveEnabled,
+            defaultValue: true,
+            attributedTitleText: NSAttributedString(string: .Settings.Passwords.SavePasswords)
+        )
+
         super.init()
     }
 
@@ -42,7 +40,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     @objc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == PasswordManagerListViewController.loginsSettingsSection {
-            return 2
+            return 1
         }
         return viewModel.loginsForSection(section)?.count ?? 0
     }
@@ -53,8 +51,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
            let cell = tableView.dequeueReusableCell(withIdentifier: PasswordManagerSettingsTableViewCell.cellIdentifier,
                                                     for: indexPath) as? PasswordManagerSettingsTableViewCell {
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
-            let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
-            setting.onConfigureCell(cell, theme: viewModel.theme)
+            loginSavedSetting.onConfigureCell(cell, theme: viewModel.theme)
             if hideSettings {
                 cell.isHidden = true
             } else if viewModel.isDuringSearchControllerDismiss {

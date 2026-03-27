@@ -121,6 +121,7 @@ struct AccessibilityIdentifiers {
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
+        static let translatePage = "MainMenu.TranslatePage"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -752,6 +753,7 @@ struct AccessibilityIdentifiers {
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
+            static let languagePickerList = "Settings.Translation.LanguagePickerList"
         }
 
         struct BlockImages {

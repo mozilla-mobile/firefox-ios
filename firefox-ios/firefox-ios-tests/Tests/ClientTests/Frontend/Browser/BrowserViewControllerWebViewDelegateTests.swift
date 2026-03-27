@@ -25,7 +25,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
         fileManager = MockFileManager()
-        setWebEngineIntegrationEnabled(false)
     }
 
     override func tearDown() async throws {
@@ -34,22 +33,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         fileManager = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
-    }
-
-    @MainActor
-    func testWKUIDelegate_isBrowserWebUIDelegate_whenWebEngineIntegrationIsEnabled() {
-        let subject = createSubject()
-
-        setWebEngineIntegrationEnabled(true)
-
-        XCTAssertTrue(subject.wkUIDelegate is BrowserWebUIDelegate)
-    }
-
-    @MainActor
-    func testWKUIDelegate_isBrowserViewController_whenWebEngineIntegrationIsDisabled() {
-        let subject = createSubject()
-
-        XCTAssertTrue(subject.wkUIDelegate is BrowserViewController)
     }
 
     // MARK: - Decide policy for navigation action
@@ -408,12 +391,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         let path = Bundle(for: type(of: self)).path(forResource: file, ofType: "pem")
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return SecCertificateCreateWithData(nil, data! as CFData)!
-    }
-
-    private func setWebEngineIntegrationEnabled(_ enabled: Bool) {
-        FxNimbus.shared.features.webEngineIntegrationRefactor.with { _, _ in
-            return WebEngineIntegrationRefactor(enabled: enabled)
-        }
     }
 
     // This test is being skipped because there are some very strange side effects

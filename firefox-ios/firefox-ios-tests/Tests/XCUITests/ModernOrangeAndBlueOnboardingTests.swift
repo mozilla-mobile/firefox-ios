@@ -343,6 +343,9 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
         // Go to second screen
         onboardingScreen.goToNextScreenViaSecondary()
+        if iPad() {
+            onboardingScreen.currentScreen += 1
+        }
         onboardingScreen.assertTitle()
 
         // Go to third screen

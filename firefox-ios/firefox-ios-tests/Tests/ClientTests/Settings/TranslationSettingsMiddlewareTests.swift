@@ -172,6 +172,84 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider = { _, _ in }
     }
 
+    // MARK: - saveLanguages
+
+    func test_saveLanguages_persistsLanguagesToPrefsAndDispatchesUpdate() throws {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languages: ["en", "fr"],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let stored = mockProfile.prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedType = try XCTUnwrap(dispatched.actionType as? TranslationSettingsMiddlewareActionType)
+        let preferredCodes = dispatched.preferredLanguages?.map { $0.code }
+
+        XCTAssertEqual(dispatchedType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(preferredCodes, ["en", "fr"])
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_enterEditMode_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.enterEditMode
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_cancelEditMode_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_reorderLanguages_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            pendingLanguages: makeLanguages(["fr", "en"]),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.reorderLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_removeLanguage_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languageCode: "fr",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.removeLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
     // MARK: - Unrelated action
 
     func test_unrelatedAction_doesNotDispatch() {
@@ -190,15 +268,34 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - StoreTestUtility
 
     func setupAppState() -> AppState {
+        return makeAppState()
+    }
+
+    private func makeAppState(
+        preferredLanguages: [PreferredLanguageDetails] = [],
+        pendingLanguages: [PreferredLanguageDetails]? = nil,
+        isEditing: Bool = false
+    ) -> AppState {
         return AppState(
             presentedComponents: PresentedComponentsState(
                 components: [
                     .translationSettings(
-                        TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+                        TranslationSettingsState(
+                            windowUUID: .XCTestDefaultUUID,
+                            isTranslationsEnabled: true,
+                            isEditing: isEditing,
+                            pendingLanguages: pendingLanguages,
+                            preferredLanguages: preferredLanguages,
+                            supportedLanguages: ["en", "fr", "de"]
+                        )
                     )
                 ]
             )
         )
+    }
+
+    private func makeLanguages(_ codes: [String]) -> [PreferredLanguageDetails] {
+        return codes.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
     }
 
     func setupStore() {

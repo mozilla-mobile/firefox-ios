@@ -374,8 +374,8 @@ extension ContentBlocker {
         let blocklists = BlocklistFileName.allBlocklistFileNames
         let dispatchGroup = DispatchGroup()
         let totalListCount = blocklists.count
-        var listsCompiledCount = 0
-        var errorCount = 0
+        nonisolated(unsafe) var listsCompiledCount = 0
+        nonisolated(unsafe) var errorCount = 0
         blocklists.forEach { filename in
             dispatchGroup.enter()
             ruleStore?.lookUpContentRuleList(forIdentifier: filename) { [weak self] contentRuleList, error in
@@ -400,10 +400,16 @@ extension ContentBlocker {
                         self.ruleStore?.compileContentRuleList(
                             forIdentifier: filename,
                             encodedContentRuleList: str
-                        ) { rule, error in
-                            listsCompiledCount += 1
-                            errorCount += (error == nil ? 0 : 1)
-                            self.compileContentRuleListCompletion(dispatchGroup: dispatchGroup, rule: rule, error: error)
+                        ) { [weak self] rule, error in
+                            DispatchQueue.main.async {
+                                listsCompiledCount += 1
+                                errorCount += (error == nil ? 0 : 1)
+                                self?.compileContentRuleListCompletion(
+                                    dispatchGroup: dispatchGroup,
+                                    rule: rule,
+                                    error: error
+                                )
+                            }
                         }
                     }
                 }

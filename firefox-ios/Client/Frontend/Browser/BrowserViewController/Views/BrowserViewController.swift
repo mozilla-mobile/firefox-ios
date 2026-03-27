@@ -293,20 +293,6 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction?
     var copyAddressAction: AccessibleAction?
 
-    // TODO: FXIOS-13669 The session dependencies shouldn't be empty
-    private lazy var browserWebUIDelegate = BrowserWebUIDelegate(
-        engineResponder: DefaultUIHandler.factory(sessionDependencies: .empty(),
-                                                  sessionCreator: tabManager as? SessionCreator),
-        legacyResponder: self
-    )
-    /// The ui delegate used by a `WKWebView`
-    var wkUIDelegate: WKUIDelegate {
-        if featureFlags.isFeatureEnabled(.webEngineIntegrationRefactor, checking: .buildOnly) {
-            return browserWebUIDelegate
-        }
-        return self
-    }
-
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
@@ -1042,18 +1028,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
-        /// This toast is generated from GeneralBrowserActionType.showToast
-        func showToast() {
-            SimpleToast().showAlertWithText(
-                toast.title,
-                bottomContainer: contentContainer,
-                theme: currentTheme()
-            )
-        }
+        // This toast is generated from GeneralBrowserActionType.showToast
         switch toast {
         case .clearCookies,
                 .shakeToSummarizeNotAvailable:
-            showToast()
+            showPlainToast(message: toast.title)
         case .addBookmark(let urlString):
             showBookmarkToast(urlString: urlString, action: .add)
         default:
@@ -2928,8 +2907,8 @@ class BrowserViewController: UIViewController,
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
             }
-        case .translationLanguagePicker(let languages):
-            presentTranslationLanguagePicker(languages: languages, sourceButton: state.buttonTapped)
+        case .translationLanguagePicker(let data):
+            presentTranslationLanguagePicker(data: data, sourceButton: state.buttonTapped)
         }
     }
 
@@ -3032,17 +3011,33 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    private func presentTranslationLanguagePicker(languages: [String], sourceButton: UIButton?) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.setValue(
-            NSAttributedString(
-                string: .Translations.LanguagePicker.Title,
-                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
-            ),
-            forKey: "attributedTitle"
-        )
+    private static let alertAttributedTitleKey = "attributedTitle"
 
-        languages.forEach { code in
+    /// Presents an action sheet allowing the user to pick a translation target language.
+    /// If the page is already translated, the sheet shows a "Show Original" option to restore the page.
+    /// - Parameters:
+    ///   - data: The language picker configuration including available language codes, translation state,
+    ///           and the BCP 47 language code the page was translated to (if any).
+    ///   - sourceButton: The button to anchor the popover on iPad.
+    private func presentTranslationLanguagePicker(
+        data: TranslationLanguagePickerData,
+        sourceButton: UIButton?
+    ) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+        if data.isTranslated, let langCode = data.translatedToLanguage {
+            configureShowOriginalHeader(for: alert, languageCode: langCode)
+        } else {
+            alert.setValue(
+                NSAttributedString(
+                    string: .Translations.LanguagePicker.Title,
+                    attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+                ),
+                forKey: Self.alertAttributedTitleKey
+            )
+        }
+
+        data.languages.forEach { code in
             let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
             let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
             let title = native == localized ? native : "\(native) (\(localized))"
@@ -3071,11 +3066,46 @@ class BrowserViewController: UIViewController,
         alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
 
         if let popover = alert.popoverPresentationController {
-            popover.sourceView = sourceButton ?? view
-            popover.sourceRect = sourceButton?.bounds ?? view.bounds
+            if let sourceButton {
+                popover.sourceView = sourceButton
+                popover.sourceRect = sourceButton.bounds
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
+                popover.permittedArrowDirections = []
+            }
         }
 
         present(alert, animated: true)
+    }
+
+    private func configureShowOriginalHeader(
+        for alert: UIAlertController,
+        languageCode: String
+    ) {
+        let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
+        let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
+        alert.setValue(
+            NSAttributedString(
+                string: title,
+                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
+            ),
+            forKey: Self.alertAttributedTitleKey
+        )
+        let showOriginalAction = UIAlertAction(
+            title: .Translations.LanguagePicker.ShowOriginal,
+            style: .default
+        ) { [weak self] _ in
+            guard let self else { return }
+            store.dispatch(ToolbarMiddlewareAction(
+                buttonType: .translate,
+                gestureType: .tap,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.didTapButton
+            ))
+        }
+        alert.addAction(showOriginalAction)
+        alert.preferredAction = showOriginalAction
     }
 
     func didTapOnHome() {
@@ -3397,7 +3427,7 @@ class BrowserViewController: UIViewController,
     }
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        popToBVC()
+        navigationHandler?.popToBVC()
         cancelEditMode()
         if let url {
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
@@ -3480,7 +3510,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        popToBVC()
+        navigationHandler?.popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
@@ -3535,7 +3565,7 @@ class BrowserViewController: UIViewController,
         isPrivate: Bool = false,
         searchFor searchText: String? = nil
     ) {
-        popToBVC()
+        navigationHandler?.popToBVC()
         guard !isShowingJSPromptAlert() else {
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
@@ -3548,7 +3578,7 @@ class BrowserViewController: UIViewController,
     }
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
-        popToBVC()
+        navigationHandler?.popToBVC()
 
         guard let engine = searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
@@ -3558,16 +3588,6 @@ class BrowserViewController: UIViewController,
         }
 
         openURLInNewTab(searchURL, isPrivate: isPrivate)
-    }
-
-    fileprivate func popToBVC() {
-        guard let currentViewController = navigationController?.topViewController else { return }
-        // Avoid dismissing JSPromptAlert that causes the crash because completionHandler was not called
-        if !isShowingJSPromptAlert() {
-            currentViewController.dismiss(animated: true, completion: nil)
-        }
-
-        navigationHandler?.popToBVC()
     }
 
     private func isShowingJSPromptAlert() -> Bool {
@@ -3829,7 +3849,8 @@ class BrowserViewController: UIViewController,
                                                                decryptedCard: nil,
                                                                viewType: .selectSavedCard,
                                                                frame: frame,
-                                                               alertContainer: self.contentContainer)
+                                                               viewController: self,
+                                                               alertContainer: self.bottomContentStackView)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:
@@ -3848,7 +3869,8 @@ class BrowserViewController: UIViewController,
                                                                    decryptedCard: fieldValues,
                                                                    viewType: .save,
                                                                    frame: nil,
-                                                                   alertContainer: self.contentContainer)
+                                                                   viewController: self,
+                                                                   alertContainer: self.bottomContentStackView)
                 }
                 return
             }
@@ -3860,7 +3882,8 @@ class BrowserViewController: UIViewController,
                                                                    decryptedCard: fieldValues,
                                                                    viewType: .update,
                                                                    frame: nil,
-                                                                   alertContainer: self.contentContainer)
+                                                                   viewController: self,
+                                                                   alertContainer: self.bottomContentStackView)
                 }
             }
         }
@@ -4316,7 +4339,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         beginObserving(webView: webView)
         self.scrollController.beginObserving(scrollView: webView.scrollView)
-        webView.uiDelegate = wkUIDelegate
+        webView.uiDelegate = self
 
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self

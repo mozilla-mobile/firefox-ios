@@ -10,6 +10,7 @@ import TestKit
 final class DependencyHelperMock {
     @MainActor
     func bootstrapDependencies(
+        injectedProfile: Profile? = nil,
         injectedWindowManager: WindowManager? = nil,
         injectedTabManager: TabManager? = nil,
         injectedMicrosurveyManager: MicrosurveyManager? = nil,
@@ -17,7 +18,7 @@ final class DependencyHelperMock {
     ) {
         AppContainer.shared.reset()
 
-        let profile: Profile = BrowserProfile(
+        let profile: Profile = injectedProfile ?? BrowserProfile(
             localName: "profile"
         )
         AppContainer.shared.register(service: profile as Profile)

@@ -14,6 +14,7 @@ channels:
   - release
 include:
 
+
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/adsClient.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
@@ -37,6 +38,7 @@ include:
   - nimbus-features/newAddressBarMenu.yaml
   - nimbus-features/newAppearanceMenu.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/quickAnswersFeature.yaml
   - nimbus-features/recentSearchesFeature.yaml
   - nimbus-features/relayIntegrationFeature.yaml
   - nimbus-features/searchFeature.yaml
@@ -56,5 +58,3 @@ include:
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
-  - nimbus-features/quickAnswersFeature.yaml
-  - nimbus-features/webEngineIntegrationRefactor.yaml
