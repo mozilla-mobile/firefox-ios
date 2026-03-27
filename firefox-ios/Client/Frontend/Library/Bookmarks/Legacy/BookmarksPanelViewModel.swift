@@ -11,6 +11,31 @@ import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
+@MainActor
+protocol BookmarksPanelViewModelProtocol: Sendable {
+    var profile: Profile { get }
+    var bookmarkNodes: [FxBookmarkNode] { get }
+    var bookmarkFolder: FxBookmarkNode? { get }
+    var bookmarkFolderGUID: GUID { get }
+    var displayedBookmarkNodes: [FxBookmarkNode] { get }
+    var isSearching: Bool { get }
+    var isRootNode: Bool { get }
+    var shouldFlashRow: Bool { get }
+
+    func resetSearch()
+    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
+    func reloadData(completion: @escaping @MainActor () -> Void)
+    func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int)
+    func removeBookmark(atPosition position: Int)
+    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
+    func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    func createPinUnpinAction(
+        for site: Site,
+        isPinned: Bool,
+        successHandler: @escaping @MainActor (String) -> Void
+    ) -> PhotonRowActions
+}
+
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
     BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
@@ -19,8 +44,8 @@ let LocalizedRootBookmarkFolderStrings = [
     LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
-// FIXME: FXIOS-14162 Make BookmarksPanelViewModel actually Sendable
-final class BookmarksPanelViewModel: @unchecked Sendable {
+@MainActor
+final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -34,7 +59,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
     var isSearching = false
-    var filteredBookmarkNodes = [FxBookmarkNode]()
+    private var filteredBookmarkNodes = [FxBookmarkNode]()
 
     /// The data source nodes currently displayed: filtered results when searching, otherwise the full bookmark nodes.
     var displayedBookmarkNodes: [FxBookmarkNode] {
@@ -44,19 +69,16 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     private var hasDesktopFolders = false
     private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
-    private var mainQueue: DispatchQueueInterface
-    private var logger: Logger
+    private let logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
-         mainQueue: DispatchQueueInterface = DispatchQueue.main,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
-        self.mainQueue = mainQueue
         self.logger = logger
     }
 
@@ -67,7 +89,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
         return true
     }
 
-    func reloadData(completion: @escaping @Sendable () -> Void) {
+    func reloadData(completion: @escaping @MainActor () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
             completion()
@@ -106,7 +128,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @Sendable (Site?) -> Void) {
+    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void) {
         guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
@@ -126,7 +148,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     func createPinUnpinAction(
         for site: Site,
         isPinned: Bool,
-        successHandler: @MainActor @escaping (String) -> Void
+        successHandler: @escaping @MainActor (String) -> Void
     ) -> PhotonRowActions {
         return SingleActionViewModel(
             title: isPinned ? .Bookmarks.Menu.RemoveFromShortcutsTitle : .AddToShortcutsActionTitle,
@@ -138,6 +160,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
                 : profile.pinnedSites.addPinnedTopSite(site)
 
                 action.uponQueue(.main) { result in
+                    // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                     MainActor.assumeIsolated {
                         if result.isSuccess {
                             let message: String = isPinned
@@ -158,9 +181,11 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
 
     /// Recursively searches all bookmarks under the current folder (and its subfolders)
     /// for items whose title or URL contains the given query string (case-insensitive).
-    func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable ([FxBookmarkNode]) -> Void) {
+    func searchBookmarks(query: String, completion: @escaping @MainActor () -> Void) {
         guard !query.isEmpty else {
-            DispatchQueue.main.async { completion([]) }
+            isSearching = true
+            filteredBookmarkNodes = []
+            completion()
             return
         }
 
@@ -175,7 +200,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
                             self?.logger.log("Search bookmarks tree fetch failed",
                                              level: .debug,
                                              category: .library)
-                            completion([])
+                            completion()
                             return
                         }
 
@@ -184,13 +209,20 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
                         self?.collectMatchingBookmarks(from: folderData,
                                                        query: lowercasedQuery,
                                                        results: &matches)
-                        completion(matches)
+
+                        self?.isSearching = true
+                        self?.filteredBookmarkNodes = matches
+
+                        completion()
 
                     case .failure(let error):
                         self?.logger.log("Search bookmarks tree fetch error: \(error)",
                                          level: .debug,
                                          category: .library)
-                        completion([])
+
+                        self?.isSearching = true
+                        self?.filteredBookmarkNodes = []
+                        completion()
                     }
                 }
             }
@@ -230,23 +262,26 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
         return max(index - LocalDesktopFolder.numberOfRowsTaken, 0)
     }
 
-    private func setupMobileFolderData(completion: @escaping @Sendable () -> Void) {
+    private func setupMobileFolderData(completion: @escaping @MainActor () -> Void) {
         bookmarksHandler
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
-                guard let mobileFolder = result.successValue as? BookmarkFolderData else {
-                    self.logger.log("Mobile folder data setup failed \(String(describing: result.failureValue))",
-                                    level: .debug,
-                                    category: .library)
-                    self.setErrorCase()
-                    completion()
-                    return
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                        self.logger.log("Mobile folder data setup failed \(String(describing: result.failureValue))",
+                                        level: .debug,
+                                        category: .library)
+                        self.setErrorCase()
+                        completion()
+                        return
+                    }
+
+                    self.bookmarkFolder = mobileFolder
+                    self.bookmarkNodes = mobileFolder.fxChildren ?? []
+
+                    self.createDesktopBookmarksFolder(completion: completion)
                 }
-
-                self.bookmarkFolder = mobileFolder
-                self.bookmarkNodes = mobileFolder.fxChildren ?? []
-
-                self.createDesktopBookmarksFolder(completion: completion)
             }
     }
 
@@ -263,22 +298,26 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     }
 
     /// Subfolder data case happens when we select a folder created by a user
-    private func setupSubfolderData(completion: @escaping @Sendable () -> Void) {
+    private func setupSubfolderData(completion: @escaping @MainActor () -> Void) {
         bookmarksHandler.getBookmarksTree(rootGUID: bookmarkFolderGUID,
-                                          recursive: false).uponQueue(.main) { result in
-            guard let folder = result.successValue as? BookmarkFolderData else {
-                self.logger.log("Sublfolder data setup failed \(String(describing: result.failureValue))",
-                                level: .debug,
-                                category: .library)
-                self.setErrorCase()
+                                          recursive: false)
+        .uponQueue(.main) { result in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                guard let folder = result.successValue as? BookmarkFolderData else {
+                    self.logger.log("Subfolder data setup failed \(String(describing: result.failureValue))",
+                                    level: .debug,
+                                    category: .library)
+                    self.setErrorCase()
+                    completion()
+                    return
+                }
+
+                self.bookmarkFolder = folder
+                self.bookmarkNodes = folder.fxChildren ?? []
+
                 completion()
-                return
             }
-
-            self.bookmarkFolder = folder
-            self.bookmarkNodes = folder.fxChildren ?? []
-
-            completion()
         }
     }
 
@@ -290,34 +329,36 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
 
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
     // subfolders
-    private func createDesktopBookmarksFolder(completion: @escaping @Sendable () -> Void) {
+    private func createDesktopBookmarksFolder(completion: @escaping @MainActor () -> Void) {
         bookmarksHandler.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
-            switch result {
-            case .success(let bookmarkCount):
-                if bookmarkCount > 0 {
-                    self.hasDesktopFolders = true
-                    let desktopFolder = LocalDesktopFolder()
-                    self.mainQueue.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let bookmarkCount):
+                    if bookmarkCount > 0 {
+                        self.hasDesktopFolders = true
+                        let desktopFolder = LocalDesktopFolder()
                         self.bookmarkNodes.insert(desktopFolder, at: 0)
+                    } else {
+                        self.hasDesktopFolders = false
                     }
-                } else {
-                    self.hasDesktopFolders = false
+                case .failure(let error):
+                    self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
                 }
-            case .failure(let error):
-                self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
+                completion()
             }
-            completion()
         }
     }
 
     private func checkIfPinnedURL(
         _ url: String,
-        queue: DispatchQueue = .main,
-        completion: @escaping @Sendable  (Bool) -> Void
+        completion: @escaping @MainActor  (Bool) -> Void
     ) {
         profile.pinnedSites.isPinnedTopSite(url)
-            .uponQueue(queue) { result in
-                completion(result.successValue ?? false)
+            .uponQueue(.main) { result in
+                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                MainActor.assumeIsolated {
+                    completion(result.successValue ?? false)
+                }
             }
     }
 
@@ -334,5 +375,18 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
             title: bookmarkItem.title,
             isGooglePinnedTile: false
         )
+    }
+
+    func resetSearch() {
+        isSearching = false
+        filteredBookmarkNodes.removeAll()
+    }
+
+    func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int) {
+        bookmarkNodes.insert(bookmarkNode, at: position)
+    }
+
+    func removeBookmark(atPosition position: Int) {
+        bookmarkNodes.remove(at: position)
     }
 }

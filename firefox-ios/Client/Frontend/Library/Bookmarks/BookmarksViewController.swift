@@ -28,7 +28,7 @@ final class BookmarksViewController: SiteTableViewController,
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
-    let viewModel: BookmarksPanelViewModel
+    let viewModel: BookmarksPanelViewModelProtocol
     var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
@@ -145,7 +145,7 @@ final class BookmarksViewController: SiteTableViewController,
 
     // MARK: - Init
 
-    init(viewModel: BookmarksPanelViewModel,
+    init(viewModel: BookmarksPanelViewModelProtocol,
          windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
@@ -345,7 +345,7 @@ final class BookmarksViewController: SiteTableViewController,
         let position = Int(bookmarkNode.position)
         tableView.beginUpdates()
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
-        viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
+        viewModel.addBookmark(bookmarkNode: bookmarkNode, atPosition: position)
         tableView.endUpdates()
         updateEmptyState(animated: false)
     }
@@ -372,7 +372,7 @@ final class BookmarksViewController: SiteTableViewController,
             }
 
         tableView.beginUpdates()
-        viewModel.bookmarkNodes.remove(at: indexPath.row)
+        viewModel.removeBookmark(atPosition: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         updateEmptyState(animated: false)
@@ -489,8 +489,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private func resetSearch() {
-        viewModel.isSearching = false
-        viewModel.filteredBookmarkNodes.removeAll()
+        viewModel.resetSearch()
         tableView.reloadData()
         updateEmptyState(animated: false)
     }
@@ -747,7 +746,7 @@ final class BookmarksViewController: SiteTableViewController,
             case .success:
                 Task { @MainActor in
                     tableView.beginUpdates()
-                    viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
+                    viewModel.removeBookmark(atPosition: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
                     updateEmptyState(animated: false)
@@ -971,11 +970,8 @@ extension BookmarksViewController: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.searchBookmarks(query: term) { [weak self] results in
-            guard let self else { return }
-            self.viewModel.isSearching = true
-            self.viewModel.filteredBookmarkNodes = results
-            self.tableView.reloadData()
+        viewModel.searchBookmarks(query: term) { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 
