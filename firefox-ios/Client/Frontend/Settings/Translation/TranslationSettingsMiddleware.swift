@@ -25,10 +25,16 @@ final class TranslationSettingsMiddleware {
 
     lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
         guard let action = action as? TranslationSettingsViewAction else { return }
-        self.handleAction(action)
+        self.handleAction(action, state: state)
     }
 
-    private func handleAction(_ action: TranslationSettingsViewAction) {
+    private func handleAction(_ action: TranslationSettingsViewAction, state: AppState) {
+        let translationState = state.componentState(
+            TranslationSettingsState.self,
+            for: .translationSettings,
+            window: action.windowUUID
+        )
+
         switch action.actionType {
         case TranslationSettingsViewActionType.viewDidLoad:
             Task { await self.loadSettings(windowUUID: action.windowUUID) }
@@ -52,9 +58,22 @@ final class TranslationSettingsMiddleware {
             guard let code = action.languageCode else { break }
             let updated = manager.addLanguage(code)
             let preferred = buildLanguageDetails(from: updated)
+            let supported = translationState?.supportedLanguages ?? []
             store.dispatch(TranslationSettingsMiddlewareAction(
                 preferredLanguages: preferred,
-                availableLanguages: nil,
+                availableLanguages: buildAvailableLanguages(preferred: updated, supported: supported),
+                windowUUID: action.windowUUID,
+                actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
+            ))
+
+        case TranslationSettingsViewActionType.saveLanguages:
+            guard let languages = action.languages else { break }
+            manager.save(languages: languages)
+            let preferred = buildLanguageDetails(from: languages)
+            let supported = translationState?.supportedLanguages ?? []
+            store.dispatch(TranslationSettingsMiddlewareAction(
+                preferredLanguages: preferred,
+                availableLanguages: buildAvailableLanguages(preferred: languages, supported: supported),
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
@@ -80,6 +99,17 @@ final class TranslationSettingsMiddleware {
         ))
     }
 
+    private func buildAvailableLanguages(preferred: [String], supported: [String]) -> [String] {
+        let preferredSet = Set(preferred)
+        return supported
+            .filter { !preferredSet.contains($0) }
+            .sorted { [localeProvider] lhs, rhs in
+                let lhsName = localeProvider.nativeLanguageName(for: lhs)
+                let rhsName = localeProvider.nativeLanguageName(for: rhs)
+                return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending
+            }
+    }
+
     private func buildLanguageDetails(from codes: [String]) -> [PreferredLanguageDetails] {
         let deviceCode = localeProvider.current.languageCode ?? ""
         return codes.map { code in
@@ -91,16 +121,5 @@ final class TranslationSettingsMiddleware {
                 : (native == localized ? nil : localized)
             return PreferredLanguageDetails(code: code, mainText: native, subtitleText: subtitle)
         }
-    }
-
-    private func buildAvailableLanguages(preferred: [String], supported: [String]) -> [String] {
-        let preferredSet = Set(preferred)
-        return supported
-            .filter { !preferredSet.contains($0) }
-            .sorted { [localeProvider] lhs, rhs in
-                let lhsName = localeProvider.nativeLanguageName(for: lhs)
-                let rhsName = localeProvider.nativeLanguageName(for: rhs)
-                return lhsName.localizedCaseInsensitiveCompare(rhsName) == .orderedAscending
-            }
     }
 }

@@ -30,6 +30,26 @@ final class TranslationPickerSettingsViewController: UIViewController,
 
     private lazy var dataSource: TranslationSettingsDiffableDataSource = makeDataSource()
 
+    // MARK: - Navigation bar items
+
+    private lazy var editButton = UIBarButtonItem(
+        barButtonSystemItem: .edit,
+        target: self,
+        action: #selector(didTapEdit)
+    )
+
+    private lazy var doneButton = UIBarButtonItem(
+        barButtonSystemItem: .done,
+        target: self,
+        action: #selector(didTapDone)
+    )
+
+    private lazy var cancelButton = UIBarButtonItem(
+        barButtonSystemItem: .cancel,
+        target: self,
+        action: #selector(didTapCancel)
+    )
+
     // MARK: - Themeable
 
     var themeManager: ThemeManager
@@ -103,8 +123,20 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     func newState(state: TranslationSettingsState) {
+        let wasEditing = self.state.isEditing
         self.state = state
-        dataSource.applySnapshot(state: state, animated: true)
+        if wasEditing != state.isEditing {
+            collectionView.isEditing = state.isEditing
+            setEditing(state.isEditing, animated: true)
+        }
+        updateNavBar()
+        updateDoneButton()
+        // Defer snapshot apply to avoid a deadlock when newState is triggered
+        // from inside a UIKit snapshot apply (e.g. the swipe-to-delete handler).
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.dataSource.applySnapshot(state: self.state, animated: true)
+        }
     }
 
     // MARK: - Setup
@@ -148,6 +180,17 @@ final class TranslationPickerSettingsViewController: UIViewController,
         > { [weak self] cell, _, item in
             guard let self, case let .language(details) = item else { return }
             cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
+            cell.accessories = [
+                .delete(displayed: .whenEditing, actionHandler: { [weak self] in
+                    guard let self else { return }
+                    store.dispatch(TranslationSettingsViewAction(
+                        languageCode: details.code,
+                        windowUUID: windowUUID,
+                        actionType: TranslationSettingsViewActionType.removeLanguage
+                    ))
+                }),
+                .reorder(displayed: .whenEditing)
+            ]
         }
 
         let addLanguageReg = UICollectionView.CellRegistration<
@@ -188,14 +231,83 @@ final class TranslationPickerSettingsViewController: UIViewController,
             }
         }
 
+        dataSource.reorderingHandlers.canReorderItem = { [weak self] item in
+            guard let self, state.isEditing else { return false }
+            if case .language = item { return true }
+            return false
+        }
+
+        dataSource.reorderingHandlers.didReorder = { [weak self] transaction in
+            guard let self else { return }
+            let newItems = transaction.finalSnapshot.itemIdentifiers(inSection: .preferredLanguages)
+            let reorderedLanguages = newItems.compactMap { item -> PreferredLanguageDetails? in
+                if case .language(let details) = item { return details }
+                return nil
+            }
+            store.dispatch(TranslationSettingsViewAction(
+                pendingLanguages: reorderedLanguages,
+                windowUUID: windowUUID,
+                actionType: TranslationSettingsViewActionType.reorderLanguages
+            ))
+        }
+
         return dataSource
     }
+
+    // MARK: - Toggle actions
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))
+    }
+
+    // MARK: - Nav bar
+
+    private func updateNavBar() {
+        if state.isEditing {
+            navigationItem.leftBarButtonItem = cancelButton
+            navigationItem.rightBarButtonItem = doneButton
+        } else {
+            navigationItem.leftBarButtonItem = nil
+            let languages = state.preferredLanguages
+            navigationItem.rightBarButtonItem = (state.isTranslationsEnabled && languages.count > 1) ? editButton : nil
+        }
+    }
+
+    // MARK: - Edit mode
+
+    @objc private func didTapEdit() {
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.enterEditMode
+        ))
+    }
+
+    @objc private func didTapDone() {
+        guard let pendingLanguages = state.pendingLanguages else { return }
+        store.dispatch(TranslationSettingsViewAction(
+            languages: pendingLanguages.map { $0.code },
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        ))
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        ))
+    }
+
+    @objc private func didTapCancel() {
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        ))
+    }
+
+    private func updateDoneButton() {
+        guard state.isEditing, let pendingLanguages = state.pendingLanguages else { return }
+        doneButton.isEnabled = pendingLanguages != state.preferredLanguages
     }
 
     // MARK: - Theming

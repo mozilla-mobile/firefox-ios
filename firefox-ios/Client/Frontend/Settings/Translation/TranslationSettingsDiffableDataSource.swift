@@ -80,7 +80,8 @@ final class TranslationSettingsDiffableDataSource:
 
         if state.isTranslationsEnabled {
             snapshot.appendSections([.preferredLanguages])
-            let langItems = state.preferredLanguages.map { TranslationSettingsItem.language($0) }
+            let displayLanguages = state.pendingLanguages ?? state.preferredLanguages
+            let langItems = displayLanguages.map { TranslationSettingsItem.language($0) }
             snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
         }
 
