@@ -612,7 +612,7 @@ class LoginTest: BaseTestCase {
         app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables[loginList].otherElements["SAVED PASSWORDS"])
         loginSettingsScreen.tapSaveButtonIfExists()
-        
+
         // Modal only appears during first run
         if app.sheets.firstMatch.exists {
             app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
