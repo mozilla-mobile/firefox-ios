@@ -103,9 +103,6 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].waitAndTap()
-        if #unavailable(iOS 16) {
-            sleep(2)
-        }
         let textField = app.textFields["HomeAsCustomURLTextField"]
         let pasteOption = app.menuItems["Paste"]
         textField.pressWithRetry(duration: 2, element: pasteOption)

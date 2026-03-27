@@ -30,7 +30,6 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
-        sleep(1)
         // Bookmarks
         screenState.tap(app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
         // History

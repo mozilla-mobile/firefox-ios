@@ -58,10 +58,6 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons.element(matching: .any, identifier: reloadWithWithoutProtectionButton).waitAndTap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
-        if #unavailable(iOS 16) {
-            XCTAssert(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].isHittable)
-            sleep(2)
-        }
     }
 
     private func enableStrictMode() {

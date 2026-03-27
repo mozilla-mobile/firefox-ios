@@ -509,10 +509,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/25093
-            // Waiting is needed before switching to private tab in order to display the expected domain
-            sleep(3)
-            // workaround end
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
             navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         }
         numTabs = app.otherElements[tabsTray].cells.count
