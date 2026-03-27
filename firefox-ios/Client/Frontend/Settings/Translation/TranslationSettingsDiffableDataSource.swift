@@ -83,12 +83,12 @@ final class TranslationSettingsDiffableDataSource:
         snapshot.appendItems([.enableToggle], toSection: .enableToggle)
 
         if state.isTranslationsEnabled {
-            snapshot.appendSections([.autoTranslate])
-            snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
             snapshot.appendSections([.preferredLanguages])
             let displayLanguages = state.pendingLanguages ?? state.preferredLanguages
             let langItems = displayLanguages.map { TranslationSettingsItem.language($0) }
             snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
+            snapshot.appendSections([.autoTranslate])
+            snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
         }
 
         apply(snapshot, animatingDifferences: animated)
