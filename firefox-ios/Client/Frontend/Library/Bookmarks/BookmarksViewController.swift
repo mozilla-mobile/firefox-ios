@@ -299,32 +299,6 @@ final class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
-                                     parentFolderGUID: String,
-                                     recentBookmarkFolderGUID: String?,
-                                     completion: (@Sendable (GUID) -> Void)? = nil) {
-        guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
-        bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
-            guard let guid = res else {return}
-            completion?(guid)
-
-            if recentBookmarkFolderGUID != nil && recentBookmarkFolderGUID == bookmarkTreeRoot.guid {
-                self.profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
-            }
-
-            // In the case that the node is a folder, restore its children as well
-            guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
-
-            ensureMainThread {
-                for child in children {
-                    self.restoreBookmarkTree(bookmarkTreeRoot: child,
-                                             parentFolderGUID: guid,
-                                             recentBookmarkFolderGUID: recentBookmarkFolderGUID)
-                }
-            }
-        }
-    }
-
     /// Show an alert to confirm whether the user wishes to delete a bookmarks folder.
     /// - Parameters:
     ///   - indexPath: The index path of the folder.
@@ -340,15 +314,6 @@ final class BookmarksViewController: SiteTableViewController,
             self?.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
         })
         present(alertController, animated: true, completion: nil)
-    }
-
-    private func addBookmarkNodeToTable(bookmarkNode: FxBookmarkNode) {
-        let position = Int(bookmarkNode.position)
-        tableView.beginUpdates()
-        tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
-        viewModel.addBookmark(bookmarkNode: bookmarkNode, atPosition: position)
-        tableView.endUpdates()
-        updateEmptyState(animated: false)
     }
 
     /// Performs the delete asynchronously even though we update the
