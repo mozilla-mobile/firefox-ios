@@ -8,6 +8,7 @@ import Testing
 
 @MainActor
 struct DefaultQuickAnswersServiceTests {
+    let resultsService = MockResultsService()
     // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
     @Test
     func test_record_returnsExpectCallsAndResults() async throws {
@@ -16,7 +17,8 @@ struct DefaultQuickAnswersServiceTests {
             SpeechResult(text: "What is the weather", isFinal: false),
             SpeechResult(text: "today?", isFinal: true)
         ]
-        let subject = DefaultQuickAnswersService(engine: engine)
+
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         let stream = try await subject.record()
 
@@ -38,7 +40,8 @@ struct DefaultQuickAnswersServiceTests {
     func test_record_throwsWhenPrepareFails() async {
         let engine = MockTranscriptionEngine()
         engine.prepareError = TestError.prepareFailed
-        let subject = DefaultQuickAnswersService(engine: engine)
+
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         do {
             _ = try await subject.record()
@@ -55,7 +58,8 @@ struct DefaultQuickAnswersServiceTests {
     func test_record_throwsWhenStartFails() async throws {
         let engine = MockTranscriptionEngine()
         engine.startError = TestError.startFailed
-        let subject = DefaultQuickAnswersService(engine: engine)
+
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         let stream = try await subject.record()
 
@@ -74,7 +78,8 @@ struct DefaultQuickAnswersServiceTests {
     @Test
     func test_stopRecording_callsExpectedMethods() async throws {
         let engine = MockTranscriptionEngine()
-        let subject = DefaultQuickAnswersService(engine: engine)
+
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         try await subject.stopRecording()
 
@@ -85,7 +90,8 @@ struct DefaultQuickAnswersServiceTests {
     func test_stopRecording_throwsWhenError() async {
         let engine = MockTranscriptionEngine()
         engine.stopError = TestError.stopFailed
-        let subject = DefaultQuickAnswersService(engine: engine)
+
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         do {
             try await subject.stopRecording()
@@ -100,7 +106,7 @@ struct DefaultQuickAnswersServiceTests {
     @Test
     func test_search_returnsEmptySuccess() async {
         let engine = MockTranscriptionEngine()
-        let subject = DefaultQuickAnswersService(engine: engine)
+        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
 
         let result = await subject.search(text: "hello")
 
