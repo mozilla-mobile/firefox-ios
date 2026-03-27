@@ -50,49 +50,8 @@ struct ColoredListStyle: ViewModifier {
                 .scrollContentBackground(.hidden)
                 .background(backgroundColor)
         } else {
-            content.listStyle(.plain)
-        }
-    }
-}
-
-struct ListHeaderPadding: ViewModifier {
-    let isLandscape: Bool
-    let paddingSize: CGFloat
-
-    func body(content: Content) -> some View {
-        let isPad = UIDevice().userInterfaceIdiom == .pad
-        let shouldAddPadding = !isLandscape || (isPad && isLandscape)
-        if #available(iOS 26.0, *) {
-            if shouldAddPadding {
-                content.padding(.leading, paddingSize)
-            } else {
-                content
-            }
-        } else {
-            if !isPad {
-                content.padding(.leading, paddingSize / 2)
-            } else {
-                content
-            }
-        }
-    }
-}
-
-struct ListItemIconPadding: ViewModifier {
-    let isLandscape: Bool
-    let paddingSize: CGFloat
-
-    func body(content: Content) -> some View {
-        let isPad = UIDevice().userInterfaceIdiom == .pad
-        let shouldAddPadding = !isLandscape || (isPad && isLandscape)
-        if #available(iOS 26.0, *) {
-            if shouldAddPadding {
-                content.padding(.leading, paddingSize)
-            } else {
-                content
-            }
-        } else {
             content
+                .listStyle(.plain)
         }
     }
 }
@@ -237,27 +196,5 @@ struct CreditCardViewButtonStyle: ViewModifier {
         return isEnabled
             ? Color(theme.colors.actionPrimary)
             : Color(theme.colors.textSecondary)
-    }
-}
-
-struct DeviceOrientation: ViewModifier {
-    @Binding var isLandscape: Bool
-
-    func body(content: Content) -> some View {
-        GeometryReader { geometryReader in
-            content
-                .onAppear {
-                    isLandscape = geometryReader.size.width > geometryReader.size.height
-                }
-                .onChange(of: geometryReader.size) { newSize in
-                    isLandscape = newSize.width > newSize.height
-                }
-        }
-    }
-}
-
-extension View {
-    func detectDeviceOrientation(isLandscape: Binding<Bool>) -> some View {
-        self.modifier(DeviceOrientation(isLandscape: isLandscape))
     }
 }

@@ -11,6 +11,16 @@ import struct MozillaAppServices.Address
 
 /// A view representing a cell displaying address information.
 struct AddressCellView: View {
+    // MARK: - Constants
+
+    private enum UX {
+        static let listIconPadding: CGFloat = -8
+        static let hStackSpacing: CGFloat = 24
+        static let vStackSpacing: CGFloat = 0
+        static let spacerHeight: CGFloat = 0
+        static let dividerHeight: CGFloat = 1
+    }
+
     // MARK: - Properties
 
     let windowUUID: WindowUUID
@@ -28,11 +38,12 @@ struct AddressCellView: View {
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .midIconAndLabel, spacing: 24) {
+            VStack(alignment: .leading, spacing: UX.vStackSpacing) {
+                HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
                     Image(StandardImageIdentifiers.Large.location)
                         .renderingMode(.template)
-                        .padding(.leading, 16)
+                        .modifier(ListItemIconPadding(isLandscape: UIDevice.current.orientation.isLandscape,
+                                                      paddingSize: UX.listIconPadding))
                         .foregroundColor(iconPrimary)
                         .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     VStack(alignment: .leading) {
@@ -57,11 +68,12 @@ struct AddressCellView: View {
                 }
             }
             .padding()
-            Spacer().frame(height: 0)
-            Divider().frame(height: 1)
+            Spacer().frame(height: UX.spacerHeight)
+            Divider().frame(height: UX.dividerHeight)
         }
         .listRowInsets(EdgeInsets())
-        .buttonStyle(AddressButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        .listRowBackground(Color(themeManager.getCurrentTheme(for: windowUUID).colors.layer2)
+            .edgesIgnoringSafeArea([.leading, .trailing]))
         .listRowSeparator(.hidden)
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -82,18 +94,5 @@ struct AddressCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
-    }
-}
-
-// MARK: - CustomButtonStyle
-
-/// A address button style with a specific theme.
-struct AddressButtonStyle: ButtonStyle {
-    let theme: Theme
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(configuration.isPressed ? Color(theme.colors.layer1) : Color(theme.colors.layer2))
-            .foregroundColor(.white)
     }
 }

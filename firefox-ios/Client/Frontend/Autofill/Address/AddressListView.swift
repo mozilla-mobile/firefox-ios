@@ -35,8 +35,6 @@ struct AddressListView: View {
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
 
-    @State private var isLandscape = false
-
     // MARK: - Body
 
     var body: some View {
@@ -44,12 +42,11 @@ struct AddressListView: View {
             if viewModel.showSection {
                 List {
                     Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)
-                        .modifier(ListHeaderPadding(isLandscape: isLandscape,
+                        .modifier(ListHeaderPadding(isLandscape: UIDevice.current.orientation.isLandscape,
                                                     paddingSize: UX.listPadding))) {
                         ForEach(viewModel.addresses, id: \.self) { address in
-                            AddressSettingsCellView(
+                            AddressCellView(
                                 windowUUID: windowUUID,
-                                isLandscape: isLandscape,
                                 address: address,
                                 onTap: {
                                     if viewModel.isEditingFeatureEnabled {
@@ -71,7 +68,6 @@ struct AddressListView: View {
                 Spacer()
             }
         }
-        .detectDeviceOrientation(isLandscape: $isLandscape)
         .sheet(item: $viewModel.destination, onDismiss: {
             viewModel.isEditMode = false
         }) { destination in
