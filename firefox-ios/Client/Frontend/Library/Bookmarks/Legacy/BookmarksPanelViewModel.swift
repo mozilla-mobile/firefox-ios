@@ -107,7 +107,7 @@ final class BookmarksPanelViewModel: @unchecked Sendable {
     }
 
     func getSiteDetails(for indexPath: IndexPath, completion: @escaping @Sendable (Site?) -> Void) {
-        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row],
+        guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
             logger.log("Could not get site details for indexPath \(indexPath)",

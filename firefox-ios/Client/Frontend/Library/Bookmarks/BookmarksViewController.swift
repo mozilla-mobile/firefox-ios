@@ -71,6 +71,9 @@ final class BookmarksViewController: SiteTableViewController,
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
+            // Hide search button when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [flexibleSpace, bottomRightButton] }
+            // Show search and edit buttons when bookmarks are available
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             return searchItems + [flexibleSpace]
@@ -381,7 +384,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -390,7 +392,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -458,6 +459,8 @@ final class BookmarksViewController: SiteTableViewController,
 
         emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
                                  isSignedIn: profile.hasAccount())
+        // Depending on empty state, show/hide the search bar in the library panel's toolbar
+        sendPanelChangeNotification()
     }
 
     private func createContextButton() -> UIButton {
@@ -785,7 +788,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                     self.presentContextMenu(for: site, with: indexPath, completionHandler: {
                         return self.contextMenu(for: site, with: indexPath)
                     })
-                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                } else if let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                           bookmarkNode.type == .folder,
                           self.isCurrentFolderEditable(at: indexPath) {
                     self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
@@ -843,7 +846,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
-            guard let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+            guard let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
