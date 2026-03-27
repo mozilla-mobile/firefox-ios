@@ -129,4 +129,21 @@ struct HomepageDimensionCalculator {
             verticalFittingPriority: .fittingSizeLevel
         ).height
     }
+
+    // Calculates the number of cells that fit given a container's width, including spacing between items
+    static func numberOfCellsThatFit(in containerWidth: CGFloat, traitCollection: UITraitCollection) -> Int {
+        // Portion of the container not occupied by insets
+        let sectionHorizontalInsets = (HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: traitCollection) * 2)
+        let availableContainerWidth = containerWidth - sectionHorizontalInsets
+        // # of cells that would fit in container
+        let cellsPerRow = floor(availableContainerWidth / HomepageSectionLayoutProvider.UX.PocketConstants.minimumCellWidth)
+        // Amount of space used by inter-item spacing
+        let spacingAdjustment = (cellsPerRow > 1 ?
+                                 (cellsPerRow - 1) * HomepageSectionLayoutProvider.UX.PocketConstants.interItemSpacing : 0)
+        // Available container width for cells
+        let adjustedContainerWidth = availableContainerWidth - spacingAdjustment
+        // Number of cells that will fit in a row, considering inter-item spacing
+        let adjustedCellsPerRow = Int(adjustedContainerWidth / HomepageSectionLayoutProvider.UX.PocketConstants.minimumCellWidth)
+        return max(HomepageSectionLayoutProvider.UX.PocketConstants.minimumCellsPerRow, adjustedCellsPerRow)
+    }
 }
