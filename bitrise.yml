@@ -2025,6 +2025,9 @@ workflows:
             Branch | ${BITRISE_GIT_BRANCH}
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.4.x-edge
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
   # The trends are reported on Bitrise Insights.
