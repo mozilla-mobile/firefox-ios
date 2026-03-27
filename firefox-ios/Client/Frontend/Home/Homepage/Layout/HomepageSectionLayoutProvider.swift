@@ -320,8 +320,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
 
         let containerWidth = environment.container.effectiveContentSize.width
+        let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
         let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: containerWidth,
-                                                                         traitCollection: traitCollection)
+                                                                         horizontalInset: horizontalInset)
 
         // For iOS 17+ we use uniform height across cells in the same group (row) which is the height of the tallest cell
         // in the group.
@@ -366,7 +367,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         section.boundarySupplementaryItems = [header]
 
-        let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: horizontalInset,
