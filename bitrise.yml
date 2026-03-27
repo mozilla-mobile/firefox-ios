@@ -993,7 +993,7 @@ workflows:
         - content: |-
             brew tap mozilla-mobile/fxios
             brew install fxios
-            fxios bootstrap firefox
+            fxios bootstrap
         title: Run bootstrap
     - script@1.2.1:
         title: NPM install and build
@@ -2220,7 +2220,7 @@ workflows:
             #!/usr/bin/env bash
             brew tap mozilla-mobile/fxios
             brew install fxios
-            fxios bootstrap focus
+            fxios bootstrap
         title: ContentBlockerGen
 
   focus-set-project-version:
