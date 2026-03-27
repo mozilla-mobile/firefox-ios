@@ -281,12 +281,13 @@ class LibraryViewController: UIViewController, Themeable {
     private func topLeftButtonSetup() {
         let panelState = getCurrentPanelState()
         switch panelState {
-        case .bookmarks(state: .inFolder), .bookmarks(state: .transitioning),
+        case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.chevronLeft)?
                 .imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
-        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
+        case .bookmarks(state: .itemEditMode),
+             .bookmarks(state: .itemEditModeInvalidField):
             topLeftButton.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross)
             navigationItem.leftBarButtonItem = topLeftButton
         default:
@@ -327,13 +328,13 @@ class LibraryViewController: UIViewController, Themeable {
     @objc
     func topLeftButtonAction() {
         guard let navController = children.first as? UINavigationController,
-              getCurrentPanelState() != .bookmarks(state: .transitioning) else {
+              let currentPanel = getCurrentPanel(),
+              !currentPanel.isTransitioning else {
             return
         }
 
         navController.popViewController(animated: true)
-        let panel = getCurrentPanel()
-        panel?.handleLeftTopButton()
+        currentPanel.handleLeftTopButton()
     }
 
     @objc

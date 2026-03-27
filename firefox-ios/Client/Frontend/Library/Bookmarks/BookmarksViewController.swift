@@ -28,6 +28,7 @@ final class BookmarksViewController: SiteTableViewController,
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
+    var isTransitioning = false
     let viewModel: BookmarksPanelViewModelProtocol
     var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
@@ -890,8 +891,8 @@ extension BookmarksViewController {
     }
 
     func handleLeftTopButton() {
-        // We use the "transitioning" so that the "<" back toolbar navigation button cannot be spammed
-        updatePanelState(newState: .bookmarks(state: .transitioning))
+        // We use the isTransitioning so that the "<" back toolbar navigation button cannot be spammed
+        isTransitioning = true
     }
 
     func handleRightTopButton() {
