@@ -723,6 +723,18 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleMarketplaceKitNavigation(
+        navigationAction: WKNavigationAction,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        let isMainFrame = isMainFrameNavigation(navigationAction)
+        let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(
+            navigationType: navigationAction.navigationType,
+            isMainFrame: isMainFrame
+        )
+        decisionHandler(shouldAllowNavigation ? .allow : .cancel)
+    }
+
     private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
         // Try to open the custom scheme URL, if it doesn't work we show an error alert
         UIApplication.shared.open(url, options: [:]) { openedURL in
