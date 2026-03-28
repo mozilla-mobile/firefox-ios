@@ -565,12 +565,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handle MarketplaceKit URL
         if url.scheme == "marketplace-kit" {
-            let isMainFrame = isMainFrameNavigation(navigationAction)
-            let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(
-                navigationType: navigationAction.navigationType,
-                isMainFrame: isMainFrame
-            )
-            decisionHandler(shouldAllowNavigation ? .allow : .cancel)
+            handleMarketplaceKitNavigation(navigationAction: navigationAction, decisionHandler: decisionHandler)
             return
         }
 
