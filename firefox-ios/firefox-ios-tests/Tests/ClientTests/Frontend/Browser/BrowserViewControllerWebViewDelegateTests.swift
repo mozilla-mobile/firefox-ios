@@ -288,6 +288,63 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         }
     }
 
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenAuthorized() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let internalURL = URL(string: "internal://local/about/home")!
+        let authorizedURL = InternalURL.authorize(url: internalURL)!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: authorizedURL,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_cancelInternalURL_whenUnprivileged() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "internal://local/about/home")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .cancel)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenUnprivilegedWithBackForwardNavigation() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "internal://local/about/home")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .backForward)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
+    @MainActor
+    func testWebViewDecidePolicyForNavigationAction_allowInternalURL_whenUnprivilegedReaderModeURL() {
+        let subject = createSubject()
+        let tab = createTab()
+        tabManager.tabs = [tab]
+        let url = URL(string: "http://localhost:6571/reader-mode/page")!
+
+        subject.webView(tab.webView!,
+                        decidePolicyFor: MockNavigationAction(url: url,
+                                                              type: .linkActivated)) { policy in
+            XCTAssertEqual(policy, .allow)
+        }
+    }
+
     // MARK: - Authentication
 
     @MainActor
