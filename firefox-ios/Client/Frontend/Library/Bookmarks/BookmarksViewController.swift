@@ -51,7 +51,7 @@ final class BookmarksViewController: SiteTableViewController,
         // Return empty toolbar when bookmarks is in desktop folder node
         guard case .bookmarks = state,
               viewModel.bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid
-        else { return [UIBarButtonItem]() }
+        else { return [] }
 
         return toolbarButtonItems
     }
@@ -98,7 +98,7 @@ final class BookmarksViewController: SiteTableViewController,
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
-            return [UIBarButtonItem]()
+            return []
         }
     }
 
@@ -151,8 +151,8 @@ final class BookmarksViewController: SiteTableViewController,
         self.viewModel = viewModel
         self.logger = logger
 
-        let guidMatches = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-        self.state = guidMatches ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
+        let isMobileFolder = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+        self.state = isMobileFolder ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile, windowUUID: windowUUID)
 
@@ -248,14 +248,12 @@ final class BookmarksViewController: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData {
-            ensureMainThread { [weak self] in
-                self?.tableView.reloadData()
-                if self?.viewModel.shouldFlashRow ?? false {
-                    self?.flashRow()
-                }
-                self?.updateEmptyState(animated: false)
-                self?.updateParentViewControllerTitle()
+            self.tableView.reloadData()
+            if self.viewModel.shouldFlashRow {
+                self.flashRow()
             }
+            self.updateEmptyState(animated: false)
+            self.updateParentViewControllerTitle()
         }
     }
 
@@ -284,22 +282,21 @@ final class BookmarksViewController: SiteTableViewController,
         return viewModel.bookmarkNodes.count
     }
 
+    /// Attempt to delete the bookmark node (bookmark or folder) at the given index path. If the node is for a folder,
+    /// will present an alert for the user to confirm deletion.
     private func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
         guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row]else {
             return
         }
 
-        // If this node is a folder and it is not empty, we need
-        // to prompt the user before deleting.
+        // If this node is a folder and it is not empty, we need to prompt the user before deleting
         if bookmarkNode.isNonEmptyFolder {
-            presentDeletingActionToUser(indexPath, bookmarkNode: bookmarkNode)
-            return
+            presentAlertToConfirmFolderDeletion(indexPath, bookmarkNode: bookmarkNode)
         } else if bookmarkNode.type == .separator {
             deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
-            return
+        } else {
+            deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
         }
-
-        self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
     }
 
     private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
@@ -328,7 +325,11 @@ final class BookmarksViewController: SiteTableViewController,
         }
     }
 
-    private func presentDeletingActionToUser(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
+    /// Show an alert to confirm whether the user wishes to delete a bookmarks folder.
+    /// - Parameters:
+    ///   - indexPath: The index path of the folder.
+    ///   - bookmarkNode: The bookmark node of the folder.
+    private func presentAlertToConfirmFolderDeletion(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         let alertController = UIAlertController(title: .BookmarksDeleteFolderWarningTitle,
                                                 message: .BookmarksDeleteFolderWarningDescription,
                                                 preferredStyle: .alert)
@@ -457,7 +458,7 @@ final class BookmarksViewController: SiteTableViewController,
             a11yEmptyStateScrollView.isHidden = !showEmptyState
         }
 
-        emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
+        emptyStateView.configure(isRoot: viewModel.isRootNode,
                                  isSignedIn: profile.hasAccount())
         // Depending on empty state, show/hide the search bar in the library panel's toolbar
         sendPanelChangeNotification()
@@ -565,9 +566,9 @@ final class BookmarksViewController: SiteTableViewController,
 
         guard !tableView.isEditing else {
             if let bookmarkFolder = self.viewModel.bookmarkFolder,
-                !(node is BookmarkSeparatorData),
-                !viewModel.isSearching,
-                isCurrentFolderEditable(at: indexPath) {
+               !(node is BookmarkSeparatorData),
+               !viewModel.isSearching,
+               isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
                 bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
             }
@@ -677,10 +678,13 @@ final class BookmarksViewController: SiteTableViewController,
             style: .destructive,
             title: .BookmarksPanelDeleteTableAction
         ) { [weak self] (_, _, completion) in
-            guard let strongSelf = self else { completion(false); return }
+            guard let self else {
+                completion(false)
+                return
+            }
 
-            strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
+            self.deleteBookmarkNodeAtIndexPath(indexPath)
+            self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -730,6 +734,8 @@ final class BookmarksViewController: SiteTableViewController,
         return UITableViewDropProposal(operation: .move, intent: .automatic)
     }
 
+    /// Called when a user is in Edit mode and drags and drops a bookmark into a folder. Updates the bookmark's parent folder
+    /// GUID and reloads the table.
     func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath,
               let item = coordinator.items[safe: 0],
@@ -842,6 +848,9 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         guard let defaultActions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
         }
+
+        var actions: [PhotonRowActions] = defaultActions
+
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
@@ -851,7 +860,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
             }
             self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder)
         }).items
-        var actions: [PhotonRowActions] = [editBookmark] + defaultActions
+        actions.append(editBookmark)
 
         let pinTopSiteAction = viewModel.createPinUnpinAction(
             for: site,
@@ -895,6 +904,7 @@ extension BookmarksViewController {
     }
 
     func handleRightTopButton() {
+        // When the Done button is tapped and search is active, exit search mode
         if state == .bookmarks(state: .search) {
             exitSearchState()
             updatePanelState(newState: viewModel.isRootNode
