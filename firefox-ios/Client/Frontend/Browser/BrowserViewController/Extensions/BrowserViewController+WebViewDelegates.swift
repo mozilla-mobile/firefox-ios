@@ -508,17 +508,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if InternalURL.isValid(url: url) {
-            if navigationAction.navigationType != .backForward,
-               navigationAction.isInternalUnprivileged,
-               !url.isReaderModeURL {
-                logger.log("Denying unprivileged request: \(navigationAction.request)",
-                           level: .warning,
-                           category: .webview)
-                decisionHandler(.cancel)
-                return
-            }
-
-            decisionHandler(.allow)
+            handleInternalURLNavigation(url: url, navigationAction: navigationAction, decisionHandler: decisionHandler)
             return
         }
 
