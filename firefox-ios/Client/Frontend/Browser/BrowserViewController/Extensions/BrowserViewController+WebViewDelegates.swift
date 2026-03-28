@@ -730,6 +730,63 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(shouldAllowNavigation ? .allow : .cancel)
     }
 
+    private func handleWebURLNavigation(
+        webView: WKWebView,
+        url: URL,
+        tab: Tab,
+        navigationAction: WKNavigationAction,
+        shouldBlockExternalApps: Bool,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        // prevent the App from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        if navigationAction.targetFrame?.isMainFrame ?? false {
+            tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
+        }
+
+        pendingRequests[url.absoluteString] = navigationAction.request
+
+        if tab.changedUserAgent {
+            let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+            webView.customUserAgent = platformSpecificUserAgent
+        } else {
+            webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+        }
+
+        if url.isFileURL,
+           tab.shouldDownloadDocument(navigationAction.request),
+           let sourceURL = tab.getTemporaryDocumentsSession()[url] {
+            let request = URLRequest(url: sourceURL)
+            let filename = url.lastPathComponent
+            handlePDFDownloadRequest(request: request, tab: tab, filename: filename)
+            decisionHandler(.cancel)
+            return
+        }
+
+        // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
+        // - If the blob response has a .pkpass MIME type (FXIOS-11684)
+        // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
+        // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
+        // via JS since we are cancelling the navigation here
+        if url.scheme == "blob" && navigationAction.navigationType != .other {
+            _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
+            decisionHandler(.cancel)
+            return
+        }
+
+        let isGoogleDomain = url.host?.contains("google") ?? false
+        let isPrivate = tab.isPrivate
+
+        if isPrivate || isGoogleDomain || shouldBlockExternalApps {
+            decisionHandler(allowPolicy)
+            return
+        }
+
+        decisionHandler(.allow)
+    }
+
     private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
         // Try to open the custom scheme URL, if it doesn't work we show an error alert
         UIApplication.shared.open(url, options: [:]) { openedURL in
