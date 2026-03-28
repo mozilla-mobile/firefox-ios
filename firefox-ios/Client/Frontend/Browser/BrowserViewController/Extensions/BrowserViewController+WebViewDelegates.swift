@@ -667,6 +667,24 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func handleInternalURLNavigation(
+        url: URL,
+        navigationAction: WKNavigationAction,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        if navigationAction.navigationType != .backForward,
+           navigationAction.isInternalUnprivileged,
+           !url.isReaderModeURL {
+            logger.log("Denying unprivileged request: \(navigationAction.request)",
+                       level: .warning,
+                       category: .webview)
+            decisionHandler(.cancel)
+            return
+        }
+
+        decisionHandler(.allow)
+    }
+
     private func handleSpecialSchemeNavigation(url: URL) {
         if url.scheme == "sms" { // All the other types show a native prompt
             showExternalAlert(withText: .ExternalSmsLinkConfirmation) { _ in
