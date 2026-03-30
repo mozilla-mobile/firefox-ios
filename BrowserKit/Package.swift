@@ -293,6 +293,9 @@ let package = Package(
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
+            resources: [
+                .process("IntroVideo.mp4")
+            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),

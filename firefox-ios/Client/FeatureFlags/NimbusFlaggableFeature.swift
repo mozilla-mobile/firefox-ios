@@ -73,6 +73,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
+    case videoIntroOnboarding
     case quickAnswers
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -212,7 +213,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch:
+                .unifiedSearch,
+                .videoIntroOnboarding:
             return nil
         }
     }
