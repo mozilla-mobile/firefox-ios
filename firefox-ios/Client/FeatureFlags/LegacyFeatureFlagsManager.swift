@@ -16,7 +16,7 @@ extension FeatureFlaggable {
     var isHomepageStoriesScrollDirectionVertical: Bool {
         let scrollDirection: ScrollDirection = featureFlags
             .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-        return scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
+        return scrollDirection == .vertical
     }
 }
 

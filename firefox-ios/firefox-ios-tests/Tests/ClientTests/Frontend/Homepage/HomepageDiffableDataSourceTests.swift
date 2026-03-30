@@ -43,9 +43,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 1)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header])
+        XCTAssertEqual(snapshot.numberOfSections, 2)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .spacer])
         XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
     }
 
     @MainActor
@@ -86,6 +87,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            .spacer,
             .pocket(.systemCyan)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -121,7 +123,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, true)), displayedTopSitesCount)
         let expectedSections: [HomepageSection] = [
             .header,
-            .topSites(nil, numberOfTilesPerRow, true)
+            .topSites(nil, numberOfTilesPerRow, true),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -157,7 +160,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, false)), topSitesCount)
         let expectedSections: [HomepageSection] = [
             .header,
-            .topSites(nil, numberOfTilesPerRow, false)
+            .topSites(nil, numberOfTilesPerRow, false),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -181,6 +185,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            .spacer,
             .pocket(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -211,7 +216,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
         let expectedSections: [HomepageSection] = [
             .header,
-            .messageCard
+            .messageCard,
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -249,7 +255,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
-            .bookmarks(nil)
+            .bookmarks(nil),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -281,7 +288,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
-            .jumpBackIn(nil, mockSectionConfig)
+            .jumpBackIn(nil, mockSectionConfig),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -302,7 +310,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         let expectedSections: [HomepageSection] = [
             .header,
-            .privacyNotice
+            .privacyNotice,
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }

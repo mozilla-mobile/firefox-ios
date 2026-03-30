@@ -65,7 +65,7 @@ final class HomepageViewController: UIViewController,
     private var shouldUseNewsTransitionHeader: Bool {
         let scrollDirection: ScrollDirection = featureFlags.getCustomState(for: .homepageStoriesScrollDirection)
                                                ?? .baseline
-        return scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
+        return scrollDirection == .vertical
     }
 
     private var availableWidth: CGFloat {
@@ -487,6 +487,7 @@ final class HomepageViewController: UIViewController,
         )
 
         collectionView.keyboardDismissMode = .onDrag
+        collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
