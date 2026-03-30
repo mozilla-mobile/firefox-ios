@@ -93,12 +93,18 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
 
     @objc
     private func didTapEnable() {
-        store.dispatch(TranslationsAction(windowUUID: windowUUID, actionType: TranslationsActionType.didTapEnableAutoTranslate))
+        store.dispatch(TranslationsAction(
+            windowUUID: windowUUID,
+            actionType: TranslationsActionType.didTapEnableAutoTranslate
+        ))
     }
 
     @objc
     private func didTapDismiss() {
-        store.dispatch(TranslationsAction(windowUUID: windowUUID, actionType: TranslationsActionType.didDismissAutoTranslatePrompt))
+        store.dispatch(TranslationsAction(
+            windowUUID: windowUUID,
+            actionType: TranslationsActionType.didDismissAutoTranslatePrompt
+        ))
     }
 
     // MARK: - ThemeApplicable
