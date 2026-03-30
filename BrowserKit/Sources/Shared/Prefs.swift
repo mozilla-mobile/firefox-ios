@@ -169,6 +169,7 @@ public struct PrefsKeys {
         public static let translationsFeature = "settings.translationFeature"
         public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
         public static let translationAutoTranslate = "settings.translationAutoTranslate"
+        public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
     }
 

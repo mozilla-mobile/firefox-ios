@@ -1395,6 +1395,8 @@
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		367C100A7ABD4B4585D029D5 /* AutoTranslatePromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */; };
+		31286F788EBE4BDE9BB9FF21 /* AutoTranslatePromptState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */; };
 		AA02D5EB2EB3D83200814F4C /* TranslationsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */; };
 		AA24AD302E7C37C6008659A3 /* TrendingSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */; };
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
@@ -9817,6 +9819,8 @@
 		A983458C8926F8D4B3FDB503 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Storage.strings"; sourceTree = "<group>"; };
 		A99A45579536045560D367CE /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Storage.strings; sourceTree = "<group>"; };
 		A9B04AA7B21B939545F42DDF /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
+		137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoTranslatePromptView.swift; sourceTree = "<group>"; };
+		47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoTranslatePromptState.swift; sourceTree = "<group>"; };
 		AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsAction.swift; sourceTree = "<group>"; };
 		AA0B46CCA57F0E0997CC0AEA /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Intro.strings; sourceTree = "<group>"; };
 		AA0B47C6B76C81D58AD910F1 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -14494,6 +14498,8 @@
 				C2886E022EC5DFDD007AE6C3 /* SchemeHandler */,
 				C2886BA82EC4A41E007AE6C3 /* TinyRouter */,
 				C27EF6182EBA363800BED719 /* LanguageDetector */,
+				137DDFADC6034016BE36E02B /* AutoTranslatePromptView.swift */,
+				47E805FFBBD74D9BA77BD057 /* AutoTranslatePromptState.swift */,
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
 				AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
 				AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */,
@@ -19311,6 +19317,8 @@
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
+				367C100A7ABD4B4585D029D5 /* AutoTranslatePromptView.swift in Sources */,
+				31286F788EBE4BDE9BB9FF21 /* AutoTranslatePromptState.swift in Sources */,
 				AA02D5EB2EB3D83200814F4C /* TranslationsAction.swift in Sources */,
 				C79CEE5E2EDF3C4B004C4EB8 /* JumpBackInCell.swift in Sources */,
 				0EBD66922DBFE41000A78532 /* ConcurrencyThrottler.swift in Sources */,

@@ -316,6 +316,12 @@ struct AccessibilityIdentifiers {
         }
     }
 
+    struct Translations {
+        struct AutoTranslatePrompt {
+            static let closeButton = "Translations.AutoTranslatePrompt.CloseButton"
+        }
+    }
+
     struct TermsOfUse {
         static let logo = "TermsOfUse.Logo"
         static let title = "TermsOfUse.Title"
