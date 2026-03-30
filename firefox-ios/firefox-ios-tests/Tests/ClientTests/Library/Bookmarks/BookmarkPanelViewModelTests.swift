@@ -115,7 +115,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Mobile folder does not contain the local desktop folder")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Mobile folder does not contain local desktop folder")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
