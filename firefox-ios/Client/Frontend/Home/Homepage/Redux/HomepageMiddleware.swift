@@ -59,7 +59,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         case HomepageActionType.initialize:
             self.dispatchPrivacyNoticeConfigurationAction(action: action)
             self.dispatchSearchBarConfigurationAction(action: action)
-            self.dispatchSpacerConfigurationAction(action: action)
 
         case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
             GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
@@ -95,16 +94,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
                 isSearchBarEnabled: self.shouldShowSearchBar(),
                 windowUUID: action.windowUUID,
                 actionType: HomepageMiddlewareActionType.configuredSearchBar
-            )
-        )
-    }
-
-    private func dispatchSpacerConfigurationAction(action: Action) {
-        store.dispatch(
-            HomepageAction(
-                shouldShowSpacer: true,
-                windowUUID: action.windowUUID,
-                actionType: HomepageMiddlewareActionType.configuredSpacer
             )
         )
     }

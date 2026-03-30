@@ -133,10 +133,8 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
         }
 
-        if state.shouldShowSpacer {
-            snapshot.appendSections([.spacer])
-            snapshot.appendItems([.spacer], toSection: .spacer)
-        }
+        snapshot.appendSections([.spacer])
+        snapshot.appendItems([.spacer], toSection: .spacer)
 
         if state.searchState.shouldShowSearchBar {
             snapshot.appendSections([.searchBar])
