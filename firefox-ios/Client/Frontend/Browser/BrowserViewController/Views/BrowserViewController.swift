@@ -160,13 +160,6 @@ class BrowserViewController: UIViewController,
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
 
-    // Other constraints
-    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
-    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
-    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
-
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
         view.backgroundColor = self.currentTheme().colors.layerScrim
