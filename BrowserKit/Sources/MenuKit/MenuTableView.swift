@@ -131,8 +131,5 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
         backgroundColor = .clear
         tableView.backgroundColor = .clear
         tableView.separatorColor = theme.colors.borderPrimary
-        tableView.visibleCells.forEach { (cell: UITableViewCell) in
-            (cell as? ThemeApplicable)?.applyTheme(theme: theme)
-        }
     }
 }
