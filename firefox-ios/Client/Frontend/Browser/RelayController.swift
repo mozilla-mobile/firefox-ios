@@ -104,27 +104,35 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - RelayControllerProtocol
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
-        func fail(_ message: String) -> Bool {
-            logger.log("Display Relay: false. \(message)", level: .info, category: .relay)
-            return false
+        func bail(_ message: String) -> Bool {
+            logger.log("Display Relay: false. \(message)", level: .info, category: .relay); return false
         }
 
-        guard Self.isFeatureEnabled else { return fail("Feature disabled.") }
+        guard Self.isFeatureEnabled else { return bail("Feature disabled.") }
         let prefKey = PrefsKeys.ShowRelayMaskSuggestions
-        guard profile.prefs.boolForKey(prefKey) ?? true else { return fail("Local setting disabled.") }
-        guard client != nil else { return fail("No Relay client.") }
-        guard let relayRSClient, hasRelayAccount() else { return fail("No client / Relay account") }
-        guard let domain = url.baseDomain, let host = url.normalizedHost else { return fail("Invalid domain/host.") }
+        guard profile.prefs.boolForKey(prefKey) ?? true else { return bail("Local setting disabled.") }
+        guard client != nil else { return bail("No Relay client.") }
+        guard let relayRSClient, hasRelayAccount() else { return bail("No client / Relay account") }
+        guard let domain = url.baseDomain, let host = url.normalizedHost else { return bail("Invalid domain/host.") }
 
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
         logger.log("Display Relay: \(shouldShow). (Allow-list check.)", level: .info, category: .relay)
         return shouldShow
     }
 
-    func populateEmailFieldWithRelayMask(for tab: Tab,
-                                         completion: @escaping RelayPopulateCompletion) {
+    func populateEmailFieldWithRelayMask(for tab: Tab, completion: @escaping RelayPopulateCompletion) {
         populateEmailFieldWithRelayMask(for: tab, isRetry: false, completion: completion)
     }
+
+    func emailFieldFocused(in tab: Tab) {
+        focusedTab = tab
+    }
+
+    func shouldDisplayRelaySettings() -> Bool {
+        return Self.isFeatureEnabled && hasRelayAccount()
+    }
+
+    // MARK: - Private Utilities
 
     private func populateEmailFieldWithRelayMask(for tab: Tab,
                                                  isRetry: Bool,
@@ -134,9 +142,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         guard focusedTab == nil || focusedTab === tab else {
-            logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
-                       level: .warning,
-                       category: .relay)
+            logger.log("Attempting to populate Relay mask after changing tab. Bailing.", level: .warning, category: .relay)
             focusedTab = nil
             // Note: this is an edge case error and in this scenario we will not call the completion at
             // all, given that we're no longer on the correct tab.
@@ -144,9 +150,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
 
         guard let webView = tab.webView, let client else {
-            logger.log("No tab webview available, or client is nil. Will not populate email field.",
-                       level: .warning,
-                       category: .relay)
+            logger.log("No tab webview, or nil client. Won't populate email.", level: .warning, category: .relay)
             completion(.error)
             return
         }
@@ -186,23 +190,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
-    func emailFieldFocused(in tab: Tab) {
-        focusedTab = tab
-    }
-
-    func shouldDisplayRelaySettings() -> Bool {
-        return Self.isFeatureEnabled && hasRelayAccount()
-    }
-
-    // MARK: - Private Utilities
-
     private func performPostLaunchUpdate() {
         let delay = updateConfig.postLaunchUpdateDelay
         Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
-            Task { @MainActor in
-                self?.updateRelayAccountStatus()
-            }
+            Task { @MainActor in self?.updateRelayAccountStatus() }
         }
     }
 
@@ -272,9 +264,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
-        Task { @MainActor in
-            updateRelayAccountStatus()
-        }
+        Task { @MainActor in updateRelayAccountStatus() }
     }
 
     private func updateRelayAccountStatus() {
