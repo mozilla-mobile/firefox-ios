@@ -100,5 +100,9 @@ final class MenuSquaresViewContentCell: UITableViewCell, ReusableCell, ThemeAppl
         } else {
             contentStackView.backgroundColor = .clear
         }
+
+        contentStackView.arrangedSubviews
+            .compactMap { $0 as? MenuSquareView }
+            .forEach { $0.applyTheme(theme: theme) }
     }
 }

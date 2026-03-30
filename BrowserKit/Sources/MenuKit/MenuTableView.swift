@@ -93,6 +93,15 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
     ) {
         tableHelper.didSelectRowAt(tableView, indexPath)
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        guard let theme else { return }
+        (cell as? ThemeApplicable)?.applyTheme(theme: theme)
+    }
 
     func tableView(
         _ tableView: UITableView,
@@ -122,5 +131,8 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
         backgroundColor = .clear
         tableView.backgroundColor = .clear
         tableView.separatorColor = theme.colors.borderPrimary
+        tableView.visibleCells.forEach { (cell: UITableViewCell) in
+            (cell as? ThemeApplicable)?.applyTheme(theme: theme)
+        }
     }
 }
