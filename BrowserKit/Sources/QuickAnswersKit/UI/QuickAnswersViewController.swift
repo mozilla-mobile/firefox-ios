@@ -39,7 +39,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
     }
-    private let responseView: QuickAnswersResponseView = .build()
+    private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: TransitionAnimator
 
     public let themeManager: any ThemeManager
@@ -106,7 +106,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
 
     private func setupSubviews() {
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, responseView, closeButton)
+        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, contentView, closeButton)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -119,13 +119,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            responseView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
+            contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
                                               constant: UX.responseViewTopPadding),
-            responseView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                   constant: UX.responseViewHorizontalPadding),
-            responseView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                    constant: -UX.responseViewHorizontalPadding),
-            responseView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                  constant: -UX.responseViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
@@ -141,12 +141,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         viewModel.onStateChange = { [weak self] state in
             switch state {
             case .recordVoice(let result, _):
-                self?.responseView.configureTranscript(result.text)
+                self?.contentView.configureTranscript(result.text)
             case .loadingSearchResult:
                 self?.audioWaveform.stopAnimating()
-                self?.responseView.configureSearching()
+                self?.contentView.configureSearching()
             case .showSearchResult(let result, _):
-                self?.responseView.configureAnswer(result.body)
+                self?.contentView.configureAnswer(result.body)
             }
         }
         viewModel.startRecordingVoice()
@@ -160,6 +160,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
-        responseView.applyTheme(theme: theme)
+        contentView.applyTheme(theme: theme)
     }
 }

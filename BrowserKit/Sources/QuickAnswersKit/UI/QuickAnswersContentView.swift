@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 // TODO: - FXIOS-14720 Add Strings and accessibility ids
-final class QuickAnswersResponseView: UIView, ThemeApplicable {
+final class QuickAnswersContentView: UIView, ThemeApplicable {
     private struct UX {
         static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
