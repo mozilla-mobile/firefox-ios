@@ -120,13 +120,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
-                                              constant: UX.responseViewTopPadding),
+                                             constant: UX.responseViewTopPadding),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                  constant: UX.responseViewHorizontalPadding),
+                                                 constant: UX.responseViewHorizontalPadding),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                   constant: -UX.responseViewHorizontalPadding),
+                                                  constant: -UX.responseViewHorizontalPadding),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                 constant: -UX.responseViewBottomPadding),
+                                                constant: -UX.responseViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
