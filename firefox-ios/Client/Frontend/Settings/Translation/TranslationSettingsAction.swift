@@ -49,7 +49,6 @@ struct TranslationSettingsMiddlewareAction: Action {
 }
 
 enum TranslationSettingsViewActionType: ActionType {
-    case initialize
     case viewDidLoad
     case toggleTranslationsEnabled
     case addLanguage
