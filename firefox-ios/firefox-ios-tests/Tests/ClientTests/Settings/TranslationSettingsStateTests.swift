@@ -80,6 +80,43 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState.supportedLanguages, ["en", "de"])
     }
 
+    // MARK: - Reducer Tests - isAutoTranslateEnabled
+
+    func test_reduceMiddlewareAction_didLoadSettings_updatesAutoTranslate() {
+        let initialState = createSubject()
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsMiddlewareAction(
+            isAutoTranslateEnabled: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isAutoTranslateEnabled)
+    }
+
+    func test_reduceMiddlewareAction_didLoadSettings_preservesAutoTranslate_whenNil() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isAutoTranslateEnabled: true,
+            preferredLanguages: [],
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isAutoTranslateEnabled)
+    }
+
     // MARK: - Reducer Tests - enterEditMode
 
     func test_enterEditMode_setsIsEditingAndCopiesPreferredToPending() {
@@ -281,6 +318,25 @@ final class TranslationSettingsStateTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             isTranslationsEnabled: true,
             preferredLanguages: makeLanguages(["en"]),
+            supportedLanguages: []
+        )
+
+        XCTAssertNotEqual(state1, state2)
+    }
+
+    func test_equality_differentAutoTranslate_notEqual() {
+        let state1 = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isAutoTranslateEnabled: false,
+            preferredLanguages: [],
+            supportedLanguages: []
+        )
+        let state2 = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isAutoTranslateEnabled: true,
+            preferredLanguages: [],
             supportedLanguages: []
         )
 
