@@ -7,29 +7,42 @@ import Foundation
 
 // TODO: FXIOS-15199 Move to LLMKitTests package
 
-/// Mock implementation of a real  LiteLLMClient for testing the session and responses.
-/// This allows injecting controlled outputs or errors without calling the real inference backend.
-public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
+/// Mock implementation of LiteLLMClient for testing.
+final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
     var respondWithError: Error?
+    var requestChatCompletionCallCount = 0
+    var requestChatCompletionStreamedCallCount = 0
+    var lastMessages: [LiteLLMMessage]?
+    var lastConfig: LLMConfig?
 
-    public func requestChatCompletion(
+    func requestChatCompletion(
         messages: [LiteLLMMessage],
         config: LLMConfig
     ) async throws -> String {
+        requestChatCompletionCallCount += 1
+        lastMessages = messages
+        lastConfig = config
+
         if let error = respondWithError { throw error }
         return respondWith.joined(separator: " ")
     }
 
-    public func requestChatCompletionStreamed(
+    func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
         config: LLMConfig
     ) -> AsyncThrowingStream<String, Error> {
-        AsyncThrowingStream<String, Error> { continuation in
-            if let error = respondWithError {
+        requestChatCompletionStreamedCallCount += 1
+        lastMessages = messages
+        lastConfig = config
+
+        return AsyncThrowingStream<String, Error> { continuation in
+            if let error = self.respondWithError {
                 continuation.finish(throwing: error)
             } else {
-                for chunk in respondWith { continuation.yield(chunk) }
+                for chunk in self.respondWith {
+                    continuation.yield(chunk)
+                }
                 continuation.finish()
             }
         }

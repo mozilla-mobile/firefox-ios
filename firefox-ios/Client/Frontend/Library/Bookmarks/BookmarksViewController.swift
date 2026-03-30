@@ -28,7 +28,7 @@ final class BookmarksViewController: SiteTableViewController,
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
-    let viewModel: BookmarksPanelViewModel
+    let viewModel: BookmarksPanelViewModelProtocol
     var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
@@ -71,6 +71,9 @@ final class BookmarksViewController: SiteTableViewController,
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
+            // Hide search button when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [flexibleSpace, bottomRightButton] }
+            // Show search and edit buttons when bookmarks are available
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             return searchItems + [flexibleSpace]
@@ -142,7 +145,7 @@ final class BookmarksViewController: SiteTableViewController,
 
     // MARK: - Init
 
-    init(viewModel: BookmarksPanelViewModel,
+    init(viewModel: BookmarksPanelViewModelProtocol,
          windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
@@ -342,7 +345,7 @@ final class BookmarksViewController: SiteTableViewController,
         let position = Int(bookmarkNode.position)
         tableView.beginUpdates()
         tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
-        viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
+        viewModel.addBookmark(bookmarkNode: bookmarkNode, atPosition: position)
         tableView.endUpdates()
         updateEmptyState(animated: false)
     }
@@ -369,7 +372,7 @@ final class BookmarksViewController: SiteTableViewController,
             }
 
         tableView.beginUpdates()
-        viewModel.bookmarkNodes.remove(at: indexPath.row)
+        viewModel.removeBookmark(atPosition: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         updateEmptyState(animated: false)
@@ -381,7 +384,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -390,7 +392,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -458,6 +459,8 @@ final class BookmarksViewController: SiteTableViewController,
 
         emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
                                  isSignedIn: profile.hasAccount())
+        // Depending on empty state, show/hide the search bar in the library panel's toolbar
+        sendPanelChangeNotification()
     }
 
     private func createContextButton() -> UIButton {
@@ -486,8 +489,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private func resetSearch() {
-        viewModel.isSearching = false
-        viewModel.filteredBookmarkNodes.removeAll()
+        viewModel.resetSearch()
         tableView.reloadData()
         updateEmptyState(animated: false)
     }
@@ -744,7 +746,7 @@ final class BookmarksViewController: SiteTableViewController,
             case .success:
                 Task { @MainActor in
                     tableView.beginUpdates()
-                    viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
+                    viewModel.removeBookmark(atPosition: sourceIndexPath.row)
                     tableView.deleteRows(at: [sourceIndexPath], with: .left)
                     tableView.endUpdates()
                     updateEmptyState(animated: false)
@@ -785,7 +787,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                     self.presentContextMenu(for: site, with: indexPath, completionHandler: {
                         return self.contextMenu(for: site, with: indexPath)
                     })
-                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                } else if let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                           bookmarkNode.type == .folder,
                           self.isCurrentFolderEditable(at: indexPath) {
                     self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
@@ -843,7 +845,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
-            guard let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+            guard let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
@@ -968,11 +970,8 @@ extension BookmarksViewController: UISearchBarDelegate {
     }
 
     func performSearch(term: String) {
-        viewModel.searchBookmarks(query: term) { [weak self] results in
-            guard let self else { return }
-            self.viewModel.isSearching = true
-            self.viewModel.filteredBookmarkNodes = results
-            self.tableView.reloadData()
+        viewModel.searchBookmarks(query: term) { [weak self] in
+            self?.tableView.reloadData()
         }
     }
 

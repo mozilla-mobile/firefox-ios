@@ -25,6 +25,7 @@ class ThemeSettingsControllerTests: XCTestCase, StoreTestUtility {
         try await super.tearDown()
     }
 
+    @MainActor
     func testUseSystemAppearance_WithRedux() {
         let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: true)
