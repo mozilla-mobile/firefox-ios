@@ -18,9 +18,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let recordWaveEffectSize: CGFloat = 400.0
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
         static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
-        static let responseViewTopPadding: CGFloat = 32.0
-        static let responseViewBottomPadding: CGFloat = 12.0
-        static let responseViewHorizontalPadding: CGFloat = 24.0
+        static let contentViewTopPadding: CGFloat = 32.0
+        static let contentViewBottomPadding: CGFloat = 12.0
+        static let contentViewHorizontalPadding: CGFloat = 24.0
     }
 
     // MARK: - Properties
@@ -120,13 +120,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
-                                             constant: UX.responseViewTopPadding),
+                                             constant: UX.contentViewTopPadding),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                 constant: UX.responseViewHorizontalPadding),
+                                                 constant: UX.contentViewHorizontalPadding),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -UX.responseViewHorizontalPadding),
+                                                  constant: -UX.contentViewHorizontalPadding),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                constant: -UX.responseViewBottomPadding),
+                                                constant: -UX.contentViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
