@@ -24,7 +24,7 @@ struct MockQuickAnswersService: QuickAnswersService {
                     continuation.finish(throwing: SpeechError.unknown)
                 }
                 for (index, _) in recordPhrase.enumerated() {
-                    try await Task.sleep(nanoseconds: 400_000_000)
+                    try await Task.sleep(nanoseconds: 200_000_000)
                     let isFinal = index == recordPhrase.count - 1
                     let textSoFar = recordPhrase[0...index].joined(separator: " ")
                     continuation.yield(SpeechResult(text: textSoFar, isFinal: isFinal))
@@ -37,7 +37,7 @@ struct MockQuickAnswersService: QuickAnswersService {
     func stopRecording() {}
 
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        try? await Task.sleep(nanoseconds: 1000_000_000)
+        try? await Task.sleep(nanoseconds: 200_000_000)
         if throwSearchError {
             return .failure(SearchResultError.unknown)
         }
