@@ -22,6 +22,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Stores the last target language used per window, so retry can re-use the same language.
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
 
+    /// Windows where the user explicitly restored the original page. Auto-translate is skipped
+    /// for the immediately following page load, then cleared.
+    private var restoringWindows: Set<WindowUUID> = []
+
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -119,6 +123,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 translationFlowId: flowId(for: action.windowUUID)
             )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
+            restoringWindows.insert(action.windowUUID)
             self.reloadPage(for: action)
         }
     }
@@ -174,6 +179,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// If auto-translate is enabled, triggers translation to the user's top preferred language.
     /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
     private func tryAutoTranslate(for action: ToolbarAction) async -> Bool {
+        if restoringWindows.remove(action.windowUUID) != nil { return false }
         guard profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false else { return false }
         let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
         let supported = await translationsService.fetchSupportedTargetLanguages()
