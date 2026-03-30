@@ -75,10 +75,7 @@ class Download: NSObject {
     // Determines if we want to save the download to the downloads panel
     fileprivate func shouldWriteToDisk() -> Bool {
         // If we downloaded a Passbook Pass, we want to open this immediately instead of saving it to downloads
-        if self.mimeType == MIMEType.Passbook {
-            return false
-        }
-        return true
+        return !MIMEType.isPassbook(self.mimeType)
     }
 
     // Used to avoid name spoofing using Unicode RTL char to change file extension
