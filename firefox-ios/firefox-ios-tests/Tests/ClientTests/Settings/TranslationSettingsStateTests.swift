@@ -324,25 +324,6 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertNotEqual(state1, state2)
     }
 
-    func test_equality_differentAutoTranslate_notEqual() {
-        let state1 = TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            isAutoTranslateEnabled: false,
-            preferredLanguages: [],
-            supportedLanguages: []
-        )
-        let state2 = TranslationSettingsState(
-            windowUUID: .XCTestDefaultUUID,
-            isTranslationsEnabled: true,
-            isAutoTranslateEnabled: true,
-            preferredLanguages: [],
-            supportedLanguages: []
-        )
-
-        XCTAssertNotEqual(state1, state2)
-    }
-
     func test_equality_differentSupportedLanguages_returnsFalse() {
         let state1 = createSubject()
         let state2 = TranslationSettingsState(

@@ -13,6 +13,10 @@ final class TranslationSettingsMiddleware {
     private let modelsFetcher: TranslationModelsFetcherProtocol
     private let localeProvider: LocaleProvider
 
+    private var isAutoTranslateEnabled: Bool {
+        prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
+    }
+
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: PreferredTranslationLanguagesManager? = nil,
          modelsFetcher: TranslationModelsFetcherProtocol = ASTranslationModelsFetcher.shared,
@@ -37,14 +41,6 @@ final class TranslationSettingsMiddleware {
 
         switch action.actionType {
         case TranslationSettingsViewActionType.viewDidLoad:
-            let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-            let isAutoTranslateEnabled = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
-            store.dispatch(TranslationSettingsMiddlewareAction(
-                isTranslationsEnabled: isEnabled,
-                isAutoTranslateEnabled: isAutoTranslateEnabled,
-                windowUUID: action.windowUUID,
-                actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
-            ))
             Task { await self.loadSettings(windowUUID: action.windowUUID) }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
@@ -63,8 +59,7 @@ final class TranslationSettingsMiddleware {
             ))
 
         case TranslationSettingsViewActionType.toggleAutoTranslate:
-            let current = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
-            let newValue = !current
+            let newValue = !isAutoTranslateEnabled
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationAutoTranslate)
             store.dispatch(TranslationSettingsMiddlewareAction(
                 isAutoTranslateEnabled: newValue,
@@ -105,7 +100,6 @@ final class TranslationSettingsMiddleware {
         let supported = await modelsFetcher.fetchSupportedTargetLanguages()
         let codes = manager.preferredLanguages(supportedTargetLanguages: supported)
         let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-        let isAutoTranslateEnabled = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
         let preferred = buildLanguageDetails(from: codes)
         let available = buildAvailableLanguages(preferred: codes, supported: supported)
         store.dispatch(TranslationSettingsMiddlewareAction(
