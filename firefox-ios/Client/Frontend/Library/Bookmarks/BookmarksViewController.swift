@@ -219,12 +219,16 @@ final class BookmarksViewController: SiteTableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Update if we've navigated back to the root folder of the bookmarks library either from the bookmark/folder detail
-        // screen during "Edit" mode, or from drilling deeper into folders and then tapping the `<` back nav button.
+        // Set this panel's initial state.
         if tableView.isEditing {
+            // This happens if we navigate back to the panel either from the bookmark/folder detail screen during "Edit" mode
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-        } else if viewModel.isRootNode {
-            updatePanelState(newState: .bookmarks(state: .mainView))
+        } else {
+            if viewModel.isRootNode {
+                updatePanelState(newState: .bookmarks(state: .mainView))
+            } else {
+                updatePanelState(newState: .bookmarks(state: .inFolder))
+            }
         }
 
         sendPanelChangeNotification()
@@ -533,8 +537,10 @@ final class BookmarksViewController: SiteTableViewController,
 
         if let itemData = bookmarkCell as? BookmarkItemData,
            let url = URL(string: itemData.url) {
+            // Navigate to a webpage when tapping a bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
+            // Drill deeper into a bookmark folder
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
 
             // If the user taps on a folder before filtering the bookmarks with a search term, simply exit search
@@ -542,7 +548,6 @@ final class BookmarksViewController: SiteTableViewController,
                 exitSearchState()
             }
 
-            updatePanelState(newState: .bookmarks(state: .inFolder))
             bookmarkCoordinatorDelegate?.start(from: folder)
         }
     }
