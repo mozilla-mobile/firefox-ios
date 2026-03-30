@@ -40,7 +40,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     func setupToolbarAnimator() {
         let context = ToolbarContext(overKeyboardContainerHeight: overKeyboardContainerHeight,
                                      bottomContainerHeight: getBottomContainerSize().height,
-                                     headerHeight: headerHeight)
+                                     headerHeight: calculateHeaderOffset())
         toolbarAnimator = ToolbarAnimator(context: context)
         toolbarAnimator?.view = self
         toolbarAnimator?.delegate = self
@@ -53,7 +53,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         let context = ToolbarContext(
             overKeyboardContainerHeight: overKeyboardContainerHeight,
             bottomContainerHeight: getBottomContainerSize().height,
-            headerHeight: headerHeight
+            headerHeight: calculateHeaderOffset()
         )
         animator.updateToolbarContext(context)
     }
@@ -62,15 +62,30 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
     }
 
-    private var headerHeight: CGFloat {
+    private func calculateHeaderOffset() -> CGFloat {
         let baseOffset = -getHeaderSize().height
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
 
-        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
-            return baseOffset
+        let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
+
+        // Add extra offset when the minimal address bar is enabled and visible,
+        // to preserve spacing for the compact header UI.
+        if isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) && !isReaderModeActive {
+            return baseOffset + UX.minimalHeaderOffset
         }
-        return baseOffset + UX.minimalHeaderOffset
+
+        // In Reader Mode, fully hide the header. Since an animation may already be
+        // in progress, add the offset to tge transform position to get the initial position.
+        if isReaderModeActive {
+            // Subtract the current transform to get the stable layout position, not the animated frame
+            let headerYPosition = header.frame.minY - header.transform.ty
+            let fullyHideOffset = -(baseOffset + headerYPosition)
+            return fullyHideOffset
+        }
+
+        // scroll the given the header height
+        return baseOffset
     }
 
     // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage

@@ -18,6 +18,7 @@ final class BrowserViewControllerLayoutManager {
     private weak var scrollController: LegacyTabScrollProvider?
 
     // Constraints to store - header
+    var headerTopConstraintReference: ConstraintReference?
     private var headerTopConstraint: NSLayoutConstraint?
     private var headerHeightConstraint: NSLayoutConstraint?
 
