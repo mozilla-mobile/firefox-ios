@@ -101,4 +101,7 @@ public protocol ThemeColourPalette {
     var gradientOnboardingStop2: UIColor { get }
     var gradientOnboardingStop3: UIColor { get }
     var gradientOnboardingStop4: UIColor { get }
+    var gradientAIStrongStop1: UIColor { get }
+    var gradientAIStrongStop2: UIColor { get }
+    var gradientAIStrongStop3: UIColor { get }
 }

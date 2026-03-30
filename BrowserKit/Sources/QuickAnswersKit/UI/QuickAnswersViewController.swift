@@ -17,16 +17,15 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         )
         static let recordWaveEffectSize: CGFloat = 400.0
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
-        static let audioWaveformTopPadding: CGFloat = 37.0
-        static let audioWaveformSize = CGSize(width: 18.0, height: 35)
-        static let responseViewTopPadding: CGFloat = 16.0
+        static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        static let responseViewTopPadding: CGFloat = 32.0
         static let responseViewBottomPadding: CGFloat = 12.0
         static let responseViewHorizontalPadding: CGFloat = 24.0
     }
 
     // MARK: - Properties
     private let backgroundBlur: UIVisualEffectView = .build {
-        $0.effect = UIBlurEffect(style: .systemMaterial)
+        $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
@@ -50,12 +49,31 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
 
-    public init(
+    public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        self.init(
+            navigationHandler: navigationHandler,
+            // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
+            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            presentationTransitionType: presentationTransitionType,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            notificationCenter: notificationCenter
+        )
+    }
+    
+    init(
+        navigationHandler: QuickAnswersNavigationHandler?,
+        viewModel: QuickAnswersViewModel,
+        presentationTransitionType: QuickAnswersTransitionType,
+        windowUUID: WindowUUID,
+        themeManager: any ThemeManager,
+        notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
@@ -66,7 +84,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             themeManager: themeManager,
             windowUUID: windowUUID
         )
-        self.viewModel = QuickAnswersViewModel(service: MockQuickAnswersService())
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = transitionAnimator
@@ -96,8 +114,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonSidePadding),
             
-            audioWaveform.topAnchor.constraint(equalTo: closeButton.bottomAnchor,
-                                               constant: UX.audioWaveformTopPadding),
+            audioWaveform.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
             audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -120,17 +137,16 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         backgroundBlur.pinToSuperview()
     }
     
-    static var result = ""
-    
     private func registerViewModelUpdates() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, let error):
-                Self.result = result.text
+            case .recordVoice(let result, _):
+                self?.responseView.configureTranscript(result.text)
             case .loadingSearchResult:
-                break
-            default:
-                break
+                self?.audioWaveform.stopAnimating()
+                self?.responseView.configureSearching()
+            case .showSearchResult(let result, _):
+                self?.responseView.configureAnswer(result.body)
             }
         }
         viewModel.startRecordingVoice()
@@ -146,17 +162,4 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         audioWaveform.applyTheme(theme: theme)
         responseView.applyTheme(theme: theme)
     }
-}
-
-@available(iOS 17, *)
-#Preview {
-    let controller = QuickAnswersViewController(
-        navigationHandler: nil,
-        windowUUID: .XCTestDefaultUUID,
-        themeManager: DefaultThemeManager(
-            sharedContainerIdentifier: ""
-        )
-    )
-    (controller.view.subviews.last as! UIButton).setImage(UIImage(systemName: "xmark"), for: .normal)
-    return controller
 }

@@ -5,17 +5,10 @@
 import UIKit
 import Common
 
-/// Displays the voice interaction content area for QuickAnswers.
-///
-/// Manages four visual states that mirror the flow of a voice query:
-/// - `idle`: shows a "Ask anything…" placeholder
-/// - `recording`: shows live speech transcription as it arrives
-/// - `searching`: shows the final transcript and an animated "Searching" indicator
-/// - `result`: shows the transcript, the AI answer, and source cards
 // TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersResponseView: UIView, ThemeApplicable {
     private struct UX {
-        static let contentSpacing: CGFloat = 16.0
+        static let contentSpacing: CGFloat = 32.0
         static let animationDuration: TimeInterval = 0.2
     }
 
@@ -24,10 +17,7 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false
     }
-    private let contentStack: UIStackView = .build {
-        $0.axis = .vertical
-        $0.spacing = UX.contentSpacing
-    }
+    private let contentView: UIView = .build()
     private let placeholderLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.text = "Ask anything…"
@@ -37,18 +27,18 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
     private let transcriptLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
-        $0.isHidden = true
     }
     private let searchingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.callout.scaledFont()
         $0.text = "Answering…"
-        $0.isHidden = true
+        $0.alpha = 0.0
     }
     private let answerLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.numberOfLines = 0
-        $0.isHidden = true
+        $0.alpha = 0.0
     }
+    private var theme: Theme?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -62,12 +52,9 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
 
     // MARK: - Setup
     private func setupSubviews() {
-        contentStack.addArrangedSubview(placeholderLabel)
-        contentStack.addArrangedSubview(transcriptLabel)
-        contentStack.addArrangedSubview(searchingLabel)
-        contentStack.addArrangedSubview(answerLabel)
+        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel)
 
-        scrollView.addSubview(contentStack)
+        scrollView.addSubview(contentView)
         addSubview(scrollView)
 
         NSLayoutConstraint.activate([
@@ -76,35 +63,79 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            placeholderLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            placeholderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            placeholderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            transcriptLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            searchingLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
+            searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            searchingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            answerLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
+            answerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            answerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            answerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
     // MARK: - Configuration
     func configureTranscript(_ text: String) {
+        // if the placeholder is visible then hide it before adding text to the transcription label.
+        // This is needed to don't overlap the show of the transcription with the placeholder label
+        guard placeholderLabel.alpha == 1.0 else {
+            UIView.transition(
+                with: transcriptLabel,
+                duration: UX.animationDuration,
+                options: .transitionCrossDissolve
+            ) { [self] in
+                transcriptLabel.text = text
+            }
+            return
+        }
         UIView.animate(withDuration: UX.animationDuration) { [self] in
-            transcriptLabel.text = text
-            transcriptLabel.isHidden = false
-            placeholderLabel.isHidden = true
+            placeholderLabel.alpha = 0.0
+        } completion: { [weak self] _ in
+            self?.transcriptLabel.text = text
+        }
+    }
+    
+    func configureSearching() {
+        if let theme {
+            searchingLabel.startShimmering(
+                light: theme.colors.textDisabled,
+                dark: theme.colors.textPrimary
+            )
+        }
+        UIView.animate(withDuration: UX.animationDuration) { [self] in
+            searchingLabel.alpha = 1.0
+        }
+    }
+    
+    func configureAnswer(_ text: String) {
+        searchingLabel.stopShimmering()
+        searchingLabel.alpha = 0.0
+        UIView.animate(withDuration: UX.animationDuration) { [self] in
+            answerLabel.text = text
+            answerLabel.alpha = 1.0
         }
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
+        self.theme = theme
         placeholderLabel.textColor = theme.colors.textSecondary
         transcriptLabel.textColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
     }
-}
-
-@available(iOS 17, *)
-#Preview {
-    let view = QuickAnswersResponseView()
-    view.applyTheme(theme: LightTheme())
-    return view
 }

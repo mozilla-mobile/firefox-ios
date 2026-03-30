@@ -5,6 +5,7 @@
 import UIKit
 import Common
 
+// TODO: - FXIOS-15247 Refactor Gradient according to design
 final class GradientCircleView: UIView, ThemeApplicable {
     private struct UX {
         static let gradientStartPoint = CGPoint(x: 1.0, y: 0.5)
@@ -81,9 +82,9 @@ final class GradientCircleView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         gradientLayer.colors = [
-            theme.colors.gradientOnboardingStop2.cgColor,
-            theme.colors.gradientOnboardingStop3.cgColor,
-            theme.colors.gradientOnboardingStop4.cgColor
+            theme.colors.gradientAIStrongStop1.cgColor,
+            theme.colors.gradientAIStrongStop2.cgColor,
+            theme.colors.gradientAIStrongStop3.cgColor
         ]
     }
 }
