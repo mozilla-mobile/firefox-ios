@@ -19,7 +19,7 @@ struct MerinoAction: Action {
     let telemetryConfig: OpenPocketTelemetryConfig?
 
     init(
-        merinoStories: MerinoStoryResponse? = nil,
+        merinoStoryResponse: MerinoStoryResponse? = nil,
         isEnabled: Bool? = nil,
         telemetryConfig: OpenPocketTelemetryConfig? = nil,
         windowUUID: WindowUUID,
@@ -27,7 +27,7 @@ struct MerinoAction: Action {
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
-        self.merinoResponse = merinoStories
+        self.merinoResponse = merinoStoryResponse
         self.isEnabled = isEnabled
         self.telemetryConfig = telemetryConfig
     }

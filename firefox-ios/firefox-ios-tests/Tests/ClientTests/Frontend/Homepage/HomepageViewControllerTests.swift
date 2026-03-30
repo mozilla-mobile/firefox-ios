@@ -598,7 +598,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         return HomepageState.reducer(
             currentState,
             MerinoAction(
-                merinoStories: merinoStories,
+                merinoStoryResponse: merinoStories,
                 windowUUID: windowUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
