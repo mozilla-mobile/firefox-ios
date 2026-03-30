@@ -235,6 +235,13 @@ final class BookmarksViewController: SiteTableViewController,
         sendPanelChangeNotification()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Clear any `isTransitioning` state once the user is back on this panel fully
+        isTransitioning = false
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
