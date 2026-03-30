@@ -59,7 +59,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
             /// `storiesPeekOffset` is how much we want the stories section (not including section header)
             /// to peek in vertically from the bottom of the homepage viewport
-            static let storiesPeekOffset: CGFloat = 14
+            static let storiesPeekOffset: CGFloat = 16
+            static let storiesPeekOffsetiPad: CGFloat = 36
 
             @MainActor
             static func getAbsoluteCellWidth(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
@@ -87,6 +88,13 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
                 }
 
                 return UX.PocketConstants.getAbsoluteCellWidth(collectionViewWidth: containerWidth)
+            }
+
+            @MainActor
+            static func getStoriesPeekOffset(
+                device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+            ) -> CGFloat {
+                return device == .pad ? UX.PocketConstants.storiesPeekOffsetiPad : UX.PocketConstants.storiesPeekOffset
             }
         }
 
@@ -592,7 +600,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             } else {
                 let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
                                                                              width: environment.container.contentSize.width)
-                spacerHeight = max(0.1, rawSpacerHeight - headerHeight - UX.PocketConstants.storiesPeekOffset)
+                spacerHeight = max(0.1, rawSpacerHeight - headerHeight - UX.PocketConstants.getStoriesPeekOffset())
             }
         }
 
@@ -914,7 +922,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let newsAffordanceHeaderHeight = HomepageDimensionCalculator
             .fittingHeight(for: NewsTransitionHeaderView(), width: environment.container.contentSize.width)
-        let fullPeekOffset = newsAffordanceHeaderHeight + UX.PocketConstants.storiesPeekOffset
+        let fullPeekOffset = newsAffordanceHeaderHeight + UX.PocketConstants.getStoriesPeekOffset()
 
         if rawSpacerHeight >= fullPeekOffset {
             // Enough free space to show the full affordance header and the full peek offset.

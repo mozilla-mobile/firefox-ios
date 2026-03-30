@@ -102,7 +102,7 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private func dispatchSpacerConfigurationAction(action: Action) {
         store.dispatch(
             HomepageAction(
-                shouldShowSpacer: self.shouldShowSpacer(),
+                shouldShowSpacer: true,
                 windowUUID: action.windowUUID,
                 actionType: HomepageMiddlewareActionType.configuredSpacer
             )
@@ -120,10 +120,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             return false
         }
         return true
-    }
-
-    private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone
     }
 
     // MARK: - Notifications
