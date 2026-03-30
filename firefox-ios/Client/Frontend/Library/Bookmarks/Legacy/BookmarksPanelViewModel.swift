@@ -27,7 +27,7 @@ protocol BookmarksPanelViewModelProtocol: Sendable, CanRemoveQuickActionBookmark
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
     func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String)
     func remove(bookmark: FxBookmarkNode)
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void)
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     func createPinUnpinAction(
         for site: Site,
@@ -138,11 +138,9 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         allBookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void) {
-        guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
-              let bookmarkItem = bookmarkNode as? BookmarkItemData
-        else {
-            logger.log("Could not get site details for indexPath \(indexPath)",
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void) {
+        guard let bookmarkItem = bookmark as? BookmarkItemData else {
+            logger.log("Could not get site details for bookmark",
                        level: .debug,
                        category: .library)
             completion(nil)
