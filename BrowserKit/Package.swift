@@ -100,6 +100,11 @@ let package = Package(
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
+        .testTarget(
+            name: "SharedTests",
+            dependencies: ["Shared"],
+            swiftSettings: []
+        ),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
