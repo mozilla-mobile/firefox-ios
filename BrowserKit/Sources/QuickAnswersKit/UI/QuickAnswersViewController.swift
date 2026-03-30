@@ -66,7 +66,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             notificationCenter: notificationCenter
         )
     }
-    
+
     init(
         navigationHandler: QuickAnswersNavigationHandler?,
         viewModel: QuickAnswersViewModel,
@@ -113,7 +113,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                                              constant: UX.closeButtonSidePadding),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                   constant: -UX.closeButtonSidePadding),
-            
+
             audioWaveform.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
             audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
@@ -136,7 +136,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         ])
         backgroundBlur.pinToSuperview()
     }
-    
+
     private func registerViewModelUpdates() {
         viewModel.onStateChange = { [weak self] state in
             switch state {

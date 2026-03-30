@@ -68,19 +68,19 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-            
+
             placeholderLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             placeholderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             placeholderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             transcriptLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
             transcriptLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             transcriptLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             searchingLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
             searchingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             searchingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
+
             answerLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
             answerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             answerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -108,7 +108,7 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
             self?.transcriptLabel.text = text
         }
     }
-    
+
     func configureSearching() {
         if let theme {
             searchingLabel.startShimmering(
@@ -120,7 +120,7 @@ final class QuickAnswersResponseView: UIView, ThemeApplicable {
             searchingLabel.alpha = 1.0
         }
     }
-    
+
     func configureAnswer(_ text: String) {
         searchingLabel.stopShimmering()
         searchingLabel.alpha = 0.0
