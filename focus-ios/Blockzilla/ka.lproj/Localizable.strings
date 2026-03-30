@@ -323,7 +323,7 @@
 "Settings.detailTextCrashReports.V2" = "დაგვეხმარება ბრაუზერის ხარვეზების დადგენასა და მოგვარებაში.";
 
 /* Description associated to the Rollouts toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextRollouts" = "%@ შეძლებს გააუმჯობესოს შესაძლებლობები, წარმადობა და მდგრადობა განახლებებს შორის შუალედშიც. ცვლილებები დაშორებული რეჟიმით.";
+"Settings.detailTextRollouts" = "%@ გააუმჯობესებს შესაძლებლობებს, წარმადობასა და მდგრადობას განახლებებს შორის შუალედშიც. ცვლილებები აისახება დაშორებულად.";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას მისამართების ველში აკრეფილ ტექსტს.";
