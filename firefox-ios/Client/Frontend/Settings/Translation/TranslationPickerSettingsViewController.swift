@@ -88,10 +88,6 @@ final class TranslationPickerSettingsViewController: UIViewController,
         subscribeToRedux()
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
-            actionType: TranslationSettingsViewActionType.initialize
-        ))
-        store.dispatch(TranslationSettingsViewAction(
-            windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.viewDidLoad
         ))
     }
@@ -127,8 +123,12 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     func newState(state: TranslationSettingsState) {
+        let wasEnabled = self.state.isTranslationsEnabled
         let wasEditing = self.state.isEditing
         self.state = state
+        if wasEnabled && !state.isTranslationsEnabled {
+            collectionView.cancelInteractiveMovement()
+        }
         if wasEditing != state.isEditing {
             collectionView.isEditing = state.isEditing
             setEditing(state.isEditing, animated: true)

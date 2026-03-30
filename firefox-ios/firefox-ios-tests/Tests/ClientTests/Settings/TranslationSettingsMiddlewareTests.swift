@@ -43,14 +43,17 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.viewDidLoad
         )
 
+        // viewDidLoad dispatches twice: once synchronously with isTranslationsEnabled,
+        // then asynchronously with the full settings (preferredLanguages, supportedLanguages, etc.)
         let expectation = XCTestExpectation(description: "didLoadSettings action dispatched")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
         let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
 
@@ -75,13 +78,14 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "didLoadSettings dispatched with disabled state")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
         let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
 
@@ -105,13 +109,14 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
 
         XCTAssertEqual(preferredLanguages[0].code, "en")
