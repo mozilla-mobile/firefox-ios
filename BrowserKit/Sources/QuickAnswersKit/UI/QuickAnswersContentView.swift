@@ -55,7 +55,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel)
         scrollView.addSubview(contentView)
         addSubview(scrollView)
-        
+
         scrollView.pinToSuperview()
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
