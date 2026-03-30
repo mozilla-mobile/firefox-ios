@@ -817,7 +817,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let storiesState = state.merinoState
-        guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else { return 0 }
+        guard storiesState.shouldShowSection,
+              storiesState.hasMerinoResponseContent
+        else { return 0 }
+
         let cellWidth = UX.PocketConstants.getStoriesCellWidth(
             for: environment,
             isHomepageStoriesScrollDirectionVertical: isHomepageStoriesScrollDirectionVertical)
@@ -1060,7 +1063,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return cachedResult
         }
 
-        guard storiesState.shouldShowSection, !storiesState.merinoData.isEmpty else {
+        guard storiesState.shouldShowSection,
+              storiesState.hasMerinoResponseContent,
+              let stories = storiesState.merinoData.stories
+        else {
             let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,
                 totalHeight: 0
@@ -1069,7 +1075,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return result
         }
 
-        let storyCells: [UIView] = storiesState.merinoData.map { story in
+        let storyCells: [UIView] = stories.map { story in
             let cell = StoryCell()
             cell.configure(story: story, theme: LightTheme())
             return cell
