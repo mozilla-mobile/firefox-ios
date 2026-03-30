@@ -452,7 +452,7 @@ struct BrowserViewControllerState: ScreenState {
                 displayView: .trackingProtectionDetails,
                 buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+                autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
         }
 
     @MainActor
@@ -507,7 +507,7 @@ struct BrowserViewControllerState: ScreenState {
                 browserViewType: state.browserViewType,
                 displayView: .locationViewLongPressAction,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
+                autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
         }
 
     @MainActor

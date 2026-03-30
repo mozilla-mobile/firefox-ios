@@ -332,7 +332,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let autoTranslateEnabled = profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
         guard !promptShown && !autoTranslateEnabled else { return }
         profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
-        store.dispatch(TranslationsAction(windowUUID: windowUUID, actionType: TranslationsActionType.showAutoTranslatePrompt))
+        store.dispatch(TranslationsAction(
+            windowUUID: windowUUID,
+            actionType: TranslationsActionType.showAutoTranslatePrompt
+        ))
     }
 
     /// Clears the flow ID for the given action's window.
