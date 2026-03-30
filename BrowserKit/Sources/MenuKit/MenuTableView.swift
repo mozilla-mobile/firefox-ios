@@ -93,7 +93,7 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
     ) {
         tableHelper.didSelectRowAt(tableView, indexPath)
     }
-    
+
     func tableView(
         _ tableView: UITableView,
         willDisplay cell: UITableViewCell,
