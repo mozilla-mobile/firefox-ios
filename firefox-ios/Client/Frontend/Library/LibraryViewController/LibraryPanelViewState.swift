@@ -48,7 +48,6 @@ enum LibraryPanelSubState {
     case itemEditMode
     case itemEditModeInvalidField
     case search
-    case transitioning
 
     // The following two functions enable checking that substate moves are legal.
     // For example, you can move from .mainView to .inFolder, but not from
