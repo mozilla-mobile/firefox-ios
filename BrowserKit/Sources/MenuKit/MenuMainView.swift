@@ -207,6 +207,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
+        tableView.reloadTableView(with: menuData, isBannerVisible: isBannerVisible)
         siteProtectionHeader.applyTheme(theme: theme)
         headerBanner.applyTheme(theme: theme)
     }

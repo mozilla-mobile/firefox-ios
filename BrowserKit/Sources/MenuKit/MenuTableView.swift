@@ -96,15 +96,6 @@ final class MenuTableView: UIView, UITableViewDelegate, UITableViewDataSource, U
 
     func tableView(
         _ tableView: UITableView,
-        willDisplay cell: UITableViewCell,
-        forRowAt indexPath: IndexPath
-    ) {
-        guard let theme else { return }
-        (cell as? ThemeApplicable)?.applyTheme(theme: theme)
-    }
-
-    func tableView(
-        _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
         return tableHelper.calculateHeightForHeaderInSection(section)
