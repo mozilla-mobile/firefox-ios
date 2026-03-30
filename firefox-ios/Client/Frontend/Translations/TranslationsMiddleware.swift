@@ -64,6 +64,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
             guard let action = (action as? TranslationLanguageSelectedAction) else { return }
             self.handleLanguageSelected(for: action, and: state)
 
+        case TranslationsActionType.didTapEnableAutoTranslate:
+            self.profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+
         default:
            break
         }
@@ -254,6 +257,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                     translatedToLanguage: targetLanguage,
                     and: action.windowUUID
                 )
+                maybeShowAutoTranslatePrompt(windowUUID: action.windowUUID)
             } catch {
                 let serviceError = TranslationsServiceError.fromUnknown(error)
                 translationsTelemetry.translationFailed(
@@ -321,6 +325,14 @@ final class TranslationsMiddleware: FeatureFlaggable {
             actionType: GeneralBrowserActionType.showToast
         )
         store.dispatch(toastAction)
+    }
+
+    private func maybeShowAutoTranslatePrompt(windowUUID: WindowUUID) {
+        let promptShown = profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslatePromptShown) ?? false
+        let autoTranslateEnabled = profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
+        guard !promptShown && !autoTranslateEnabled else { return }
+        profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        store.dispatch(TranslationsAction(windowUUID: windowUUID, actionType: TranslationsActionType.showAutoTranslatePrompt))
     }
 
     /// Clears the flow ID for the given action's window.

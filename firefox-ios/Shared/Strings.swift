@@ -4265,6 +4265,19 @@ extension String {
                     comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
             }
         }
+
+        public struct AutoTranslatePrompt {
+            public static let Message = MZLocalizedString(
+                key: "", // Translations.AutoTranslatePrompt.Message.v151
+                tableName: "Translations",
+                value: "Automatically translate pages when available?",
+                comment: "Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate.")
+            public static let EnableButton = MZLocalizedString(
+                key: "", // Translations.AutoTranslatePrompt.EnableButton.v151
+                tableName: "Translations",
+                value: "Enable",
+                comment: "Button label on the auto-translate prompt that enables the auto-translate feature when tapped.")
+        }
     }
 }
 
