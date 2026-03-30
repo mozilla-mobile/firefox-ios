@@ -100,6 +100,11 @@ let package = Package(
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
+        .testTarget(
+            name: "SharedTests",
+            dependencies: ["Shared"],
+            swiftSettings: []
+        ),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
@@ -218,7 +223,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "MLPAKitTests",
-            dependencies: ["MLPAKit", "TestKit"],
+            dependencies: ["MLPAKit", "Shared"],
             swiftSettings: []
         ),
         .target(
