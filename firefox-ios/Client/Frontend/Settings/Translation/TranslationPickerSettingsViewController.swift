@@ -88,6 +88,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
         subscribeToRedux()
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.initialize
+        ))
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.viewDidLoad
         ))
     }
