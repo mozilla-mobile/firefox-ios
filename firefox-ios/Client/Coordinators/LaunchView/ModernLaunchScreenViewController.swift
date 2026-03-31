@@ -14,7 +14,6 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         static let fadeOutDuration: TimeInterval = 0.24
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
-        static let minimumDisplayTimeSeconds: TimeInterval = 0.0
         static let logoSize: CGFloat = 125.0
     }
 
@@ -97,9 +96,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         if isLoading {
             shouldLoadNextLaunchType = true
         } else {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + UX.minimumDisplayTimeSeconds) { [weak self] in
             viewModel.loadNextLaunchType()
-//            }
         }
     }
 

@@ -31,7 +31,7 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var shouldShowVideoIntro: Bool {
-        featureFlags.isFeatureEnabled(.videoIntroOnboarding, checking: .buildAndUser)
+        featureFlags.isFeatureEnabled(.videoIntroOnboarding, checking: .buildOnly)
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {

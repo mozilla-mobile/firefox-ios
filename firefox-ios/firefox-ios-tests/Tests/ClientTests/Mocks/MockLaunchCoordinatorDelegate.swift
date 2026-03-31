@@ -14,9 +14,6 @@ class MockLaunchCoordinatorDelegate: LaunchCoordinatorDelegate {
         savedDidFinishCoordinator = coordinator
     }
 
-    func didFinishVideoIntro(from coordinator: LaunchCoordinator) {
-    }
-
     func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
     }
 }
