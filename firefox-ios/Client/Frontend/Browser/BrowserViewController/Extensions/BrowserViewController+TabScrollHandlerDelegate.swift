@@ -76,7 +76,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         }
 
         // In Reader Mode, fully hide the header. Since an animation may already be
-        // in progress, add the offset to tge transform position to get the initial position.
+        // in progress, add the offset to the transform position to get the initial position.
         if isReaderModeActive {
             // Subtract the current transform to get the stable layout position, not the animated frame
             let headerYPosition = header.frame.minY - header.transform.ty
