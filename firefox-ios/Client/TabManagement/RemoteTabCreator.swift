@@ -4,6 +4,7 @@
 
 import Storage
 
+/// Creates a remote tab which is used to sync tabs to a sync account
 struct RemoteTabCreator {
     @MainActor
     static func toRemoteTab(from tab: Tab) -> RemoteTab? {
