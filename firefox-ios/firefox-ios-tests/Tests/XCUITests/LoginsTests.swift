@@ -436,7 +436,7 @@ class LoginTest: BaseTestCase {
     func testDismissedChangesAreNotSaved() {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
-        let savedCredentials = app.tables[loginList].cells.element(boundBy: 2)
+        let savedCredentials = app.tables[loginList].cells.element(boundBy: 1)
         let passwordCell = app.tables.cells["Password"]
         let editButton = app.buttons["Edit"]
         savedCredentials.waitAndTap()
