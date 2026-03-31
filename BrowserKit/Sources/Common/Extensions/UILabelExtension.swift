@@ -5,12 +5,12 @@
 import UIKit
 
 extension UILabel {
-    /// Add a shimmer endless animation with the provided colors and locations
+    /// Add a shimmer endless animation with the provided colors.
     ///
     /// - Parameters:
     ///   - light: The color to apply to the label when the light is spreading on the label
     ///   - dark: The color to apply to portion of the label not affected by light.
-    func startShimmering(light: UIColor, dark: UIColor) {
+    public func startShimmering(light: UIColor, dark: UIColor) {
         stopShimmering()
         let light = light.cgColor
         let dark = dark.cgColor
@@ -38,7 +38,8 @@ extension UILabel {
         gradient.add(animation, forKey: "shimmer")
     }
 
-    func stopShimmering() {
+    /// Stop the shimmering animation started with `startShimmering(light:, dark:)`.
+    public func stopShimmering() {
         (layer.mask as? CAGradientLayer)?.removeAnimation(forKey: "shimmer")
         layer.mask = nil
     }

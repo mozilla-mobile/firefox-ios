@@ -92,10 +92,6 @@ final class TransitionAnimator: NSObject,
 
         presentedController.view.frame = containerView.bounds
         presentedController.view.alpha = 0.0
-        presentedController.buttonsContainer.transform = CGAffineTransform(
-            translationX: 0.0,
-            y: UX.buttonsContainerInitialTranslationY
-        )
 
         UIView.animate(
             withDuration: UX.springAnimationDuration,
@@ -105,7 +101,6 @@ final class TransitionAnimator: NSObject,
             options: .curveEaseOut,
             animations: {
                 presentedController.view.alpha = 1.0
-                presentedController.buttonsContainer.transform = .identity
             },
             completion: { _ in
                 transitionContext.completeTransition(true)
@@ -188,10 +183,6 @@ final class TransitionAnimator: NSObject,
             options: .curveEaseOut,
             animations: {
                 snapshotView.alpha = 1.0
-                dismissedController.buttonsContainer.transform = CGAffineTransform(
-                    translationX: 0.0,
-                    y: UX.buttonsContainerInitialTranslationY
-                )
             },
             completion: { _ in
                 // We don't need to remove the snapshot view since during the dismissal the container view
