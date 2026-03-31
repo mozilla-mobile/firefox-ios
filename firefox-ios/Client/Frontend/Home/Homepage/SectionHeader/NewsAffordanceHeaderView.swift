@@ -13,7 +13,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         static let stackHorizontalInset: CGFloat = 20
         static let iconSpacing: CGFloat = 4
         static let chevronSize: CGFloat = 20
-        static let newsIconSize: CGFloat = 24
+        static let newsIconSize: CGFloat = 20
     }
 
     // MARK: - UI Elements
@@ -44,7 +44,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
 
     private lazy var newsIconImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.readingList)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.newsfeed)
     }
 
     private lazy var newsLabel: UILabel = .build { label in
