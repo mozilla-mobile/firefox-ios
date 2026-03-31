@@ -22,8 +22,11 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Stores the last target language used per window, so retry can re-use the same language.
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
 
-    /// Windows where the user explicitly restored the original page. Auto-translate is skipped
-    /// for the immediately following page load, then cleared.
+    /// Tracks windows where the user explicitly restored the original (untranslated) page.
+    /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
+    /// auto-translate to immediately re-translate the page the user just opted out of.
+    /// Each entry is a one-shot flag: auto-translate is skipped for the immediately following
+    /// page load for that window, then the entry is removed. On iPhone only one window exists.
     private var restoringWindows: Set<WindowUUID> = []
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -202,8 +205,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
 
+                // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
 
+                // Auto-translate didn't run; offer manual translation instead.
                 let toolbarAction = ToolbarAction(
                     translationConfiguration: TranslationConfiguration(
                         prefs: profile.prefs,
