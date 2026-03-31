@@ -3421,6 +3421,21 @@ extension String {
                 )
             }
 
+            public struct AutoTranslate {
+                public static let Title = MZLocalizedString(
+                    key: "", // Settings.Translation.AutoTranslate.Title.v150
+                    tableName: "Settings",
+                    value: "Automatically Translate",
+                    comment: "Title for the auto-translate toggle in the Translation settings screen."
+                )
+                public static let Footer = MZLocalizedString(
+                    key: "", // Settings.Translation.AutoTranslate.Footer.v150
+                    tableName: "Settings",
+                    value: "Translates pages to your top preferred language automatically.",
+                    comment: "Footer text below the auto-translate toggle in the Translation settings screen."
+                )
+            }
+
             public struct LanguagePicker {
                 public static let NavTitle = MZLocalizedString(
                     key: "", // Settings.Translation.LanguagePicker.NavTitle.v150

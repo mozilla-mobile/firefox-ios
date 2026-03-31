@@ -29,11 +29,13 @@ struct TranslationSettingsMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isTranslationsEnabled: Bool?
+    let isAutoTranslateEnabled: Bool?
     let preferredLanguages: [PreferredLanguageDetails]?
     let supportedLanguages: [String]?
     let availableLanguages: [String]?
 
     init(isTranslationsEnabled: Bool? = nil,
+         isAutoTranslateEnabled: Bool? = nil,
          preferredLanguages: [PreferredLanguageDetails]? = nil,
          supportedLanguages: [String]? = nil,
          availableLanguages: [String]? = nil,
@@ -42,6 +44,7 @@ struct TranslationSettingsMiddlewareAction: Action {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isAutoTranslateEnabled = isAutoTranslateEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
         self.availableLanguages = availableLanguages
@@ -51,6 +54,7 @@ struct TranslationSettingsMiddlewareAction: Action {
 enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
+    case toggleAutoTranslate
     case addLanguage
     case enterEditMode
     case cancelEditMode

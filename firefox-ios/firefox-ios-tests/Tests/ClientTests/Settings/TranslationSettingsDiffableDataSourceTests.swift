@@ -35,13 +35,13 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .enableToggle), [.enableToggle])
     }
 
-    func test_applySnapshot_withTranslationsEnabled_hasBothSections() {
+    func test_applySnapshot_withTranslationsEnabled_hasAllThreeSections() {
         let state = makeState(isEnabled: true, languages: ["en", "fr"])
 
         subject.applySnapshot(state: state, animated: false)
 
         let snapshot = subject.snapshot()
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages, .autoTranslate])
     }
 
     func test_applySnapshot_withTranslationsEnabled_noLanguages_hasEmptyLanguageSection() {
@@ -50,8 +50,24 @@ final class TranslationSettingsDiffableDataSourceTests: XCTestCase {
         subject.applySnapshot(state: state, animated: false)
 
         let snapshot = subject.snapshot()
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.enableToggle, .preferredLanguages, .autoTranslate])
         XCTAssertEqual(snapshot.numberOfItems(inSection: .preferredLanguages), 1)
+    }
+
+    func test_applySnapshot_withTranslationsDisabled_doesNotIncludeAutoTranslateSection() {
+        let state = makeState(isEnabled: false, languages: [])
+
+        subject.applySnapshot(state: state, animated: false)
+
+        XCTAssertFalse(subject.snapshot().sectionIdentifiers.contains(.autoTranslate))
+    }
+
+    func test_applySnapshot_autoTranslateSectionIsLast() {
+        let state = makeState(isEnabled: true, languages: ["en"])
+
+        subject.applySnapshot(state: state, animated: false)
+
+        XCTAssertEqual(subject.snapshot().sectionIdentifiers, [.enableToggle, .preferredLanguages, .autoTranslate])
     }
 
     func test_applySnapshot_withTranslationsEnabled_languageItemCountMatchesState() {

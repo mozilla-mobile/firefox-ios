@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import Shared
 
 @MainActor
 final class TranslationsMiddleware: FeatureFlaggable {
@@ -20,6 +21,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
     /// Stores the last target language used per window, so retry can re-use the same language.
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
+
+    /// Tracks windows where the user explicitly restored the original (untranslated) page.
+    /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
+    /// auto-translate to immediately re-translate the page the user just opted out of.
+    /// Each entry is a one-shot flag: auto-translate is skipped for the immediately following
+    /// page load for that window, then the entry is removed. On iPhone only one window exists.
+    private var restoringWindows: Set<WindowUUID> = []
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -118,6 +126,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 translationFlowId: flowId(for: action.windowUUID)
             )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
+            restoringWindows.insert(action.windowUUID)
             self.reloadPage(for: action)
         }
     }
@@ -170,6 +179,23 @@ final class TranslationsMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
+    /// If auto-translate is enabled, triggers translation to the user's top preferred language.
+    /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
+    private func tryAutoTranslate(for action: ToolbarAction) async -> Bool {
+        if restoringWindows.remove(action.windowUUID) != nil { return false }
+        guard profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false else { return false }
+        let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+        let supported = await translationsService.fetchSupportedTargetLanguages()
+        let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
+        guard let targetLanguage = preferred.first else { return false }
+        let newFlowId = UUID()
+        translationFlowIds[action.windowUUID] = newFlowId
+        selectedTargetLanguages[action.windowUUID] = targetLanguage
+        handleUpdatingTranslationIcon(for: action, with: .loading)
+        retrieveTranslations(for: action, targetLanguage: targetLanguage)
+        return true
+    }
+
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
@@ -178,6 +204,11 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+
+                // Auto-translate handled the page load — skip the manual offer.
+                if await self.tryAutoTranslate(for: action) { return }
+
+                // Auto-translate didn't run; offer manual translation instead.
                 let toolbarAction = ToolbarAction(
                     translationConfiguration: TranslationConfiguration(
                         prefs: profile.prefs,
