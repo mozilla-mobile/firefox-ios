@@ -125,11 +125,11 @@ class FxAccountManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(authURL, "https://foo.bar/oauth?state=bobo")
 
-        // The mock simulates Rust's OAuth state validation: wrong state → disconnected
+        // The mock simulates Rust's OAuth state validation: wrong state → disconnected.
+        // finishAuthentication returns .failure when the FSM lands in a non-connected state.
         let finishAuthDone = expectation(description: "finishAuthDone")
         mgr.finishAuthentication(authData: FxaAuthData(code: "bobo", state: "NOTBOBO", actionQueryParam: "email")) { result in
-            // finishAuthentication itself succeeds (no error thrown); state will be disconnected
-            if case .success = result {
+            if case .failure = result {
                 finishAuthDone.fulfill()
             }
         }
@@ -175,11 +175,15 @@ class FxAccountManagerTests: XCTestCase {
 
         XCTAssertFalse(mgr.accountNeedsReauth())
 
-        XCTAssertTrue(account.invocations.contains(MockAccount.MethodInvocation.checkAuthorizationStatus))
+        // Read invocations through the same serial queue used for writes to avoid
+        // a potential memory visibility issue on the main test thread.
+        var hasCheckAuthStatus = false
+        queue.sync { hasCheckAuthStatus = account.invocations.contains(.checkAuthorizationStatus) }
+        XCTAssertTrue(hasCheckAuthStatus)
     }
 
     func testReLoginAfterLogout() {
-        // Regression test: after logout, resetAccount() creates a fresh account.
+        // Regression test: after logout, onDisconnected() creates a fresh account.
         // That account must be re-initialized so that beginAuthentication works again.
         let mgr = mockFxAManager()
 
@@ -195,7 +199,7 @@ class FxAccountManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(mgr.state, .disconnected)
 
-        // After logout, sign in must still work (account was re-initialized by resetAccount)
+        // After logout, sign in must still work (account was re-initialized by onDisconnected)
         let beginAuthDone = expectation(description: "beginAuthDone")
         nonisolated(unsafe) var authURL: String?
         mgr.beginAuthentication(entrypoint: "test_re_login_after_logout") { url in
@@ -204,7 +208,7 @@ class FxAccountManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(authURL, "https://foo.bar/oauth?state=bobo",
-                       "beginAuthentication must succeed after logout — resetAccount must re-initialize the account")
+                       "beginAuthentication must succeed after logout — onDisconnected must re-initialize the account")
     }
 
     func testGetTokenServerEndpointURL() {
