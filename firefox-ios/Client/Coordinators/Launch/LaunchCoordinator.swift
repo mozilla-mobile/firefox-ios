@@ -73,7 +73,10 @@ final class LaunchCoordinator: BaseCoordinator,
         let viewController = OnboardingVideoIntroViewController(windowUUID: windowUUID)
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
-        viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(title: "Continue", a11yIdentifier: ""))
+        viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(
+            title: .Onboarding.VideoIntro.ContinueAction,
+            a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
+        ))
         router.present(viewController, animated: false)
     }
 

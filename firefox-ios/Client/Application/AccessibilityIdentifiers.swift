@@ -412,6 +412,10 @@ struct AccessibilityIdentifiers {
         static let pageControl = "PageControl"
         static let bottomSheetCloseButton = "Onboarding.bottomSheetCloseButton"
 
+        struct VideoIntro {
+            static let continueButton = "Onboarding.VideoIntro.ContinueButton"
+        }
+
         struct Wallpaper {
             static let card = "wallpaperCard"
             static let title = "wallpaperOnboardingTitle"

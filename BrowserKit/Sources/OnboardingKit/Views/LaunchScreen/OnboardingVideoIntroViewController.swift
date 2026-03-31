@@ -75,7 +75,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
-            observing: [.AVPlayerItemDidPlayToEndTime]
+            observing: [.AVPlayerItemDidPlayToEndTime, UIApplication.willEnterForegroundNotification]
         )
     }
 
@@ -97,10 +97,18 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
 
     // MARK: - Notifiable
     nonisolated public func handleNotifications(_ notification: Notification) {
-        guard notification.name == .AVPlayerItemDidPlayToEndTime else { return }
-        DispatchQueue.main.async { [weak self] in
-            self?.player?.seek(to: .zero)
-            self?.player?.play()
+        switch notification.name {
+        case .AVPlayerItemDidPlayToEndTime:
+            DispatchQueue.main.async { [weak self] in
+                self?.player?.seek(to: .zero)
+                self?.player?.play()
+            }
+        case UIApplication.willEnterForegroundNotification:
+            DispatchQueue.main.async { [weak self] in
+                self?.player?.play()
+            }
+        default:
+            break
         }
     }
 

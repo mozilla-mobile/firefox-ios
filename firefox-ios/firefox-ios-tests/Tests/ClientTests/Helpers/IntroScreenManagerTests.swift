@@ -110,6 +110,13 @@ final class IntroScreenManagerTests: XCTestCase {
         XCTAssertEqual(subject.onboardingVariant, .legacy)
     }
 
+    // MARK: - shouldShowVideoIntro Tests
+
+    func testShouldShowVideoIntro_byDefault_returnsFalse() {
+        let subject = IntroScreenManager(prefs: prefs)
+        XCTAssertFalse(subject.shouldShowVideoIntro)
+    }
+
     // MARK: - Helper Methods
 
     private func setupNimbusFeatureFlags(enableModernUi: Bool, shouldUseJapanConfiguration: Bool) {
