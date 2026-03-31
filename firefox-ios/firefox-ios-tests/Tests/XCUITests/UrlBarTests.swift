@@ -19,6 +19,7 @@ class UrlBarTests: BaseTestCase {
         // The keyboard is dismissed
         XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
         // Select the tab tray and add a new tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // The URL bar is empty on the new tab

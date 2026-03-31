@@ -195,6 +195,7 @@ class HomePageSettingsUITests: FeatureFlaggedTestBase {
         enableJumpBackInInSettings()
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)

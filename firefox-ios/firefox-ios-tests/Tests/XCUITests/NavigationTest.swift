@@ -159,6 +159,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
 
@@ -489,6 +490,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
@@ -502,6 +504,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")

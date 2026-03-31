@@ -272,6 +272,7 @@ class LoginTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
@@ -491,6 +492,7 @@ class LoginTest: BaseTestCase {
         // There is a Saved Password toggle option (enabled)
         loginSettingsScreen.assertSavePasswordsToggleIsEnabled()
         navigator.goto(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
