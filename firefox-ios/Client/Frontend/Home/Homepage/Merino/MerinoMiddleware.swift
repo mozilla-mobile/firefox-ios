@@ -45,7 +45,7 @@ final class MerinoMiddleware {
             let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
             store.dispatch(
                 MerinoAction(
-                    merinoStories: merinoStories,
+                    merinoStoryResponse: merinoStories,
                     windowUUID: action.windowUUID,
                     actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
                 )

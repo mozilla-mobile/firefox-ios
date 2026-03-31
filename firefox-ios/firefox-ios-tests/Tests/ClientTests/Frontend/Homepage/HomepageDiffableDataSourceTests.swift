@@ -63,7 +63,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                merinoStories: createStories(),
+                merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
@@ -173,7 +173,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                merinoStories: createStories(),
+                merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
