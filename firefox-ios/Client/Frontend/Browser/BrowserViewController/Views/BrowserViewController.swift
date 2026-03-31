@@ -3016,8 +3016,6 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
-    private static let alertAttributedTitleKey = "attributedTitle"
-
     /// Presents an action sheet allowing the user to pick a translation target language.
     /// If the page is already translated, the sheet shows a "Show Original" option to restore the page.
     /// - Parameters:
@@ -3033,13 +3031,7 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            alert.setValue(
-                NSAttributedString(
-                    string: .Translations.LanguagePicker.Title,
-                    attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
-                ),
-                forKey: Self.alertAttributedTitleKey
-            )
+            alert.title = .Translations.LanguagePicker.Title
         }
 
         data.languages.forEach { code in
@@ -3068,7 +3060,7 @@ class BrowserViewController: UIViewController,
             ))
         })
 
-        alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        alert.addAction(UIAlertAction(title: .CancelString, style: .default))
 
         if let popover = alert.popoverPresentationController {
             if let sourceButton {
@@ -3089,14 +3081,7 @@ class BrowserViewController: UIViewController,
         languageCode: String
     ) {
         let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
-        let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
-        alert.setValue(
-            NSAttributedString(
-                string: title,
-                attributes: [.font: UIFont.preferredFont(forTextStyle: .headline)]
-            ),
-            forKey: Self.alertAttributedTitleKey
-        )
+        alert.title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
         let showOriginalAction = UIAlertAction(
             title: .Translations.LanguagePicker.ShowOriginal,
             style: .default
