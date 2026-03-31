@@ -30,7 +30,6 @@ final class BookmarksViewController: SiteTableViewController,
     var state: LibraryPanelMainState
     var isTransitioning = false
     let viewModel: BookmarksPanelViewModelProtocol
-    var bookmarksSaver: BookmarksSaver?
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
 
@@ -156,8 +155,6 @@ final class BookmarksViewController: SiteTableViewController,
         self.state = isMobileFolder ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile, windowUUID: windowUUID)
-
-        bookmarksSaver = DefaultBookmarksSaver(profile: profile)
 
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -327,26 +324,8 @@ final class BookmarksViewController: SiteTableViewController,
     /// Performs the delete asynchronously even though we update the
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
-        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
-            .uponQueue(.main) { _ in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
-                        self.profile.places.getBookmark(guid: recentBookmarkFolderGuid)
-                            .uponQueue(.main) { node in
-                                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                                MainActor.assumeIsolated {
-                                    guard let nodeValue = node.successValue, nodeValue == nil else { return }
-                                    self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
-                                }
-                            }
-                    }
-                    self.removeBookmarkShortcut()
-                }
-            }
-
         tableView.beginUpdates()
-        viewModel.removeBookmark(atPosition: indexPath.row)
+        viewModel.remove(bookmark: bookmarkNode)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         updateEmptyState(animated: false)
@@ -433,6 +412,7 @@ final class BookmarksViewController: SiteTableViewController,
 
         emptyStateView.configure(isRoot: viewModel.isRootNode,
                                  isSignedIn: profile.hasAccount())
+
         // Depending on empty state, show/hide the search bar in the library panel's toolbar
         sendPanelChangeNotification()
     }
@@ -697,8 +677,8 @@ final class BookmarksViewController: SiteTableViewController,
                    withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
         guard let destinationIndex = destinationIndexPath?.row,
               let sourceIndex = (session.localDragSession?.items[safe: 0]?.localObject as? IndexPath)?.row,
-              let destinationFolder = viewModel.bookmarkNodes[safe: destinationIndex],
-              let sourceNode = viewModel.bookmarkNodes[safe: sourceIndex],
+              let destinationFolder = viewModel.displayedBookmarkNodes[safe: destinationIndex],
+              let sourceNode = viewModel.displayedBookmarkNodes[safe: sourceIndex],
               destinationFolder.type == .folder,
               sourceNode.type == .bookmark || sourceNode.type == .folder,
               sourceNode.guid != destinationFolder.guid else {
@@ -713,28 +693,18 @@ final class BookmarksViewController: SiteTableViewController,
         guard let destinationIndexPath = coordinator.destinationIndexPath,
               let item = coordinator.items[safe: 0],
               let sourceIndexPath = item.dragItem.localObject as? IndexPath,
-              let sourceItem = viewModel.bookmarkNodes[safe: sourceIndexPath.row],
-              let destinationItem = viewModel.bookmarkNodes [safe: destinationIndexPath.row],
+              let sourceItem = viewModel.displayedBookmarkNodes[safe: sourceIndexPath.row],
+              let destinationItem = viewModel.displayedBookmarkNodes[safe: destinationIndexPath.row],
               coordinator.proposal.intent == .insertIntoDestinationIndexPath
         else { return }
 
-        Task {
-            let result = await bookmarksSaver?.save(bookmark: sourceItem,
-                                                    parentFolderGUID: destinationItem.guid)
-            switch result {
-            case .success:
-                Task { @MainActor in
-                    tableView.beginUpdates()
-                    viewModel.removeBookmark(atPosition: sourceIndexPath.row)
-                    tableView.deleteRows(at: [sourceIndexPath], with: .left)
-                    tableView.endUpdates()
-                    updateEmptyState(animated: false)
-                    profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
-                }
-            default:
-                return
-            }
-        }
+        tableView.beginUpdates()
+        viewModel.moveBookmarkToFolder(bookmark: sourceItem, withGUID: destinationItem.guid)
+        tableView.deleteRows(at: [sourceIndexPath], with: .left)
+        tableView.endUpdates()
+
+        updateEmptyState(animated: false)
+        profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {

@@ -12,7 +12,7 @@ import class MozillaAppServices.BookmarkItemData
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-protocol BookmarksPanelViewModelProtocol: Sendable {
+protocol BookmarksPanelViewModelProtocol: Sendable, CanRemoveQuickActionBookmark {
     var profile: Profile { get }
     var bookmarkNodes: [FxBookmarkNode] { get }
     var bookmarkFolder: FxBookmarkNode? { get }
@@ -25,8 +25,8 @@ protocol BookmarksPanelViewModelProtocol: Sendable {
     func resetSearch()
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
     func reloadData(completion: @escaping @MainActor () -> Void)
-    func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int)
-    func removeBookmark(atPosition position: Int)
+    func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String)
+    func remove(bookmark: FxBookmarkNode)
     func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     func createPinUnpinAction(
@@ -66,8 +66,9 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         return isSearching ? filteredBookmarkNodes : bookmarkNodes
     }
 
+    var bookmarksHandler: BookmarksHandler
+    private var bookmarksSaver: BookmarksSaver
     private var hasDesktopFolders = false
-    private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private let logger: Logger
 
@@ -75,10 +76,12 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     init(profile: Profile,
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
+         bookmarksSaver: BookmarksSaver? = nil,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
+        self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.logger = logger
     }
 
@@ -382,11 +385,50 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         filteredBookmarkNodes.removeAll()
     }
 
-    func addBookmark(bookmarkNode: FxBookmarkNode, atPosition position: Int) {
-        bookmarkNodes.insert(bookmarkNode, at: position)
+    func removeBookmarkLocally(bookmark: FxBookmarkNode) {
+        // Immediately remove the bookmark from backing arrays and search matches, if needed (for UI responsiveness)
+        bookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
+        filteredBookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
     }
 
-    func removeBookmark(atPosition position: Int) {
-        bookmarkNodes.remove(at: position)
+    /// Deletes the bookmark. Deletion of the bookmark in places happens asynchronously, but tableView source arrays are
+    /// updated immediately for UI responsiveness.
+    func remove(bookmark: FxBookmarkNode) {
+        // Remove the bookmark from places (async background work)
+        profile.places.deleteBookmarkNode(guid: bookmark.guid).uponQueue(.main) { _ in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                // Remove this bookmark out of recent places
+                if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
+                    self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
+                        // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+                        MainActor.assumeIsolated {
+                            guard let nodeValue = node.successValue, nodeValue == nil else { return }
+
+                            self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                        }
+                    }
+                }
+
+                // Remove this bookmark from quick actions
+                self.removeBookmarkShortcut()
+            }
+        }
+
+        // Immediately remove the bookmark from backing arrays and search matches, if needed (for UI responsiveness)
+        removeBookmarkLocally(bookmark: bookmark)
+    }
+
+    /// Updates the bookmark with a new parent GUID. Update of bookmark in places happens asynchronously, but tableView
+    /// source arrays are updated immediately for UI responsiveness.
+    func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String) {
+        // Save the bookmark updates (async)
+        Task {
+            _ = await bookmarksSaver.save(bookmark: bookmark, parentFolderGUID: parentFolderGUID)
+        }
+
+        // When a bookmark is dragged and dropped into another folder, we should remove it from the current view of bookmarks
+        // Immediately update the UI for responsiveness.
+        removeBookmarkLocally(bookmark: bookmark)
     }
 }
