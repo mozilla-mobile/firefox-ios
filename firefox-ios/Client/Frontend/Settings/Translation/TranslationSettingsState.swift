@@ -115,6 +115,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: true,
                 pendingLanguages: state.preferredLanguages,
                 preferredLanguages: state.preferredLanguages,
@@ -125,6 +126,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: false,
                 pendingLanguages: nil,
                 preferredLanguages: state.preferredLanguages,
@@ -135,6 +137,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: state.isEditing,
                 pendingLanguages: action.pendingLanguages ?? state.pendingLanguages,
                 preferredLanguages: state.preferredLanguages,
@@ -148,6 +151,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: state.isEditing,
                 pendingLanguages: pending,
                 preferredLanguages: state.preferredLanguages,

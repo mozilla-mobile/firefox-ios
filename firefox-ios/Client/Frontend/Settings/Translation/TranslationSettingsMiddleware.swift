@@ -41,6 +41,13 @@ final class TranslationSettingsMiddleware {
 
         switch action.actionType {
         case TranslationSettingsViewActionType.viewDidLoad:
+            let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+            store.dispatch(TranslationSettingsMiddlewareAction(
+                isTranslationsEnabled: isEnabled,
+                isAutoTranslateEnabled: isAutoTranslateEnabled,
+                windowUUID: action.windowUUID,
+                actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
+            ))
             Task { await self.loadSettings(windowUUID: action.windowUUID) }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
