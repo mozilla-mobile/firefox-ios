@@ -676,13 +676,14 @@ final class TabManagerMiddleware: FeatureFlaggable,
         guard let tab else { return false }
 
         // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
-        // and it is not a homepage (FxHome) tab.
+        // and it is not a homepage (FxHome) tab or empty url
         return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab && !urlString.isEmpty
     }
 
     private func canAddCopyOption(tab: Tab?, urlString: String) -> Bool {
         guard let tab else { return false }
 
+        // the option is not available if is homepage (FxHome) tab or empty url
         return !tab.isFxHomeTab && !urlString.isEmpty
     }
 
