@@ -125,6 +125,28 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider = { _, _ in }
     }
 
+    func test_viewDidLoad_readsAutoTranslatePref_whenEnabled() throws {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        )
+
+        let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, true)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
     // MARK: - toggleTranslationsEnabled
 
     func test_toggleTranslationsEnabled_whenEnabled_disablesAndDispatchesUpdate() throws {
