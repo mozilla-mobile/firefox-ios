@@ -31,6 +31,8 @@ struct AddressCellView: View {
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
 
+    @State private var isLandscape = false
+
     private(set) var address: Address
     private(set) var onTap: () -> Void
 
@@ -42,7 +44,7 @@ struct AddressCellView: View {
                 HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
                     Image(StandardImageIdentifiers.Large.location)
                         .renderingMode(.template)
-                        .modifier(ListItemIconPadding(isLandscape: UIDevice.current.orientation.isLandscape,
+                        .modifier(ListItemIconPadding(isLandscape: isLandscape,
                                                       paddingSize: UX.listIconPadding))
                         .foregroundColor(iconPrimary)
                         .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
@@ -81,6 +83,9 @@ struct AddressCellView: View {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            isLandscape = UIDevice.current.orientation.isLandscape
         }
         .accessibilityLabel(address.a11ySettingsRow)
     }
