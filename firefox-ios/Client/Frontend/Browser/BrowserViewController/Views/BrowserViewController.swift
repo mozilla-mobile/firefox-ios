@@ -155,17 +155,10 @@ class BrowserViewController: UIViewController,
     }
 
     // Constraints used to show/hide toolbars
-    var headerTopConstraint: Constraint?
+    var headerTopConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
-
-    // Other constraints
-    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
-    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
-    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -1679,6 +1672,9 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setupBottomContainerConstraints()
             browserLayoutManager.setupBottomContentStackViewConstraints()
             browserLayoutManager.setupOverKeyboardContainerConstraints()
+            headerTopConstraint = browserLayoutManager.headerTopConstraintReference
+            overKeyboardContainerConstraint = browserLayoutManager.overKeyboardContainerConstraint
+            bottomContainerConstraint = browserLayoutManager.bottomContainerConstraint
         } else {
             updateHeaderConstraints()
         }
@@ -1743,7 +1739,7 @@ class BrowserViewController: UIViewController,
                     let topConstraint = make.top.equalTo(topConstraint).constraint
                     scrollController.headerTopConstraint = ConstraintReference(snapKit: topConstraint)
                 } else {
-                    headerTopConstraint = make.top.equalTo(topConstraint).constraint
+                    headerTopConstraint = ConstraintReference(snapKit: make.top.equalTo(topConstraint).constraint)
                 }
                 make.left.right.equalTo(view)
             }
