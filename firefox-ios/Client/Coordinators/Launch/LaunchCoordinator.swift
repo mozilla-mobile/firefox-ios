@@ -70,10 +70,10 @@ final class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Video Intro
     private func presentVideoIntro() {
-        let viewController = VideoIntroViewController()
-        viewController.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        let viewController = OnboardingVideoIntroViewController(windowUUID: windowUUID)
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
+        viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(title: "Continue", a11yIdentifier: ""))
         router.present(viewController, animated: false)
     }
 
