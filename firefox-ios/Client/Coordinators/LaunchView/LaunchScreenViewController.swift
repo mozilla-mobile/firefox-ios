@@ -124,7 +124,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
             snapshotView.removeFromSuperview()
         })
     }
-    
+
     deinit {
         print("FF: deinti LaunchScreenViewController")
     }
