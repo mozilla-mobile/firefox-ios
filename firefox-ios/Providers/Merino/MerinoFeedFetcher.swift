@@ -9,6 +9,7 @@ protocol MerinoFeedFetching: Sendable {
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,
+        region: String?,
         userAgent: String
     ) async -> [RecommendationDataItem]
 }
@@ -20,6 +21,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,
+        region: String?,
         userAgent: String
     ) async -> [RecommendationDataItem] {
         do {
@@ -29,7 +31,12 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     userAgentHeader: userAgent
                 )
             )
-            let request = CuratedRecommendationsRequest(locale: locale, count: Int32(itemCount))
+            let request = CuratedRecommendationsRequest(
+                locale: locale,
+                region: region,
+                count: Int32(itemCount),
+                feeds: ["sections"]
+            )
             let response = try client.getCuratedRecommendations(request: request)
             return response.data
         } catch let error as CuratedRecommendationsApiError {

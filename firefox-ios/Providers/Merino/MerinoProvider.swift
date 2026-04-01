@@ -49,9 +49,9 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
-        if !AppConstants.isRunningTest && shouldUseMockData {
-            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
-        }
+//        if !AppConstants.isRunningTest && shouldUseMockData {
+//            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
+//        }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.isLocaleSupported(Locale.current.identifier)
@@ -81,9 +81,14 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
                 guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
                     return []
                 }
+
+                let region = SystemLocaleProvider().regionCode()
+                let regionCode: String? = region == "und" ? nil : region
+
                 let items = await fetcher.fetch(
                     itemCount: Constants.numberOfStoriesToFetchForCaching,
                     locale: currentLocale,
+                    region: regionCode,
                     userAgent: UserAgent.getUserAgent()
                 )
                 if !items.isEmpty {
