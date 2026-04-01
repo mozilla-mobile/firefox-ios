@@ -14,7 +14,7 @@ protocol MerinoFeedFetching: Sendable {
     ) async -> CuratedRecommendationsResponse?
 }
 
-struct MerinoFeedFetcher: MerinoFeedFetching {
+struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
     let baseURL: String
     let logger: Logger
 
@@ -31,14 +31,25 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     userAgentHeader: userAgent
                 )
             )
-            let request = CuratedRecommendationsRequest(
-                locale: locale,
-                region: region,
-                count: Int32(itemCount),
-                feeds: ["sections"]
-            )
-
-            return try client.getCuratedRecommendations(request: request)
+            if featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly) {
+                return try client.getCuratedRecommendations(
+                    request:
+                        CuratedRecommendationsRequest(
+                            locale: locale,
+                            region: region,
+                            count: Int32(itemCount),
+                            feeds: ["sections"]
+                        )
+                )
+            } else {
+                return try client.getCuratedRecommendations(
+                    request:
+                        CuratedRecommendationsRequest(
+                            locale: locale,
+                            count: Int32(itemCount),
+                        )
+                )
+            }
         } catch let error as CuratedRecommendationsApiError {
             switch error {
             case .Network(let reason):

@@ -85,9 +85,19 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
     func test_fetchContent_returnsCached_whenThresholdNotPassed() async throws {
         let control = await createSubject(thresholdHours: 4)
-        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("a"), .makeItem("b")])
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [
+                .makeItem("a"),
+                .makeItem("b")
+            ]
+        )
         control.cache.seed(response: cachedResponse, lastUpdated: Date())
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net1"), .makeItem("net2")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [
+                .makeItem("net1"),
+                .makeItem("net2")
+            ]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -100,7 +110,12 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         let control = await createSubject(thresholdHours: 1/60)
         let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("old")])
         control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-3600))
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("new1"), .makeItem("new2")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [
+                .makeItem("new1"),
+                .makeItem("new2")
+            ]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -113,7 +128,9 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     func test_fetchContent_fetchesAndSaves_whenNoCache() async throws {
         let control = await createSubject()
         control.cache.seedEmpty()
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("net")]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -139,10 +156,17 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     func test_fetchContent_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
         let control = await createSubject(prefsEnabled: true)
 
-        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("staleButNoTimestamp")])
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("staleButNoTimestamp")]
+        )
         control.cache.seed(response: cachedResponse, lastUpdated: nil)
 
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net1"), .makeItem("net2")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [
+                .makeItem("net1"),
+                .makeItem("net2")
+            ]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -157,9 +181,13 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
     func test_fetchContent_returnsCached_whenWithinOneHourThreshold() async throws {
         let control = await createSubject(thresholdHours: 1)
-        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("cached")])
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("cached")]
+        )
         control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-30 * 60))
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("network")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network")]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -170,7 +198,12 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     func test_fetchContent_coalescesConcurrentRequests_whenCacheIsStale() async throws {
         nonisolated(unsafe) let control = await createSubject(thresholdHours: 1)
         control.cache.seedEmpty()
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("a"), .makeItem("b")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [
+                .makeItem("a"),
+                .makeItem("b")
+            ]
+        )
         control.fetcher.fetchDelay = 100_000_000
 
         async let result1 = control.subject.fetchContent()
@@ -184,9 +217,13 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
     func test_fetchContent_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
         let control = await createSubject(thresholdHours: 1)
-        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("old")])
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("old")]
+        )
         control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-61 * 60))
-        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("fresh")])
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("fresh")]
+        )
 
         let result = try await control.subject.fetchContent()
 
@@ -233,10 +270,37 @@ extension RecommendationDataItem {
 }
 
 extension CuratedRecommendationsResponse {
-    static func makeResponse(items: [RecommendationDataItem]) -> CuratedRecommendationsResponse {
+    static func makeResponse(
+        items: [RecommendationDataItem],
+        feeds: [FeedSection]? = nil
+    ) -> CuratedRecommendationsResponse {
         return CuratedRecommendationsResponse(
             recommendedAt: Int64(Date().timeIntervalSince1970 * 1000),
-            data: items
+            data: items,
+            feeds: feeds
+        )
+    }
+}
+
+extension FeedSection {
+    static func makeSection(
+        feedId: String = "section",
+        receivedFeedRank: Int32 = 0,
+        recommendations: [RecommendationDataItem] = [],
+        title: String = "Section Title",
+        subtitle: String? = nil,
+        isFollowed: Bool = false,
+        isBlocked: Bool = false
+    ) -> FeedSection {
+        return FeedSection(
+            feedId: feedId,
+            receivedFeedRank: receivedFeedRank,
+            recommendations: recommendations,
+            title: title,
+            subtitle: subtitle,
+            layout: Layout(name: "4-large", responsiveLayouts: []),
+            isFollowed: isFollowed,
+            isBlocked: isBlocked
         )
     }
 }

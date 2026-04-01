@@ -487,6 +487,8 @@
 		39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */; };
 		39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */; };
 		39E186DF2F7D991700FD3FFA /* MerinoCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186DE2F7D991200FD3FFA /* MerinoCategory.swift */; };
+		39E186E22F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186E02F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift */; };
+		39E186E32F7DAA7F00FD3FFA /* MerinoCategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186E12F7DAA7F00FD3FFA /* MerinoCategoryTests.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
 		39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39F4C0F92045D87400746155 /* FocusHelper.js */; };
@@ -3406,6 +3408,8 @@
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategoryConfiguration.swift; sourceTree = "<group>"; };
 		39E186DE2F7D991200FD3FFA /* MerinoCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategory.swift; sourceTree = "<group>"; };
+		39E186E02F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategoryConfigurationTests.swift; sourceTree = "<group>"; };
+		39E186E12F7DAA7F00FD3FFA /* MerinoCategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategoryTests.swift; sourceTree = "<group>"; };
 		39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxScreenGraph.swift; sourceTree = "<group>"; };
 		39EF434D260A73950011E22E /* Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experiments.swift; sourceTree = "<group>"; };
 		39F4C0F92045D87400746155 /* FocusHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = FocusHelper.js; sourceTree = "<group>"; };
@@ -12591,6 +12595,17 @@
 			name = Accessors;
 			sourceTree = "<group>";
 		};
+		393B1E402F7EA2AC00DA7E9C /* Merino */ = {
+			isa = PBXGroup;
+			children = (
+				8AD8FDB52EBB008E00FDFD78 /* MerinoManagerTests.swift */,
+				81AE06F52E3AA69F002C3E58 /* MerinoProviderTests.swift */,
+				39E186E02F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift */,
+				39E186E12F7DAA7F00FD3FFA /* MerinoCategoryTests.swift */,
+			);
+			path = Merino;
+			sourceTree = "<group>";
+		};
 		397848DC1ED86605004C0C0B /* NotificationService */ = {
 			isa = PBXGroup;
 			children = (
@@ -13279,7 +13294,6 @@
 				8A00BD862CAB3FE500680AF9 /* HomepageViewControllerTests.swift */,
 				61E637842D03615D00E95B63 /* LabelButtonHeaderViewTests.swift */,
 				A1F0D0002F70000100ABC001 /* NewsTransitionHeaderViewTests.swift */,
-				8AD8FDB52EBB008E00FDFD78 /* MerinoManagerTests.swift */,
 				8A87B4352CC1A8FD003A9239 /* Mock */,
 				8A6E8DE92B275B49000C4301 /* PrivateHomepageViewControllerTests.swift */,
 				8A552AC22CB43A7000564C98 /* Redux */,
@@ -16511,7 +16525,7 @@
 				81DAB2EF2C88EFEE00F4BE98 /* MainMenu */,
 				C8DC90CA2A067BF10008832B /* MarkupParseUtilityTests */,
 				819820602E4A344800086890 /* CuratedRecommendationCacheUtilityTests.swift */,
-				81AE06F52E3AA69F002C3E58 /* MerinoProviderTests.swift */,
+				393B1E402F7EA2AC00DA7E9C /* Merino */,
 				C83DE54529DF3579006E1B69 /* Messaging */,
 				8A8482ED2BE15FEF00F9007B /* Microsurvey */,
 				C889D7D22858C85200121E1D /* Mocks */,
@@ -16522,8 +16536,8 @@
 				21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */,
 				0EC57CE12CA31AFC002E3F04 /* PasswordGenerator */,
 				CA24B53A24ABFE5D0093848C /* PasswordManagerDataSourceHelperTests.swift */,
-				CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */,
 				CA24B52024ABD7D40093848C /* PasswordManagerViewModelTests.swift */,
+				CA24B53824ABFE250093848C /* PasswordManagerSelectionHelperTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */,
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
@@ -19832,6 +19846,8 @@
 				43B658D929CE251C00C9EF08 /* CreditCardInputViewModelTests.swift in Sources */,
 				ED6D46E02D3573F80045E4ED /* TitleActivityItemProviderTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
+				39E186E22F7DAA7F00FD3FFA /* MerinoCategoryConfigurationTests.swift in Sources */,
+				39E186E32F7DAA7F00FD3FFA /* MerinoCategoryTests.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				CB5541872F51E1B100256DA1 /* CertificateHelperTests.swift in Sources */,
 				C2D80BEB2AAF395200CDF7A9 /* CredentialAutofillCoordinatorTests.swift in Sources */,

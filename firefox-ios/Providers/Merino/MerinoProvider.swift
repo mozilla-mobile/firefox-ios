@@ -91,12 +91,18 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
                     region: regionCode,
                     userAgent: UserAgent.getUserAgent()
                 )
-                if let response {
+
+                // Only cache items if we have a response, and it has some sort
+                // of data we'd like to actually save
+                if let response,
+                   !response.data.isEmpty || response.feeds != nil {
                     cache.clearCache()
                     cache.save(response)
                 }
+
                 return response
             }
+
             inFlightTask = newTask
             return newTask
         }
