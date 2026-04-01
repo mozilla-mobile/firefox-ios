@@ -117,10 +117,15 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         window.addSubview(snapshotView)
 
         // Animate the snapshot scaling and fading, revealing the browser underneath
-        UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseIn, animations: {
-            snapshotView.transform = .identity.scaledBy(x: 20.0, y: 20.0)
-            snapshotView.alpha = 0.0
-        }, completion: { _ in
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0.0,
+            options: .curveEaseIn,
+            animations: {
+                snapshotView.transform = .identity.scaledBy(x: 20.0, y: 20.0)
+                snapshotView.alpha = 0.0
+            },
+            completion: { _ in
             snapshotView.removeFromSuperview()
         })
     }
