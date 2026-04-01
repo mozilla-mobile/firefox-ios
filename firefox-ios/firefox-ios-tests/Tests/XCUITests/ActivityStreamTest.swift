@@ -21,6 +21,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
     private var tabTray: TabTrayScreen!
     private var browser: BrowserScreen!
     private var toolbar: ToolbarScreen!
+    private var homePage: HomePageScreen!
 
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
     let TopSiteCellgroup = XCUIApplication().links[TopSites.itemCell]
@@ -48,6 +49,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         tabTray = TabTrayScreen(app: app)
         browser = BrowserScreen(app: app)
         toolbar = ToolbarScreen(app: app)
+        homePage = HomePageScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -223,6 +225,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         browser.assertAddressBarContains(value: "wikipedia.org")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()
@@ -350,6 +353,29 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         mozWaitForElementToNotExist(itemCell)
         mozWaitForElementToNotExist(firstWebsite)
         mozWaitForElementToNotExist(secondWebsite)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2861432
+    func testHomepageHeader() {
+        app.launch()
+        XCTExpectFailure("The app was not launched", strict: false) {
+            topSites.assertVisible()
+        }
+        // "Firefox" text is displayed in the header
+        homePage.validateHomePageLogo(isPrivate: false)
+        // Validate step 1 in private browsing
+        // "Firefox" text is displayed in the header of the homepage.
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        homePage.validateHomePageLogo(isPrivate: true)
+        // Validate steps 1 and 2 in landscape orientation
+        XCUIDevice.shared.orientation = .landscapeLeft
+        waitForRotation(to: .landscapeLeft)
+        homePage.assertPrivateHomeTitleExists()
+        homePage.validateHomePageLogo(isPrivate: true)
+        navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        homePage.validateHomePageLogo(isPrivate: false)
     }
 
     private func addWebsiteToShortcut(website: String) {

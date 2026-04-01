@@ -10,7 +10,8 @@ import Shared
 /// State for the Merino stories section that is used in the homepage
 struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let merinoData: [MerinoStoryConfiguration]
+    let merinoData: MerinoStoryResponse
+    let hasMerinoResponseContent: Bool
     let shouldShowSection: Bool
     let sectionHeaderState = initializeSectionHeaderState()
 
@@ -23,18 +24,21 @@ struct MerinoState: StateType, Equatable {
 
         self.init(
             windowUUID: windowUUID,
-            merinoData: [],
+            merinoData: MerinoStoryResponse(),
+            hasMerinoResponseContent: false,
             shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        merinoData: [MerinoStoryConfiguration],
+        merinoData: MerinoStoryResponse,
+        hasMerinoResponseContent: Bool,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.merinoData = merinoData
+        self.hasMerinoResponseContent = hasMerinoResponseContent
         self.shouldShowSection = shouldShowSection
     }
 
@@ -46,7 +50,7 @@ struct MerinoState: StateType, Equatable {
 
         switch action.actionType {
         case MerinoMiddlewareActionType.retrievedUpdatedHomepageStories:
-            return handlePocketStoriesAction(action, state: state)
+            return handleMerinoStoriesAction(action, state: state)
         case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
         default:
@@ -54,17 +58,26 @@ struct MerinoState: StateType, Equatable {
         }
     }
 
-    private static func handlePocketStoriesAction(_ action: Action, state: MerinoState) -> MerinoState {
-        guard let pocketAction = action as? MerinoAction,
-              let pocketStories = pocketAction.merinoStories
+    private static func handleMerinoStoriesAction(_ action: Action, state: MerinoState) -> MerinoState {
+        guard let merinoAction = action as? MerinoAction,
+              let merinoResponse = merinoAction.merinoResponse
         else {
             return defaultState(from: state)
         }
 
+        let merinoContentExists = if let stories = merinoResponse.stories {
+            !stories.isEmpty
+        } else if let categories = merinoResponse.categories {
+            !categories.isEmpty
+        } else {
+            false
+        }
+
         return MerinoState(
             windowUUID: state.windowUUID,
-            merinoData: pocketStories,
-            shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
+            merinoData: merinoResponse,
+            hasMerinoResponseContent: merinoContentExists,
+            shouldShowSection: merinoContentExists && state.shouldShowSection
         )
     }
 
@@ -78,6 +91,7 @@ struct MerinoState: StateType, Equatable {
         return MerinoState(
             windowUUID: state.windowUUID,
             merinoData: state.merinoData,
+            hasMerinoResponseContent: state.hasMerinoResponseContent,
             shouldShowSection: isEnabled
         )
     }
@@ -86,6 +100,7 @@ struct MerinoState: StateType, Equatable {
         return MerinoState(
             windowUUID: state.windowUUID,
             merinoData: state.merinoData,
+            hasMerinoResponseContent: state.hasMerinoResponseContent,
             shouldShowSection: state.shouldShowSection
         )
     }
@@ -93,14 +108,12 @@ struct MerinoState: StateType, Equatable {
     private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-         let isScrollDirectionCustomized = scrollDirection != .baseline
+        let isScrollDirectionVertical = scrollDirection == .vertical
 
         return SectionHeaderConfiguration(
-            title: .FirefoxHomepage.Pocket.PopularTodaySectionTitle,
+            title: .FirefoxHomepage.Pocket.NewsSectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            isButtonHidden: isScrollDirectionCustomized,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.stories,
-            buttonTitle: String.FirefoxHomepage.Pocket.AllStoriesButtonTitle
+            style: isScrollDirectionVertical ? .newsAffordance : .sectionTitle
         )
     }
 }

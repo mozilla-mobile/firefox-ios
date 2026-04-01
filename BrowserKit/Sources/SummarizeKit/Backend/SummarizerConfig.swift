@@ -1,9 +1,10 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
+import LLMKit
 
 /// A configuration container for a summarizer.
-public struct SummarizerConfig: Equatable, Sendable {
+public struct SummarizerConfig: LLMConfig, Equatable, Sendable {
     public let instructions: String
     // FIXME: FXIOS-13417 We should strongly type options in the future so they can be any Sendable & Hashable
     /// NOTE: options is intentionally untyped to allow for flexibility in the configuration.

@@ -5,9 +5,10 @@
 import Foundation
 import Redux
 import Common
+import Shared
 
 @MainActor
-final class TranslationsMiddleware {
+final class TranslationsMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -18,11 +19,21 @@ final class TranslationsMiddleware {
     /// On iPhone, only a single window exists, so this will contain at most one entry.
     private var translationFlowIds: [WindowUUID: UUID] = [:]
 
+    /// Stores the last target language used per window, so retry can re-use the same language.
+    private var selectedTargetLanguages: [WindowUUID: String] = [:]
+
+    /// Tracks windows where the user explicitly restored the original (untranslated) page.
+    /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
+    /// auto-translate to immediately re-translate the page the user just opted out of.
+    /// Each entry is a one-shot flag: auto-translate is skipped for the immediately following
+    /// page load for that window, then the entry is removed. On iPhone only one window exists.
+    private var restoringWindows: Set<WindowUUID> = []
+
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          translationsService: TranslationsServiceProtocol = TranslationsService(),
-         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
+         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry()
     ) {
         self.profile = profile
         self.logger = logger
@@ -49,6 +60,10 @@ final class TranslationsMiddleware {
             guard let action = (action as? TranslationsAction) else { return }
             self.handleTappingRetryButtonOnToast(for: action, and: state)
 
+        case TranslationsActionType.didSelectTargetLanguage:
+            guard let action = (action as? TranslationLanguageSelectedAction) else { return }
+            self.handleLanguageSelected(for: action, and: state)
+
         default:
            break
         }
@@ -61,7 +76,7 @@ final class TranslationsMiddleware {
               type == .translate
         else { return }
 
-        guard let toolbarState = state.screenState(
+        guard let toolbarState = state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: action.windowUUID
@@ -78,21 +93,32 @@ final class TranslationsMiddleware {
             return
         }
 
-        // When user taps on button when in inactive mode,
-        // then we start translating the page and update the icon to loading.
-        // When user taps on button when in active mode,
-        // then we go back to inactive mode and page should reload to original language.
-
-        if translationConfiguration.state == .inactive {
+        if translationConfiguration.state == .inactive,
+           featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            let capturedButton = action.buttonTapped
+            Task { @MainActor in
+                let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+                let supported = await translationsService.fetchSupportedTargetLanguages()
+                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+                store.dispatch(GeneralBrowserAction(
+                    buttonTapped: capturedButton,
+                    translationLanguages: languages,
+                    windowUUID: action.windowUUID,
+                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                ))
+            }
+        } else if translationConfiguration.state == .inactive {
+            guard let deviceLanguage = Locale.current.languageCode else { return }
             let newFlowId = UUID()
             translationFlowIds[action.windowUUID] = newFlowId
+            selectedTargetLanguages[action.windowUUID] = deviceLanguage
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willTranslate,
                 translationFlowId: newFlowId
             )
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
-            self.retrieveTranslations(for: action)
+            self.retrieveTranslations(for: action, targetLanguage: deviceLanguage)
         } else if translationConfiguration.state == .active {
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
@@ -100,13 +126,41 @@ final class TranslationsMiddleware {
                 translationFlowId: flowId(for: action.windowUUID)
             )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
+            restoringWindows.insert(action.windowUUID)
             self.reloadPage(for: action)
         }
     }
 
     private func handleTappingRetryButtonOnToast(for action: TranslationsAction, and state: AppState) {
+        guard let language = selectedTargetLanguages[action.windowUUID] else {
+            logger.log(
+                "Missing stored target language for retry.",
+                level: .warning,
+                category: .translations
+            )
+            return
+        }
         self.handleUpdatingTranslationIcon(for: action, with: .loading)
-        retrieveTranslations(for: action)
+        retrieveTranslations(for: action, targetLanguage: language)
+    }
+
+    private func handleLanguageSelected(for action: TranslationLanguageSelectedAction, and state: AppState) {
+        guard let toolbarState = state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        ) else { return }
+
+        let newFlowId = UUID()
+        translationFlowIds[action.windowUUID] = newFlowId
+        selectedTargetLanguages[action.windowUUID] = action.targetLanguage
+        translationsTelemetry.translateButtonTapped(
+            isPrivate: toolbarState.isPrivateMode,
+            actionType: .willTranslate,
+            translationFlowId: newFlowId
+        )
+        self.handleUpdatingTranslationIcon(for: action, with: .loading)
+        self.retrieveTranslations(for: action, targetLanguage: action.targetLanguage)
     }
 
     @MainActor
@@ -125,6 +179,23 @@ final class TranslationsMiddleware {
         store.dispatch(toolbarAction)
     }
 
+    /// If auto-translate is enabled, triggers translation to the user's top preferred language.
+    /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
+    private func tryAutoTranslate(for action: ToolbarAction) async -> Bool {
+        if restoringWindows.remove(action.windowUUID) != nil { return false }
+        guard profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false else { return false }
+        let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+        let supported = await translationsService.fetchSupportedTargetLanguages()
+        let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
+        guard let targetLanguage = preferred.first else { return false }
+        let newFlowId = UUID()
+        translationFlowIds[action.windowUUID] = newFlowId
+        selectedTargetLanguages[action.windowUUID] = targetLanguage
+        handleUpdatingTranslationIcon(for: action, with: .loading)
+        retrieveTranslations(for: action, targetLanguage: targetLanguage)
+        return true
+    }
+
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
@@ -133,6 +204,11 @@ final class TranslationsMiddleware {
 
             do {
                 guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+
+                // Auto-translate handled the page load — skip the manual offer.
+                if await self.tryAutoTranslate(for: action) { return }
+
+                // Auto-translate didn't run; offer manual translation instead.
                 let toolbarAction = ToolbarAction(
                     translationConfiguration: TranslationConfiguration(
                         prefs: profile.prefs,
@@ -158,14 +234,12 @@ final class TranslationsMiddleware {
     }
 
     @MainActor
-    private func retrieveTranslations(for action: Action) {
-        // We dispatch an action for now, but eventually we want to inject a script
-        // to check if the page language differs from our locale language
-        // When translation completed, we want icon to be active mode.
+    private func retrieveTranslations(for action: Action, targetLanguage: String) {
         Task { @MainActor in
             do {
                 try await translationsService.translateCurrentPage(
                     for: action.windowUUID,
+                    to: targetLanguage,
                     onLanguageIdentified: { identifiedLanguage, deviceLanguage in
                         self.translationsTelemetry.pageLanguageIdentified(
                             identifiedLanguage: identifiedLanguage,
@@ -177,6 +251,7 @@ final class TranslationsMiddleware {
                 dispatchAction(
                     for: ToolbarActionType.translationCompleted,
                     with: .active,
+                    translatedToLanguage: targetLanguage,
                     and: action.windowUUID
                 )
             } catch {
@@ -222,12 +297,14 @@ final class TranslationsMiddleware {
     private func dispatchAction(
         for actionType: ToolbarActionType,
         with state: TranslationConfiguration.IconState,
+        translatedToLanguage: String? = nil,
         and windowUUID: WindowUUID
     ) {
         let toolbarAction = ToolbarAction(
             translationConfiguration: TranslationConfiguration(
                 prefs: profile.prefs,
-                state: state
+                state: state,
+                translatedToLanguage: translatedToLanguage
             ),
             windowUUID: windowUUID,
             actionType: actionType

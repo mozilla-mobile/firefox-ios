@@ -17,6 +17,7 @@ protocol PhotonActionSheetSelectorsSet {
     var SHARE_VIEW_BOOKMARK_THIS_PAGE: Selector { get }
     var SHARE_VIEW_ADD_TO_READING_LIST: Selector { get }
     var SHARE_VIEW_SEND_TO_DEVICE: Selector { get }
+    var ACTIVITY_LIST_VIEW: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -34,6 +35,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         static let shareViewBookmarkThisPage = "Bookmark This Page"
         static let shareViewAddToReadingList = "Add to Reading List"
         static let shareViewSendToDevice = "Send to Device"
+        static let activityListView = "ActivityListView"
     }
 
     let SETTINGS_MENU_BUTTON = Selector.buttonId(
@@ -54,7 +56,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         groups: ["photonActionSheet"]
     )
 
-    let PHOTON_ACTION_SHEET_WEBSITE_URL = Selector.staticTextByLabel(
+    let PHOTON_ACTION_SHEET_WEBSITE_URL = Selector.otherElementId(
         IDs.photonActionSheetWebsiteURL,
         description: "Photon action sheet's website URL",
         groups: ["photonActionSheet"]
@@ -66,7 +68,7 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         groups: ["photonActionSheet"]
     )
 
-    let PHOTON_ACTION_SHEET_SHARE_VIEW = Selector.anyId(
+    let PHOTON_ACTION_SHEET_SHARE_VIEW = Selector.navigationBarId(
         IDs.shareView,
         description: "Share view after tapping fennec icon",
         groups: ["photonActionSheet"]
@@ -108,10 +110,16 @@ struct PhotonActionSheetSelectors: PhotonActionSheetSelectorsSet {
         groups: ["photonActionSheet"]
     )
 
+    let ACTIVITY_LIST_VIEW = Selector.otherElementId(
+        IDs.activityListView,
+        description: "iOS system share sheet activity list view",
+        groups: ["photonActionSheet", "system"]
+    )
+
     var all: [Selector] { [SETTINGS_MENU_BUTTON, PHOTON_ACTION_SHEET_NAVIGATION_BAR,
         PHOTON_ACTION_SHEET_WEBSITE_TITLE, PHOTON_ACTION_SHEET_WEBSITE_URL,
         PHOTON_ACTION_SHEET_COPY_BUTTON, PHOTON_ACTION_SHEET_SHARE_VIEW,
         PHOTON_ACTION_SHEET_FENNEC_ICON, SHARE_VIEW_OPEN_IN_FIREFOX,
         SHARE_VIEW_LOAD_IN_BACKGROUND, SHARE_VIEW_BOOKMARK_THIS_PAGE,
-        SHARE_VIEW_ADD_TO_READING_LIST, SHARE_VIEW_SEND_TO_DEVICE] }
+        SHARE_VIEW_ADD_TO_READING_LIST, SHARE_VIEW_SEND_TO_DEVICE, ACTIVITY_LIST_VIEW] }
 }

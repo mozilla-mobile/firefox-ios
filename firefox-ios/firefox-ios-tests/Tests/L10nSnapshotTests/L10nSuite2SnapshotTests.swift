@@ -17,7 +17,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // Tap on each of the library buttons
         if #unavailable(iOS 26) {
             for i in 1...3 {
-                app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).tap()
+                app.segmentedControls["librarySegmentControl"].buttons.element(boundBy: i).waitAndTap()
                 snapshot("PanelsEmptyState-\(i)")
             }
         } else {
@@ -45,7 +45,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
         if app.menuItems["show.next.items.menu.button"].exists {
-            app.menuItems["show.next.items.menu.button"].tap()
+            app.menuItems["show.next.items.menu.button"].waitAndTap()
             snapshot("LongPressTextOptions-02")
         }
     }
@@ -113,7 +113,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     private func typePasscode(n: Int, keyNumber: Int) {
         for _ in 1...n {
-            app.keys.element(boundBy: keyNumber).tap()
+            app.keys.element(boundBy: keyNumber).waitAndTap()
             sleep(1)
         }
     }
@@ -123,8 +123,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         if app.buttons["Continue"].isHittable {
             // Attempt to find and tap the Continue button
             // of the keyboard onboarding screen.
-            app.buttons.staticTexts["Continue"].tap()
-            app.tables["Add Credential"].cells.element(boundBy: 1).tap()
+            app.buttons.staticTexts["Continue"].waitAndTap()
+            app.tables["Add Credential"].cells.element(boundBy: 1).waitAndTap()
         }
         key.waitAndTap(timeout: 5)
     }
@@ -141,7 +141,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
         // Press continue button on the password onboarding if it's shown
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
-            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].tap()
+            app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].waitAndTap()
         }
 
         let passcodeInput = springboard.secureTextFields.firstMatch
@@ -152,7 +152,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
         mozWaitForElementToExist(app.buttons["addCredentialButton"], timeout: 20)
         snapshot("CreateLogin")
-        app.buttons["addCredentialButton"].tap()
+        app.buttons["addCredentialButton"].waitAndTap()
 
         app.tables["Add Credential"].cells.element(boundBy: 0).waitAndTap(timeout: 15)
         tapKeyboardKey(key)
@@ -163,12 +163,16 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         tapKeyboardKey(key)
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).waitAndTap(timeout: 5)
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
+        if app.sheets.firstMatch.exists {
+            app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
+            mozWaitForElementToNotExist(app.sheets.firstMatch)
+        }
         snapshot("CreatedLoginView")
 
-        app.tables["Login List"].cells.element(boundBy: 2).tap()
+        app.tables["Login List"].cells.element(boundBy: 2).waitAndTap()
         snapshot("CreatedLoginDetailedView")
 
-        app.tables["Login Detail List"].cells.element(boundBy: 4).tap()
+        app.tables["Login Detail List"].cells.element(boundBy: 4).waitAndTap()
         snapshot("RemoveLoginDetailedView")
     }
 }

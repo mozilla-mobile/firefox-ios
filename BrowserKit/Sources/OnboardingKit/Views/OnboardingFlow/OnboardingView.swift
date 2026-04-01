@@ -14,15 +14,21 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     public let windowUUID: WindowUUID
     public var themeManager: ThemeManager
     @State public var theme: Theme
+    let pageControlAccessibilityId: String
+    let closeButtonAccessibilityId: String
 
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<ViewModel>
+        viewModel: OnboardingFlowViewModel<ViewModel>,
+        pageControlAccessibilityId: String,
+        closeButtonAccessibilityId: String
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
+        self.pageControlAccessibilityId = pageControlAccessibilityId
+        self.closeButtonAccessibilityId = closeButtonAccessibilityId
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -68,7 +74,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         numberOfPages: viewModel.onboardingCards.count,
                         windowUUID: windowUUID,
                         themeManager: themeManager,
-                        isBrandRefresh: viewModel.variant == .brandRefresh
+                        isBrandRefresh: viewModel.variant == .brandRefresh,
+                        accessibilityIdentifier: pageControlAccessibilityId
                     )
                     .padding(.bottom)
                 }
@@ -106,7 +113,8 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 windowUUID: windowUUID,
                 themeManager: themeManager,
                 style: .compact,
-                isBrandRefresh: viewModel.variant == .brandRefresh
+                isBrandRefresh: viewModel.variant == .brandRefresh,
+                accessibilityIdentifier: pageControlAccessibilityId
             )
             .padding(
                 .bottom,
@@ -136,6 +144,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         }
         .skipButtonStyle(theme: theme, variant: viewModel.variant)
         .accessibilityLabel(viewModel.skipText)
+        .accessibilityIdentifier(closeButtonAccessibilityId)
     }
 
     private var tabView: some View {

@@ -1,15 +1,13 @@
 // swift-tools-version: 5.10
 import PackageDescription
 
-let checksum = "787b7f118361aefc1c37024c92a95f3e7199527b8e51841822011159e20d0f46"
-let version = "149.0.20260212050311"
-let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.149.20260212050311/artifacts/public/build/MozillaRustComponents.xcframework.zip"
-    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/MozillaRustComponents.xcframework.zip"
+let checksum = "3898957d254946a959413cbfcfc8e857142de876b26e1df3a0a1190b2d1e9647"
+let version = "151.0.20260331050213"
+let url = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.151.20260331050213/artifacts/public/build/MozillaRustComponents.xcframework.zip"
 
 // Focus xcframework
-let focusChecksum = "57847de167b79e892663175a76b5e9f72436d564ace92f6272ff336298be92de"
-let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.149.20260212050311/artifacts/public/build/FocusRustComponents.xcframework.zip"
-    "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.148.20251217050246/artifacts/public/build/FocusRustComponents.xcframework.zip"
+let focusChecksum = "c9b00d9f0d634c5ea0c2bd4fb7e153c4cb793636dd9b9fba17ab361e0a8c69d0"
+let focusUrl = "https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/project.application-services.v2.swift.151.20260331050213/artifacts/public/build/FocusRustComponents.xcframework.zip"
 
 let package = Package(
     name: "MozillaRustComponentsSwift",
@@ -30,7 +28,8 @@ let package = Package(
             ],
             path: "Sources/MozillaRustComponentsWrapper",
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
+                .enableExperimentalFeature("StrictConcurrency"),
+                .unsafeFlags(["-enable-testing"]),
             ],
         ),
         .target(

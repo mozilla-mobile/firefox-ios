@@ -19,17 +19,14 @@ public struct PrefsKeys {
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
-    public static let HasFocusInstalled = "HasFocusInstalled"
-    public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
-    public static let TermsOfServiceAcceptedVersion = "TermsOfServiceAcceptedVersion"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
     public static let TermsOfUseAccepted = "termsOfUseAccepted"
-    public static let TermsOfUseAcceptedVersion = "TermsOfUseAcceptedVersion"
     public static let TermsOfUseAcceptedDate = "TermsOfUseAcceptedDate"
     public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
+    public static let TermsOfUseShownRecorded = "TermsOfUseShownRecorded"
     public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
@@ -39,11 +36,12 @@ public struct PrefsKeys {
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"
     public static let TermsOfUseTermsLinkTapDate = "TermsOfUseTermsLinkTapDate"
+    public static let TermsOfUseExperimentKey = "TermsOfUseExperimentKey" // "<slug>|<branch>|<name>"
+    public static let TermsOfUseExperimentTrackingInitialized = "TermsOfUseExperimentTrackingInitialized"
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
     public static let LoginsSaveEnabled = "saveLogins"
-    public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
@@ -79,6 +77,7 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
+        public static let selectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {
@@ -168,6 +167,9 @@ public struct PrefsKeys {
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
+        public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
+        public static let translationAutoTranslate = "settings.translationAutoTranslate"
+        public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
     }
 
     // Activity Stream
@@ -227,9 +229,6 @@ public struct PrefsKeys {
     public static let splashScreenShownKey = "splashScreenShownKey"
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
-
-    // Represents whether or not the user has seen the photon main menu once, at least.
-    public static let PhotonMainMenuShown = "PhotonMainMenuShown"
 
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.

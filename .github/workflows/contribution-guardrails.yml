@@ -1,0 +1,100 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: 'Contribution Guardrails'
+
+on:
+  pull_request_target:
+    types: [labeled, unlabeled, reopened]
+
+permissions: {}
+
+jobs:
+  contribution-check:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: contribution-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+
+    steps:
+      - name: Handle does-not-meet-guidelines label
+        if: github.event.action == 'labeled' && github.event.label.name == 'does-not-meet-guidelines'
+        shell: bash
+        env:
+          BODY: |
+            :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+
+            This pull request is being closed because it does not meet the project's 
+            [contribution guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md).
+
+            Common reasons might include:
+            - The changes are too large or not scoped to a single issue
+            - The PR lacks sufficient context or explanation
+            - The implementation does not follow existing patterns or project conventions
+            - The work was not validated (build, tests, or clear verification steps)
+            - The contribution was not aligned with maintainers before starting
+
+            To respect reviewer time and maintain code quality, we only review pull requests
+            that meet the baseline described in the contribution guidelines.
+
+            If you would like to continue working on this, please:
+            - Review the contribution guidelines linked above
+            - Ensure your work is for an issue labelled `contributor-friendly` or you have received explicit approval to work on an issue from a maintainer
+            - Break the work into smaller, focused pull requests (generally under ~400 lines)
+
+            Once the work is ready and aligned, feel free to open a new pull request.
+
+            If you have questions or would like to discuss on an approach, you can reach out on
+            [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) or comment on the related issue.
+
+            Thank you for your understanding.
+
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
+          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+
+      - name: Handle outside-approved-scope label
+        if: github.event.action == 'labeled' && github.event.label.name == 'outside-approved-scope'
+        shell: bash
+        env:
+         BODY: |
+          :wave: Thanks @${{ env.PR_AUTHOR }} for your contribution.
+
+          This pull request is being closed because it introduces changes that were 
+          not previously aligned with the maintainers. Please have a look at our contribution guidelines 
+          [here](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md#guidelines-for-contributing).
+
+          If you’d like to work on something that isn’t marked as contributor-friendly,
+          please reach out to a team member first to confirm whether it’s available.
+          Work that isn’t pre-aligned can be declined, as features and priorities are
+          carefully planned with product and design, and can also conflict with
+          work that is already in progress.
+
+          We absolutely welcome ideas and contributions. If you’d like to move this
+          forward, please let's align first. This can be done on [Element](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org), 
+          or the ticket itself for this feature. Thank you!
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr comment "$NUMBER" -R "$GH_REPO" -b "$BODY" || true
+          retry gh pr close "$NUMBER" -R "$GH_REPO" || true
+
+      - name: Reopen PR when label removed
+        if: github.event.action == 'unlabeled' && (github.event.label.name == 'does-not-meet-guidelines' || github.event.label.name == 'outside-approved-scope')
+        shell: bash
+        run: |
+          retry() { n=0; until "$@"; do n=$((n+1)); [ $n -ge 3 ] && break; sleep 2; done; }
+          retry gh pr reopen "$NUMBER" -R "$GH_REPO" || true
+
+      - name: Cleanup labels on manual reopen
+        if: github.event.action == 'reopened'
+        shell: bash
+        run: |
+          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "does-not-meet-guidelines" || true
+          gh pr edit "$NUMBER" -R "$GH_REPO" --remove-label "outside-approved-scope" || true

@@ -18,6 +18,8 @@ class MockTabManager: TabManager {
     var selectedTabUUID: UUID?
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
+    // Use to return in getTabForUUID()
+    var tabForUUID: Tab?
 
     var recentlyAccessedNormalTabs = [Tab]()
 
@@ -56,7 +58,7 @@ class MockTabManager: TabManager {
         }
     }
 
-    func selectTab(_ tab: Tab?, previous: Tab?) {
+    func selectTab(_ tab: Tab?, previous: Tab?, immediatePreservation: Bool) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
             selectedTab = tab
@@ -108,12 +110,12 @@ class MockTabManager: TabManager {
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
 
-    func preserveTabs() {}
+    func preserveTabs(immediate: Bool) {}
 
     func restoreTabs() {}
 
     func getTabForUUID(uuid: String) -> Tab? {
-        return nil
+        return tabForUUID
     }
 
     func getTabForURL(_ url: URL) -> Tab? {

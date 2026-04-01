@@ -173,6 +173,7 @@ class ReadingListPanel: UITableViewController,
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
+    var isTransitioning = false
     var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?

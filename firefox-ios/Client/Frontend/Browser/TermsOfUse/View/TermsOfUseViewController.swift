@@ -10,7 +10,8 @@ import ComponentLibrary
 final class TermsOfUseViewController: UIViewController,
                                       Themeable,
                                       UITextViewDelegate,
-                                      StoreSubscriber {
+                                      StoreSubscriber,
+                                      PreventsDismissal {
     private struct UX {
         static let cornerRadius: CGFloat = 20
         static let stackSpacing: CGFloat = 16
@@ -154,22 +155,22 @@ final class TermsOfUseViewController: UIViewController,
     }
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .termsOfUse)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .termsOfUse)
         store.dispatch(action)
         store.subscribe(self) {
             $0.select { appState in
-                appState.screenState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
+                appState.componentState(TermsOfUseState.self, for: .termsOfUse, window: self.windowUUID)
                 ?? TermsOfUseState(windowUUID: self.windowUUID)
             }
         }
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .termsOfUse)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .termsOfUse)
         store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }

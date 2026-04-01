@@ -42,6 +42,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.borderPosition)
         XCTAssertNil(initialState.url)
         XCTAssertNil(initialState.searchTerm)
+        XCTAssertNil(initialState.lockIconButtonA11yId)
         XCTAssertNil(initialState.lockIconImageName)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
@@ -77,6 +78,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
         XCTAssertNil(newState.url)
         XCTAssertNil(newState.searchTerm)
+        XCTAssertNil(newState.lockIconButtonA11yId)
         XCTAssertNil(newState.lockIconImageName)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
@@ -979,7 +981,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: isShowingNavigationToolbar,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
@@ -1002,8 +1004,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     // MARK: Helper
     func setupAppState(with initialToolbarState: ToolbarState) -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -1028,6 +1030,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             toolbarPosition: toolbarState.toolbarPosition,
             toolbarLayout: toolbarState.toolbarLayout,
+            tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
             isPrivateMode: toolbarState.isPrivateMode,
             addressToolbar: toolbarState.addressToolbar,
             navigationToolbar: toolbarState.navigationToolbar,
@@ -1042,14 +1045,16 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
-            isTranslucent: toolbarState.isTranslucent)
+            isTranslucent: toolbarState.isTranslucent,
+            previousTabScreenshot: toolbarState.previousTabScreenshot,
+            nextTabScreenshot: toolbarState.nextTabScreenshot)
     }
 
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

@@ -40,7 +40,7 @@ final class AddCreditCardScreen {
     func tapCreditCardForm() {
         // https://github.com/mozilla-mobile/firefox-ios/issues/31079
         if #available(iOS 26, *) {
-            sel.CARD_NUMBER_FIELD_BUTTON.element(in: app).waitAndTap()
+            sel.NAME_FIELD_BUTTON.element(in: app).waitAndTap()
         }
     }
 
@@ -58,12 +58,18 @@ final class AddCreditCardScreen {
     }
 
     func waitForCardFields() {
-        BaseTestCase().waitForElementsToExist([
-            sel.NAME_FIELD_BUTTON.element(in: app),
-            sel.CARD_NUMBER_FIELD_BUTTON.element(in: app),
-            sel.EXPIRATION_FIELD_BUTTON.element(in: app),
-            sel.SAVE_BUTTON.element(in: app)
-        ])
+            var elementsToWait = [
+                sel.NAME_FIELD_BUTTON.element(in: app),
+                sel.CARD_NUMBER_FIELD_BUTTON.element(in: app),
+                sel.EXPIRATION_FIELD_BUTTON.element(in: app)
+            ]
+
+            // Only check SAVE_BUTTON on iPhone
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                elementsToWait.append(sel.SAVE_BUTTON.element(in: app))
+            }
+
+            BaseTestCase().waitForElementsToExist(elementsToWait)
     }
 
     func fillCardFields(name: String, number: String, expiration: String) {
@@ -178,5 +184,9 @@ final class AddCreditCardScreen {
             BaseTestCase().mozWaitForElementToExist(app.keyboards.keys["Delete"])
             app.keyboards.keys["Delete"].press(forDuration: 2.2)
         }
+    }
+
+    private func typeExpiration(_ expiration: String) {
+        creditCard_ExpirationFieldButton.typeText(expiration)
     }
 }

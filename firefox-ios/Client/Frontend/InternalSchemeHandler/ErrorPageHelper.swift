@@ -13,10 +13,13 @@ private let MozDomain = "mozilla"
 private let MozErrorDownloadsNotEnabled = 100
 private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
+private let ErrorPageBadCertParam = "badcert"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
-private let CertErrors = [
+// TODO: This legacy constant should eventually be removed in favor of CertErrors
+// similar to LegacyCertErrorCodes 
+private let LegacyCertErrors = [
     NSURLErrorServerCertificateUntrusted,
     NSURLErrorServerCertificateHasBadDate,
     NSURLErrorServerCertificateHasUnknownRoot,
@@ -36,11 +39,10 @@ private let LegacyCertErrorCodes = [
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if let encodedCert = components?.queryItems?.first(where: { $0.name == "badcert" })?.value,
+        if let encodedCert = components?.queryItems?.first(where: { $0.name == ErrorPageBadCertParam })?.value,
             let certData = Data(base64Encoded: encodedCert, options: []) {
             return SecCertificateCreateWithData(nil, certData as CFData)
         }
-
         return nil
     }
 
@@ -51,7 +53,6 @@ private func certFromErrorURL(_ url: URL) -> SecCertificate? {
 
     // Fallback case when the error url is nested, this happens when restoring an error url,
     // it will be inside a 'sessionrestore' url.
-    // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
     if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
         return getCert(url)
     }
@@ -163,6 +164,10 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
+    var isOtherErrorPagesEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    }
+
     @MainActor
     func response(forRequest request: URLRequest, useOldErrorPage: Bool) -> (URLResponse, Data)? {
         guard let url = request.url,
@@ -177,8 +182,11 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        // Only handle No internet access because other cases show about:blank page
-        if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
+        let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
+        let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+
+        // Handle No internet access or certificate errors with native error page
+        if isNoInternetError || isCertificateError {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
@@ -242,7 +250,7 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
             }
             errDomain = ""
-        } else if CertErrors.contains(errCode) {
+        } else if LegacyCertErrors.contains(errCode) {
             guard let url = request.url,
                   let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
                   let certError = comp.valueForQuery("certerror")
@@ -315,13 +323,13 @@ class ErrorPageHelper {
         // user to go back or continue. The certificate itself is encoded and added as
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
-        if CertErrors.contains(error.code),
+        if LegacyCertErrors.contains(error.code),
             let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
             let cert = certChain.first,
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
             let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int {
             let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
-            queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
+            queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
 
             let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
             queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))

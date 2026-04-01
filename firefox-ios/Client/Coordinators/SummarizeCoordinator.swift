@@ -66,10 +66,17 @@ final class SummarizeCoordinator: BaseCoordinator,
     private func showSummarizeViewController() {
         let isAppleSummarizerEnabled = summarizerNimbusUtils.isAppleSummarizerEnabled()
         let isHostedSummarizerEnabled = summarizerNimbusUtils.isHostedSummarizerEnabled()
+        let isAppAttestAuthEnabled = summarizerNimbusUtils.isAppAttestAuthEnabled()
+        let usesPermissiveGuardrails = summarizerNimbusUtils.usesPermissiveGuardrails()
         guard let service = summarizerServiceFactory.make(
             isAppleSummarizerEnabled: isAppleSummarizerEnabled,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
-            config: config) else { return }
+            isAppAttestAuthEnabled: isAppAttestAuthEnabled,
+            usesPermissiveGuardrails: usesPermissiveGuardrails,
+            config: config) else {
+            parentCoordinatorDelegate?.didFinish(from: self)
+            return
+        }
 
         let brandLabel: String = if summarizerNimbusUtils.isAppleSummarizerEnabled() {
             .Summarizer.AppleBrandLabel

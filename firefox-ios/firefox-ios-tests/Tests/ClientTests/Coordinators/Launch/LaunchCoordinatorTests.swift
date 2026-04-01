@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import ComponentLibrary
 import OnboardingKit
 import XCTest
 @testable import Client
@@ -49,7 +50,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(presentedViewController as? TermsOfServiceViewController)
+        XCTAssertNotNil(presentedViewController as?
+                        PortraitOnlyHostingController<TermsOfUseView<OnboardingKitCardInfoModel>>)
     }
 
     func testStart_termsOfServiceIsIphone_present() throws {
@@ -60,7 +62,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(presentedViewController as? TermsOfServiceViewController)
+        XCTAssertNotNil(presentedViewController as?
+                        PortraitOnlyHostingController<TermsOfUseView<OnboardingKitCardInfoModel>>)
     }
 
     // MARK: - Intro
@@ -72,7 +75,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(presentedViewController as? IntroViewController)
+        XCTAssertNotNil(presentedViewController as?
+                        PortraitOnlyHostingController<OnboardingView<OnboardingKitCardInfoModel>>)
     }
 
     func testStart_introIsIphone_setRootView() throws {
@@ -83,7 +87,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         let pushedVC = try XCTUnwrap(mockRouter.presentedViewController)
-        XCTAssertNotNil(pushedVC as? IntroViewController)
+        XCTAssertNotNil(pushedVC as?
+                        PortraitOnlyHostingController<OnboardingView<OnboardingKitCardInfoModel>>)
     }
 
     func testStart_introNotIphone_presentToModernUI() throws {
@@ -117,7 +122,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     // MARK: - Update
     func testStart_updateNotIphone_present() throws {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
                                         telemetryUtility: telemetryUtility,
@@ -133,7 +138,7 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     func testStart_updateIsIphone_setRootView() throws {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
                                         telemetryUtility: telemetryUtility,

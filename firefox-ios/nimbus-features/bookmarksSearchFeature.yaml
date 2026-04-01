@@ -1,0 +1,18 @@
+# The configuration for the bookmarksSearchFeature feature
+features:
+  bookmarks-search-feature:
+    description: >
+      Configuration feature for the bookmarks search bar
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false

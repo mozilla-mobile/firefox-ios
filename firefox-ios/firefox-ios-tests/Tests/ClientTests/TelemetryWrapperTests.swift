@@ -117,35 +117,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     // MARK: - Onboarding
-    func test_onboardingSelectWallpaperWithExtras_GleanIsCalled() throws {
-        let wallpaperNameKey = TelemetryWrapper.EventExtraKey.wallpaperName.rawValue
-        let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
-        let extras = [wallpaperNameKey: "defaultBackground",
-                      wallpaperTypeKey: "default"]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .onboardingSelectWallpaper,
-                                     value: .wallpaperSelected,
-                                     extras: extras)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.wallpaperSelected)
-    }
-
-    func test_onboardingEngagementNotificationTapped_GleanIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .engagementNotification)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationTapped)
-    }
-
-    func test_onboardingEngagementNotificationCancel_GleanIsCalled() throws {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .cancel,
-                                     object: .engagementNotification)
-
-        try testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationCancel)
-    }
 
     // MARK: Wallpapers
 
@@ -345,18 +316,6 @@ class TelemetryWrapperTests: XCTestCase {
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.abandonment)
     }
 
-    // MARK: - Page Action Menu
-
-    func test_createNewTab_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .createNewTab
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
-    }
-
     // MARK: - History
 
     func test_HistoryPanelOpened_GleanIsCalled() throws {
@@ -381,26 +340,6 @@ class TelemetryWrapperTests: XCTestCase {
                                      object: .historySingleItemRemoved)
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.History.removed)
-    }
-
-    func test_viewHistoryPanel_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .viewHistoryPanel
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewHistoryPanel)
-    }
-
-    func test_viewDownloadsPanel_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .viewDownloadsPanel
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewDownloadsPanel)
     }
 
     // Accessibility

@@ -9,7 +9,7 @@ features:
         description: >
           Toggle between legacy (false) and modern (true) UI variants.
         type: Boolean
-        default: false
+        default: true
       should-use-japan-configuration:
         description: >
           Toggle between standard (false) and Japan-specific (true) assets and content.
@@ -19,7 +19,7 @@ features:
         description: >
           Toggle between standard (false) and brand refresh (true) onboarding content.
         type: Boolean
-        default: false
+        default: true
       conditions:
         description: >
           A collection of out the box conditional expressions to be
@@ -43,9 +43,9 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: false
+          enable-modern-ui: true
           should-use-japan-configuration: false
-          should-use-brand-refresh-configuration: false
+          should-use-brand-refresh-configuration: true
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -408,7 +408,7 @@ features:
             welcome-brand-refresh:
               card-type: basic
               order: 10
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149
               body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
               image: trackers-brand-refresh
               buttons:

@@ -56,6 +56,7 @@ struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let lockIcon = "AddressToolbar.lockIcon"
+            static let lockIconOff = "AddressToolbar.lockIconOff"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
             static let leadingSkeleton = "AddressToolbar.leadingSkeleton"
@@ -64,6 +65,7 @@ struct AccessibilityIdentifiers {
 
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
+            static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
@@ -119,6 +121,7 @@ struct AccessibilityIdentifiers {
         static let moreLess = "MainMenu.MoreLess"
         static let signIn = "MainMenu.SignIn"
         static let summarizePage = "MainMenu.SummarizePage"
+        static let translatePage = "MainMenu.TranslatePage"
         static let trackigProtection = "shieldCheckmarkLarge"
     }
 
@@ -237,7 +240,6 @@ struct AccessibilityIdentifiers {
             static let shortcuts = "shortcutsSectionMoreButton"
             static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let stories = "storiesSectionMoreButton"
         }
 
         struct SectionTitles {
@@ -275,14 +277,6 @@ struct AccessibilityIdentifiers {
             static let itemTitle = "SyncedTabItemTitle"
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
-        }
-
-        struct StoriesFeed {
-            static let storiesFeedCell = "StoriesFeedCell"
-        }
-
-        struct StoriesWebview {
-            static let reloadButton = "StoriesWebviewReloadButton"
         }
     }
 
@@ -387,6 +381,7 @@ struct AccessibilityIdentifiers {
             static let saveButton = "BookmarksDetail.SaveButton"
             static let titleTextFieldClearButton = "BookmarksDetail.TitleTextFieldClearButton"
             static let urlTextFieldClearButton = "BookmarksDetail.UrlTextFieldClearButton"
+            static let bookmarksFolder = "BookmarksDetail.ParentFolderSelector.FolderCell_0"
         }
 
         struct HistoryPanel {
@@ -468,6 +463,10 @@ struct AccessibilityIdentifiers {
         static let title = "Settings"
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
+
+        struct AIControls {
+            static let title = "AIControlsSettings"
+        }
 
         struct Appearance {
             static let browserThemeSectionTitle = "BrowserThemeSectionTitle"
@@ -740,6 +739,7 @@ struct AccessibilityIdentifiers {
             static let title = "SummarizeSettings"
             static let summarizeContentSwitch = "summarizeContentFeature"
             static let shakeGestureSwitch = "shakeGestureEnabledKey"
+            static let languageCell = "summarizeLanguageCell"
         }
 
         struct Theme {
@@ -753,6 +753,7 @@ struct AccessibilityIdentifiers {
             static let navigationBar = "Settings.Translation.navigationBar"
             static let backButtoniOS26 = "BackButton"
             static let backButton = "Settings"
+            static let languagePickerList = "Settings.Translation.LanguagePickerList"
         }
 
         struct BlockImages {
@@ -883,6 +884,11 @@ struct AccessibilityIdentifiers {
         static let titleLabel = "NativeErrorPage.titleLabel"
         static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
         static let reloadButton = "NativeErrorPage.reloadButton"
+        static let goBackButton = "NativeErrorPage.goBackButton"
+        static let proceedButton = "NativeErrorPage.proceedButton"
+        static let advancedSectionHeader = "NativeErrorPage.advancedSectionHeader"
+        static let viewCertificateLink = "NativeErrorPage.viewCertificateLink"
+        static let learnMoreLink = "NativeErrorPage.learnMoreLink"
     }
 
     struct SaveLoginAlert {

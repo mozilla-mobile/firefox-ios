@@ -13,8 +13,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case addressAutofillEdit
     case addressBarMenu
     case adsClient
+    case aiKillSwitch
     case appearanceMenu
     case appIconSelection
+    case bookmarksSearchFeature
     case bottomSearchBar
     case deeplinkOptimizationRefactor
     case defaultZoomFeature
@@ -28,11 +30,10 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
     case homepageStoriesScrollDirection
+    case homepageStoryCategories
+    case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
     case shouldUseJapanConfiguration
-    case menuDefaultBrowserBanner
-    case menuRefactor
-    case menuRedesignHint
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
@@ -46,13 +47,13 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
-    case appleSummarizer
-    case appleSummarizerToolbarEntrypoint
-    case appleSummarizerShakeGesture
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
+    case summarizerLanguageExpansion
+    case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayUIExperiments
     case tabTrayTranslucency
@@ -69,36 +70,42 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case touFeature
     case trackingProtectionRefactor
     case translation
+    case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
-    case voiceSearch
-    case webEngineIntegrationRefactor
+    case quickAnswers
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .appearanceMenu,
+        case    .aiKillSwitch,
+                .appearanceMenu,
                 .appIconSelection,
-                .appleSummarizer,
                 .addressBarMenu,
                 .adsClient,
+                .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
                 .homepageSearchBar,
+                .homepageStoryCategories,
                 .hostedSummarizer,
+                .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
                 .feltPrivacySimplifiedUI,
-                .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
+                .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
                 .sentFromFirefox,
                 .snapkitRemovalRefactor,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .toolbarRefactor,
@@ -106,10 +113,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch,
-                .voiceSearch,
-                .webEngineIntegrationRefactor:
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -134,6 +140,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
+        case .aiKillSwitch:
+            return PrefsKeys.Settings.aiKillSwitchFeature
         case .bottomSearchBar:
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
@@ -154,6 +162,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .addressAutofillEdit,
                 .addressBarMenu,
                 .adsClient,
+                .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .defaultZoomFeature,
                 .downloadLiveActivities,
@@ -162,14 +171,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,
+                .homepageStoryCategories,
+                .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
                 .shouldUseJapanConfiguration,
-                .menuDefaultBrowserBanner,
-                .menuRefactor,
-                .menuRedesignHint,
                 .microsurvey,
                 .modernOnboardingUI,
                 .nativeErrorPage,
+                .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
                 .otherErrorPages,
                 .recentSearches,
@@ -177,14 +186,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .sentFromFirefoxTreatmentA,
                 .snapkitRemovalRefactor,
                 .splashScreen,
-                .appleSummarizer,
-                .appleSummarizerToolbarEntrypoint,
-                .appleSummarizerShakeGesture,
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .quickAnswers,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
+                .summarizerLanguageExpansion,
+                .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
@@ -201,10 +210,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
+                .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch,
-                .voiceSearch,
-                .webEngineIntegrationRefactor:
+                .unifiedSearch:
             return nil
         }
     }

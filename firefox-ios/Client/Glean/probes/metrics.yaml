@@ -2968,4 +2968,6 @@ nimbus_system:
     expires: never
     send_in_pings:
       - nimbus
+      - nimbus-targeting-context
+    lifetime: application
 

@@ -14,7 +14,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         static let faviconCornerRadius: CGFloat = 2
         static let tabTitlePadding: CGFloat = 10
         static let tabTitlePaddingVersion: CGFloat = 14
-        static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
 
         // MARK: - Tab Appearance Constants
         static let tabCornerRadius: CGFloat = 8
@@ -101,8 +100,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.manuallySetImage(
-            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
+        favicon.manuallySetImage(UIImage(named: ImageIdentifiers.firefoxFavicon) ?? UIImage())
+
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
@@ -168,7 +167,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                 cellBackground.centerXAnchor.constraint(equalTo: centerXAnchor),
                 cellBackground.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-                favicon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                favicon.centerYAnchor.constraint(equalTo: centerYAnchor),
                 favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
                 favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
                 favicon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.tabTitlePadding),
@@ -184,9 +183,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
                     constant: UX.tabTitlePadding
                 ),
 
-                closeButton.centerYAnchor.constraint(equalTo: centerYAnchor, constant: UX.tabNudge),
+                closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
                 closeButton.widthAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
-                closeButton.heightAnchor.constraint(equalTo: heightAnchor),
+                closeButton.heightAnchor.constraint(equalTo: heightAnchor, constant: -UX.tabTitlePadding),
                 closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             ]
         )

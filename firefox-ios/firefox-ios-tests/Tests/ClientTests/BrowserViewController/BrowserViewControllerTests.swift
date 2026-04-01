@@ -522,6 +522,61 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(recordVisitManager.lastVisitObservation)
     }
 
+    // MARK: - updateInContentHomePanel
+
+    func testUpdateInContentHomePanel_withCertificateErrorURL_showsNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            otherErrorPagesIsEnabled: true
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 1)
+    }
+
+    func testUpdateInContentHomePanel_withNonCertErrorURL_doesNotShowNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: false,
+            otherErrorPagesIsEnabled: true
+        )
+        let subject = createSubject()
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(NSURLErrorTimedOut)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    func testUpdateInContentHomePanel_withCertErrorURL_andFeatureFlagDisabled_doesNotShowNativeErrorPage() {
+        setupNimbusNativeErrorPageTesting(
+            isEnabled: true,
+            noInternetConnectionErrorIsEnabled: true,
+            otherErrorPagesIsEnabled: false
+        )
+        let subject = createSubject()
+        let certErrorCode = NSURLErrorServerCertificateUntrusted
+        let errorPageURL = URL(
+            string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)"
+            + "?url=https%3A%2F%2Fexample.com&code=\(certErrorCode)"
+        )!
+
+        subject.updateInContentHomePanel(errorPageURL)
+
+        XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
@@ -563,6 +618,20 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    private func setupNimbusNativeErrorPageTesting(
+        isEnabled: Bool,
+        noInternetConnectionErrorIsEnabled: Bool,
+        otherErrorPagesIsEnabled: Bool
+    ) {
+        FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
+            return NativeErrorPageFeature(
+                enabled: isEnabled,
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled,
+                otherErrorPages: otherErrorPagesIsEnabled
+            )
+        }
+    }
+
     /// We need to set up the state for the homepage search bar in order to test method that relies on this state.
     func setupStoreForSearchBar() {
         let initialHomepageState = HomepageState
@@ -583,8 +652,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 )
             )
         mockStore = MockStoreForMiddleware(state: AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID
@@ -602,8 +671,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     // MARK: - StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

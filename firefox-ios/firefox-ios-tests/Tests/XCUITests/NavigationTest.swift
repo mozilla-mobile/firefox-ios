@@ -20,13 +20,27 @@ let website_2 = [
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
-class NavigationTest: BaseTestCase {
+class NavigationTest: FeatureFlaggedTestSuite {
+    // There are multiple onboarding flows, so use a feature flag to test just against the newest flow.
+    let onboardingFlowType = OnboardingScreen.OnboardingFlowType.modernKit
+
+    override func setUpExperimentVariables() {
+        jsonFileName = onboardingFlowType.jsonFeatureOverrideFileName
+        featureName = onboardingFlowType.onboardingFeatureName
+    }
+
     var contextMenuScreen: ContextMenuScreen!
     var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
     var browserScreen: BrowserScreen!
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+
+        launchApp()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
@@ -569,6 +583,88 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
         validateExternalLink()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306833
+    func testLongTapFirefoxIconNewTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewTabButton()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3408299
+    func testLongTapFirefoxIconNewPrivateTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
+        waitForTabsButton()
+        app.terminate()
+        springBoardScreen.assertFennecIconExists()
+        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        springBoardScreen.tapNewPrivateButton()
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.closeTourIfNeeded()
+        browserScreen.assertPrivateModeMessageCardExists()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    func testLongTapFirefoxIconOpenLastBookmark() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springboardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
+
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+
+        // Open and bookmark a page
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        bookmark(isLockIconOff: false)
+
+        // Terminate app and go to springboard
+        app.terminate()
+
+        springboardScreen.assertFennecIconExists()
+        springboardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+
+        // Verify all context menu options are present
+        springboardScreen.assertAllContextMenuOptionsExist()
+        springboardScreen.tapOpenLastBookmarkButton()
+
+        // Close onboarding if it appears
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.closeTourIfNeeded()
+
+        // Verify the bookmarked page opens
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
     private func validateExternalLink() {

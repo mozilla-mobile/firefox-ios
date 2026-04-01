@@ -7,6 +7,9 @@
 /* Accessibility label for the summarize button that can be displayed in the address toolbar. */
 "Toolbar.NewTab.Button.v142" = "Stronu zjimać";
 
+/* Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar. */
+"Toolbar.ReaderModeWithSummarizer.Button.v150" = "Čitanski napohlad. Zjeće strony k dispoziciji.";
+
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Tutón rajtark začinić";
 

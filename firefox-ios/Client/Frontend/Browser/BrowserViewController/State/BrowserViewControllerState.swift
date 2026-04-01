@@ -9,6 +9,12 @@ import Common
 import WebKit
 import SummarizeKit
 
+struct TranslationLanguagePickerData: Equatable {
+    let languages: [String]
+    let isTranslated: Bool
+    let translatedToLanguage: String?
+}
+
 struct BrowserViewControllerState: ScreenState {
     enum NavigationType: Equatable {
         case home
@@ -36,6 +42,7 @@ struct BrowserViewControllerState: ScreenState {
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
+        case translationLanguagePicker(TranslationLanguagePickerData)
     }
 
     let windowUUID: WindowUUID
@@ -53,7 +60,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigationDestination: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let bvcState = appState.screenState(
+        guard let bvcState = appState.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: uuid)
@@ -171,8 +178,9 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnShareSheet,
             NavigationBrowserActionType.tapOnHomepageSearchBar,
             NavigationBrowserActionType.tapOnShortcutsShowAllButton,
-            NavigationBrowserActionType.tapOnAllStoriesButton,
-            NavigationBrowserActionType.tapOnPrivacyNoticeLink:
+            NavigationBrowserActionType.tapOnPrivacyNoticeLink,
+            NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage,
+            NavigationBrowserActionType.tapOnNativeErrorPageLearnMore:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 windowUUID: state.windowUUID,
@@ -230,7 +238,7 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarMiddlewareActionType.didTapButton:
-            let shouldShowSearchBar = store.state.screenState(
+            let shouldShowSearchBar = store.state.componentState(
                 HomepageState.self,
                 for: .homepage,
                 window: action.windowUUID
@@ -347,6 +355,8 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowPasswordGeneratorAction(state: state, action: action)
         case GeneralBrowserActionType.showSummarizer:
             return handleShowSummarizerAction(state: state, action: action)
+        case GeneralBrowserActionType.showTranslationLanguagePicker:
+            return handleShowTranslationLanguagePickerAction(state: state, action: action)
         default:
             return passthroughState(from: state, action: action)
         }
@@ -631,6 +641,25 @@ struct BrowserViewControllerState: ScreenState {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             displayView: .summarizer(config: action.summarizerConfig),
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
+    @MainActor
+    private static func handleShowTranslationLanguagePickerAction(
+        state: BrowserViewControllerState,
+        action: GeneralBrowserAction
+    ) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            toast: state.toast,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            displayView: .translationLanguagePicker(TranslationLanguagePickerData(
+                languages: action.translationLanguages ?? [],
+                isTranslated: action.isPageTranslated ?? false,
+                translatedToLanguage: action.translatedToLanguage
+            )),
+            buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 

@@ -38,6 +38,7 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnBookmarksShowMoreButton
     case tapOnHomepageSearchBar
     case tapOnShortcutsShowAllButton
-    case tapOnAllStoriesButton
     case tapOnPrivacyNoticeLink
+    case tapOnShowCertificatesFromErrorPage
+    case tapOnNativeErrorPageLearnMore
 }

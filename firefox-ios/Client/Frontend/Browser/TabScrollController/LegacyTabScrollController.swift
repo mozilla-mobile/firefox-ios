@@ -12,8 +12,8 @@ protocol LegacyTabScrollProvider: TabScrollHandlerProtocol {
     var tab: Tab? { get set }
     var zoomPageBar: ZoomPageBar? { get set }
     var headerTopConstraint: ConstraintReference? { get set }
-    var overKeyboardContainerConstraint: Constraint? { get set }
-    var bottomContainerConstraint: Constraint? { get set }
+    var overKeyboardContainerConstraint: ConstraintReference? { get set }
+    var bottomContainerConstraint: ConstraintReference? { get set }
 
     func configureToolbarViews(overKeyboardContainer: BaseAlphaStackView?,
                                bottomContainer: BaseAlphaStackView?,
@@ -86,8 +86,8 @@ final class LegacyTabScrollController: NSObject,
 
     // Toolbar Constraints
     var headerTopConstraint: ConstraintReference?
-    var overKeyboardContainerConstraint: Constraint?
-    var bottomContainerConstraint: Constraint?
+    var overKeyboardContainerConstraint: ConstraintReference?
+    var bottomContainerConstraint: ConstraintReference?
 
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
@@ -249,7 +249,7 @@ final class LegacyTabScrollController: NSObject,
         }
 
         MainActor.assumeIsolated {
-            observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+            stopObservingAllScrollViews()
         }
     }
 
@@ -307,7 +307,7 @@ final class LegacyTabScrollController: NSObject,
     private func applicationWillTerminate() {
         // Ensures that we immediately de-register KVO observations for content size changes in
         // webviews if the app is about to terminate.
-        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        stopObservingAllScrollViews()
     }
 
     @objc
@@ -412,6 +412,12 @@ final class LegacyTabScrollController: NSObject,
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
     }
 
+    /// Copy collection first to avoid mutation during iteration.
+    private func stopObservingAllScrollViews() {
+        let scrollViewsToCleanup = Array(observedScrollViews)
+        scrollViewsToCleanup.forEach { stopObserving(scrollView: $0) }
+    }
+
     override nonisolated func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
@@ -466,8 +472,8 @@ final class LegacyTabScrollController: NSObject,
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willTerminateNotification:
-            ensureMainThread {
-                self.applicationWillTerminate
+            Task { @MainActor in
+                self.applicationWillTerminate()
             }
         default:
             return
@@ -524,7 +530,7 @@ private extension LegacyTabScrollController {
     @objc
     func reload() {
         guard let tab = tab else { return }
-        tab.reloadPage()
+        tab.reload()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 

@@ -6,7 +6,8 @@ import Foundation
 import Common
 
 class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
-                                 ReusableCell {
+                                 ReusableCell,
+                                 ThemeApplicable {
     let totalTrackersBlockedLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left

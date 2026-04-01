@@ -39,8 +39,11 @@ struct NotificationManagerTelemetry {
                                  extras: permissionExtra)
     }
 
-    func sendNotificationPermissionPrompt(isPermissionGranted: Bool) {
-        let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(granted: isPermissionGranted)
+    func sendNotificationPermissionPrompt(isPermissionGranted: Bool, onboardingReason: OnboardingReason = .newUser) {
+        let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(
+            granted: isPermissionGranted,
+            onboardingReason: onboardingReason.rawValue
+        )
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.notificationPermissionPrompt,
                                  extras: permissionExtra)
     }

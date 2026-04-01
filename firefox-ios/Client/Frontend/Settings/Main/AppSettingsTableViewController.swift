@@ -405,6 +405,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildOnly) {
+            generalSettings.append(AIControlsSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         generalSettings += [
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
@@ -537,6 +541,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif

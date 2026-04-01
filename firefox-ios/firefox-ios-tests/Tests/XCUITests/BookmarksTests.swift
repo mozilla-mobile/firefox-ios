@@ -128,7 +128,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.nowAt(BrowserTab)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         bookmark()
-
         // There should be a bookmark
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: true)
@@ -139,46 +138,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarksAwesomeBar() {
         app.launch()
         XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                     timeout: TIMEOUT_LONG)
-        }
-        typeOnSearchBar(text: "www.google")
-        waitForElementsToExist([app.tables["SiteTable"], app.tables["SiteTable"].cells.staticTexts["www.google"]])
-        urlBarAddress.typeText(".com")
-        urlBarAddress.typeText("\r")
-        navigator.nowAt(BrowserTab)
-
-        // Clear text and enter new url
-        waitUntilPageLoad()
-        waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        typeOnSearchBar(text: "https://mozilla.org")
-
-        // Site table exists but is empty
-        mozWaitForElementToExist(app.tables["SiteTable"])
-        XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
-        urlBarAddress.typeText("\r")
-        navigator.nowAt(BrowserTab)
-
-        // Add page to bookmarks
-        waitForTabsButton()
-        sleep(2)
-        bookmark()
-
-        // Now the site should be suggested
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(BrowserTab)
-        typeOnSearchBar(text: "mozilla.org")
-        waitForElementsToExist([app.tables["SiteTable"], app.cells.staticTexts["mozilla.org"]])
-        XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306907
-    // SmokeTest TAE
-    func testBookmarksAwesomeBar_TAE() {
-        app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
             topSitesScreen.assertVisible()
         }
         browserScreen.tapOnAddressBar()
@@ -186,10 +145,11 @@ class BookmarksTests: FeatureFlaggedTestBase {
         browserScreen.assertTypeSuggestText(text: "www.google")
         browserScreen.typeOnSearchBar(text: ".com")
         browserScreen.typeOnSearchBar(text: "\r")
+        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
 
         // Enter new url
-        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
@@ -198,48 +158,55 @@ class BookmarksTests: FeatureFlaggedTestBase {
         browserScreen.assertNumberOfSuggestedLines(expectedLines: 0)
         browserScreen.typeOnSearchBar(text: "\r")
         waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks
-        bookmark_TAE()
+        bookmark(isLockIconOff: false)
 
         // Now the site should be suggested
+        toolbarScreen.assertSettingsButtonExists()
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "mozilla.org")
         browserScreen.assertTypeSuggestText(text: "mozilla.org")
+        browserScreen.assertSuggestedLinesNotEmpty()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306914
+    // https://mozilla.testrail.io/index.php?/cases/view/3168587
     func testAddNewFolder() {
         app.launch()
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
-        mozWaitForElementToExist(app.navigationBars["Bookmarks"])
-        app.buttons["Edit"].waitAndTap()
-        app.buttons["New Folder"].waitAndTap()
-        // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables.cells.textFields.element(boundBy: 0).tapAndTypeText("Test Folder")
-        app.buttons["Save"].waitAndTap()
-        app.buttons["Done"].waitAndTap()
-        mozWaitForElementToExist(app.staticTexts["Test Folder"])
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.assertNewFreshFolderCreated(folderName: "Test Folder")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168596
+    func testDeleteEmptyFolderInEditMode() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
         navigator.nowAt(MobileBookmarks)
-        // Now remove the folder
-        navigator.performAction(Action.RemoveItemMobileBookmarks)
-        if #available (iOS 17, *) {
-            mozWaitForElementToExist(app.buttons["Remove Test Folder"])
-        } else {
-            mozWaitForElementToExist(app.buttons["Delete Test Folder"])
-        }
-        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.tapEditButton()
+        libraryScreen.deleteFolder(folderName: "Test Folder")
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
+    }
 
-        app.buttons["Done"].waitAndTap()
-
-        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
-        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
-        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
-        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
-        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
+    // https://mozilla.testrail.io/index.php?/cases/view/3168588
+    func testEditModeExitsOnlyWithDoneButton() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
+        libraryScreen.tapEditButton()
+        libraryScreen.assertNewFolderButtonExists()
+        libraryScreen.tapDoneButton()
+        libraryScreen.assertNewFolderButtonExists(shouldExists: false)
+        libraryScreen.addFreshNewFolder(text: "Test Folder")
+        libraryScreen.tapDoneButton()
+        libraryScreen.assertEditButtonExists()
+        libraryScreen.assertNewFolderButtonExists(shouldExists: false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306917
@@ -288,47 +255,8 @@ class BookmarksTests: FeatureFlaggedTestBase {
     func testBookmarkLibraryAddDeleteBookmark() {
         app.launch()
         navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        navigator.goto(LibraryPanel_Bookmarks)
-        // There is only one row in the bookmarks panel, which is the desktop folder
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
-
-        // Add a bookmark
-        navigator.nowAt(LibraryPanel_Bookmarks)
-        navigator.goto(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-
-        navigator.openURL(url_3)
-        waitForTabsButton()
-        navigator.nowAt(BrowserTab)
-        bookmark()
-
-        // Check that it appears in Bookmarks panel
-        navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
-
-        // Delete the Bookmark added, check it is removed
-        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
-        app.buttons["Delete"].waitAndTap()
-
-        // Check that the bookmark was deleted by ensuring an element of the empty state is visible
-        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
-        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
-        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
-        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306909
-    // SmokeTest TAE
-    func testBookmarkLibraryAddDeleteBookmark_TAE() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
         toolbarScreen.assertTabsButtonExists()
         navigator.goto(LibraryPanel_Bookmarks)
-        libraryScreen.assertBookmarkList()
-        libraryScreen.assertBookmarkListCount(numberOfEntries: 0)
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
@@ -336,8 +264,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         navigator.openURL(url_3)
         waitUntilPageLoad()
+        toolbarScreen.assertTabsButtonExists()
         navigator.nowAt(BrowserTab)
-        bookmark_TAE()
+        bookmark()
 
         // Check that it appears in Bookmarks panel
         navigator.goto(LibraryPanel_Bookmarks)
@@ -398,7 +327,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         enableBookmarksInSettings()
-        validateLongTapOptionsFromBookmarkLink(isExperiment: true)
+        validateLongTapOptionsFromBookmarkLink()
         forceRestartApp()
         app.launch()
         navigator.nowAt(NewTabScreen)
@@ -406,7 +335,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         if #available(iOS 18, *) {
             XCUIDevice.shared.orientation = .landscapeLeft
             navigator.nowAt(NewTabScreen)
-            validateLongTapOptionsFromBookmarkLink(isExperiment: true)
+            validateLongTapOptionsFromBookmarkLink()
         }
     }
 
@@ -428,7 +357,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
         app.launch()
         navigator.openURL(url_3)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         navigator.nowAt(BrowserTab)
         bookmark()
         navigator.nowAt(NewTabScreen)
@@ -438,66 +367,46 @@ class BookmarksTests: FeatureFlaggedTestBase {
             app.swipeUp()
         }
         navigator.goto(HomeSettings)
-        let bookmarksToggle = app.tables.cells.switches["Bookmarks"]
-        mozWaitForElementToExist(bookmarksToggle)
-        if bookmarksToggle.value! as? String == "1" {
-            bookmarksToggle.waitAndTap()
-        }
-        XCTAssertEqual(bookmarksToggle.value! as? String, "0", "Bookmark toogle is not disabled")
+        homepageSettingsScreen.assertBookmarkToggleExists()
+        homepageSettingsScreen.disableBookmarkToggle()
+        homepageSettingsScreen.assertBookmarkToggleIsDisabled()
         navigator.nowAt(HomeSettings)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tapIfExists()
-        mozWaitForElementToNotExist(app.cells["BookmarksCell"])
+        browserScreen.tapCancelButtonIfExist()
+        firefoxHomeScreen.assertBookmarksItemCellToNotExist()
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             app.swipeUp()
         }
         navigator.goto(HomeSettings)
-        mozWaitForElementToExist(bookmarksToggle)
-        if bookmarksToggle.value! as? String == "0" {
-            bookmarksToggle.waitAndTap()
-        }
-        XCTAssertEqual(bookmarksToggle.value! as? String, "1", "Bookmark toogle is not enabled")
-        navigator.nowAt(HomeSettings)
-        navigator.goto(HomePanelsScreen)
-        mozWaitForElementToExist(app.cells["BookmarksCell"])
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2784448
-    // SmokeTest TAE
-    func testBookmarksToggleIsAvailable_TAE() throws {
-        addLaunchArgument(jsonFileName: "homepageRedesignOff", featureName: "homepage-redesign-feature")
-        app.launch()
-        navigator.openURL(url_3)
-        toolbarScreen.assertTabsButtonExists()
-        navigator.nowAt(BrowserTab)
-        bookmark_TAE()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(HomeSettings)
-        homepageSettingsScreen.assertBookmarkToggleExists()
-        homepageSettingsScreen.disableBookmarkToggle()
-        homepageSettingsScreen.assertBookmarkToggleIsDisabled()
-        navigator.nowAt(HomeSettings)
-        navigator.goto(NewTabScreen)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        browserScreen.tapCancelButtonIfExist()
-        firefoxHomeScreen.assertBookmarksItemCellToNotExist()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(HomeSettings)
         homepageSettingsScreen.assertBookmarkToggleExists()
         homepageSettingsScreen.enableBookmarkToggle()
         homepageSettingsScreen.assertBookmarkToggleIsEnabled()
         navigator.nowAt(HomeSettings)
-        navigator.goto(NewTabScreen)
-        navigator.goto(TabTray)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        browserScreen.tapCancelButtonIfExist()
+        navigator.goto(HomePanelsScreen)
         firefoxHomeScreen.assertBookmarksItemCellExist()
     }
 
-    private func validateLongTapOptionsFromBookmarkLink(isExperiment: Bool) {
+    // https://mozilla.testrail.io/index.php?/cases/view/3168583
+    func testNoFoldersInBookmarks() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.nowAt(MobileBookmarks)
+        libraryScreen.assertBookmarkList()
+        libraryScreen.assertBookmarkListCount(numberOfEntries: 0)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168584
+    func testCheckDonebutton() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.assertBookmarkEmptyStateTextExists()
+        navigator.goto(HomePanelsScreen)
+        libraryScreen.assertBookmarkEmptyStateTextExists(shouldExist: false)
+    }
+
+    private func validateLongTapOptionsFromBookmarkLink() {
         // Go to "Recently saved" section and long tap on one of the links
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
@@ -582,12 +491,5 @@ class BookmarksTests: FeatureFlaggedTestBase {
         XCTAssertEqual(nrOfTabs, tabsOpen as? String)
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "localhost")
-    }
-
-    func bookmark_TAE() {
-        browserScreen.assertAddressBar_LockIconExist()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.Bookmark)
     }
 }

@@ -2,7 +2,7 @@
 "DefaultBrowserCard.BetterInternet.Description.v108" = "ការធ្វើឱ្យ Firefox កម្មវិធីរុករកលំនាំដើមរបស់អ្នកគឺជាការបោះឆ្នោតសម្រាប់អ៊ីនធឺណិតដែលបើកចំហ និងអាចចូលប្រើបាន។";
 
 /* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.BetterInternet.Title.v108" = "លំនាំដើមទៅអ៊ីនធឺណិតកាន់តែប្រសើរ";
+"DefaultBrowserCard.BetterInternet.Title.v108" = "បុរសជម្រើស ដើម្បីអ៊ីនធឺណិតកាន់តែប្រសើរ";
 
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "ស្វែងយល់​របៀប";

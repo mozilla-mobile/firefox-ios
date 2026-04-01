@@ -43,7 +43,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 0)
+        XCTAssertEqual(snapshot.numberOfSections, 2)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .spacer])
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
     }
 
     @MainActor
@@ -60,7 +63,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                merinoStories: createStories(),
+                merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
@@ -82,10 +85,16 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .spacer,
+            .pocket(.systemCyan)
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
     @MainActor
-    func test_updateSnapshot_withValidState_returnTopSites() throws {
+    func test_updateSnapshot_withOverflowingTopSites_returnTopSitesWithHeader() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
@@ -109,9 +118,50 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, 4)), 8)
+        let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
+        let displayedTopSitesCount = updatedState.topSitesState.numberOfRows * numberOfTilesPerRow
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, true)), displayedTopSitesCount)
         let expectedSections: [HomepageSection] = [
-            .topSites(nil, 4)
+            .header,
+            .topSites(nil, numberOfTilesPerRow, true),
+            .spacer
+        ]
+        XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withTopSitesWithinVisibleCount_returnTopSitesWithoutHeader() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let numberOfRows = 2
+
+        let stateWithRows = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                numberOfRows: numberOfRows,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+        let topSitesCount = numberOfRows * stateWithRows.topSitesState.numberOfTilesPerRow
+
+        let updatedState = HomepageState.reducer(
+            stateWithRows,
+            TopSitesAction(
+                topSites: createSites(count: topSitesCount),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        let numberOfTilesPerRow = updatedState.topSitesState.numberOfTilesPerRow
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .topSites(nil, numberOfTilesPerRow, false)), topSitesCount)
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .topSites(nil, numberOfTilesPerRow, false),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -123,7 +173,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let state = HomepageState.reducer(
             HomepageState(windowUUID: .XCTestDefaultUUID),
             MerinoAction(
-                merinoStories: createStories(),
+                merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
@@ -134,6 +184,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
+            .header,
+            .spacer,
             .pocket(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -163,7 +215,9 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .messageCard), 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .messageCard).first, HomepageItem.messageCard(configuration))
         let expectedSections: [HomepageSection] = [
-            .messageCard
+            .header,
+            .messageCard,
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -200,7 +254,9 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
-            .bookmarks(nil)
+            .header,
+            .bookmarks(nil),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -231,7 +287,9 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
-            .jumpBackIn(nil, mockSectionConfig)
+            .header,
+            .jumpBackIn(nil, mockSectionConfig),
+            .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -250,7 +308,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
         let snapshot = dataSource.snapshot()
-        let expectedSections: [HomepageSection] = [.privacyNotice]
+        let expectedSections: [HomepageSection] = [
+            .header,
+            .privacyNotice,
+            .spacer
+        ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 

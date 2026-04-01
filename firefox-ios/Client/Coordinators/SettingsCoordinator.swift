@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import SwiftUI
+import Shared
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     @MainActor
@@ -29,12 +30,15 @@ final class SettingsCoordinator: BaseCoordinator,
                                  ParentCoordinatorDelegate,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
-                                 AppearanceSettingsDelegate {
+                                 AppearanceSettingsDelegate,
+                                 TranslationPickerSettingsDelegate,
+                                 FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
+    private let relayController: RelayControllerProtocol
     private let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService
     weak var parentCoordinator: SettingsCoordinatorDelegate?
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
@@ -46,6 +50,7 @@ final class SettingsCoordinator: BaseCoordinator,
         profile: Profile = AppContainer.shared.resolve(),
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
+        relayController: RelayControllerProtocol,
         gleanUsageReportingMetricsService: GleanUsageReportingMetricsService = AppContainer.shared.resolve(),
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
@@ -55,6 +60,7 @@ final class SettingsCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.gleanUsageReportingMetricsService = gleanUsageReportingMetricsService
         self.settingsTelemetry = SettingsTelemetry(gleanWrapper: gleanWrapper)
+        self.relayController = relayController
         super.init(router: router)
 
         // It's important we initialize AppSettingsTableViewController with a settingsDelegate and parentCoordinator
@@ -98,6 +104,7 @@ final class SettingsCoordinator: BaseCoordinator,
         }
     }
 
+    // swiftlint:disable:next function_body_length
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .appIcon:
@@ -211,11 +218,15 @@ final class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .relayMask:
-            return RelayMaskSettingsViewController(profile: profile, windowUUID: windowUUID, tabManager: tabManager)
+            return RelayMaskSettingsViewController(profile: profile,
+                                                   windowUUID: windowUUID,
+                                                   tabManager: tabManager,
+                                                   relayController: relayController)
 
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
+        case .translation: return translationSettingsViewController()
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
@@ -301,7 +312,9 @@ final class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAutoFillsPasswords() {
-        let viewController = AutoFillPasswordSettingsViewController(profile: profile, windowUUID: windowUUID)
+        let viewController = AutoFillPasswordSettingsViewController(profile: profile,
+                                                                    relayController: relayController,
+                                                                    windowUUID: windowUUID)
         viewController.parentCoordinator = self
         router.push(viewController)
     }
@@ -364,6 +377,18 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     // MARK: GeneralSettingsDelegate
+    func pressedAIControls() {
+        let model = AIControlsModel(prefs: profile.prefs)
+
+        let viewController = UIHostingController(
+            rootView: AIControlsSettingsView(
+                windowUUID: windowUUID,
+                aiControlsModel: model
+            )
+        )
+        viewController.title = .Settings.AIControls.Title
+        router.push(viewController)
+    }
 
     func pressedCustomizeAppIcon() {
         settingsTelemetry.optionSelected(option: .AppIconSelection)
@@ -422,9 +447,9 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
@@ -453,8 +478,26 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
-        router.push(viewController)
+        router.push(translationSettingsViewController())
+    }
+
+    private func translationSettingsViewController() -> UIViewController {
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            viewController.coordinator = self
+            return viewController
+        } else {
+            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        }
+    }
+
+    func showLanguagePicker(availableLanguages: [String]) {
+        let picker = TranslationLanguagePickerViewController(
+            windowUUID: windowUUID,
+            languages: availableLanguages
+        )
+        let navigationController = UINavigationController(rootViewController: picker)
+        router.present(navigationController)
     }
 
     // MARK: AccountSettingsDelegate

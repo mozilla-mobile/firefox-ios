@@ -19,6 +19,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .adsClient:
             return checkAdsClientFeature(from: nimbus)
 
+        case .aiKillSwitch:
+            return checkAiKillSwitchFeature(from: nimbus)
+
         case .appearanceMenu:
             return checkAppearanceMenuFeature(from: nimbus)
 
@@ -30,6 +33,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .bottomSearchBar:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
+
+        case .bookmarksSearchFeature:
+            return checkBookmarksSearchFeature(from: nimbus)
 
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
@@ -64,20 +70,17 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageStoriesScrollDirection:
             return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
 
+        case .homepageStoryCategories:
+            return checkHomepageStoriesCaterogiesFeature(from: nimbus)
+
+        case .needsReloadRefactor:
+            return checkNeedsReloadRefactorFeature(from: nimbus)
+
         case .shouldUseBrandRefreshConfiguration:
             return checkShouldUseBrandRefreshConfigurationFeature(from: nimbus)
 
         case .shouldUseJapanConfiguration:
             return checkShouldUseJapanConfigurationFeature(from: nimbus)
-
-        case .menuDefaultBrowserBanner:
-            return checkMenuDefaultBrowserBanner(from: nimbus)
-
-        case .menuRefactor:
-            return checkMenuRefactor(from: nimbus)
-
-        case .menuRedesignHint:
-            return checkMenuRedesignHint(from: nimbus)
 
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
@@ -115,17 +118,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID, from: nimbus) != .disabled
 
-        case .appleSummarizer:
-           return checkAppleSummarizerFeature(from: nimbus)
-
-        case .appleSummarizerToolbarEntrypoint:
-           return checkAppleSummarizerToolbarEntrypoint(from: nimbus)
-
-        case .appleSummarizerShakeGesture:
-           return checkAppleSummarizerShakeGesture(from: nimbus)
-
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
+
+        case .improvedAppStoreReviewTriggerFeature:
+            return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
 
         case .relayIntegration:
             return checkRelayIntegration(from: nimbus)
@@ -137,7 +134,13 @@ final class NimbusFeatureFlagLayer: Sendable {
            return checkHostedSummarizerShakeGesture(from: nimbus)
 
         case .summarizerAppAttestAuth:
-            return checkAppleSummarizerFeature(from: nimbus)
+            return checkSummarizerAppAttestAuthFeature(from: nimbus)
+
+        case .summarizerLanguageExpansion:
+            return checkSummarizerLanguageExpansionFeature(from: nimbus)
+
+        case .summarizerPermissiveGuardrails:
+            return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
@@ -190,14 +193,14 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .translation:
             return checkTranslationFeature(from: nimbus)
 
+        case .translationLanguagePicker:
+            return checkTranslationLanguagePickerFeature(from: nimbus)
+
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
-        case .voiceSearch:
-            return checkVoiceSearchFeature(from: nimbus)
-
-        case .webEngineIntegrationRefactor:
-            return checkWebEngineIntegrationRefactor(from: nimbus)
+        case .quickAnswers:
+            return checkQuickAnswersFeature(from: nimbus)
         }
     }
 
@@ -248,6 +251,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageSearchBarFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().searchBar
+    }
+
+    private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
     }
 
     private func checkHomepageStoriesScrollDirectionFeature(from nimbus: FxNimbus) -> ScrollDirection {
@@ -345,12 +352,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.translationsFeature.value().enabled
     }
 
+    private func checkTranslationLanguagePickerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.translationsFeature.value().languagePickerEnabled
+    }
+
     private func checkTrendingSearches(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.trendingSearchesFeature.value().enabled
     }
 
-    private func checkVoiceSearchFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.voiceSearchFeature.value().enabled
+    private func checkQuickAnswersFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.quickAnswersFeature.value().enabled
     }
 
     private func checkFeltPrivacyFeature(
@@ -437,20 +448,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.status
     }
 
-    private func checkMenuDefaultBrowserBanner(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuDefaultBrowserBanner
-    }
-
-    private func checkMenuRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.menuRefactorFeature.value().enabled
-    }
-
-    private func checkMenuRedesignHint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuRedesignHint
-    }
-
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -469,20 +466,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
     }
 
+    private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.improvedAppStoreReviewTriggerFeature.value().enabled
+    }
+
     // MARK: - Summarizer Feature
-    private func checkAppleSummarizerFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appleSummarizerFeature.value()
-        return config.enabled
-    }
-
-    private func checkAppleSummarizerToolbarEntrypoint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.appleSummarizerFeature.value()
-        return config.toolbarEntrypoint
-    }
-
-    private func checkAppleSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.appleSummarizerFeature.value().shakeGesture
-    }
 
     private func checkHostedSummarizerFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.hostedSummarizerFeature.value()
@@ -502,12 +490,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
     }
 
-    private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
+    private func checkSummarizerLanguageExpansionFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerLanguageExpansionFeature.value().enabled
     }
 
-    private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.webEngineIntegrationRefactor.value().enabled
+    private func checkSummarizerPermissiveGuardrailsFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.summarizerPermissiveGuardrailsFeature.value().enabled
+    }
+
+    private func checkMondernOnboardingUIFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
     }
 
     private func checkShouldUseBrandRefreshConfigurationFeature(from nimbus: FxNimbus) -> Bool {
@@ -516,5 +508,17 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
+    }
+
+    private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.needsReloadRefactor.value().enabled
+    }
+
+    private func checkAiKillSwitchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.aiKillSwitchFeature.value().enabled
+    }
+
+    private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarksSearchFeature.value().enabled
     }
 }

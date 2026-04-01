@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import UIKit
 import WebKit
 import Shared
 import Storage
@@ -15,7 +16,7 @@ import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
 import ComponentLibrary
 
-class BrowserCoordinator: BaseCoordinator,
+final class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
                           SettingsCoordinatorDelegate,
@@ -31,6 +32,7 @@ class BrowserCoordinator: BaseCoordinator,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
+                          ShareSheetCoordinatorDelegate,
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -49,6 +51,7 @@ class BrowserCoordinator: BaseCoordinator,
     private let glean: GleanWrapper
     private let applicationHelper: ApplicationHelper
     private let summarizerNimbusUtils: SummarizerNimbusUtils
+    private let touExperimentsTracking: ToUExperimentsTracking
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
@@ -75,6 +78,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.windowManager = windowManager
+        self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
@@ -246,7 +250,6 @@ class BrowserCoordinator: BaseCoordinator,
         } else {
             let webviewViewController = WebviewViewController(webView: webView)
             webviewController = webviewViewController
-            browserViewController.fullscreenDelegate = webviewViewController
             let isEmbedded = browserViewController.embedContent(webviewViewController)
             logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
@@ -356,6 +359,7 @@ class BrowserCoordinator: BaseCoordinator,
             }
         }
     }
+
     private func showIntroOnboarding() {
         let introManager = IntroScreenManager(prefs: profile.prefs)
         let launchType = LaunchType.intro(manager: introManager)
@@ -443,7 +447,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let settingsCoordinator = SettingsCoordinator(
             router: settingsRouter,
-            tabManager: tabManager
+            tabManager: tabManager,
+            relayController: browserViewController.relayController,
         )
         settingsCoordinator.parentCoordinator = self
         add(child: settingsCoordinator)
@@ -541,18 +546,13 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
 
     func showMainMenu() {
-        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            let mainMenuCoordinator = MainMenuCoordinator(router: router,
-                                                          windowUUID: tabManager.windowUUID,
-                                                          profile: profile)
-            mainMenuCoordinator.parentCoordinator = self
-            mainMenuCoordinator.navigationHandler = self
-            add(child: mainMenuCoordinator)
-            mainMenuCoordinator.startWithNavController()
-        } else {
-            guard let menuNavViewController = makeMenuNavViewController() else { return }
-            present(menuNavViewController)
-        }
+        let mainMenuCoordinator = MainMenuCoordinator(router: router,
+                                                      windowUUID: tabManager.windowUUID,
+                                                      profile: profile)
+        mainMenuCoordinator.parentCoordinator = self
+        mainMenuCoordinator.navigationHandler = self
+        add(child: mainMenuCoordinator)
+        mainMenuCoordinator.startWithNavController()
     }
 
     func openURLInNewTab(_ url: URL?) {
@@ -584,7 +584,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showFindInPage() {
-        browserViewController.showFindInPage()
+        browserViewController.updateFindInPageVisibility(isVisible: true)
     }
 
     func updateZoomPageBarVisibility() {
@@ -666,32 +666,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
-            mainMenuCoordinator.dismissMenuModal(animated: false)
-        }
-
-        let navigationController = DismissableNavigationViewController()
-        navigationController.modalPresentationStyle = .formSheet
-        if !navigationController.shouldUseiPadSetup() {
-            navigationController.modalPresentationStyle = .formSheet
-            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
-            navigationController.sheetPresentationController?.prefersGrabberVisible = true
-        }
-
-        let coordinator = MainMenuCoordinator(
-            router: DefaultRouter(navigationController: navigationController),
-            windowUUID: tabManager.windowUUID,
-            profile: profile
-        )
-        coordinator.parentCoordinator = self
-        coordinator.navigationHandler = self
-        add(child: coordinator)
-        coordinator.start()
-
-        return navigationController
-    }
-
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
         guard let fxaParameters else { return }
         browserViewController.presentSignInViewController(fxaParameters.launchParameters,
@@ -699,13 +673,23 @@ class BrowserCoordinator: BaseCoordinator,
                                                           referringPage: fxaParameters.referringPage)
     }
 
+    func showReaderMode() {
+        // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
+        store.dispatch(
+            GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showReaderMode
+            )
+        )
+    }
+
     // MARK: - SearchEngineSelectionCoordinatorDelegate
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
-        let isEditing = store.state.screenState(ToolbarState.self,
-                                                for: .toolbar,
-                                                window: windowUUID)?.addressToolbar.isEditing == true
+        let isEditing = store.state.componentState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)?.addressToolbar.isEditing == true
 
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
@@ -855,11 +839,11 @@ class BrowserCoordinator: BaseCoordinator,
                 guard let self else { return }
 
                 let shareSheetCoordinator = ShareSheetCoordinator(
-                    alertContainer: toastContainer,
                     router: router,
                     profile: profile,
+                    tabManager: tabManager,
                     parentCoordinator: self,
-                    tabManager: tabManager
+                    delegate: self
                 )
                 add(child: shareSheetCoordinator)
                 shareSheetCoordinator.start(
@@ -877,6 +861,7 @@ class BrowserCoordinator: BaseCoordinator,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showCreditCardAutofill(
@@ -884,6 +869,7 @@ class BrowserCoordinator: BaseCoordinator,
             decryptedCard: decryptedCard,
             viewType: state,
             frame: frame,
+            viewController: viewController,
             alertContainer: alertContainer
         )
     }
@@ -1003,6 +989,8 @@ class BrowserCoordinator: BaseCoordinator,
         } else {
             present(navigationController)
         }
+        guard browserViewController.isAppStoreReviewTriggerEnabled else { return }
+        browserViewController.ratingPromptManager.showRatingPromptIfNeeded()
     }
 
     // This implementation of present is specifically for the animation on .tabTrayUIExperiments
@@ -1087,18 +1075,6 @@ class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
-    func showStoriesFeed() {
-        let storiesFeedViewController = StoriesFeedViewController(windowUUID: windowUUID)
-        router.push(storiesFeedViewController)
-    }
-
-    func showStoriesWebView(url: URL?) {
-        guard let url else { return }
-        let webviewViewController = StoriesWebviewViewController(profile: profile, windowUUID: windowUUID)
-        webviewViewController.configure(url: url)
-        router.push(webviewViewController)
-    }
-
     func showPrivacyNoticeLink(url: URL) {
         let linkVC = TermsOfUseLinkViewController(
             url: url,
@@ -1109,8 +1085,32 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(linkVC, animated: true)
     }
 
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
+        let certificates = CertificateHelper.certificatesFromErrorURL(errorPageURL, logger: logger)
+        guard !certificates.isEmpty else { return }
+
+        let topLevelDomain = originalURL.host ?? originalURL.absoluteString
+        let model = CertificatesModel(
+            topLevelDomain: topLevelDomain,
+            title: title,
+            URL: originalURL.absoluteString,
+            certificates: certificates
+        )
+        let certificatesController = CertificatesViewController(
+            with: model,
+            windowUUID: windowUUID
+        )
+        let navController = UINavigationController(rootViewController: certificatesController)
+        navController.modalPresentationStyle = .pageSheet
+        router.present(navController, animated: true)
+    }
+
+    func openLearnMoreFromNativeErrorPage(url: URL) {
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+    }
+
     func popToBVC() {
-        _ = router.popToViewController(browserViewController, reason: .deeplink)
+        router.popToViewController(browserViewController, reason: .deeplink)
     }
 
     // MARK: Microsurvey
@@ -1144,6 +1144,7 @@ class BrowserCoordinator: BaseCoordinator,
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
+            tabManager: tabManager,
             overlayManager: overlayManager
         )
 
@@ -1183,7 +1184,8 @@ class BrowserCoordinator: BaseCoordinator,
             router: router,
             themeManager: AppContainer.shared.resolve(),
             notificationCenter: NotificationCenter.default,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            experimentsTracking: touExperimentsTracking
         )
         guard coordinator.shouldShowTermsOfUse(context: context) else { return }
         coordinator.parentCoordinator = self
@@ -1302,6 +1304,12 @@ class BrowserCoordinator: BaseCoordinator,
                 remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
+    }
+
+    // MARK: - ShareSheetCoordinatorDelegate
+
+    func showToast(message: String) {
+        browserViewController.showPlainToast(message: message)
     }
 
     // MARK: - Private helpers

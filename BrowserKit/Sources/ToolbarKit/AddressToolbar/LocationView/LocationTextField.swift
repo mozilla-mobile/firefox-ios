@@ -9,15 +9,17 @@ import UIKit
 /// callers must use this instead.
 @MainActor
 protocol LocationTextFieldDelegate: AnyObject {
-    func locationTextField(_ textField: LocationTextField, didEnterText text: String)
+    func locationTextFieldDidEnterText(_ text: String)
     func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool
-    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool
+    func locationTextFieldShouldClear() -> Bool
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
-    func locationTextFieldDidEndEditing(_ textField: UITextField)
-    func locationTextFieldNeedsSearchReset(_ textField: UITextField)
+    func locationTextFieldDidEndEditing()
+    func locationTextFieldNeedsSearchReset()
 }
 
-final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
+final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable, Notifiable {
+    public var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
@@ -35,15 +37,23 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private var lastReplacement: String?
     private var hideCursor = false
     private var isSettingMarkedText = false
+    private var lastMarkedText = ""
     var clearButton: UIButton? {
         return value(forKey: "_clearButton") as? UIButton
     }
-    private let copyShortcutKey = "c"
 
     // MARK: - Init
     override init(frame: CGRect) {
-        super.init(frame: .zero)
-        super.addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func commonInit() {
+        addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
 
         font = FXFontStyles.Regular.body.scaledFont()
         adjustsFontForContentSizeCategory = true
@@ -51,6 +61,8 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         keyboardType = .webSearch
         autocorrectionType = .no
         autocapitalizationType = .none
+        smartQuotesType = .no
+        smartDashesType = .no
         returnKeyType = .go
         tintAdjustmentMode = .normal
 
@@ -68,16 +80,17 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         notifyTextChanged = debounce(0.1,
                                      action: {
             if self.isEditing {
-                self.autocompleteDelegate?.locationTextField(
-                    self,
-                    didEnterText: self.normalizeString(self.textWithoutSuggestion() ?? "")
+                self.autocompleteDelegate?.locationTextFieldDidEnterText(
+                    self.normalizeString(self.textWithoutSuggestion() ?? "")
                 )
             }
         })
-    }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UITextInputMode.currentInputModeDidChangeNotification]
+        )
     }
 
     weak var accessibilityActionsSource: AccessibilityActionsSource?
@@ -101,6 +114,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     }
 
     override func deleteBackward() {
+        lastMarkedText = ""
         lastReplacement = ""
         hideCursor = false
 
@@ -126,6 +140,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         isSettingMarkedText = true
+        lastMarkedText = markedText ?? ""
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
         isSettingMarkedText = false
@@ -150,6 +165,21 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         hideCursor = true
     }
 
+    func handleInputModeDidChange() {
+        guard !lastMarkedText.isEmpty, let currentText = self.text else { return }
+        self.text = currentText.replacingOccurrences(of: lastMarkedText, with: "")
+        hideCursor = true
+        setMarkedText(lastMarkedText, selectedRange: NSRange())
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        guard notification.name == UITextInputMode.currentInputModeDidChangeNotification else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.handleInputModeDidChange()
+        }
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
@@ -167,7 +197,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
 
     // MARK: - Private
     @objc
-    private func textDidChange(_ textField: UITextField) {
+    private func textDidChange() {
         // When marked text (autocomplete suggestion) is set this method is called
         // in this case we don't need to
         guard !isSettingMarkedText else { return }
@@ -185,6 +215,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
         // Clear the current completion, then set the text without the attributed style.
+        lastMarkedText = ""
         let text = (self.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
@@ -219,7 +250,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     private func clear() {
         text = ""
         removeCompletion()
-        autocompleteDelegate?.locationTextField(self, didEnterText: "")
+        autocompleteDelegate?.locationTextFieldDidEnterText("")
     }
 
     private func normalizeString(_ string: String) -> String {
@@ -260,7 +291,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
         textField.selectedTextRange = nil
-        autocompleteDelegate?.locationTextFieldDidEndEditing(self)
+        autocompleteDelegate?.locationTextFieldDidEndEditing()
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
@@ -277,7 +308,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
         // can reset itself since it will only lookup results if the new text is
         // longer than the previous text.
         if lastReplacement == nil {
-            autocompleteDelegate?.locationTextFieldNeedsSearchReset(textField)
+            autocompleteDelegate?.locationTextFieldNeedsSearchReset()
         }
 
         lastReplacement = string
@@ -292,7 +323,7 @@ final class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         text = ""
         removeCompletion()
-        return autocompleteDelegate?.locationTextFieldShouldClear(self) ?? true
+        return autocompleteDelegate?.locationTextFieldShouldClear() ?? true
     }
 
     // MARK: - Debounce

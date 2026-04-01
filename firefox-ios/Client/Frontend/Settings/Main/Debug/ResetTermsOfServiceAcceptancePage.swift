@@ -34,7 +34,6 @@ class ResetTermsOfServiceAcceptancePage: HiddenSetting, FeatureFlaggable {
         // Reset Terms of Use preferences
         // This allows testing the Terms of Use bottom sheet after acceptance
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseAccepted)
-        prefs.removeObjectForKey(PrefsKeys.TermsOfUseAcceptedVersion)
         prefs.removeObjectForKey(PrefsKeys.TermsOfUseAcceptedDate)
 
         settingsDelegate?.askedToReload()

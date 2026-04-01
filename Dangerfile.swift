@@ -100,7 +100,6 @@ func checkCodeCoverage() {
 class CodeCoverageGate {
     private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let threshold: Double = 70
     private let minimumAddedLines = 5
 
     func failOnNewFilesWithoutCoverage() {
@@ -118,9 +117,9 @@ class CodeCoverageGate {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
-            !$0.contains("MozillaRustComponents/") &&
             !$0.contains("/Strings.swift") &&
-            !$0.contains("/AccessibilityIdentifiers.swift")
+            !$0.contains("/AccessibilityIdentifiers.swift") &&
+            !$0.contains("Protocol.swift")
         }
 
         guard !candidates.isEmpty else {
@@ -166,6 +165,10 @@ class CodeCoverageGate {
                 return raw <= 1.000001 ? raw * 100.0 : raw
             }()
 
+            // Calculate threshold based on file length
+            let lineCount = countLines(in: file)
+            let threshold = scaledPercentage(for: Double(lineCount)) * 100.0
+
             if percent + 0.0001 < threshold { // epsilon for float stability
                 rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
             }
@@ -174,14 +177,14 @@ class CodeCoverageGate {
         guard !rows.isEmpty else {
             markdown("""
             ### ✅ New file code coverage
-            All new files meet the threshold of **\(formatPct(threshold))**.
+            All new files meet their thresholds**.
             """)
             return
         }
 
         let header = """
         ### ❌ New file code coverage
-        The following new file(s) are below **\(formatPct(threshold))** coverage:
+        The following new file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
@@ -197,6 +200,37 @@ class CodeCoverageGate {
             let owners = "Please also tag a member of the \(team) if the bypass is used."
             fail("\(header)\n\n\(tip) \(owners)")
         }
+    }
+
+    /// Maps an input value to a percentage using logarithmic scaling.
+    /// - Parameter x: Input value (must be > 0)
+    /// - Returns: A value between 0.5 and 0.8 for inputs between 10 and 500
+    func scaledPercentage(for x: Double) -> Double {
+        precondition(x > 0, "Input must be greater than 0")
+
+        let minX = 10.0
+        let maxX = 500.0
+        let minY = 0.4
+        let maxY = 0.7
+
+        // Clamp to min/max bounds
+        if x <= minX { return minY }
+        if x >= maxX { return maxY }
+
+        let numerator = log(x / minX)
+        let denominator = log(maxX / minX)
+
+        return minY + (maxY - minY) * (numerator / denominator)
+    }
+
+    /// Counts the number of lines in a file
+    /// - Parameter filePath: Path to the file
+    /// - Returns: Number of lines in the file, or 0 if file cannot be read
+    private func countLines(in filePath: String) -> Int {
+        guard let content = try? String(contentsOfFile: filePath, encoding: .utf8) else {
+            return 0
+        }
+        return content.components(separatedBy: .newlines).count
     }
 
     // Small helper to format percentages

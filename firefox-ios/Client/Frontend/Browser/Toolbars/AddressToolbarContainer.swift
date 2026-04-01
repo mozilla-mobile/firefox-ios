@@ -289,9 +289,9 @@ final class AddressToolbarContainer: UIView,
     func subscribeToRedux() {
         guard let windowUUID else { return }
 
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .toolbar)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .toolbar)
         store.dispatch(action)
 
         store.subscribe(self, transform: {
@@ -307,9 +307,9 @@ final class AddressToolbarContainer: UIView,
             return
         }
 
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .toolbar)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .toolbar)
         store.dispatch(action)
         store.unsubscribe(self)
     }
@@ -376,33 +376,18 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func configureSkeletonAddressBars(previousTab: Tab?, forwardTab: Tab?) {
-        guard let model, let state else { return }
-        leftSkeletonAddressBar.configure(
-            config: model.configureSkeletonAddressBar(
-                with: previousTab?.url?.displayURL,
-                isReaderModeAvailableOrActive: previousTab?.readerModeAvailableOrActive
-            ),
-            toolbarPosition: state.toolbarPosition,
-            toolbarDelegate: self,
+        guard let model else { return }
+        leftSkeletonAddressBar.configureNonInteractive(
+            config: model.getSkeletonAddressBarConfiguration(for: previousTab),
             leadingSpace: UX.skeletonBarOffset,
-            trailingSpace: -UX.skeletonBarOffset,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: model.shouldAnimate
+            trailingSpace: -UX.skeletonBarOffset
+        )
+        rightSkeletonAddressBar.configureNonInteractive(
+            config: model.getSkeletonAddressBarConfiguration(for: forwardTab),
+            leadingSpace: -UX.skeletonBarOffset,
+            trailingSpace: UX.skeletonBarOffset
         )
         leftSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.leadingSkeleton
-
-        rightSkeletonAddressBar.configure(
-            config: model.configureSkeletonAddressBar(
-                with: forwardTab?.url?.displayURL,
-                isReaderModeAvailableOrActive: forwardTab?.readerModeAvailableOrActive
-            ),
-            toolbarPosition: state.toolbarPosition,
-            toolbarDelegate: self,
-            leadingSpace: -UX.skeletonBarOffset,
-            trailingSpace: UX.skeletonBarOffset,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            animated: model.shouldAnimate
-        )
         rightSkeletonAddressBar.accessibilityIdentifier = AccessibilityIdentifiers.Browser.AddressToolbar.trailingSkeleton
     }
 
@@ -546,7 +531,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - AddressToolbarDelegate
     func searchSuggestions(searchTerm: String) {
         if let windowUUID,
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
+           let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) {
             if searchTerm.isEmpty, !toolbarState.addressToolbar.isEmptySearch {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
                 store.dispatch(action)
@@ -608,7 +593,7 @@ final class AddressToolbarContainer: UIView,
         with contextualHintType: String
     ) {
         guard addressToolbar == toolbar,
-              let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+              let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
         if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
@@ -663,7 +648,7 @@ final class AddressToolbarContainer: UIView,
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         guard let windowUUID,
-              let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+              let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
         _ = toolbar.resignFirstResponder()

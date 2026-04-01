@@ -18,6 +18,7 @@ private struct TestableSubject {
 private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
     var stubbedItems: [RecommendationDataItem] = []
     var callCount = 0
+    var fetchDelay: UInt64 = 0
 
     func fetch(
         itemCount: Int,
@@ -25,6 +26,9 @@ private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
         userAgent: String
     ) async -> [RecommendationDataItem] {
         callCount += 1
+        if fetchDelay > 0 {
+            try? await Task.sleep(nanoseconds: fetchDelay)
+        }
         return stubbedItems
     }
 }
@@ -166,6 +170,45 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertTrue(control.cache.didClear)
         XCTAssertEqual(control.cache.loadRecommendations()?.count, 2)
         XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
+    }
+
+    func test_fetchStories_returnsCached_whenWithinOneHourThreshold() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        control.cache.seed(items: [.makeItem("cached")], lastUpdated: Date().addingTimeInterval(-30 * 60))
+        control.fetcher.stubbedItems = [.makeItem("network")]
+
+        let result = try await control.subject.fetchStories(10)
+
+        XCTAssertEqual(result.map(\.title), ["cached"])
+        XCTAssertEqual(control.fetcher.callCount, 0)
+    }
+
+    // This test attempts to create a data race, to make sure that the actual code addresses
+    // the possible data race issue. Hence the marking nonisolated(unsafe)
+    func test_fetchStories_coalescesConcurrentRequests_whenCacheIsStale() async throws {
+        nonisolated(unsafe) let control = await createSubject(thresholdHours: 1)
+        control.cache.seedEmpty()
+        control.fetcher.stubbedItems = [.makeItem("a"), .makeItem("b")]
+        control.fetcher.fetchDelay = 100_000_000 // 100ms to ensure overlap
+
+        async let result1 = control.subject.fetchStories(5)
+        async let result2 = control.subject.fetchStories(10)
+        let (items1, items2) = try await (result1, result2)
+
+        XCTAssertEqual(control.fetcher.callCount, 1, "Concurrent fetches should coalesce into a single network request")
+        XCTAssertEqual(items1.map(\.title), ["a", "b"])
+        XCTAssertEqual(items2.map(\.title), ["a", "b"])
+    }
+
+    func test_fetchStories_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
+        let control = await createSubject(thresholdHours: 1)
+        control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-61 * 60))
+        control.fetcher.stubbedItems = [.makeItem("fresh")]
+
+        let result = try await control.subject.fetchStories(10)
+
+        XCTAssertEqual(result.map(\.title), ["fresh"])
+        XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
     private func createSubject(

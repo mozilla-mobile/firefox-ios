@@ -24,5 +24,6 @@ public struct ReaderModeUtils {
             .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
             .replacingOccurrences(of: "%READER-LANGUAGE%", with: readabilityResult.language)
             .replacingOccurrences(of: "%READER-DIRECTION%", with: readabilityResult.direction.rawValue)
+            .replacingOccurrences(of: "%READER-JSONLD%", with: readabilityResult.jsonld)
     }
 }

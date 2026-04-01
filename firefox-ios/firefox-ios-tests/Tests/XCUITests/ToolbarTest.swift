@@ -170,7 +170,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             if !isPrivate {
-                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites])
+                app.partialSwipeUp(distance: 0.2)
                 mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
             }
             navigator.nowAt(BrowserTab)

@@ -37,9 +37,9 @@ final class OnboardingViewControllerStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = onboardingReducer()
 
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .onboardingViewController)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .onboardingViewController)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -50,9 +50,9 @@ final class OnboardingViewControllerStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = onboardingReducer()
 
-        let action = ScreenAction(windowUUID: .unavailable,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .onboardingViewController)
+        let action = ComponentAction(windowUUID: .unavailable,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .onboardingViewController)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
@@ -64,9 +64,9 @@ final class OnboardingViewControllerStateTests: XCTestCase {
         let reducer = onboardingReducer()
         let differentUUID: WindowUUID = .XCTestDefaultUUID
 
-        let action = ScreenAction(windowUUID: differentUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .onboardingViewController)
+        let action = ComponentAction(windowUUID: differentUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .onboardingViewController)
         let newState = reducer(initialState, action)
 
         // Should return defaultState (preserves original windowUUID)

@@ -7,18 +7,20 @@ import Redux
 import Common
 
 struct AppState: StateType, Sendable {
-    let activeScreens: ActiveScreensState
+    let presentedComponents: PresentedComponentsState
 
     static let reducer: Reducer<Self> = { state, action in
-        return AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        return AppState(
+            presentedComponents: PresentedComponentsState.reducer(state.presentedComponents, action)
+        )
     }
 
-    func screenState<S: ScreenState>(_ s: S.Type,
-                                     for screen: AppScreen,
-                                     window: WindowUUID?) -> S? {
-        return activeScreens.screens
+    func componentState<S: ScreenState>(_ s: S.Type,
+                                        for component: AppComponent,
+                                        window: WindowUUID?) -> S? {
+        return presentedComponents.components
             .compactMap {
-                switch ($0, screen) {
+                switch ($0, component) {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 case (.homepage(let state), .homepage): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S
@@ -35,7 +37,7 @@ struct AppState: StateType, Sendable {
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
                 case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 case (.shortcutsLibrary(let state), .shortcutsLibrary): return state as? S
-                case (.storiesFeed(let state), .storiesFeed): return state as? S
+                case (.translationSettings(let state), .translationSettings): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -52,13 +54,13 @@ struct AppState: StateType, Sendable {
     }
 
     static func defaultState(from state: AppState) -> AppState {
-        return AppState(activeScreens: state.activeScreens)
+        return AppState(presentedComponents: state.presentedComponents)
     }
 }
 
 extension AppState {
     init() {
-        activeScreens = ActiveScreensState()
+        presentedComponents = PresentedComponentsState()
     }
 }
 
@@ -86,7 +88,8 @@ let middlewares = [
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider,
-    TranslationsMiddleware().translationsProvider
+    TranslationsMiddleware().translationsProvider,
+    TranslationSettingsMiddleware().translationSettingsProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

@@ -426,17 +426,16 @@ class O_AddressesTests: BaseTestCase {
         settingsScreen.validateAutofillPasswordOptions()
         settingsScreen.rotateDevice(to: .portrait)
         // While in dark mode check for the options
-        sleep(1)
         exitAutofillSettingsToNewTab()
         // Adding sleep to avoid loading screen on bitrise
-        sleep(3)
+        toolbar.assertSettingsButtonExists()
         switchThemeToDarkOrLight(theme: "Dark")
         navigateToAutofillPasswordSettingsScreen()
         settingsScreen.validateAutofillPasswordOptions()
         // While in light mode check for the options
         exitAutofillSettingsToNewTab()
         // Adding sleep to avoid loading screen on bitrise
-        sleep(3)
+        toolbar.assertSettingsButtonExists()
         switchThemeToDarkOrLight(theme: "Light")
         navigateToAutofillPasswordSettingsScreen()
         settingsScreen.validateAutofillPasswordOptions()
@@ -592,20 +591,7 @@ class O_AddressesTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(AddressesSettings)
-        let addresses = AccessibilityIdentifiers.Settings.Address.Addresses.self
-        sleep(4)
-        if !app.navigationBars[addresses.title].exists {
-            navigator.goto(AddressesSettings)
-        }
-        app.buttons[addresses.addAddress].waitAndTap()
-        mozWaitForElementToExist(app.navigationBars[addresses.addAddress])
-        var attempts = 3
-        while !app.staticTexts["Name"].exists && attempts > 0 {
-            app.buttons["Close"].tapIfExists()
-            app.buttons[addresses.addAddress].tapIfExists()
-            attempts -= 1
-        }
-        mozWaitForElementToExist(app.staticTexts["Name"])
+        addressScreen.reachAddNewAddressScreen()
     }
 
     private func addNewAddress() {
@@ -764,7 +750,7 @@ class O_AddressesTests: BaseTestCase {
 
     private func retryTypingText(element: XCUIElement, textField: String) {
         var nrOfTaps = 5
-        sleep(3)
+        mozWaitElementHittable(element: element, timeout: TIMEOUT)
         while !element.isVisible() && nrOfTaps > 0 {
             element.tapIfExists()
             nrOfTaps -= 1

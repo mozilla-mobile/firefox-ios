@@ -5,6 +5,7 @@
 import Common
 import Foundation
 
+@MainActor
 class LibraryViewModel {
     let profile: Profile
     let panelDescriptors: [LibraryPanelDescriptor]

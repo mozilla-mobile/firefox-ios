@@ -73,7 +73,10 @@ class TrackingProtectionTests: BaseTestCase {
     func checkTrackingProtectionOn() -> Bool {
         var trackingProtection = true
         if iPad() {
-            sleep(1)
+            mozWaitElementHittable(
+                element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
+                timeout: TIMEOUT
+            )
         }
         if app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label
             == secureTrackingProtectionOffLabel {
@@ -85,60 +88,6 @@ class TrackingProtectionTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
-        navigator.goto(TrackingProtectionSettings)
-
-        // Make sure ETP is enabled by default
-        XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
-
-        // Turn off ETP
-        navigator.performAction(Action.SwitchETP)
-
-        // Verify it is turned off
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-
-        // The lock icon should still be there
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
-                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            ]
-        )
-
-        // Switch to Private Browsing
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-
-        // Make sure TP is also there in PBM
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
-                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-            ]
-        )
-        navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-        }
-        navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells["NewTab"])
-        app.tables.cells["NewTab"].swipeUp()
-        // Enable TP again
-        navigator.goto(TrackingProtectionSettings)
-        // Turn on ETP
-        navigator.performAction(Action.SwitchETP)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307059
-    // Smoketest TAE
-    func testStandardProtectionLevel_TAE() {
         browserScreen = BrowserScreen(app: app)
         trackingProtectionScreen = TrackingProtectionScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
@@ -161,7 +110,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         // Switch to Private Browsing
@@ -170,7 +119,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        browserScreen.assertAddressBar_LockIconExist()
+        browserScreen.assertAddressBar_LockIconOffExist()
         toolbarScreen.assertSettingsButtonExists()
 
         navigator.goto(BrowserTabMenu)

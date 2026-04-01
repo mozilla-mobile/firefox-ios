@@ -11,9 +11,11 @@ import XCTest
 final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockProfile: MockProfile!
     private var mockWindowManager: MockWindowManager!
-    private var summarizationChecker: MockSummarizationChecker!
     private var mockStore: MockStoreForMiddleware<AppState>!
+    private var mockTabManager: MockTabManager!
+    private var summarizerConfigFactory: MockSummarizerConfigFactory!
     private var appState: AppState!
+    private let homepageURLString = "internal://local/about/home"
 
     @MainActor
     override func setUp() async throws {
@@ -21,13 +23,13 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         DependencyHelperMock().bootstrapDependencies()
         setIsHostedSummaryEnabled(false)
         mockProfile = MockProfile()
-        let mockTabManager = MockTabManager()
+        summarizerConfigFactory = MockSummarizerConfigFactory()
+        mockTabManager = MockTabManager()
         mockTabManager.recentlyAccessedNormalTabs = [createTab(profile: mockProfile)]
         mockWindowManager = MockWindowManager(
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
-        summarizationChecker = MockSummarizationChecker()
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         setupStore()
         appState = setupAppState()
@@ -37,7 +39,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     override func tearDown() async throws {
         mockProfile = nil
         mockWindowManager = nil
-        summarizationChecker = nil
+        mockTabManager = nil
+        summarizerConfigFactory = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -295,9 +298,11 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         mockTabManager?.selectedTab = tab
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
+        summarizerConfigFactory.returnedConfig = .defaultConfig
 
-        mockStore.dispatchCalled = {
+        mockStore.dispatchCalled = { [weak self] in
+            // requestTabInfo dispatches 2 actions, fulfill only when the second action is dispatched.
+            guard self?.mockStore.dispatchedActions.count == 2 else { return }
             expectation.fulfill()
         }
         subject.tabsPanelProvider(
@@ -309,10 +314,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         )
         wait(for: [expectation])
 
-        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
-        // TODO(FXIOS-13126): Fix this when we merge all implemenations for how we disptach showing summaries.
-        // This should be true but since we have no way to override the checker for now, this will be false always.
-        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
+        let action = try XCTUnwrap(mockStore.dispatchedActions[1] as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, true)
     }
 
     func testTabPanelProvider_dispatchesMainMenuAction_withSummaryIsAvailableFalse_whenWebViewNil() throws {
@@ -323,7 +326,6 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
         let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
         mockTabManager?.selectedTab = tab
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
 
         mockStore.dispatchCalled = {
             expectation.fulfill()
@@ -348,7 +350,6 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
         let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
         mockTabManager?.selectedTab = tab
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
 
         mockStore.dispatchCalled = {
             expectation.fulfill()
@@ -364,6 +365,81 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
         XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
+    }
+
+    func testTabPanelProvider_withSummaryIsAvailableFalse_whenSummarizeFeatureOn_andIsHomepage() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID, isHomePage: true)
+        mockTabManager?.selectedTab = tab
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.summaryIsAvailable, false)
+    }
+
+    func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsEnabledFalse_byDefault() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        mockTabManager?.selectedTab = tab
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, false)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, false)
+    }
+
+    func testTabPanelProvider_dispatchesMainMenuAction_withReaderModeIsActive() throws {
+        let expectation = XCTestExpectation(description: "expect main menu action to be fired")
+        let subject = createSubject()
+
+        let mockTabManager = mockWindowManager.tabManager(for: .XCTestDefaultUUID) as? MockTabManager
+        let tab = MockTab(profile: MockProfile(databasePrefix: ""), windowUUID: .XCTestDefaultUUID)
+        tab.overrideReaderModeState = .active
+        mockTabManager?.selectedTab = tab
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+        subject.tabsPanelProvider(
+            appState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+        wait(for: [expectation])
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.first as? MainMenuAction)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isAvailable, true)
+        XCTAssertEqual(action.currentTabInfo?.readerModeConfiguration.isActive, true)
     }
 
     func test_shortcutsLibraryAction_switchTabToastButtonPressed_selectsTab() throws {
@@ -396,12 +472,218 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertNotEqual(selectedTab, tab)
     }
 
+    // MARK: - Tab Peek Actions
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_WithBookmarksOptions() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_withNilTab() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile)
+        mockTabManager.tabForUUID = nil
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        // Expected to fail because tab is nil
+        XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_URLToLong() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        // Long URL that exceeds AppConstants.databaseURLLengthMax
+        // Long URL that exceeds AppConstants.databaseURLLengthMax
+        let longString = String(repeating: "a", count: 65536)
+        let urlString = "https://example.com/\(longString)"
+        let tab = createTab(profile: mockProfile, urlString: urlString)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_Homepage() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: homepageURLString)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_BlankURL() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: "")
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_CopyOption() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoCopy_Homepage() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: homepageURLString)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoCopy_BlankURL() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: "")
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
         return TabManagerMiddleware(
             profile: mockProfile,
             windowManager: mockWindowManager,
-            summarizationChecker: summarizationChecker
+            summarizerConfigFactory: summarizerConfigFactory
         )
     }
 
@@ -411,7 +693,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     ) -> Tab {
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
 
-        if let urlString = urlString {
+        if let urlString = urlString, !urlString.isEmpty {
             tab.url = URL(string: urlString)!
         }
         return tab
@@ -426,8 +708,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .tabsPanel(
                         TabsPanelState(
                             windowUUID: .XCTestDefaultUUID

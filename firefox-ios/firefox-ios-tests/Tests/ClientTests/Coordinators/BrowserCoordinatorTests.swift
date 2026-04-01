@@ -5,15 +5,17 @@
 import Common
 import ComponentLibrary
 import MozillaAppServices
+import Redux
 import WebKit
 import XCTest
 import GCDWebServers
 import SummarizeKit
+import Shared
 
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
+final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -23,6 +25,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
+    private var mockStore: MockStoreForMiddleware<AppState>!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -33,7 +36,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
-        setIsHostedSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
         overlayModeManager = MockOverlayModeManager()
@@ -42,6 +44,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         glean = MockGleanWrapper()
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        setupStore()
     }
 
     override func tearDown() async throws {
@@ -55,6 +58,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         glean = nil
         scrollDelegate = nil
         browserViewController = nil
+        resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -329,6 +333,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             decryptedCard: nil,
             viewType: .save,
             frame: nil,
+            viewController: UIViewController(),
             alertContainer: UIView()
         )
 
@@ -531,7 +536,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     // MARK: - Summarize Panel
 
     func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -549,7 +554,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
         tab.webView = MockTabWebView(tab: tab)
@@ -574,7 +579,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
-        setIsHostedSummarizerEnabled(true)
+        setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -606,27 +611,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
-    // MARK: - Stories Feed
-
-    func testShowStoriesFeed_showsStoriesFeed() throws {
-        let subject = createSubject()
-
-        subject.showStoriesFeed()
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesFeedViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowStoriesWebview_showsStoriesWebview() throws {
-        let subject = createSubject()
-
-        subject.showStoriesWebView(url: URL(string: "https://www.mozilla.com"))
-
-        XCTAssertNotNil(mockRouter.pushedViewController as? StoriesWebviewViewController)
-        XCTAssertEqual(mockRouter.pushCalled, 1)
-    }
-
-    func testShowPrivacyNoticeLink_showsStoriesWebview() throws {
+    func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
         let subject = createSubject()
 
         guard let url = URL(string: "https://www.mozilla.com") else { return }
@@ -674,7 +659,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
         let childCoordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
             tabManager: tabManager)
@@ -1217,10 +1201,19 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        if !featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
-            XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
-        }
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
+    }
+
+    func testShowReaderMode_dispatchesGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        subject.showReaderMode()
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, GeneralBrowserActionType.showReaderMode)
     }
 
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
@@ -1330,6 +1323,20 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - StoreTestUtility
+    func setupAppState() -> AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #filePath,
                                line: UInt = #line) -> BrowserCoordinator {
@@ -1356,14 +1363,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     private func setIsAppleSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.appleSummarizerFeature.with { _, _ in
-            return AppleSummarizerFeature(enabled: isEnabled)
-        }
+        // Apple summarizer doesn't run on an experiment, it relies only on user defaults.
+        // See `AppleIntelligenceUtil`
+        UserDefaults.standard.set(isEnabled, forKey: PrefsKeys.appleIntelligenceAvailable)
     }
 
-    private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
+    private func setIsAppAttestEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.summarizerAppAttestAuthFeature.with { _, _ in
+            return SummarizerAppAttestAuthFeature(enabled: true)
         }
     }
 

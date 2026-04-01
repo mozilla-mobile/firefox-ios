@@ -45,12 +45,13 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var setHomepageVisibilityCalled = 0
     var showSummarizePanelCalled = 0
     var showShortcutsLibraryCalled = 0
-    var showStoriesFeedCalled = 0
-    var showStoriesWebViewCalled = 0
     var showPrivacyNoticeLink = 0
     var showTermsOfUseCalled = 0
+    var showCertificatesFromErrorPageCalled = 0
+    var showNativeErrorPageLearnMoreCalled = 0
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
+    var openLearnMoreFromNativeErrorPageCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -65,6 +66,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         decryptedCard: UnencryptedCreditCardFields?,
         viewType state: CreditCardBottomSheetState,
         frame: WKFrameInfo?,
+        viewController: UIViewController,
         alertContainer: UIView
     ) {
         showCreditCardAutofillCalled += 1
@@ -101,7 +103,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showTabTrayCalled += 1
     }
 
-    func showQRCode() {
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
         showQrCodeCalled += 1
     }
 
@@ -165,6 +167,14 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
         showTermsOfUseCalled += 1
     }
 
+    func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
+        showCertificatesFromErrorPageCalled += 1
+    }
+
+    func openLearnMoreFromNativeErrorPage(url: URL) {
+        openLearnMoreFromNativeErrorPageCalled += 1
+    }
+
     // MARK: - BrowserDelegate
 
     func show(webView: WKWebView) {
@@ -198,14 +208,6 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func showShortcutsLibrary() {
         showShortcutsLibraryCalled += 1
-    }
-
-    func showStoriesFeed() {
-        showStoriesFeedCalled += 1
-    }
-
-    func showStoriesWebView(url: URL?) {
-        showStoriesWebViewCalled += 1
     }
 
     func showPrivacyNoticeLink(url: URL) {

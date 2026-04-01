@@ -2,8 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import TestKit
 import WebKit
+import XCTest
 @testable import Client
 
 @MainActor
@@ -94,7 +95,7 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected shouldOfferTranslation to throw when language detector fails, but no error was thrown.")
         } catch let error as TranslationsServiceError {
             guard case .unknown = error else {
@@ -115,7 +116,7 @@ final class TranslationsServiceTests: XCTestCase {
         )
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected missingWebView error")
         } catch let error as TranslationsServiceError {
             XCTAssertEqual(error, .missingWebView)
@@ -136,7 +137,7 @@ final class TranslationsServiceTests: XCTestCase {
         setupWebViewForTabManager()
 
         do {
-            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, onLanguageIdentified: nil)
+            try await subject.translateCurrentPage(for: .XCTestDefaultUUID, to: "en", onLanguageIdentified: nil)
             XCTFail("Expected translateCurrentPage to throw when language detector fails, but no error was thrown.")
         } catch let error as TranslationsServiceError {
             guard case .unknown = error else {
