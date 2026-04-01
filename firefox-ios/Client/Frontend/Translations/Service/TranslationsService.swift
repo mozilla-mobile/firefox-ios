@@ -29,21 +29,21 @@ final class TranslationsService: TranslationsServiceProtocol {
         self.logger = logger
     }
 
-    /// Determines whether translation should be offered to the user based on
-    /// the detected page language and the device locale.
-    func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool {
-        // Throwing here to capture this case in telemetry. It shouldn't happen in practice.
-        guard let deviceLanguage = deviceLanguageCode() else {
-            throw TranslationsServiceError.deviceLanguageUnavailable
-        }
+    /// Determines whether translation should be offered by checking any of the given
+    /// preferred target languages against the detected page language.
+    /// Returns `true` if at least one preferred language has an available model pair.
+    /// NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
+    /// describing the pipeline, it does not fetch large model attachments.
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+        guard !preferredLanguages.isEmpty else { return false }
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        // Do not offer translations if device language is the same as detected page language.
-        guard pageLanguage != deviceLanguage else { return false }
-        // Only offer translation if we have a model pair (direct or via pivot).
-        // NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
-        // describing the pipeline, it does not fetch large model attachments.
-        guard await modelsFetcher.fetchModels(from: pageLanguage, to: deviceLanguage) != nil else { return false }
-        return true
+        for language in preferredLanguages {
+            guard language != pageLanguage else { continue }
+            if await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
+                return true
+            }
+        }
+        return false
     }
 
     /// Initiates translation of the current page to the specified target language.

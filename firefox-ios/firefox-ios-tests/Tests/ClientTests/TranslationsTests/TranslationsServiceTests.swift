@@ -57,7 +57,7 @@ final class TranslationsServiceTests: XCTestCase {
 
         setupWebViewForTabManager()
 
-        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID)
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [deviceLanguage])
         XCTAssertTrue(
             result,
             "Expected shouldOfferTranslation to be true when languages differ and models are available."
@@ -76,10 +76,61 @@ final class TranslationsServiceTests: XCTestCase {
 
         setupWebViewForTabManager()
 
-        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID)
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [deviceLanguage])
         XCTAssertFalse(
             result,
             "Expected shouldOfferTranslation to be false when no models are available."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsFalse_whenPreferredLanguagesIsEmpty() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: true
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: [])
+        XCTAssertFalse(
+            result,
+            "Expected shouldOfferTranslation to be false when preferred languages list is empty."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsFalse_whenAllPreferredLanguagesMatchPageLanguage() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: true
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["de"])
+        XCTAssertFalse(
+            result,
+            "Expected shouldOfferTranslation to be false when the only preferred language matches the page language."
+        )
+    }
+
+    func test_shouldOfferTranslation_returnsTrue_whenFallbackPreferredLanguageHasModel() async throws {
+        let subject = createSubject(
+            detectedLanguage: "de",
+            languageDetectorError: nil,
+            modelsAvailable: false
+        )
+        mockModelsFetcher.fetchModelsHandler = { _, targetLang in
+            return targetLang == "en" ? Data() : nil
+        }
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["fr", "en"])
+        XCTAssertTrue(
+            result,
+            "Expected shouldOfferTranslation to be true when a fallback preferred language has an available model."
         )
     }
 
