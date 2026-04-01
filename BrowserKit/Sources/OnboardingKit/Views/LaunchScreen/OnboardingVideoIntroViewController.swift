@@ -58,7 +58,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
     }
-    
+
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         playerLayer?.frame = view.bounds
@@ -89,7 +89,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
 
     private func setupLayout() {
         view.addSubview(continueButton)
-   
+
         let preferredWidth = continueButton.widthAnchor.constraint(equalToConstant: UX.buttonMaxWidth)
         preferredWidth.priority = .defaultHigh
         NSLayoutConstraint.activate([
