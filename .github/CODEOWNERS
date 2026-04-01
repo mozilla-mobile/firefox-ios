@@ -21,7 +21,7 @@
 /firefox-ios/firefox-ios-tests/Tests/XCUITests @mozilla-mobile/fxios-automation-1
 /focus-ios/focus-ios-tests @mozilla-mobile/fxios-automation-1
 /focus-ios/focus-ios-tests/ClientTests @mozilla-mobile/fxios-eng
-bitrise.yml @mozilla-mobile/fxios-automation-1 @mozilla-mobile/releng
+bitrise.yml @mozilla-mobile/fxios-automation-1
 .taskcluster.yml @mozilla-mobile/fxios-automation-1 @mozilla-mobile/releng
 /taskcluster @mozilla-mobile/fxios-automation-1 @mozilla-mobile/releng
 .github/workflows @mozilla-mobile/fxios-automation-1
