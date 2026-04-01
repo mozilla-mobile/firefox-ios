@@ -501,31 +501,6 @@ class Tab: NSObject,
         )
     }
 
-    func toRemoteTab() -> RemoteTab? {
-        guard !isPrivate else {
-            return nil
-        }
-
-        let faviconURL = faviconURL ?? pageMetadata?.faviconURL
-        if let displayURL = url?.displayURL,
-           RemoteTab.shouldIncludeURL(displayURL) {
-            let filteredReversedHistory: [URL] = historyList
-                .filter(RemoteTab.shouldIncludeURL)
-                .reversed()
-
-            return RemoteTab(
-                clientGUID: nil,
-                URL: displayURL,
-                title: title ?? displayTitle,
-                history: filteredReversedHistory,
-                lastUsed: lastExecutedTime,
-                icon: faviconURL?.asURL
-            )
-        }
-
-        return nil
-    }
-
     weak var navigationDelegate: WKNavigationDelegate? {
         didSet {
             if let webView = webView {
