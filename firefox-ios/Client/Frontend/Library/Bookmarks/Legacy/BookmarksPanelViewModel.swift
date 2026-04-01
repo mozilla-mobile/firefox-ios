@@ -115,8 +115,9 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             return
         }
 
-        // After reloading bookmarks, we should also reload our active search results as well, if applicable
-        // That is because our bookmarks results are fetched recursively and backed by a separate data array
+        // FXIOS-15296: After reloading bookmarks, we should also reload our active search results as well, if applicable.
+        // This is because our bookmarks results are fetched recursively and backed by a separate data array.
+        // FIXME: FXIOS-15309 This can be improved.
         let completionAfterSetup: @MainActor () -> Void = { [weak self] in
             guard let self else {
                 completion()
@@ -436,11 +437,12 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             if let self, self.isBookmarksSearchEnabled, self.isShowingSearchResults {
                 // Reload the bookmarks tree for the current folder. If a bookmark was deleted via search, there is a chance
                 // a subfolder becomes empty that was previously non-empty. We need to know whether folders in the current
-                // folder contain bookmarks or not because we show an alert when deleting folders with non-empty contents.
+                // folder contain bookmarks or not because we show an alert when deleting folders with non-empty contents
+                // (see FXIOS-15296).
                 //
-                // Note: A race condition exists where the user might try to delete a folder before this refresh happens,
-                // since we optimistically update the UI but can't synchronously update the bookmarks tree local copy (at
-                // least not easily).
+                // Note: A race condition exists where the user might try to delete a folder before this refresh completes,
+                // since we optimistically update the UI but can't synchronously update the local bookmarks tree copy.
+                // FIXME: FXIOS-15309
                 self.reloadData {
                     completion()
                 }
