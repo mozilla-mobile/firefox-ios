@@ -26,7 +26,7 @@ protocol BookmarksPanelViewModelProtocol: Sendable, CanRemoveQuickActionBookmark
     func resetSearch()
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
     func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String)
-    func remove(bookmark: FxBookmarkNode)
+    func remove(bookmark: FxBookmarkNode, afterAsyncRemoval completion: @escaping @MainActor () -> Void)
     func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void)
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     func createPinUnpinAction(
@@ -50,6 +50,10 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         case bookmarks
     }
 
+    private var isBookmarksSearchEnabled: Bool {
+        LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+    }
+
     var isRootNode: Bool {
         return bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
     }
@@ -62,6 +66,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var isShowingSearchResults = false
+    private var currentSearchQuery: String?
 
     /// Backing data array of all bookmarks
     private var allBookmarkNodes = [FxBookmarkNode]()
@@ -99,6 +104,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         return true
     }
 
+    /// Reloads all the bookmarks data (and search results data, if the user is currently searching bookmarks).
     func reloadData(completion: @escaping @MainActor () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
@@ -106,12 +112,30 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             return
         }
 
+        // After reloading bookmarks, we should also reload our active search results as well, if applicable
+        // That is because our bookmarks results are fetched recursively and backed by a separate data array
+        let completionAfterSetup: @MainActor () -> Void = { [weak self] in
+            guard let self else {
+                completion()
+                return
+            }
+
+            // If search results are present, we need to refresh those, too
+            if self.isShowingSearchResults, let currentSearchQuery = self.currentSearchQuery {
+                self.searchBookmarks(query: currentSearchQuery) {
+                    completion()
+                }
+            } else {
+                completion()
+            }
+        }
+
         if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
-            setupMobileFolderData(completion: completion)
+            setupMobileFolderData(completion: completionAfterSetup)
         } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
-            setupLocalDesktopFolderData(completion: completion)
+            setupLocalDesktopFolderData(completion: completionAfterSetup)
         } else {
-            setupSubfolderData(completion: completion)
+            setupSubfolderData(completion: completionAfterSetup)
         }
     }
 
@@ -196,6 +220,8 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             completion()
             return
         }
+
+        currentSearchQuery = query
 
         bookmarksHandler
             .getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: true)
@@ -398,25 +424,49 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
 
     /// Deletes the bookmark. Deletion of the bookmark in places happens asynchronously, but tableView source arrays are
     /// updated immediately for UI responsiveness.
-    func remove(bookmark: FxBookmarkNode) {
+    /// - Parameters:
+    ///   - bookmark: The bookmark to delete.
+    ///   - completion: The completion handler to call after the bookmark has been asynchronously removed from the backing
+    ///                 store.
+    func remove(bookmark: FxBookmarkNode, afterAsyncRemoval completion: @escaping @MainActor () -> Void) {
+        let removalCompletion: @MainActor () -> Void = { [weak self] in
+            if let self, self.isBookmarksSearchEnabled, self.isShowingSearchResults {
+                // Reload the bookmarks tree for the current folder. If a bookmark was deleted via search, there is a chance
+                // a subfolder becomes empty that was previously non-empty. We need to know whether folders in the current
+                // folder contain bookmarks or not because we show an alert when deleting folders with non-empty contents.
+                //
+                // Note: A race condition exists where the user might try to delete a folder before this refresh happens,
+                // since we optimistically update the UI but can't synchronously update the bookmarks tree local copy (at
+                // least not easily).
+                self.reloadData {
+                    completion()
+                }
+            }
+        }
         // Remove the bookmark from places (async background work)
         profile.places.deleteBookmarkNode(guid: bookmark.guid).uponQueue(.main) { _ in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
             MainActor.assumeIsolated {
+                // Remove this bookmark from quick actions
+                self.removeBookmarkShortcut()
+
                 // Remove this bookmark out of recent places
                 if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
                     self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
-                            guard let nodeValue = node.successValue, nodeValue == nil else { return }
+                            guard let nodeValue = node.successValue, nodeValue == nil else {
+                                removalCompletion()
+                                return
+                            }
 
                             self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                            removalCompletion()
                         }
                     }
+                } else {
+                    removalCompletion()
                 }
-
-                // Remove this bookmark from quick actions
-                self.removeBookmarkShortcut()
             }
         }
 

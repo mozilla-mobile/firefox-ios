@@ -326,12 +326,17 @@ final class BookmarksViewController: SiteTableViewController,
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         tableView.beginUpdates()
-        viewModel.remove(bookmark: bookmarkNode)
+        // Remove the bookmark from local data arrays for optimistic UI update, then re-queries and reloads the table
+        // because deleting a node while searching can alter the bookmarks tree at subfolder depths.
+        viewModel.remove(bookmark: bookmarkNode, afterAsyncRemoval: { [weak self] in
+            self?.tableView.reloadData()
+        })
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
 
-        // If the last bookmark in this folder was deleted and the user is searching, exit search
+        // If the last bookmark in this folder was deleted and the user is searching, exit search.
         if viewModel.isCurrentFolderEmpty && state == .bookmarks(state: .search) {
+            // Exits search and updates the empty state as needed
             exitSearchState()
         } else {
             updateEmptyState(animated: false)
