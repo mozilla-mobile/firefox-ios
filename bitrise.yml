@@ -346,7 +346,9 @@ workflows:
             #!/usr/bin/env bash
             set -e
             set -x
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
     - xcode-build-for-test@3:
         inputs:
         - scheme: Firefox
@@ -440,7 +442,9 @@ workflows:
             #!/usr/bin/env bash
             set -e
             set -x
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
     - xcode-build-for-test@3:
         inputs:
         - scheme: FirefoxBeta
@@ -756,7 +760,9 @@ workflows:
     - script@1.2.1:
         inputs:
         - content: |-
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
         title: Run bootstrap
     - swiftlint-extended@1.0.0:
         inputs:
@@ -918,7 +924,9 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - content: |-
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
         title: Run bootstrap
     - script@1.2.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -983,7 +991,9 @@ workflows:
     - script@1.2.1:
         inputs:
         - content: |-
-            ./bootstrap.sh firefox
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
         title: Run bootstrap
     - script@1.2.1:
         title: NPM install and build
@@ -1092,7 +1102,9 @@ workflows:
             # debug log
             set -x
 
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
@@ -1233,7 +1245,9 @@ workflows:
             set -e
             set -x
 
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
@@ -2204,7 +2218,9 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            ./bootstrap.sh focus
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
         title: ContentBlockerGen
 
   focus-set-project-version:
@@ -2724,7 +2740,9 @@ workflows:
             #!/usr/bin/env bash
             set -xe
 
-            ./bootstrap.sh
+            brew tap mozilla-mobile/fxios
+            brew install fxios
+            fxios bootstrap
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
