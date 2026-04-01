@@ -625,9 +625,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     ) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
             return NativeErrorPageFeature(
+                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
                 enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled,
-                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
             )
         }
     }

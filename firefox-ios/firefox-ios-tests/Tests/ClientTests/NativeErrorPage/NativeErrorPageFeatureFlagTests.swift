@@ -54,9 +54,9 @@ class NativeErrorPageFeatureFlagTests: XCTestCase {
                                                    noInternetConnectionErrorIsEnabled: Bool,
                                                    badCertDomainErrorPageIsEnabled: Bool = false) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
-                return NativeErrorPageFeature(enabled: isEnabled,
-                                              noInternetConnectionError: noInternetConnectionErrorIsEnabled,
-                                              badCertDomainErrorPage: badCertDomainErrorPageIsEnabled)
+                return NativeErrorPageFeature(badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
+                                              enabled: isEnabled,
+                                              noInternetConnectionError: noInternetConnectionErrorIsEnabled)
         }
     }
 }
