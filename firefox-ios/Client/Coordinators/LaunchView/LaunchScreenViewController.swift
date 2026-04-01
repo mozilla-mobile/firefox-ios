@@ -126,7 +126,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
                 snapshotView.alpha = 0.0
             }, completion: { _ in
             snapshotView.removeFromSuperview()
-        })
+            })
     }
 
     deinit {
