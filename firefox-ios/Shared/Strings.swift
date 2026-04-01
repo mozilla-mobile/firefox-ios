@@ -1658,14 +1658,6 @@ extension String {
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {
-        public struct VideoIntro {
-            public static let ContinueButtonTitle = MZLocalizedString(
-                key: "Onboarding.VideoIntro.ContinueButtonTitle.v151",
-                tableName: "Onboarding",
-                value: "Continue with %@",
-                comment: "Button label on the full-screen video intro shown before onboarding on a fresh install. %@ is replaced with the app name (e.g Firefox).")
-        }
-
         public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(
             key: "Onboarding.Welcome.Link.Action.v114",
             tableName: "Onboarding",
