@@ -21,7 +21,7 @@ final class MenuMainViewTests: XCTestCase {
     }
 
     func testShouldNotDisplayBanner_onSiteMenu() {
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: false, bannerShown: false)
+        setupDetails(isBrowserDefault: false, bannerShown: false)
 
         let homepageSection = MenuSection(isExpanded: false, isHomepage: false, options: [])
         menuView.reloadDataView(with: [homepageSection])
@@ -30,7 +30,7 @@ final class MenuMainViewTests: XCTestCase {
     }
 
     func testShouldNotDisplayBanner_ifBrowserIsDefault() {
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: true, bannerShown: false)
+        setupDetails(isBrowserDefault: true, bannerShown: false)
 
         let homepageSection = MenuSection(isExpanded: false, isHomepage: true, options: [])
         menuView.reloadDataView(with: [homepageSection])
@@ -39,7 +39,7 @@ final class MenuMainViewTests: XCTestCase {
     }
 
     func testShouldNotDisplayBanner_ifWasShown() {
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: false, bannerShown: true)
+        setupDetails(isBrowserDefault: false, bannerShown: true)
 
         let homepageSection = MenuSection(isExpanded: false, isHomepage: true, options: [])
         menuView.reloadDataView(with: [homepageSection])
@@ -48,7 +48,7 @@ final class MenuMainViewTests: XCTestCase {
     }
 
     func testShouldDisplayBanner() {
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: false, bannerShown: false)
+        setupDetails(isBrowserDefault: false, bannerShown: false)
 
         let homepageSection = MenuSection(isExpanded: false, isHomepage: true, options: [])
         menuView.reloadDataView(with: [homepageSection])
@@ -58,7 +58,7 @@ final class MenuMainViewTests: XCTestCase {
 
     func testCloseBannerCallback() {
         let homepageSection = MenuSection(isExpanded: false, isHomepage: true, options: [])
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: false, bannerShown: false)
+        setupDetails(isBrowserDefault: false, bannerShown: false)
         menuView.reloadDataView(with: [homepageSection])
 
         let expectation = XCTestExpectation(description: "Close banner callback should be called")
@@ -88,7 +88,7 @@ final class MenuMainViewTests: XCTestCase {
 
     func testBannerButtonCallbackCalled() {
         let expectation = XCTestExpectation(description: "Banner button callback")
-        setupDetails(isBannerFlagEnabled: true, isBrowserDefault: false, bannerShown: false)
+        setupDetails(isBrowserDefault: false, bannerShown: false)
 
         menuView.bannerButtonCallback = {
             expectation.fulfill()
@@ -100,12 +100,11 @@ final class MenuMainViewTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    private func setupDetails(isBannerFlagEnabled: Bool, isBrowserDefault: Bool, bannerShown: Bool) {
+    private func setupDetails(isBrowserDefault: Bool, bannerShown: Bool) {
         menuView.setupDetails(
             title: "",
             subtitle: "",
             image: nil,
-            isBannerFlagEnabled: isBannerFlagEnabled,
             isBrowserDefault: isBrowserDefault,
             bannerShown: bannerShown
         )

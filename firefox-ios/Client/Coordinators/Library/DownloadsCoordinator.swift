@@ -65,11 +65,10 @@ class DownloadsCoordinator: BaseCoordinator,
         }
 
         let coordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
             router: router,
             profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
+            tabManager: tabManager,
+            parentCoordinator: self
         )
         add(child: coordinator)
 

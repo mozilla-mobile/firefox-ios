@@ -20,7 +20,7 @@ let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
 let loginsListPasswordLabelEdited = "Password, bar"
-let defaultNumRowsLoginsList = 2
+let defaultNumRowsLoginsList = 1
 let defaultNumRowsEmptyFilterList = 0
 let searchPasswords = "Search passwords"
 let loginList = "Login List"
@@ -327,7 +327,6 @@ class LoginTest: BaseTestCase {
         waitForElementsToExist(
             [
                 app.switches[passwordssQuery.saveLogins],
-                app.switches[passwordssQuery.showLoginsInAppMenu],
                 app.searchFields[passwordssQuery.searchPasswords],
                 app.staticTexts[passwordssQuery.emptyList],
                 app.buttons[passwordssQuery.addButton]
@@ -336,9 +335,6 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.switches[passwordssQuery.saveLogins].value as? String,
                        "1",
                        "Save passwords toggle in not enabled by default")
-        XCTAssertEqual(app.switches[passwordssQuery.showLoginsInAppMenu].value as? String,
-                       "1",
-                       "Show in Application Menu toggle in not enabled by default")
         app.buttons[passwordssQuery.addButton].waitAndTap()
         waitForElementsToExist(
             [
@@ -440,7 +436,7 @@ class LoginTest: BaseTestCase {
     func testDismissedChangesAreNotSaved() {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
-        let savedCredentials = app.tables[loginList].cells.element(boundBy: 2)
+        let savedCredentials = app.tables[loginList].cells.element(boundBy: 1)
         let passwordCell = app.tables.cells["Password"]
         let editButton = app.buttons["Edit"]
         savedCredentials.waitAndTap()
@@ -511,7 +507,7 @@ class LoginTest: BaseTestCase {
         saveLoginAlertScreen.respondToAlert(savePassword: isPasswordSaved)
 
         openLoginsSettings()
-        loginSettingsScreen.openLoginAtIndex(2)
+        loginSettingsScreen.openLoginAtIndex(defaultNumRowsLoginsList)
         loginSettingsScreen.revealPassword()
         if isPasswordSaved {
             loginSettingsScreen.assertPasswordVisible("password")
@@ -521,7 +517,7 @@ class LoginTest: BaseTestCase {
     }
 
     private func validateLoginTextFieldsCanBeCopied(indexField: Int, copiedText: String, field: String) {
-        app.tables[loginList].cells.element(boundBy: 2).waitAndTap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).waitAndTap()
         // Long tap on the Website field and then tap on Copy
         app.tables.cells.element(boundBy: indexField).press(forDuration: 1.5)
         app.staticTexts["Copy"].waitAndTap()
@@ -577,12 +573,12 @@ class LoginTest: BaseTestCase {
         // Only matching results are displayed
         waitForElementsToExist(
             [
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domain],
-                app.tables[loginList].cells.element(boundBy: 2).staticTexts[domainLogin]
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domain],
+                app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).staticTexts[domainLogin]
             ]
         )
         // Tap on one of the matching results
-        app.tables[loginList].cells.element(boundBy: 2).tap()
+        app.tables[loginList].cells.element(boundBy: defaultNumRowsLoginsList).tap()
         // The login details are displayed
         waitForElementsToExist(
             [
@@ -616,6 +612,12 @@ class LoginTest: BaseTestCase {
         app.buttons[passwordssQuery.AddLogin.saveButton].waitAndTap()
         mozWaitForElementToExist(app.tables[loginList].otherElements["SAVED PASSWORDS"])
         loginSettingsScreen.tapSaveButtonIfExists()
+
+        // Modal only appears during first run
+        if app.sheets.firstMatch.exists {
+            app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
+            mozWaitForElementToNotExist(app.sheets.firstMatch)
+        }
     }
 
     func enterTextInField(typedText: String) {

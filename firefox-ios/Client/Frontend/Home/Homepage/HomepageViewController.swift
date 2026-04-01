@@ -65,9 +65,7 @@ final class HomepageViewController: UIViewController,
     private var shouldUseNewsTransitionHeader: Bool {
         let scrollDirection: ScrollDirection = featureFlags.getCustomState(for: .homepageStoriesScrollDirection)
                                                ?? .baseline
-        let isStoriesScrollDirectionVertical = scrollDirection == .vertical && UIDevice.current.userInterfaceIdiom == .phone
-        let isNewsTransitionEnabled = featureFlags.isFeatureEnabled(.homepageNewsTransition, checking: .buildOnly)
-        return isStoriesScrollDirectionVertical && isNewsTransitionEnabled
+        return scrollDirection == .vertical
     }
 
     private var availableWidth: CGFloat {
@@ -253,7 +251,7 @@ final class HomepageViewController: UIViewController,
     // If no scroll position exists for tab, scroll the homepage to the top
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
-        guard let activeTabUUID, isHomepageStoriesScrollDirectionCustomized,
+        guard let activeTabUUID, isHomepageStoriesScrollDirectionVertical,
               let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
         else {
             scrollToTop()
@@ -356,10 +354,10 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.showScreen,
-            screen: .homepage
+            actionType: ComponentActionType.addComponent,
+            component: .homepage
         )
         store.dispatch(action)
 
@@ -401,10 +399,10 @@ final class HomepageViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .homepage
+            actionType: ComponentActionType.removeComponent,
+            component: .homepage
         )
         store.dispatch(action)
     }
@@ -489,6 +487,7 @@ final class HomepageViewController: UIViewController,
         )
 
         collectionView.keyboardDismissMode = .onDrag
+        collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -652,14 +651,13 @@ final class HomepageViewController: UIViewController,
         _ story: MerinoStoryConfiguration,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let shouldShowStoriesFeedCell = isHomepageStoriesScrollDirectionCustomized
-            && UIDevice.current.userInterfaceIdiom == .phone
+        let shouldShowLargeStoryCell = isHomepageStoriesScrollDirectionVertical
         let position = indexPath.item + 1
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        if shouldShowStoriesFeedCell {
-            return configuredCell(cellType: StoriesFeedCell.self, at: indexPath) { cell in
+        if shouldShowLargeStoryCell {
+            return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
                 cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
             }
         }
@@ -771,9 +769,6 @@ final class HomepageViewController: UIViewController,
         case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.merinoState.sectionHeaderState,
-                moreButtonAction: { [weak self] _ in
-                    self?.navigateToStoriesFeed()
-                },
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -809,7 +804,9 @@ final class HomepageViewController: UIViewController,
             return
         }
 
-        let transitionEnabled = headerAttributes.size.height >= NewsAffordanceHeaderView.UX.totalHeight
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                                                                             width: collectionView.bounds.width)
+        let transitionEnabled = headerAttributes.size.height >= expectedHeaderHeight
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
@@ -822,7 +819,9 @@ final class HomepageViewController: UIViewController,
             ofKind: UICollectionView.elementKindSectionHeader,
             at: indexPath
         )?.size.height ?? 0
-        return headerHeight >= NewsAffordanceHeaderView.UX.totalHeight
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                                                                             width: collectionView.bounds.width)
+        return headerHeight >= expectedHeaderHeight
     }
 
     /// Converts the homepage's vertical scroll offset into normalized transition progress for the
@@ -873,6 +872,15 @@ final class HomepageViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            // Wait for a layout pass so the header has its correct height before determining
+            // whether the transition should be enabled.
+            DispatchQueue.main.async { [weak self] in
+                self?.updateNewsTransitionHeaderProgress()
+            }
+        }
+
         store.dispatch(
             HomepageAction(
                 showiPadSetup: shouldUseiPadSetup(),
@@ -985,16 +993,6 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.shortcutsLibrary),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnShortcutsShowAllButton
-            )
-        )
-    }
-
-    private func navigateToStoriesFeed() {
-        store.dispatch(
-            NavigationBrowserAction(
-                navigationDestination: NavigationDestination(.storiesFeed),
-                windowUUID: windowUUID,
-                actionType: NavigationBrowserActionType.tapOnAllStoriesButton
             )
         )
     }

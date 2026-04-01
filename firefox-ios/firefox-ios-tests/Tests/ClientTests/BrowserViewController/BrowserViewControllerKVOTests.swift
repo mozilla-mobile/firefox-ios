@@ -250,8 +250,8 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
 
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

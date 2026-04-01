@@ -11,9 +11,12 @@ mozprofile = "*"
 mozrunner = "*"
 mozversion = "*"
 pytest = "*"
-pytest-fxa-mte = "1.6.0"
+pytest-fxa-mte = "1.7.0b1"
 pytest-html = "*"
 pytest-metadata = "*"
 requests = "*"
 
 [dev-packages]
+
+[requires]
+python_version = "3.12"

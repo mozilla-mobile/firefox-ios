@@ -6,11 +6,11 @@
 "use strict";
 import { isProbablyReaderable, Readability } from "@mozilla/readability";
 import {setStyle} from "./ReaderModeStyles.js";
+import { findRecipeJSONLD } from "./JSONLD.js";
 
 const DEBUG = false;
 
 var readabilityResult = null;
-
 const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
 const BLOCK_IMAGES_SELECTOR =
@@ -100,6 +100,13 @@ function checkReadability() {
 // Readerize the document. Since we did the actual readerization already in checkReadability, we
 // can simply return the results we already have.
 function readerize() {
+  // Find recipe json ld in the current doc and append it to readabilty result to be able to embed the json
+  // for the reader view html when the page is created. This is needed in order to not lose recipe metadata
+  // when summarizing a reader view web page. 
+  const recipeJSON = findRecipeJSONLD();
+  if (readabilityResult) {
+    readabilityResult.jsonld = JSON.stringify(recipeJSON ?? "");
+  }
   return readabilityResult;
 }
 

@@ -7,6 +7,10 @@ enum DismissalReason: Equatable {
     case deeplink
 }
 
+// Used for any view controllers that shouldn't be dismissed whenever we `popToViewController`
+protocol PreventsDismissal: AnyObject {}
+
+// Used for any view controllers that wants to be notified whenever they are dismissed by a `popToViewController`
 protocol DismissalNotifiable: AnyObject {
     @MainActor
     func willBeDismissed(reason: DismissalReason)

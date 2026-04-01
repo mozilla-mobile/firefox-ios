@@ -1,5 +1,5 @@
 /* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
-"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novo! %@ E-poštne maske Relay so zdaj na voljo za mobilne naprave.";
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novo! E-poštne maske %@ Relay so zdaj na voljo za mobilne naprave.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Svojih 5 brezplačnih e-poštnih mask ste že uporabili, zato smo ponovno uporabili eno od njih.";

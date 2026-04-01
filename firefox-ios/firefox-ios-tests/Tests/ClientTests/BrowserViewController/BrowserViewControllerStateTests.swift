@@ -472,26 +472,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    // MARK: - Stories Feed
-
-    func test_tapOnAllStoriesButton_navigationBrowserAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.navigationDestination)
-
-        let action = getNavigationBrowserAction(for: .tapOnAllStoriesButton, destination: .storiesFeed)
-        let newState = reducer(initialState, action)
-
-        let destination = newState.navigationDestination?.destination
-        switch destination {
-        case .storiesFeed:
-            break
-        default:
-            XCTFail("destination is not the right type")
-        }
-    }
-
     // MARK: - Privacy Notice Link
 
     func test_tapOnPrivacyNoticeLink_navigationBrowserAction_returnsExpectedState() {
@@ -574,8 +554,8 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         StoreTestUtilityHelper.setupStore(
             with: AppState(
-                activeScreens: ActiveScreensState(
-                    screens: [
+                presentedComponents: PresentedComponentsState(
+                    components: [
                         .browserViewController(
                             BrowserViewControllerState(
                                 windowUUID: .XCTestDefaultUUID
@@ -594,8 +574,8 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

@@ -10,17 +10,17 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView,
                                        ReusableCell,
                                        ThemeApplicable {
     private struct UX {
-        static let manageCardsButtonLeadingSpace: CGFloat = 0
-        static let manageCardsButtonTopSpace: CGFloat = 24
-        static let manageCardsButtonBottomSpace: CGFloat = 24
+        static let topBottomMargin: CGFloat = 24
+        static let layoutPriority: Float = 999
     }
 
+    private let containerView: UIView = .build()
     public lazy var manageCardsButton: LinkButton  = .build { button in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        setupManageCardsButton()
         setupView()
+        setupButton()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,28 +32,36 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView,
         manageCardsButton.applyTheme(theme: theme)
     }
 
-    func setupManageCardsButton() {
-        contentView.addSubview(manageCardsButton)
+    private func setupView() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(manageCardsButton)
+
+        let bottomConstraint = containerView.bottomAnchor.constraint(
+            equalTo: contentView.bottomAnchor,
+            constant: -UX.topBottomMargin
+        )
+        bottomConstraint.priority = UILayoutPriority(UX.layoutPriority)
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.topBottomMargin),
+            bottomConstraint,
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            manageCardsButton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            manageCardsButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            manageCardsButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            manageCardsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+        ])
+    }
+
+    private func setupButton() {
         let buttonViewModel = LinkButtonViewModel(
             title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
             font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .left
         )
-
         manageCardsButton.configure(viewModel: buttonViewModel)
-    }
-
-    private func setupView() {
-        NSLayoutConstraint.activate([
-            manageCardsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                       constant: UX.manageCardsButtonLeadingSpace),
-            manageCardsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                        constant: -UX.manageCardsButtonLeadingSpace),
-            manageCardsButton.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                   constant: UX.manageCardsButtonTopSpace),
-            manageCardsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                      constant: -UX.manageCardsButtonBottomSpace)
-        ])
     }
 }

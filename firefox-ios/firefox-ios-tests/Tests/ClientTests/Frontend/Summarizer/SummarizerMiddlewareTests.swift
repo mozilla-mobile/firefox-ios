@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import TestKit
 import XCTest
 
 @testable import Client
@@ -463,8 +464,8 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .homepage(
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID

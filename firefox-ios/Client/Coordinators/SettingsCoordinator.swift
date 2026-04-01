@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 import SwiftUI
+import Shared
 
 protocol SettingsCoordinatorDelegate: AnyObject {
     @MainActor
@@ -29,7 +30,9 @@ final class SettingsCoordinator: BaseCoordinator,
                                  ParentCoordinatorDelegate,
                                  QRCodeNavigationHandler,
                                  BrowsingSettingsDelegate,
-                                 AppearanceSettingsDelegate {
+                                 AppearanceSettingsDelegate,
+                                 TranslationPickerSettingsDelegate,
+                                 FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -223,8 +226,7 @@ final class SettingsCoordinator: BaseCoordinator,
         case .creditCard, .password:
             return nil // Needs authentication, decision handled by VC
 
-        case .translation:
-            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        case .translation: return translationSettingsViewController()
         case .general, .rateApp:
             return nil // Return nil since we're already at the general page
         }
@@ -375,6 +377,18 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     // MARK: GeneralSettingsDelegate
+    func pressedAIControls() {
+        let model = AIControlsModel(prefs: profile.prefs)
+
+        let viewController = UIHostingController(
+            rootView: AIControlsSettingsView(
+                windowUUID: windowUUID,
+                aiControlsModel: model
+            )
+        )
+        viewController.title = .Settings.AIControls.Title
+        router.push(viewController)
+    }
 
     func pressedCustomizeAppIcon() {
         settingsTelemetry.optionSelected(option: .AppIconSelection)
@@ -433,9 +447,9 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .themeSettings)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .themeSettings)
         store.dispatch(action)
 
         if themeManager.isNewAppearanceMenuOn {
@@ -464,8 +478,26 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTranslation() {
-        let viewController = TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
-        router.push(viewController)
+        router.push(translationSettingsViewController())
+    }
+
+    private func translationSettingsViewController() -> UIViewController {
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
+            viewController.coordinator = self
+            return viewController
+        } else {
+            return TranslationSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
+        }
+    }
+
+    func showLanguagePicker(availableLanguages: [String]) {
+        let picker = TranslationLanguagePickerViewController(
+            windowUUID: windowUUID,
+            languages: availableLanguages
+        )
+        let navigationController = UINavigationController(rootViewController: picker)
+        router.present(navigationController)
     }
 
     // MARK: AccountSettingsDelegate

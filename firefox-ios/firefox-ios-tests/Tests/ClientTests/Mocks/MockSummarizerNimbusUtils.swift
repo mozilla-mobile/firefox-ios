@@ -15,12 +15,14 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils, @unchecked Sendabl
     var shakeGestureFeatureFlagEnabled = false
     var appAttestAuthEnabled = false
     var isLanguageExpansionEnabled = false
+    var usesPermissiveGuardrailsEnabled = false
 
     private(set) var isAppleSummarizerEnabledCallCount = 0
     private(set) var isHostedSummarizerEnabledCallCount = 0
     private(set) var isShakeGestureFeatureFlagEnabledCallCount = 0
     private(set) var isAppAttestAuthEnabledCallCount = 0
     private(set) var languageExpansionConfigurationCallCount = 0
+    private(set) var usesPermissiveGuardrailsCallCount = 0
     var languageExpansionConfiguration = SummarizerLanguageExpansionConfiguration(
         supportedLocales: []
     )
@@ -43,6 +45,11 @@ final class MockSummarizerNimbusUtils: SummarizerNimbusUtils, @unchecked Sendabl
     func isAppAttestAuthEnabled() -> Bool {
         isAppAttestAuthEnabledCallCount += 1
         return appAttestAuthEnabled
+    }
+
+    func usesPermissiveGuardrails() -> Bool {
+        usesPermissiveGuardrailsCallCount += 1
+        return usesPermissiveGuardrailsEnabled
     }
 
     func languageExpansionConfiguration(

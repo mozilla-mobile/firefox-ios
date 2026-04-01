@@ -530,7 +530,7 @@ private extension LegacyTabScrollController {
     @objc
     func reload() {
         guard let tab = tab else { return }
-        tab.reloadPage()
+        tab.reload()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 

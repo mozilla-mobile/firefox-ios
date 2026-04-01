@@ -7,16 +7,13 @@ import MozillaAppServices
 import Shared
 
 protocol StoryProviderInterface: Sendable {
-    func fetchHomepageStories() async -> [MerinoStory]
-    func fetchDiscoverMoreStories() async -> [MerinoStory]
+    func fetchHomepageStories() async -> MerinoStoryResponse
     func prefetchStories() async
 }
 
 final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     private struct Constants {
-        static let defaultNumberOfHomepageStories = 9
-        static let defaultNumberOfHomepageStoriesForCustomizedScrollDirection = 100
-        static let defaultNumberOfDiscoverMoreStories = 100
+        static let defaultNumberOfHomepageStories = 100
     }
 
     private let merinoAPI: MerinoStoriesProviding
@@ -25,25 +22,22 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
         self.merinoAPI = merinoAPI
     }
 
-    func fetchHomepageStories() async -> [MerinoStory] {
-        let numberOfRequestedStories = await isHomepageStoriesScrollDirectionCustomized
-            ? Constants.defaultNumberOfHomepageStoriesForCustomizedScrollDirection
-            : Constants.defaultNumberOfHomepageStories
-        return await fetchStories(numberOfRequestedStories)
-    }
-
-    func fetchDiscoverMoreStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
+    func fetchHomepageStories() async -> MerinoStoryResponse {
+        return await fetchStories(Constants.defaultNumberOfHomepageStories)
     }
 
     func prefetchStories() async {
         // Because a prefetch basically warms the cache, we don't actually need
         // to do anything with the results
-        _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfDiscoverMoreStories)
+        _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfHomepageStories)
     }
 
-    private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
+    private func fetchStories(_ numberOfRequestedStories: Int) async -> MerinoStoryResponse {
         let data = (try? await merinoAPI.fetchStories(numberOfRequestedStories)) ?? []
-        return data.map(MerinoStory.init)
+        return MerinoStoryResponse(
+            stories: data
+                .map(MerinoStory.init)
+                .compactMap { MerinoStoryConfiguration(story: $0) }
+        )
     }
 }

@@ -4,8 +4,10 @@
 
 import Foundation
 import Glean
-import XCTest
+import MozillaAppServices
 import Storage
+import TestKit
+import XCTest
 
 @testable import Client
 
@@ -14,18 +16,23 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     private var networking: MockUnifiedTileNetworking!
     private var logger: MockLogger!
     private var gleanWrapper: MockGleanWrapper!
+    private var mockAdsClient: MockMozAdsClient!
 
     override func setUp() async throws {
         try await super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        setupNimbusAdsClientTesting(isEnabled: false)
         networking = MockUnifiedTileNetworking()
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
+        mockAdsClient = MockMozAdsClient()
     }
 
     override func tearDown() async throws {
         networking = nil
         logger = nil
         gleanWrapper = nil
+        mockAdsClient = nil
         try await super.tearDown()
     }
 
@@ -123,17 +130,92 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         XCTAssert(secondResultMetricType == expectedSecondMetricType, secondDebugMessage.text)
     }
 
+    func testImpressionTelemetry_whenAdsClientEnabled_callsRecordImpression() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+        let subject = createSubject()
+
+        guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
+            XCTFail("Expected tileSite to be a .sponsoredSite")
+            return
+        }
+
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(mockAdsClient.recordImpressionCalledWith, siteInfo.impressionURL)
+        XCTAssertNil(mockAdsClient.recordClickCalledWith)
+    }
+
+    func testClickTelemetry_whenAdsClientEnabled_callsRecordClick() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+        let subject = createSubject()
+
+        guard case SiteType.sponsoredSite(let siteInfo) = tileSite.type else {
+            XCTFail("Expected tileSite to be a .sponsoredSite")
+            return
+        }
+
+        subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(mockAdsClient.recordClickCalledWith, siteInfo.clickURL)
+        XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
+    }
+
+    func testImpressionTelemetry_whenAdsClientDisabled_doesNotCallRecordImpression() {
+        setupNimbusAdsClientTesting(isEnabled: false)
+        let subject = createSubject()
+
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
+    }
+
+    func testClickTelemetry_whenAdsClientDisabled_doesNotCallRecordClick() {
+        setupNimbusAdsClientTesting(isEnabled: false)
+        let subject = createSubject()
+
+        subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertNil(mockAdsClient.recordClickCalledWith)
+    }
+
+    func testImpressionTelemetry_whenAdsClientEnabledAndFails_fallsBackToLegacy() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+        mockAdsClient.mockError = UnifiedTileNetworkingError.dataUnavailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
+        let subject = createSubject()
+
+        subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
+        XCTAssertEqual(networking.dataFromCalled, 1)
+    }
+
+    func testClickTelemetry_whenAdsClientEnabledAndFails_fallsBackToLegacy() {
+        setupNimbusAdsClientTesting(isEnabled: true)
+        mockAdsClient.mockError = UnifiedTileNetworkingError.dataUnavailable
+        networking.error = UnifiedTileNetworkingError.dataUnavailable
+        let subject = createSubject()
+
+        subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertNil(mockAdsClient.recordClickCalledWith)
+        XCTAssertEqual(networking.dataFromCalled, 1)
+    }
+
     // MARK: - Helper functions
 
     func createSubject(file: StaticString = #filePath, line: UInt = #line) -> UnifiedAdsCallbackTelemetry {
         let sponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry(gleanWrapper: gleanWrapper)
-        let subject = DefaultUnifiedAdsCallbackTelemetry(networking: networking,
-                                                         logger: logger,
-                                                         sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry)
+        let subject = DefaultUnifiedAdsCallbackTelemetry(
+            adsClientFactory: MockMozAdsClientFactory(mockClient: mockAdsClient),
+            networking: networking,
+            logger: logger,
+            sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry
+        )
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
+    }
+
+    func setupNimbusAdsClientTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.adsClient.with { _, _ in
+            AdsClient(status: isEnabled)
+        }
     }
 
     // MARK: - Mock object

@@ -37,10 +37,16 @@ let package = Package(
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(
+            name: "MLPAKit",
+            targets: ["MLPAKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
                  targets: ["JWTKit"]),
+        .library(
+            name: "LLMKit",
+            targets: ["LLMKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -205,12 +211,23 @@ let package = Package(
             ]
         ),
         .target(
+            name: "MLPAKit",
+            dependencies: ["Common", "JWTKit", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "MLPAKitTests",
+            dependencies: ["MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "SummarizeKit",
             dependencies: [
                 "Common",
                 "ComponentLibrary",
                 "Down",
-                "JWTKit"
+                "LLMKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
@@ -235,6 +252,18 @@ let package = Package(
             ]
         ),
         .target(
+            name: "LLMKit",
+            dependencies: ["MLPAKit"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]
+        ),
+        .testTarget(
+            name: "LLMKitTests",
+            dependencies: ["LLMKit", "MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
@@ -242,7 +271,7 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common"],
+            dependencies: ["Common", "Shared", "MLPAKit", "LLMKit"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]

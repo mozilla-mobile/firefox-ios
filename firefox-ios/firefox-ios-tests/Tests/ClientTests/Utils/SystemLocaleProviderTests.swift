@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import Foundation
+import TestKit
 import XCTest
 
 @testable import Client
@@ -127,6 +128,30 @@ final class SystemLocaleProviderTests: XCTestCase {
         XCTAssertEqual(logger.savedLevel, .fatal)
         XCTAssertEqual(logger.savedMessage, "Unable to retrieve region code from Locale, so return undetermined")
         XCTAssertEqual(logger.savedExtra, Optional(["Locale identifier": "fakeidentifier"]))
+    }
+
+    // MARK: - localizedLanguageName
+
+    func test_localizedLanguageName_knownCode_returnsNameInCurrentLocale() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.localizedLanguageName(for: "fr"), "French")
+    }
+
+    func test_localizedLanguageName_unknownCode_returnsFallbackCode() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.localizedLanguageName(for: "zz"), "zz")
+    }
+
+    // MARK: - nativeLanguageName
+
+    func test_nativeLanguageName_knownCode_returnsNameInItsOwnLanguage() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.nativeLanguageName(for: "fr"), "français")
+    }
+
+    func test_nativeLanguageName_unknownCode_returnsFallbackCode() {
+        let subject = createSubject(with: Locale(identifier: "en_US"))
+        XCTAssertEqual(subject.nativeLanguageName(for: "zz"), "zz")
     }
 
     private func createSubject(with locale: Locale) -> SystemLocaleProvider {

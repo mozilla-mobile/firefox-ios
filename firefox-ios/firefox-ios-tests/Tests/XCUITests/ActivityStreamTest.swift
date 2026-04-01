@@ -225,6 +225,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         browser.assertAddressBarContains(value: "wikipedia.org")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         app.launch()

@@ -14,7 +14,9 @@ import WebEngine
 /// Previously we used the `WKNavigationDelegate` JS alert methods with `completionHandler`s. Failing to call the
 /// `completionHandler` would crash the app with a runtime exception. We've replace them with `continuation`s to
 /// work with the async methods from WKWebView delegate.
-class JSPromptAlertController: UIAlertController, JavaScriptPromptAlertController {
+class JSPromptAlertController: UIAlertController,
+                               JavaScriptPromptAlertController,
+                               PreventsDismissal {
     var alertInfo: JavaScriptAlertInfo?
     weak var delegate: JavascriptPromptAlertControllerDelegate?
     private var handledAction = false

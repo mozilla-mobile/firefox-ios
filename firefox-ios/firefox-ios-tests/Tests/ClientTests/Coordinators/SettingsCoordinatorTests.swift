@@ -365,6 +365,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is SiriSettingsViewController)
     }
 
+    func testGeneralSettingsDelegate_pushedAIControls() {
+        let subject = createSubject()
+
+        subject.pressedAIControls()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertEqual(mockRouter.pushedViewController?.title, "AI Controls")
+    }
+
     func testGeneralSettingsDelegate_pushedToolbar() {
         let subject = createSubject()
 
@@ -392,13 +401,24 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is SummarizeSettingsViewController)
     }
 
-    func testGeneralSettingsDelegate_pushedTranslationSettings() {
+    func testGeneralSettingsDelegate_pushedTranslationSettings_withLanguagePickerDisabled() {
+        setLanguagePickerEnabled(false)
         let subject = createSubject()
 
         subject.pressedTranslation()
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is TranslationSettingsViewController)
+    }
+
+    func testGeneralSettingsDelegate_pushedTranslationSettings_withLanguagePickerEnabled() {
+        setLanguagePickerEnabled(true)
+        let subject = createSubject()
+
+        subject.pressedTranslation()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is TranslationPickerSettingsViewController)
     }
 
     // MARK: - BrowsingSettingsDelegate
@@ -581,6 +601,12 @@ final class SettingsCoordinatorTests: XCTestCase {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setLanguagePickerEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            TranslationsFeature(languagePickerEnabled: enabled)
+        }
     }
 }
 

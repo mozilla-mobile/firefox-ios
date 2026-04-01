@@ -13,16 +13,9 @@ final class MerinoManagerTests: XCTestCase {
 
     func test_getMerinoItems_withHomepageSource_returnExpectedStories() async {
         let subject = createSubject(with: storyProvider)
-        let stories = await subject.getMerinoItems(source: .homepage)
-        XCTAssertEqual(stories.count, 3)
+        let response = await subject.getMerinoItems(source: .homepage)
+        XCTAssertEqual(response.stories?.count, 3)
         XCTAssertEqual(storyProvider.fetchHomepageStoriesCalled, 1)
-    }
-
-    func test_getMerinoItems_withStoriesFeedSource_returnExpectedStories() async {
-        let subject = createSubject(with: storyProvider)
-        let stories = await subject.getMerinoItems(source: .storiesFeed)
-        XCTAssertEqual(stories.count, 3)
-        XCTAssertEqual(storyProvider.fetchDiscoverMoreStoriesCalled, 1)
     }
 
     func test_prefetchStories_callsPrefetchStories() async {

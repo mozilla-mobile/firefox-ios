@@ -11,7 +11,7 @@ import MozillaAppServices
 /// that functionality is added in.
 private struct CachableRecommendationItem: Codable {
     let corpusItemId: String
-    let scheduledCorpusItemId: String
+    let scheduledCorpusItemId: String?
     let url: String
     let title: String
     let excerpt: String
@@ -20,7 +20,7 @@ private struct CachableRecommendationItem: Codable {
     let isTimeSensitive: Bool
     let imageUrl: String
     let iconUrl: String?
-    let tileId: Int64
+    let tileId: Int64?
     let receivedRank: Int64
 
     init(from model: RecommendationDataItem) {

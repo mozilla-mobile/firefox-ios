@@ -21,6 +21,8 @@ struct GeneralBrowserAction: Action {
     let summarizerConfig: SummarizerConfig?
     let summarizerTrigger: SummarizerTrigger
     let translationLanguages: [String]?
+    let isPageTranslated: Bool?
+    let translatedToLanguage: String?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -31,6 +33,8 @@ struct GeneralBrowserAction: Action {
          summarizerConfig: SummarizerConfig? = nil,
          summarizerTrigger: SummarizerTrigger = .shakeGesture,
          translationLanguages: [String]? = nil,
+         isPageTranslated: Bool? = nil,
+         translatedToLanguage: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
@@ -45,6 +49,8 @@ struct GeneralBrowserAction: Action {
         self.summarizerConfig = summarizerConfig
         self.summarizerTrigger = summarizerTrigger
         self.translationLanguages = translationLanguages
+        self.isPageTranslated = isPageTranslated
+        self.translatedToLanguage = translatedToLanguage
     }
 }
 

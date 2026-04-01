@@ -13,7 +13,7 @@ protocol ToolbarViewProtocol: AnyObject {
     var bottomBlurView: UIVisualEffectView { get }
     var overKeyboardContainer: BaseAlphaStackView { get }
     var isBottomSearchBar: Bool { get }
-    var headerTopConstraint: Constraint? { get }
+    var headerTopConstraint: ConstraintReference? { get }
     var bottomContainerConstraint: ConstraintReference? { get }
     var overKeyboardContainerConstraint: ConstraintReference? { get }
 }
@@ -176,7 +176,7 @@ final class ToolbarAnimator {
             if !isShowing {
                 view.bottomContainer.transform = .identity.translatedBy(x: 0, y: bottomOffset)
                 view.overKeyboardContainer.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
-                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: overkeyboardOffset)
+                view.bottomBlurView.transform = .identity.translatedBy(x: 0, y: bottomOffset)
             } else {
                 view.bottomContainer.transform = .identity
                 view.overKeyboardContainer.transform = .identity

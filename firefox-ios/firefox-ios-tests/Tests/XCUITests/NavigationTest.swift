@@ -20,13 +20,27 @@ let website_2 = [
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
-class NavigationTest: BaseTestCase {
+class NavigationTest: FeatureFlaggedTestSuite {
+    // There are multiple onboarding flows, so use a feature flag to test just against the newest flow.
+    let onboardingFlowType = OnboardingScreen.OnboardingFlowType.modernKit
+
+    override func setUpExperimentVariables() {
+        jsonFileName = onboardingFlowType.jsonFeatureOverrideFileName
+        featureName = onboardingFlowType.onboardingFeatureName
+    }
+
     var contextMenuScreen: ContextMenuScreen!
     var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
     var browserScreen: BrowserScreen!
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+
+        launchApp()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
@@ -597,14 +611,14 @@ class NavigationTest: BaseTestCase {
         }
         let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
         waitForTabsButton()
         app.terminate()
         springBoardScreen.assertFennecIconExists()
         springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
         springBoardScreen.tapNewPrivateButton()
-        onboardingScreen.agreeAndContinue()
-        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
         onboardingScreen.closeTourIfNeeded()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
@@ -621,7 +635,7 @@ class NavigationTest: BaseTestCase {
         }
         let springboardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
-        let onboardingScreen = OnboardingScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
 
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -642,8 +656,8 @@ class NavigationTest: BaseTestCase {
         springboardScreen.tapOpenLastBookmarkButton()
 
         // Close onboarding if it appears
-        onboardingScreen.agreeAndContinue()
-        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
         onboardingScreen.closeTourIfNeeded()
 
         // Verify the bookmarked page opens

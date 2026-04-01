@@ -54,6 +54,11 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         standardAppearance.backgroundColor = theme.colors.layer1
         standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
 
+        let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
+        let color = if #available(iOS 26.0, *) { theme.colors.textPrimary } else { theme.colors.textDisabled }
+        buttonAppearance.disabled.titleTextAttributes = [.foregroundColor: color]
+        standardAppearance.buttonAppearance = buttonAppearance
+
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
         navigationBar.scrollEdgeAppearance = standardAppearance

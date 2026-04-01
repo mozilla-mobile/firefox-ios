@@ -103,8 +103,8 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .microsurvey(
                         MicrosurveyState(
                             windowUUID: .XCTestDefaultUUID

@@ -53,16 +53,13 @@ final class NativeErrorPageMiddleware {
     }
 
     private func handleBypassCertificateWarning(windowUUID: WindowUUID) {
-        let selectedTab: Tab?
-        do {
-            selectedTab = try windowManager.tabManager(for: windowUUID).selectedTab
-        } catch {
+        let selectedTab: Tab? = windowManager.tabManager(for: windowUUID).selectedTab
+        if selectedTab == nil {
             logger.log(
-                "handleBypassCertificateWarning: Failed to fetch selected tab - \(String(describing: error))",
+                "handleBypassCertificateWarning: Failed to fetch selected tab",
                 level: .warning,
                 category: .certificate
             )
-            return
         }
 
         guard
