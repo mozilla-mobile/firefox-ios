@@ -22,6 +22,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Stores the last target language used per window, so retry can re-use the same language.
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
 
+    /// Tracks whether private browsing mode was active when a translation session started, per window.
+    private var isPrivateModes: [WindowUUID: Bool] = [:]
+
     /// Tracks windows where the user explicitly restored the original (untranslated) page.
     /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
     /// auto-translate to immediately re-translate the page the user just opted out of.
@@ -112,6 +115,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
             let newFlowId = UUID()
             translationFlowIds[action.windowUUID] = newFlowId
             selectedTargetLanguages[action.windowUUID] = deviceLanguage
+            isPrivateModes[action.windowUUID] = toolbarState.isPrivateMode
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willTranslate,
@@ -154,6 +158,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = action.targetLanguage
+        isPrivateModes[action.windowUUID] = toolbarState.isPrivateMode
         translationsTelemetry.translateButtonTapped(
             isPrivate: toolbarState.isPrivateMode,
             actionType: .willTranslate,
@@ -191,8 +196,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = targetLanguage
+        isPrivateModes[action.windowUUID] = store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        )?.isPrivateMode ?? false
         handleUpdatingTranslationIcon(for: action, with: .loading)
-        retrieveTranslations(for: action, targetLanguage: targetLanguage)
+        retrieveTranslations(for: action, targetLanguage: targetLanguage, autoTranslate: true)
         return true
     }
 
@@ -234,40 +244,52 @@ final class TranslationsMiddleware: FeatureFlaggable {
     }
 
     @MainActor
-    private func retrieveTranslations(for action: Action, targetLanguage: String) {
+    private func retrieveTranslations(for action: Action, targetLanguage: String, autoTranslate: Bool = false) {
         Task { @MainActor in
-            do {
-                try await translationsService.translateCurrentPage(
-                    for: action.windowUUID,
-                    to: targetLanguage,
-                    onLanguageIdentified: { identifiedLanguage, deviceLanguage in
-                        self.translationsTelemetry.pageLanguageIdentified(
-                            identifiedLanguage: identifiedLanguage,
-                            deviceLanguage: deviceLanguage
-                        )
-                    }
-                )
-                try await translationsService.firstResponseReceived(for: action.windowUUID)
-                dispatchAction(
-                    for: ToolbarActionType.translationCompleted,
-                    with: .active,
-                    translatedToLanguage: targetLanguage,
-                    and: action.windowUUID
-                )
-            } catch {
-                let serviceError = TranslationsServiceError.fromUnknown(error)
-                translationsTelemetry.translationFailed(
-                    translationFlowId: flowId(for: action.windowUUID),
-                    errorType: serviceError.telemetryDescription
-                )
-                logger.log(
-                    "Unable to translate page, so translation failed.",
-                    level: .warning,
-                    category: .translations,
-                    extra: ["Translations error": "\(error.localizedDescription)"]
-                )
-                self.handleErrorFromTranslatingPage(for: action)
-            }
+            await self.performTranslation(for: action, targetLanguage: targetLanguage, autoTranslate: autoTranslate)
+        }
+    }
+
+    @MainActor
+    private func performTranslation(for action: Action, targetLanguage: String, autoTranslate: Bool) async {
+        do {
+            try await translationsService.translateCurrentPage(
+                for: action.windowUUID,
+                to: targetLanguage,
+                onLanguageIdentified: { identifiedLanguage, deviceLanguage in
+                    self.translationsTelemetry.pageLanguageIdentified(
+                        identifiedLanguage: identifiedLanguage,
+                        deviceLanguage: deviceLanguage
+                    )
+                    self.translationsTelemetry.translationRequested(
+                        isPrivate: self.isPrivateModes[action.windowUUID] ?? false,
+                        translationFlowId: self.flowId(for: action.windowUUID),
+                        fromLanguage: identifiedLanguage,
+                        toLanguage: targetLanguage,
+                        autoTranslate: autoTranslate
+                    )
+                }
+            )
+            try await translationsService.firstResponseReceived(for: action.windowUUID)
+            dispatchAction(
+                for: ToolbarActionType.translationCompleted,
+                with: .active,
+                translatedToLanguage: targetLanguage,
+                and: action.windowUUID
+            )
+        } catch {
+            let serviceError = TranslationsServiceError.fromUnknown(error)
+            translationsTelemetry.translationFailed(
+                translationFlowId: flowId(for: action.windowUUID),
+                errorType: serviceError.telemetryDescription
+            )
+            logger.log(
+                "Unable to translate page, so translation failed.",
+                level: .warning,
+                category: .translations,
+                extra: ["Translations error": "\(error.localizedDescription)"]
+            )
+            self.handleErrorFromTranslatingPage(for: action)
         }
     }
 
@@ -326,6 +348,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Clears the flow ID for the given action's window.
     private func clearFlowId(for action: Action) {
         translationFlowIds[action.windowUUID] = nil
+        isPrivateModes[action.windowUUID] = nil
     }
 
     /// Returns the existing flow ID for this window, or generates a fallback one.

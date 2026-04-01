@@ -62,6 +62,39 @@ final class TranslationsTelemetryTests: XCTestCase {
         XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
     }
 
+    func testRecordEvent_WhenTranslationRequested_ThenGleanIsCalled() throws {
+        let subject = createSubject()
+        let event = GleanMetrics.Translations.translationRequested
+        typealias EventExtrasType = GleanMetrics.Translations.TranslationRequestedExtra
+
+        let expectedIsPrivate = false
+        let expectedFlowId = UUID()
+        let expectedFromLanguage = "fr"
+        let expectedToLanguage = "en"
+        let expectedAutoTranslate = true
+
+        subject.translationRequested(
+            isPrivate: expectedIsPrivate,
+            translationFlowId: expectedFlowId,
+            fromLanguage: expectedFromLanguage,
+            toLanguage: expectedToLanguage,
+            autoTranslate: expectedAutoTranslate
+        )
+
+        let savedExtras = try XCTUnwrap(mockGleanWrapper.savedExtras.first as? EventExtrasType)
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<EventExtrasType>
+        )
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssertEqual(savedExtras.isPrivateMode, expectedIsPrivate)
+        XCTAssertEqual(savedExtras.translationFlowId, expectedFlowId.uuidString)
+        XCTAssertEqual(savedExtras.fromLanguage, expectedFromLanguage)
+        XCTAssertEqual(savedExtras.toLanguage, expectedToLanguage)
+        XCTAssertEqual(savedExtras.autoTranslate, expectedAutoTranslate)
+        XCTAssert(savedMetric === event, "Received \(savedMetric) instead of \(event)")
+    }
+
     func testRecordEvent_WhenTranslationFailed_ThenGleanIsCalled() throws {
         let subject = createSubject()
         let event = GleanMetrics.Translations.translationFailed
