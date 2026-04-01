@@ -40,7 +40,7 @@ struct BrowserViewControllerState: ScreenState {
         case readerModeLongPressAction
         case dataClearance
         case passwordGenerator
-        case translationLanguagePicker(languages: [String])
+        case translationLanguagePicker(TranslationLanguagePickerData)
     }
 
     let windowUUID: WindowUUID

@@ -249,7 +249,7 @@ final class SummarizerMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_showReaderModeAction_withInvalidConfiguration_dispatchesNotAvailableAction() throws {
         setupWebViewForTabManager()
-        setupSuccessSummarizerConfiguration()
+        mockSummarizationChecker.overrideResponse = MockSummarizationChecker.failure
 
         let subject = createSubject()
 

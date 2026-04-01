@@ -418,7 +418,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let newState = BrowserViewControllerState.reducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
-                                 actionType: GeneralBrowserActionType.showSummarizer)
+                                 actionType: GeneralBrowserActionType.showSummarizer,
+                                 summarizerConfig: .defaultConfig)
         )
         subject.newState(state: newState)
 
