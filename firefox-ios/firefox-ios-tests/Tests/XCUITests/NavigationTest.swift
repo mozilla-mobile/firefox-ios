@@ -618,7 +618,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
         springBoardScreen.tapNewPrivateButton()
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
         onboardingScreen.closeTourIfNeeded()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)

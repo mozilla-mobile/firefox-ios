@@ -208,18 +208,15 @@ final class OnboardingScreen {
     func waitForCurrentScreenElements(checkCloseButton: Bool = false,
                                       checkPageControl: Bool = false,
                                       waitForImage: Bool = true) {
-        let img = app.images["\(rootA11yId)ImageView"]
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
 
+        var elementsToCheck = [title, desc, primaryButton]
+
         if waitForImage {
             let img = app.images["\(rootA11yId)ImageView"]
-            BaseTestCase().waitForElementsToExist([img, title, desc, primaryButton])
-        } else {
-            BaseTestCase().waitForElementsToExist([title, desc, primaryButton])
+            elementsToCheck.append(img)
         }
-
-        var elementsToCheck = [img, title, desc, primaryButton]
 
         if checkCloseButton {
             let closeBtn = sel.CLOSE_TOUR_BUTTON.element(in: app)
