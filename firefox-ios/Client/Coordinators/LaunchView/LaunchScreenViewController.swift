@@ -124,8 +124,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
             animations: {
                 snapshotView.transform = .identity.scaledBy(x: 20.0, y: 20.0)
                 snapshotView.alpha = 0.0
-            },
-            completion: { _ in
+        }, completion: { _ in
             snapshotView.removeFromSuperview()
         })
     }
