@@ -45,6 +45,19 @@ struct SearchPartner {
 enum SearchEngine: String, CaseIterable {
     case google
     case none
+
+    @MainActor
+    static func providerFrom(url: URL?) -> SearchEngine {
+        guard let url = url else {
+            return .none
+        }
+
+        for provider in SearchEngine.allCases where url.absoluteString.contains(provider.rawValue) {
+            return provider
+        }
+
+        return .none
+    }
 }
 
 // all the values explained: https://mozilla-hub.atlassian.net/browse/FXIOS-8109
@@ -204,7 +217,7 @@ class SearchTelemetry: @unchecked Sendable {
     // MARK: Track Regular and Follow-on SAP from Tab and TopSite
     @MainActor
     func trackTabAndTopSiteSAP(_ tab: Tab, webView: WKWebView) {
-        let provider = tab.getProviderForUrl()
+        let provider = SearchEngine.providerFrom(url: tab.webView?.url)
         let code = SearchPartner.getCode(
             searchEngine: provider,
             region: SystemLocaleProvider().regionCode() == "US" ? "US" : "ROW"
@@ -334,7 +347,7 @@ class SearchTelemetry: @unchecked Sendable {
         let selectedResultSubtype = selectedResult
 
         let providerKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.provider.rawValue
-        let provider = tab.getProviderForUrl().rawValue
+        let provider = SearchEngine.providerFrom(url: tab.webView?.url).rawValue
 
         let engagementTypeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.engagementType.rawValue
         let engagementType = engagementType.rawValue
