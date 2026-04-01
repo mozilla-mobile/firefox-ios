@@ -1659,11 +1659,11 @@ extension String {
 extension String {
     public struct Onboarding {
         public struct VideoIntro {
-            public static let ContinueAction = MZLocalizedString(
-                key: "Onboarding.VideoIntro.ContinueAction.v151",
+            public static let ContinueButtonTitle = MZLocalizedString(
+                key: "Onboarding.VideoIntro.ContinueButtonTitle.v151",
                 tableName: "Onboarding",
-                value: "Continue",
-                comment: "Button label on the full-screen video intro shown before onboarding on a fresh install.")
+                value: "Continue with %@",
+                comment: "Button label on the full-screen video intro shown before onboarding on a fresh install. %@ is replaced with the app name (e.g Firefox).")
         }
 
         public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(

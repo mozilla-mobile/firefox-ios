@@ -11,16 +11,18 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
     private struct UX {
         static let buttonHorizontalPadding: CGFloat = 24
         static let buttonBottomPadding: CGFloat = 16
+        static let buttonMaxWidth: CGFloat = 400.0
         static let introVideoTitle = "IntroVideo"
         static let introVideoExtension = "mp4"
     }
 
-    public var themeManager: any Common.ThemeManager
+    public var themeManager: any ThemeManager
     public var themeListenerCancellable: Any?
-    public var currentWindowUUID: Common.WindowUUID?
+    public var currentWindowUUID: WindowUUID?
     private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
     private let notificationCenter: NotificationProtocol
-    private lazy var continueButton: PrimaryRoundedGlassButton = .build {
+    private lazy var continueButton: PrimaryRoundedButton = .build {
         $0.addAction(
             UIAction(
                 handler: { [weak self] _ in
@@ -54,6 +56,12 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         setupPlayerLayer()
         setupLayout()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        applyTheme()
+    }
+    
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        playerLayer?.frame = view.bounds
     }
 
     private func setupPlayerLayer() {
@@ -63,7 +71,6 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         }
 
         player = AVPlayer(url: url)
-        player?.isMuted = true
         player?.actionAtItemEnd = .none
         player?.play()
 
@@ -71,6 +78,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         layer.frame = view.bounds
         layer.videoGravity = .resizeAspectFill
         view.layer.insertSublayer(layer, at: 0)
+        playerLayer = layer
 
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -81,10 +89,15 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
 
     private func setupLayout() {
         view.addSubview(continueButton)
+   
+        let preferredWidth = continueButton.widthAnchor.constraint(equalToConstant: UX.buttonMaxWidth)
+        preferredWidth.priority = .defaultHigh
         NSLayoutConstraint.activate([
-            continueButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            continueButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            preferredWidth,
+            continueButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
                                                     constant: UX.buttonHorizontalPadding),
-            continueButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            continueButton.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor,
                                                      constant: -UX.buttonHorizontalPadding),
             continueButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                    constant: -UX.buttonBottomPadding)

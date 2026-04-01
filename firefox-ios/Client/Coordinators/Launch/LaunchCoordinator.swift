@@ -74,7 +74,7 @@ final class LaunchCoordinator: BaseCoordinator,
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
         viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(
-            title: .Onboarding.VideoIntro.ContinueAction,
+            title: String(format: .Onboarding.VideoIntro.ContinueButtonTitle, AppName.shortName.rawValue),
             a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
         ))
         router.present(viewController, animated: false)
