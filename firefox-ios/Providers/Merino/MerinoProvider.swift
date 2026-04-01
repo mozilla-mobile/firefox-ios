@@ -8,9 +8,7 @@ import MozillaAppServices
 import Shared
 
 protocol MerinoStoriesProviding: Sendable {
-    typealias StoryResult = Swift.Result<[RecommendationDataItem], Error>
-
-    func fetchStories(_ itemCount: Int) async throws -> [RecommendationDataItem]
+    func fetchContent() async throws -> CuratedRecommendationsResponse
 }
 
 final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
@@ -25,7 +23,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     private var logger: Logger
     private let fetcher: MerinoFeedFetching
     private let lock = NSLock()
-    private var inFlightTask: Task<[RecommendationDataItem], Never>?
+    private var inFlightTask: Task<CuratedRecommendationsResponse?, Never>?
 
     enum Error: Swift.Error {
         case failure
@@ -48,7 +46,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         )
     }
 
-    func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
+    func fetchContent() async throws -> CuratedRecommendationsResponse {
 //        if !AppConstants.isRunningTest && shouldUseMockData {
 //            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
 //        }
@@ -57,13 +55,15 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
               MerinoProvider.isLocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
-        if let cachedItems = cache.loadRecommendations(),
+        if let cachedResponse = cache.loadResponse(),
            cacheUpdateThresholdHasNotPassed() {
-            return Array(cachedItems.prefix(numberOfRequestedStories))
+            return cachedResponse
         }
 
-        let items = await createTask().value
-        return Array(items.prefix(numberOfRequestedStories))
+        guard let response = await createTask().value else {
+            throw Error.failure
+        }
+        return response
     }
 
     static func isLocaleSupported(_ locale: String) -> Bool {
@@ -72,30 +72,30 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         )
     }
 
-    private func createTask() -> Task<[RecommendationDataItem], Never> {
+    private func createTask() -> Task<CuratedRecommendationsResponse?, Never> {
         lock.withLock {
             if let existing = inFlightTask { return existing }
 
-            let newTask = Task<[RecommendationDataItem], Never> { [self] in
+            let newTask = Task<CuratedRecommendationsResponse?, Never> { [self] in
                 defer { self.lock.withLock { self.inFlightTask = nil } }
                 guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
-                    return []
+                    return nil
                 }
 
                 let region = SystemLocaleProvider().regionCode()
                 let regionCode: String? = region == "und" ? nil : region
 
-                let items = await fetcher.fetch(
+                let response = await fetcher.fetch(
                     itemCount: Constants.numberOfStoriesToFetchForCaching,
                     locale: currentLocale,
                     region: regionCode,
                     userAgent: UserAgent.getUserAgent()
                 )
-                if !items.isEmpty {
+                if let response {
                     cache.clearCache()
-                    cache.save(items)
+                    cache.save(response)
                 }
-                return items
+                return response
             }
             inFlightTask = newTask
             return newTask

@@ -11,21 +11,22 @@ import MozillaAppServices
 class StoryProviderTests: XCTestCase, FeatureFlaggable {
     func testFetchingStories_forHomepage_returnsList() async {
         let stories: [RecommendationDataItem] = (0..<150).map { .makeItem("feed\($0)") }
-        let expectedNumberOfStories = 100
+        let response = CuratedRecommendationsResponse.makeResponse(items: stories)
         let expectedResult = MerinoStoryResponse(
-            stories: Array(stories.prefix(expectedNumberOfStories))
+            stories: stories
                 .map(MerinoStory.init)
                 .compactMap({ MerinoStoryConfiguration(story: $0) })
         )
 
-        let subject = createSubject(with: MockMerinoAPI(result: .success(stories)))
+        let subject = createSubject(with: MockMerinoAPI(result: .success(response)))
         let fetched = await subject.fetchHomepageStories()
 
         XCTAssertEqual(fetched, expectedResult)
     }
 
     func testFetchingStories_forHomepage_returnsEmptyList() async {
-        let subject = createSubject(with: MockMerinoAPI(result: .success([])))
+        let response = CuratedRecommendationsResponse.makeResponse(items: [])
+        let subject = createSubject(with: MockMerinoAPI(result: .success(response)))
         let fetched = await subject.fetchHomepageStories()
 
         XCTAssertEqual(fetched.stories?.count, 0)

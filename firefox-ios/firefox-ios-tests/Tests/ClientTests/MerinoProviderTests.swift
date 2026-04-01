@@ -16,36 +16,37 @@ private struct TestableSubject {
 }
 
 private final class MockFeedFetcher: MerinoFeedFetching, @unchecked Sendable {
-    var stubbedItems: [RecommendationDataItem] = []
+    var stubbedResponse: CuratedRecommendationsResponse?
     var callCount = 0
     var fetchDelay: UInt64 = 0
 
     func fetch(
         itemCount: Int,
         locale: CuratedRecommendationLocale,
+        region: String?,
         userAgent: String
-    ) async -> [RecommendationDataItem] {
+    ) async -> CuratedRecommendationsResponse? {
         callCount += 1
         if fetchDelay > 0 {
             try? await Task.sleep(nanoseconds: fetchDelay)
         }
-        return stubbedItems
+        return stubbedResponse
     }
 }
 
 private final class MockCache: CuratedRecommendationsCacheProtocol {
-    private(set) var savedItemsHistory: [[RecommendationDataItem]] = []
+    private(set) var savedResponseHistory: [CuratedRecommendationsResponse] = []
     private(set) var didClear = false
 
-    private var stored: [RecommendationDataItem]?
+    private var stored: CuratedRecommendationsResponse?
     private var lastUpdated: Date?
 
-    func loadRecommendations() -> [RecommendationDataItem]? { stored }
+    func loadResponse() -> CuratedRecommendationsResponse? { stored }
 
-    func save(_ items: [RecommendationDataItem]) {
-        stored = items
+    func save(_ response: CuratedRecommendationsResponse) {
+        stored = response
         lastUpdated = Date()
-        savedItemsHistory.append(items)
+        savedResponseHistory.append(response)
     }
 
     func clearCache() {
@@ -57,8 +58,8 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
     func lastUpdatedDate() -> Date? { lastUpdated }
 
     // Testing helpers
-    func seed(items: [RecommendationDataItem], lastUpdated: Date?) {
-        stored = items
+    func seed(response: CuratedRecommendationsResponse, lastUpdated: Date?) {
+        stored = response
         self.lastUpdated = lastUpdated
     }
 
@@ -82,68 +83,51 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertTrue(MerinoProvider.isLocaleSupported("en_CA"))
     }
 
-    func test_fetchStories_cachesManyStories_returnsRequired() async throws {
+    func test_fetchContent_returnsCached_whenThresholdNotPassed() async throws {
         let control = await createSubject(thresholdHours: 4)
-        let testData = MerinoTestData().getMockDataFeed(30)
-        control.cache.seed(items: testData, lastUpdated: Date())
-        control.fetcher.stubbedItems = testData
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("a"), .makeItem("b")])
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net1"), .makeItem("net2")])
 
-        let result = try await control.subject.fetchStories(30)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.count, 30)
-        XCTAssertEqual(control.fetcher.callCount, 0)
-        XCTAssertFalse(control.cache.didClear)
-
-        let anotherResult = try await control.subject.fetchStories(9)
-
-        XCTAssertEqual(anotherResult.count, 9)
+        XCTAssertEqual(result.data.map(\.title), ["a", "b"])
         XCTAssertEqual(control.fetcher.callCount, 0)
         XCTAssertFalse(control.cache.didClear)
     }
 
-    func test_fetchStories_returnsCached_whenThresholdNotPassed() async throws {
-        let control = await createSubject(thresholdHours: 4)
-        control.cache.seed(items: [.makeItem("a"), .makeItem("b")], lastUpdated: Date())
-        control.fetcher.stubbedItems = [.makeItem("net1"), .makeItem("net2")]
-
-        let result = try await control.subject.fetchStories(10)
-
-        XCTAssertEqual(result.map(\.title), ["a", "b"])
-        XCTAssertEqual(control.fetcher.callCount, 0)
-        XCTAssertFalse(control.cache.didClear)
-    }
-
-    func test_fetchStories_fetchesAndSaves_whenThresholdPassed() async throws {
+    func test_fetchContent_fetchesAndSaves_whenThresholdPassed() async throws {
         let control = await createSubject(thresholdHours: 1/60)
-        control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-3600))
-        control.fetcher.stubbedItems = [.makeItem("new1"), .makeItem("new2")]
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("old")])
+        control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-3600))
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("new1"), .makeItem("new2")])
 
-        let result = try await control.subject.fetchStories(10)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.map(\.title), ["new1", "new2"])
+        XCTAssertEqual(result.data.map(\.title), ["new1", "new2"])
         XCTAssertTrue(control.cache.didClear)
-        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["new1", "new2"])
+        XCTAssertEqual(control.cache.loadResponse()?.data.map(\.title), ["new1", "new2"])
         XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
-    func test_fetchStories_fetchesAndSaves_whenNoCache() async throws {
+    func test_fetchContent_fetchesAndSaves_whenNoCache() async throws {
         let control = await createSubject()
         control.cache.seedEmpty()
-        control.fetcher.stubbedItems = [.makeItem("net")]
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net")])
 
-        let result = try await control.subject.fetchStories(5)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.map(\.title), ["net"])
+        XCTAssertEqual(result.data.map(\.title), ["net"])
         XCTAssertTrue(control.cache.didClear)
-        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net"])
+        XCTAssertEqual(control.cache.loadResponse()?.data.map(\.title), ["net"])
         XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
-    func test_fetchStories_throws_whenFeatureDisabled() async {
+    func test_fetchContent_throws_whenFeatureDisabled() async {
         let control = await createSubject(prefsEnabled: false)
 
         do {
-            _ = try await control.subject.fetchStories(3)
+            _ = try await control.subject.fetchContent()
             XCTFail("Expected MerinoProvider.Error to be thrown")
         } catch let error as MerinoProvider.Error {
             XCTAssertEqual(error, MerinoProvider.Error.failure)
@@ -152,62 +136,61 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         }
     }
 
-    func test_fetchStories_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
+    func test_fetchContent_fetches_whenNoLastUpdatedEvenIfItemsExist() async throws {
         let control = await createSubject(prefsEnabled: true)
 
-        // Cache has _ itemCount but NO timestamp should be treated as STALE and must fetch
-        // new stories. We should never get here, but we should still test it.
-        control.cache.seed(items: [.makeItem("staleButNoTimestamp")], lastUpdated: nil)
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("staleButNoTimestamp")])
+        control.cache.seed(response: cachedResponse, lastUpdated: nil)
 
-        control.fetcher.stubbedItems = [.makeItem("net1"), .makeItem("net2")]
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("net1"), .makeItem("net2")])
 
-        let result = try await control.subject.fetchStories(3)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.count, 2)
-        XCTAssertEqual(result.map(\.title), ["net1", "net2"])
+        XCTAssertEqual(result.data.count, 2)
+        XCTAssertEqual(result.data.map(\.title), ["net1", "net2"])
         XCTAssertEqual(control.fetcher.callCount, 1)
 
         XCTAssertTrue(control.cache.didClear)
-        XCTAssertEqual(control.cache.loadRecommendations()?.count, 2)
-        XCTAssertEqual(control.cache.loadRecommendations()?.map(\.title), ["net1", "net2"])
+        XCTAssertEqual(control.cache.loadResponse()?.data.count, 2)
+        XCTAssertEqual(control.cache.loadResponse()?.data.map(\.title), ["net1", "net2"])
     }
 
-    func test_fetchStories_returnsCached_whenWithinOneHourThreshold() async throws {
+    func test_fetchContent_returnsCached_whenWithinOneHourThreshold() async throws {
         let control = await createSubject(thresholdHours: 1)
-        control.cache.seed(items: [.makeItem("cached")], lastUpdated: Date().addingTimeInterval(-30 * 60))
-        control.fetcher.stubbedItems = [.makeItem("network")]
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("cached")])
+        control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-30 * 60))
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("network")])
 
-        let result = try await control.subject.fetchStories(10)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.map(\.title), ["cached"])
+        XCTAssertEqual(result.data.map(\.title), ["cached"])
         XCTAssertEqual(control.fetcher.callCount, 0)
     }
 
-    // This test attempts to create a data race, to make sure that the actual code addresses
-    // the possible data race issue. Hence the marking nonisolated(unsafe)
-    func test_fetchStories_coalescesConcurrentRequests_whenCacheIsStale() async throws {
+    func test_fetchContent_coalescesConcurrentRequests_whenCacheIsStale() async throws {
         nonisolated(unsafe) let control = await createSubject(thresholdHours: 1)
         control.cache.seedEmpty()
-        control.fetcher.stubbedItems = [.makeItem("a"), .makeItem("b")]
-        control.fetcher.fetchDelay = 100_000_000 // 100ms to ensure overlap
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("a"), .makeItem("b")])
+        control.fetcher.fetchDelay = 100_000_000
 
-        async let result1 = control.subject.fetchStories(5)
-        async let result2 = control.subject.fetchStories(10)
-        let (items1, items2) = try await (result1, result2)
+        async let result1 = control.subject.fetchContent()
+        async let result2 = control.subject.fetchContent()
+        let (response1, response2) = try await (result1, result2)
 
         XCTAssertEqual(control.fetcher.callCount, 1, "Concurrent fetches should coalesce into a single network request")
-        XCTAssertEqual(items1.map(\.title), ["a", "b"])
-        XCTAssertEqual(items2.map(\.title), ["a", "b"])
+        XCTAssertEqual(response1.data.map(\.title), ["a", "b"])
+        XCTAssertEqual(response2.data.map(\.title), ["a", "b"])
     }
 
-    func test_fetchStories_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
+    func test_fetchContent_fetchesFromNetwork_whenOneHourThresholdPassed() async throws {
         let control = await createSubject(thresholdHours: 1)
-        control.cache.seed(items: [.makeItem("old")], lastUpdated: Date().addingTimeInterval(-61 * 60))
-        control.fetcher.stubbedItems = [.makeItem("fresh")]
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("old")])
+        control.cache.seed(response: cachedResponse, lastUpdated: Date().addingTimeInterval(-61 * 60))
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(items: [.makeItem("fresh")])
 
-        let result = try await control.subject.fetchStories(10)
+        let result = try await control.subject.fetchContent()
 
-        XCTAssertEqual(result.map(\.title), ["fresh"])
+        XCTAssertEqual(result.data.map(\.title), ["fresh"])
         XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
@@ -245,6 +228,15 @@ extension RecommendationDataItem {
             iconUrl: "https://example\(name).com",
             tileId: 0,
             receivedRank: 0
+        )
+    }
+}
+
+extension CuratedRecommendationsResponse {
+    static func makeResponse(items: [RecommendationDataItem]) -> CuratedRecommendationsResponse {
+        return CuratedRecommendationsResponse(
+            recommendedAt: Int64(Date().timeIntervalSince1970 * 1000),
+            data: items
         )
     }
 }

@@ -11,7 +11,7 @@ protocol MerinoFeedFetching: Sendable {
         locale: CuratedRecommendationLocale,
         region: String?,
         userAgent: String
-    ) async -> [RecommendationDataItem]
+    ) async -> CuratedRecommendationsResponse?
 }
 
 struct MerinoFeedFetcher: MerinoFeedFetching {
@@ -23,7 +23,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
         locale: CuratedRecommendationLocale,
         region: String?,
         userAgent: String
-    ) async -> [RecommendationDataItem] {
+    ) async -> CuratedRecommendationsResponse? {
         do {
             let client = try CuratedRecommendationsClient(
                 config: CuratedRecommendationsConfig(
@@ -37,8 +37,8 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                 count: Int32(itemCount),
                 feeds: ["sections"]
             )
-            let response = try client.getCuratedRecommendations(request: request)
-            return response.data
+
+            return try client.getCuratedRecommendations(request: request)
         } catch let error as CuratedRecommendationsApiError {
             switch error {
             case .Network(let reason):
@@ -78,14 +78,14 @@ struct MerinoFeedFetcher: MerinoFeedFetching {
                     category: .merino
                 )
             }
-            return []
+            return nil
         } catch {
             logger.log(
                 "Unhandled error: \(error)",
                 level: .debug,
                 category: .merino
             )
-            return []
+            return nil
         }
     }
 }

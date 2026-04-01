@@ -12,10 +12,6 @@ protocol StoryProviderInterface: Sendable {
 }
 
 final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
-    private struct Constants {
-        static let defaultNumberOfHomepageStories = 100
-    }
-
     private let merinoAPI: MerinoStoriesProviding
 
     init(merinoAPI: MerinoStoriesProviding) {
@@ -23,21 +19,21 @@ final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
     }
 
     func fetchHomepageStories() async -> MerinoStoryResponse {
-        return await fetchStories(Constants.defaultNumberOfHomepageStories)
+        guard let response = try? await merinoAPI.fetchContent() else {
+            return MerinoStoryResponse(stories: [])
+        }
+
+        return MerinoStoryResponse(
+            stories: response.data
+                .map(MerinoStory.init)
+                .compactMap { MerinoStoryConfiguration(story: $0) },
+            categories: response.feeds?
+                .compactMap({ MerinoCategory(from: $0) })
+                .compactMap { MerinoCategoryConfiguration(category: $0) }
+        )
     }
 
     func prefetchStories() async {
-        // Because a prefetch basically warms the cache, we don't actually need
-        // to do anything with the results
-        _ = try? await merinoAPI.fetchStories(Constants.defaultNumberOfHomepageStories)
-    }
-
-    private func fetchStories(_ numberOfRequestedStories: Int) async -> MerinoStoryResponse {
-        let data = (try? await merinoAPI.fetchStories(numberOfRequestedStories)) ?? []
-        return MerinoStoryResponse(
-            stories: data
-                .map(MerinoStory.init)
-                .compactMap { MerinoStoryConfiguration(story: $0) }
-        )
+        _ = try? await merinoAPI.fetchContent()
     }
 }

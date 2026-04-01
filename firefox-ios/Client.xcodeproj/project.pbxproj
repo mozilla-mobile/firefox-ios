@@ -485,6 +485,8 @@
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
 		39D056382665235700FBEE59 /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3964F5FB2656D2B500065278 /* initial_experiments.json */; };
 		39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */; };
+		39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */; };
+		39E186DF2F7D991700FD3FFA /* MerinoCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E186DE2F7D991200FD3FFA /* MerinoCategory.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
 		39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 39F4C0F92045D87400746155 /* FocusHelper.js */; };
@@ -3402,6 +3404,8 @@
 		39D0DA7429D767D1000760B8 /* NimbusMessagingTriggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingTriggerTests.swift; sourceTree = "<group>"; };
 		39DB4F1AA7B4688949522C99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategoryConfiguration.swift; sourceTree = "<group>"; };
+		39E186DE2F7D991200FD3FFA /* MerinoCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MerinoCategory.swift; sourceTree = "<group>"; };
 		39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxScreenGraph.swift; sourceTree = "<group>"; };
 		39EF434D260A73950011E22E /* Experiments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experiments.swift; sourceTree = "<group>"; };
 		39F4C0F92045D87400746155 /* FocusHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = FocusHelper.js; sourceTree = "<group>"; };
@@ -14040,12 +14044,13 @@
 		8ABDBAA42CB6BF3A00B51F63 /* Merino */ = {
 			isa = PBXGroup;
 			children = (
-				3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */,
-				8A454D282CB7078D009436D9 /* MerinoState.swift */,
-				8A454D2F2CB81697009436D9 /* MerinoMiddleware.swift */,
-				8A454D312CB8170D009436D9 /* MerinoManager.swift */,
 				8A454D2D2CB81668009436D9 /* MerinoAction.swift */,
+				39E186DC2F7D98A600FD3FFA /* MerinoCategoryConfiguration.swift */,
+				8A454D312CB8170D009436D9 /* MerinoManager.swift */,
+				8A454D2F2CB81697009436D9 /* MerinoMiddleware.swift */,
+				8A454D282CB7078D009436D9 /* MerinoState.swift */,
 				8A454D352CB86993009436D9 /* MerinoStoryConfiguration.swift */,
+				3954D0F02F74286800CDC338 /* MerinoStoryResponse.swift */,
 				C743CB1C2DF201D50069CB23 /* StoryCell.swift */,
 				E58368A9287D632F0087A449 /* StoryProvider.swift */,
 			);
@@ -15226,6 +15231,7 @@
 		C8B0F5F0283B7CCE007AE65D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				39E186DE2F7D991200FD3FFA /* MerinoCategory.swift */,
 				81E9B6E72E2AB73400CE6FF6 /* MerinoStory.swift */,
 			);
 			path = Model;
@@ -18751,6 +18757,7 @@
 				219914052AF963F900153598 /* TabTrayAction.swift in Sources */,
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
+				39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */,
 				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
@@ -18792,6 +18799,7 @@
 				DFACBF7F277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift in Sources */,
 				8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
+				39E186DF2F7D991700FD3FFA /* MerinoCategory.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* GlobalTabEventHandlers.swift in Sources */,
 				C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */,

@@ -7,11 +7,11 @@ import Foundation
 /// Converts the Merino story model to be presentable for the `MerinoStandardCell` view
 final class MerinoStoryResponse: Sendable, Equatable, Hashable {
     let stories: [MerinoStoryConfiguration]?
-    let categories: [String]?
+    let categories: [MerinoCategoryConfiguration]?
 
     init(
         stories: [MerinoStoryConfiguration]? = nil,
-        categories: [String]? = nil
+        categories: [MerinoCategoryConfiguration]? = nil
     ) {
         self.stories = stories
         self.categories = categories
