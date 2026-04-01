@@ -38,6 +38,9 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.numberOfLines = 0
         $0.alpha = 0.0
     }
+    private let sourceView: QuickAnswersSourceView = .build {
+        $0.alpha = 0.0
+    }
     private var theme: Theme?
 
     // MARK: - Init
@@ -52,7 +55,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
 
     // MARK: - Setup
     private func setupSubviews() {
-        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel)
+        contentView.addSubviews(placeholderLabel, transcriptLabel, searchingLabel, answerLabel, sourceView)
         scrollView.addSubview(contentView)
         addSubview(scrollView)
 
@@ -79,7 +82,11 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             answerLabel.topAnchor.constraint(equalTo: transcriptLabel.bottomAnchor, constant: UX.contentSpacing),
             answerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             answerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            answerLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+
+            sourceView.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: UX.contentSpacing),
+            sourceView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            sourceView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            sourceView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
@@ -125,6 +132,13 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
+    func configureSources(_ items: [QuickAnswersSourceItem]) {
+        sourceView.configure(with: items)
+        UIView.animate(withDuration: UX.animationDuration) { [self] in
+            sourceView.alpha = 1.0
+        }
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
@@ -132,5 +146,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         transcriptLabel.textColor = theme.colors.textPrimary
         searchingLabel.textColor = theme.colors.textSecondary
         answerLabel.textColor = theme.colors.textPrimary
+        sourceView.applyTheme(theme: theme)
     }
 }
