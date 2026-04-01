@@ -34,7 +34,13 @@ final class MockTranslationsTelemetry: TranslationsTelemetryProtocol {
         lastErrorType = errorType
     }
 
-    func translationRequested(isPrivate: Bool, translationFlowId: UUID, fromLanguage: String, toLanguage: String, autoTranslate: Bool) {
+    func translationRequested(
+        isPrivate: Bool,
+        translationFlowId: UUID,
+        fromLanguage: String,
+        toLanguage: String,
+        autoTranslate: Bool
+    ) {
         translationRequestedCalledCount += 1
         lastIsPrivate = isPrivate
         lastTranslationFlowId = translationFlowId
