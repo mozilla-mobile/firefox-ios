@@ -224,7 +224,11 @@ final class TranslationsMiddleware: FeatureFlaggable {
                     preferredLanguages = [Locale.current.languageCode].compactMap { $0 }
                 }
 
-                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID, using: preferredLanguages) else { return }
+                let isEligible = try await translationsService.shouldOfferTranslation(
+                    for: action.windowUUID,
+                    using: preferredLanguages
+                )
+                guard isEligible else { return }
 
                 // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
