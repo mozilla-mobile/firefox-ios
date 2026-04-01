@@ -11,13 +11,14 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
     var modelsResult: Data?
     var modelBufferResult: Data?
     var supportedTargetLanguages: [String] = []
+    var fetchModelsHandler: ((String, String) -> Data?)?
 
     func fetchTranslatorWASM() -> Data? {
         return translatorWASMResult
     }
 
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        return modelsResult
+        return fetchModelsHandler?(sourceLang, targetLang) ?? modelsResult
     }
 
     func fetchModelBuffer(recordId: String) -> Data? {

@@ -215,7 +215,16 @@ final class TranslationsMiddleware: FeatureFlaggable {
             guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
             do {
-                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+                let preferredLanguages: [String]
+                if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+                    let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+                    let supported = await translationsService.fetchSupportedTargetLanguages()
+                    preferredLanguages = manager.preferredLanguages(supportedTargetLanguages: supported)
+                } else {
+                    preferredLanguages = [Locale.current.languageCode].compactMap { $0 }
+                }
+
+                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID, using: preferredLanguages) else { return }
 
                 // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
