@@ -80,6 +80,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
 
     var bookmarksHandler: BookmarksHandler
     private var bookmarksSaver: BookmarksSaver
+    private var quickActions: QuickActions
     private var hasDesktopFolders = false
     private var flashLastRowOnNextReload = false
     private let logger: Logger
@@ -89,11 +90,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          bookmarksSaver: BookmarksSaver? = nil,
+         quickActions: QuickActions = QuickActionsImplementation(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
+        self.quickActions = quickActions
         self.logger = logger
     }
 
@@ -441,14 +444,18 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                 self.reloadData {
                     completion()
                 }
+            } else {
+                completion()
             }
         }
         // Remove the bookmark from places (async background work)
-        profile.places.deleteBookmarkNode(guid: bookmark.guid).uponQueue(.main) { _ in
+        bookmarksHandler.deleteBookmarkNode(guid: bookmark.guid).uponQueue(DispatchQueue.main) { _ in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-            MainActor.assumeIsolated {
+            MainActor.assumeIsolated { [weak self] in
+                guard let self else { return }
+
                 // Remove this bookmark from quick actions
-                self.removeBookmarkShortcut()
+                Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler, withQuickActions: self.quickActions)
 
                 // Remove this bookmark out of recent places
                 if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {

@@ -2360,7 +2360,7 @@ class BrowserViewController: UIViewController,
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     guard result.isSuccess else { return }
-                    self.removeBookmarkShortcut()
+                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
                 }
             }
     }
