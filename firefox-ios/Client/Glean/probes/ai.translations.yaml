@@ -108,9 +108,9 @@ translations:
           True if triggered automatically via always-translate settings.
           False if triggered manually.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/30441
+      - https://github.com/mozilla-mobile/firefox-ios/issues/32490
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/30820
+      - https://github.com/mozilla-mobile/firefox-ios/pull/32859
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
