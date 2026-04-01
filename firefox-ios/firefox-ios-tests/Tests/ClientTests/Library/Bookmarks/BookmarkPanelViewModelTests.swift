@@ -201,7 +201,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
         let bookmark = createBookmarkItemData()
 
-        let indexPath = IndexPath(row: 0, section: 0)
         subject.getSiteDetails(for: bookmark) { site in
             XCTAssertNotNil(site)
             XCTAssertFalse(site?.isPinnedSite ?? true)
@@ -222,7 +221,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
         let bookmark = createBookmarkItemData()
 
-        let indexPath = IndexPath(row: 0, section: 0)
         subject.getSiteDetails(for: bookmark) { site in
             expectation.fulfill()
             XCTAssertNotNil(site)
