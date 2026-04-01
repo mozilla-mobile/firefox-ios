@@ -27,12 +27,22 @@ protocol AppAuthenticationProtocol {
     )
 }
 
-final class AppAuthenticator: AppAuthenticationProtocol {
-    private let context: LAContextProtocol
-    private(set) var isAuthenticating = false
+protocol LocalAuthenticationContextProvider {
+    var context: LAContextProtocol { get }
+}
 
-    init(context: LAContextProtocol = LAContext()) {
-        self.context = context
+final class DefaultLAContextProvider: LocalAuthenticationContextProvider {
+    var context: LAContextProtocol {
+        return LAContext()
+    }
+}
+
+final class AppAuthenticator: AppAuthenticationProtocol {
+    private(set) var isAuthenticating = false
+    private let contextProvider: LocalAuthenticationContextProvider
+
+    init(contextProvider: LocalAuthenticationContextProvider = DefaultLAContextProvider()) {
+        self.contextProvider = contextProvider
     }
 
     func getAuthenticationState(completion: @MainActor @escaping (AuthenticationState) -> Void) {
@@ -61,10 +71,11 @@ final class AppAuthenticator: AppAuthenticationProtocol {
         _ completion: @MainActor @escaping (Result<Void, AuthenticationError>) -> Void
     ) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
-        //  (by commenting out the next line), then a previously successful authentication
-        //  causes the next policy evaluation to succeed without testing biometry again.
-        //  That's usually not what you want.
-        let context = self.context
+        // (by commenting out the next line), then a previously successful authentication
+        // causes the next policy evaluation to succeed without testing biometry again.
+        // That's usually not what you want.
+        // The default context provider will return a new LAContext().
+        let context = contextProvider.context
 
         isAuthenticating = true
 
@@ -106,6 +117,6 @@ final class AppAuthenticator: AppAuthenticationProtocol {
     }
 
     var canAuthenticateDeviceOwner: Bool {
-        return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        return contextProvider.context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }

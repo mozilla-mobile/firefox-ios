@@ -115,8 +115,8 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
         let newState = reducer(initialState, action)
 
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .shortcutsLibrary(newState)
                 ]
             )
@@ -132,8 +132,8 @@ final class ShortcutsLibraryMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .shortcutsLibrary(
                         ShortcutsLibraryState(
                             windowUUID: .DefaultUITestingUUID

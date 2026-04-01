@@ -956,8 +956,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         toolbarState.isPrivateMode = true
 
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -974,8 +974,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         toolbarState.toolbarPosition = .bottom
 
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -990,8 +990,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

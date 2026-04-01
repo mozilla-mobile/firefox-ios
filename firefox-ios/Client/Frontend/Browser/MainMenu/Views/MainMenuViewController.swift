@@ -54,10 +54,6 @@ class MainMenuViewController: UIViewController,
         !(UIDevice.current.userInterfaceIdiom == .phone)
     }
 
-    private var isMenuDefaultBrowserBanner: Bool {
-        return featureFlags.isFeatureEnabled(.menuDefaultBrowserBanner, checking: .buildOnly)
-    }
-
     private var bannerShown: Bool {
         profile.prefs.boolForKey(PrefsKeys.defaultBrowserBannerShown) ?? false
     }
@@ -316,7 +312,6 @@ class MainMenuViewController: UIViewController,
             title: String(format: .MainMenu.HeaderBanner.Title, AppName.shortName.rawValue),
             subtitle: .MainMenu.HeaderBanner.Subtitle,
             image: UIImage(named: ImageIdentifiers.foxDefaultBrowser),
-            isBannerFlagEnabled: isMenuDefaultBrowserBanner,
             isBrowserDefault: isBrowserDefault,
             bannerShown: bannerShown
         )
@@ -378,10 +373,10 @@ class MainMenuViewController: UIViewController,
     // MARK: - Redux
     func subscribeToRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.showScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.addComponent,
+                component: .mainMenu
             )
         )
         let uuid = windowUUID
@@ -394,10 +389,10 @@ class MainMenuViewController: UIViewController,
 
     func unsubscribeFromRedux() {
         store.dispatch(
-            ScreenAction(
+            ComponentAction(
                 windowUUID: windowUUID,
-                actionType: ScreenActionType.closeScreen,
-                screen: .mainMenu
+                actionType: ComponentActionType.removeComponent,
+                component: .mainMenu
             )
         )
     }

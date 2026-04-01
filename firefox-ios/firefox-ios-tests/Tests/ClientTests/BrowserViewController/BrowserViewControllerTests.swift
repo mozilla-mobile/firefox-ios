@@ -652,8 +652,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
                 )
             )
         mockStore = MockStoreForMiddleware(state: AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID
@@ -671,8 +671,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     // MARK: - StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

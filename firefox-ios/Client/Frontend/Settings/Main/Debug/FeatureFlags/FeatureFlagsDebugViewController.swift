@@ -115,13 +115,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .menuRefactor,
-                titleText: format(string: "Menu Refactor"),
-                statusText: format(string: "Toggle to use the menu redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .microsurvey,
                 titleText: format(string: "Microsurvey"),
                 statusText: format(string: "Toggle to reset microsurvey expiration")
@@ -263,13 +256,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .webEngineIntegrationRefactor,
-                titleText: format(string: "Web Engine Integration Refactor"),
-                statusText: format(string: "Toggle to enable the use of WebEngine library")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .hostedSummarizer,
                 titleText: format(string: "Hosted Summarizer Feature"),
                 statusText: format(string: "Toggle to enable the hosted summarizer feature")
@@ -289,24 +275,15 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 statusText: format(string: "Toggle to enable the needs reload refactor")
             ) { [weak self] _ in
                 self?.reloadView()
-            }
+            },
+            FeatureFlagsBoolSetting(
+                with: .summarizerPermissiveGuardrails,
+                titleText: format(string: "Summarizer Permissive Guardrails Feature"),
+                statusText: format(string: "Toggle to enable the permissive guardrails for the summarizer feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
         ]
-
-        // Conditionally add the Apple Summarizer only if the compile time check for the FoundationModels is true
-        // and the LLM is supported on the device.
-        #if canImport(FoundationModels)
-            if AppleIntelligenceUtil().isAppleIntelligenceAvailable {
-                children.append(
-                    FeatureFlagsBoolSetting(
-                        with: .appleSummarizer,
-                        titleText: format(string: "Apple Summarizer Feature"),
-                        statusText: format(string: "Toggle to enable the apple summarizer feature")
-                    ) { [weak self] _ in
-                        self?.reloadView()
-                    }
-                )
-            }
-        #endif
 
         return SettingSection(
             title: nil,

@@ -15,7 +15,7 @@ struct NativeErrorPageState: ScreenState {
     var showGoBackButton: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let nativeErrorPageState = appState.screenState(
+        guard let nativeErrorPageState = appState.componentState(
             NativeErrorPageState.self,
             for: .nativeErrorPage,
             window: uuid

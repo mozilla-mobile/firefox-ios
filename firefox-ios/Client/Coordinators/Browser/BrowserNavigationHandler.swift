@@ -51,6 +51,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView)
 
     /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials

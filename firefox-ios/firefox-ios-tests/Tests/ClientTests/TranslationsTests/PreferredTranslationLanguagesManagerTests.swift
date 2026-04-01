@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import TestKit
 import XCTest
 @testable import Client
 
@@ -105,6 +106,44 @@ final class PreferredTranslationLanguagesManagerTests: XCTestCase {
 
         let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
         XCTAssertEqual(stored, "de", "Expected second save to overwrite the first.")
+    }
+
+    // MARK: - addLanguage
+
+    func test_addLanguage_appendsToStoredList() {
+        let subject = createSubject()
+        subject.save(languages: ["en"])
+
+        let result = subject.addLanguage("fr")
+
+        XCTAssertEqual(result, ["en", "fr"])
+    }
+
+    func test_addLanguage_persistsUpdatedList() {
+        let subject = createSubject()
+        subject.save(languages: ["en"])
+
+        subject.addLanguage("fr")
+
+        let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+    }
+
+    func test_addLanguage_doesNotAddDuplicate() {
+        let subject = createSubject()
+        subject.save(languages: ["en", "fr"])
+
+        let result = subject.addLanguage("en")
+
+        XCTAssertEqual(result, ["en", "fr"])
+    }
+
+    func test_addLanguage_toEmptyList_returnsListWithSingleEntry() {
+        let subject = createSubject()
+
+        let result = subject.addLanguage("de")
+
+        XCTAssertEqual(result, ["de"])
     }
 
     // MARK: - Helpers

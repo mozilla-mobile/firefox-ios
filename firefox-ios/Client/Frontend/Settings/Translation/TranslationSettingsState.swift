@@ -5,14 +5,24 @@
 import Common
 import Redux
 
+struct PreferredLanguageDetails: Equatable, Hashable {
+    let code: String
+    let mainText: String
+    let subtitleText: String?
+}
+
 struct TranslationSettingsState: ScreenState, Equatable {
     var isTranslationsEnabled: Bool
-    var preferredLanguages: [String]
+    var isAutoTranslateEnabled: Bool
+    var isEditing: Bool
+    var pendingLanguages: [PreferredLanguageDetails]?
+    var preferredLanguages: [PreferredLanguageDetails]
     var supportedLanguages: [String]
+    var availableLanguages: [String]
     var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let state = appState.screenState(
+        guard let state = appState.componentState(
             TranslationSettingsState.self,
             for: .translationSettings,
             window: uuid
@@ -23,8 +33,12 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+            isEditing: state.isEditing,
+            pendingLanguages: state.pendingLanguages,
             preferredLanguages: state.preferredLanguages,
-            supportedLanguages: state.supportedLanguages
+            supportedLanguages: state.supportedLanguages,
+            availableLanguages: state.availableLanguages
         )
     }
 
@@ -32,34 +46,117 @@ struct TranslationSettingsState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             isTranslationsEnabled: true,
+            isAutoTranslateEnabled: false,
+            isEditing: false,
+            pendingLanguages: nil,
             preferredLanguages: [],
-            supportedLanguages: []
+            supportedLanguages: [],
+            availableLanguages: []
         )
     }
 
     init(windowUUID: WindowUUID,
          isTranslationsEnabled: Bool,
-         preferredLanguages: [String],
-         supportedLanguages: [String]) {
+         isAutoTranslateEnabled: Bool = false,
+         isEditing: Bool = false,
+         pendingLanguages: [PreferredLanguageDetails]? = nil,
+         preferredLanguages: [PreferredLanguageDetails],
+         supportedLanguages: [String],
+         availableLanguages: [String] = []) {
         self.windowUUID = windowUUID
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isAutoTranslateEnabled = isAutoTranslateEnabled
+        self.isEditing = isEditing
+        self.pendingLanguages = pendingLanguages
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
+        self.availableLanguages = availableLanguages
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-              let action = action as? TranslationSettingsMiddlewareAction else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return defaultState(from: state)
         }
+        if let action = action as? TranslationSettingsMiddlewareAction {
+            return reduceMiddlewareAction(state: state, action: action)
+        }
+        if let action = action as? TranslationSettingsViewAction {
+            return reduceViewAction(state: state, action: action)
+        }
+        return defaultState(from: state)
+    }
+
+    private static func reduceMiddlewareAction(
+        state: TranslationSettingsState,
+        action: TranslationSettingsMiddlewareAction
+    ) -> TranslationSettingsState {
         switch action.actionType {
         case TranslationSettingsMiddlewareActionType.didLoadSettings,
              TranslationSettingsMiddlewareActionType.didUpdateSettings:
             return TranslationSettingsState(
                 windowUUID: state.windowUUID,
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
+                isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled,
                 preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
-                supportedLanguages: action.supportedLanguages ?? state.supportedLanguages
+                supportedLanguages: action.supportedLanguages ?? state.supportedLanguages,
+                availableLanguages: action.availableLanguages ?? state.availableLanguages
+            )
+        default:
+            return defaultState(from: state)
+        }
+    }
+
+    private static func reduceViewAction(
+        state: TranslationSettingsState,
+        action: TranslationSettingsViewAction
+    ) -> TranslationSettingsState {
+        switch action.actionType {
+        case TranslationSettingsViewActionType.enterEditMode:
+            return TranslationSettingsState(
+                windowUUID: state.windowUUID,
+                isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+                isEditing: true,
+                pendingLanguages: state.preferredLanguages,
+                preferredLanguages: state.preferredLanguages,
+                supportedLanguages: state.supportedLanguages,
+                availableLanguages: state.availableLanguages
+            )
+        case TranslationSettingsViewActionType.cancelEditMode:
+            return TranslationSettingsState(
+                windowUUID: state.windowUUID,
+                isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+                isEditing: false,
+                pendingLanguages: nil,
+                preferredLanguages: state.preferredLanguages,
+                supportedLanguages: state.supportedLanguages,
+                availableLanguages: state.availableLanguages
+            )
+        case TranslationSettingsViewActionType.reorderLanguages:
+            return TranslationSettingsState(
+                windowUUID: state.windowUUID,
+                isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+                isEditing: state.isEditing,
+                pendingLanguages: action.pendingLanguages ?? state.pendingLanguages,
+                preferredLanguages: state.preferredLanguages,
+                supportedLanguages: state.supportedLanguages,
+                availableLanguages: state.availableLanguages
+            )
+        case TranslationSettingsViewActionType.removeLanguage:
+            guard let code = action.languageCode else { return defaultState(from: state) }
+            var pending = state.pendingLanguages ?? state.preferredLanguages
+            pending.removeAll { $0.code == code }
+            return TranslationSettingsState(
+                windowUUID: state.windowUUID,
+                isTranslationsEnabled: state.isTranslationsEnabled,
+                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+                isEditing: state.isEditing,
+                pendingLanguages: pending,
+                preferredLanguages: state.preferredLanguages,
+                supportedLanguages: state.supportedLanguages,
+                availableLanguages: state.availableLanguages
             )
         default:
             return defaultState(from: state)
@@ -70,14 +167,22 @@ struct TranslationSettingsState: ScreenState, Equatable {
         return TranslationSettingsState(
             windowUUID: state.windowUUID,
             isTranslationsEnabled: state.isTranslationsEnabled,
+            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
+            isEditing: state.isEditing,
+            pendingLanguages: state.pendingLanguages,
             preferredLanguages: state.preferredLanguages,
-            supportedLanguages: state.supportedLanguages
+            supportedLanguages: state.supportedLanguages,
+            availableLanguages: state.availableLanguages
         )
     }
 
     static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
         return lhs.isTranslationsEnabled == rhs.isTranslationsEnabled
+            && lhs.isAutoTranslateEnabled == rhs.isAutoTranslateEnabled
+            && lhs.isEditing == rhs.isEditing
+            && lhs.pendingLanguages == rhs.pendingLanguages
             && lhs.preferredLanguages == rhs.preferredLanguages
             && lhs.supportedLanguages == rhs.supportedLanguages
+            && lhs.availableLanguages == rhs.availableLanguages
     }
 }

@@ -46,7 +46,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -72,7 +72,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -98,7 +98,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -245,8 +245,8 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .homepage(
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID

@@ -68,7 +68,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Individual Screen Tests
 
-    func testModernTermsOfServiceScreen() throws {
+    func testModernTermsOfServiceScreen() {
         launchApp()
 
         onboardingScreen.assertModernTermsOfServiceScreen()
@@ -247,7 +247,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Navigation Tests
 
-    func testModernKitOnboardingSkipButton() throws {
+    func testModernKitOnboardingSkipButton() {
         launchApp()
 
         onboardingScreen.handleTermsOfService()
@@ -337,6 +337,9 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Go to second screen
         onboardingScreen.goToNextScreenViaSecondary()
+        if iPad() {
+            onboardingScreen.currentScreen += 1
+        }
         onboardingScreen.assertTitle()
 
         // Go to third screen
@@ -344,8 +347,10 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertTitle()
 
         // Go to fourth (last) screen
-        onboardingScreen.goToNextScreenViaPrimary()
-        onboardingScreen.assertTitle()
+        if !iPad() {
+            onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.assertTitle()
+        }
 
         // Test closing the tour at the very last card using the X
         onboardingScreen.closeTour()

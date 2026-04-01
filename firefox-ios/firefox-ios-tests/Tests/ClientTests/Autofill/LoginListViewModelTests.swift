@@ -5,6 +5,7 @@
 import Foundation
 import MozillaAppServices
 import Storage
+import TestKit
 import XCTest
 
 @testable import Client

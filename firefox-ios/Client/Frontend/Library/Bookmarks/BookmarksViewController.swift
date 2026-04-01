@@ -14,7 +14,8 @@ final class BookmarksViewController: SiteTableViewController,
                                      LibraryPanel,
                                      CanRemoveQuickActionBookmark,
                                      UITableViewDropDelegate,
-                                     Notifiable {
+                                     Notifiable,
+                                     FeatureFlaggable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -27,29 +28,55 @@ final class BookmarksViewController: SiteTableViewController,
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
-    let viewModel: BookmarksPanelViewModel
-    var bookmarksSaver: BookmarksSaver?
+    var isTransitioning = false
+    let viewModel: BookmarksPanelViewModelProtocol
     private var logger: Logger
     private let bookmarksTelemetry = BookmarksTelemetry()
+
+    // MARK: - Search Properties
+    var keyboardState: KeyboardState?
+
+    // MARK: - Search UI (History-style bottom search bar)
+    var bottomStackView: BaseAlphaStackView = .build { _ in }
+
+    lazy var searchbar: UISearchBar = .build { searchbar in
+        searchbar.searchTextField.placeholder = .LibraryPanel.History.SearchHistoryPlaceholder
+        searchbar.returnKeyType = .go
+        searchbar.delegate = self
+        searchbar.showsCancelButton = true
+    }
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
         // Return empty toolbar when bookmarks is in desktop folder node
         guard case .bookmarks = state,
               viewModel.bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid
-        else { return [UIBarButtonItem]() }
+        else { return [] }
 
         return toolbarButtonItems
     }
 
+    private var isBookmarksSearchEnabled: Bool {
+        featureFlags.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+    }
+
     private var toolbarButtonItems: [UIBarButtonItem] {
+        let searchItems: [UIBarButtonItem] = isBookmarksSearchEnabled
+            ? [flexibleSpace, bottomSearchButton]
+            : []
+
         switch state {
         case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             if #available(iOS 26.0, *) {
                 bottomRightButton.tintColor = currentTheme().colors.textPrimary
             }
-            return [flexibleSpace, bottomRightButton]
+            // Hide search button when there are no bookmarks
+            guard !viewModel.bookmarkNodes.isEmpty else { return [flexibleSpace, bottomRightButton] }
+            // Show search and edit buttons when bookmarks are available
+            return searchItems + [flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .search):
+            return searchItems + [flexibleSpace]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             if #available(iOS 26.0, *) {
@@ -71,7 +98,7 @@ final class BookmarksViewController: SiteTableViewController,
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
-            return [UIBarButtonItem]()
+            return []
         }
     }
 
@@ -97,6 +124,17 @@ final class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
+    private lazy var bottomSearchButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.search),
+            style: .plain,
+            target: self,
+            action: #selector(bottomSearchButtonAction)
+        )
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomSearchButton
+        return button
+    }()
+
     private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
         emptyStateView.signInAction = { [weak self] in
             self?.bookmarkCoordinatorDelegate?.showSignIn()
@@ -107,18 +145,16 @@ final class BookmarksViewController: SiteTableViewController,
 
     // MARK: - Init
 
-    init(viewModel: BookmarksPanelViewModel,
+    init(viewModel: BookmarksPanelViewModelProtocol,
          windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.logger = logger
 
-        let guidMatches = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-        self.state = guidMatches ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
+        let isMobileFolder = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+        self.state = isMobileFolder ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile, windowUUID: windowUUID)
-
-        bookmarksSaver = DefaultBookmarksSaver(profile: profile)
 
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
@@ -158,6 +194,8 @@ final class BookmarksViewController: SiteTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self,
                                                                         action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
@@ -167,6 +205,7 @@ final class BookmarksViewController: SiteTableViewController,
         tableView.dragDelegate = self
         tableView.dropDelegate = self
 
+        setupLayout()
         setupEmptyStateView()
     }
 
@@ -181,6 +220,8 @@ final class BookmarksViewController: SiteTableViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        bottomStackView.isHidden = !viewModel.isSearching
+
         if tableView.isEditing {
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         } else if viewModel.isRootNode {
@@ -191,18 +232,33 @@ final class BookmarksViewController: SiteTableViewController,
         sendPanelChangeNotification()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Clear any `isTransitioning` state once the user is back on this panel fully
+        isTransitioning = false
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if state == .bookmarks(state: .search) {
+            exitSearchState()
+            let substate: LibraryPanelSubState = viewModel.isRootNode ? .mainView : .inFolder
+            updatePanelState(newState: .bookmarks(state: substate))
+        }
+    }
+
     // MARK: - Data
 
     override func reloadData() {
         viewModel.reloadData {
-            ensureMainThread { [weak self] in
-                self?.tableView.reloadData()
-                if self?.viewModel.shouldFlashRow ?? false {
-                    self?.flashRow()
-                }
-                self?.updateEmptyState(animated: false)
-                self?.updateParentViewControllerTitle()
+            self.tableView.reloadData()
+            if self.viewModel.shouldFlashRow {
+                self.flashRow()
             }
+            self.updateEmptyState(animated: false)
+            self.updateParentViewControllerTitle()
         }
     }
 
@@ -231,51 +287,28 @@ final class BookmarksViewController: SiteTableViewController,
         return viewModel.bookmarkNodes.count
     }
 
+    /// Attempt to delete the bookmark node (bookmark or folder) at the given index path. If the node is for a folder,
+    /// will present an alert for the user to confirm deletion.
     private func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
         guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row]else {
             return
         }
 
-        // If this node is a folder and it is not empty, we need
-        // to prompt the user before deleting.
+        // If this node is a folder and it is not empty, we need to prompt the user before deleting
         if bookmarkNode.isNonEmptyFolder {
-            presentDeletingActionToUser(indexPath, bookmarkNode: bookmarkNode)
-            return
+            presentAlertToConfirmFolderDeletion(indexPath, bookmarkNode: bookmarkNode)
         } else if bookmarkNode.type == .separator {
             deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
-            return
-        }
-
-        self.deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
-    }
-
-    private func restoreBookmarkTree(bookmarkTreeRoot: BookmarkNodeData,
-                                     parentFolderGUID: String,
-                                     recentBookmarkFolderGUID: String?,
-                                     completion: (@Sendable (GUID) -> Void)? = nil) {
-        guard bookmarkTreeRoot.type == .folder || bookmarkTreeRoot.type == .bookmark else { return }
-        bookmarksSaver?.restoreBookmarkNode(bookmarkNode: bookmarkTreeRoot, parentFolderGUID: parentFolderGUID) { res in
-            guard let guid = res else {return}
-            completion?(guid)
-
-            if recentBookmarkFolderGUID != nil && recentBookmarkFolderGUID == bookmarkTreeRoot.guid {
-                self.profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
-            }
-
-            // In the case that the node is a folder, restore its children as well
-            guard let children = (bookmarkTreeRoot as? BookmarkFolderData)?.children else { return }
-
-            ensureMainThread {
-                for child in children {
-                    self.restoreBookmarkTree(bookmarkTreeRoot: child,
-                                             parentFolderGUID: guid,
-                                             recentBookmarkFolderGUID: recentBookmarkFolderGUID)
-                }
-            }
+        } else {
+            deleteBookmarkNode(indexPath, bookmarkNode: bookmarkNode)
         }
     }
 
-    private func presentDeletingActionToUser(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
+    /// Show an alert to confirm whether the user wishes to delete a bookmarks folder.
+    /// - Parameters:
+    ///   - indexPath: The index path of the folder.
+    ///   - bookmarkNode: The bookmark node of the folder.
+    private func presentAlertToConfirmFolderDeletion(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
         let alertController = UIAlertController(title: .BookmarksDeleteFolderWarningTitle,
                                                 message: .BookmarksDeleteFolderWarningDescription,
                                                 preferredStyle: .alert)
@@ -288,38 +321,11 @@ final class BookmarksViewController: SiteTableViewController,
         present(alertController, animated: true, completion: nil)
     }
 
-    private func addBookmarkNodeToTable(bookmarkNode: FxBookmarkNode) {
-        let position = Int(bookmarkNode.position)
-        tableView.beginUpdates()
-        tableView.insertRows(at: [IndexPath(row: position, section: 0)], with: .left)
-        viewModel.bookmarkNodes.insert(bookmarkNode, at: position)
-        tableView.endUpdates()
-        updateEmptyState(animated: false)
-    }
-
     /// Performs the delete asynchronously even though we update the
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
-        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
-            .uponQueue(.main) { _ in
-                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                MainActor.assumeIsolated {
-                    if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
-                        self.profile.places.getBookmark(guid: recentBookmarkFolderGuid)
-                            .uponQueue(.main) { node in
-                                // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-                                MainActor.assumeIsolated {
-                                    guard let nodeValue = node.successValue, nodeValue == nil else { return }
-                                    self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
-                                }
-                            }
-                    }
-                    self.removeBookmarkShortcut()
-                }
-            }
-
         tableView.beginUpdates()
-        viewModel.bookmarkNodes.remove(at: indexPath.row)
+        viewModel.remove(bookmark: bookmarkNode)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
         updateEmptyState(animated: false)
@@ -331,7 +337,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
         self.tableView.dragInteractionEnabled = true
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -340,7 +345,6 @@ final class BookmarksViewController: SiteTableViewController,
         updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
         self.tableView.dragInteractionEnabled = false
-        sendPanelChangeNotification()
         updateEmptyState(animated: true)
     }
 
@@ -406,8 +410,11 @@ final class BookmarksViewController: SiteTableViewController,
             a11yEmptyStateScrollView.isHidden = !showEmptyState
         }
 
-        emptyStateView.configure(isRoot: viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID,
+        emptyStateView.configure(isRoot: viewModel.isRootNode,
                                  isSignedIn: profile.hasAccount())
+
+        // Depending on empty state, show/hide the search bar in the library panel's toolbar
+        sendPanelChangeNotification()
     }
 
     private func createContextButton() -> UIButton {
@@ -435,6 +442,12 @@ final class BookmarksViewController: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
+    private func resetSearch() {
+        viewModel.resetSearch()
+        tableView.reloadData()
+        updateEmptyState(animated: false)
+    }
+
     private func backButtonView() -> UIView? {
         let navigationBarContentView = navigationController?.navigationBar.subviews.first(where: {
             $0.description.starts(with: "<_UINavigationBarContentView:")
@@ -446,6 +459,31 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     // MARK: - UI Setup
+    private func setupLayout() {
+        view.addSubview(bottomStackView)
+        bottomStackView.addArrangedSubview(searchbar)
+        bottomStackView.isHidden = true
+
+        NSLayoutConstraint.activate([
+            bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+
+        bottomStackView.applyTheme(theme: currentTheme())
+    }
+
+    func updateLayoutForKeyboard() {
+        guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
+              keyboardHeight > 0 else {
+            bottomStackView.removeKeyboardSpacer()
+            return
+        }
+
+        let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
+        bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+    }
+
     private func setupEmptyStateView() {
         view.addSubview(a11yEmptyStateScrollView)
         a11yEmptyStateScrollView.addSubview(emptyStateView)
@@ -475,14 +513,15 @@ final class BookmarksViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        guard let node = viewModel.bookmarkNodes[safe: indexPath.row],
+        guard let node = viewModel.displayedBookmarkNodes[safe: indexPath.row],
               let bookmarkCell = node as? BookmarksFolderCell
         else { return }
 
         guard !tableView.isEditing else {
             if let bookmarkFolder = self.viewModel.bookmarkFolder,
-                !(node is BookmarkSeparatorData),
-                isCurrentFolderEditable(at: indexPath) {
+               !(node is BookmarkSeparatorData),
+               !viewModel.isSearching,
+               isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
                 bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
             }
@@ -493,14 +532,14 @@ final class BookmarksViewController: SiteTableViewController,
         if let itemData = bookmarkCell as? BookmarkItemData,
            let url = URL(string: itemData.url) {
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
-        } else {
+        } else if !viewModel.isSearching {
             guard let folder = bookmarkCell as? FxBookmarkNode else { return }
             bookmarkCoordinatorDelegate?.start(from: folder)
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.bookmarkNodes.count
+        return viewModel.displayedBookmarkNodes.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -508,7 +547,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let node = viewModel.bookmarkNodes[safe: indexPath.row] else {
+        guard let node = viewModel.displayedBookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -560,10 +599,12 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard !viewModel.isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        guard !viewModel.isSearching else { return false }
         return isCurrentFolderEditable(at: indexPath)
     }
 
@@ -590,10 +631,13 @@ final class BookmarksViewController: SiteTableViewController,
             style: .destructive,
             title: .BookmarksPanelDeleteTableAction
         ) { [weak self] (_, _, completion) in
-            guard let strongSelf = self else { completion(false); return }
+            guard let self else {
+                completion(false)
+                return
+            }
 
-            strongSelf.deleteBookmarkNodeAtIndexPath(indexPath)
-            strongSelf.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
+            self.deleteBookmarkNodeAtIndexPath(indexPath)
+            self.bookmarksTelemetry.deleteBookmark(eventLabel: .bookmarksPanel)
             completion(true)
         }
 
@@ -606,6 +650,15 @@ final class BookmarksViewController: SiteTableViewController,
 
     private func currentTheme() -> Theme {
         return themeManager.getCurrentTheme(for: windowUUID)
+    }
+
+    private func applyThemeToSearchBar() {
+        bottomStackView.applyTheme(theme: currentTheme())
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        applyThemeToSearchBar()
     }
 
     // MARK: - UITableViewDragDelegate | UITableViewDropDelegate
@@ -624,8 +677,8 @@ final class BookmarksViewController: SiteTableViewController,
                    withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
         guard let destinationIndex = destinationIndexPath?.row,
               let sourceIndex = (session.localDragSession?.items[safe: 0]?.localObject as? IndexPath)?.row,
-              let destinationFolder = viewModel.bookmarkNodes[safe: destinationIndex],
-              let sourceNode = viewModel.bookmarkNodes[safe: sourceIndex],
+              let destinationFolder = viewModel.displayedBookmarkNodes[safe: destinationIndex],
+              let sourceNode = viewModel.displayedBookmarkNodes[safe: sourceIndex],
               destinationFolder.type == .folder,
               sourceNode.type == .bookmark || sourceNode.type == .folder,
               sourceNode.guid != destinationFolder.guid else {
@@ -634,32 +687,24 @@ final class BookmarksViewController: SiteTableViewController,
         return UITableViewDropProposal(operation: .move, intent: .automatic)
     }
 
+    /// Called when a user is in Edit mode and drags and drops a bookmark into a folder. Updates the bookmark's parent folder
+    /// GUID and reloads the table.
     func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath,
               let item = coordinator.items[safe: 0],
               let sourceIndexPath = item.dragItem.localObject as? IndexPath,
-              let sourceItem = viewModel.bookmarkNodes[safe: sourceIndexPath.row],
-              let destinationItem = viewModel.bookmarkNodes [safe: destinationIndexPath.row],
+              let sourceItem = viewModel.displayedBookmarkNodes[safe: sourceIndexPath.row],
+              let destinationItem = viewModel.displayedBookmarkNodes[safe: destinationIndexPath.row],
               coordinator.proposal.intent == .insertIntoDestinationIndexPath
         else { return }
 
-        Task {
-            let result = await bookmarksSaver?.save(bookmark: sourceItem,
-                                                    parentFolderGUID: destinationItem.guid)
-            switch result {
-            case .success:
-                Task { @MainActor in
-                    tableView.beginUpdates()
-                    viewModel.bookmarkNodes.remove(at: sourceIndexPath.row)
-                    tableView.deleteRows(at: [sourceIndexPath], with: .left)
-                    tableView.endUpdates()
-                    updateEmptyState(animated: false)
-                    profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
-                }
-            default:
-                return
-            }
-        }
+        tableView.beginUpdates()
+        viewModel.moveBookmarkToFolder(bookmark: sourceItem, withGUID: destinationItem.guid)
+        tableView.deleteRows(at: [sourceIndexPath], with: .left)
+        tableView.endUpdates()
+
+        updateEmptyState(animated: false)
+        profile.prefs.setString(destinationItem.guid, forKey: PrefsKeys.RecentBookmarkFolder)
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
@@ -691,7 +736,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
                     self.presentContextMenu(for: site, with: indexPath, completionHandler: {
                         return self.contextMenu(for: site, with: indexPath)
                     })
-                } else if let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+                } else if let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                           bookmarkNode.type == .folder,
                           self.isCurrentFolderEditable(at: indexPath) {
                     self.presentContextMenu(for: bookmarkNode, indexPath: indexPath)
@@ -746,23 +791,25 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         guard let defaultActions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
         }
+
+        var actions: [PhotonRowActions] = defaultActions
+
         let editBookmark = SingleActionViewModel(title: .Bookmarks.Menu.EditBookmark,
                                                  iconString: StandardImageIdentifiers.Large.edit,
                                                  tapHandler: { _ in
-            guard let bookmarkNode = self.viewModel.bookmarkNodes[safe: indexPath.row],
+            guard let bookmarkNode = self.viewModel.displayedBookmarkNodes[safe: indexPath.row],
                   let bookmarkFolder = self.viewModel.bookmarkFolder else {
                 return
             }
             self.bookmarkCoordinatorDelegate?.showBookmarkDetail(for: bookmarkNode, folder: bookmarkFolder)
         }).items
-        var actions: [PhotonRowActions] = [editBookmark] + defaultActions
+        actions.append(editBookmark)
 
         let pinTopSiteAction = viewModel.createPinUnpinAction(
             for: site,
             isPinned: site.isPinnedSite
         ) { [weak self] message in
-            guard let view = self?.view, let theme = self?.currentTheme() else { return }
-            SimpleToast().showAlertWithText(message, bottomContainer: view, theme: theme)
+            self?.libraryPanelDelegate?.showToast(message: message)
         }
         actions.append(pinTopSiteAction)
 
@@ -795,14 +842,29 @@ extension BookmarksViewController {
     }
 
     func handleLeftTopButton() {
-        // We use the "transitioning" so that the "<" back toolbar navigation button cannot be spammed
-        updatePanelState(newState: .bookmarks(state: .transitioning))
+        // We use the isTransitioning so that the "<" back toolbar navigation button cannot be spammed
+        isTransitioning = true
+    }
+
+    func handleRightTopButton() {
+        // When the Done button is tapped and search is active, exit search mode
+        if state == .bookmarks(state: .search) {
+            exitSearchState()
+            updatePanelState(newState: viewModel.isRootNode
+                             ? .bookmarks(state: .mainView)
+                             : .bookmarks(state: .inFolder))
+        }
     }
 
     func shouldDismissOnDone() -> Bool {
-        guard state != .bookmarks(state: .itemEditMode) else { return false }
+        guard state != .bookmarks(state: .itemEditMode),
+              state != .bookmarks(state: .search) else { return false }
 
         return true
+    }
+
+    func bottomSearchButtonAction() {
+        startSearchState()
     }
 
     func bottomRightButtonAction() {
@@ -819,4 +881,77 @@ extension BookmarksViewController {
             return
         }
     }
+}
+
+// MARK: - UISearchBarDelegate
+extension BookmarksViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+
+        performSearch(term: searchText)
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            handleEmptySearch()
+            return
+        }
+
+        performSearch(term: searchText)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        exitSearchState()
+        let substate: LibraryPanelSubState = viewModel.isRootNode ? .mainView : .inFolder
+        updatePanelState(newState: .bookmarks(state: substate))
+        sendPanelChangeNotification()
+    }
+
+    func startSearchState() {
+        updatePanelState(newState: .bookmarks(state: .search))
+        bottomStackView.isHidden = false
+        searchbar.becomeFirstResponder()
+        sendPanelChangeNotification()
+    }
+
+    func exitSearchState() {
+        resetSearch()
+        searchbar.text = ""
+        searchbar.resignFirstResponder()
+        bottomStackView.isHidden = true
+    }
+
+    func performSearch(term: String) {
+        viewModel.searchBookmarks(query: term) { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+
+    private func handleEmptySearch() {
+        resetSearch()
+    }
+}
+
+// MARK: - KeyboardHelperDelegate
+extension BookmarksViewController: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateLayoutForKeyboard()
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomStackView.layoutIfNeeded()
+            })
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = nil
+        updateLayoutForKeyboard()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }

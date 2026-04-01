@@ -18,10 +18,6 @@ public struct EngineSessionDependencies {
         self.readerModeDelegate = readerModeDelegate
         self.telemetryProxy = telemetryProxy
     }
-
-    public static func empty() -> EngineSessionDependencies {
-        return EngineSessionDependencies(webviewParameters: WKWebViewParameters())
-    }
 }
 
 /// Dependencies that are global to the engine and isn't session specific.

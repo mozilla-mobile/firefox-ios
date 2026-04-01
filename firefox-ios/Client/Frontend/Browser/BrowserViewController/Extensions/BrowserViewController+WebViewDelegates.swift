@@ -38,9 +38,8 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        guard !isPayPalPopUp(navigationAction) else { return nil }
-
-        if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
+        let shouldBlockExternalApps = profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false
+        if !shouldBlockExternalApps, navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
         }
@@ -491,10 +490,6 @@ extension BrowserViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
     ) {
-        // prevent the App from opening universal links
-        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
-        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
-
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -509,17 +504,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if InternalURL.isValid(url: url) {
-            if navigationAction.navigationType != .backForward,
-               navigationAction.isInternalUnprivileged,
-               !url.isReaderModeURL {
-                logger.log("Denying unprivileged request: \(navigationAction.request)",
-                           level: .warning,
-                           category: .webview)
-                decisionHandler(.cancel)
-                return
-            }
-
-            decisionHandler(.allow)
+            handleInternalURLNavigation(url: url, navigationAction: navigationAction, decisionHandler: decisionHandler)
             return
         }
 
@@ -569,19 +554,14 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handle Universal link for Firefox wallpaper setting
         if isFirefoxUniversalWallpaperSetting(url) {
-            showWallpaperSettings()
+            navigationHandler?.show(settings: .wallpaper)
             decisionHandler(.cancel)
             return
         }
 
         // Handle MarketplaceKit URL
         if url.scheme == "marketplace-kit" {
-            let isMainFrame = isMainFrameNavigation(navigationAction)
-            let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(
-                navigationType: navigationAction.navigationType,
-                isMainFrame: isMainFrame
-            )
-            decisionHandler(shouldAllowNavigation ? .allow : .cancel)
+            handleMarketplaceKitNavigation(navigationAction: navigationAction, decisionHandler: decisionHandler)
             return
         }
 
@@ -602,49 +582,14 @@ extension BrowserViewController: WKNavigationDelegate {
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView.
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
         if let scheme = url.scheme, ["http", "https", "blob", "file"].contains(scheme) {
-            if navigationAction.targetFrame?.isMainFrame ?? false {
-                tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
-            }
-
-            pendingRequests[url.absoluteString] = navigationAction.request
-
-            if tab.changedUserAgent {
-                let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
-                webView.customUserAgent = platformSpecificUserAgent
-            } else {
-                webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
-            }
-
-            if url.isFileURL,
-               tab.shouldDownloadDocument(navigationAction.request),
-               let sourceURL = tab.getTemporaryDocumentsSession()[url] {
-                let request = URLRequest(url: sourceURL)
-                let filename = url.lastPathComponent
-                handlePDFDownloadRequest(request: request, tab: tab, filename: filename)
-                decisionHandler(.cancel)
-                return
-            }
-
-            // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
-            // - If the blob response has a .pkpass MIME type (FXIOS-11684)
-            // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
-            // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
-            // via JS since we are cancelling the navigation here
-            if scheme == "blob" && navigationAction.navigationType != .other {
-                _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
-                decisionHandler(.cancel)
-                return
-            }
-
-            let isGoogleDomain = url.host?.contains("google") ?? false
-            let isPrivate = tab.isPrivate
-
-            if isPrivate || isGoogleDomain || shouldBlockExternalApps {
-                decisionHandler(allowPolicy)
-                return
-            }
-
-            decisionHandler(.allow)
+            handleWebURLNavigation(
+                webView: webView,
+                url: url,
+                tab: tab,
+                navigationAction: navigationAction,
+                shouldBlockExternalApps: shouldBlockExternalApps,
+                decisionHandler: decisionHandler
+            )
             return
         }
 
@@ -666,6 +611,24 @@ extension BrowserViewController: WKNavigationDelegate {
             tab.adsTelemetryRedirectUrlList.removeAll()
             tab.adsProviderName = ""
         }
+    }
+
+    private func handleInternalURLNavigation(
+        url: URL,
+        navigationAction: WKNavigationAction,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        if navigationAction.navigationType != .backForward,
+           navigationAction.isInternalUnprivileged,
+           !url.isReaderModeURL {
+            logger.log("Denying unprivileged request: \(navigationAction.request)",
+                       level: .warning,
+                       category: .webview)
+            decisionHandler(.cancel)
+            return
+        }
+
+        decisionHandler(.allow)
     }
 
     private func handleSpecialSchemeNavigation(url: URL) {
@@ -714,6 +677,75 @@ extension BrowserViewController: WKNavigationDelegate {
                 UIApplication.shared.open(url, options: [:])
             }
         }
+    }
+
+    private func handleMarketplaceKitNavigation(
+        navigationAction: WKNavigationAction,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        let isMainFrame = isMainFrameNavigation(navigationAction)
+        let shouldAllowNavigation = shouldAllowMarketplaceKitNavigation(
+            navigationType: navigationAction.navigationType,
+            isMainFrame: isMainFrame
+        )
+        decisionHandler(shouldAllowNavigation ? .allow : .cancel)
+    }
+
+    private func handleWebURLNavigation(
+        webView: WKWebView,
+        url: URL,
+        tab: Tab,
+        navigationAction: WKNavigationAction,
+        shouldBlockExternalApps: Bool,
+        decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        // prevent the App from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowPolicy = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        if navigationAction.targetFrame?.isMainFrame ?? false {
+            tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
+        }
+
+        pendingRequests[url.absoluteString] = navigationAction.request
+
+        if tab.changedUserAgent {
+            let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+            webView.customUserAgent = platformSpecificUserAgent
+        } else {
+            webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+        }
+
+        if url.isFileURL,
+           tab.shouldDownloadDocument(navigationAction.request),
+           let sourceURL = tab.getTemporaryDocumentsSession()[url] {
+            let request = URLRequest(url: sourceURL)
+            let filename = url.lastPathComponent
+            handlePDFDownloadRequest(request: request, tab: tab, filename: filename)
+            decisionHandler(.cancel)
+            return
+        }
+
+        // Blob URLs are downloaded via DownloadHelper.js where we check if we need to handle any special cases like:
+        // - If the blob response has a .pkpass MIME type (FXIOS-11684)
+        // - The <a> tag pressed has a "download" attribute, indicating a file download (FXIOS-11125)
+        // Once inspected, if there are no special cases to handle, we will then navigate to the blob URL's location
+        // via JS since we are cancelling the navigation here
+        if url.scheme == "blob" && navigationAction.navigationType != .other {
+            _ = DownloadContentScript.requestBlobDownload(url: url, tab: tab)
+            decisionHandler(.cancel)
+            return
+        }
+
+        let isGoogleDomain = url.host?.contains("google") ?? false
+        let isPrivate = tab.isPrivate
+
+        if isPrivate || isGoogleDomain || shouldBlockExternalApps {
+            decisionHandler(allowPolicy)
+            return
+        }
+
+        decisionHandler(.allow)
     }
 
     private func handleCustomSchemeURLNavigation(url: URL, navigationAction: WKNavigationAction) {
@@ -1312,14 +1344,6 @@ private extension BrowserViewController {
         }
 
         return false
-    }
-
-    // The WKNavigationAction request for Paypal popUp is empty which causes that we open a blank page in
-    // createWebViewWith. We will show Paypal popUp in page like mobile devices using the mobile User Agent
-    // so we will block the creation of a new Webview with this check
-    func isPayPalPopUp(_ navigationAction: WKNavigationAction) -> Bool {
-        let domain = navigationAction.sourceFrame.request.url?.baseDomain ?? ""
-        return ["paypal.com", "shopify.com"].contains(domain)
     }
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {

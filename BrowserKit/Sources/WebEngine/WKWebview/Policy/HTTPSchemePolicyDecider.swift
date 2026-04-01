@@ -20,11 +20,6 @@ struct HTTPSchemePolicyDecider: WKPolicyDecider {
         guard shouldRequestBeOpenedAsPopup(action.request) else {
             return nextDecider?.policyForPopupNavigation(action: action) ?? .cancel
         }
-
-        // We don't want to open a PayPal popup since it will result in blank screen.
-        if action.sourceFrameInfo.request.url?.baseDomain == "paypal.com" {
-            return .cancel
-        }
         return .allow
     }
 

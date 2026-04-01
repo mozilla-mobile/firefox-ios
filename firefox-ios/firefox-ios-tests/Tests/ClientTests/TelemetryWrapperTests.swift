@@ -316,18 +316,6 @@ class TelemetryWrapperTests: XCTestCase {
         try testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.abandonment)
     }
 
-    // MARK: - Page Action Menu
-
-    func test_createNewTab_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .createNewTab
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
-    }
-
     // MARK: - History
 
     func test_HistoryPanelOpened_GleanIsCalled() throws {
@@ -352,26 +340,6 @@ class TelemetryWrapperTests: XCTestCase {
                                      object: .historySingleItemRemoved)
 
         try testEventMetricRecordingSuccess(metric: GleanMetrics.History.removed)
-    }
-
-    func test_viewHistoryPanel_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .viewHistoryPanel
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewHistoryPanel)
-    }
-
-    func test_viewDownloadsPanel_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .viewDownloadsPanel
-        )
-
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewDownloadsPanel)
     }
 
     // Accessibility

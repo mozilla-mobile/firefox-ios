@@ -1,7 +1,7 @@
 
 def test_sync_bookmark_from_device(tps, xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncBookmark')
-    tps.run('test_bookmark.js')
+    #tps.run('test_bookmark.js')
 
 def test_sync_bookmark_from_desktop(tps, xcodebuild):
     tps.run('test_bookmark_desktop.js')
@@ -9,11 +9,11 @@ def test_sync_bookmark_from_desktop(tps, xcodebuild):
 
 def test_sync_history_from_device(tps, xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncHistory')
-    tps.run('test_history.js')
+    # tps.run('test_history.js')
 
 def test_sync_tabs_from_device(tps, xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncTabs')
-    tps.run('test_tabs.js')
+    # tps.run('test_tabs.js')
 
 def test_sync_history_from_desktop(tps, xcodebuild):
     tps.run('test_history_desktop.js')

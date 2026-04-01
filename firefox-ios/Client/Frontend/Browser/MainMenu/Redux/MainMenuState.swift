@@ -75,6 +75,7 @@ struct MainMenuTabInfo: Equatable {
     let isInReadingList: Bool
     let isPinned: Bool
     let accountData: AccountData
+    let translationConfiguration: TranslationConfiguration?
 }
 
 struct MainMenuState: ScreenState, Sendable {
@@ -97,7 +98,7 @@ struct MainMenuState: ScreenState, Sendable {
     private let menuConfigurator = MainMenuConfigurationUtility()
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let mainMenuState = appState.screenState(
+        guard let mainMenuState = appState.componentState(
             MainMenuState.self,
             for: .mainMenu,
             window: uuid

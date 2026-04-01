@@ -8,12 +8,24 @@ import XCTest
 
 @MainActor
 class HomepageDimensionCalculatorTests: XCTestCase {
-    struct UX {
-        struct DeviceSize {
-            static let iPhone14 = CGSize(width: 390, height: 844)
-            static let iPadAir = CGSize(width: 820, height: 1180)
-            static let iPadAirCompactSplit = CGSize(width: 320, height: 375)
-        }
+    struct DeviceSize {
+        static let iPhone14 = CGSize(width: 390, height: 844)
+        static let iPadAir = CGSize(width: 820, height: 1180)
+        static let iPadAirCompactSplit = CGSize(width: 320, height: 375)
+
+        static let iPhone17PortraitWidth: CGFloat = 402
+        static let iPhone17LandscapeSafeAreaWidth: CGFloat = 750
+        static let iPhone17ProMaxPortraitWidth: CGFloat = 440
+        static let iPhone17ProMaxLandscapeSafeAreaWidth: CGFloat = 832
+        static let iPhoneSEPortraitWidth: CGFloat = 320
+        static let iPhoneSELandscapeWidth: CGFloat = 568
+        static let iPadPro13InPortrait: CGFloat = 1032
+        static let iPadPro13InLandscape: CGFloat = 1376
+    }
+
+    struct Insets {
+        static let iPhoneInset = HomepageSectionLayoutProvider.UX.standardInset
+        static let ipadInset = HomepageSectionLayoutProvider.UX.iPadInset
     }
 
     // MARK: - maxJumpBackInItemsToDisplay
@@ -78,7 +90,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPhone14.width,
+            availableWidth: DeviceSize.iPhone14.width,
             leadingInset: leadingInset
         )
 
@@ -90,7 +102,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .phone)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPhone14.height,
+            availableWidth: DeviceSize.iPhone14.height,
             leadingInset: leadingInset
         )
 
@@ -102,7 +114,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPadAir.width,
+            availableWidth: DeviceSize.iPadAir.width,
             leadingInset: leadingInset
         )
 
@@ -114,7 +126,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPadAir.height,
+            availableWidth: DeviceSize.iPadAir.height,
             leadingInset: leadingInset
         )
 
@@ -126,7 +138,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPadAirCompactSplit.width,
+            availableWidth: DeviceSize.iPadAirCompactSplit.width,
             leadingInset: leadingInset
         )
 
@@ -138,7 +150,7 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let leadingInset = HomepageSectionLayoutProvider.UX.leadingInset(traitCollection: trait, interfaceIdiom: .pad)
 
         let numberOfTilesPerRow = HomepageDimensionCalculator.numberOfTopSitesPerRow(
-            availableWidth: UX.DeviceSize.iPadAirCompactSplit.height,
+            availableWidth: DeviceSize.iPadAirCompactSplit.height,
             leadingInset: leadingInset
         )
 
@@ -161,5 +173,59 @@ class HomepageDimensionCalculatorTests: XCTestCase {
         let result = HomepageDimensionCalculator.getTallestViewHeight(views: views, viewWidth: testWidth)
 
         XCTAssertEqual(result, 80, accuracy: 0.1)
+    }
+
+    func test_numberOfCellsThatFit_withIphone17Portrait_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhone17PortraitWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 1)
+    }
+
+    func test_numberOfCellsThatFit_withIphone17Landscape_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhone17LandscapeSafeAreaWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 2)
+    }
+
+    func test_numberOfCellsThatFit_withIphone17ProMaxPortrait_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhone17ProMaxPortraitWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 1)
+    }
+
+    func test_numberOfCellsThatFit_withIphone17ProMaxLandscape_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhone17ProMaxLandscapeSafeAreaWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 2)
+    }
+
+    func test_numberOfCellsThatFit_withIphoneSePortrait_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhoneSEPortraitWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 1)
+    }
+
+    func test_numberOfCellsThatFit_witIhphoneSeLandscape_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPhoneSELandscapeWidth
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize,
+                                                                         horizontalInset: Insets.iPhoneInset)
+        XCTAssertEqual(cellCount, 1)
+    }
+
+    func test_numberOfCellsThatFit_withIpad13InPortrait_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPadPro13InPortrait
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize, horizontalInset: Insets.ipadInset)
+        XCTAssertEqual(cellCount, 2)
+    }
+
+    func test_numberOfCellsThatFit_withIpad13InLandscape_returnsExpectedCellCount() {
+        let deviceSize = DeviceSize.iPadPro13InLandscape
+        let cellCount = HomepageDimensionCalculator.numberOfCellsThatFit(in: deviceSize, horizontalInset: Insets.ipadInset)
+        XCTAssertEqual(cellCount, 3)
     }
 }

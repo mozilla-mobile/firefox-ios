@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
     lazy var windowManager = WindowManagerImplementation()
+    lazy var relayController: RelayControllerProtocol = RelayController()
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
@@ -113,8 +114,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
     private func startRecordingStartupOpenURLTime() {
         shareTelemetry.recordOpenDeeplinkTime()
-        var recordCompleteToken: ActionToken?
-        var recordCancelledToken: ActionToken?
+        nonisolated(unsafe) var recordCompleteToken: ActionToken?
+        nonisolated(unsafe) var recordCancelledToken: ActionToken?
         recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
             ensureMainThread { [weak self] in
                 self?.shareTelemetry.sendOpenDeeplinkTimeRecord()

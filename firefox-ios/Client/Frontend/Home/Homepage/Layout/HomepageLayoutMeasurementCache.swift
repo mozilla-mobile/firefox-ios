@@ -57,7 +57,7 @@ struct HomepageLayoutMeasurementCache {
 
     struct StoriesMeasurement: Equatable {
         struct Key: Equatable {
-            let stories: [MerinoStoryConfiguration]
+            let stories: MerinoStoryResponse
             let headerState: SectionHeaderConfiguration
             let cellWidth: Double
             let containerWidth: Double

@@ -7,38 +7,28 @@ import Common
 
 public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
-        static let buttonPadding: CGFloat = 26.0
-        static let buttonContentInset = NSDirectionalEdgeInsets(
-            top: UX.buttonPadding,
-            leading: UX.buttonPadding,
-            bottom: UX.buttonPadding,
-            trailing: UX.buttonPadding
+        static let closeButtonSidePadding: CGFloat = 16.0
+        static let closeButtonPadding: CGFloat = 13.0
+        static let closeButtonContentInset = NSDirectionalEdgeInsets(
+            top: UX.closeButtonPadding,
+            leading: UX.closeButtonPadding,
+            bottom: UX.closeButtonPadding,
+            trailing: UX.closeButtonPadding
         )
-        static let buttonsSpacing: CGFloat = 11.0
-        static let buttonsContainerBottomPadding: CGFloat = 12.0
         static let recordWaveEffectSize: CGFloat = 400.0
         static let recordWaveEffectBottomPadding = recordWaveEffectSize / 3.0
-        static let audioWaveformTopPadding: CGFloat = 37.0
-        static let audioWaveformSize = CGSize(width: 18.0, height: 35)
+        static let audioWaveformSize = CGSize(width: 18.0, height: 25.0)
+        static let contentViewTopPadding: CGFloat = 32.0
+        static let contentViewBottomPadding: CGFloat = 12.0
+        static let contentViewHorizontalPadding: CGFloat = 24.0
     }
 
     // MARK: - Properties
     private let backgroundBlur: UIVisualEffectView = .build {
-        $0.effect = UIBlurEffect(style: .systemMaterial)
+        $0.effect = UIBlurEffect(style: .systemUltraThinMaterial)
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let recordButton: UIButton = .build {
-        if #available(iOS 26, *) {
-            $0.configuration = .prominentGlass()
-        } else {
-            $0.configuration = .filled()
-        }
-        $0.configuration?.cornerStyle = .capsule
-        $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.microphone)?
-            .withRenderingMode(.alwaysTemplate)
-        $0.configuration?.contentInsets = UX.buttonContentInset
-    }
     private let closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
@@ -47,12 +37,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         }
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
-        $0.configuration?.contentInsets = UX.buttonContentInset
+        $0.configuration?.contentInsets = UX.closeButtonContentInset
     }
-    let buttonsContainer: UIStackView = .build {
-        $0.axis = .horizontal
-        $0.spacing = UX.buttonsSpacing
-    }
+    private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: TransitionAnimator
 
     public let themeManager: any ThemeManager
@@ -60,13 +47,33 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     public var themeListenerCancellable: Any?
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
+    private let viewModel: QuickAnswersViewModel
 
-    public init(
+    public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
+    ) {
+        self.init(
+            navigationHandler: navigationHandler,
+            // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
+            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            presentationTransitionType: presentationTransitionType,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            notificationCenter: notificationCenter
+        )
+    }
+
+    init(
+        navigationHandler: QuickAnswersNavigationHandler?,
+        viewModel: QuickAnswersViewModel,
+        presentationTransitionType: QuickAnswersTransitionType,
+        windowUUID: WindowUUID,
+        themeManager: any ThemeManager,
+        notificationCenter: NotificationProtocol
     ) {
         self.navigationHandler = navigationHandler
         self.currentWindowUUID = windowUUID
@@ -77,6 +84,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             themeManager: themeManager,
             windowUUID: windowUUID
         )
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .custom
         transitioningDelegate = transitionAnimator
@@ -94,50 +102,64 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
+        registerViewModelUpdates()
     }
 
     private func setupSubviews() {
-        let leadingButtonContainerSpacer = UIView()
-        let trailingButtonContainerSpacer = UIView()
-        buttonsContainer.addArrangedSubview(leadingButtonContainerSpacer)
-        buttonsContainer.addArrangedSubview(recordButton)
-        buttonsContainer.addArrangedSubview(closeButton)
-        buttonsContainer.addArrangedSubview(trailingButtonContainerSpacer)
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, buttonsContainer)
+        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, contentView, closeButton)
 
         NSLayoutConstraint.activate([
-            audioWaveform.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                               constant: UX.audioWaveformTopPadding),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                             constant: UX.closeButtonSidePadding),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -UX.closeButtonSidePadding),
+
+            audioWaveform.topAnchor.constraint(equalTo: closeButton.bottomAnchor),
             audioWaveform.heightAnchor.constraint(equalToConstant: UX.audioWaveformSize.height),
             audioWaveform.widthAnchor.constraint(equalToConstant: UX.audioWaveformSize.width),
             audioWaveform.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
+                                             constant: UX.contentViewTopPadding),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                 constant: UX.contentViewHorizontalPadding),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                  constant: -UX.contentViewHorizontalPadding),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                                constant: -UX.contentViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.heightAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
-
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                                                     constant: -UX.buttonsContainerBottomPadding),
-            buttonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            buttonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            // Make spacer views expand equally to center the buttons in the button container
-            leadingButtonContainerSpacer.widthAnchor.constraint(equalTo: trailingButtonContainerSpacer.widthAnchor)
         ])
         backgroundBlur.pinToSuperview()
+    }
+
+    private func registerViewModelUpdates() {
+        viewModel.onStateChange = { [weak self] state in
+            switch state {
+            case .recordVoice(let result, _):
+                self?.contentView.configureTranscript(result.text)
+            case .loadingSearchResult:
+                self?.audioWaveform.stopAnimating()
+                self?.contentView.configureSearching()
+            case .showSearchResult(let result, _):
+                self?.contentView.configureAnswer(result.body)
+            }
+        }
+        viewModel.startRecordingVoice()
     }
 
     // MARK: - Themeable
     public func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer2
-        recordButton.configuration?.baseBackgroundColor = theme.colors.iconPrimary
-        recordButton.configuration?.baseForegroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
+        contentView.applyTheme(theme: theme)
     }
 }

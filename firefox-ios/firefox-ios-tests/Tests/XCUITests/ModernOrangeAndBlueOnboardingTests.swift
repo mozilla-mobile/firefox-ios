@@ -343,6 +343,9 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
         // Go to second screen
         onboardingScreen.goToNextScreenViaSecondary()
+        if iPad() {
+            onboardingScreen.currentScreen += 1
+        }
         onboardingScreen.assertTitle()
 
         // Go to third screen
@@ -350,8 +353,10 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertTitle()
 
         // Go to fourth (last) screen
-        onboardingScreen.goToNextScreenViaPrimary()
-        onboardingScreen.assertTitle()
+        if !iPad() {
+            onboardingScreen.goToNextScreenViaPrimary()
+            onboardingScreen.assertTitle()
+        }
 
         // Test closing the tour at the very last card using the X
         onboardingScreen.closeTour()

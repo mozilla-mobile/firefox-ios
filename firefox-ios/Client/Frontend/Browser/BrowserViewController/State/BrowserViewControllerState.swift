@@ -9,6 +9,12 @@ import Common
 import WebKit
 import SummarizeKit
 
+struct TranslationLanguagePickerData: Equatable {
+    let languages: [String]
+    let isTranslated: Bool
+    let translatedToLanguage: String?
+}
+
 struct BrowserViewControllerState: ScreenState {
     enum NavigationType: Equatable {
         case home
@@ -36,7 +42,7 @@ struct BrowserViewControllerState: ScreenState {
         case passwordGenerator
         // TODO: FXIOS-13118 Clean up and remove as we should have one navigation entry point
         case summarizer(config: SummarizerConfig?)
-        case translationLanguagePicker(languages: [String])
+        case translationLanguagePicker(TranslationLanguagePickerData)
     }
 
     let windowUUID: WindowUUID
@@ -54,7 +60,7 @@ struct BrowserViewControllerState: ScreenState {
     var navigationDestination: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let bvcState = appState.screenState(
+        guard let bvcState = appState.componentState(
             BrowserViewControllerState.self,
             for: .browserViewController,
             window: uuid)
@@ -232,7 +238,7 @@ struct BrowserViewControllerState: ScreenState {
     ) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarMiddlewareActionType.didTapButton:
-            let shouldShowSearchBar = store.state.screenState(
+            let shouldShowSearchBar = store.state.componentState(
                 HomepageState.self,
                 for: .homepage,
                 window: action.windowUUID
@@ -648,7 +654,11 @@ struct BrowserViewControllerState: ScreenState {
             toast: state.toast,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            displayView: .translationLanguagePicker(languages: action.translationLanguages ?? []),
+            displayView: .translationLanguagePicker(TranslationLanguagePickerData(
+                languages: action.translationLanguages ?? [],
+                isTranslated: action.isPageTranslated ?? false,
+                translatedToLanguage: action.translatedToLanguage
+            )),
             buttonTapped: action.buttonTapped,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }

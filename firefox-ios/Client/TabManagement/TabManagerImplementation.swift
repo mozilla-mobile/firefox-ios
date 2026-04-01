@@ -8,7 +8,6 @@ import Storage
 import Common
 import Shared
 import WebKit
-import WebEngine
 
 enum SwitchPrivacyModeResult {
     case createdNewTab
@@ -21,10 +20,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-final class TabManagerImplementation: NSObject,
-                                TabManager,
-                                FeatureFlaggable,
-                                SessionCreator {
+final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
@@ -1235,13 +1231,6 @@ final class TabManagerImplementation: NSObject,
             menuItems.append(contentsOf: [searchItem, findInPageItem])
         }
         UIMenuController.shared.menuItems = menuItems
-    }
-
-    // MARK: - SessionCreator
-
-    func createPopupSession(configuration: WKWebViewConfiguration, parent: WKWebView) -> WKWebView? {
-        guard let parentTab = self[parent] else { return nil }
-        return addPopupForParentTab(profile: profile, parentTab: parentTab, configuration: configuration).webView
     }
 }
 

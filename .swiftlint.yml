@@ -112,8 +112,8 @@ closure_body_length:
   error: 34
 
 function_body_length:
-  warning: 110
-  error: 110
+  warning: 108
+  error: 108
 
 file_header:
   required_string: |
