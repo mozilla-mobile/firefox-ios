@@ -230,6 +230,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_didSelectTargetLanguage_dispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
         let subject = createSubject()
 
         let action = TranslationLanguageSelectedAction(
