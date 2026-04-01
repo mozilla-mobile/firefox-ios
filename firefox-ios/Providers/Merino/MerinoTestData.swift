@@ -8,13 +8,21 @@ import MozillaAppServices
 struct MerinoTestData {
     /// Because we're not testing the Merino API/AS module, we're simply providing some
     /// dummy data here.
-    func getMockDataFeed(_ numberOfStories: Int) -> [RecommendationDataItem] {
+    func getMockDataFeed(_ numberOfStories: Int) -> CuratedRecommendationsResponse {
         var mockData = mockFeedData(startingRank: 0)
         while mockData.count < numberOfStories {
             mockData.append(contentsOf: mockFeedData(startingRank: Int64(mockData.count)))
         }
 
-        return mockData
+        return CuratedRecommendationsResponse(
+            recommendedAt: 123,
+            data: mockData,
+            feeds: mockCategoryData()
+        )
+    }
+
+    private func mockCategoryData() -> [FeedSection] {
+        return []
     }
 
     private func mockFeedData(startingRank: Int64) -> [RecommendationDataItem] {

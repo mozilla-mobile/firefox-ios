@@ -47,9 +47,9 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     }
 
     func fetchContent() async throws -> CuratedRecommendationsResponse {
-//        if !AppConstants.isRunningTest && shouldUseMockData {
-//            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
-//        }
+        if !AppConstants.isRunningTest && shouldUseMockData {
+            return MerinoTestData().getMockDataFeed(Constants.numberOfStoriesToFetchForCaching)
+        }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.isLocaleSupported(Locale.current.identifier)
