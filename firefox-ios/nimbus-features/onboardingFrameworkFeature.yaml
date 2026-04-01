@@ -49,7 +49,7 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-video-intro: true
+          enable-video-intro: false
           enable-modern-ui: true
           should-use-japan-configuration: false
           should-use-brand-refresh-configuration: true
