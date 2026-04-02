@@ -48,9 +48,7 @@ enum SearchEngine: String, CaseIterable {
 
     @MainActor
     static func providerFrom(url: URL?) -> SearchEngine {
-        guard let url = url else {
-            return .none
-        }
+        guard let url else { return .none }
 
         for provider in SearchEngine.allCases where url.absoluteString.contains(provider.rawValue) {
             return provider
