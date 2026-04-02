@@ -261,6 +261,7 @@
 		1DEBC55E2AC4ED70006E4801 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEBC55D2AC4ED70006E4801 /* RemoteTabsPanel.swift */; };
 		1DF2BDC32BD1BCF300E53C57 /* WindowManager+DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF2BDC22BD1BCF300E53C57 /* WindowManager+DebugUtilities.swift */; };
 		1DF9168A2F48EAB100FA2407 /* MockRelayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF916892F48EAAD00FA2407 /* MockRelayController.swift */; };
+		21050F332F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21050F322F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
 		2109726E2DCA8831001162A2 /* ZoomTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */; };
 		210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */; };
@@ -3013,6 +3014,7 @@
 		20C24CE7AEFE559B0B06390C /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		20C6401CAC4ACAA189D446BC /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Today.strings; sourceTree = "<group>"; };
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
+		21050F322F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTabScrollHandlerDelegateTest.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomTelemetryTests.swift; sourceTree = "<group>"; };
 		2109726F2DCBA4CF001162A2 /* GenericItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericItemCellView.swift; sourceTree = "<group>"; };
@@ -12069,6 +12071,7 @@
 				21365E3C2F314D1D0000C369 /* BrowserViewControllerLayoutManagerTests.swift */,
 				E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */,
 				BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */,
+				21050F322F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -19739,6 +19742,7 @@
 				0E6557402D82232B00D7F017 /* DownloadProgressManagerTests.swift in Sources */,
 				AADBD0E42EBBA79B00F35E30 /* MockLanguageDetector.swift in Sources */,
 				AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */,
+				21050F332F7D66C00006B76C /* BrowserTabScrollHandlerDelegateTest.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
 				E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesManagerTests.swift in Sources */,
