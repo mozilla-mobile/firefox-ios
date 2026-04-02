@@ -120,25 +120,7 @@ class LibraryCoordinator: BaseCoordinator,
         add(child: coordinator)
 
         // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
-        let sourceBoundsFrameInWindow = sourceView.convert(sourceView.bounds, to: sourceView.window)
-        let windowCenterMidY = sourceView.window?.bounds.midY ?? sourceBoundsFrameInWindow.midY
-
-        let sourceIsBelowWindowCenter = sourceBoundsFrameInWindow.midY > windowCenterMidY
-        let popoverArrowDirection: UIPopoverArrowDirection = sourceIsBelowWindowCenter ? .down : .up
-
-        let sourceViewCenterPoint = CGPoint(x: sourceView.bounds.midX, y: sourceView.bounds.midY)
-        let sourceViewAnchorRect = CGRect(x: sourceViewCenterPoint.x - 0.5,
-                                          y: sourceViewCenterPoint.y - 0.5,
-                                          width: 1,
-                                          height: 1)
-
-        coordinator.start(
-            shareType: .site(url: url),
-            shareMessage: nil,
-            sourceView: sourceView,
-            sourceRect: sourceViewAnchorRect,
-            popoverArrowDirection: popoverArrowDirection
-        )
+        coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView, popoverArrowDirection: .any)
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
