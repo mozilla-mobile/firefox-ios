@@ -31,6 +31,7 @@ class CopyPasteTest: BaseTestCase {
         }
 
         XCTAssert(text == "example.com")
+        XCTAssert(text == "example.com")
     }
 
     // Smoketest
