@@ -3391,7 +3391,7 @@ extension String {
                 key: "Settings.Translation.ToggleFooter.v151",
                 tableName: "Settings",
                 value: "Turn this off to remove translation from the toolbar and menu.",
-                comment: "Footer text below the enable-translations toggle in the Translation settings screen."
+                comment: "Footer text below the enable toggle in the Translation settings screen."
             )
 
             public struct PreferredLanguages {
