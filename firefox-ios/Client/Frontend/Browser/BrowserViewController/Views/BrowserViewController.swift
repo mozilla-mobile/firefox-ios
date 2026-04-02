@@ -2149,7 +2149,6 @@ class BrowserViewController: UIViewController,
 
     private func handleAutoTranslatePrompt(state: BrowserViewControllerState) {
         if state.autoTranslatePromptState.showPrompt {
-            guard autoTranslatePrompt == nil else { return }
             showAutoTranslatePrompt()
         } else {
             guard autoTranslatePrompt != nil else { return }
@@ -2158,17 +2157,14 @@ class BrowserViewController: UIViewController,
     }
 
     private func showAutoTranslatePrompt() {
+        guard autoTranslatePrompt == nil else { return }
         let prompt = AutoTranslatePromptView(windowUUID: windowUUID)
         autoTranslatePrompt = prompt
 
         if isBottomSearchBar {
-            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: {
-                self.view.layoutIfNeeded()
-            })
+            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         } else {
-            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: {
-                self.view.layoutIfNeeded()
-            })
+            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         }
 
         prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))

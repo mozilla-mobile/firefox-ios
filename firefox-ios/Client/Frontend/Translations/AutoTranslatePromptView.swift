@@ -8,7 +8,7 @@ import Redux
 import Shared
 import UIKit
 
-final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
+final class AutoTranslatePromptView: UIView, ThemeApplicable {
     private struct UX {
         static let borderThickness: CGFloat = 1.0
         static let contentPadding = NSDirectionalEdgeInsets(
@@ -21,7 +21,6 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
     }
 
     private let windowUUID: WindowUUID
-    var notificationCenter: NotificationProtocol
 
     private var topBorderView: UIView = .build()
 
@@ -30,12 +29,15 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.text = .Translations.AutoTranslatePrompt.Message
+        label.accessibilityIdentifier = AccessibilityIdentifiers.Translations.AutoTranslatePrompt.messageLabel
     }
 
     private lazy var enableButton: UIButton = .build { button in
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         button.setTitle(.Translations.AutoTranslatePrompt.EnableButton, for: .normal)
+        button.accessibilityLabel = .Translations.AutoTranslatePrompt.EnableButton
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Translations.AutoTranslatePrompt.enableButton
         button.addTarget(self, action: #selector(self.didTapEnable), for: .touchUpInside)
     }
 
@@ -54,15 +56,9 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
         stack.spacing = UX.contentSpacing
     }
 
-    init(windowUUID: WindowUUID, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
-        self.notificationCenter = notificationCenter
         super.init(frame: .zero)
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [UIContentSizeCategory.didChangeNotification]
-        )
         setupView()
     }
 
@@ -115,19 +111,5 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
         messageLabel.textColor = theme.colors.textPrimary
         enableButton.setTitleColor(theme.colors.textAccent, for: .normal)
         closeButton.tintColor = theme.colors.textSecondary
-    }
-
-    // MARK: - Notifiable
-
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case UIContentSizeCategory.didChangeNotification:
-            ensureMainThread {
-                self.messageLabel.font = FXFontStyles.Regular.body.scaledFont()
-                self.enableButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
-            }
-        default:
-            break
-        }
     }
 }

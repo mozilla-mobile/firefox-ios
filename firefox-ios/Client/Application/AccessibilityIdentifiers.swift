@@ -308,6 +308,8 @@ struct AccessibilityIdentifiers {
 
     struct Translations {
         struct AutoTranslatePrompt {
+            static let messageLabel = "Translations.AutoTranslatePrompt.MessageLabel"
+            static let enableButton = "Translations.AutoTranslatePrompt.EnableButton"
             static let closeButton = "Translations.AutoTranslatePrompt.CloseButton"
         }
     }
