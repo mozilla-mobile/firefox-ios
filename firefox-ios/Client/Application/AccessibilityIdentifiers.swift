@@ -195,10 +195,12 @@ struct AccessibilityIdentifiers {
 
         struct BlockedTrackers {
             static let headerView = "BlockedTrackers.HeaderView"
+            static let footerView = "BlockedTrackers.FooterView"
             static let mainView = "BlockedTrackers.MainView"
             static let containerView = "BlockedTrackers.BaseView"
             static let trackersTable = "BlockedTrackers.TrackersTable"
             static let totalTrackersBlockedLabel = "BlockedTrackers.TotalTrackersBlockedLabel"
+            static let trackersBlockedInfoTextView = "BlockedTrackers.TrackersBlockedInfoTextView"
 
             static let crossSiteTitle = "BlockedTrackers.CrossSiteTitle"
             static let crossSiteImage = "BlockedTrackers.CrossSiteImage"
@@ -211,6 +213,14 @@ struct AccessibilityIdentifiers {
 
             static let socialMediaTitle = "BlockedTrackers.SocialMediaTitle"
             static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
+        }
+
+        struct BlockedTrackersLearnMore {
+            static let headerView = "BlockedTrackersLearnMore.HeaderView"
+            static let containerView = "BlockedTrackersLearnMore.containerView"
+            static let closeButton = "BlockedTrackersLearnMore.CloseButton"
+            static let backButton = "BlockedTrackersLearnMore.BackButton"
+            static let titleLabel = "BlockedTrackersLearnMore.TitleLabel"
         }
 
         struct CertificatesScreen {

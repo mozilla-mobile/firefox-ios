@@ -52,6 +52,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         super.init(router: router)
         if self.trackingProtectionRefactorStatus {
             let etpViewModel = TrackingProtectionModel(
+                userDefaults: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
                 url: url,
                 displayTitle: displayTitle,
                 connectionSecure: connectionSecure,
