@@ -23,8 +23,6 @@ This is a monolithic-repository, containing both the Firefox and Focus iOS proje
 
 As this is an iOS project, it is required to have Xcode on your system, and you should check that `xcode-select -p` points to `/Applications/Xcode.app/Contents/Developer` (or however you've named your `Xcode.app`).
 
-### Automatic Installation
-
 The recommended way of setting up the repo is through the [fxios](https://github.com/mozilla-mobile/fxios-ctl) tool. This tool provides multiple helpful commands to help manage the repo. Check out its documentation, or the repo, if you'd like to find out more. Setup allows cloning from an https or an ssh url.
 
 Note that, if you're using a fork, you'll have to use the `--with-fork <fork-url>` option. This will set your fork as `origin` and the main firefox-ios repo as `upstream`. `fork-url` can be either the ssh or the https version.
@@ -44,7 +42,7 @@ fxios setup --ssh --with-fork <fork-url>
 For more options for setup, please run `fxios setup --help`.
 Please note, this is a decently sized repo, so downloading might take a while depending on your connection.
 
-#### Firefox Instructions
+### Firefox Instructions
 
 1. Open the `Client.xcodeproj`, under the `firefox-ios/firefox-ios` folder, in Xcode.
 1. Make sure to select the `Fennec` scheme in Xcode.
@@ -53,18 +51,10 @@ Please note, this is a decently sized repo, so downloading might take a while de
 
     Xcode -> File -> Packages -> Reset Package Caches
 
-#### Focus Instructions
+### Focus Instructions
 
 1. Open `Blockzilla.xcodeproj`, under the `firefox-ios/focus-ios` folder, in Xcode.
 1. Build the `Focus` scheme in Xcode.
-
-### Manual Installation
-
-1. Clone the repo locally
-1. For their related build instructions, please follow the respective project readmes:
-
-- [Firefox for iOS](./firefox-ios/README.md)
-- [Focus iOS](./focus-ios/README.md)
 
 ## Getting involved
 
