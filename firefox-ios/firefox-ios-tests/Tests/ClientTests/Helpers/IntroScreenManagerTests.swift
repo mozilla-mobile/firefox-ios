@@ -115,7 +115,7 @@ final class IntroScreenManagerTests: XCTestCase {
     func testShouldShowVideoIntro() {
         setupNimbusFeatureFlags(enableModernUi: false, shouldUseJapanConfiguration: false)
         let subject = IntroScreenManager(prefs: prefs)
-        
+
         XCTAssertFalse(subject.shouldShowVideoIntro)
     }
 

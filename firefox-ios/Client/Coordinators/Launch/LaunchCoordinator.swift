@@ -77,6 +77,9 @@ final class LaunchCoordinator: BaseCoordinator,
             title: .Onboarding.Modern.Toolbar.ContinueAction,
             a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
         ))
+        viewController.onDismiss = { [weak self] in
+            self?.router.dismiss(animated: true)
+        }
         router.present(viewController, animated: false)
     }
 

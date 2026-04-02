@@ -16,6 +16,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         static let introVideoExtension = "mp4"
     }
 
+    public var onDismiss: (() -> Void)?
     public var themeManager: any ThemeManager
     public var themeListenerCancellable: Any?
     public var currentWindowUUID: WindowUUID?
@@ -26,7 +27,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
         $0.addAction(
             UIAction(
                 handler: { [weak self] _ in
-                    self?.dismiss(animated: true)
+                    self?.onDismiss?()
                 }),
             for: .touchUpInside
         )
@@ -66,7 +67,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
 
     private func setupPlayerLayer() {
         guard let url = Bundle.module.url(forResource: UX.introVideoTitle, withExtension: UX.introVideoExtension) else {
-            dismiss(animated: false)
+            onDismiss?()
             return
         }
 
