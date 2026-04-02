@@ -811,19 +811,6 @@ class Tab: NSObject,
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
-    @MainActor
-    func getProviderForUrl() -> SearchEngine {
-        guard let url = self.webView?.url else {
-            return .none
-        }
-
-        for provider in SearchEngine.allCases where url.absoluteString.contains(provider.rawValue) {
-            return provider
-        }
-
-        return .none
-    }
-
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
