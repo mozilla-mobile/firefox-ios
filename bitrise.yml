@@ -2220,7 +2220,7 @@ workflows:
             #!/usr/bin/env bash
             brew tap mozilla-mobile/fxios
             brew install fxios
-            fxios bootstrap
+            fxios bootstrap -p focus
         title: ContentBlockerGen
 
   focus-set-project-version:
