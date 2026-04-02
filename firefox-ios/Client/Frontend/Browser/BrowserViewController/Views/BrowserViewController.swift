@@ -2167,9 +2167,6 @@ class BrowserViewController: UIViewController,
         }
 
         prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        }
     }
 
     private func removeAutoTranslatePrompt() {
@@ -2182,9 +2179,6 @@ class BrowserViewController: UIViewController,
         }
 
         autoTranslatePrompt = nil
-        if !isSnapKitRemovalEnabled {
-            updateViewConstraints()
-        }
     }
 
     // MARK: - Native Error Page
