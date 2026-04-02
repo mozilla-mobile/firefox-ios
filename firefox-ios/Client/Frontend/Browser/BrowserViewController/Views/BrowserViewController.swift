@@ -2151,7 +2151,6 @@ class BrowserViewController: UIViewController,
         if state.autoTranslatePromptState.showPrompt {
             showAutoTranslatePrompt()
         } else {
-            guard autoTranslatePrompt != nil else { return }
             removeAutoTranslatePrompt()
         }
     }
