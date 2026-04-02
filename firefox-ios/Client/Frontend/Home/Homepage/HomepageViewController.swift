@@ -721,7 +721,7 @@ final class HomepageViewController: UIViewController,
     ) -> NewsTransitionHeaderView {
         let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
         newsTransitionHeaderView.configure(
-            state: MerinoState.Constants.sectionHeaderConfiguration,
+            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled
@@ -737,7 +737,7 @@ final class HomepageViewController: UIViewController,
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
-                state: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToShortcutsLibrary()
                 },
@@ -747,7 +747,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
-                state: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToTabTray(with: .tabs)
                 },
@@ -758,7 +758,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
-                state: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToBookmarksPanel()
                 },
@@ -768,7 +768,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: MerinoState.Constants.sectionHeaderConfiguration,
+                sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
                 textColor: textColor,
                 theme: currentTheme
             )

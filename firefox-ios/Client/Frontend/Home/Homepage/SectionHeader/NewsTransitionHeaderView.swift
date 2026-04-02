@@ -59,10 +59,20 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         updateSectionTitleHeaderFrame()
     }
 
-    func configure(state: SectionHeaderConfiguration, textColor: UIColor?, theme: Theme, transitionEnabled: Bool = true) {
+    func configure(
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
+        textColor: UIColor?,
+        theme: Theme,
+        transitionEnabled: Bool = true
+    ) {
         self.transitionEnabled = transitionEnabled
         newsAffordanceContentView.applyTheme(theme: theme)
-        sectionTitleHeaderView.configure(state: state, moreButtonAction: nil, textColor: textColor, theme: theme)
+        sectionTitleHeaderView.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            moreButtonAction: nil,
+            textColor: textColor,
+            theme: theme
+        )
         sectionTitleHeaderView.moreButton.isHidden = true
         updateSectionTitleHeaderFrame()
         updateViewState(forHeight: bounds.height)
