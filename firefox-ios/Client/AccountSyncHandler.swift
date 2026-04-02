@@ -104,7 +104,7 @@ final class AccountSyncHandler: TabEventHandler, Sendable {
         var storedTabsDict = [String: RemoteTab]()
         for manager in tabManagers {
             for tab in manager.normalTabs {
-                if let remoteTab = tab.toRemoteTab() {
+                if let remoteTab = RemoteTabCreator.toRemoteTab(from: tab) {
                     storedTabsDict[tab.tabUUID] = remoteTab
                 }
             }

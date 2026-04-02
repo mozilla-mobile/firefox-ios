@@ -155,17 +155,10 @@ class BrowserViewController: UIViewController,
     }
 
     // Constraints used to show/hide toolbars
-    var headerTopConstraint: Constraint?
+    var headerTopConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
-
-    // Other constraints
-    var bottomContentMaxBottomConstraints: [NSLayoutConstraint] = []
-    var bottomContentStackViewKeyboardConstraint: NSLayoutConstraint?
-    var bottomContentStackViewBasicConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopZoomHeightConstraint: NSLayoutConstraint?
-    var overKeyboardContainerTopHeightConstraint: NSLayoutConstraint?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -473,8 +466,7 @@ class BrowserViewController: UIViewController,
         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
         searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: .userInitiated),
-        recordVisitManager: RecordVisitObserving? = nil,
-        relayController: RelayControllerProtocol = RelayController()
+        recordVisitManager: RecordVisitObserving? = nil
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
@@ -496,7 +488,7 @@ class BrowserViewController: UIViewController,
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
         self.userInitiatedQueue = userInitiatedQueue
         self.recordVisitManager = recordVisitManager ?? RecordVisitObservationManager(historyHandler: profile.places)
-        self.relayController = relayController
+        self.relayController = (UIApplication.shared.delegate as? AppDelegate)?.relayController ?? RelayController()
 
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -1680,6 +1672,9 @@ class BrowserViewController: UIViewController,
             browserLayoutManager.setupBottomContainerConstraints()
             browserLayoutManager.setupBottomContentStackViewConstraints()
             browserLayoutManager.setupOverKeyboardContainerConstraints()
+            headerTopConstraint = browserLayoutManager.headerTopConstraintReference
+            overKeyboardContainerConstraint = browserLayoutManager.overKeyboardContainerConstraint
+            bottomContainerConstraint = browserLayoutManager.bottomContainerConstraint
         } else {
             updateHeaderConstraints()
         }
@@ -1744,7 +1739,7 @@ class BrowserViewController: UIViewController,
                     let topConstraint = make.top.equalTo(topConstraint).constraint
                     scrollController.headerTopConstraint = ConstraintReference(snapKit: topConstraint)
                 } else {
-                    headerTopConstraint = make.top.equalTo(topConstraint).constraint
+                    headerTopConstraint = ConstraintReference(snapKit: make.top.equalTo(topConstraint).constraint)
                 }
                 make.left.right.equalTo(view)
             }
@@ -2988,11 +2983,14 @@ class BrowserViewController: UIViewController,
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let shouldSuppress = !topTabsVisible && isPad
         let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
             .overCurrentContext
+        } else if shouldSuppress || !isPad {
+            .overCurrentContext
         } else {
-            !shouldSuppress ? .popover : .overCurrentContext
+            .popover
         }
         let viewModel = PhotonActionSheetViewModel(
             actions: [urlActions],

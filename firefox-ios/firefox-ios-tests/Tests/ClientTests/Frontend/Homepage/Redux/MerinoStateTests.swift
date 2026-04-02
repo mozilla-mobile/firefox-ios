@@ -26,7 +26,7 @@ final class MerinoStateTests: XCTestCase {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(initialState.merinoData, [])
+        XCTAssertEqual(initialState.merinoData.stories, nil)
         XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
     }
 
@@ -48,15 +48,15 @@ final class MerinoStateTests: XCTestCase {
         let newState = reducer(
             initialState,
             MerinoAction(
-                merinoStories: stories,
+                merinoStoryResponse: MerinoStoryResponse(stories: stories),
                 windowUUID: .XCTestDefaultUUID,
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.merinoData.count, 3)
-        XCTAssertEqual(newState.merinoData.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
+        XCTAssertEqual(newState.merinoData.stories?.count, 3)
+        XCTAssertEqual(newState.merinoData.stories?.compactMap { $0.title }, ["feed1", "feed2", "feed3"])
     }
 
     @MainActor

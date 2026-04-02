@@ -35,6 +35,7 @@ class DragAndDropTests: BaseTestCase {
     func testRearrangeTabsTabTray() {
         let tabTrayScreen = TabTrayScreen(app: app)
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         if #available(iOS 17, *) {
@@ -51,6 +52,7 @@ class DragAndDropTests: BaseTestCase {
 
         // Open three websites and home tab
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
@@ -91,6 +93,7 @@ class DragAndDropTests: BaseTestCase {
         // Set the device in landscape mode
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
 
@@ -130,6 +133,7 @@ class DragAndDropTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openTwoWebsites()
+        waitForTabsButton()
         navigator.goto(TabTray)
         checkTabsOrder(
             dragAndDropTab: false,
@@ -267,6 +271,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         waitUntilPageLoad()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         // Drag first tab on the second one

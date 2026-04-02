@@ -681,75 +681,6 @@ public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedR
 
 
 /**
- * A ranked list of curated recommendations with an optional title.
- */
-public struct CuratedRecommendationsBucket: Equatable, Hashable, Codable {
-    /**
-     * The recommendations in this bucket.
-     */
-    public var recommendations: [RecommendationDataItem]
-    /**
-     * Optional display title for this bucket.
-     */
-    public var title: String?
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(
-        /**
-         * The recommendations in this bucket.
-         */recommendations: [RecommendationDataItem], 
-        /**
-         * Optional display title for this bucket.
-         */title: String? = nil) {
-        self.recommendations = recommendations
-        self.title = title
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension CuratedRecommendationsBucket: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeCuratedRecommendationsBucket: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CuratedRecommendationsBucket {
-        return
-            try CuratedRecommendationsBucket(
-                recommendations: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
-                title: FfiConverterOptionString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: CuratedRecommendationsBucket, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeRecommendationDataItem.write(value.recommendations, into: &buf)
-        FfiConverterOptionString.write(value.title, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeCuratedRecommendationsBucket_lift(_ buf: RustBuffer) throws -> CuratedRecommendationsBucket {
-    return try FfiConverterTypeCuratedRecommendationsBucket.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeCuratedRecommendationsBucket_lower(_ value: CuratedRecommendationsBucket) -> RustBuffer {
-    return FfiConverterTypeCuratedRecommendationsBucket.lower(value)
-}
-
-
-/**
  * Configuration options for initializing a [`CuratedRecommendationsClient`](crate::curated_recommendations::CuratedRecommendationsClient).
  */
 public struct CuratedRecommendationsConfig: Equatable, Hashable, Codable {
@@ -970,9 +901,9 @@ public struct CuratedRecommendationsResponse: Equatable, Hashable, Codable {
      */
     public var data: [RecommendationDataItem]
     /**
-     * Optional categorized feeds (e.g. by topic section, Fakespot products).
+     * Optional categorized feeds (e.g. by topic section).
      */
-    public var feeds: Feeds?
+    public var feeds: [FeedSection]?
     /**
      * Optional interest picker configuration for displaying section selection UI.
      */
@@ -988,8 +919,8 @@ public struct CuratedRecommendationsResponse: Equatable, Hashable, Codable {
          * The list of recommended items.
          */data: [RecommendationDataItem], 
         /**
-         * Optional categorized feeds (e.g. by topic section, Fakespot products).
-         */feeds: Feeds? = nil, 
+         * Optional categorized feeds (e.g. by topic section).
+         */feeds: [FeedSection]? = nil, 
         /**
          * Optional interest picker configuration for displaying section selection UI.
          */interestPicker: InterestPicker? = nil) {
@@ -1017,7 +948,7 @@ public struct FfiConverterTypeCuratedRecommendationsResponse: FfiConverterRustBu
             try CuratedRecommendationsResponse(
                 recommendedAt: FfiConverterInt64.read(from: &buf), 
                 data: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
-                feeds: FfiConverterOptionTypeFeeds.read(from: &buf), 
+                feeds: FfiConverterOptionSequenceTypeFeedSection.read(from: &buf), 
                 interestPicker: FfiConverterOptionTypeInterestPicker.read(from: &buf)
         )
     }
@@ -1025,7 +956,7 @@ public struct FfiConverterTypeCuratedRecommendationsResponse: FfiConverterRustBu
     public static func write(_ value: CuratedRecommendationsResponse, into buf: inout [UInt8]) {
         FfiConverterInt64.write(value.recommendedAt, into: &buf)
         FfiConverterSequenceTypeRecommendationDataItem.write(value.data, into: &buf)
-        FfiConverterOptionTypeFeeds.write(value.feeds, into: &buf)
+        FfiConverterOptionSequenceTypeFeedSection.write(value.feeds, into: &buf)
         FfiConverterOptionTypeInterestPicker.write(value.interestPicker, into: &buf)
     }
 }
@@ -1047,276 +978,14 @@ public func FfiConverterTypeCuratedRecommendationsResponse_lower(_ value: Curate
 
 
 /**
- * Call-to-action link for the Fakespot feed.
- */
-public struct FakespotCta: Equatable, Hashable, Codable {
-    /**
-     * Display text for the call-to-action button.
-     */
-    public var ctaCopy: String
-    /**
-     * URL the call-to-action links to.
-     */
-    public var url: String
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(
-        /**
-         * Display text for the call-to-action button.
-         */ctaCopy: String, 
-        /**
-         * URL the call-to-action links to.
-         */url: String) {
-        self.ctaCopy = ctaCopy
-        self.url = url
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension FakespotCta: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotCta: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotCta {
-        return
-            try FakespotCta(
-                ctaCopy: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotCta, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.ctaCopy, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotCta_lift(_ buf: RustBuffer) throws -> FakespotCta {
-    return try FfiConverterTypeFakespotCta.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotCta_lower(_ value: FakespotCta) -> RustBuffer {
-    return FfiConverterTypeFakespotCta.lower(value)
-}
-
-
-/**
- * A feed of Fakespot product review recommendations.
- */
-public struct FakespotFeed: Equatable, Hashable, Codable {
-    /**
-     * The recommended products.
-     */
-    public var products: [FakespotProduct]
-    /**
-     * Default category name for display.
-     */
-    public var defaultCategoryName: String
-    /**
-     * Header copy text displayed above the product list.
-     */
-    public var headerCopy: String
-    /**
-     * Footer copy text displayed below the product list.
-     */
-    public var footerCopy: String
-    /**
-     * Call-to-action link for the Fakespot feed.
-     */
-    public var cta: FakespotCta
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(
-        /**
-         * The recommended products.
-         */products: [FakespotProduct], 
-        /**
-         * Default category name for display.
-         */defaultCategoryName: String, 
-        /**
-         * Header copy text displayed above the product list.
-         */headerCopy: String, 
-        /**
-         * Footer copy text displayed below the product list.
-         */footerCopy: String, 
-        /**
-         * Call-to-action link for the Fakespot feed.
-         */cta: FakespotCta) {
-        self.products = products
-        self.defaultCategoryName = defaultCategoryName
-        self.headerCopy = headerCopy
-        self.footerCopy = footerCopy
-        self.cta = cta
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension FakespotFeed: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotFeed: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotFeed {
-        return
-            try FakespotFeed(
-                products: FfiConverterSequenceTypeFakespotProduct.read(from: &buf), 
-                defaultCategoryName: FfiConverterString.read(from: &buf), 
-                headerCopy: FfiConverterString.read(from: &buf), 
-                footerCopy: FfiConverterString.read(from: &buf), 
-                cta: FfiConverterTypeFakespotCta.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotFeed, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeFakespotProduct.write(value.products, into: &buf)
-        FfiConverterString.write(value.defaultCategoryName, into: &buf)
-        FfiConverterString.write(value.headerCopy, into: &buf)
-        FfiConverterString.write(value.footerCopy, into: &buf)
-        FfiConverterTypeFakespotCta.write(value.cta, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotFeed_lift(_ buf: RustBuffer) throws -> FakespotFeed {
-    return try FfiConverterTypeFakespotFeed.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotFeed_lower(_ value: FakespotFeed) -> RustBuffer {
-    return FfiConverterTypeFakespotFeed.lower(value)
-}
-
-
-/**
- * Details for a single Fakespot product recommendation.
- */
-public struct FakespotProduct: Equatable, Hashable, Codable {
-    /**
-     * Unique product identifier.
-     */
-    public var id: String
-    /**
-     * Product title.
-     */
-    public var title: String
-    /**
-     * Product category.
-     */
-    public var category: String
-    /**
-     * URL of the product image.
-     */
-    public var imageUrl: String
-    /**
-     * URL of the product page.
-     */
-    public var url: String
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(
-        /**
-         * Unique product identifier.
-         */id: String, 
-        /**
-         * Product title.
-         */title: String, 
-        /**
-         * Product category.
-         */category: String, 
-        /**
-         * URL of the product image.
-         */imageUrl: String, 
-        /**
-         * URL of the product page.
-         */url: String) {
-        self.id = id
-        self.title = title
-        self.category = category
-        self.imageUrl = imageUrl
-        self.url = url
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension FakespotProduct: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotProduct: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotProduct {
-        return
-            try FakespotProduct(
-                id: FfiConverterString.read(from: &buf), 
-                title: FfiConverterString.read(from: &buf), 
-                category: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotProduct, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.id, into: &buf)
-        FfiConverterString.write(value.title, into: &buf)
-        FfiConverterString.write(value.category, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotProduct_lift(_ buf: RustBuffer) throws -> FakespotProduct {
-    return try FfiConverterTypeFakespotProduct.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotProduct_lower(_ value: FakespotProduct) -> RustBuffer {
-    return FfiConverterTypeFakespotProduct.lower(value)
-}
-
-
-/**
  * A categorized feed section containing recommendations and responsive layout configuration.
  */
 public struct FeedSection: Equatable, Hashable, Codable {
+    /**
+     * Identifier for this feed section (the key from the API response map,
+     * e.g. `"top_stories_section"`, `"travel"`, `"arts"`).
+     */
+    public var feedId: String
     /**
      * The display position of this section within the overall feed.
      */
@@ -1350,6 +1019,10 @@ public struct FeedSection: Equatable, Hashable, Codable {
     // declare one manually.
     public init(
         /**
+         * Identifier for this feed section (the key from the API response map,
+         * e.g. `"top_stories_section"`, `"travel"`, `"arts"`).
+         */feedId: String, 
+        /**
          * The display position of this section within the overall feed.
          */receivedFeedRank: Int32, 
         /**
@@ -1370,6 +1043,7 @@ public struct FeedSection: Equatable, Hashable, Codable {
         /**
          * Whether the user has blocked this section.
          */isBlocked: Bool) {
+        self.feedId = feedId
         self.receivedFeedRank = receivedFeedRank
         self.recommendations = recommendations
         self.title = title
@@ -1395,6 +1069,7 @@ public struct FfiConverterTypeFeedSection: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSection {
         return
             try FeedSection(
+                feedId: FfiConverterString.read(from: &buf), 
                 receivedFeedRank: FfiConverterInt32.read(from: &buf), 
                 recommendations: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
                 title: FfiConverterString.read(from: &buf), 
@@ -1406,6 +1081,7 @@ public struct FfiConverterTypeFeedSection: FfiConverterRustBuffer {
     }
 
     public static func write(_ value: FeedSection, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.feedId, into: &buf)
         FfiConverterInt32.write(value.receivedFeedRank, into: &buf)
         FfiConverterSequenceTypeRecommendationDataItem.write(value.recommendations, into: &buf)
         FfiConverterString.write(value.title, into: &buf)
@@ -1429,152 +1105,6 @@ public func FfiConverterTypeFeedSection_lift(_ buf: RustBuffer) throws -> FeedSe
 #endif
 public func FfiConverterTypeFeedSection_lower(_ value: FeedSection) -> RustBuffer {
     return FfiConverterTypeFeedSection.lower(value)
-}
-
-
-/**
- * Container for all categorized recommendation feeds returned by the API.
- *
- * Each field corresponds to a content category or special feed type. Fields are
- * `None` when the category was not requested or has no content available.
- */
-public struct Feeds: Equatable, Hashable, Codable {
-    /**
-     * High-priority "need to know" recommendations.
-     */
-    public var needToKnow: CuratedRecommendationsBucket?
-    /**
-     * Fakespot product review recommendations.
-     */
-    public var fakespot: FakespotFeed?
-    /**
-     * Top stories section.
-     */
-    public var topStoriesSection: FeedSection?
-    public var business: FeedSection?
-    public var career: FeedSection?
-    public var arts: FeedSection?
-    public var food: FeedSection?
-    public var health: FeedSection?
-    public var home: FeedSection?
-    public var finance: FeedSection?
-    public var government: FeedSection?
-    public var sports: FeedSection?
-    public var tech: FeedSection?
-    public var travel: FeedSection?
-    public var education: FeedSection?
-    public var hobbies: FeedSection?
-    public var societyParenting: FeedSection?
-    public var educationScience: FeedSection?
-    public var society: FeedSection?
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(
-        /**
-         * High-priority "need to know" recommendations.
-         */needToKnow: CuratedRecommendationsBucket? = nil, 
-        /**
-         * Fakespot product review recommendations.
-         */fakespot: FakespotFeed? = nil, 
-        /**
-         * Top stories section.
-         */topStoriesSection: FeedSection? = nil, business: FeedSection? = nil, career: FeedSection? = nil, arts: FeedSection? = nil, food: FeedSection? = nil, health: FeedSection? = nil, home: FeedSection? = nil, finance: FeedSection? = nil, government: FeedSection? = nil, sports: FeedSection? = nil, tech: FeedSection? = nil, travel: FeedSection? = nil, education: FeedSection? = nil, hobbies: FeedSection? = nil, societyParenting: FeedSection? = nil, educationScience: FeedSection? = nil, society: FeedSection? = nil) {
-        self.needToKnow = needToKnow
-        self.fakespot = fakespot
-        self.topStoriesSection = topStoriesSection
-        self.business = business
-        self.career = career
-        self.arts = arts
-        self.food = food
-        self.health = health
-        self.home = home
-        self.finance = finance
-        self.government = government
-        self.sports = sports
-        self.tech = tech
-        self.travel = travel
-        self.education = education
-        self.hobbies = hobbies
-        self.societyParenting = societyParenting
-        self.educationScience = educationScience
-        self.society = society
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension Feeds: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFeeds: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Feeds {
-        return
-            try Feeds(
-                needToKnow: FfiConverterOptionTypeCuratedRecommendationsBucket.read(from: &buf), 
-                fakespot: FfiConverterOptionTypeFakespotFeed.read(from: &buf), 
-                topStoriesSection: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                business: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                career: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                arts: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                food: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                health: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                home: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                finance: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                government: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                sports: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                tech: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                travel: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                education: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                hobbies: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                societyParenting: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                educationScience: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                society: FfiConverterOptionTypeFeedSection.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: Feeds, into buf: inout [UInt8]) {
-        FfiConverterOptionTypeCuratedRecommendationsBucket.write(value.needToKnow, into: &buf)
-        FfiConverterOptionTypeFakespotFeed.write(value.fakespot, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.topStoriesSection, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.business, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.career, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.arts, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.food, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.health, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.home, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.finance, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.government, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.sports, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.tech, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.travel, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.education, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.hobbies, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.societyParenting, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.educationScience, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.society, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFeeds_lift(_ buf: RustBuffer) throws -> Feeds {
-    return try FfiConverterTypeFeeds.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFeeds_lower(_ value: Feeds) -> RustBuffer {
-    return FfiConverterTypeFeeds.lower(value)
 }
 
 
@@ -1806,7 +1336,7 @@ public struct RecommendationDataItem: Equatable, Hashable, Codable {
     /**
      * Unique identifier for the scheduled corpus item.
      */
-    public var scheduledCorpusItemId: String
+    public var scheduledCorpusItemId: String?
     /**
      * URL of the recommended article.
      */
@@ -1842,7 +1372,7 @@ public struct RecommendationDataItem: Equatable, Hashable, Codable {
     /**
      * Numeric tile identifier used for telemetry.
      */
-    public var tileId: Int64
+    public var tileId: Int64?
     /**
      * The position rank at which this item was received from the server.
      */
@@ -1856,7 +1386,7 @@ public struct RecommendationDataItem: Equatable, Hashable, Codable {
          */corpusItemId: String, 
         /**
          * Unique identifier for the scheduled corpus item.
-         */scheduledCorpusItemId: String, 
+         */scheduledCorpusItemId: String? = nil, 
         /**
          * URL of the recommended article.
          */url: String, 
@@ -1883,7 +1413,7 @@ public struct RecommendationDataItem: Equatable, Hashable, Codable {
          */iconUrl: String?, 
         /**
          * Numeric tile identifier used for telemetry.
-         */tileId: Int64, 
+         */tileId: Int64? = nil, 
         /**
          * The position rank at which this item was received from the server.
          */receivedRank: Int64) {
@@ -1918,7 +1448,7 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
         return
             try RecommendationDataItem(
                 corpusItemId: FfiConverterString.read(from: &buf), 
-                scheduledCorpusItemId: FfiConverterString.read(from: &buf), 
+                scheduledCorpusItemId: FfiConverterOptionString.read(from: &buf), 
                 url: FfiConverterString.read(from: &buf), 
                 title: FfiConverterString.read(from: &buf), 
                 excerpt: FfiConverterString.read(from: &buf), 
@@ -1927,14 +1457,14 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
                 isTimeSensitive: FfiConverterBool.read(from: &buf), 
                 imageUrl: FfiConverterString.read(from: &buf), 
                 iconUrl: FfiConverterOptionString.read(from: &buf), 
-                tileId: FfiConverterInt64.read(from: &buf), 
+                tileId: FfiConverterOptionInt64.read(from: &buf), 
                 receivedRank: FfiConverterInt64.read(from: &buf)
         )
     }
 
     public static func write(_ value: RecommendationDataItem, into buf: inout [UInt8]) {
         FfiConverterString.write(value.corpusItemId, into: &buf)
-        FfiConverterString.write(value.scheduledCorpusItemId, into: &buf)
+        FfiConverterOptionString.write(value.scheduledCorpusItemId, into: &buf)
         FfiConverterString.write(value.url, into: &buf)
         FfiConverterString.write(value.title, into: &buf)
         FfiConverterString.write(value.excerpt, into: &buf)
@@ -1943,7 +1473,7 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
         FfiConverterBool.write(value.isTimeSensitive, into: &buf)
         FfiConverterString.write(value.imageUrl, into: &buf)
         FfiConverterOptionString.write(value.iconUrl, into: &buf)
-        FfiConverterInt64.write(value.tileId, into: &buf)
+        FfiConverterOptionInt64.write(value.tileId, into: &buf)
         FfiConverterInt64.write(value.receivedRank, into: &buf)
     }
 }
@@ -2506,6 +2036,30 @@ fileprivate struct FfiConverterOptionInt32: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionInt64: FfiConverterRustBuffer {
+    typealias SwiftType = Int64?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterInt64.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
     typealias SwiftType = String?
 
@@ -2522,102 +2076,6 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterString.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeCuratedRecommendationsBucket: FfiConverterRustBuffer {
-    typealias SwiftType = CuratedRecommendationsBucket?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeCuratedRecommendationsBucket.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeCuratedRecommendationsBucket.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFakespotFeed: FfiConverterRustBuffer {
-    typealias SwiftType = FakespotFeed?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFakespotFeed.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFakespotFeed.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFeedSection: FfiConverterRustBuffer {
-    typealias SwiftType = FeedSection?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFeedSection.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFeedSection.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFeeds: FfiConverterRustBuffer {
-    typealias SwiftType = Feeds?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFeeds.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFeeds.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2698,6 +2156,30 @@ fileprivate struct FfiConverterOptionSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionSequenceTypeFeedSection: FfiConverterRustBuffer {
+    typealias SwiftType = [FeedSection]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterSequenceTypeFeedSection.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterSequenceTypeFeedSection.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionSequenceTypeSectionSettings: FfiConverterRustBuffer {
     typealias SwiftType = [SectionSettings]?
 
@@ -2747,23 +2229,23 @@ fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterSequenceTypeFakespotProduct: FfiConverterRustBuffer {
-    typealias SwiftType = [FakespotProduct]
+fileprivate struct FfiConverterSequenceTypeFeedSection: FfiConverterRustBuffer {
+    typealias SwiftType = [FeedSection]
 
-    public static func write(_ value: [FakespotProduct], into buf: inout [UInt8]) {
+    public static func write(_ value: [FeedSection], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for item in value {
-            FfiConverterTypeFakespotProduct.write(item, into: &buf)
+            FfiConverterTypeFeedSection.write(item, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FakespotProduct] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FeedSection] {
         let len: Int32 = try readInt(&buf)
-        var seq = [FakespotProduct]()
+        var seq = [FeedSection]()
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeFakespotProduct.read(from: &buf))
+            seq.append(try FfiConverterTypeFeedSection.read(from: &buf))
         }
         return seq
     }

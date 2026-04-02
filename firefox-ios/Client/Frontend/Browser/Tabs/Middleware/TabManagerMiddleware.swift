@@ -655,12 +655,12 @@ final class TabManagerMiddleware: FeatureFlaggable,
         getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
             MainActor.assumeIsolated {
-                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked, urlString: urlString)
                 let isSyncEnabled = self.profile.hasSyncableAccount()
 
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
                                          canTabBeRemoved: isBookmarked,
-                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                         canCopyURL: self.canAddCopyOption(tab: tab, urlString: urlString),
                                          isSyncEnabled: isSyncEnabled,
                                          screenshot: tab?.screenshot ?? UIImage(),
                                          accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
@@ -672,12 +672,19 @@ final class TabManagerMiddleware: FeatureFlaggable,
         }
     }
 
-    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool, urlString: String) -> Bool {
         guard let tab else { return false }
 
         // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
-        // and it is not a homepage (FxHome) tab.
-        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
+        // and it is not a homepage (FxHome) tab or empty url
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab && !urlString.isEmpty
+    }
+
+    private func canAddCopyOption(tab: Tab?, urlString: String) -> Bool {
+        guard let tab else { return false }
+
+        // the option is not available if is homepage (FxHome) tab or empty url
+        return !tab.isFxHomeTab && !urlString.isEmpty
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {

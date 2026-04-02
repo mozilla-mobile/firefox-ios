@@ -3041,7 +3041,7 @@ extension String {
             public static let BlockAIEnhancementsDescription = MZLocalizedString(
                 key: "Settings.AIControls.BlockAIEnhancementsDescription.v151",
                 tableName: "Settings",
-                value: "Blocking means you won’t see new or current AI enhancements in %@, or popups about them.",
+                value: "Blocking means you won’t see new or current AI enhancements in %@, or pop-ups about them.",
                 comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
             )
 
@@ -3418,6 +3418,21 @@ extension String {
                     tableName: "Settings",
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
+                )
+            }
+
+            public struct AutoTranslate {
+                public static let Title = MZLocalizedString(
+                    key: "", // Settings.Translation.AutoTranslate.Title.v150
+                    tableName: "Settings",
+                    value: "Automatically Translate",
+                    comment: "Title for the auto-translate toggle in the Translation settings screen."
+                )
+                public static let Footer = MZLocalizedString(
+                    key: "", // Settings.Translation.AutoTranslate.Footer.v150
+                    tableName: "Settings",
+                    value: "Translates pages to your top preferred language automatically.",
+                    comment: "Footer text below the auto-translate toggle in the Translation settings screen."
                 )
             }
 

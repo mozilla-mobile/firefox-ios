@@ -172,9 +172,23 @@ final class TranslationPickerSettingsViewController: UIViewController,
         > { [weak self] cell, _, _ in
             guard let self else { return }
             cell.configure(
+                title: .Settings.Translation.ToggleTitle,
                 isOn: state.isTranslationsEnabled,
                 target: self,
                 action: #selector(didToggleTranslations(_:)),
+                theme: themeManager.getCurrentTheme(for: windowUUID)
+            )
+        }
+
+        let autoTranslateReg = UICollectionView.CellRegistration<
+            TranslationToggleCell, TranslationSettingsItem
+        > { [weak self] cell, _, _ in
+            guard let self else { return }
+            cell.configure(
+                title: .Settings.Translation.AutoTranslate.Title,
+                isOn: state.isAutoTranslateEnabled,
+                target: self,
+                action: #selector(didToggleAutoTranslate(_:)),
                 theme: themeManager.getCurrentTheme(for: windowUUID)
             )
         }
@@ -211,6 +225,9 @@ final class TranslationPickerSettingsViewController: UIViewController,
             case .enableToggle:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: toggleReg, for: indexPath, item: item)
+            case .autoTranslate:
+                return collectionView.dequeueConfiguredReusableCell(
+                    using: autoTranslateReg, for: indexPath, item: item)
             case .language:
                 return collectionView.dequeueConfiguredReusableCell(
                     using: languageReg, for: indexPath, item: item)
@@ -264,6 +281,13 @@ final class TranslationPickerSettingsViewController: UIViewController,
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        ))
+    }
+
+    @objc private func didToggleAutoTranslate(_ sender: UISwitch) {
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.toggleAutoTranslate
         ))
     }
 

@@ -106,7 +106,7 @@ final class MockToolbarView: ToolbarViewProtocol {
     var bottomBlurView = UIVisualEffectView()
     var overKeyboardContainer = BaseAlphaStackView()
     var isBottomSearchBar = false
-    var headerTopConstraint: Constraint?
+    var headerTopConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: ConstraintReference?
 }

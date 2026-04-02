@@ -141,7 +141,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
-        if let stories = getPocketStories(with: state.merinoState) {
+        if let stories = getMerinoStories(with: state.merinoState) {
             snapshot.appendSections([.pocket(textColor)])
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
@@ -149,11 +149,14 @@ final class HomepageDiffableDataSource:
         apply(snapshot, animatingDifferences: false, completion: completion)
     }
 
-    private func getPocketStories(
-        with pocketState: MerinoState
+    private func getMerinoStories(
+        with merinoState: MerinoState
     ) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = pocketState.merinoData.compactMap { .merino($0) }
-        guard pocketState.shouldShowSection, !stories.isEmpty else { return nil }
+        guard merinoState.shouldShowSection,
+              let stories: [HomeItem] = merinoState.merinoData.stories?.compactMap({ .merino($0) }),
+              !stories.isEmpty
+        else { return nil }
+
         return stories
     }
 

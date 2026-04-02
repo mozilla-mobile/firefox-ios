@@ -78,6 +78,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url2)
         waitUntilPageLoad()
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.otherElements[tabsTray])
         mozWaitForElementToExist(app.cells.elementContainingText(url3Label))
@@ -127,6 +128,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleExperimentRegularMode)
         app.otherElements[tabsTray].cells.firstMatch.waitAndTap()
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         // Go back to private browsing and check that the tab has been closed
@@ -230,6 +232,7 @@ class PrivateBrowsingTest: BaseTestCase {
         for _ in 1...4 {
             navigator.createNewTab()
         }
+        waitForTabsButton()
         navigator.goto(TabTray)
         var numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
@@ -259,6 +262,7 @@ class PrivateBrowsingTest: BaseTestCase {
         app.buttons["Undo"].waitAndTap()
 
         // All the private tabs are restored
+        waitForTabsButton()
         navigator.goto(TabTray)
         numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
@@ -291,6 +295,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         openNewTabAndLoadURL(URL: urlExample)
         openNewTabAndLoadURL(URL: path(forTestPage: url_2["url"]!))
+        waitForTabsButton()
         navigator.goto(TabTray)
         // The multiple tabs with different websites are correctly displayed
         tabTray.assertTabCount(2)
@@ -387,6 +392,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         checkOpenTabsBeforeClosingPrivateMode()

@@ -9,9 +9,9 @@ import UIKit
 final class TranslationToggleCell: UICollectionViewListCell, ThemeApplicable {
     private let toggle = UISwitch()
 
-    func configure(isOn: Bool, target: Any?, action: Selector, theme: Theme) {
+    func configure(title: String, isOn: Bool, target: Any?, action: Selector, theme: Theme) {
         var content = defaultContentConfiguration()
-        content.text = .Settings.Translation.ToggleTitle
+        content.text = title
         contentConfiguration = content
         toggle.isOn = isOn
         toggle.addTarget(target, action: action, for: .valueChanged)
