@@ -5,18 +5,15 @@
 import UIKit
 import Common
 
-// MARK: - Data Model
-
 struct QuickAnswersSourceItem {
     let title: String
     let thumbnail: UIImage?
     let favicon: UIImage?
 }
 
-// MARK: - Source Cell
-
+// TODO: - Layout, Dynamic Font Size, Code Refactor (namings)
 final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    private struct UX {
+    struct UX {
         static let thumbnailAspectRatio: CGFloat = 4.0 / 3.0
         static let thumbnailCornerRadius: CGFloat = 16.0
         static let thumbnailBorderWidth: CGFloat = 1.0
@@ -31,14 +28,12 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.thumbnailCornerRadius
     }
-
     private let faviconImageView: UIImageView = .build {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.faviconCornerRadius
         $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
-
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.footnote.scaledFont()
         $0.lineBreakMode = .byTruncatingTail
@@ -63,25 +58,19 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.widthAnchor.constraint(
-                equalTo: thumbnailImageView.heightAnchor,
-                multiplier: UX.thumbnailAspectRatio
-            ),
+            thumbnailImageView.widthAnchor.constraint(equalTo: thumbnailImageView.heightAnchor,
+                                                      multiplier: UX.thumbnailAspectRatio),
 
-            faviconImageView.topAnchor.constraint(
-                equalTo: thumbnailImageView.bottomAnchor,
-                constant: UX.titleSpacing
-            ),
+            faviconImageView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
+                                                  constant: UX.titleSpacing),
             faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconSize),
             faviconImageView.heightAnchor.constraint(equalToConstant: UX.faviconSize),
             faviconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             titleLabel.centerYAnchor.constraint(equalTo: faviconImageView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: faviconImageView.trailingAnchor,
-                constant: UX.titleGap
-            ),
+            titleLabel.leadingAnchor.constraint(equalTo: faviconImageView.trailingAnchor,
+                                                constant: UX.titleGap),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
@@ -105,10 +94,14 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
 
 // MARK: - Source View
 
-final class QuickAnswersSourceView: UIView, UICollectionViewDataSource, ThemeApplicable {
+final class QuickAnswersSourceView: UIView,
+                                    UICollectionViewDataSource,
+                                    UICollectionViewDelegateFlowLayout,
+                                    ThemeApplicable {
     private struct UX {
         static let headerSpacing: CGFloat = 8.0
         static let interItemSpacing: CGFloat = 16.0
+        static let maxItemWidth: CGFloat = 150.0
     }
     
     private let headerLabel: UILabel = .build {
@@ -117,12 +110,17 @@ final class QuickAnswersSourceView: UIView, UICollectionViewDataSource, ThemeApp
         $0.adjustsFontForContentSizeCategory = true
     }
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = UX.interItemSpacing
+        layout.minimumLineSpacing = UX.interItemSpacing
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
         collectionView.backgroundColor = .clear
         collectionView.register(cellType: QuickAnswersSourceCell.self)
         collectionView.dataSource = self
+        collectionView.delegate = self
         return collectionView
     }()
     
@@ -147,35 +145,11 @@ final class QuickAnswersSourceView: UIView, UICollectionViewDataSource, ThemeApp
             headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            collectionView.topAnchor.constraint(
-                equalTo: headerLabel.bottomAnchor,
-                constant: UX.headerSpacing
-            ),
+            collectionView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: UX.headerSpacing),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-    }
-
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
-            heightDimension: .estimated(200)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(200)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item, item]
-        )
-        group.interItemSpacing = .fixed(UX.interItemSpacing)
-
-        let section = NSCollectionLayoutSection(group: group)
-        return UICollectionViewCompositionalLayout(section: section)
     }
 
     // MARK: - Configuration
@@ -193,10 +167,7 @@ final class QuickAnswersSourceView: UIView, UICollectionViewDataSource, ThemeApp
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            cellType: QuickAnswersSourceCell.self,
-            for: indexPath
-        ) else {
+        guard let cell = collectionView.dequeueReusableCell(cellType: QuickAnswersSourceCell.self, for: indexPath) else {
             return UICollectionViewCell()
         }
         cell.configure(with: items[indexPath.item])
@@ -204,6 +175,25 @@ final class QuickAnswersSourceView: UIView, UICollectionViewDataSource, ThemeApp
             cell.applyTheme(theme: theme)
         }
         return cell
+    }
+    
+    // MARK: - UICollectionViewDelegateFlowLayout
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let availableWidth = collectionView.bounds.width
+        let maxItemWidth = UX.maxItemWidth
+        let spacing = UX.interItemSpacing
+
+        let numberOfItems = floor((availableWidth + spacing) / (maxItemWidth + spacing))
+        let itemWidth = min(maxItemWidth, (availableWidth - spacing * (numberOfItems - 1)) / numberOfItems)
+
+        // Height: thumbnail (4:3 aspect) + titleSpacing (8) + faviconSize (16)
+        let thumbnailHeight = itemWidth / QuickAnswersSourceCell.UX.thumbnailAspectRatio
+        let itemHeight = thumbnailHeight + QuickAnswersSourceCell.UX.titleSpacing + QuickAnswersSourceCell.UX.faviconSize
+        return CGSize(width: itemWidth, height: itemHeight)
     }
 
     // MARK: - ThemeApplicable
