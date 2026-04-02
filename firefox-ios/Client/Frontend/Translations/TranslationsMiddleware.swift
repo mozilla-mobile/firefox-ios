@@ -22,9 +22,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Stores the last target language used per window, so retry can re-use the same language.
     private var selectedTargetLanguages: [WindowUUID: String] = [:]
 
-    /// Tracks whether private browsing mode was active when a translation session started, per window.
-    private var isPrivateModes: [WindowUUID: Bool] = [:]
-
     /// Tracks windows where the user explicitly restored the original (untranslated) page.
     /// Without this flag, the restore-triggered reload would fire urlDidChange and cause
     /// auto-translate to immediately re-translate the page the user just opted out of.
@@ -99,7 +96,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         if translationConfiguration.state == .inactive,
            featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
             let capturedButton = action.buttonTapped
-            Task { @MainActor in
+            Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
@@ -115,14 +112,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
             let newFlowId = UUID()
             translationFlowIds[action.windowUUID] = newFlowId
             selectedTargetLanguages[action.windowUUID] = deviceLanguage
-            isPrivateModes[action.windowUUID] = toolbarState.isPrivateMode
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willTranslate,
                 translationFlowId: newFlowId
             )
             self.handleUpdatingTranslationIcon(for: action, with: .loading)
-            self.retrieveTranslations(for: action, targetLanguage: deviceLanguage)
+            self.retrieveTranslations(for: action, targetLanguage: deviceLanguage, isPrivate: toolbarState.isPrivateMode)
         } else if translationConfiguration.state == .active {
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
@@ -144,8 +140,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
             )
             return
         }
+        let isPrivate = state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        )?.isPrivateMode ?? false
         self.handleUpdatingTranslationIcon(for: action, with: .loading)
-        retrieveTranslations(for: action, targetLanguage: language)
+        retrieveTranslations(for: action, targetLanguage: language, isPrivate: isPrivate)
     }
 
     private func handleLanguageSelected(for action: TranslationLanguageSelectedAction, and state: AppState) {
@@ -158,17 +159,15 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = action.targetLanguage
-        isPrivateModes[action.windowUUID] = toolbarState.isPrivateMode
         translationsTelemetry.translateButtonTapped(
             isPrivate: toolbarState.isPrivateMode,
             actionType: .willTranslate,
             translationFlowId: newFlowId
         )
         self.handleUpdatingTranslationIcon(for: action, with: .loading)
-        self.retrieveTranslations(for: action, targetLanguage: action.targetLanguage)
+        self.retrieveTranslations(for: action, targetLanguage: action.targetLanguage, isPrivate: toolbarState.isPrivateMode)
     }
 
-    @MainActor
     private func handleUpdatingTranslationIcon(
         for action: Action,
         with state: TranslationConfiguration.IconState
@@ -193,23 +192,23 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let supported = await translationsService.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
         guard let targetLanguage = preferred.first else { return false }
-        let newFlowId = UUID()
-        translationFlowIds[action.windowUUID] = newFlowId
-        selectedTargetLanguages[action.windowUUID] = targetLanguage
-        isPrivateModes[action.windowUUID] = store.state.componentState(
+        let isPrivate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: action.windowUUID
         )?.isPrivateMode ?? false
+        let newFlowId = UUID()
+        translationFlowIds[action.windowUUID] = newFlowId
+        selectedTargetLanguages[action.windowUUID] = targetLanguage
         handleUpdatingTranslationIcon(for: action, with: .loading)
-        retrieveTranslations(for: action, targetLanguage: targetLanguage, autoTranslate: true)
+        retrieveTranslations(for: action, targetLanguage: targetLanguage, isPrivate: isPrivate, autoTranslate: true)
         return true
     }
 
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
-        Task { @MainActor in
+        Task {
             guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
             do {
@@ -243,15 +242,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
         }
     }
 
-    @MainActor
-    private func retrieveTranslations(for action: Action, targetLanguage: String, autoTranslate: Bool = false) {
-        Task { @MainActor in
-            await self.performTranslation(for: action, targetLanguage: targetLanguage, autoTranslate: autoTranslate)
+    private func retrieveTranslations(for action: Action, targetLanguage: String, isPrivate: Bool, autoTranslate: Bool = false) {
+        Task {
+            await self.performTranslation(for: action, targetLanguage: targetLanguage, isPrivate: isPrivate, autoTranslate: autoTranslate)
         }
     }
 
-    @MainActor
-    private func performTranslation(for action: Action, targetLanguage: String, autoTranslate: Bool) async {
+    private func performTranslation(for action: Action, targetLanguage: String, isPrivate: Bool, autoTranslate: Bool) async {
         do {
             try await translationsService.translateCurrentPage(
                 for: action.windowUUID,
@@ -262,7 +259,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                         deviceLanguage: deviceLanguage
                     )
                     self.translationsTelemetry.translationRequested(
-                        isPrivate: self.isPrivateModes[action.windowUUID] ?? false,
+                        isPrivate: isPrivate,
                         translationFlowId: self.flowId(for: action.windowUUID),
                         fromLanguage: identifiedLanguage,
                         toLanguage: targetLanguage,
@@ -348,7 +345,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Clears the flow ID for the given action's window.
     private func clearFlowId(for action: Action) {
         translationFlowIds[action.windowUUID] = nil
-        isPrivateModes[action.windowUUID] = nil
     }
 
     /// Returns the existing flow ID for this window, or generates a fallback one.
