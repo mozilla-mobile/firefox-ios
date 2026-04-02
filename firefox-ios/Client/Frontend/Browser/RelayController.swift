@@ -178,7 +178,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             completion(populateSuccess ? result : .error)
         }
     }
-    
+
     /// Populates the webview of the supplied tab with the final email result
     /// - Parameters:
     ///   - tab: the tab with the webview form
