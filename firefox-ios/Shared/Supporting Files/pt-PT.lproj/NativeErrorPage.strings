@@ -11,16 +11,16 @@
 "NativeErrorPage.BadCertDomain.AdvancedWarning1.v149" = "Pode ser necessário iniciar sessão na sua rede Wi-Fi ou verificar as suas definições de VPN.";
 
 /* On certificate error page, this is the second warning message in the advanced section for users on corporate networks. */
-"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Se está uma rede empresarial, a sua equipa de apoio poderá ter mais informações.";
+"NativeErrorPage.BadCertDomain.AdvancedWarning2.v149" = "Se está uma rede empresarial, a sua equipa de apoio poderá ter mais informação.";
 
 /* On certificate error page, this is the description explaining the security risk. */
-"NativeErrorPage.BadCertDomain.Description.v149" = "Alguém que se faz passar pelo site pode tentar furtar a sua informação pessoal. As suas definições de ligação também podem estar incorretas.";
+"NativeErrorPage.BadCertDomain.Description.v149" = "Alguém que se faz passar pelo site poderá tentar roubar a sua informação pessoal. As suas definições de ligação também poderão estar configuradas incorretamente.";
 
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Código de erro: %@";
 
 /* On certificate error page, this is the text on a button that will hide the advanced information section. */
-"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Ocultar avançadas";
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Ocultar avançado";
 
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Saber mais";

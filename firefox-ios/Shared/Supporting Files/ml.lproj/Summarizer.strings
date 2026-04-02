@@ -13,6 +13,9 @@
 /* The label for the error button that allows the user to retry summarizing the page. */
 "Summarizer.RetryButton.Label.v142" = "വീണ്ടും ശ്രമിയ്ക്കുക";
 
+/* The label for the toast that shows when shaking and the summary is not available for that page. */
+"Summarizer.ToastLabel.v149" = "ചുരുക്കം ലഭ്യമല്ല";
+
 /* The label for the learn more link button on the Terms of Service alert for the summarizer. */
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "ഇതു് എങ്ങനെയാണു പ്രവൎത്തിക്കുന്നതു് ";
 

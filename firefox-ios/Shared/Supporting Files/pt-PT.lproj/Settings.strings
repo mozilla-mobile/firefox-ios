@@ -64,6 +64,54 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Endereços";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "Disponível";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**Disponível**: Irá ver a funcionalidade e poderá utilizá-la.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Bloqueada";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Bloqueada**: não poderá ver e não poderá utilizar a funcionalidade. Para a IA no dispositivo, quaisquer modelos transferidos são removidos.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "As páginas e resumos nunca são guardados.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Resumos de páginas";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "Funcionalidades de IA";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "As traduções permanecem privadas, no seu dispositivo.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Tradução";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Ao bloquear, deixará de ver melhorias de IA, sejam novas ou existentes, no %@, assim como notificações sobre as mesmas.";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "Veja o que está e o que não está incluído";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Bloquear melhorias da IA";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "As melhorias de IA novas e existentes são bloqueadas por omissão. Pode desbloquear funcionalidades específicas em baixo.";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "Saber mais";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "Isto inclui se devem ou não utilizar funcionalidades melhoradas com IA.";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "Tem sempre uma escolha em %@";
+
 /* In the settings menu, in the General section, this is the title for the AI Controls settings section */
 "Settings.AIControls.Title.v150" = "Controlos de IA";
 
@@ -179,7 +227,7 @@
 "Settings.Rollouts.Link.v148" = "Saber mais";
 
 /* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
-"Settings.Rollouts.Message.v148" = "O %@ irá melhorar funcionalidades, desempenho e estabilidade entre atualizações. Alterações aplicadas remotamente.";
+"Settings.Rollouts.Message.v148" = "O %@ irá melhorar funcionalidades, desempenho e estabilidade, entre atualizações. Alterações aplicadas remotamente.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "Permitir melhorias remotas";
@@ -311,13 +359,13 @@
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Novo separador";
 
 /* This is the section title text for the the Translation feature under the Translation settings section. */
-"Settings.Translation.SectionTitle.v145" = "Preferências da tradução";
+"Settings.Translation.SectionTitle.v145" = "Preferências de tradução";
 
 /* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
-"Settings.Translation.SettingOff.v145" = "Desligado";
+"Settings.Translation.SettingOff.v145" = "Desligada";
 
 /* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
-"Settings.Translation.SettingOn.v145" = "Ligado";
+"Settings.Translation.SettingOn.v145" = "Ligada";
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "Tradução";
