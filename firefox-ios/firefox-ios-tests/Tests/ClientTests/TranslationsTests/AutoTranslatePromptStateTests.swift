@@ -8,6 +8,7 @@ import XCTest
 
 @testable import Client
 
+@MainActor
 final class AutoTranslatePromptStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
@@ -21,7 +22,6 @@ final class AutoTranslatePromptStateTests: XCTestCase {
 
     // MARK: - Reducer Tests
 
-    @MainActor
     func test_showAutoTranslatePrompt_setsShowPromptTrue() {
         let initialState = createSubject()
         let reducer = autoTranslatePromptReducer()
@@ -33,7 +33,6 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         XCTAssertTrue(newState.showPrompt)
     }
 
-    @MainActor
     func test_didTapEnableAutoTranslate_setsShowPromptFalse() {
         let initialState = AutoTranslatePromptState(windowUUID: .XCTestDefaultUUID, showPrompt: true)
         let reducer = autoTranslatePromptReducer()
@@ -45,7 +44,6 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         XCTAssertFalse(newState.showPrompt)
     }
 
-    @MainActor
     func test_didDismissAutoTranslatePrompt_setsShowPromptFalse() {
         let initialState = AutoTranslatePromptState(windowUUID: .XCTestDefaultUUID, showPrompt: true)
         let reducer = autoTranslatePromptReducer()
@@ -57,7 +55,6 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         XCTAssertFalse(newState.showPrompt)
     }
 
-    @MainActor
     func test_unknownAction_preservesState() {
         let initialState = AutoTranslatePromptState(windowUUID: .XCTestDefaultUUID, showPrompt: true)
         let reducer = autoTranslatePromptReducer()
@@ -68,7 +65,6 @@ final class AutoTranslatePromptStateTests: XCTestCase {
         XCTAssertEqual(newState.showPrompt, true)
     }
 
-    @MainActor
     func test_actionWithDifferentWindowUUID_preservesState() {
         let initialState = AutoTranslatePromptState(windowUUID: .XCTestDefaultUUID, showPrompt: false)
         let reducer = autoTranslatePromptReducer()
