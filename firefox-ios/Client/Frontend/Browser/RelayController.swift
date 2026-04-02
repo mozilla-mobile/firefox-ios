@@ -150,7 +150,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
 
         guard let client else {
-            logger.log("No tab webview, or nil client. Won't populate email.", level: .warning, category: .relay)
+            logger.log("Nil client. Won't populate Relay email.", level: .warning, category: .relay)
             completion(.error)
             return
         }
@@ -185,7 +185,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     ///   - email: the Relay email
     /// - Returns: true if successful
     private func populateWebViewForm(for tab: Tab, email: String?) -> Bool {
-        guard let webView = tab.webView, let email else { return false }
+        guard let webView = tab.webView, let email else {
+            logger.log("No tab webview. Won't populate Relay email.", level: .warning, category: .relay)
+            return false
+        }
         guard let jsonData = try? JSONEncoder().encode(email),
               let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
             logger.log("Couldn't encode string for Relay JS injection.", level: .warning, category: .relay)
