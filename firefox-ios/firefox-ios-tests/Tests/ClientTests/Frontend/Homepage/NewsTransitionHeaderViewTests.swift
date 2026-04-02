@@ -11,7 +11,7 @@ import UIKit
 @MainActor
 final class NewsTransitionHeaderViewTests: XCTestCase {
     private let theme = DarkTheme()
-    private let sectionHeaderState = SectionHeaderConfiguration(
+    private let sectionHeaderConfiguration = SectionHeaderConfiguration(
         title: "Top Stories",
         a11yIdentifier: "news-transition-header"
     )
@@ -19,7 +19,12 @@ final class NewsTransitionHeaderViewTests: XCTestCase {
     func test_configure_withTransitionEnabledAndZeroProgress_showsAffordance() {
         let view = createSubject()
 
-        view.configure(state: sectionHeaderState, textColor: nil, theme: theme, transitionEnabled: true)
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: true
+        )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
 
@@ -30,7 +35,12 @@ final class NewsTransitionHeaderViewTests: XCTestCase {
     func test_configure_withTransitionEnabledAndFullProgress_showsSectionTitle() {
         let view = createSubject()
 
-        view.configure(state: sectionHeaderState, textColor: nil, theme: theme, transitionEnabled: true)
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: true
+        )
         view.setTransitionProgress(1)
         view.layoutIfNeeded()
 
@@ -41,7 +51,12 @@ final class NewsTransitionHeaderViewTests: XCTestCase {
     func test_configure_withTransitionDisabled_showsSectionTitleOnly() {
         let view = createSubject()
 
-        view.configure(state: sectionHeaderState, textColor: nil, theme: theme, transitionEnabled: false)
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: false
+        )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
 
