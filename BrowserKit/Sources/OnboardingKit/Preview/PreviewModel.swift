@@ -561,7 +561,9 @@ extension PreviewModel {
             },
             onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _, _ in }
-        )
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
 }
 
@@ -577,7 +579,9 @@ extension PreviewModel {
             },
             onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _, _ in }
-        )
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
     .preferredColorScheme(.dark)
 }
@@ -594,7 +598,9 @@ extension PreviewModel {
             },
             onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _, _ in }
-        )
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
 }
 
@@ -610,7 +616,9 @@ extension PreviewModel {
             },
             onMultipleChoiceActionTap: { _, _ in },
             onComplete: { _, _ in }
-        )
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
 }
 
@@ -661,3 +669,4 @@ extension PreviewModel {
 }
 
 #endif
+

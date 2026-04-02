@@ -81,15 +81,15 @@ enum UX {
         }
 
         static func linksTextAlignment(for variant: OnboardingVariant) -> TextAlignment {
-            return (variant == .brandRefresh || isJapanLocale()) ? .leading : .center
+            return (variant.shouldShowBrandRefreshUI() || isJapanLocale()) ? .leading : .center
         }
 
         static func linksHorizontalAlignment(for variant: OnboardingVariant) -> HorizontalAlignment {
-            return (variant == .brandRefresh || isJapanLocale()) ? .leading : .center
+            return (variant.shouldShowBrandRefreshUI() || isJapanLocale()) ? .leading : .center
         }
 
         static func tosImageHeight(for variant: OnboardingVariant) -> CGFloat {
-            if variant == .brandRefresh {
+            if variant.shouldShowBrandRefreshUI() {
                 return 180
             } else {
                 return tosImageHeight
@@ -153,7 +153,7 @@ enum UX {
         static let welcomeBrandRefreshName = "onboardingWelcomeBrandRefresh"
 
         static func tosImage(for variant: OnboardingVariant, fallback: UIImage?) -> UIImage? {
-            if variant == .brandRefresh {
+            if variant.shouldShowBrandRefreshUI() {
                 return UIImage(named: welcomeBrandRefreshName, in: .module, with: nil)
             }
             return fallback

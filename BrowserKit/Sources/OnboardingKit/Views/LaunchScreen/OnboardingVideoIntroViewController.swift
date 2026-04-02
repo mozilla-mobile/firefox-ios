@@ -73,6 +73,7 @@ public final class OnboardingVideoIntroViewController: UIViewController, Themeab
 
         player = AVPlayer(url: url)
         player?.actionAtItemEnd = .none
+        player?.isMuted = true
         player?.play()
 
         let layer = AVPlayerLayer(player: player)
