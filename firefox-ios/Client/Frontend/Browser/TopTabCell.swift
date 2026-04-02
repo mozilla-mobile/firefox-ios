@@ -53,7 +53,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         label.lineBreakMode = .byCharWrapping
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.semanticContentAttribute = .forceLeftToRight
-        label.isAccessibilityElement = false
     }
 
     let favicon: FaviconImageView = .build { _ in }
@@ -84,7 +83,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFl
         accessibilityLabel = getA11yTitleLabel(tab: tab)
         showsLargeContentViewer = true
         largeContentTitle = tab.getTabTrayTitle()
-        isAccessibilityElement = true
 
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel,
                                                 self.titleText.text ?? "")
