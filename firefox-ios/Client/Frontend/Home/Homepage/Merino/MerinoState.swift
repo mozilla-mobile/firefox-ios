@@ -17,7 +17,10 @@ struct MerinoState: StateType, Equatable {
     let shouldShowSection: Bool
 
     struct Constants {
-        static let sectionHeaderConfiguration = MerinoState.initializeSectionHeaderConfiguration()
+        static var sectionHeaderConfiguration: SectionHeaderConfiguration {
+            // Computed property because feature flag configuration can change after launch
+            MerinoState.initializeSectionHeaderConfiguration()
+        }
         static let footerURL = SupportUtils.URLForPocketLearnMore
     }
 
