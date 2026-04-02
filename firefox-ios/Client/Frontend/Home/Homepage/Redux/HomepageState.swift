@@ -190,7 +190,9 @@ struct HomepageState: ScreenState, Equatable {
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            shouldTriggerImpression: false
+            shouldTriggerImpression: false,
+            availableContentHeight: availableContentHeight,
+            availableWallpaperHeight: availableWallpaperHeight
         )
     }
 
