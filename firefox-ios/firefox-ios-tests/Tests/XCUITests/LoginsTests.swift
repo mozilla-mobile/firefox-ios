@@ -272,7 +272,9 @@ class LoginTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
-        waitForTabsButton()
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)

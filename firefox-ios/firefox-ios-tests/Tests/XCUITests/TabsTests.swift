@@ -129,16 +129,12 @@ class TabsTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         toolBarScreen.tapOnTabsButton()
         tabTrayScreen.tapOnNewTabButton()
-        waitForTabsButton()
-        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         tabTrayScreen.undoRemovingAllTabs()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
         navigator.nowAt(BrowserTab)
-        waitForTabsButton()
-        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         tabTrayScreen.waitForTabWithLabel(urlLabel)
     }
