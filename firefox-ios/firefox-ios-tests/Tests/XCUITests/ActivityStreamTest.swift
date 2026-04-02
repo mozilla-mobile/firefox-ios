@@ -245,10 +245,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         BaseTestCase().waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         tabTray.assertCellExists(named: siteName)
-        if iPad() {
-            waitForTabsButton()
-            navigator.goto(TabTray)
-        }
         tabTray.assertFirstCellVisible()
         tabTray.assertTabCount(1)
     }

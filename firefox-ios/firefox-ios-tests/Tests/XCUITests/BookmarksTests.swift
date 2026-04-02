@@ -371,7 +371,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         homepageSettingsScreen.disableBookmarkToggle()
         homepageSettingsScreen.assertBookmarkToggleIsDisabled()
         navigator.nowAt(HomeSettings)
-        waitForTabsButton()
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         browserScreen.tapCancelButtonIfExist()
