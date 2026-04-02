@@ -120,19 +120,23 @@ class LibraryCoordinator: BaseCoordinator,
         add(child: coordinator)
 
         // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
-        let sourceFrameInWindow = sourceView.convert(sourceView.bounds, to: sourceView.window)
-        let windowMidY = sourceView.window?.bounds.midY ?? sourceFrameInWindow.midY
-        let shouldPreferPopoverAbove = sourceFrameInWindow.midY > windowMidY
-        let popoverArrowDirection: UIPopoverArrowDirection = shouldPreferPopoverAbove ? .down : .up
+        let sourceBoundsFrameInWindow = sourceView.convert(sourceView.bounds, to: sourceView.window)
+        let windowCenterMidY = sourceView.window?.bounds.midY ?? sourceBoundsFrameInWindow.midY
+       
+        let sourceIsBelowWindowCenter = sourceBoundsFrameInWindow.midY > windowCenterMidY
+        let popoverArrowDirection: UIPopoverArrowDirection = sourceIsBelowWindowCenter ? .down : .up
 
-        let center = CGPoint(x: sourceView.bounds.midX, y: sourceView.bounds.midY)
-        let sourceRect = CGRect(x: center.x - 0.5, y: center.y - 0.5, width: 1, height: 1)
+        let sourceViewCenterPoint = CGPoint(x: sourceView.bounds.midX, y: sourceView.bounds.midY)
+        let sourceViewAnchorRect = CGRect(x: sourceViewCenterPoint.x - 0.5,
+                                          y: sourceViewCenterPoint.y - 0.5,
+                                          width: 1,
+                                          height: 1)
 
         coordinator.start(
             shareType: .site(url: url),
             shareMessage: nil,
             sourceView: sourceView,
-            sourceRect: sourceRect,
+            sourceRect: sourceViewAnchorRect,
             popoverArrowDirection: popoverArrowDirection
         )
     }
