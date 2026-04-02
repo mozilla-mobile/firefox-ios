@@ -50,7 +50,7 @@ extension View {
                 .tint(theme.colors.layer2.color)
                 .foregroundStyle(theme.colors.textSecondary.color)
         } else {
-            let textColor = variant.shouldShowBrandRefreshUI()
+            let textColor = variant.shouldShowBrandRefreshUI
                 ? theme.colors.textSecondary.color
                 : theme.colors.iconOnColor.color
             self.buttonStyle(.borderless)
@@ -62,7 +62,7 @@ extension View {
     func cardBackground(theme: Theme, cornerRadius: CGFloat = 0.0, variant: OnboardingVariant) -> some View {
         let backgroundColor = theme.colors.layer2.color
 
-        if #available(iOS 26, *), !variant.shouldShowBrandRefreshUI() {
+        if #available(iOS 26, *), !variant.shouldShowBrandRefreshUI {
             self.glassEffect(.clear.interactive().tint(backgroundColor.opacity(0.95)),
                              in: .rect(cornerRadius: cornerRadius))
         } else {

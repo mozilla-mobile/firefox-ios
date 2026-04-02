@@ -74,7 +74,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         numberOfPages: viewModel.onboardingCards.count,
                         windowUUID: windowUUID,
                         themeManager: themeManager,
-                        isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI(),
+                        isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI,
                         accessibilityIdentifier: pageControlAccessibilityId
                     )
                     .padding(.bottom)
@@ -113,7 +113,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 windowUUID: windowUUID,
                 themeManager: themeManager,
                 style: .compact,
-                isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI(),
+                isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI,
                 accessibilityIdentifier: pageControlAccessibilityId
             )
             .padding(

@@ -25,7 +25,7 @@ struct OnboardingBackgroundView: ThemeableView {
 
     var body: some View {
         Group {
-            if variant.shouldShowBrandRefreshUI() {
+            if variant.shouldShowBrandRefreshUI {
                 ImageBackgroundView(windowUUID: windowUUID, themeManager: themeManager)
             } else {
                 AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
