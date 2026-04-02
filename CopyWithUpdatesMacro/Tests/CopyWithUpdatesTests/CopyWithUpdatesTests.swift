@@ -76,11 +76,15 @@ final class CopyWithUpdatesTests: XCTestCase {
 
                 public func copyWithUpdates(venue: String? = nil, sponsor: String?? = .some(nil), drinks: [String]? = nil, complexStructure: [Date: [(String, Int)]]? = nil, characters: [String]?? = .some(nil), budget: Double? = nil) -> Self {
                     return Self (
-                        venue: venue ?? self.venue,
-                        sponsor: sponsor == .none ? nil : self.sponsor,
+                    venue: venue ?? self.venue,
+                        sponsor: sponsor.map {
+                            $0 ?? self.sponsor
+                        } ?? nil,
                         drinks: drinks ?? self.drinks,
                         complexStructure: complexStructure ?? self.complexStructure,
-                        characters: characters == .none ? nil : self.characters,
+                        characters: characters.map {
+                            $0 ?? self.characters
+                        } ?? nil,
                         budget: budget ?? self.budget
                     )
                 }
@@ -119,7 +123,7 @@ final class CopyWithUpdatesTests: XCTestCase {
 
                 public func copyWithUpdates(prop1: UUID? = nil, prop2: String? = nil) -> Self {
                     return Self (
-                        prop1: prop1 ?? self.prop1,
+                    prop1: prop1 ?? self.prop1,
                         prop2: prop2 ?? self.prop2
                     )
                 }
@@ -130,6 +134,178 @@ final class CopyWithUpdatesTests: XCTestCase {
         #else
         throw XCTSkip("macros are only supported when running tests for the host platform")
         #endif
+    }
+
+    func testMacro_withPropertyAndTrailingLineComment() throws {
+        #if canImport(CopyWithUpdatesMacros)
+        assertMacroExpansion(
+            """
+            @CopyWithUpdates
+            struct TestType {
+                let prop1: String? // A trailing comment should not affect function argument list
+            }
+            """,
+            expandedSource: """
+            struct TestType {
+                let prop1: String? // A trailing comment should not affect function argument list
+
+                public func copyWithUpdates(prop1: String?? = .some(nil)) -> Self {
+                    return Self (
+                    prop1: prop1.map {
+                            $0 ?? self.prop1
+                        } ?? nil
+                    )
+                }
+            }
+            """,
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    func testMacro_withMultipleCommentTypes_forNonOptionals() throws {
+        #if canImport(CopyWithUpdatesMacros)
+        assertMacroExpansion(
+            """
+            @CopyWithUpdates
+            struct TestType {
+                let prop1: [String: Value/* middle comment should not affect function argument list */]
+                /// Markup comment for prop2 should not affect function argument list
+                let prop2: String
+                let prop3: Int // A trailing comment should not affect function argument list
+            }
+            """,
+            expandedSource: """
+            struct TestType {
+                let prop1: [String: Value/* middle comment should not affect function argument list */]
+                /// Markup comment for prop2 should not affect function argument list
+                let prop2: String
+                let prop3: Int // A trailing comment should not affect function argument list
+
+                public func copyWithUpdates(prop1: [String: Value]? = nil, prop2: String? = nil, prop3: Int? = nil) -> Self {
+                    return Self (
+                    prop1: prop1 ?? self.prop1,
+                        prop2: prop2 ?? self.prop2,
+                        prop3: prop3 ?? self.prop3
+                    )
+                }
+            }
+            """,
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    func testMacro_withMultipleCommentTypes_forOptionals() throws {
+        #if canImport(CopyWithUpdatesMacros)
+        // swiftlint:disable line_length
+        assertMacroExpansion(
+            """
+            @CopyWithUpdates
+            struct TestType {
+                let prop1: [String: Value/* middle comment should not affect function argument list */]?
+                /// Markup comment for prop2 should not affect function argument list
+                let prop2: String?
+                let prop3: Int? // A trailing comment should not affect function argument list
+            }
+            """,
+            expandedSource: """
+            struct TestType {
+                let prop1: [String: Value/* middle comment should not affect function argument list */]?
+                /// Markup comment for prop2 should not affect function argument list
+                let prop2: String?
+                let prop3: Int? // A trailing comment should not affect function argument list
+
+                public func copyWithUpdates(prop1: [String: Value]?? = .some(nil), prop2: String?? = .some(nil), prop3: Int?? = .some(nil)) -> Self {
+                    return Self (
+                    prop1: prop1.map {
+                            $0 ?? self.prop1
+                        } ?? nil,
+                        prop2: prop2.map {
+                            $0 ?? self.prop2
+                        } ?? nil,
+                        prop3: prop3.map {
+                            $0 ?? self.prop3
+                        } ?? nil
+                    )
+                }
+            }
+            """,
+            macros: testMacros
+        )
+        // swiftlint:enable line_length
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    func testStrippingCommentsFromProperty() {
+        let propertyDescription = "let prop1: [String: SomeType] // Simple trailing comment"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingMarkupFromProperty() {
+        let propertyDescription = "let prop1: [String: SomeType] /// Simple markup comment"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingDocstringFromProperty_opensOnLine() {
+        let propertyDescription = "let prop1: [String: SomeType] /* Opening comment..."
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingDocstringFromProperty_opensAndClosesOnLine_start() {
+        let propertyDescription = " /* start comment */ let prop1: [String: SomeType]"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingDocstringFromProperty_opensAndClosesOnLine_middle() {
+        let propertyDescription = "let prop1: [String: SomeType/* middle comment */]"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingDocstringFromProperty_opensAndClosesOnLine_end() {
+        let propertyDescription = "let prop1: [String: SomeType] /* end comment */"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingMultipleCommentsFromProperty() {
+        let propertyDescription
+        = "/* start comment */let prop1: [String: SomeType/* middle comment */]/* end comment */ // Trailing comment"
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
+    }
+
+    func testStrippingTrailingWhitespaceFromProperty() {
+        let propertyDescription = "let prop1: [String: SomeType]    "
+
+        let result = stripCommentsFromTypeDefinition(ofProperty: propertyDescription)
+
+        XCTAssertEqual(result, "let prop1: [String: SomeType]")
     }
 
     func testIntegration_withOptionalSet() {
