@@ -20,6 +20,12 @@ features:
           Toggle between standard (false) and brand refresh (true) onboarding content.
         type: Boolean
         default: true
+      enable-video-intro:
+        description: >
+          When true, a full-screen video is displayed before the Terms of Service
+          screen during fresh-install onboarding.
+        type: Boolean
+        default: false
       conditions:
         description: >
           A collection of out the box conditional expressions to be
@@ -43,6 +49,7 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
+          enable-video-intro: false
           enable-modern-ui: true
           should-use-japan-configuration: false
           should-use-brand-refresh-configuration: true

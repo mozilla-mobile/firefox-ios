@@ -105,6 +105,9 @@ class LaunchScreenViewModel {
         var order: [LaunchType] = []
 
         if introScreenManager.shouldShowIntroScreen {
+            if introScreenManager.shouldShowVideoIntro {
+                order.append(.videoIntro)
+            }
             if termsOfServiceManager.shouldShowScreen {
                 order.append(.termsOfService(manager: termsOfServiceManager))
             }

@@ -22,6 +22,25 @@ final class LaunchTypeTests: XCTestCase {
         try await super.tearDown()
     }
 
+    // MARK: - Video Intro
+    func testCanLaunch_videoIntroFromSceneCoordinator() {
+        let launchType = LaunchType.videoIntro
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+    }
+
+    func testCanLaunch_videoIntroFromBrowserCoordinator() {
+        let launchType = LaunchType.videoIntro
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+    }
+
+    func testIsFullScreen_videoIntroIsAlwaysFullScreen() {
+        let launchType = LaunchType.videoIntro
+        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: true))
+        XCTAssertTrue(launchType.isFullScreenAvailable(isIphone: false))
+    }
+
     func testCanLaunch_surveyFromBrowserCoordinator() {
         let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
         XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))

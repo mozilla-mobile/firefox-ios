@@ -110,9 +110,20 @@ final class IntroScreenManagerTests: XCTestCase {
         XCTAssertEqual(subject.onboardingVariant, .legacy)
     }
 
+    // MARK: - shouldShowVideoIntro Tests
+
+    func testShouldShowVideoIntro() {
+        setupNimbusFeatureFlags(enableModernUi: false, shouldUseJapanConfiguration: false)
+        let subject = IntroScreenManager(prefs: prefs)
+
+        XCTAssertFalse(subject.shouldShowVideoIntro)
+    }
+
     // MARK: - Helper Methods
 
-    private func setupNimbusFeatureFlags(enableModernUi: Bool, shouldUseJapanConfiguration: Bool) {
+    private func setupNimbusFeatureFlags(enableModernUi: Bool,
+                                         shouldUseJapanConfiguration: Bool,
+                                         enableVideoIntro: Bool = false) {
         FxNimbus.shared.features.onboardingFrameworkFeature.with { appContext, _ in
             OnboardingFrameworkFeature(
                 appContext,
@@ -121,6 +132,7 @@ final class IntroScreenManagerTests: XCTestCase {
                 conditions: ["ALWAYS": "true"],
                 dismissable: false,
                 enableModernUi: enableModernUi,
+                enableVideoIntro: enableVideoIntro,
                 shouldUseJapanConfiguration: shouldUseJapanConfiguration
             )
         }

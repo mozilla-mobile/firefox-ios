@@ -199,6 +199,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
+        case .videoIntroOnboarding:
+            return checkVideoIntroOnboardingFeature(from: nimbus)
+
         case .quickAnswers:
             return checkQuickAnswersFeature(from: nimbus)
         }
@@ -508,6 +511,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
+    }
+
+    private func checkVideoIntroOnboardingFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().enableVideoIntro
     }
 
     private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {
