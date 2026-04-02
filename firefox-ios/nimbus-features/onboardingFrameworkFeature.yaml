@@ -49,9 +49,9 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-video-intro: false
+          enable-video-intro: true
           enable-modern-ui: true
-          should-use-japan-configuration: false
+          should-use-japan-configuration: true
           should-use-brand-refresh-configuration: true
           conditions:
             ALWAYS:                   "true"

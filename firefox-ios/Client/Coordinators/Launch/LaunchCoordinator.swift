@@ -74,7 +74,7 @@ final class LaunchCoordinator: BaseCoordinator,
         viewController.modalPresentationStyle = .fullScreen
         viewController.modalTransitionStyle = .crossDissolve
         viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(
-            title: .Onboarding.Modern.Toolbar.ContinueAction,
+            title: String(format: .Onboarding.TermsOfService.Title, AppName.shortName.rawValue),
             a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
         ))
         viewController.onDismiss = { [weak self] in
