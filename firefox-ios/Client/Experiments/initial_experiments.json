@@ -2,6 +2,91 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
+      "slug": "ios-japan-onboarding-with-video-release",
+      "id": "ios-japan-onboarding-with-video-release",
+      "arguments": {},
+      "application": "org.mozilla.ios.FirefoxBeta",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.FirefoxBeta",
+      "channel": "beta",
+      "userFacingName": "iOS - Japan Onboarding with Video - Beta",
+      "userFacingDescription": "Japan Onboarding with Video",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-beta-5",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "enable-modern-ui": true,
+                "should-use-japan-configuration": true,
+                "enable-video-intro": false
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "enable-modern-ui": true,
+                "should-use-japan-configuration": true,
+                "enable-video-intro": true
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "(app_version|versionCompare('149.3.0') >= 0) && (language in ['ja'])",
+      "startDate": "2026-04-02",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2026-04-02T17:39:29.543803Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
+      "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
       "slug": "ios-new-onboarding-global-release-version",
       "id": "ios-new-onboarding-global-release-version",
       "arguments": {},
