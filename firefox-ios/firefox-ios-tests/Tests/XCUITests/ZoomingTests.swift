@@ -247,6 +247,7 @@ final class ZoomingTests: BaseTestCase {
 
     func goToTabTray() {
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
     }
 }

@@ -51,8 +51,6 @@ func registerUrlBarNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppli
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
             let textsField = app.textFields.firstMatch
-            // Workaround BB iOS13 be sure tap happens on url bar
-            sleep(1)
             textsField.waitAndTap()
             textsField.waitAndTap()
             textsField.typeText("\(url)")

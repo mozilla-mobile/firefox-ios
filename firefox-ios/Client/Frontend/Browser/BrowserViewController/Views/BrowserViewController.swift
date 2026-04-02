@@ -3030,11 +3030,14 @@ class BrowserViewController: UIViewController,
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let shouldSuppress = !topTabsVisible && isPad
         let style: UIModalPresentationStyle = if #available(iOS 26.0, *) {
             .overCurrentContext
+        } else if shouldSuppress || !isPad {
+            .overCurrentContext
         } else {
-            !shouldSuppress ? .popover : .overCurrentContext
+            .popover
         }
         let viewModel = PhotonActionSheetViewModel(
             actions: [urlActions],

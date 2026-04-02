@@ -14,20 +14,20 @@ import enum MozillaAppServices.BookmarkRoots
 @MainActor
 protocol BookmarksPanelViewModelProtocol: Sendable, CanRemoveQuickActionBookmark {
     var profile: Profile { get }
-    var bookmarkNodes: [FxBookmarkNode] { get }
     var bookmarkFolder: FxBookmarkNode? { get }
     var bookmarkFolderGUID: GUID { get }
     var displayedBookmarkNodes: [FxBookmarkNode] { get }
-    var isSearching: Bool { get }
+    var isShowingSearchResults: Bool { get }
     var isRootNode: Bool { get }
+    var isCurrentFolderEmpty: Bool { get }
     var shouldFlashRow: Bool { get }
 
+    func reloadData(completion: @escaping @MainActor () -> Void)
     func resetSearch()
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
-    func reloadData(completion: @escaping @MainActor () -> Void)
     func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String)
     func remove(bookmark: FxBookmarkNode)
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void)
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     func createPinUnpinAction(
         for site: Site,
@@ -54,16 +54,23 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         return bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
     }
 
+    var isCurrentFolderEmpty: Bool {
+        return allBookmarkNodes.isEmpty
+    }
+
     let profile: Profile
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
-    var bookmarkNodes = [FxBookmarkNode]()
-    var isSearching = false
+    var isShowingSearchResults = false
+
+    /// Backing data array of all bookmarks
+    private var allBookmarkNodes = [FxBookmarkNode]()
+    /// Bookmarks filtered via search
     private var filteredBookmarkNodes = [FxBookmarkNode]()
 
     /// The data source nodes currently displayed: filtered results when searching, otherwise the full bookmark nodes.
     var displayedBookmarkNodes: [FxBookmarkNode] {
-        return isSearching ? filteredBookmarkNodes : bookmarkNodes
+        return isShowingSearchResults ? filteredBookmarkNodes : allBookmarkNodes
     }
 
     var bookmarksHandler: BookmarksHandler
@@ -113,7 +120,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     }
 
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
+        guard let bookmarkNode = allBookmarkNodes[safe: sourceIndexPath.row] else {
             logger.log("Could not move row from \(sourceIndexPath) to \(destinationIndexPath)",
                        level: .debug,
                        category: .library)
@@ -127,15 +134,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                                 title: nil,
                                                 url: nil)
 
-        bookmarkNodes.remove(at: sourceIndexPath.row)
-        bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
+        allBookmarkNodes.remove(at: sourceIndexPath.row)
+        allBookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void) {
-        guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
-              let bookmarkItem = bookmarkNode as? BookmarkItemData
-        else {
-            logger.log("Could not get site details for indexPath \(indexPath)",
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void) {
+        guard let bookmarkItem = bookmark as? BookmarkItemData else {
+            logger.log("Could not get site details for bookmark",
                        level: .debug,
                        category: .library)
             completion(nil)
@@ -186,7 +191,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     /// for items whose title or URL contains the given query string (case-insensitive).
     func searchBookmarks(query: String, completion: @escaping @MainActor () -> Void) {
         guard !query.isEmpty else {
-            isSearching = true
+            isShowingSearchResults = true
             filteredBookmarkNodes = []
             completion()
             return
@@ -213,7 +218,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                                        query: lowercasedQuery,
                                                        results: &matches)
 
-                        self?.isSearching = true
+                        self?.isShowingSearchResults = true
                         self?.filteredBookmarkNodes = matches
 
                         completion()
@@ -223,7 +228,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                          level: .debug,
                                          category: .library)
 
-                        self?.isSearching = true
+                        self?.isShowingSearchResults = true
                         self?.filteredBookmarkNodes = []
                         completion()
                     }
@@ -281,7 +286,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                     }
 
                     self.bookmarkFolder = mobileFolder
-                    self.bookmarkNodes = mobileFolder.fxChildren ?? []
+                    self.allBookmarkNodes = mobileFolder.fxChildren ?? []
 
                     self.createDesktopBookmarksFolder(completion: completion)
                 }
@@ -296,7 +301,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         let menu = LocalDesktopFolder(forcedGuid: BookmarkRoots.MenuFolderGUID)
 
         self.bookmarkFolder = nil
-        self.bookmarkNodes = [unfiled, toolbar, menu]
+        self.allBookmarkNodes = [unfiled, toolbar, menu]
         completion()
     }
 
@@ -317,7 +322,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                 }
 
                 self.bookmarkFolder = folder
-                self.bookmarkNodes = folder.fxChildren ?? []
+                self.allBookmarkNodes = folder.fxChildren ?? []
 
                 completion()
             }
@@ -327,7 +332,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     /// Error case at the moment is setting data to nil and showing nothing
     private func setErrorCase() {
         self.bookmarkFolder = nil
-        self.bookmarkNodes = []
+        self.allBookmarkNodes = []
     }
 
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
@@ -340,7 +345,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                     if bookmarkCount > 0 {
                         self.hasDesktopFolders = true
                         let desktopFolder = LocalDesktopFolder()
-                        self.bookmarkNodes.insert(desktopFolder, at: 0)
+                        self.allBookmarkNodes.insert(desktopFolder, at: 0)
                     } else {
                         self.hasDesktopFolders = false
                     }
@@ -381,13 +386,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     }
 
     func resetSearch() {
-        isSearching = false
+        isShowingSearchResults = false
         filteredBookmarkNodes.removeAll()
     }
 
     func removeBookmarkLocally(bookmark: FxBookmarkNode) {
         // Immediately remove the bookmark from backing arrays and search matches, if needed (for UI responsiveness)
-        bookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
+        allBookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
         filteredBookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
     }
 

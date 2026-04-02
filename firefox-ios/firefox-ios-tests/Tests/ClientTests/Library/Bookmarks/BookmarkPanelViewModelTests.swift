@@ -52,7 +52,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -64,7 +64,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no folders")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Contains no folders")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -76,7 +76,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 3, "Contains the 3 desktop folders")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 3, "Contains the 3 desktop folders")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -91,7 +91,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no bookmarks")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Contains no bookmarks")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -104,7 +104,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -115,7 +115,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Mobile folder does not contain the local desktop folder")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Mobile folder does not contain local desktop folder")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -200,10 +200,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         let bookmark = createBookmarkItemData()
-        subject.bookmarkNodes.append(bookmark)
 
-        let indexPath = IndexPath(row: 0, section: 0)
-        subject.getSiteDetails(for: indexPath) { site in
+        subject.getSiteDetails(for: bookmark) { site in
             XCTAssertNotNil(site)
             XCTAssertFalse(site?.isPinnedSite ?? true)
             expectation.fulfill()
@@ -222,10 +220,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         let bookmark = createBookmarkItemData()
-        subject.bookmarkNodes.append(bookmark)
 
-        let indexPath = IndexPath(row: 0, section: 0)
-        subject.getSiteDetails(for: indexPath) { site in
+        subject.getSiteDetails(for: bookmark) { site in
             expectation.fulfill()
             XCTAssertNotNil(site)
             XCTAssertTrue(site?.isPinnedSite ?? false)
@@ -242,7 +238,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
@@ -256,7 +252,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "firefox") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
@@ -271,7 +267,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "mozilla.org") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Mozilla")
             expectation.fulfill()
@@ -286,7 +282,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "nonexistent") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
@@ -300,7 +296,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "FIREFOX") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
@@ -315,7 +311,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "nested") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Nested Bookmark")
             expectation.fulfill()
@@ -332,7 +328,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         // Both "Firefox" (url: https://www.firefox.com) and "Mozilla" (url: https://www.mozilla.org)
         // contain "www" in their URLs
         subject.searchBookmarks(query: "www") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 2)
             expectation.fulfill()
         }

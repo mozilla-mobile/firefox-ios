@@ -159,6 +159,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
 
@@ -489,6 +490,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
@@ -502,6 +504,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
@@ -509,10 +512,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/25093
-            // Waiting is needed before switching to private tab in order to display the expected domain
-            sleep(3)
-            // workaround end
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
             navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         }
         numTabs = app.otherElements[tabsTray].cells.count
@@ -618,7 +618,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
         springBoardScreen.tapNewPrivateButton()
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
         onboardingScreen.closeTourIfNeeded()
         browserScreen.assertPrivateModeMessageCardExists()
         navigator.openURL(website_1["url"]!)
@@ -657,7 +657,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
 
         // Close onboarding if it appears
         onboardingScreen.handleTermsOfService()
-        onboardingScreen.waitForCurrentScreenElements()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
         onboardingScreen.closeTourIfNeeded()
 
         // Verify the bookmarked page opens

@@ -82,6 +82,7 @@ class HistoryTests: BaseTestCase {
     func testOpenSyncDevices() {
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
         waitForElementsToExist(
@@ -320,6 +321,7 @@ class HistoryTests: BaseTestCase {
 
         // The page is opened on the new tab
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -354,6 +356,7 @@ class HistoryTests: BaseTestCase {
 
         // The page is opened only on the new private tab
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -447,6 +450,7 @@ class HistoryTests: BaseTestCase {
     private func navigateToPage(isTabTrayOff: Bool = true) {
         navigator.openURL("example.com")
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if isTabTrayOff {
