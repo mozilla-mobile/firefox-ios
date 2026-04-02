@@ -12,7 +12,7 @@ import XCTest
 final class AutoTranslatePromptStateTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
