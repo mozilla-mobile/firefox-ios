@@ -323,9 +323,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
         let traitCollection = environment.traitCollection
-        let storiesHeaderState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)?
-            .merinoState.sectionHeaderState
-        ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
+        let storiesHeaderState = MerinoState.Constants.sectionHeaderConfiguration
 
         let containerWidth = environment.container.effectiveContentSize.width
         let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
@@ -700,7 +698,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add header height
         if topSitesState.shouldShowSectionHeader {
-            totalHeight += getHeaderHeight(headerState: TopSitesSectionState.Constants.sectionHeaderConfiguration, environment: environment)
+            totalHeight += getHeaderHeight(
+                headerState: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                environment: environment
+            )
         }
 
         // Build array of configured cells for the data being displayed on the homepage
@@ -1077,9 +1078,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return cachedResult
         }
 
-        guard storiesState.shouldShowSection,
-              storiesState.hasMerinoResponseContent,
-              let stories = storiesState.merinoData.stories
+        guard merinoState.shouldShowSection,
+              merinoState.hasMerinoResponseContent,
+              let stories = merinoState.merinoData.stories
         else {
             let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,

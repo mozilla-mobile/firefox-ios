@@ -684,7 +684,7 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
                shouldUseNewsTransitionHeader {
                 guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
                     of: kind,
@@ -721,7 +721,7 @@ final class HomepageViewController: UIViewController,
     ) -> NewsTransitionHeaderView {
         let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
         newsTransitionHeaderView.configure(
-            state: homepageState.merinoState.sectionHeaderState,
+            state: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled
@@ -783,7 +783,7 @@ final class HomepageViewController: UIViewController,
     /// (the section label fallback header used when there is no room for the header to transition does not participate
     /// in the transition)
     private func updateNewsTransitionHeaderProgress() {
-        guard homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+        guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               shouldUseNewsTransitionHeader,
               let collectionView,
               let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {

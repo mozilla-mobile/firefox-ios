@@ -89,6 +89,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
+        let shouldShowSectionHeader = sites.count > state.numberOfRows * state.numberOfTilesPerRow
+
         return state.copyWithUpdates(
             topSitesData: sites,
             shouldShowSectionHeader: shouldShowSectionHeader
@@ -102,6 +104,8 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
+        let shouldShowSectionHeader = state.topSitesData.count > numberOfRows * state.numberOfTilesPerRow
+
         return state.copyWithUpdates(
             numberOfRows: numberOfRows,
             shouldShowSectionHeader: shouldShowSectionHeader
@@ -114,6 +118,8 @@ struct TopSitesSectionState: StateType, Equatable {
         else {
             return defaultState(from: state)
         }
+
+        let shouldShowSectionHeader = state.topSitesData.count > state.numberOfRows * numberOfTilesPerRow
 
         return state.copyWithUpdates(
             numberOfTilesPerRow: numberOfTilesPerRow,
