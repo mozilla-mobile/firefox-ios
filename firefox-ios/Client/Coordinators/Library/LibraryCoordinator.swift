@@ -122,7 +122,7 @@ class LibraryCoordinator: BaseCoordinator,
         // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
         let sourceBoundsFrameInWindow = sourceView.convert(sourceView.bounds, to: sourceView.window)
         let windowCenterMidY = sourceView.window?.bounds.midY ?? sourceBoundsFrameInWindow.midY
-       
+
         let sourceIsBelowWindowCenter = sourceBoundsFrameInWindow.midY > windowCenterMidY
         let popoverArrowDirection: UIPopoverArrowDirection = sourceIsBelowWindowCenter ? .down : .up
 
