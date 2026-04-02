@@ -242,9 +242,19 @@ final class TranslationsMiddleware: FeatureFlaggable {
         }
     }
 
-    private func retrieveTranslations(for action: Action, targetLanguage: String, isPrivate: Bool, autoTranslate: Bool = false) {
+    private func retrieveTranslations(
+        for action: Action,
+        targetLanguage: String,
+        isPrivate: Bool,
+        autoTranslate: Bool = false
+    ) {
         Task {
-            await self.performTranslation(for: action, targetLanguage: targetLanguage, isPrivate: isPrivate, autoTranslate: autoTranslate)
+            await self.performTranslation(
+                for: action,
+                targetLanguage: targetLanguage,
+                isPrivate: isPrivate,
+                autoTranslate: autoTranslate
+            )
         }
     }
 
