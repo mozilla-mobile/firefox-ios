@@ -1,0 +1,3 @@
+/* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.TitleLabel.v145" = "Не ўдалося загрузіць мовы";
+

@@ -2,7 +2,7 @@
 "Summarizer.AppleBrand.Label.v142" = "Resumida pelo Apple Intelligence";
 
 /* The a11y label for the close button in the summary view. */
-"Summarizer.CloseButton.Accessibility.Label.v145" = "Fechar sumário";
+"Summarizer.CloseButton.Accessibility.Label.v145" = "Fechar resumo";
 
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Fechar";

@@ -1,5 +1,5 @@
 /* On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
-"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "გააცანით %1$@ სხვებსაც ყოველ ჯერზე ბმულის გაზიარებით %2$@-ზე.";
+"SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134" = "გაავრცელეთ %1$@ ბმულის ყოველი გაზიარებით %2$@-ზე.";
 
 /* On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. %1$@ is the app name (e.g. Firefox). %2$@ is the social media app name (e.g. WhatsApp). */
 "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "გააზიარეთ %1$@ ჩამოსატვირთი ბმულით %2$@-ზე";

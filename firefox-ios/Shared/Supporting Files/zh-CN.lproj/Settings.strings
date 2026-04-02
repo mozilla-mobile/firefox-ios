@@ -254,7 +254,7 @@
 "Settings.Studies.Message.v136" = "抢先体验尚未全面推出的功能和概念。";
 
 /* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
-"Settings.Studies.Message.v148" = "%@ 将随机选择用户测试功能，以为全体用户改进质量。";
+"Settings.Studies.Message.v148" = "%@ 会随机选择用户测试功能，以为全体用户改进质量。";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Title.v136" = "安装并运行研究";

@@ -4,6 +4,9 @@
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "Nov zavihek";
 
+/* Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar. */
+"Toolbar.ReaderModeWithSummarizer.Button.v150" = "Bralni pogled. Na voljo je povzetek strani.";
+
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Zapri zavihek";
 
