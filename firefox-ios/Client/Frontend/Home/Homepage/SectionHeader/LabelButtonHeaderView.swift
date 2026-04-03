@@ -10,8 +10,6 @@ import Foundation
 class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
     struct UX {
         static let inBetweenSpace: CGFloat = 12
-        static let bottomSpace: CGFloat = 16
-        static let bottomButtonSpace: CGFloat = 6
     }
 
     // MARK: - UIElements
@@ -41,12 +39,6 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
         }
     }
 
-    var bottomSpacing: CGFloat = UX.bottomSpace {
-        didSet {
-            bottomConstraint?.constant = -bottomSpacing
-        }
-    }
-
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var bottomConstraint: NSLayoutConstraint?
 
@@ -66,22 +58,12 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
-        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
-            .priority(UILayoutPriority(999))
-        self.bottomConstraint = bottomConstraint
-
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            // Collection view sizing can temporarily collapse supplementary views to zero height.
-            // Keep the inset in normal layouts, but let auto layout relax it during that pass.
-            bottomConstraint,
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        // Setting custom values to resolve horizontal ambiguity
-        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        titleLabel.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
 
         adjustLayout()
     }
@@ -92,7 +74,6 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: - Helper functions
     func prepareForReuse() {
-        bottomSpacing = UX.bottomSpace
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
         moreButton.accessibilityIdentifier = nil
