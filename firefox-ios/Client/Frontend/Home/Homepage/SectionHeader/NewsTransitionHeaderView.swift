@@ -98,7 +98,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-
     }
 
     private func updateViewState() {
