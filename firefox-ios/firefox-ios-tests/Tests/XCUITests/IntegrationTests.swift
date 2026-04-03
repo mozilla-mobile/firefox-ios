@@ -50,7 +50,7 @@ class IntegrationTests: BaseTestCase {
             alert.buttons["Allow"].waitAndTap()
             return true
         }
-        app.swipeDown()
+        sleep(5)
     }
 
     private func signInFxAccounts() {
@@ -265,12 +265,8 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForElementsToExist(
-            [
-                app.tables["Bookmarks List"],
-                app.tables["Bookmarks List"].cells.staticTexts["Example Domain"]
-            ]
-        )
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
+        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
 
         // Check Login
         navigator.performAction(Action.CloseBookmarkPanel)
