@@ -16,19 +16,15 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     }
 
     private lazy var newsAffordanceContentView: NewsAffordanceHeaderView = .build()
-    private lazy var sectionTitleHeaderView: LabelButtonHeaderView = {
-        // This reusable view is embedded inside another supplementary view, so keep it frame-based instead of auto layout
-        let view = LabelButtonHeaderView(frame: .zero)
-        view.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-        return view
-    }()
+    private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
 
     private var progress: CGFloat = 0
     private var transitionEnabled = true
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        updateViewState(forHeight: bounds.height)
+        updateViewState()
     }
 
     required init?(coder: NSCoder) {
@@ -40,21 +36,12 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         progress = 0
         transitionEnabled = true
         sectionTitleHeaderView.prepareForReuse()
-        updateViewState(forHeight: bounds.height)
+        updateViewState()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
-
-        // Supplementary view sizing can change before `layoutSubviews` runs during rotation.
-        // Sync the active affordance constraints from the incoming layout height immediately.
-        updateViewState(forHeight: layoutAttributes.size.height)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateViewState(forHeight: bounds.height)
-        updateSectionTitleHeaderFrame()
+        updateViewState()
     }
 
     func configure(
@@ -72,19 +59,18 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             theme: theme
         )
         sectionTitleHeaderView.moreButton.isHidden = true
-        updateSectionTitleHeaderFrame()
-        updateViewState(forHeight: bounds.height)
+        updateViewState()
     }
 
     func setTransitionProgress(_ progress: CGFloat) {
         self.progress = min(max(progress, 0), 1)
-        updateViewState(forHeight: bounds.height)
+        updateViewState()
     }
 
     func setTransitionEnabled(_ transitionEnabled: Bool) {
         guard self.transitionEnabled != transitionEnabled else { return }
         self.transitionEnabled = transitionEnabled
-        updateViewState(forHeight: bounds.height)
+        updateViewState()
     }
 
     func applyTheme(theme: Theme) {
@@ -110,17 +96,22 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
 
         addSubview(newsAffordanceContentView)
         addSubview(sectionTitleHeaderView)
-        updateSectionTitleHeaderFrame()
 
         NSLayoutConstraint.activate([
             newsAffordanceContentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             newsAffordanceContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             newsAffordanceContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             newsAffordanceContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            sectionTitleHeaderView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            sectionTitleHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
+
     }
 
-    private func updateViewState(forHeight height: CGFloat) {
+    private func updateViewState() {
         if transitionEnabled {
             newsAffordanceContentView.alpha = 1 - progress
             newsAffordanceContentView.accessibilityElementsHidden = progress >= 0.5
@@ -134,28 +125,5 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
             sectionTitleHeaderView.alpha = 1
             sectionTitleHeaderView.accessibilityElementsHidden = false
         }
-    }
-
-    private func updateSectionTitleHeaderFrame() {
-        guard bounds.width > 0, bounds.height > 0 else {
-            sectionTitleHeaderView.frame = bounds
-            return
-        }
-
-        // Measure the label header at its natural height, then pin that measured frame to the
-        // bottom of the transition container so the crossfade matches the final resting position.
-        let measuredHeight = sectionTitleHeaderView.systemLayoutSizeFitting(
-            CGSize(width: bounds.width, height: UIView.layoutFittingCompressedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        ).height
-
-        let headerHeight = min(bounds.height, measuredHeight)
-        sectionTitleHeaderView.frame = CGRect(
-            x: 0,
-            y: bounds.height - headerHeight,
-            width: bounds.width,
-            height: headerHeight
-        )
     }
 }
