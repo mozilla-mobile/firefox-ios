@@ -6,64 +6,14 @@ import Common
 import Foundation
 import MozillaAppServices
 
-/// This exists because `RecommendationDataItem` is an Application-Services object and
-/// UNIFFI cannot mark things as Codable. So this exists merely as a placeholder until
-/// that functionality is added in.
-private struct CachableRecommendationItem: Codable {
-    let corpusItemId: String
-    let scheduledCorpusItemId: String?
-    let url: String
-    let title: String
-    let excerpt: String
-    let topic: String?
-    let publisher: String
-    let isTimeSensitive: Bool
-    let imageUrl: String
-    let iconUrl: String?
-    let tileId: Int64?
-    let receivedRank: Int64
-
-    init(from model: RecommendationDataItem) {
-        self.corpusItemId = model.corpusItemId
-        self.scheduledCorpusItemId = model.scheduledCorpusItemId
-        self.url = model.url
-        self.title = model.title
-        self.excerpt = model.excerpt
-        self.topic = model.topic
-        self.publisher = model.publisher
-        self.isTimeSensitive = model.isTimeSensitive
-        self.imageUrl = model.imageUrl
-        self.iconUrl = model.iconUrl
-        self.tileId = model.tileId
-        self.receivedRank = model.receivedRank
-    }
-
-    func toModel() -> RecommendationDataItem {
-        return RecommendationDataItem(
-            corpusItemId: corpusItemId,
-            scheduledCorpusItemId: scheduledCorpusItemId,
-            url: url,
-            title: title,
-            excerpt: excerpt,
-            topic: topic,
-            publisher: publisher,
-            isTimeSensitive: isTimeSensitive,
-            imageUrl: imageUrl,
-            iconUrl: iconUrl,
-            tileId: tileId,
-            receivedRank: receivedRank
-        )
-    }
-}
-
-private struct CachedRecommendations: Codable {
-    let recommendations: [CachableRecommendationItem]
+private struct CachedResponse: Codable {
+    let response: CuratedRecommendationsResponse
     let lastUpdated: Date
 }
 
 protocol CuratedRecommendationsCacheProtocol {
-    func save(_ recommendations: [RecommendationDataItem])
-    func loadRecommendations() -> [RecommendationDataItem]?
+    func save(_ response: CuratedRecommendationsResponse)
+    func loadResponse() -> CuratedRecommendationsResponse?
     func lastUpdatedDate() -> Date?
     func clearCache()
 }
@@ -93,7 +43,7 @@ final class CuratedRecommendationCacheUtility: CuratedRecommendationsCacheProtoc
         self.injectedURL = injectedURL
     }
 
-    func save(_ recommendations: [RecommendationDataItem]) {
+    func save(_ response: CuratedRecommendationsResponse) {
         guard let cacheURL = cacheURL else {
             logger.log(
                 "The cache URL for Merino could not be constructed",
@@ -105,8 +55,8 @@ final class CuratedRecommendationCacheUtility: CuratedRecommendationsCacheProtoc
 
         do {
             let data = try JSONEncoder().encode(
-                CachedRecommendations(
-                    recommendations: recommendations.map { CachableRecommendationItem(from: $0) },
+                CachedResponse(
+                    response: response,
                     lastUpdated: Date()
                 )
             )
@@ -120,15 +70,15 @@ final class CuratedRecommendationCacheUtility: CuratedRecommendationsCacheProtoc
         }
     }
 
-    func loadRecommendations() -> [RecommendationDataItem]? {
-        return load()?.recommendations.map { $0.toModel() }
+    func loadResponse() -> CuratedRecommendationsResponse? {
+        return load()?.response
     }
 
     func lastUpdatedDate() -> Date? {
         return load()?.lastUpdated
     }
 
-    private func load() -> CachedRecommendations? {
+    private func load() -> CachedResponse? {
         guard let cacheURL = cacheURL else {
             logger.log(
                 "The cache URL for Merino could not be constructed",
@@ -140,7 +90,7 @@ final class CuratedRecommendationCacheUtility: CuratedRecommendationsCacheProtoc
 
         do {
             let data = try Data(contentsOf: cacheURL)
-            return try JSONDecoder().decode(CachedRecommendations.self, from: data)
+            return try JSONDecoder().decode(CachedResponse.self, from: data)
         } catch {
             logger.log(
                 "Failed to load recommendations from cache: \(error)",
