@@ -418,7 +418,8 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         let newState = BrowserViewControllerState.reducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
             GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
-                                 actionType: GeneralBrowserActionType.showSummarizer)
+                                 actionType: GeneralBrowserActionType.showSummarizer,
+                                 summarizerConfig: .defaultConfig)
         )
         subject.newState(state: newState)
 
@@ -575,6 +576,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.updateInContentHomePanel(errorPageURL)
 
         XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    // MARK: - ReaderMode
+
+    func testReaderModeBar_didSelectSummarizeButton_dispatchesGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        subject.readerModeBar(ReaderModeBarView(frame: .zero), didSelectButton: .summarizer)
+
+        let dispatchAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchActionType = try XCTUnwrap(dispatchAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
     // MARK: - Private
