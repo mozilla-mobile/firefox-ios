@@ -684,7 +684,7 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
                shouldUseNewsTransitionHeader {
                 guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
                     of: kind,
@@ -721,7 +721,7 @@ final class HomepageViewController: UIViewController,
     ) -> NewsTransitionHeaderView {
         let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
         newsTransitionHeaderView.configure(
-            state: homepageState.merinoState.sectionHeaderState,
+            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled
@@ -737,7 +737,7 @@ final class HomepageViewController: UIViewController,
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
-                state: homepageState.topSitesState.sectionHeaderState,
+                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToShortcutsLibrary()
                 },
@@ -747,7 +747,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .jumpBackIn(let textColor, _):
             sectionLabelCell.configure(
-                state: homepageState.jumpBackInState.sectionHeaderState,
+                sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToTabTray(with: .tabs)
                 },
@@ -758,7 +758,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .bookmarks(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.bookmarkState.sectionHeaderState,
+                sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
                 moreButtonAction: { [weak self] _ in
                     self?.navigateToBookmarksPanel()
                 },
@@ -768,7 +768,7 @@ final class HomepageViewController: UIViewController,
             return sectionLabelCell
         case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: homepageState.merinoState.sectionHeaderState,
+                sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
                 textColor: textColor,
                 theme: currentTheme
             )
@@ -783,7 +783,7 @@ final class HomepageViewController: UIViewController,
     /// (the section label fallback header used when there is no room for the header to transition does not participate
     /// in the transition)
     private func updateNewsTransitionHeaderProgress() {
-        guard homepageState.merinoState.sectionHeaderState.style == .newsAffordance,
+        guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               shouldUseNewsTransitionHeader,
               let collectionView,
               let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
@@ -935,7 +935,7 @@ final class HomepageViewController: UIViewController,
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
                     .link,
-                    url: homepageState.merinoState.footerURL,
+                    url: MerinoState.Constants.footerURL,
                     visitType: .link
                 ),
                 windowUUID: self.windowUUID,
