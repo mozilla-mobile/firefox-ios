@@ -28,7 +28,7 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     }
 
     // MARK: - TranslationsServiceProtocol
-    func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool {
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
         return try shouldOfferTranslationResult.get()
     }
 

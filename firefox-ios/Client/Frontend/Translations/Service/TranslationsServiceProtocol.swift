@@ -7,9 +7,10 @@ import Common
 /// A service responsible for coordinating in-page translations.
 @MainActor
 protocol TranslationsServiceProtocol {
-    /// Determines whether translation should be offered to the user based on
-    /// the detected page language and the device's current locale.
-    func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool
+    /// Determines whether translation should be offered by checking any of the given
+    /// preferred target languages against the detected page language.
+    /// Returns `true` if at least one preferred language has an available model pair.
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool
     /// Performs translation and returns immediately.
     /// TODO(FXIOS-14213): We should implement a lifecycle for the service similar to `SummarizerServiceLifecycle`.
     /// For now `onLanguageIdentified` is used to notify caller when language detection is done.

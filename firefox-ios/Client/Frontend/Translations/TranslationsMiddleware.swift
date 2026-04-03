@@ -205,6 +205,18 @@ final class TranslationsMiddleware: FeatureFlaggable {
         return true
     }
 
+    /// Returns the list of target languages to check for translation eligibility.
+    /// When the language picker flag is ON, returns the user's full preferred list.
+    /// When OFF, returns only the primary device language (preserving legacy behavior).
+    private func targetLanguagesForEligibilityCheck() async -> [String] {
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+            let supported = await translationsService.fetchSupportedTargetLanguages()
+            return manager.preferredLanguages(supportedTargetLanguages: supported)
+        }
+        return [Locale.current.languageCode].compactMap { $0 }
+    }
+
     /// Checks whether the current page in the active tab is eligible for translation,
     /// and if so, dispatches a toolbar action to update the translation state.
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
@@ -212,7 +224,12 @@ final class TranslationsMiddleware: FeatureFlaggable {
             guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
             do {
-                guard try await translationsService.shouldOfferTranslation(for: action.windowUUID) else { return }
+                let preferredLanguages = await targetLanguagesForEligibilityCheck()
+                let isEligible = try await translationsService.shouldOfferTranslation(
+                    for: action.windowUUID,
+                    using: preferredLanguages
+                )
+                guard isEligible else { return }
 
                 // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
