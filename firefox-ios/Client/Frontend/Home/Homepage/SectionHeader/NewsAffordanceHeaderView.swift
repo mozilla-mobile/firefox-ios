@@ -7,7 +7,6 @@ import Foundation
 
 final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     struct UX {
-        static let containerBottomInset: CGFloat = 16
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20
@@ -82,8 +81,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                                  constant: -UX.containerBottomInset),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             stackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
                                            constant: UX.stackTopInset),
