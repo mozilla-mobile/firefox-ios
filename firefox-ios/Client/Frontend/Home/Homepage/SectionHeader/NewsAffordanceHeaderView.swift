@@ -90,16 +90,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                 constant: -UX.stackHorizontalInset),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                              constant: -UX.stackBottomInset),
-
-            chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize)
-                .priority(UILayoutPriority(999)),
-            chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize)
-                .priority(UILayoutPriority(999)),
-            newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize)
-                .priority(UILayoutPriority(999)),
-            newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize)
-                .priority(UILayoutPriority(999)),
+                                              constant: -UX.stackBottomInset)
         ])
     }
 }
