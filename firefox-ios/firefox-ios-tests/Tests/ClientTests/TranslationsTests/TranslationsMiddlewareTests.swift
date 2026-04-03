@@ -230,6 +230,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_didSelectTargetLanguage_dispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
         let subject = createSubject()
 
         let action = TranslationLanguageSelectedAction(
@@ -541,6 +542,88 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         XCTAssertEqual(dispatchedAction.translationConfiguration?.state, .inactive)
         XCTAssertEqual(dispatchedActionType, ToolbarActionType.receivedTranslationLanguage)
+    }
+
+    // MARK: - maybeShowAutoTranslatePrompt tests
+
+    func test_translationCompleted_whenPromptNotShownAndAutoTranslateOff_dispatchesShowAutoTranslatePrompt() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let subject = createSubject()
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let expectation = XCTestExpectation(
+            description: "expect didStartTranslatingPage, translationCompleted, showAutoTranslatePrompt to be fired"
+        )
+        expectation.expectedFulfillmentCount = 3
+        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 3)
+
+        let thirdAction = try XCTUnwrap(mockStore.dispatchedActions[2] as? TranslationsAction)
+        let thirdActionType = try XCTUnwrap(thirdAction.actionType as? TranslationsActionType)
+
+        XCTAssertEqual(thirdActionType, TranslationsActionType.showAutoTranslatePrompt)
+        XCTAssertTrue(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslatePromptShown) ?? false)
+    }
+
+    func test_translationCompleted_whenPromptAlreadyShown_doesNotDispatchShowPrompt() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        let subject = createSubject()
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let expectation = XCTestExpectation(
+            description: "expect didStartTranslatingPage and translationCompleted to be fired"
+        )
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+
+        let lastActionType = try XCTUnwrap(mockStore.dispatchedActions.last?.actionType as? ToolbarActionType)
+        XCTAssertEqual(lastActionType, ToolbarActionType.translationCompleted)
+    }
+
+    func test_translationCompleted_whenAutoTranslateAlreadyEnabled_doesNotDispatchShowPrompt() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+        let subject = createSubject()
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let expectation = XCTestExpectation(
+            description: "expect didStartTranslatingPage and translationCompleted to be fired"
+        )
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+
+        let lastActionType = try XCTUnwrap(mockStore.dispatchedActions.last?.actionType as? ToolbarActionType)
+        XCTAssertEqual(lastActionType, ToolbarActionType.translationCompleted)
     }
 
     // MARK: - didTapRetryFailedTranslation tests
