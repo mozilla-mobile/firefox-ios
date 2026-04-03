@@ -149,45 +149,65 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
 
-        guard let webView = tab.webView, let client else {
-            logger.log("No tab webview, or nil client. Won't populate email.", level: .warning, category: .relay)
+        guard let client else {
+            logger.log("Nil client. Won't populate Relay email.", level: .warning, category: .relay)
             completion(.error)
             return
         }
         logger.log("Will generate Relay mask.", level: .info, category: .relay)
+        generateEmailAndPopulateField(for: tab, isRetry: isRetry, client: client, completion: completion)
+    }
+
+    private func generateEmailAndPopulateField(for tab: Tab,
+                                               isRetry: Bool,
+                                               client: RelayClientProtocol,
+                                               completion: @escaping RelayPopulateCompletion) {
         isGeneratingMask = true
         Task {
             defer { isGeneratingMask = false }
             let (email, result) = await generateRelayMask(for: tab.url?.baseDomain ?? "", client: client)
             if result == .expiredToken && !isRetry {
-                // Attempt a single retry of OAuth refresh
-                attemptOAuthTokenRefresh(tab: tab, completion: completion)
+                attemptOAuthTokenRefresh(tab: tab, completion: completion) // Attempt a single retry of OAuth refresh
                 return
             }
 
             // If an error occurred, or our OAuth token refresh attempt failed, complete with error.
             guard result != .error && result != .expiredToken else { completion(.error); return }
 
-            guard let jsonData = try? JSONEncoder().encode(email),
-                  let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
-                logger.log("Couldn't encode string for Relay JS injection.", level: .warning, category: .relay)
-                completion(.error)
+            let populateSuccess = populateWebViewForm(for: tab, email: email)
+            completion(populateSuccess ? result : .error)
+        }
+    }
+
+    /// Populates the webview of the supplied tab with the final email result
+    /// - Parameters:
+    ///   - tab: the tab with the webview form
+    ///   - email: the Relay email
+    /// - Returns: true if successful
+    private func populateWebViewForm(for tab: Tab, email: String?) -> Bool {
+        guard let webView = tab.webView, let email else {
+            logger.log("No tab webview. Won't populate Relay email.", level: .warning, category: .relay)
+            return false
+        }
+        guard let jsonData = try? JSONEncoder().encode(email),
+              let encodedEmailStr = String(data: jsonData, encoding: .utf8) else {
+            logger.log("Couldn't encode string for Relay JS injection.", level: .warning, category: .relay)
+            return false
+        }
+
+        logger.log("Will send payload to WKWebView", level: .info, category: .relay)
+        let closureLogger = logger
+
+        let javascriptFunc = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
+        var didFailJS = false
+        webView.evaluateJavascriptInDefaultContentWorld(javascriptFunc) { (result, error) in
+            guard error == nil else {
+                closureLogger.log("Javascript error: \(error!)", level: .warning, category: .relay)
+                didFailJS = true
                 return
             }
-
-            logger.log("Will send payload to WKWebView", level: .info, category: .relay)
-
-            let jsFunctionCall = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
-            let closureLogger = logger
-            webView.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
-                guard error == nil else {
-                    closureLogger.log("Javascript error: \(error!)", level: .warning, category: .relay)
-                    return
-                }
-            }
-
-            completion(result)
         }
+        return !didFailJS
     }
 
     private func performPostLaunchUpdate() {
@@ -198,14 +218,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
-    private func invalidateClient() {
-        client = nil
-    }
-
     private func attemptOAuthTokenRefresh(tab: Tab, completion: @escaping RelayPopulateCompletion) {
         // Attempt to refresh OAuth token and retry.
         logger.log("Attempting OAuth refresh. Will re-create Relay client.", level: .info, category: .relay)
-        invalidateClient()
+        client = nil
         createRelayClientIfNeeded(isRefresh: true) { [weak self] in
             // This completion will be called async after we attempt to re-create a new RelayClient
             // with a fresh OAuth token. At this point we can re-try to populate.
@@ -280,7 +296,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
         accountStatus = .updating
         let isStaging = clientConfig == .staging
-        // Fetch the account status (off the main thread)
+        // Fetch the account status (async)
         Task {
             await fetchRelayAccountAvailability(isStaging: isStaging)
             if hasRelayAccount() {
@@ -303,26 +319,31 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
         isCreatingClient = true
         let useCache = !isRefresh
-        acctManager.getAccessToken(scope: clientConfig.scope, useCache: useCache) { [clientConfig, weak self] result in
-            switch result {
-            case .failure(let error):
-                self?.logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
-                self?.isCreatingClient = false
-                completion?()
-            case .success(let tokenInfo):
-                do {
-                    let clientResult = try RelayClient(serverUrl: clientConfig.serverURL, authToken: tokenInfo.token)
-                    self?.handleRelayClientCreated(clientResult)
-                } catch {
-                    self?.logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)
-                }
-                self?.isCreatingClient = false
-                completion?()
-            }
+        acctManager.getAccessToken(scope: clientConfig.scope, useCache: useCache) { [weak self] result in
+            self?.handleRelayCreateClientResult(result, completion: completion)
         }
     }
 
-    private func handleRelayClientCreated(_ client: RelayClient) {
+    private func handleRelayCreateClientResult(_ result: Result<AccessTokenInfo, Error>,
+                                               completion: (() -> Void)? = nil) {
+        switch result {
+        case .failure(let error):
+            logger.log("Error getting access token for Relay: \(error)", level: .warning, category: .relay)
+            isCreatingClient = false
+            completion?()
+        case .success(let tokenInfo):
+            do {
+                let clientResult = try RelayClient(serverUrl: clientConfig.serverURL, authToken: tokenInfo.token)
+                didCreateRelayClient(clientResult)
+            } catch {
+                logger.log("Error creating Relay client: \(error)", level: .warning, category: .relay)
+            }
+            isCreatingClient = false
+            completion?()
+        }
+    }
+
+    private func didCreateRelayClient(_ client: RelayClient) {
         self.client = client
         isCreatingClient = false
         logger.log("Relay client created.", level: .info, category: .relay)
@@ -339,22 +360,18 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         guard let result = RustFirefoxAccounts.shared.accountManager?.getAttachedClients() else { return }
 
         logger.log("Will check OAuth clients.", level: .info, category: .relay)
-        let hasRelayOAuth = {
+        let status: RelayAccountStatus = {
             switch result {
             case .success(let clients):
-                let OAuthID = isStaging ? RelayOAuthClientID.stage.rawValue : RelayOAuthClientID.release.rawValue
-                let hasRelayID = clients.contains(where: { $0.clientId == OAuthID })
-                if !hasRelayID {
-                    logger.log("No Relay service on this account.", level: .info, category: .relay)
-                }
-                return hasRelayID
+                let oAuthID: RelayOAuthClientID = isStaging ? RelayOAuthClientID.stage : RelayOAuthClientID.release
+                let hasRelayID = clients.contains(where: { $0.clientId == oAuthID.rawValue })
+                if !hasRelayID { logger.log("No Relay service on this account.", level: .info, category: .relay) }
+                return hasRelayID ? .available : .unavailable
             case .failure(let error):
                 logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .relay)
-                return false
+                return .unavailable
             }
         }()
-        Task { @MainActor in
-            accountStatus = hasRelayOAuth ? .available : .unavailable
-        }
+        Task { @MainActor in accountStatus = status }
     }
 }
