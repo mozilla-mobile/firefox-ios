@@ -102,9 +102,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        linkVC.modalTransitionStyle = .coverVertical
-        presentedVC?.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        navController.modalTransitionStyle = .coverVertical
+        presentedVC?.present(navController, animated: true)
     }
 
     func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
