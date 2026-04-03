@@ -479,7 +479,7 @@ final class HomepageViewController: UIViewController,
 
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
-            cellType: LabelButtonHeaderView.self
+            cellType: LabelButtonHeaderCell.self
         )
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
@@ -702,7 +702,7 @@ final class HomepageViewController: UIViewController,
 
             guard let sectionHeaderView = collectionView.dequeueSupplementary(
                 of: kind,
-                cellType: LabelButtonHeaderView.self,
+                cellType: LabelButtonHeaderCell.self,
                 for: indexPath
             ) else {
                 return UICollectionReusableView()
@@ -732,8 +732,8 @@ final class HomepageViewController: UIViewController,
 
     private func configureSectionHeader(
         for section: HomepageSection,
-        with sectionLabelCell: LabelButtonHeaderView
-    ) -> LabelButtonHeaderView? {
+        with sectionLabelCell: LabelButtonHeaderCell
+    ) -> LabelButtonHeaderCell? {
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
@@ -1220,7 +1220,7 @@ final class HomepageViewController: UIViewController,
         return true
     }
 
-    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderCell) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
               dataSource?.snapshot().sectionIdentifiers.contains(.messageCard) == nil
         else { return }

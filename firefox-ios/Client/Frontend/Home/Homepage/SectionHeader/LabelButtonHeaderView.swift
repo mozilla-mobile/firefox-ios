@@ -7,16 +7,11 @@ import ComponentLibrary
 import Foundation
 
 /// Firefox homepage section header view
-class LabelButtonHeaderView: UICollectionReusableView,
-                             ReusableCell,
-                             ThemeApplicable,
-                             Notifiable {
+class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
     struct UX {
         static let inBetweenSpace: CGFloat = 12
-        static let topSpacing: CGFloat = 0
         static let bottomSpace: CGFloat = 16
         static let bottomButtonSpace: CGFloat = 6
-        static let leadingInset: CGFloat = 0
     }
 
     // MARK: - UIElements
@@ -46,7 +41,14 @@ class LabelButtonHeaderView: UICollectionReusableView,
         }
     }
 
+    var bottomSpacing: CGFloat = UX.bottomSpace {
+        didSet {
+            bottomConstraint?.constant = -bottomSpacing
+        }
+    }
+
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var bottomConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -64,14 +66,17 @@ class LabelButtonHeaderView: UICollectionReusableView,
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
+        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
+            .priority(UILayoutPriority(999))
+        self.bottomConstraint = bottomConstraint
+
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             // Collection view sizing can temporarily collapse supplementary views to zero height.
             // Keep the inset in normal layouts, but let auto layout relax it during that pass.
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
-                .priority(UILayoutPriority(999)),
+            bottomConstraint,
         ])
 
         // Setting custom values to resolve horizontal ambiguity
@@ -86,8 +91,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     // MARK: - Helper functions
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    func prepareForReuse() {
+        bottomSpacing = UX.bottomSpace
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
         moreButton.accessibilityIdentifier = nil

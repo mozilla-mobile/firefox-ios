@@ -25,8 +25,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
 
     private var progress: CGFloat = 0
     private var transitionEnabled = true
-    private var newsAffordanceExpandedConstraints = [NSLayoutConstraint]()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -104,11 +102,8 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         addSubview(sectionTitleHeaderView)
         updateSectionTitleHeaderFrame()
 
-        newsAffordanceExpandedConstraints = [
-            newsAffordanceContentView.topAnchor.constraint(equalTo: topAnchor),
-        ]
-
         NSLayoutConstraint.activate([
+            newsAffordanceContentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             newsAffordanceContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             newsAffordanceContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             newsAffordanceContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -116,10 +111,7 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
     }
 
     private func updateViewState(forHeight height: CGFloat) {
-        let shouldShowAffordance = transitionEnabled
-        updateAffordanceConstraints(shouldShowAffordance: shouldShowAffordance)
-
-        if shouldShowAffordance {
+        if transitionEnabled {
             newsAffordanceContentView.alpha = 1 - progress
             newsAffordanceContentView.accessibilityElementsHidden = progress >= 0.5
 
@@ -131,14 +123,6 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
 
             sectionTitleHeaderView.alpha = 1
             sectionTitleHeaderView.accessibilityElementsHidden = false
-        }
-    }
-
-    private func updateAffordanceConstraints(shouldShowAffordance: Bool) {
-        if shouldShowAffordance {
-            NSLayoutConstraint.activate(newsAffordanceExpandedConstraints)
-        } else {
-            NSLayoutConstraint.deactivate(newsAffordanceExpandedConstraints)
         }
     }
 

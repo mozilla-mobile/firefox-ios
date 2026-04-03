@@ -80,12 +80,12 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         addSubview(containerView)
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
                                                   constant: -UX.containerBottomInset),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
                                            constant: UX.stackTopInset),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.stackHorizontalInset),
@@ -94,10 +94,14 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                               constant: -UX.stackBottomInset),
 
-            chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize),
-            chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize),
-            newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize),
-            newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize),
+            chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize)
+                .priority(UILayoutPriority(999)),
+            chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize)
+                .priority(UILayoutPriority(999)),
+            newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize)
+                .priority(UILayoutPriority(999)),
+            newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize)
+                .priority(UILayoutPriority(999)),
         ])
     }
 }

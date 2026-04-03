@@ -896,7 +896,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
-            let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
+            let header = LabelButtonHeaderCell(frame: CGRect(width: 200, height: 200))
             header.configure(state: headerState, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         }
