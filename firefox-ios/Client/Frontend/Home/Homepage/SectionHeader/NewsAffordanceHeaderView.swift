@@ -7,7 +7,6 @@ import Foundation
 
 final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     struct UX {
-        static let containerBottomInset: CGFloat = 16
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20
@@ -80,24 +79,18 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         addSubview(containerView)
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                                  constant: -UX.containerBottomInset),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor,
                                            constant: UX.stackTopInset),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.stackHorizontalInset),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                 constant: -UX.stackHorizontalInset),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                              constant: -UX.stackBottomInset),
-
-            chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize),
-            chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize),
-            newsIconImageView.widthAnchor.constraint(equalToConstant: UX.newsIconSize),
-            newsIconImageView.heightAnchor.constraint(equalToConstant: UX.newsIconSize),
+                                              constant: -UX.stackBottomInset)
         ])
     }
 }
