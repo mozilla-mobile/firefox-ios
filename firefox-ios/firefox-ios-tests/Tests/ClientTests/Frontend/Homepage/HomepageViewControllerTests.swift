@@ -477,7 +477,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
     }
 
-    func test_configureSupplementaryHeader_withoutNewsAffordanceStyle_usesLabelButtonHeaderView() async throws {
+    func test_configureSupplementaryHeader_withoutNewsAffordanceStyle_usesLabelButtonHeaderCell() async throws {
         setupNimbusStoriesScrollDirectionTesting(scrollDirection: .baseline)
 
         let subject = createSubject()
@@ -498,7 +498,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             )
         )
 
-        XCTAssertTrue(header is LabelButtonHeaderView)
+        XCTAssertTrue(header is LabelButtonHeaderCell)
     }
 
     func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsTransitionHeaderView() async throws {
