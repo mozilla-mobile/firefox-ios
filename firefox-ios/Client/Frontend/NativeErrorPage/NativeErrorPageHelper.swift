@@ -59,6 +59,18 @@ class NativeErrorPageHelper {
 
     // MARK: - Static Helpers
 
+    /// Returns true when the error is a certificate error caused by a
+    /// hostname mismatch (SSL_ERROR_BAD_CERT_DOMAIN / -9843). Other certificate
+    /// failures return false so they fall back to the legacy HTML error page
+    static func isBadCertDomainError(_ error: NSError) -> Bool {
+        guard CertErrors.contains(error.code) else { return false }
+        if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
+           let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int {
+            return certErrorCode == Constants.sslErrorBadCertDomainCode
+        }
+        return false
+    }
+
     /// Builds the full set of URL query items for an error page, including
     /// certificate-specific items when the error is a certificate error.
     static func buildErrorPageQueryItems(for error: NSError, url: URL) -> [URLQueryItem] {
@@ -74,17 +86,21 @@ class NativeErrorPageHelper {
         return queryItems
     }
 
-    /// Checks whether a given error page URL encodes a certificate error by
-    /// inspecting the `code` query parameter against known certificate error codes.
+    /// Checks whether a given error page URL encodes a bad-cert-domain error
+    /// Other certificate errors return false  and use the legacy HTML error page
     static func isCertificateErrorURL(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let codeString = components.queryItems?.first(where: {
                   $0.name == Constants.codeQueryParam
               })?.value,
-              let errCode = Int(codeString)
+              let errCode = Int(codeString),
+              CertErrors.contains(errCode)
         else { return false }
 
-        return CertErrors.contains(errCode)
+        let certError = components.queryItems?.first(where: {
+            $0.name == Constants.certErrorQueryParam
+        })?.value
+        return certError == Constants.defaultBadCertDomainError
     }
 
     /// Logs diagnostic details for a certificate error to aid debugging.
