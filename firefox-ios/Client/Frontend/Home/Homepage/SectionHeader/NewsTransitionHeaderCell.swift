@@ -41,9 +41,17 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         updateViewState()
     }
 
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        updateViewState()
+    override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+    ) -> CGSize {
+        let measuredView: UIView = transitionEnabled ? newsAffordanceContentView : sectionTitleHeaderView
+        return measuredView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
     }
 
     func configure(
@@ -78,19 +86,6 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     func applyTheme(theme: Theme) {
         newsAffordanceContentView.applyTheme(theme: theme)
         sectionTitleHeaderView.applyTheme(theme: theme)
-    }
-
-    override func systemLayoutSizeFitting(
-        _ targetSize: CGSize,
-        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
-        verticalFittingPriority: UILayoutPriority
-    ) -> CGSize {
-        let measuredView: UIView = transitionEnabled ? newsAffordanceContentView : sectionTitleHeaderView
-        return measuredView.systemLayoutSizeFitting(
-            targetSize,
-            withHorizontalFittingPriority: horizontalFittingPriority,
-            verticalFittingPriority: verticalFittingPriority
-        )
     }
 
     private func setupLayout() {
