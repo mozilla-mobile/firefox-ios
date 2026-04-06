@@ -98,12 +98,10 @@ final class NewsTransitionHeaderView: UICollectionReusableView,
         addSubview(sectionTitleHeaderView)
 
         NSLayoutConstraint.activate([
-            newsAffordanceContentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             newsAffordanceContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             newsAffordanceContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             newsAffordanceContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            sectionTitleHeaderView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             sectionTitleHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
