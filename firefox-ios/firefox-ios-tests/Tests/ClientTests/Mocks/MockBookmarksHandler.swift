@@ -11,7 +11,7 @@ import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkNodeData
 
 final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
-    private let bookmarkFolderData = BookmarkFolderData(
+    private var folderData = BookmarkFolderData(
         guid: "1",
         dateAdded: Int64(Date().toTimestamp()),
         lastModified: Int64(Date().toTimestamp()),
@@ -21,22 +21,33 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
         childGUIDs: [],
         children: nil)
 
+    var getBookmarksTreeCalled = 0
+    var countBookmarksTreeCalled = 0
     var getRecentBookmarksCallCount = 0
-    var getRecentBookmarksCompletion: (([BookmarkItemData]) -> Void)?
+    var getRecentBookmarksResult: [BookmarkItemData]?
     var bookmarksInTreeValue = 0
+
+    init() {}
+
+    init(folderData: BookmarkFolderData) {
+        self.folderData = folderData
+    }
 
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
         getRecentBookmarksCallCount += 1
-        getRecentBookmarksCompletion = completion
-    }
+        guard let results = getRecentBookmarksResult else {
+            completion([])
+            return
+        }
 
-    func callGetRecentBookmarksCompletion(with results: [BookmarkItemData]) {
-        getRecentBookmarksCompletion?(results)
+        completion(results)
     }
 
     func getBookmarksTree(rootGUID: Shared.GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
+        getBookmarksTreeCalled += 1
+
         let deferred = Deferred<Maybe<BookmarkNodeData?>>()
-        deferred.fill(Maybe(success: bookmarkFolderData))
+        deferred.fill(Maybe(success: folderData))
         return deferred
     }
 
@@ -45,7 +56,7 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
         recursive: Bool,
         completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
     ) {
-        completion(.success(bookmarkFolderData))
+        completion(.success(folderData))
     }
 
     func updateBookmarkNode(guid: Shared.GUID,
@@ -68,10 +79,36 @@ final class MockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
     }
 
     func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        countBookmarksTreeCalled += 1
         completion(.success(bookmarksInTreeValue))
     }
 
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
         completion(.success(true))
+    }
+
+    func deleteBookmarkNode(guid: GUID) -> Success {
+        // This mock implements only a trivial search to the first level children for removal, not a recursive search
+        // at all depths.
+        var newChildrenGuids = folderData.childGUIDs
+        newChildrenGuids.removeAll(where: { $0 == guid })
+
+        var newChildren = folderData.children
+        newChildren?.removeAll(where: { $0.guid == guid })
+
+        folderData = BookmarkFolderData(
+            guid: folderData.guid,
+            dateAdded: folderData.dateAdded,
+            lastModified: folderData.lastModified,
+            parentGUID: folderData.parentGUID,
+            position: folderData.position,
+            title: folderData.title,
+            childGUIDs: newChildrenGuids,
+            children: newChildren
+        )
+
+        let result = Deferred<Maybe<Void>>()
+        result.fill(Maybe(success: ()))
+        return result
     }
 }
