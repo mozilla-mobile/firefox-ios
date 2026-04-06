@@ -323,9 +323,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
         let traitCollection = environment.traitCollection
-        let storiesHeaderState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)?
-            .merinoState.sectionHeaderState
-        ?? SectionHeaderConfiguration(title: "", a11yIdentifier: "")
+        let sectionHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
 
         let containerWidth = environment.container.effectiveContentSize.width
         let horizontalInset = UX.leadingInset(traitCollection: traitCollection)
@@ -366,7 +364,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(getHeaderHeight(headerState: storiesHeaderState, environment: environment))
+            heightDimension: .absolute(
+                getHeaderHeight(
+                    sectionHeaderConfiguration: sectionHeaderConfiguration,
+                    environment: environment
+                )
+            )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
@@ -667,7 +670,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             topSites: topSitesState.topSitesData,
             numberOfRows: topSitesState.numberOfRows,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
-            headerState: topSitesState.sectionHeaderState,
+            headerState: TopSitesSectionState.Constants.sectionHeaderConfiguration,
             containerWidth: containerWidth,
             isLandscape: UIDevice.current.orientation.isLandscape,
             shouldShowSection: topSitesState.shouldShowSection,
@@ -700,7 +703,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // Add header height
         if topSitesState.shouldShowSectionHeader {
-            totalHeight += getHeaderHeight(headerState: topSitesState.sectionHeaderState, environment: environment)
+            totalHeight += getHeaderHeight(
+                sectionHeaderConfiguration: TopSitesSectionState.Constants.sectionHeaderConfiguration,
+                environment: environment
+            )
         }
 
         // Build array of configured cells for the data being displayed on the homepage
@@ -756,7 +762,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             syncedTabConfig: jumpBackInState.mostRecentSyncedTab,
             maxNumberOfLocalTabs: jumpBackInConfig.getMaxNumberOfLocalTabsLayout,
             numberOfLocalTabsToShow: numberOfLocalTabsToShow,
-            headerState: jumpBackInState.sectionHeaderState,
+            headerState: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
             containerWidth: containerWidth,
             shouldShowSection: jumpBackInState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -800,7 +806,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += totalCells > 1 ? UX.interGroupSpacing : 0
 
         // Add header height
-        totalHeight += getHeaderHeight(headerState: jumpBackInState.sectionHeaderState, environment: environment)
+        totalHeight += getHeaderHeight(
+            sectionHeaderConfiguration: JumpBackInSectionState.Constants.sectionHeaderConfiguration,
+            environment: environment
+        )
 
         // Add section insets
         totalHeight += UX.spacingBetweenSections
@@ -882,22 +891,27 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
     /// Creates a "dummy" header and returns its height
     private func getHeaderHeight(
-        headerState: SectionHeaderConfiguration,
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
         environment: NSCollectionLayoutEnvironment
     ) -> CGFloat {
         let containerWidth = environment.container.contentSize.width
         let headerHeight: CGFloat
 
-        switch headerState.style {
+        switch sectionHeaderConfiguration.style {
         case .newsAffordance
             where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
             let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(state: headerState, textColor: .black, theme: LightTheme(), transitionEnabled: true)
+            header.configure(
+                sectionHeaderConfiguration: sectionHeaderConfiguration,
+                textColor: .black,
+                theme: LightTheme(),
+                transitionEnabled: true
+            )
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
             let header = LabelButtonHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(state: headerState, textColor: .black, theme: LightTheme())
+            header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: .black, theme: LightTheme())
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
         }
 
@@ -989,7 +1003,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let key = HomepageLayoutMeasurementCache.BookmarksMeasurement.Key(
             bookmarks: bookmarkState.bookmarks,
-            headerState: bookmarkState.sectionHeaderState,
+            headerState: BookmarksSectionState.Constants.sectionHeaderConfiguration,
             containerWidth: containerWidth,
             shouldShowSection: bookmarkState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory
@@ -1025,7 +1039,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
 
         // Get the rest of the section's height and cache and return the results
-        let headerHeight = getHeaderHeight(headerState: bookmarkState.sectionHeaderState, environment: environment)
+        let headerHeight = getHeaderHeight(
+            sectionHeaderConfiguration: BookmarksSectionState.Constants.sectionHeaderConfiguration,
+            environment: environment
+        )
         let totalHeight = headerHeight
             + tallestCellHeight
             + UX.spacingBetweenSections
@@ -1054,14 +1071,14 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             )
         }
 
-        let storiesState = state.merinoState
+        let merinoState = state.merinoState
         let scrollDirection = storiesScrollDirection
         let key = HomepageLayoutMeasurementCache.StoriesMeasurement.Key(
-            stories: storiesState.merinoData,
-            headerState: storiesState.sectionHeaderState,
+            stories: merinoState.merinoData,
+            headerState: MerinoState.Constants.sectionHeaderConfiguration,
             cellWidth: normalizedDimension(cellWidth),
             containerWidth: normalizedDimension(environment.container.contentSize.width),
-            shouldShowSection: storiesState.shouldShowSection,
+            shouldShowSection: merinoState.shouldShowSection,
             contentSizeCategory: environment.traitCollection.preferredContentSizeCategory,
             scrollDirection: scrollDirection
         )
@@ -1071,9 +1088,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             return cachedResult
         }
 
-        guard storiesState.shouldShowSection,
-              storiesState.hasMerinoResponseContent,
-              let stories = storiesState.merinoData.stories
+        guard merinoState.shouldShowSection,
+              merinoState.hasMerinoResponseContent,
+              let stories = merinoState.merinoData.stories
         else {
             let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
                 tallestCellHeight: 0,
@@ -1094,7 +1111,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             viewWidth: cellWidth
         )
 
-        let headerHeight = getHeaderHeight(headerState: storiesState.sectionHeaderState, environment: environment)
+        let headerHeight = getHeaderHeight(
+            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+            environment: environment
+        )
         let totalHeight = headerHeight + max(tallestCellHeight, UX.PocketConstants.minimumCellHeight) + UX.standardInset
 
         let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(

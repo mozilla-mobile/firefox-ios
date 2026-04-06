@@ -10,11 +10,11 @@ import Common
 @MainActor
 final class LabelButtonHeaderViewTests: XCTestCase {
     let theme = DarkTheme()
-    let sectionHeaderState = SectionHeaderConfiguration(title: "test title", a11yIdentifier: "test a11y identifier")
+    let sectionHeaderConfiguration = SectionHeaderConfiguration(title: "test title", a11yIdentifier: "test a11y identifier")
 
     func test_configure_withStateColor_appliesStateColorOverThemeColors() {
         let view = createSubject()
-        view.configure(state: sectionHeaderState, textColor: .systemPink, theme: theme)
+        view.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: .systemPink, theme: theme)
 
         XCTAssertEqual(view.titleLabel.textColor, .systemPink)
         XCTAssertEqual(view.moreButton.foregroundColorNormal, .systemPink)
@@ -22,7 +22,7 @@ final class LabelButtonHeaderViewTests: XCTestCase {
 
     func test_configure_withNoStateColor_appliesThemeColors() {
         let view = createSubject()
-        view.configure(state: sectionHeaderState, textColor: nil, theme: theme)
+        view.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: nil, theme: theme)
 
         XCTAssertEqual(view.titleLabel.textColor, theme.colors.textPrimary)
         XCTAssertEqual(view.moreButton.foregroundColorNormal, theme.colors.textAccent)
