@@ -38,37 +38,31 @@ func registerTabMenuNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIAppl
             to: LibraryPanel_History)
         // Downloads
         screenState.tap(
-            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
-            to: LibraryPanel_Downloads
+            app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads], to: LibraryPanel_Downloads
         )
         // More Options
         screenState.tap(
-            app.tables.cells["MainMenu.MoreLess"],
-            to: BrowserTabMenuMore)
-        // Tracking Protections (TODO)
-
+            app.tables.cells["MainMenu.MoreLess"], to: BrowserTabMenuMore)
+        // Tracking Protections
+        screenState.tap(
+            app.buttons["Protections are ON"], to: EnhancedTrackingProtection)
         // Find In Page
         screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
-            to: FindInPage)
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage], to: FindInPage)
         // Desktop Site
         screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite],
-            to: RequestDesktopSite
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite], to: RequestDesktopSite
         )
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.desktopSite],
                         to: RequestMobileSite)
 
         // Bookmark this page
         screenState.tap(
-            app.tables.cells["MainMenu.BookmarkPage"],
-            forAction: Action.Bookmark
+            app.tables.cells["MainMenu.BookmarkPage"], forAction: Action.Bookmark
         )
         // Sign In (if unauthenticated)
         screenState.tap(
-            app.cells[AccessibilityIdentifiers.MainMenu.signIn],
-            to: Intro_FxASignin,
-            if: "fxaUsername == nil")
+            app.cells[AccessibilityIdentifiers.MainMenu.signIn], to: Intro_FxASignin, if: "fxaUsername == nil")
         // Signed in (TODO)
         // SettingsScreen
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings], to: SettingsScreen)
