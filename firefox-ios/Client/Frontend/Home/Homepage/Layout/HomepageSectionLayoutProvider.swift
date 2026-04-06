@@ -906,7 +906,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         case .newsAffordance
             where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
             let header = NewsTransitionHeaderCell(frame: CGRect(width: 200, height: 200))
-            header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: .black, theme: LightTheme(), transitionEnabled: true)
+            header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration,
+                             textColor: .black,
+                             theme: LightTheme(),
+                             transitionEnabled: true)
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
@@ -1112,7 +1115,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             viewWidth: cellWidth
         )
 
-        let headerHeight = getHeaderHeight(sectionHeaderConfiguration: storiesState.sectionHeaderState, environment: environment)
+        let headerHeight = getHeaderHeight(sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+                                           environment: environment)
         let totalHeight = headerHeight + max(tallestCellHeight, UX.PocketConstants.minimumCellHeight)
                                        + UX.headerSectionSpacing
                                        + UX.standardInset

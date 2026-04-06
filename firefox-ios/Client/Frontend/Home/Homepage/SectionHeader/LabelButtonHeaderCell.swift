@@ -29,13 +29,13 @@ final class LabelButtonHeaderCell: UICollectionReusableView,
     }
 
     func configure(
-        state: SectionHeaderConfiguration,
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
         moreButtonAction: (@MainActor (UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme
     ) {
         headerView.configure(
-            state: state,
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
             moreButtonAction: moreButtonAction,
             textColor: textColor,
             theme: theme
