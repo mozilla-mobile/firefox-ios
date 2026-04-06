@@ -257,13 +257,10 @@ class PrivateBrowsingTest: BaseTestCase {
         )
         numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
 
         app.buttons["Undo"].waitAndTap()
 
         // All the private tabs are restored
-        waitForTabsButton()
-        navigator.goto(TabTray)
         numTab = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
