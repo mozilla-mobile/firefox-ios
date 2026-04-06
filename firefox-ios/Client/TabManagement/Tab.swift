@@ -820,7 +820,7 @@ class Tab: NSObject,
         /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
         webView?.backgroundColor =  theme.colors.layer1
         webView?.scrollView.backgroundColor = theme.colors.layer1
-        webView?.isOpaque = !nightMode
+        webView?.isOpaque = !(nightMode || theme.type == .dark)
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 
