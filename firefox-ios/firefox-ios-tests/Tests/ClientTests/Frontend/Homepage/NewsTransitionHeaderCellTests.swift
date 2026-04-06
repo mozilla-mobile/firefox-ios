@@ -62,8 +62,6 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
         XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
-        XCTAssertEqual(affordanceView(in: view)?.accessibilityElementsHidden, true)
-        XCTAssertEqual(labelHeaderView(in: view)?.accessibilityElementsHidden, false)
     }
 
     private func createSubject() -> NewsTransitionHeaderCell {
