@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 /// Firefox homepage stories header that fades between the news affordance and section title.
-final class NewsTransitionHeaderView: UICollectionReusableView,
+final class NewsTransitionHeaderCell: UICollectionReusableView,
                                       ReusableCell,
                                       ThemeApplicable {
     struct UX {

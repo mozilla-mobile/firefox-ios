@@ -601,7 +601,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
                 spacerHeight = 0.1
             } else {
-                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
                                                                              width: environment.container.contentSize.width)
                 let headerWithSectionSpacing = headerHeight + UX.headerSectionSpacing
                 /// `totalPeek` is how much of the stories section (header + spacing + stories) we want above the fold
@@ -905,13 +905,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         switch sectionHeaderConfiguration.style {
         case .newsAffordance
             where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
-            let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(
-                sectionHeaderConfiguration: sectionHeaderConfiguration,
-                textColor: .black,
-                theme: LightTheme(),
-                transitionEnabled: true
-            )
+            let header = NewsTransitionHeaderCell(frame: CGRect(width: 200, height: 200))
+            header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: .black, theme: LightTheme(), transitionEnabled: true)
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
@@ -943,7 +938,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let newsAffordanceHeaderHeight = HomepageDimensionCalculator
-            .fittingHeight(for: NewsTransitionHeaderView(), width: environment.container.contentSize.width)
+            .fittingHeight(for: NewsTransitionHeaderCell(), width: environment.container.contentSize.width)
         let fullPeekOffset = newsAffordanceHeaderHeight + UX.PocketConstants.getStoriesPeekOffset()
 
         if rawSpacerHeight >= fullPeekOffset {
