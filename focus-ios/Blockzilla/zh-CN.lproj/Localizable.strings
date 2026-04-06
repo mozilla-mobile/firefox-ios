@@ -338,7 +338,7 @@
 "Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
 
 /* Description associated to the Studies toggle on the settings screen. %@ is the app name (for example "Firefox Focus" or "Firefox Klar"). */
-"Settings.detailTextStudies.v2" = "%@ 将随机选择用户测试功能，以为全体用户改进质量。";
+"Settings.detailTextStudies.v2" = "%@ 会随机选择用户测试功能，以为全体用户改进质量。";
 
 /* Title for section in settings menu */
 "Settings.general" = "常规";
