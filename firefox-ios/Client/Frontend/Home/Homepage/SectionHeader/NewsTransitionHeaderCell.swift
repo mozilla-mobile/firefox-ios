@@ -23,6 +23,8 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isAccessibilityElement = true
+        accessibilityTraits = .header
         setupLayout()
         updateViewState()
     }
@@ -111,16 +113,14 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     private func updateViewState() {
         if transitionEnabled {
             newsAffordanceContentView.alpha = 1 - progress
-            newsAffordanceContentView.accessibilityElementsHidden = progress >= 0.5
-
             sectionTitleHeaderView.alpha = progress
-            sectionTitleHeaderView.accessibilityElementsHidden = progress < 0.5
+            accessibilityLabel = progress < 0.5
+                ? newsAffordanceContentView.accessibilityLabel
+                : sectionTitleHeaderView.title
         } else {
             newsAffordanceContentView.alpha = 0
-            newsAffordanceContentView.accessibilityElementsHidden = true
-
             sectionTitleHeaderView.alpha = 1
-            sectionTitleHeaderView.accessibilityElementsHidden = false
+            accessibilityLabel = sectionTitleHeaderView.title
         }
     }
 }

@@ -48,9 +48,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        isAccessibilityElement = true
         accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
-        accessibilityTraits.insert(.header)
         setupLayout()
     }
 
