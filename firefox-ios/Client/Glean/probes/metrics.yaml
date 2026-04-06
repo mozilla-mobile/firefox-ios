@@ -2929,6 +2929,8 @@ nimbus_system:
           type: boolean
         has_accepted_terms_of_use:
           type: boolean
+        user_disabled_ai:
+          type: boolean
         is_apple_intelligence_available:
           type: boolean
         cannot_use_apple_intelligence:
@@ -2939,6 +2941,7 @@ nimbus_system:
       The Nimbus context object that is recorded to Glean
     bugs:
       - 'https://github.com/mozilla-mobile/firefox-ios/issues/23736'
+      - 'https://mozilla-hub.atlassian.net/browse/FXIOS-15343'
     data_reviews:
       - 'https://github.com/mozilla-mobile/firefox-ios/pull/23737#issuecomment-2541639916'
     data_sensitivity:

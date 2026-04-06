@@ -25,6 +25,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -38,6 +39,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -69,6 +71,10 @@ class RecordedNimbusContextTests: XCTestCase {
             recordedContext.hasAcceptedTermsOfUse
         )
         XCTAssertEqual(
+            json?.removeValue(forKey: "user_disabled_ai") as? Bool,
+            recordedContext.userDisabledAi
+        )
+        XCTAssertEqual(
             json?.removeValue(forKey: "is_apple_intelligence_available") as? Bool,
             recordedContext.isAppleIntelligenceAvailable
         )
@@ -96,6 +102,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -125,6 +132,10 @@ class RecordedNimbusContextTests: XCTestCase {
             recordedContext.hasAcceptedTermsOfUse
         )
         XCTAssertEqual(
+            value?.userDisabledAi,
+            recordedContext.userDisabledAi
+        )
+        XCTAssertEqual(
             value?.touExperiencePoints,
             recordedContext.touExperiencePoints.toInt64()
         )
@@ -139,6 +150,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -156,6 +168,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -177,6 +190,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
