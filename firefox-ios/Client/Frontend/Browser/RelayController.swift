@@ -218,7 +218,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                                                                                       result: RelayMaskGenerationResult) {
         do {
             logger.log("Relay: createAddress()", level: .info, category: .relay)
-            let relayAddress = try client.createAddress(description: "", generatedFor: websiteDomain, usedOn: "")
+            let relayAddress = try client.createAddress(description: websiteDomain, generatedFor: websiteDomain, usedOn: "")
             telemetry.autofilled(newMask: true)
             return (relayAddress.fullAddress, .newMaskGenerated)
         } catch {
