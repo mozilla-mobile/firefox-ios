@@ -211,7 +211,7 @@ class Action {
     static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
     static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
 
-    static let TogglePocketInNewTab = "TogglePocketInNewTab"
+    static let ToggleStoriesInNewTab = "ToggleStoriesInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
     static let ToggleJumpBackIn = "ToggleJumpBackIn"
