@@ -22,6 +22,11 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+    }
 
     override func generateSettings() -> [SettingSection] {
         updateNumberofRows()
@@ -62,4 +67,5 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
             numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
         }
     }
+    
 }
