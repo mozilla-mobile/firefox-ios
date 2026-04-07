@@ -445,9 +445,15 @@ final class HomepageViewController: UIViewController,
 
         // Shift up by the homepage view's window offset so wallpaper stays anchored to window top.
         let viewTopOffset = view.convert(CGPoint.zero, to: window).y
-        // Height is authoritative from state and already includes the window-relative content offset.
-        wallpaperHeightConstraint?.constant = availableWallpaperHeight
-        wallpaperTopConstraint?.constant = -viewTopOffset
+
+        if availableWallpaperHeight.isZero {
+            // Default height when availableWallpaperHeight is zero
+            wallpaperHeightConstraint?.constant = UIScreen.main.bounds.height - viewTopOffset
+        } else {
+            // Height is authoritative from state and already includes the window-relative content offset.
+            wallpaperHeightConstraint?.constant = availableWallpaperHeight
+            wallpaperTopConstraint?.constant = -viewTopOffset
+        }
     }
 
     private func setupLayout() {
