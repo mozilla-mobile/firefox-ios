@@ -216,14 +216,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         return !didFailJS
     }
 
-    private func performPostLaunchUpdate() {
-        let delay = updateConfig.postLaunchUpdateDelay
-        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
-            self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
-            Task { @MainActor in self?.updateRelayAccountStatus() }
-        }
-    }
-
     private func attemptOAuthTokenRefresh(tab: Tab, completion: @escaping RelayPopulateCompletion) {
         // Attempt to refresh OAuth token and retry.
         logger.log("Attempting OAuth refresh. Will re-create Relay client.", level: .info, category: .relay)
@@ -273,20 +265,6 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }
         return (nil, .error)
-    }
-
-    private func beginObserving() {
-        startObservingNotifications(
-            withNotificationCenter: notificationCenter,
-            forObserver: self,
-            observing: [Notification.Name.ProfileDidStartSyncing,
-                        Notification.Name.FirefoxAccountChanged]
-        )
-    }
-
-    func handleNotifications(_ notification: Notification) {
-        logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
-        Task { @MainActor in updateRelayAccountStatus() }
     }
 
     private func updateRelayAccountStatus() {
@@ -379,5 +357,29 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             }
         }()
         Task { @MainActor in accountStatus = status }
+    }
+
+    // MARK: - Notifications
+
+    private func beginObserving() {
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [Notification.Name.ProfileDidStartSyncing,
+                        Notification.Name.FirefoxAccountChanged]
+        )
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
+        Task { @MainActor in updateRelayAccountStatus() }
+    }
+
+    private func performPostLaunchUpdate() {
+        let delay = updateConfig.postLaunchUpdateDelay
+        Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
+            self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
+            Task { @MainActor in self?.updateRelayAccountStatus() }
+        }
     }
 }
