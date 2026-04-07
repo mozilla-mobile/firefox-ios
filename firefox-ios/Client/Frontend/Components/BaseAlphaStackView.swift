@@ -70,23 +70,24 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     private func setKeyboardSpacerHeight(height: CGFloat) {
         guard let keyboardSpacer = self.keyboardSpacer else { return }
         keyboardSpacer.translatesAutoresizingMaskIntoConstraints = false
-        // Remove any existing height constraint on keyboardSpacer
+
         if let existingHeightConstraint = keyboardSpacer.constraints.first(where: {
             $0.firstAttribute == .height && $0.secondItem == nil
         }) {
-            keyboardSpacer.removeConstraint(existingHeightConstraint)
+            existingHeightConstraint.constant = height
+            keyboardSpacerHeight = existingHeightConstraint
+        } else {
+            // Create and add the new height constraint
+            let heightConstraint = NSLayoutConstraint(item: keyboardSpacer,
+                                                      attribute: .height,
+                                                      relatedBy: .equal,
+                                                      toItem: nil,
+                                                      attribute: .notAnAttribute,
+                                                      multiplier: 1.0,
+                                                      constant: height)
+            keyboardSpacer.addConstraint(heightConstraint)
+            keyboardSpacerHeight = heightConstraint
         }
-
-        // Create and add the new height constraint
-        let heightConstraint = NSLayoutConstraint(item: keyboardSpacer,
-                                                  attribute: .height,
-                                                  relatedBy: .equal,
-                                                  toItem: nil,
-                                                  attribute: .notAnAttribute,
-                                                  multiplier: 1.0,
-                                                  constant: height)
-        keyboardSpacer.addConstraint(heightConstraint)
-        keyboardSpacerHeight = heightConstraint
     }
 
     // MARK: - Spacer view
