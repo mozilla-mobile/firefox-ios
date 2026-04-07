@@ -54,6 +54,7 @@ class AIControlsModelTests: XCTestCase {
 
     @MainActor
     func testInitialize() {
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
