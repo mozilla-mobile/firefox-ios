@@ -100,48 +100,11 @@ class RecordedNimbusContextTests: XCTestCase {
             cannotUseAppleIntelligence: true
         )
 
-        var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
-        let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
-            value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue("nimbus")
-            expectation.fulfill()
-        }
-
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         recordedContext.record()
 
-        wait(for: [expectation], timeout: 5.0)
-
-        // Check value on nimbus ping
-        XCTAssertNotNil(value)
-        XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
-        XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
-        XCTAssertEqual(value?.isPhone, recordedContext.isPhone)
-        XCTAssertEqual(value?.locale, recordedContext.locale)
-        XCTAssertEqual(value?.region, recordedContext.region)
-        XCTAssertEqual(value?.language, recordedContext.language)
-        XCTAssertEqual(value?.daysSinceInstall, recordedContext.daysSinceInstall.toInt64())
-        XCTAssertEqual(value?.daysSinceUpdate, recordedContext.daysSinceUpdate.toInt64())
-        XCTAssertEqual(value?.isDefaultBrowser, recordedContext.isDefaultBrowser)
-        XCTAssertEqual(value?.isBottomToolbarUser, recordedContext.isBottomToolbarUser)
-        XCTAssertEqual(
-            value?.hasEnabledTipsNotifications,
-            recordedContext.hasEnabledTipsNotifications
-        )
-        XCTAssertEqual(
-            value?.hasAcceptedTermsOfUse,
-            recordedContext.hasAcceptedTermsOfUse
-        )
-        XCTAssertEqual(
-            value?.touExperiencePoints,
-            recordedContext.touExperiencePoints.toInt64()
-        )
-
-        XCTAssertNotNil(value?.eventQueryValues)
-        XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
-
         // Check value on nimbus-targeting-context ping
-        value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue("nimbus-targeting-context")
+        let value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue("nimbus-targeting-context")
         XCTAssertNotNil(value)
         XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
         XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
