@@ -16,6 +16,12 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         case stage = "41b4363ae36440a9"
     }
 
+    private enum RelayAPIErrorCode {
+        static let freeTierLimitReached = "free_tier_limit"
+        static let invalidToken = "invalid_token"
+        static let unknown = "unknown"
+    }
+
     enum RelayClientConfiguration {
         case prod
         case staging
@@ -242,11 +248,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
             if case let RelayApiError.Api(status, code, _) = error,
                status == 401,
-               code == "invalid_token" || code == "unknown" {
+               code == RelayAPIErrorCode.invalidToken || code == RelayAPIErrorCode.unknown {
                 // Invalid OAuth token
                 logger.log("OAuth token expired.", level: .info, category: .relay)
                 return (nil, .expiredToken)
-            } else if case let RelayApiError.Api(_, code, _) = error, code == "free_tier_limit" {
+            } else if case let RelayApiError.Api(_, code, _) = error, code == RelayAPIErrorCode.freeTierLimitReached {
                 // For Phase 1, we return a random email from the user's list
                 logger.log("Free tier limit reached. Using random mask.", level: .info, category: .relay)
                 do {
