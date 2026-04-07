@@ -39,4 +39,7 @@ struct TranslationLanguageSelectedAction: Action {
 enum TranslationsActionType: ActionType {
     case didTapRetryFailedTranslation
     case didSelectTargetLanguage
+    case showAutoTranslatePrompt
+    case didTapEnableAutoTranslate
+    case didDismissAutoTranslatePrompt
 }
