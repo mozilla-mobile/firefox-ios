@@ -38,6 +38,7 @@ protocol TranslationModelsFetcherProtocol: Sendable {
     func fetchModelBuffer(recordId: String) async -> Data?
     func prewarmResources(for sourceLang: String, to targetLang: String) async
     func fetchSupportedTargetLanguages() async -> [String]
+    func resetStorage() async
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
@@ -213,6 +214,15 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         return records
             .compactMap { (decodeRecord($0) as ModelFieldsRecord?)?.toLang }
             .uniqued()
+    }
+
+    /// Resets any local storage of models.
+    func resetStorage() async {
+        do {
+            try modelsClient?.resetStorage()
+        } catch {
+            logger.log("Resetting storage for models failed with error \(error.localizedDescription).", level: .warning, category: .remoteSettings)
+        }
     }
 
     /// Pre-warms attachments for a list of records by fetching them

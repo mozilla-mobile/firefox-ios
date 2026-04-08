@@ -51,10 +51,12 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
 
     init(
         prefs: Prefs,
+        windowUUID: WindowUUID,
         translationConfiguration: TranslationConfiguration? = nil,
         summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
     ) {
         self.prefs = prefs
+        self.windowUUID = windowUUID
         self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
         self.summarizerConfiguration = summarizerConfiguration
 
@@ -67,24 +69,31 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
     }
 
+    @MainActor
     func toggleKillSwitch(to newValue: Bool) {
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
         switch newValue {
         case false:
             pageSummariesEnabled = true
             translationEnabled = true
-            prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
             prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         case true:
             pageSummariesEnabled = false
             translationEnabled = false
-            prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
             prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         }
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        ))
     }
 
+    @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
+        store.dispatch(TranslationSettingsViewAction(
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        ))
     }
 
     func togglePageSummariesFeature(to newValue: Bool) {

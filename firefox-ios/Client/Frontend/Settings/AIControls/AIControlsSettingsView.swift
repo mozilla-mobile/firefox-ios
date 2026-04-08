@@ -6,7 +6,6 @@ import Common
 import Shared
 
 struct AIControlsSettingsView: View, ThemeApplicable {
-    let windowUUID: WindowUUID
     @ObservedObject var aiControlsModel: AIControlsModel
 
     // MARK: - Theming
@@ -70,8 +69,8 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             aiControlsModel.togglePageSummariesFeature(to: newValue)
         })
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
         }
     }
 
@@ -215,7 +214,6 @@ private struct RoundedCard<Content: View>: View {
 
 #Preview {
     AIControlsSettingsView(
-        windowUUID: WindowUUID.DefaultUITestingUUID,
-        aiControlsModel: AIControlsModel(prefs: MockProfilePrefs())
+        aiControlsModel: AIControlsModel(prefs: MockProfilePrefs(), windowUUID: WindowUUID.DefaultUITestingUUID)
     )
 }

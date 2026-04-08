@@ -378,11 +378,10 @@ final class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
     func pressedAIControls() {
-        let model = AIControlsModel(prefs: profile.prefs)
+        let model = AIControlsModel(prefs: profile.prefs, windowUUID: windowUUID)
 
         let viewController = UIHostingController(
             rootView: AIControlsSettingsView(
-                windowUUID: windowUUID,
                 aiControlsModel: model
             )
         )
