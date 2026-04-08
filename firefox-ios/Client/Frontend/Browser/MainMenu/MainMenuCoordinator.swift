@@ -169,7 +169,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let translationConfig = toolbarState?.addressToolbar.translationConfiguration
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
-            let isSingleLanguageFlow = translationConfig.map { !$0.isMultiLanguageFlow } ?? false
+            let isSingleLanguageFlow = if let translationConfig { !translationConfig.isMultiLanguageFlow } else { false }
             let prefs = profile.prefs
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
