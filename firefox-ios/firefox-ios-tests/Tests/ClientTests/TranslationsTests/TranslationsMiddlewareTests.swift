@@ -125,6 +125,34 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.pageLanguageIdentificationFailedCalledCount, 0)
     }
 
+    func test_urlDidChangeAction_withLanguagePickerEnabled_andEligiblePage_doesDispatchAction() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "expect receivedTranslationLanguage action to be fired")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(actionCalled.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(actionType, ToolbarActionType.receivedTranslationLanguage)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+    }
+
     func test_urlDidChangeAction_withError_doesNotDispatchActionAndLogsError() throws {
         setTranslationsFeatureEnabled(enabled: true)
         enum TestError: Error { case example }
@@ -837,14 +865,18 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func createSubject(
-        translationsService: TranslationsServiceProtocol = MockTranslationsService()
+        translationsService: TranslationsServiceProtocol = MockTranslationsService(),
+        manager: PreferredTranslationLanguagesManager? = nil,
+        localeProvider: LocaleProvider = MockLocaleProvider()
     ) -> TranslationsMiddleware {
         return TranslationsMiddleware(
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
             translationsService: translationsService,
-            translationsTelemetry: mockTranslationsTelemetry
+            translationsTelemetry: mockTranslationsTelemetry,
+            manager: manager,
+            localeProvider: localeProvider
         )
     }
 
