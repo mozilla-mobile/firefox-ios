@@ -161,7 +161,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             DefaultApplicationHelper().openSettings()
 
         case .webpageSummary(let config):
-            dismissMenuModal(animated: true)
             navigationHandler?.showSummarizePanel(.mainMenu, config: config)
 
         case .translatePage:

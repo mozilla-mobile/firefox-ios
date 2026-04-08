@@ -307,6 +307,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
+                                                  summarizerTrigger: .toolbarIcon,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
@@ -370,6 +371,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
                 let summarizerConfig = await summarizerConfigFactory.makeConfiguration(from: webView)
                 let action = GeneralBrowserAction(summarizerConfig: summarizerConfig,
+                                                  summarizerTrigger: .toolbarIcon,
                                                   windowUUID: action.windowUUID,
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
