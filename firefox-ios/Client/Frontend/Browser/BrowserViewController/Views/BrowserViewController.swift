@@ -1921,17 +1921,10 @@ class BrowserViewController: UIViewController,
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else { return }
 
-        /// On iOS 26+, we use `UIKeyboardLayoutGuide` (https://developer.apple.com/documentation/uikit/uikeyboardlayoutguide)
-        /// to avoid keyboard frame calculation issues. The legacy `keyboardFrameEndUserInfoKey` API returns
-        /// incorrect keyboard frames when autofill displays suggested credentials above the keyboard.
-        /// It  might be an apple bug.
-        /// Related bug: https://mozilla-hub.atlassian.net/browse/FXIOS-13349
-        let keyboardOverlapHeight = view.frame.height - view.keyboardLayoutGuide.layoutFrame.minY
         let toolbarHeightOffset = addressToolbarContainer.offsetForKeyboardAccessory(
             hasAccessoryView: tabManager.selectedTab?.webView?.accessoryView != nil
         )
-        let effectiveKeyboardHeight = if #available(iOS 26.0, *) { keyboardOverlapHeight } else { keyboardHeight }
-        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: effectiveKeyboardHeight - toolbarHeightOffset)
+        let spacerHeight = getKeyboardSpacerHeight(keyboardHeight: keyboardHeight - toolbarHeightOffset)
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
 
         // make sure the keyboard spacer has the right color/translucency
