@@ -9,6 +9,14 @@ struct PreferredLanguageDetails: Equatable, Hashable {
     let code: String
     let mainText: String
     let subtitleText: String?
+    let isDeviceLanguage: Bool
+
+    init(code: String, mainText: String, subtitleText: String?, isDeviceLanguage: Bool = false) {
+        self.code = code
+        self.mainText = mainText
+        self.subtitleText = subtitleText
+        self.isDeviceLanguage = isDeviceLanguage
+    }
 }
 
 struct TranslationSettingsState: ScreenState, Equatable {

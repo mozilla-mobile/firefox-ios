@@ -152,7 +152,9 @@ final class TranslationSettingsMiddleware {
             let subtitle: String? = isDeviceLanguage
                 ? .Settings.Translation.PreferredLanguages.DeviceLanguage
                 : (native == localized ? nil : localized)
-            return PreferredLanguageDetails(code: code, mainText: native, subtitleText: subtitle)
+            return PreferredLanguageDetails(
+                code: code, mainText: native, subtitleText: subtitle, isDeviceLanguage: isDeviceLanguage
+            )
         }
     }
 }

@@ -198,17 +198,21 @@ final class TranslationPickerSettingsViewController: UIViewController,
         > { [weak self] cell, _, item in
             guard let self, case let .language(details) = item else { return }
             cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
-            cell.accessories = [
-                .delete(displayed: .whenEditing, actionHandler: { [weak self] in
-                    guard let self else { return }
-                    store.dispatch(TranslationSettingsViewAction(
-                        languageCode: details.code,
-                        windowUUID: windowUUID,
-                        actionType: TranslationSettingsViewActionType.removeLanguage
-                    ))
-                }),
-                .reorder(displayed: .whenEditing)
-            ]
+            if details.isDeviceLanguage {
+                cell.accessories = [.reorder(displayed: .whenEditing)]
+            } else {
+                cell.accessories = [
+                    .delete(displayed: .whenEditing, actionHandler: { [weak self] in
+                        guard let self else { return }
+                        store.dispatch(TranslationSettingsViewAction(
+                            languageCode: details.code,
+                            windowUUID: windowUUID,
+                            actionType: TranslationSettingsViewActionType.removeLanguage
+                        ))
+                    }),
+                    .reorder(displayed: .whenEditing)
+                ]
+            }
         }
 
         let addLanguageReg = UICollectionView.CellRegistration<
