@@ -524,10 +524,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func canShowDataClearanceAction() -> Bool {
-        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
-
-        return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
+        return isFeltPrivacyDeletionEnabled
     }
 
     private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {

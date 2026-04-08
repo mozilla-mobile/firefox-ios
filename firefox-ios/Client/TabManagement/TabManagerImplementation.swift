@@ -888,13 +888,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
         selectTabWithSession(tab: tab, sessionData: sessionData)
 
-        // Default to false if the feature flag is not enabled
-        var isPrivate = false
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            isPrivate = tab.isPrivate
-        }
-
-        let action = PrivateModeAction(isPrivate: isPrivate,
+        let action = PrivateModeAction(isPrivate: tab.isPrivate,
                                        windowUUID: windowUUID,
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatch(action)

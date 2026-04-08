@@ -2008,7 +2008,7 @@ class BrowserViewController: UIViewController,
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetCFRsTimer()
 
-        if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if isPrivate {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
 
             // embedContent(:) is called when showing the homepage and that is already making sure the shadow is not clipped
@@ -3920,14 +3920,13 @@ class BrowserViewController: UIViewController,
     // MARK: Overlay View
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
-        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
 
         let isSettingEnabled = searchEnginesManager.shouldShowPrivateModeSearchSuggestions
 
-        return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
+        return !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
     // Configure dimming view to show for private mode
