@@ -195,7 +195,10 @@ final class MockRelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol {
 }
 
 final class MockRelayJavascriptEvaluator: RelayJavascriptEvaluator {
-    func evaluateJavaScript(_ javaScript: String, for: WKWebView, in frame: WKFrameInfo?, contentWorld: WKContentWorld) async throws -> Any? {
+    func evaluateJavaScript(_ javaScript: String,
+                            for: WKWebView,
+                            in frame: WKFrameInfo?,
+                            contentWorld: WKContentWorld) async throws -> Any? {
         return nil
     }
 }
