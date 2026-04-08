@@ -55,6 +55,8 @@ public protocol BookmarksHandler {
         completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     )
 
+    func deleteBookmarkNode(guid: GUID) -> Success
+
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 

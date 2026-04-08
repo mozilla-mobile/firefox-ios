@@ -486,6 +486,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
         // Type partial match ("mo") of the history and the bookmark
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.goto(HomePanelsScreen)
         typeOnSearchBar(text: "mo")

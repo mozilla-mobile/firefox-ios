@@ -3388,33 +3388,33 @@ extension String {
             )
 
             public static let ToggleFooter = MZLocalizedString(
-                key: "", // Settings.Translation.ToggleFooter.v150
+                key: "Settings.Translation.ToggleFooter.v151",
                 tableName: "Settings",
                 value: "Turn this off to remove translation from the toolbar and menu.",
-                comment: "Footer text below the enable-translations toggle in the Translation settings screen."
+                comment: "Footer text below the enable toggle in the Translation settings screen."
             )
 
             public struct PreferredLanguages {
                 public static let SectionTitle = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.SectionTitle.v150
+                    key: "Settings.Translation.PreferredLanguages.SectionTitle.v151",
                     tableName: "Settings",
                     value: "Preferred Languages",
                     comment: "Section header for the preferred languages list in the Translation settings screen."
                 )
                 public static let DeviceLanguage = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.DeviceLanguage.v150
+                    key: "Settings.Translation.PreferredLanguages.DeviceLanguage.v151",
                     tableName: "Settings",
                     value: "Device Language",
                     comment: "Subtitle on the device language row in the preferred languages list in the Translation settings screen."
                 )
                 public static let Footer = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.Footer.v150
+                    key: "Settings.Translation.PreferredLanguages.Footer.v151",
                     tableName: "Settings",
                     value: "Choose from these languages when translating.",
                     comment: "Footer text below the preferred languages list in the Translation settings screen."
                 )
                 public static let AddLanguage = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.AddLanguage.v150
+                    key: "Settings.Translation.PreferredLanguages.AddLanguage.v151",
                     tableName: "Settings",
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
@@ -3423,13 +3423,13 @@ extension String {
 
             public struct AutoTranslate {
                 public static let Title = MZLocalizedString(
-                    key: "", // Settings.Translation.AutoTranslate.Title.v150
+                    key: "Settings.Translation.AutoTranslate.Title.v151",
                     tableName: "Settings",
                     value: "Automatically Translate",
                     comment: "Title for the auto-translate toggle in the Translation settings screen."
                 )
                 public static let Footer = MZLocalizedString(
-                    key: "", // Settings.Translation.AutoTranslate.Footer.v150
+                    key: "Settings.Translation.AutoTranslate.Footer.v151",
                     tableName: "Settings",
                     value: "Translates pages to your top preferred language automatically.",
                     comment: "Footer text below the auto-translate toggle in the Translation settings screen."
@@ -3438,13 +3438,13 @@ extension String {
 
             public struct LanguagePicker {
                 public static let NavTitle = MZLocalizedString(
-                    key: "", // Settings.Translation.LanguagePicker.NavTitle.v150
+                    key: "Settings.Translation.LanguagePicker.NavTitle.v151",
                     tableName: "Settings",
                     value: "Select Language",
                     comment: "Navigation bar title of the language picker shown when adding a preferred translation language."
                 )
                 public static let SearchPlaceholder = MZLocalizedString(
-                    key: "", // Settings.Translation.LanguagePicker.SearchPlaceholder.v150
+                    key: "Settings.Translation.LanguagePicker.SearchPlaceholder.v151",
                     tableName: "Settings",
                     value: "Search",
                     comment: "Placeholder text for the search bar in the translation language picker."
@@ -4149,22 +4149,22 @@ extension String {
 
         public struct LanguagePicker {
             public static let Title = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.Title.v150
+                key: "Translations.LanguagePicker.Title.v151",
                 tableName: "Translations",
                 value: "Translate Page to…",
                 comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
             public static let PreferredLanguagesTitle = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.PreferredLanguages.v150
+                key: "Translations.LanguagePicker.PreferredLanguages.v151",
                 tableName: "Translations",
                 value: "Preferred Languages…",
                 comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
             public static let PageTranslatedTitle = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.PageTranslatedTitle.v150
+                key: "Translations.LanguagePicker.PageTranslatedTitle.v151",
                 tableName: "Translations",
                 value: "Page Translated to %@",
                 comment: "Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English').")
             public static let ShowOriginal = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.ShowOriginal.v150
+                key: "Translations.LanguagePicker.ShowOriginal.v151",
                 tableName: "Translations",
                 value: "Show Original",
                 comment: "Button in the translation action sheet to restore the page to its original language.")
@@ -4264,6 +4264,19 @@ extension String {
                     value: "Please try again.",
                     comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
             }
+        }
+
+        public struct AutoTranslatePrompt {
+            public static let Message = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.Message.v151",
+                tableName: "Translations",
+                value: "Automatically translate pages when available?",
+                comment: "Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate.")
+            public static let EnableButton = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.EnableButton.v151",
+                tableName: "Translations",
+                value: "Enable",
+                comment: "Button label on the auto-translate prompt that enables the auto-translate feature when tapped.")
         }
     }
 }
@@ -5640,7 +5653,7 @@ extension String {
                     comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
 
                 public static let Off = MZLocalizedString(
-                    key: "", // MainMenu.ToolsSection.Translation.Off.v150
+                    key: "MainMenu.ToolsSection.Translation.Off.v151",
                     tableName: "MainMenu",
                     value: "Off",
                     comment: "On the main menu, the badge shown on the Translate Page item when translation is inactive.")

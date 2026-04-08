@@ -18,6 +18,7 @@ struct TPMenuUX {
         static let headerLabelDistance: CGFloat = 2.0
         static let iconSize: CGFloat = 24
         static let connectionDetailsHeaderMargins: CGFloat = 8
+        static let connectionDetailsFooterMargins: CGFloat = 16
         static let faviconCornerRadius: CGFloat = 16
         static let clearDataButtonTopDistance: CGFloat = 32
         static let clearDataButtonBorderWidth: CGFloat = 0
@@ -385,7 +386,11 @@ class TrackingProtectionViewController: UIViewController,
         ]
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
-            guard let self else { return }
+            guard let self,
+                  let trackersBlocked = model.contentBlockerStats?.total,
+                  trackersBlocked > 0 else {
+                return
+            }
             store.dispatch(
                 TrackingProtectionAction(
                     windowUUID: self.windowUUID,

@@ -371,6 +371,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         homepageSettingsScreen.disableBookmarkToggle()
         homepageSettingsScreen.assertBookmarkToggleIsDisabled()
         navigator.nowAt(HomeSettings)
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         browserScreen.tapCancelButtonIfExist()
@@ -441,6 +444,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         if #unavailable(iOS 16) {
             navigator.performAction(Action.CloseURLBarOpen)
         }
+        waitForTabsButton()
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
         if XCUIDevice.shared.orientation == .landscapeLeft {

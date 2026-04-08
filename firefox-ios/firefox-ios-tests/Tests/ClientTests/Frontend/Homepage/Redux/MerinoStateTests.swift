@@ -27,7 +27,7 @@ final class MerinoStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.merinoData.stories, nil)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
 
     @MainActor
@@ -98,28 +98,22 @@ final class MerinoStateTests: XCTestCase {
     func test_initialState_withBaselineStoriesDirection_returnsExpectedState() {
         setupHomepageRedesignFeature(scrollDirection: .baseline)
 
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .sectionTitle)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
 
     func test_initialState_withHorizontalStoriesDirection_returnsExpectedState() {
         setupHomepageRedesignFeature(scrollDirection: .horizontal)
 
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .sectionTitle)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .sectionTitle)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
 
     func test_initialState_withVerticalStoriesDirection_returnsExpectedState() {
         setupHomepageRedesignFeature(scrollDirection: .vertical)
 
-        let initialState = createSubject()
-
-        XCTAssertEqual(initialState.sectionHeaderState.style, .newsAffordance)
-        XCTAssertEqual(initialState.sectionHeaderState.isButtonHidden, true)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .newsAffordance)
+        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
 
     // MARK: - Private

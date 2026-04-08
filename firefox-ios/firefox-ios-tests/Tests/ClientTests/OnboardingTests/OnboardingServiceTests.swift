@@ -69,6 +69,8 @@ final class MockIntroScreenManager: IntroScreenManagerProtocol {
         return stubIsModernOnboardingEnabled
     }
 
+    var shouldShowVideoIntro: Bool { return false }
+
     var onboardingKitVariant: OnboardingKit.OnboardingVariant {
         return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
     }

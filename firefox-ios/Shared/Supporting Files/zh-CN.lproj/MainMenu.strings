@@ -349,6 +349,9 @@
 /* On the main menu, the accessibility label for the action that will open the page zoom tool. */
 "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "页面缩放";
 
+/* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "阅读模式";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "保存";
 

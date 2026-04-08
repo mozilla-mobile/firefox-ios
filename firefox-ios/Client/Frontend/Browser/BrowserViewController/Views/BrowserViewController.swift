@@ -105,6 +105,7 @@ class BrowserViewController: UIViewController,
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
+    var autoTranslatePrompt: AutoTranslatePromptView?
     // TODO: FXIOS-14347 Remove this property as part of cleaning up the toolbar performance
     var keyboardBackdrop: UIView?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
@@ -1005,6 +1006,9 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
+        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+            handleAutoTranslatePrompt(state: state)
+        }
 
         if let readerMode = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             if readerMode.state == .active && !contentContainer.hasHomepage {
@@ -2141,6 +2145,42 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // MARK: - Auto-Translate Prompt
+
+    private func handleAutoTranslatePrompt(state: BrowserViewControllerState) {
+        if state.autoTranslatePromptState.showPrompt {
+            showAutoTranslatePrompt()
+        } else {
+            removeAutoTranslatePrompt()
+        }
+    }
+
+    private func showAutoTranslatePrompt() {
+        guard autoTranslatePrompt == nil else { return }
+        let prompt = AutoTranslatePromptView(windowUUID: windowUUID)
+        autoTranslatePrompt = prompt
+
+        if isBottomSearchBar {
+            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
+        } else {
+            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
+        }
+
+        prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
+
+    private func removeAutoTranslatePrompt() {
+        guard let prompt = autoTranslatePrompt else { return }
+
+        if isBottomSearchBar {
+            overKeyboardContainer.removeArrangedView(prompt)
+        } else {
+            bottomContainer.removeArrangedView(prompt)
+        }
+
+        autoTranslatePrompt = nil
+    }
+
     // MARK: - Native Error Page
 
     func showEmbeddedNativeErrorPage() {
@@ -2360,7 +2400,7 @@ class BrowserViewController: UIViewController,
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     guard result.isSuccess else { return }
-                    self.removeBookmarkShortcut()
+                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
                 }
             }
     }

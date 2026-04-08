@@ -96,19 +96,19 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     func configure(
-        state: SectionHeaderConfiguration,
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
         moreButtonAction: (@MainActor (UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme
     ) {
-        self.title = state.title
-        titleLabel.accessibilityIdentifier = state.a11yIdentifier
+        self.title = sectionHeaderConfiguration.title
+        titleLabel.accessibilityIdentifier = sectionHeaderConfiguration.a11yIdentifier
 
-        moreButton.isHidden = state.isButtonHidden
-        if !state.isButtonHidden {
+        moreButton.isHidden = sectionHeaderConfiguration.isButtonHidden
+        if !sectionHeaderConfiguration.isButtonHidden {
             let moreButtonViewModel = ActionButtonViewModel(
-                title: state.buttonTitle ?? .BookmarksSavedShowAllText,
-                a11yIdentifier: state.buttonA11yIdentifier,
+                title: sectionHeaderConfiguration.buttonTitle ?? .BookmarksSavedShowAllText,
+                a11yIdentifier: sectionHeaderConfiguration.buttonA11yIdentifier,
                 touchUpAction: moreButtonAction
             )
             moreButton.configure(

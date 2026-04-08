@@ -501,31 +501,6 @@ class Tab: NSObject,
         )
     }
 
-    func toRemoteTab() -> RemoteTab? {
-        guard !isPrivate else {
-            return nil
-        }
-
-        let faviconURL = faviconURL ?? pageMetadata?.faviconURL
-        if let displayURL = url?.displayURL,
-           RemoteTab.shouldIncludeURL(displayURL) {
-            let filteredReversedHistory: [URL] = historyList
-                .filter(RemoteTab.shouldIncludeURL)
-                .reversed()
-
-            return RemoteTab(
-                clientGUID: nil,
-                URL: displayURL,
-                title: title ?? displayTitle,
-                history: filteredReversedHistory,
-                lastUsed: lastExecutedTime,
-                icon: faviconURL?.asURL
-            )
-        }
-
-        return nil
-    }
-
     weak var navigationDelegate: WKNavigationDelegate? {
         didSet {
             if let webView = webView {
@@ -836,19 +811,6 @@ class Tab: NSObject,
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
-    @MainActor
-    func getProviderForUrl() -> SearchEngine {
-        guard let url = self.webView?.url else {
-            return .none
-        }
-
-        for provider in SearchEngine.allCases where url.absoluteString.contains(provider.rawValue) {
-            return provider
-        }
-
-        return .none
-    }
-
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
@@ -858,7 +820,7 @@ class Tab: NSObject,
         /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
         webView?.backgroundColor =  theme.colors.layer1
         webView?.scrollView.backgroundColor = theme.colors.layer1
-        webView?.isOpaque = !nightMode
+        webView?.isOpaque = !(nightMode || theme.type == .dark || theme.type == .privateMode)
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 

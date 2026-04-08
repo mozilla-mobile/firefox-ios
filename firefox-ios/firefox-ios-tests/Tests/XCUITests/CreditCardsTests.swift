@@ -94,13 +94,7 @@ class CreditCardsTests: BaseTestCase {
         addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
         app.buttons[manageCards].waitAndTap()
-        if #available(iOS 17, *) {
-            unlockLoginsView()
-        } else {
-            // There is a delay in iOS 16 in showing the secure text field
-            sleep(2)
-            unlockLoginsView()
-        }
+        unlockLoginsView()
         // The user is redirected to the "Credit cards" section in Settings
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         // Tap the back button on the Credit cards page

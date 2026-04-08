@@ -6,6 +6,7 @@ import Foundation
 import Common
 
 struct BlockedTrackersTableModel {
+    let userDefaults: UserDefaultsInterface?
     let topLevelDomain: String
     let title: String
     let URL: String
@@ -75,5 +76,21 @@ struct BlockedTrackersTableModel {
         let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
                                   totalTrackerBlocked)
         return trackersText.uppercased()
+    }
+
+    func getTrackersBlockedModeText() -> String {
+        let strengthKey = ProfilePrefsReader.prefix + ContentBlockingConfig.Prefs.StrengthKey
+        let isStrictMode = userDefaults?.string(forKey: strengthKey) == BlockingStrength.strict.rawValue
+        if isStrictMode {
+            return String(
+                format: .Menu.EnhancedTrackingProtection.trackersBlockedStrictModeFooterText,
+                String.Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink
+            )
+        } else {
+            return String(
+                format: .Menu.EnhancedTrackingProtection.trackersBlockedStandardModeFooterText,
+                String.Menu.EnhancedTrackingProtection.trackersBlockedFooterTextLink
+            )
+        }
     }
 }

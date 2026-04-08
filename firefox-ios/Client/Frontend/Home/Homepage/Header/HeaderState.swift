@@ -3,10 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 
 /// State for the header cell that is used in the homepage header section
+@CopyWithUpdates
 struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
@@ -52,8 +54,7 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return HeaderState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             isPrivate: false,
             showiPadSetup: showiPadSetup
         )
@@ -65,18 +66,12 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return HeaderState(
-            windowUUID: state.windowUUID,
-            isPrivate: state.isPrivate,
+        return state.copyWithUpdates(
             showiPadSetup: showiPadSetup
         )
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
-        return HeaderState(
-            windowUUID: state.windowUUID,
-            isPrivate: state.isPrivate,
-            showiPadSetup: state.showiPadSetup
-        )
+        return state.copyWithUpdates()
     }
 }

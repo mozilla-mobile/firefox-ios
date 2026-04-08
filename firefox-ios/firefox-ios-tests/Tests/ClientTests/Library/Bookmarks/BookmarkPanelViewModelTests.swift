@@ -52,7 +52,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0)
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -64,7 +64,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no folders")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Contains no folders")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -76,7 +76,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 3, "Contains the 3 desktop folders")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 3, "Contains the 3 desktop folders")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -91,7 +91,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no bookmarks")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Contains no bookmarks")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -104,7 +104,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -115,7 +115,7 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
-            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Mobile folder does not contain the local desktop folder")
+            XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "Mobile folder does not contain local desktop folder")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
@@ -156,7 +156,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(index, 0)
     }
 
-    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_zeroIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -166,7 +165,6 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    @MainActor
     func testMoveRowAtGetNewIndex_MobileGuid_showingDesktopFolder_minusIndex() {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -200,10 +198,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         let bookmark = createBookmarkItemData()
-        subject.bookmarkNodes.append(bookmark)
 
-        let indexPath = IndexPath(row: 0, section: 0)
-        subject.getSiteDetails(for: indexPath) { site in
+        subject.getSiteDetails(for: bookmark) { site in
             XCTAssertNotNil(site)
             XCTAssertFalse(site?.isPinnedSite ?? true)
             expectation.fulfill()
@@ -222,10 +218,8 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
         let bookmark = createBookmarkItemData()
-        subject.bookmarkNodes.append(bookmark)
 
-        let indexPath = IndexPath(row: 0, section: 0)
-        subject.getSiteDetails(for: indexPath) { site in
+        subject.getSiteDetails(for: bookmark) { site in
             expectation.fulfill()
             XCTAssertNotNil(site)
             XCTAssertTrue(site?.isPinnedSite ?? false)
@@ -237,12 +231,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     // MARK: - Search bookmarks
 
     func testSearchBookmarks_emptyQuery_returnsEmpty() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
@@ -251,12 +245,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_matchingTitle_returnsResults() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "firefox") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
@@ -266,12 +260,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_matchingURL_returnsResults() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "mozilla.org") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Mozilla")
             expectation.fulfill()
@@ -281,12 +275,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_noMatches_returnsEmpty() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "nonexistent") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertTrue(subject.displayedBookmarkNodes.isEmpty)
             expectation.fulfill()
         }
@@ -295,12 +289,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_caseInsensitive_returnsResults() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "FIREFOX") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Firefox")
             expectation.fulfill()
@@ -310,12 +304,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_recursiveInSubfolders_returnsResults() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithNestedBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithNestedBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         subject.searchBookmarks(query: "nested") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 1)
             XCTAssertEqual(subject.displayedBookmarkNodes.first?.title, "Nested Bookmark")
             expectation.fulfill()
@@ -325,19 +319,103 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     func testSearchBookmarks_matchesMultipleResults() {
-        let handler = SearchableMockBookmarksHandler(folderData: createFolderWithBookmarks())
+        let handler = MockBookmarksHandler(folderData: createFolderWithBookmarks())
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: handler)
         let expectation = expectation(description: "Search completed")
 
         // Both "Firefox" (url: https://www.firefox.com) and "Mozilla" (url: https://www.mozilla.org)
         // contain "www" in their URLs
         subject.searchBookmarks(query: "www") {
-            XCTAssertTrue(subject.isSearching)
+            XCTAssertTrue(subject.isShowingSearchResults)
             XCTAssertEqual(subject.displayedBookmarkNodes.count, 2)
             expectation.fulfill()
         }
 
         wait(for: [expectation], timeout: 1)
+    }
+
+    func testDeletingBookmark_reloadsDataAndSearchResults_ifSearching() throws {
+        setupNimbusBookmarksSearchTesting(isEnabled: true)
+
+        let bookmarksTree = createFolderWithBookmarks()
+        let bookmarksHandler = MockBookmarksHandler(folderData: bookmarksTree)
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
+        let fetchAndSearchBookmarks = expectation(description: "Fetch and search bookmarks completed")
+
+        // Setup: Populate the bookmarks (2 total bookmarks) fully before starting search, as search state affects fetching
+        subject.reloadData {
+            // Search the test data (1 matching bookmark)
+            subject.searchBookmarks(query: "firefox") {
+                fetchAndSearchBookmarks.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 2)
+
+        // Validate setup before starting test, reset handler state
+        XCTAssertEqual(bookmarksHandler.getBookmarksTreeCalled, 2, "Called when fetching mobile bookmarks, and after search")
+        XCTAssertEqual(bookmarksHandler.countBookmarksTreeCalled, 1, "Called after fetching mobile bookmarks")
+        XCTAssertTrue(subject.isShowingSearchResults, "Should be true after searching")
+        XCTAssertEqual(subject.displayedBookmarkNodes.count, 1, "1 of 2 bookmarks should be shown for search")
+        bookmarksHandler.getBookmarksTreeCalled = 0
+        bookmarksHandler.countBookmarksTreeCalled = 0
+
+        // After search has completed, test that removing a bookmark eventually reloads the bookmarks tree and search results
+        let removeExpectation = expectation(description: "Bookmark removal completed")
+
+        // Remove the bookmark that is in the search results
+        let bookmarkToRemove = try XCTUnwrap(bookmarksTree.children?[safe: 0] as? FxBookmarkNode)
+        subject.remove(bookmark: bookmarkToRemove) {
+            removeExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2)
+
+        // Expect removing a bookmark to eventually refresh the tree
+        XCTAssertEqual(bookmarksHandler.getBookmarksTreeCalled, 2, "It takes 2 calls to refresh bookmarks + re-search")
+        XCTAssertEqual(bookmarksHandler.countBookmarksTreeCalled, 1, "Called after re-fetching mobile bookmarks")
+        XCTAssertEqual(subject.displayedBookmarkNodes.count, 0, "One search result removed, in active search state")
+    }
+
+    func testDeletingBookmark_doesNotReloadDataOrSearchResults_ifNotSearching() throws {
+        setupNimbusBookmarksSearchTesting(isEnabled: true)
+
+        let bookmarksTree = createFolderWithBookmarks()
+        let bookmarksHandler = MockBookmarksHandler(folderData: bookmarksTree)
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID, bookmarksHandler: bookmarksHandler)
+        let fetchBookmarks = expectation(description: "Fetch and search bookmarks completed")
+
+        // Setup: Populate the bookmarks (2 total bookmarks) fully before starting search, as search state affects fetching
+        subject.reloadData {
+            fetchBookmarks.fulfill()
+        }
+
+        waitForExpectations(timeout: 2)
+
+        // Validate setup before starting test, reset handler state
+        XCTAssertEqual(bookmarksHandler.getBookmarksTreeCalled, 1, "Called when fetching mobile bookmarks")
+        XCTAssertEqual(bookmarksHandler.countBookmarksTreeCalled, 1, "Called after fetching mobile bookmarks")
+        XCTAssertFalse(subject.isShowingSearchResults, "Should be false after searching")
+        XCTAssertEqual(subject.displayedBookmarkNodes.count, 2, "All bookmarks should be shown (not filtered by search)")
+        bookmarksHandler.getBookmarksTreeCalled = 0
+        bookmarksHandler.countBookmarksTreeCalled = 0
+
+        // Test that removing a bookmark does NOT unnecessarily reload bookmark nodes when the user is not in search.
+        // Reloading is only necessary if a bookmark outside the current folder was deleted, which can only happen in search
+        // mode.
+        let removeExpectation = expectation(description: "Bookmark removal completed")
+
+        let bookmarkToRemove = try XCTUnwrap(bookmarksTree.children?[safe: 0] as? FxBookmarkNode)
+        subject.remove(bookmark: bookmarkToRemove) {
+            removeExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2)
+
+        // Expect removing a bookmark to eventually refresh the tree
+        XCTAssertEqual(bookmarksHandler.getBookmarksTreeCalled, 0, "Don't refresh when not in search mode")
+        XCTAssertEqual(bookmarksHandler.countBookmarksTreeCalled, 0, "Don't refresh when not in search mode")
+        XCTAssertEqual(subject.displayedBookmarkNodes.count, 1, "One of two bookmarks was removed")
     }
 
     // MARK: - Search test helpers
@@ -418,11 +496,13 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     private func createSubject(
         guid: GUID,
-        bookmarksHandler: BookmarksHandler = MockBookmarksHandler()
+        bookmarksHandler: BookmarksHandler = MockBookmarksHandler(),
+        quickActions: QuickActions = MockQuickActions()
     ) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: bookmarksHandler,
-                                                bookmarkFolderGUID: guid)
+                                                bookmarkFolderGUID: guid,
+                                                quickActions: quickActions)
         trackForMemoryLeaks(viewModel)
         return viewModel
     }
@@ -475,6 +555,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
         waitForExpectations(timeout: 5)
     }
+
+    private func setupNimbusBookmarksSearchTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.bookmarksSearchFeature.with { _, _ in
+            return BookmarksSearchFeature(enabled: isEnabled)
+        }
+    }
 }
 
 // MARK: - Mocks
@@ -515,59 +601,5 @@ private final class MockPinnedSites: MockablePinnedSites, @unchecked Sendable {
         let deffered = Deferred<Maybe<Bool>>()
         deffered.fill(Maybe(success: isPinnedTopSite))
         return deffered
-    }
-}
-
-/// A mock handler that returns a configurable `BookmarkFolderData` for search tests.
-private final class SearchableMockBookmarksHandler: BookmarksHandler, @unchecked Sendable {
-    private let folderData: BookmarkFolderData
-
-    init(folderData: BookmarkFolderData) {
-        self.folderData = folderData
-    }
-
-    func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void) {
-        completion([])
-    }
-
-    func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
-        let result = Deferred<Maybe<BookmarkNodeData?>>()
-        result.fill(Maybe(success: folderData))
-        return result
-    }
-
-    func getBookmarksTree(
-        rootGUID: GUID,
-        recursive: Bool,
-        completion: @escaping (Result<BookmarkNodeData?, any Error>) -> Void
-    ) {
-        completion(.success(folderData))
-    }
-
-    func updateBookmarkNode(guid: GUID,
-                            parentGUID: GUID?,
-                            position: UInt32?,
-                            title: String?,
-                            url: String?) -> Success {
-        succeed()
-    }
-
-    func updateBookmarkNode(
-        guid: GUID,
-        parentGUID: GUID?,
-        position: UInt32?,
-        title: String?,
-        url: String?,
-        completion: @escaping (Result<Void, any Error>) -> Void
-    ) {
-        completion(.success(()))
-    }
-
-    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
-        completion(.success(0))
-    }
-
-    func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void) {
-        completion(.success(false))
     }
 }

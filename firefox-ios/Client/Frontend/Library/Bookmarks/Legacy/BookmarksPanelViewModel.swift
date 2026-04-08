@@ -14,20 +14,20 @@ import enum MozillaAppServices.BookmarkRoots
 @MainActor
 protocol BookmarksPanelViewModelProtocol: Sendable, CanRemoveQuickActionBookmark {
     var profile: Profile { get }
-    var bookmarkNodes: [FxBookmarkNode] { get }
     var bookmarkFolder: FxBookmarkNode? { get }
     var bookmarkFolderGUID: GUID { get }
     var displayedBookmarkNodes: [FxBookmarkNode] { get }
-    var isSearching: Bool { get }
+    var isShowingSearchResults: Bool { get }
     var isRootNode: Bool { get }
+    var isCurrentFolderEmpty: Bool { get }
     var shouldFlashRow: Bool { get }
 
+    func reloadData(completion: @escaping @MainActor () -> Void)
     func resetSearch()
     func searchBookmarks(query: String, completion: @escaping @MainActor @Sendable () -> Void)
-    func reloadData(completion: @escaping @MainActor () -> Void)
     func moveBookmarkToFolder(bookmark: FxBookmarkNode, withGUID parentFolderGUID: String)
-    func remove(bookmark: FxBookmarkNode)
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void)
+    func remove(bookmark: FxBookmarkNode, afterAsyncRemoval completion: @escaping @MainActor () -> Void)
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void)
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     func createPinUnpinAction(
         for site: Site,
@@ -50,24 +50,37 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         case bookmarks
     }
 
+    private var isBookmarksSearchEnabled: Bool {
+        LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+    }
+
     var isRootNode: Bool {
         return bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+    }
+
+    var isCurrentFolderEmpty: Bool {
+        return allBookmarkNodes.isEmpty
     }
 
     let profile: Profile
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
-    var bookmarkNodes = [FxBookmarkNode]()
-    var isSearching = false
+    var isShowingSearchResults = false
+    private var currentSearchQuery: String?
+
+    /// Backing data array of all bookmarks
+    private var allBookmarkNodes = [FxBookmarkNode]()
+    /// Bookmarks filtered via search
     private var filteredBookmarkNodes = [FxBookmarkNode]()
 
     /// The data source nodes currently displayed: filtered results when searching, otherwise the full bookmark nodes.
     var displayedBookmarkNodes: [FxBookmarkNode] {
-        return isSearching ? filteredBookmarkNodes : bookmarkNodes
+        return isShowingSearchResults ? filteredBookmarkNodes : allBookmarkNodes
     }
 
     var bookmarksHandler: BookmarksHandler
     private var bookmarksSaver: BookmarksSaver
+    private var quickActions: QuickActions
     private var hasDesktopFolders = false
     private var flashLastRowOnNextReload = false
     private let logger: Logger
@@ -77,11 +90,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
          bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          bookmarksSaver: BookmarksSaver? = nil,
+         quickActions: QuickActions = QuickActionsImplementation(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
+        self.quickActions = quickActions
         self.logger = logger
     }
 
@@ -92,6 +107,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         return true
     }
 
+    /// Reloads all the bookmarks data (and search results data, if the user is currently searching bookmarks).
     func reloadData(completion: @escaping @MainActor () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
@@ -99,12 +115,31 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
             return
         }
 
+        // FXIOS-15296: After reloading bookmarks, we should also reload our active search results as well, if applicable.
+        // This is because our bookmarks results are fetched recursively and backed by a separate data array.
+        // FIXME: FXIOS-15309 This can be improved.
+        let completionAfterSetup: @MainActor () -> Void = { [weak self] in
+            guard let self else {
+                completion()
+                return
+            }
+
+            // If search results are present, we need to refresh those, too
+            if self.isShowingSearchResults, let currentSearchQuery = self.currentSearchQuery {
+                self.searchBookmarks(query: currentSearchQuery) {
+                    completion()
+                }
+            } else {
+                completion()
+            }
+        }
+
         if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
-            setupMobileFolderData(completion: completion)
+            setupMobileFolderData(completion: completionAfterSetup)
         } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
-            setupLocalDesktopFolderData(completion: completion)
+            setupLocalDesktopFolderData(completion: completionAfterSetup)
         } else {
-            setupSubfolderData(completion: completion)
+            setupSubfolderData(completion: completionAfterSetup)
         }
     }
 
@@ -113,7 +148,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     }
 
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
+        guard let bookmarkNode = allBookmarkNodes[safe: sourceIndexPath.row] else {
             logger.log("Could not move row from \(sourceIndexPath) to \(destinationIndexPath)",
                        level: .debug,
                        category: .library)
@@ -127,15 +162,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                                 title: nil,
                                                 url: nil)
 
-        bookmarkNodes.remove(at: sourceIndexPath.row)
-        bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
+        allBookmarkNodes.remove(at: sourceIndexPath.row)
+        allBookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
-    func getSiteDetails(for indexPath: IndexPath, completion: @escaping @MainActor (Site?) -> Void) {
-        guard let bookmarkNode = displayedBookmarkNodes[safe: indexPath.row],
-              let bookmarkItem = bookmarkNode as? BookmarkItemData
-        else {
-            logger.log("Could not get site details for indexPath \(indexPath)",
+    func getSiteDetails(for bookmark: FxBookmarkNode, completion: @escaping @MainActor (Site?) -> Void) {
+        guard let bookmarkItem = bookmark as? BookmarkItemData else {
+            logger.log("Could not get site details for bookmark",
                        level: .debug,
                        category: .library)
             completion(nil)
@@ -186,11 +219,13 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     /// for items whose title or URL contains the given query string (case-insensitive).
     func searchBookmarks(query: String, completion: @escaping @MainActor () -> Void) {
         guard !query.isEmpty else {
-            isSearching = true
+            isShowingSearchResults = true
             filteredBookmarkNodes = []
             completion()
             return
         }
+
+        currentSearchQuery = query
 
         bookmarksHandler
             .getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: true)
@@ -213,7 +248,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                                        query: lowercasedQuery,
                                                        results: &matches)
 
-                        self?.isSearching = true
+                        self?.isShowingSearchResults = true
                         self?.filteredBookmarkNodes = matches
 
                         completion()
@@ -223,7 +258,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                                          level: .debug,
                                          category: .library)
 
-                        self?.isSearching = true
+                        self?.isShowingSearchResults = true
                         self?.filteredBookmarkNodes = []
                         completion()
                     }
@@ -281,7 +316,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                     }
 
                     self.bookmarkFolder = mobileFolder
-                    self.bookmarkNodes = mobileFolder.fxChildren ?? []
+                    self.allBookmarkNodes = mobileFolder.fxChildren ?? []
 
                     self.createDesktopBookmarksFolder(completion: completion)
                 }
@@ -296,7 +331,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
         let menu = LocalDesktopFolder(forcedGuid: BookmarkRoots.MenuFolderGUID)
 
         self.bookmarkFolder = nil
-        self.bookmarkNodes = [unfiled, toolbar, menu]
+        self.allBookmarkNodes = [unfiled, toolbar, menu]
         completion()
     }
 
@@ -317,7 +352,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                 }
 
                 self.bookmarkFolder = folder
-                self.bookmarkNodes = folder.fxChildren ?? []
+                self.allBookmarkNodes = folder.fxChildren ?? []
 
                 completion()
             }
@@ -327,7 +362,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     /// Error case at the moment is setting data to nil and showing nothing
     private func setErrorCase() {
         self.bookmarkFolder = nil
-        self.bookmarkNodes = []
+        self.allBookmarkNodes = []
     }
 
     // Create a local "Desktop bookmarks" folder only if there exists a bookmark in one of it's nested
@@ -340,7 +375,7 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
                     if bookmarkCount > 0 {
                         self.hasDesktopFolders = true
                         let desktopFolder = LocalDesktopFolder()
-                        self.bookmarkNodes.insert(desktopFolder, at: 0)
+                        self.allBookmarkNodes.insert(desktopFolder, at: 0)
                     } else {
                         self.hasDesktopFolders = false
                     }
@@ -381,37 +416,66 @@ final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
     }
 
     func resetSearch() {
-        isSearching = false
+        isShowingSearchResults = false
         filteredBookmarkNodes.removeAll()
     }
 
     func removeBookmarkLocally(bookmark: FxBookmarkNode) {
         // Immediately remove the bookmark from backing arrays and search matches, if needed (for UI responsiveness)
-        bookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
+        allBookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
         filteredBookmarkNodes.removeAll(where: { $0.guid == bookmark.guid })
     }
 
     /// Deletes the bookmark. Deletion of the bookmark in places happens asynchronously, but tableView source arrays are
     /// updated immediately for UI responsiveness.
-    func remove(bookmark: FxBookmarkNode) {
+    /// - Parameters:
+    ///   - bookmark: The bookmark to delete.
+    ///   - completion: The completion handler to call after the bookmark has been asynchronously removed from the backing
+    ///                 store.
+    func remove(bookmark: FxBookmarkNode, afterAsyncRemoval completion: @escaping @MainActor () -> Void) {
+        let removalCompletion: @MainActor () -> Void = { [weak self] in
+            if let self, self.isBookmarksSearchEnabled, self.isShowingSearchResults {
+                // Reload the bookmarks tree for the current folder. If a bookmark was deleted via search, there is a chance
+                // a subfolder becomes empty that was previously non-empty. We need to know whether folders in the current
+                // folder contain bookmarks or not because we show an alert when deleting folders with non-empty contents
+                // (see FXIOS-15296).
+                //
+                // Note: A race condition exists where the user might try to delete a folder before this refresh completes,
+                // since we optimistically update the UI but can't synchronously update the local bookmarks tree copy.
+                // FIXME: FXIOS-15309
+                self.reloadData {
+                    completion()
+                }
+            } else {
+                completion()
+            }
+        }
         // Remove the bookmark from places (async background work)
-        profile.places.deleteBookmarkNode(guid: bookmark.guid).uponQueue(.main) { _ in
+        bookmarksHandler.deleteBookmarkNode(guid: bookmark.guid).uponQueue(DispatchQueue.main) { _ in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
-            MainActor.assumeIsolated {
+            MainActor.assumeIsolated { [weak self] in
+                guard let self else { return }
+
+                // Remove this bookmark from quick actions
+                Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler, withQuickActions: self.quickActions)
+
                 // Remove this bookmark out of recent places
                 if let recentBookmarkFolderGuid = self.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
                     self.profile.places.getBookmark(guid: recentBookmarkFolderGuid).uponQueue(.main) { node in
                         // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                         MainActor.assumeIsolated {
-                            guard let nodeValue = node.successValue, nodeValue == nil else { return }
+                            guard let nodeValue = node.successValue, nodeValue == nil else {
+                                removalCompletion()
+                                return
+                            }
 
                             self.profile.prefs.removeObjectForKey(PrefsKeys.RecentBookmarkFolder)
+                            removalCompletion()
                         }
                     }
+                } else {
+                    removalCompletion()
                 }
-
-                // Remove this bookmark from quick actions
-                self.removeBookmarkShortcut()
             }
         }
 

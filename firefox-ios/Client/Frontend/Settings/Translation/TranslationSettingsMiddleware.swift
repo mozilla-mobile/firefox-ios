@@ -55,6 +55,11 @@ final class TranslationSettingsMiddleware {
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
             let newValue = !current
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
+            SettingsTelemetry().changedSetting(
+                PrefsKeys.Settings.translationsFeature,
+                to: "\(newValue)",
+                from: "\(current)"
+            )
             store.dispatch(ToolbarAction(
                 translationConfiguration: TranslationConfiguration(prefs: prefs, state: .inactive),
                 windowUUID: action.windowUUID,
@@ -69,6 +74,11 @@ final class TranslationSettingsMiddleware {
         case TranslationSettingsViewActionType.toggleAutoTranslate:
             let newValue = !isAutoTranslateEnabled
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationAutoTranslate)
+            SettingsTelemetry().changedSetting(
+                PrefsKeys.Settings.translationAutoTranslate,
+                to: "\(newValue)",
+                from: "\(!newValue)"
+            )
             store.dispatch(TranslationSettingsMiddlewareAction(
                 isAutoTranslateEnabled: newValue,
                 windowUUID: action.windowUUID,
@@ -108,6 +118,7 @@ final class TranslationSettingsMiddleware {
         let supported = await modelsFetcher.fetchSupportedTargetLanguages()
         let codes = manager.preferredLanguages(supportedTargetLanguages: supported)
         let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+        let isAutoTranslateEnabled = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
         let preferred = buildLanguageDetails(from: codes)
         let available = buildAvailableLanguages(preferred: codes, supported: supported)
         store.dispatch(TranslationSettingsMiddlewareAction(

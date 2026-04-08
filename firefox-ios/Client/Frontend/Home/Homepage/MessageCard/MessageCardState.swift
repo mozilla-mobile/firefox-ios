@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 
 /// State for the message cell that is used in the homepage view
+@CopyWithUpdates
 struct MessageCardState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var messageCardConfiguration: MessageCardConfiguration?
@@ -47,24 +49,19 @@ struct MessageCardState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return MessageCardState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             messageCardConfiguration: messageCardConfiguration
         )
     }
 
     /// Tapping an action on the card should dismiss the message card and we do this by setting the configuration to nil
     private static func handleTappingAction(for state: MessageCardState, with action: Action) -> MessageCardState {
-        return MessageCardState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             messageCardConfiguration: nil
         )
     }
 
     static func defaultState(from state: MessageCardState) -> MessageCardState {
-        return MessageCardState(
-            windowUUID: state.windowUUID,
-            messageCardConfiguration: state.messageCardConfiguration
-        )
+        return state.copyWithUpdates()
     }
 }
