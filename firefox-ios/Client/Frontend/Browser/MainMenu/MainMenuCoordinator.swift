@@ -168,18 +168,31 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let translationConfig = toolbarState?.addressToolbar.translationConfiguration
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
+            let isSingleLanguageFlow = if let translationConfig {
+                !translationConfig.isMultiLanguageFlow
+            } else {
+                false
+            }
             let prefs = profile.prefs
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                store.dispatch(GeneralBrowserAction(
-                    translationLanguages: languages,
-                    isPageTranslated: isTranslated,
-                    translatedToLanguage: translatedLanguage,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                ))
+                if isSingleLanguageFlow, let language = languages.first, !isTranslated {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: windowUUID,
+                        targetLanguage: language,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        translationLanguages: languages,
+                        isPageTranslated: isTranslated,
+                        translatedToLanguage: translatedLanguage,
+                        windowUUID: windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
             }
         }
     }

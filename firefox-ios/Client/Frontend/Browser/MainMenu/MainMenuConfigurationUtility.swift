@@ -421,7 +421,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil
         else { return nil }
-
+        let isMultiLanguageFlow = translationConfig.isMultiLanguageFlow
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
@@ -437,10 +437,17 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
               )
             : .MainMenu.ToolsSection.Translation.TranslatePageTitle
 
+        let title: String
+        if isActive {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatedPageTitle
+        } else {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatePageTitle
+        }
+
         return MenuElement(
-            title: isActive
-                ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
-                : .MainMenu.ToolsSection.Translation.TranslatePageTitle,
+            title: title,
             iconName: Icons.translate,
             isEnabled: true,
             isActive: isActive,

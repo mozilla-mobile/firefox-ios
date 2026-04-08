@@ -65,6 +65,13 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         self.translatedToLanguage = translatedToLanguage
     }
 
+    var isMultiLanguageFlow: Bool {
+        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) else { return false }
+        guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
+              !stored.isEmpty else { return false }
+        return stored.components(separatedBy: ",").count != 1
+    }
+
     /// Determines whether to show the translate icon on the toolbar
     /// The experiment needs to be turned on and the user settings needs to be enabled
     /// If user has not toggled the settings, then we enable the feature by default
