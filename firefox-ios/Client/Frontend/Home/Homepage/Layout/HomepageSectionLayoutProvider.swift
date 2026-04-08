@@ -12,6 +12,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
+        static let headerSectionSpacing: CGFloat = 16
         static let standardSpacing: CGFloat = 16
         static let interGroupSpacing: CGFloat = 8
         static let iPadInset: CGFloat = 50
@@ -57,8 +58,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let interItemSpacing: CGFloat = 16
             static let interGroupSpacing: CGFloat = 16
 
-            /// `storiesPeekOffset` is how much we want the stories section (not including section header)
-            /// to peek in vertically from the bottom of the homepage viewport
+            /// `storiesPeekOffset` is how much we want the stories (cards only, not including section header/spacing)
+            /// to peek in vertically from the bottom of the homepage viewport (above the fold)
             static let storiesPeekOffset: CGFloat = 16
             static let storiesPeekOffsetiPad: CGFloat = 36
 
@@ -309,7 +310,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.boundarySupplementaryItems = [header]
 
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+        section.contentInsets = NSDirectionalEdgeInsets(top: UX.headerSectionSpacing,
                                                         leading: leadingInset,
                                                         bottom: UX.standardInset,
                                                         trailing: UX.standardInset)
@@ -379,7 +380,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: UX.headerSectionSpacing,
             leading: horizontalInset,
             bottom: UX.standardInset,
             trailing: horizontalInset
@@ -410,9 +411,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             section.boundarySupplementaryItems = [header]
         }
 
-        let bottomInset = UX.spacingBetweenSections
-        section.contentInsets.top = 0
-        section.contentInsets.bottom = bottomInset
+        section.contentInsets.top = UX.headerSectionSpacing
+        section.contentInsets.bottom = UX.spacingBetweenSections
 
         return section
     }
@@ -531,7 +531,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let leadingInset = UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 0,
+                    top: UX.headerSectionSpacing,
                     leading: leadingInset,
                     bottom: UX.spacingBetweenSections,
                     trailing: leadingInset)
@@ -572,7 +572,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: UX.headerSectionSpacing,
             leading: leadingInset,
             bottom: UX.spacingBetweenSections,
             trailing: leadingInset)
@@ -601,9 +601,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
                 spacerHeight = 0.1
             } else {
-                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
                                                                              width: environment.container.contentSize.width)
-                spacerHeight = max(0.1, rawSpacerHeight - headerHeight - UX.PocketConstants.getStoriesPeekOffset())
+                let headerWithSectionSpacing = headerHeight + UX.headerSectionSpacing
+                /// `totalPeek` is how much of the stories section (header + spacing + stories) we want above the fold
+                let totalPeek = headerWithSectionSpacing + UX.PocketConstants.getStoriesPeekOffset()
+                spacerHeight = max(0.1, rawSpacerHeight - totalPeek)
             }
         }
 
@@ -732,6 +735,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         totalHeight += CGFloat(max(presentedRows - 1, 0)) * UX.standardSpacing
 
         // Add section insets
+        totalHeight += UX.headerSectionSpacing
         totalHeight += UX.spacingBetweenSections
         measurementsCache.setHeight(totalHeight, for: measurementKey)
 
@@ -812,6 +816,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
 
         // Add section insets
+        totalHeight += UX.headerSectionSpacing
         totalHeight += UX.spacingBetweenSections
 
         // Save cached section height
@@ -900,13 +905,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         switch sectionHeaderConfiguration.style {
         case .newsAffordance
             where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
-            let header = NewsTransitionHeaderView(frame: CGRect(width: 200, height: 200))
-            header.configure(
-                sectionHeaderConfiguration: sectionHeaderConfiguration,
-                textColor: .black,
-                theme: LightTheme(),
-                transitionEnabled: true
-            )
+            let header = NewsTransitionHeaderCell(frame: CGRect(width: 200, height: 200))
+            header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration,
+                             textColor: .black,
+                             theme: LightTheme(),
+                             transitionEnabled: true)
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
@@ -938,7 +941,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         let newsAffordanceHeaderHeight = HomepageDimensionCalculator
-            .fittingHeight(for: NewsTransitionHeaderView(), width: environment.container.contentSize.width)
+            .fittingHeight(for: NewsTransitionHeaderCell(), width: environment.container.contentSize.width)
         let fullPeekOffset = newsAffordanceHeaderHeight + UX.PocketConstants.getStoriesPeekOffset()
 
         if rawSpacerHeight >= fullPeekOffset {
@@ -1045,6 +1048,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         )
         let totalHeight = headerHeight
             + tallestCellHeight
+            + UX.headerSectionSpacing
             + UX.spacingBetweenSections
 
         let result = HomepageLayoutMeasurementCache.BookmarksMeasurement.Result(
@@ -1111,11 +1115,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             viewWidth: cellWidth
         )
 
-        let headerHeight = getHeaderHeight(
-            sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
-            environment: environment
-        )
-        let totalHeight = headerHeight + max(tallestCellHeight, UX.PocketConstants.minimumCellHeight) + UX.standardInset
+        let headerHeight = getHeaderHeight(sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
+                                           environment: environment)
+        let totalHeight = headerHeight + max(tallestCellHeight, UX.PocketConstants.minimumCellHeight)
+                                       + UX.headerSectionSpacing
+                                       + UX.standardInset
 
         let result = HomepageLayoutMeasurementCache.StoriesMeasurement.Result(
             tallestCellHeight: tallestCellHeight,

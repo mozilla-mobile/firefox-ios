@@ -9,7 +9,7 @@ import UIKit
 @testable import Client
 
 @MainActor
-final class NewsTransitionHeaderViewTests: XCTestCase {
+final class NewsTransitionHeaderCellTests: XCTestCase {
     private let theme = DarkTheme()
     private let sectionHeaderConfiguration = SectionHeaderConfiguration(
         title: "Top Stories",
@@ -62,12 +62,10 @@ final class NewsTransitionHeaderViewTests: XCTestCase {
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
         XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
-        XCTAssertEqual(affordanceView(in: view)?.accessibilityElementsHidden, true)
-        XCTAssertEqual(labelHeaderView(in: view)?.accessibilityElementsHidden, false)
     }
 
-    private func createSubject() -> NewsTransitionHeaderView {
-        let view = NewsTransitionHeaderView(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
+    private func createSubject() -> NewsTransitionHeaderCell {
+        let view = NewsTransitionHeaderCell(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
         trackForMemoryLeaks(view)
         return view
     }

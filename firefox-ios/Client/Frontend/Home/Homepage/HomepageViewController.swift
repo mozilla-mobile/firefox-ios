@@ -479,11 +479,11 @@ final class HomepageViewController: UIViewController,
 
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
-            cellType: LabelButtonHeaderView.self
+            cellType: LabelButtonHeaderCell.self
         )
         collectionView.registerSupplementary(
             of: UICollectionView.elementKindSectionHeader,
-            cellType: NewsTransitionHeaderView.self
+            cellType: NewsTransitionHeaderCell.self
         )
 
         collectionView.keyboardDismissMode = .onDrag
@@ -686,9 +686,9 @@ final class HomepageViewController: UIViewController,
             if case .pocket = section,
                MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
                shouldUseNewsTransitionHeader {
-                guard let newsTransitionHeaderView = collectionView.dequeueSupplementary(
+                guard let newsTransitionHeaderCell = collectionView.dequeueSupplementary(
                     of: kind,
-                    cellType: NewsTransitionHeaderView.self,
+                    cellType: NewsTransitionHeaderCell.self,
                     for: indexPath
                 ) else {
                     return UICollectionReusableView()
@@ -696,13 +696,13 @@ final class HomepageViewController: UIViewController,
                 return configureNewsTransitionHeader(
                     with: collectionView,
                     at: indexPath,
-                    with: newsTransitionHeaderView
+                    with: newsTransitionHeaderCell
                 )
             }
 
             guard let sectionHeaderView = collectionView.dequeueSupplementary(
                 of: kind,
-                cellType: LabelButtonHeaderView.self,
+                cellType: LabelButtonHeaderCell.self,
                 for: indexPath
             ) else {
                 return UICollectionReusableView()
@@ -717,23 +717,23 @@ final class HomepageViewController: UIViewController,
     private func configureNewsTransitionHeader(
         with collectionView: UICollectionView,
         at indexPath: IndexPath,
-        with newsTransitionHeaderView: NewsTransitionHeaderView
-    ) -> NewsTransitionHeaderView {
+        with newsTransitionHeaderCell: NewsTransitionHeaderCell
+    ) -> NewsTransitionHeaderCell {
         let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
-        newsTransitionHeaderView.configure(
+        newsTransitionHeaderCell.configure(
             sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
             transitionEnabled: transitionEnabled
         )
-        newsTransitionHeaderView.setTransitionProgress(newsTransitionProgress())
-        return newsTransitionHeaderView
+        newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
+        return newsTransitionHeaderCell
     }
 
     private func configureSectionHeader(
         for section: HomepageSection,
-        with sectionLabelCell: LabelButtonHeaderView
-    ) -> LabelButtonHeaderView? {
+        with sectionLabelCell: LabelButtonHeaderCell
+    ) -> LabelButtonHeaderCell? {
         switch section {
         case .topSites(let textColor, _, _):
             sectionLabelCell.configure(
@@ -779,7 +779,7 @@ final class HomepageViewController: UIViewController,
     }
 
     /// Reapplies scroll-based fade progress to the visible pocket header after scrolling or relayout.
-    /// This is a no-op unless the pocket section is present and the `NewsTransitionHeaderView` is able to transition
+    /// This is a no-op unless the pocket section is present and the `newsTransitionHeaderCell` is able to transition
     /// (the section label fallback header used when there is no room for the header to transition does not participate
     /// in the transition)
     private func updateNewsTransitionHeaderProgress() {
@@ -799,12 +799,12 @@ final class HomepageViewController: UIViewController,
               let headerView = collectionView.supplementaryView(
                   forElementKind: UICollectionView.elementKindSectionHeader,
                   at: IndexPath(item: 0, section: pocketSectionIndex)
-              ) as? NewsTransitionHeaderView
+              ) as? NewsTransitionHeaderCell
         else {
             return
         }
 
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
                                                                              width: collectionView.bounds.width)
         let transitionEnabled = headerAttributes.size.height >= expectedHeaderHeight
         headerView.setTransitionEnabled(transitionEnabled)
@@ -819,7 +819,7 @@ final class HomepageViewController: UIViewController,
             ofKind: UICollectionView.elementKindSectionHeader,
             at: indexPath
         )?.size.height ?? 0
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderView(),
+        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
                                                                              width: collectionView.bounds.width)
         return headerHeight >= expectedHeaderHeight
     }
@@ -830,7 +830,7 @@ final class HomepageViewController: UIViewController,
         guard let collectionView else { return 0 }
 
         let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
-        let progress = normalizedOffset / NewsTransitionHeaderView.UX.transitionDistance
+        let progress = normalizedOffset / NewsTransitionHeaderCell.UX.transitionDistance
         return min(max(progress, 0), 1)
     }
 
@@ -1220,7 +1220,7 @@ final class HomepageViewController: UIViewController,
         return true
     }
 
-    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderCell) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
               dataSource?.snapshot().sectionIdentifiers.contains(.messageCard) == nil
         else { return }
