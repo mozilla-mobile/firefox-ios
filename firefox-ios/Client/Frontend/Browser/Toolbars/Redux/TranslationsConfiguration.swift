@@ -68,7 +68,7 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     var isMultiLanguageFlow: Bool {
         guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) else { return false }
         guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
-              !stored.isEmpty else { return true }
+              !stored.isEmpty else { return false }
         return stored.components(separatedBy: ",").count != 1
     }
 
