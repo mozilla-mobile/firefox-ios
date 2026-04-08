@@ -100,12 +100,34 @@ final class ToolbarButtonTests: XCTestCase {
         XCTAssertTrue(hasSpinner, "Loading state change should trigger reconfiguration.")
     }
 
+    func testConfigure_withBottomBadgeImage_setsImage() {
+        let element = createToolbarElement(bottomBadgeImage: UIImage(), a11yLabel: "")
+
+        button.configuration?.image = UIImage()
+        button.configure(element: element)
+
+        XCTAssertEqual(button.imageView?.subviews.count, 1)
+        XCTAssertTrue(button.imageView?.subviews.first is UIImageView)
+    }
+
+    func testConfigure_removesBottomBadgeImage_whenReconfiguredWithNone() {
+        let element1 = createToolbarElement(bottomBadgeImage: UIImage(), a11yLabel: "")
+        let element2 = createToolbarElement(a11yLabel: "")
+
+        button.configuration?.image = UIImage()
+        button.configure(element: element1)
+        button.configure(element: element2)
+
+        XCTAssertEqual(button.imageView?.subviews.count, 0)
+    }
+
     // MARK: - Helper Methods
     private func createToolbarElement(
         iconName: String? = nil,
         title: String? = nil,
         badgeImageName: String? = nil,
         maskImageName: String? = nil,
+        bottomBadgeImage: UIImage? = nil,
         loadingConfig: LoadingConfig? = nil,
         numberOfTabs: Int? = nil,
         isEnabled: Bool = true,
@@ -122,6 +144,7 @@ final class ToolbarButtonTests: XCTestCase {
             iconName: iconName,
             title: title,
             badgeImageName: badgeImageName,
+            bottomBadgeImage: bottomBadgeImage,
             maskImageName: maskImageName,
             loadingConfig: loadingConfig,
             numberOfTabs: numberOfTabs,
