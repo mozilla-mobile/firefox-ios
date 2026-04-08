@@ -374,7 +374,7 @@ final class NimbusFeatureFlagLayer: Sendable {
         let config = nimbus.features.feltPrivacyFeature.value()
 
         switch featureID {
-        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled && config.simplifiedUiEnabled
+        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled
         default: return false
         }
     }
