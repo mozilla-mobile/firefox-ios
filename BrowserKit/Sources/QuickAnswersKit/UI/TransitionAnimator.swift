@@ -164,8 +164,7 @@ final class TransitionAnimator: NSObject,
         guard let presentingController = transitionContext.viewController(forKey: .to),
               // We can't add the presenting controller to the containerView since it is going to be removed
               // from its original superview, thus we need a snapshot.
-              let snapshotView = presentingController.view.snapshotView(afterScreenUpdates: false),
-              let dismissedController = transitionContext.viewController(forKey: .from) as? QuickAnswersViewController else {
+                let snapshotView = presentingController.view.snapshotView(afterScreenUpdates: false) else {
             transitionContext.completeTransition(false)
             return
         }
