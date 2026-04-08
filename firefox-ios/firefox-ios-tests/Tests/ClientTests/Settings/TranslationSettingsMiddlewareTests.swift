@@ -125,6 +125,51 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider = { _, _ in }
     }
 
+    func test_viewDidLoad_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
+        mockModelsFetcher.supportedTargetLanguages = ["en", "fr"]
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
+        mockProfile.prefs.setString("fr,en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject(localeCode: "en")
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        )
+
+        let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[1].code, "en")
+        XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_saveLanguages_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
+        let subject = createSubject(localeCode: "en")
+        let action = TranslationSettingsViewAction(
+            languages: ["fr", "en"],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatched.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[1].code, "en")
+        XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
     func test_viewDidLoad_readsAutoTranslatePref_whenEnabled() throws {
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
 

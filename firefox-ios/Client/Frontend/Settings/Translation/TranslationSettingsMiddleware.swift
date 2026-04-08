@@ -148,7 +148,7 @@ final class TranslationSettingsMiddleware {
         return codes.map { code in
             let native = localeProvider.nativeLanguageName(for: code)
             let localized = localeProvider.localizedLanguageName(for: code)
-            let isDeviceLanguage = code == deviceCode && code == codes.first
+            let isDeviceLanguage = code == deviceCode
             let subtitle: String? = isDeviceLanguage
                 ? .Settings.Translation.PreferredLanguages.DeviceLanguage
                 : (native == localized ? nil : localized)
