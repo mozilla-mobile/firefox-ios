@@ -74,18 +74,18 @@ protocol TabManager: AnyObject {
 
     /// Remove tab option using tabUUID.
     /// - Parameter tabUUID: UUID from the tab
-    func removeTab(_ tabUUID: TabUUID)
+    func removeTab(_ tabUUID: TabUUID) async
 
     /// Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not
-    func removeAllTabs(isPrivateMode: Bool)
+    func removeAllTabs(isPrivateMode: Bool) async
 
     /// Removes all tabs matching the urls, used when other clients request to close tabs on this device.
-    func removeTabs(by urls: [URL])
-    func removeTabs(_ tabs: [Tab])
+    func removeTabs(by urls: [URL]) async
+    func removeTabs(_ tabs: [Tab]) async
 
     /// Remove normal tabs older than a certain period of time
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date)
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) async
 
     // MARK: - Undo Close
     func undoCloseTab()

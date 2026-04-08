@@ -15,12 +15,12 @@ protocol ApplicationHelper: Sendable {
     @MainActor
     func open(_ url: URL, inWindow: WindowUUID)
 
+    @MainActor
     func closeTabs(_ urls: [URL]) async
 }
 
 /// UIApplication.shared wrapper
 struct DefaultApplicationHelper: ApplicationHelper {
-    @MainActor
     func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
@@ -30,7 +30,6 @@ struct DefaultApplicationHelper: ApplicationHelper {
     /// On iPadOS if more than one window is open, the OS will
     /// determine which UIScene the URL is delivered to.
     /// - Parameter url: the URL to open.
-    @MainActor
     func open(_ url: URL) {
         UIApplication.shared.open(url)
     }
@@ -44,7 +43,6 @@ struct DefaultApplicationHelper: ApplicationHelper {
     /// - Parameters:
     ///   - url: the URL to open.
     ///   - inWindow: the UUID of the window to open the URL.
-    @MainActor
     func open(_ url: URL, inWindow: WindowUUID) {
         let foundTargetScene = UIApplication.shared.connectedScenes.contains(where: {
             guard let delegate = $0.delegate as? SceneDelegate,
@@ -63,11 +61,10 @@ struct DefaultApplicationHelper: ApplicationHelper {
     ///
     /// - Parameters:
     ///   - urls: an array of URLs requested to be closed
-    @MainActor
-    func closeTabs(_ urls: [URL]) {
+    func closeTabs(_ urls: [URL]) async {
         let windowManager = AppContainer.shared.resolve() as WindowManager
         for tabManager in windowManager.allWindowTabManagers() {
-            tabManager.removeTabs(by: urls)
+            await tabManager.removeTabs(by: urls)
         }
     }
 }

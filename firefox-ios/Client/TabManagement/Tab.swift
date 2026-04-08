@@ -598,12 +598,16 @@ class Tab: NSObject,
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        close()
+
+        // TODO: FXIOS-TODO Make clearAndResetTabHistory async
+        Task {
+            await close()
+        }
     }
 
-    func close() {
-        webView?.pauseAllMediaPlayback {}
-        webView?.closeAllMediaPresentations {}
+    func close() async {
+        await webView?.pauseAllMediaPlayback()
+        await webView?.closeAllMediaPresentations()
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)

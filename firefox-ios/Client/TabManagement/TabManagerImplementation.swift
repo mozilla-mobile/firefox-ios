@@ -202,33 +202,33 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     }
 
     // MARK: - Remove Tab
-    func removeTab(_ tabUUID: TabUUID) {
+    func removeTab(_ tabUUID: TabUUID) async {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        self.removeTab(tab, flushToDisk: true)
-        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        await removeTab(tab, flushToDisk: true)
+        updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
 
-    func removeTabs(_ tabs: [Tab]) {
+    func removeTabs(_ tabs: [Tab]) async {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false)
+            await removeTab(tab, flushToDisk: false)
         }
         commitChanges()
     }
 
-    func removeTabs(by urls: [URL]) {
+    func removeTabs(by urls: [URL]) async {
         let urls = Set(urls)
         let tabsToRemove = normalTabs.filter { tab in
             guard let url = tab.url else { return false }
             return urls.contains(url)
         }
         for tab in tabsToRemove {
-            removeTab(tab.tabUUID)
+            await removeTab(tab.tabUUID)
         }
     }
 
-    func removeAllTabs(isPrivateMode: Bool) {
+    func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?
 
@@ -249,7 +249,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
         for tab in currentModeTabs {
             // Remove each tab without persisting changes
-            self.removeTab(tab, flushToDisk: false)
+            await removeTab(tab, flushToDisk: false)
             if tab == currentModeTabs.last {
                 // Select tab calls preserve tabs so we don't need to call it again
                 if tab.isPrivate,
@@ -270,7 +270,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     /// - Parameters:
     ///   - tab: the tab to remove
     ///   - flushToDisk: Will store changes if true, and update selected index
-    private func removeTab(_ tab: Tab, flushToDisk: Bool) {
+    private func removeTab(_ tab: Tab, flushToDisk: Bool) async {
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             logger.log("Could not find index of tab to remove",
                        level: .warning,
@@ -297,7 +297,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
                        category: .tabs)
         }
 
-        tab.close()
+        await tab.close()
 
         // Notify of tab removal
         self.delegates.forEach {
@@ -315,7 +315,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         }
     }
 
-    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {
+    func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) async {
         let calendar = Calendar.current
         let cutoffDate: Date
         switch period {
@@ -337,7 +337,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         let selectedTab = selectedTab
         for tab in tabsToRemove {
             // Remove each tab without persisting changes
-            removeTab(tab, flushToDisk: false)
+            await removeTab(tab, flushToDisk: false)
         }
         // We need to reselect the tab and adjust the selected index after tabs removal.
         // The selected tab will not be removed with `removeNormalTabsOlderThan` since it's
@@ -878,7 +878,9 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
         // Make sure to wipe the private tabs if the user has the pref turned on and there are private tabs to remove
         if shouldClearPrivateTabs(), !tab.isPrivate && !privateTabs.isEmpty {
-            removeAllPrivateTabs()
+            Task {
+                await removeAllPrivateTabs()
+            }
         }
 
         selectedIndex = tabs.firstIndex(of: tab) ?? -1
@@ -923,13 +925,13 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
                                   forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
-    private func removeAllPrivateTabs() {
+    private func removeAllPrivateTabs() async {
         // reset the selectedTabIndex if we are on a private tab because we will be removing it.
         if selectedTab?.isPrivate ?? false {
             selectedIndex = -1
         }
-        privateTabs.forEach { tab in
-            tab.close()
+        for tab in privateTabs {
+            await tab.close()
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
 
@@ -1028,8 +1030,10 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
             tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
         selectTab(tabToSelect)
-        removeTab(selectedTab.tabUUID)
+
+        // TODO: FXIOS-TODO Make clearAllTabsHistory async
         Task {
+            await removeTab(selectedTab.tabUUID)
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
     }

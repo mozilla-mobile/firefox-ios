@@ -177,7 +177,7 @@ extension BrowserViewController: WKUIDelegate {
                 // Need to wait here in case we're waiting for a pending `window.open()`.
                 try await Task.sleep(nanoseconds: NSEC_PER_MSEC * 100)
                 tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-                tabManager.removeTab(tab.tabUUID)
+                await tabManager.removeTab(tab.tabUUID)
             }
         }
     }
@@ -652,15 +652,21 @@ extension BrowserViewController: WKNavigationDelegate {
                 if isOpened {
                     UIApplication.shared.open(url, options: [:])
                 }
-                // If a new window was opened for this URL, close it
-                if let currentTab = self?.tabManager.selectedTab,
-                   currentTab.historyList.count == 1,
-                   self?.isStoreURL(currentTab.historyList[0]) ?? false {
-                    self?.tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
-                    self?.tabManager.removeTab(currentTab.tabUUID)
+                Task { @MainActor in
+                    await self?.removeTab()
                 }
             }
         }
+    }
+
+    private func removeTab() async {
+        // If a new window was opened for this URL, close it
+        guard let currentTab = tabManager.selectedTab,
+              currentTab.historyList.count == 1,
+              isStoreURL(currentTab.historyList[0]) else { return }
+
+        tabsPanelTelemetry.tabClosed(mode: currentTab.isPrivate ? .private : .normal)
+        await tabManager.removeTab(currentTab.tabUUID)
     }
 
     private func handleMailToNavigation(url: URL) {
