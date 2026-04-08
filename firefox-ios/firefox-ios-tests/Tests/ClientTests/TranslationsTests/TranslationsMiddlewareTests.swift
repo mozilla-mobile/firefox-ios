@@ -865,14 +865,18 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func createSubject(
-        translationsService: TranslationsServiceProtocol = MockTranslationsService()
+        translationsService: TranslationsServiceProtocol = MockTranslationsService(),
+        manager: PreferredTranslationLanguagesManager? = nil,
+        localeProvider: LocaleProvider = MockLocaleProvider()
     ) -> TranslationsMiddleware {
         return TranslationsMiddleware(
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
             translationsService: translationsService,
-            translationsTelemetry: mockTranslationsTelemetry
+            translationsTelemetry: mockTranslationsTelemetry,
+            manager: manager,
+            localeProvider: localeProvider
         )
     }
 

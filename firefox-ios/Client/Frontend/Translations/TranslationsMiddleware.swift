@@ -14,6 +14,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private let windowManager: WindowManager
     private let translationsService: TranslationsServiceProtocol
     private let translationsTelemetry: TranslationsTelemetryProtocol
+    private let manager: PreferredTranslationLanguagesManager
+    private let localeProvider: LocaleProvider
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -33,13 +35,17 @@ final class TranslationsMiddleware: FeatureFlaggable {
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          translationsService: TranslationsServiceProtocol = TranslationsService(),
-         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry()
+         translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
+         manager: PreferredTranslationLanguagesManager? = nil,
+         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) {
         self.profile = profile
         self.logger = logger
         self.windowManager = windowManager
         self.translationsService = translationsService
         self.translationsTelemetry = translationsTelemetry
+        self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
+        self.localeProvider = localeProvider
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -213,11 +219,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// When OFF, returns only the primary device language (preserving legacy behavior).
     private func targetLanguagesForEligibilityCheck() async -> [String] {
         if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
-            let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
             let supported = await translationsService.fetchSupportedTargetLanguages()
             return manager.preferredLanguages(supportedTargetLanguages: supported)
         }
-        return [Locale.current.languageCode].compactMap { $0 }
+        return [localeProvider.current.languageCode].compactMap { $0 }
     }
 
     /// Checks whether the current page in the active tab is eligible for translation,
