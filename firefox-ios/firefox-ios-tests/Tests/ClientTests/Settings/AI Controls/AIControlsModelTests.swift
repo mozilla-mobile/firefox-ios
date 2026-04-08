@@ -38,7 +38,23 @@ class AIControlsModelTests: XCTestCase {
     }
 
     @MainActor
+    func testHasVisibleAIFeatures() {
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
+        let aiControlsModel1 = createSubject(prefs: mockPrefs)
+        XCTAssertTrue(aiControlsModel1.hasVisibleAIFeatures)
+
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        let aiControlsModel2 = createSubject(prefs: mockPrefs)
+        XCTAssertTrue(aiControlsModel2.hasVisibleAIFeatures)
+
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: false)
+        let aiControlsModel3 = createSubject(prefs: mockPrefs)
+        XCTAssertFalse(aiControlsModel3.hasVisibleAIFeatures)
+    }
+
+    @MainActor
     func testInitialize() {
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)

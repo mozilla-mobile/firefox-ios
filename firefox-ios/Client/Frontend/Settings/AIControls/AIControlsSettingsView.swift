@@ -46,14 +46,18 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     warningCard
                     Spacer(minLength: UX.cardSpacing)
                 }
-                aiFeaturesControls
+                if aiControlsModel.hasVisibleAIFeatures {
+                    aiFeaturesControls
+                }
             }.padding(.horizontal, UX.padding)
-            VStack(alignment: .leading, spacing: UX.rowSpacing) {
-                Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription))
-                    .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription))
-                    .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-            }.padding(.horizontal, UX.padding*2)
+            if aiControlsModel.hasVisibleAIFeatures {
+                VStack(alignment: .leading, spacing: UX.rowSpacing) {
+                    Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription))
+                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                    Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription))
+                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                }.padding(.horizontal, UX.padding*2)
+            }
         }
         .background(themeColors.layer1.color)
         .onChange(of: aiControlsModel.killSwitchIsOn, perform: { newValue in
@@ -138,7 +142,6 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             cornerRadius: UX.cornerRadius,
             padding: UX.padding
         ) {
-            // TODO: FXIOS-15158 Handle if a user has no AI Features turned on
             VStack(alignment: .leading) {
                 if aiControlsModel.translationsVisible {
                     Toggle(isOn: $aiControlsModel.translationEnabled) {

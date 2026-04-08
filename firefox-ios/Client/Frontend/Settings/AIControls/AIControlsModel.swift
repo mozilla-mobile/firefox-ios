@@ -36,6 +36,10 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         )
     }()
 
+    var hasVisibleAIFeatures: Bool {
+        return translationsVisible || pageSummariesVisible
+    }
+
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
