@@ -65,6 +65,14 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         self.translatedToLanguage = translatedToLanguage
     }
 
+    /// Number of preferred translation languages stored in prefs.
+    /// Returns 0 when no languages have been stored yet (initial state).
+    var preferredLanguagesCount: Int {
+        guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
+              !stored.isEmpty else { return 0 }
+        return stored.components(separatedBy: ",").count
+    }
+
     /// Determines whether to show the translate icon on the toolbar
     /// The experiment needs to be turned on and the user settings needs to be enabled
     /// If user has not toggled the settings, then we enable the feature by default

@@ -174,13 +174,22 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                store.dispatch(GeneralBrowserAction(
-                    translationLanguages: languages,
-                    isPageTranslated: isTranslated,
-                    translatedToLanguage: translatedLanguage,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                ))
+                if languages.count == 1, let language = languages.first, !isTranslated {
+                    dismissMenuModal(animated: true)
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: windowUUID,
+                        targetLanguage: language,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        translationLanguages: languages,
+                        isPageTranslated: isTranslated,
+                        translatedToLanguage: translatedLanguage,
+                        windowUUID: windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
             }
         }
     }

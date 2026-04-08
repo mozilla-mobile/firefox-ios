@@ -5652,6 +5652,18 @@ extension String {
                     value: "Translated",
                     comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
 
+                public static let TranslatePageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Title.v152",
+                    tableName: "MainMenu",
+                    value: "Translate Page…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open.")
+
+                public static let TranslatedPageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Translated.Title.v152",
+                    tableName: "MainMenu",
+                    value: "Translated…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open.")
+
                 public static let Off = MZLocalizedString(
                     key: "MainMenu.ToolsSection.Translation.Off.v151",
                     tableName: "MainMenu",

@@ -416,12 +416,13 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
+        let isMultiLanguageFlow = featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly)
+        guard isMultiLanguageFlow,
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil
         else { return nil }
-
+        let isSingleLanguageFlow = translationConfig.preferredLanguagesCount == 1
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
@@ -439,8 +440,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
         return MenuElement(
             title: isActive
-                ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
-                : .MainMenu.ToolsSection.Translation.TranslatePageTitle,
+                ? (isSingleLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
+                                        : .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage)
+                : (isSingleLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitle
+                                        : .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage),
             iconName: Icons.translate,
             isEnabled: true,
             isActive: isActive,

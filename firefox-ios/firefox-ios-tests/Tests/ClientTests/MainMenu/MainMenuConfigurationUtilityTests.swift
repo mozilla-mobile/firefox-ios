@@ -95,7 +95,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         )
         let allTitles = sections.flatMap { $0.options }.map { $0.title }
 
-        XCTAssertFalse(allTitles.contains(.MainMenu.ToolsSection.Translation.TranslatePageTitle))
+        XCTAssertFalse(allTitles.contains(.MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage))
     }
 
     func test_translateItem_inactive_whenStateIsInactive() {
@@ -111,7 +111,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
         )
         let allItems = sections.flatMap { $0.options }
-        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage }
 
         XCTAssertNotNil(translateItem)
     }
@@ -120,6 +120,44 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         setLanguagePickerEnabled(true)
         let mockProfile = MockProfile()
         let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "fr")
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage }
+
+        XCTAssertNotNil(translateItem)
+    }
+
+    func test_translateItem_singleLanguage_inactive_showsNoEllipsis() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
+
+        XCTAssertNotNil(translateItem)
+    }
+
+    func test_translateItem_singleLanguage_active_showsNoEllipsis() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "en")
         let tabInfo = getTabInfo(translationConfiguration: config)
 
         let sections = configUtility.generateMenuElements(
