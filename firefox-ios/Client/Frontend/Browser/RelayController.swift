@@ -6,6 +6,7 @@ import Common
 import MozillaAppServices
 import Account
 import Shared
+import WebKit
 
 /// Default RelayControllerProtocol implementation.
 /// Handles account status updates and logic for Relay.
@@ -180,7 +181,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             // If an error occurred, or our OAuth token refresh attempt failed, complete with error.
             guard result != .error && result != .expiredToken else { completion(.error); return }
 
-            let populateSuccess = populateWebViewForm(for: tab, email: email)
+            let populateSuccess = await populateWebViewForm(for: tab, email: email)
             completion(populateSuccess ? result : .error)
         }
     }
@@ -190,7 +191,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     ///   - tab: the tab with the webview form
     ///   - email: the Relay email
     /// - Returns: true if successful
-    private func populateWebViewForm(for tab: Tab, email: String?) -> Bool {
+    private func populateWebViewForm(for tab: Tab, email: String?) async -> Bool {
         guard let webView = tab.webView, let email else {
             logger.log("No tab webview. Won't populate Relay email.", level: .warning, category: .relay)
             return false
@@ -206,12 +207,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
         let javascriptFunc = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
         var didFailJS = false
-        webView.evaluateJavascriptInDefaultContentWorld(javascriptFunc) { (result, error) in
-            guard error == nil else {
-                closureLogger.log("Javascript error: \(error!)", level: .warning, category: .relay)
-                didFailJS = true
-                return
-            }
+        do {
+            _ = try await webView.evaluateJavaScript(javascriptFunc, in: nil, contentWorld: WKContentWorld.defaultClient)
+        } catch {
+            closureLogger.log("Javascript error: \(error)", level: .warning, category: .relay)
+            didFailJS = true
         }
         return !didFailJS
     }
