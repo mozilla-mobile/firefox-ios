@@ -24,6 +24,6 @@ final class TranslationLanguageCell: UICollectionViewListCell, ThemeApplicable {
         content.secondaryTextProperties.color = theme.colors.textSecondary
         contentConfiguration = content
         backgroundConfiguration = .listGroupedCell()
-        backgroundConfiguration?.backgroundColor = theme.colors.layer2
+        backgroundConfiguration?.backgroundColor = theme.colors.layer5
     }
 }

@@ -20,6 +20,6 @@ final class TranslationPickerLanguageCell: UITableViewCell {
         content.textProperties.color = theme.colors.textPrimary
         content.secondaryTextProperties.color = theme.colors.textSecondary
         contentConfiguration = content
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer5
     }
 }
