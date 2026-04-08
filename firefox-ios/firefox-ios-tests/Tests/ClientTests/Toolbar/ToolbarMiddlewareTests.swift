@@ -698,8 +698,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         try didLongPressButton(
             buttonType: .readerModeWithSummarizer,
             expectedActionType: .showSummarizer,
-            expectation: expectation(description: "The show summarizer action should have been dispatched.")
-        )
+            expectation: expectation(description: "The show summarizer action should have been dispatched.")) { action in
+                XCTAssertEqual(action.summarizerTrigger, .toolbarIcon)
+        }
     }
 
     func testUrlDidChange_dispatchesBorderPositionChanged() throws {
@@ -909,7 +910,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     private func didLongPressButton(buttonType: ToolbarActionConfiguration.ActionType,
                                     expectedActionType: GeneralBrowserActionType,
-                                    expectation: XCTestExpectation? = nil) throws {
+                                    expectation: XCTestExpectation? = nil,
+                                    assertAction: (GeneralBrowserAction) -> Void = { _ in }) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
@@ -932,6 +934,7 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, expectedActionType)
+        assertAction(actionCalled)
     }
 
     private func cancelEditMode(dispatchedActionsCount: Int = 2) throws {
