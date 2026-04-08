@@ -18,13 +18,7 @@ class ZoomPageManager: TabEventHandler, FeatureFlaggable {
     let zoomStore: ZoomLevelStorage
     var tab: Tab?
 
-    var defaultZoomIsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
-    }
-
     var defaultZoomLevel: CGFloat {
-        guard defaultZoomIsEnabled else { return ZoomConstants.defaultZoomLimit }
-
         return zoomStore.getDefaultZoom()
     }
 
