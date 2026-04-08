@@ -32,7 +32,8 @@ final class Debouncer {
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.
 @MainActor
-final class AccountSyncHandler: TabEventHandler, Sendable {
+final class AccountSyncHandler: TabEventHandler, Notifiable, Sendable {
+    private let notificationCenter: NotificationProtocol = NotificationCenter.default
     private let debouncer: Debouncer
     private let profile: Profile
     private let logger: Logger
@@ -68,15 +69,11 @@ final class AccountSyncHandler: TabEventHandler, Sendable {
         // without requiring any tab interaction. syncEverything() fires on login
         // but the Rust TabsStore's local tab list is empty until setLocalTabs()
         // is called...so we do that here as soon as the account is ready.
-        NotificationCenter.default.addObserver(
-            forName: .accountAuthenticated,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            MainActor.assumeIsolated {
-                self?.storeTabs()
-            }
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [.accountAuthenticated]
+        )
     }
 
     // MARK: - Account Server Sync
@@ -150,6 +147,18 @@ final class AccountSyncHandler: TabEventHandler, Sendable {
                 }
                 onSyncCompleted?() // callback for tests
             }
+        }
+    }
+}
+
+// MARK: - Notifiable
+extension AccountSyncHandler {
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .accountAuthenticated:
+            ensureMainThread { self.storeTabs() }
+        default:
+            break
         }
     }
 }

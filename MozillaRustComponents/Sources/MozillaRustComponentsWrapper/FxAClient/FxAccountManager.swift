@@ -24,6 +24,10 @@ open class FxAccountManager: @unchecked Sendable {
     public nonisolated(unsafe) var deviceConfig: DeviceConfig
     let applicationScopes: [String]
 
+    // Serial by default (no .concurrent attribute). All finite state machine (FSM) state
+    // mutations and accountStateSideEffects calls must happen on this queue.
+    let fxaFsmQueue = DispatchQueue(label: "com.mozilla.fxa-mgr-queue")
+
     // FIXME: FXIOS-13501 Unprotected shared mutable state is an error in Swift 6
     nonisolated(unsafe) var acct: PersistedFirefoxAccount?
     var account: PersistedFirefoxAccount? {
@@ -67,17 +71,17 @@ open class FxAccountManager: @unchecked Sendable {
     /// fired.
     public func initialize(completionHandler: @escaping @MainActor @Sendable (Result<Void, Error>) -> Void) {
         fxaFsmQueue.async {
-            if let acct = self.tryRestoreAccount() {
-                self.account = acct
+            if let account = self.tryRestoreAccount() {
+                self.account = account
             } else {
                 self.account = self.createAccount()
             }
-            let dc = DeviceConfig(
+            let deviceConfig = DeviceConfig(
                 name: self.deviceConfig.name,
                 deviceType: self.deviceConfig.deviceType,
                 capabilities: self.deviceConfig.capabilities
             )
-            self.processEvent(.initialize(deviceConfig: dc))
+            self.processEvent(.initialize(deviceConfig: deviceConfig))
             DispatchQueue.main.async { completionHandler(.success(())) }
         }
     }
@@ -359,10 +363,6 @@ open class FxAccountManager: @unchecked Sendable {
         return try acct.gatherTelemetry()
     }
 
-    // Serial by default (no .concurrent attribute). All FSM state mutations and
-    // accountStateSideEffects calls must happen on this queue.
-    let fxaFsmQueue = DispatchQueue(label: "com.mozilla.fxa-mgr-queue")
-
     /// Runs the Rust state machine with the given event and runs side effects for the new state.
     /// Must be called on `fxaFsmQueue`.
     func processEvent(_ fxaEvent: FxaEvent) {
@@ -435,18 +435,18 @@ open class FxAccountManager: @unchecked Sendable {
     private func refreshProfileAsync(ignoreCache: Bool) {
         DispatchQueue.global().async {
             do {
-                let p = try self.requireAccount().getProfile(ignoreCache: ignoreCache)
+                let profile = try self.requireAccount().getProfile(ignoreCache: ignoreCache)
                 // Write back on fxaFsmQueue so we don't race with onDisconnected(), which clears
                 // self.profile on that same queue. Drop the result if the account was reset
                 // (e.g. logout) while in flight.
                 self.fxaFsmQueue.async {
                     guard self.state == .connected || self.state == .authIssues else { return }
-                    self.profile = p
+                    self.profile = profile
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(
                             name: .accountProfileUpdate,
                             object: nil,
-                            userInfo: ["profile": p]
+                            userInfo: ["profile": profile]
                         )
                     }
                 }
@@ -464,12 +464,12 @@ open class FxAccountManager: @unchecked Sendable {
         // starts in .uninitialized. Without this call,
         // subsequent events like .beginOAuthFlow would be rejected by the FSM.
         account = createAccount()
-        let dc = DeviceConfig(
+        let newDeviceConfig = DeviceConfig(
             name: deviceConfig.name,
             deviceType: deviceConfig.deviceType,
             capabilities: deviceConfig.capabilities
         )
-        processEvent(.initialize(deviceConfig: dc))
+        processEvent(.initialize(deviceConfig: newDeviceConfig))
     }
 
     func createAccount() -> PersistedFirefoxAccount {
