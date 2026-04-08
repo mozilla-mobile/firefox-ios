@@ -169,12 +169,13 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let translationConfig = toolbarState?.addressToolbar.translationConfiguration
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
+            let isSingleLanguageFlow = translationConfig.map { !$0.isMultiLanguageFlow } ?? false
             let prefs = profile.prefs
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                if languages.count == 1, let language = languages.first, !isTranslated {
+                if isSingleLanguageFlow, let language = languages.first, !isTranslated {
                     dismissMenuModal(animated: true)
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: windowUUID,

@@ -416,13 +416,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        let isMultiLanguageFlow = featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly)
-        guard isMultiLanguageFlow,
+        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil
         else { return nil }
-        let isSingleLanguageFlow = translationConfig.preferredLanguagesCount == 1
+        let isMultiLanguageFlow = translationConfig.isMultiLanguageFlow
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
@@ -440,10 +439,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
         return MenuElement(
             title: isActive
-                ? (isSingleLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
-                                        : .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage)
-                : (isSingleLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitle
-                                        : .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage),
+                ? (isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage
+                                       : .MainMenu.ToolsSection.Translation.TranslatedPageTitle)
+                : (isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage
+                                       : .MainMenu.ToolsSection.Translation.TranslatePageTitle),
             iconName: Icons.translate,
             isEnabled: true,
             isActive: isActive,
