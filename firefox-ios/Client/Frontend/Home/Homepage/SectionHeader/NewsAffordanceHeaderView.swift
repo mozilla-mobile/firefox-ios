@@ -37,7 +37,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
 
     private lazy var newsIconImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.readingList)
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.newsfeed)
     }
 
     private lazy var newsLabel: UILabel = .build { label in
