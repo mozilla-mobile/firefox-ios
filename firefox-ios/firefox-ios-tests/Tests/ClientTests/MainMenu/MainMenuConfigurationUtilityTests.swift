@@ -111,7 +111,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
         )
         let allItems = sections.flatMap { $0.options }
-        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
 
         XCTAssertNotNil(translateItem)
     }
@@ -129,7 +129,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
         )
         let allItems = sections.flatMap { $0.options }
-        let title = String.MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage
+        let title = String.MainMenu.ToolsSection.Translation.TranslatedPageTitle
         let translateItem = allItems.first { $0.title == title }
 
         XCTAssertNotNil(translateItem)
