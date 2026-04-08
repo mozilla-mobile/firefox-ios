@@ -61,6 +61,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     private let profile: Profile
     private let clientConfig: RelayClientConfiguration
     private let updateConfig: RelayUpdateConfiguration
+    private let jsEvaluator: RelayJavascriptEvaluator
     private var relayRSClient: RelayRemoteSettingsClientProtocol?
     private var client: RelayClientProtocol?
     private var isCreatingClient = false
@@ -83,6 +84,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
          gleanWrapper: GleanWrapper = DefaultGleanWrapper(),
          clientConfig: RelayClientConfiguration = .prod,
          updateConfig: RelayUpdateConfiguration = RelayUpdateConfiguration.default(),
+         javascriptEvaluator: RelayJavascriptEvaluator = DefaultRelayJavascriptEvaluator(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.logger = logger
         self.profile = profile
@@ -91,6 +93,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         self.clientConfig = isStaging ? .staging : .prod
         self.notificationCenter = notificationCenter
         self.updateConfig = updateConfig
+        self.jsEvaluator = javascriptEvaluator
         self.telemetry = RelayMaskTelemetry(gleanWrapper: gleanWrapper)
 
         if let relayClient {
@@ -208,7 +211,10 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         let javascriptFunc = "window.__firefox__.logins.fillRelayEmail(\(encodedEmailStr))"
         var didFailJS = false
         do {
-            _ = try await webView.evaluateJavaScript(javascriptFunc, in: nil, contentWorld: WKContentWorld.defaultClient)
+            _ = try await jsEvaluator.evaluateJavaScript(javascriptFunc,
+                                                         for: webView,
+                                                         in: nil,
+                                                         contentWorld: WKContentWorld.defaultClient)
         } catch {
             closureLogger.log("Javascript error: \(error)", level: .warning, category: .relay)
             didFailJS = true
@@ -389,5 +395,21 @@ final class RelayController: RelayControllerProtocol, Notifiable {
                 self?.updateRelayAccountStatus()
             }
         }
+    }
+}
+
+protocol RelayJavascriptEvaluator {
+    @MainActor func evaluateJavaScript(_ javaScript: String,
+                                       for: WKWebView,
+                                       in frame: WKFrameInfo?,
+                                       contentWorld: WKContentWorld) async throws -> Any?
+}
+
+final class DefaultRelayJavascriptEvaluator: RelayJavascriptEvaluator {
+    @MainActor func evaluateJavaScript(_ javaScript: String,
+                                       for webView: WKWebView,
+                                       in frame: WKFrameInfo?,
+                                       contentWorld: WKContentWorld) async throws -> Any? {
+        return try await webView.evaluateJavaScript(javaScript, in: frame, contentWorld: contentWorld)
     }
 }
