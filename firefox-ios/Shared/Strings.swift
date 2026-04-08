@@ -3388,6 +3388,7 @@ extension String {
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
                 )
+
             }
 
             public struct AutoTranslate {
