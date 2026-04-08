@@ -349,14 +349,18 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             case .success(let clients):
                 let oAuthID: RelayOAuthClientID = isStaging ? RelayOAuthClientID.stage : RelayOAuthClientID.release
                 let hasRelayID = clients.contains(where: { $0.clientId == oAuthID.rawValue })
-                if !hasRelayID { logger.log("No Relay service on this account.", level: .info, category: .relay) }
+                if !hasRelayID {
+                    logger.log("No Relay service on this account.", level: .info, category: .relay)
+                }
                 return hasRelayID ? .available : .unavailable
             case .failure(let error):
                 logger.log("Error fetching OAuth clients for Relay: \(error)", level: .warning, category: .relay)
                 return .unavailable
             }
         }()
-        Task { @MainActor in accountStatus = status }
+        Task { @MainActor in
+            accountStatus = status
+        }
     }
 
     // MARK: - Notifications
@@ -372,14 +376,18 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
-        Task { @MainActor in updateRelayAccountStatus() }
+        Task { @MainActor in
+            updateRelayAccountStatus()
+        }
     }
 
     private func performPostLaunchUpdate() {
         let delay = updateConfig.postLaunchUpdateDelay
         Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
-            Task { @MainActor in self?.updateRelayAccountStatus() }
+            Task { @MainActor in
+                self?.updateRelayAccountStatus()
+            }
         }
     }
 }
