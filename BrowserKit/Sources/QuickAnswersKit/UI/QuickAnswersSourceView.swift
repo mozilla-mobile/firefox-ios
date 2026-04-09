@@ -58,8 +58,6 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            thumbnailImageView.widthAnchor.constraint(equalTo: thumbnailImageView.heightAnchor,
-                                                      multiplier: UX.thumbnailAspectRatio),
 
             faviconImageView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
                                                   constant: UX.titleSpacing),
@@ -112,8 +110,7 @@ final class QuickAnswersSourceView: UIView,
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = UX.interItemSpacing
-        layout.minimumLineSpacing = UX.interItemSpacing
+//        layout.minimumLineSpacing = UX.interItemSpacing
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
@@ -139,6 +136,7 @@ final class QuickAnswersSourceView: UIView,
     // MARK: - Setup
     private func setupSubviews() {
         addSubviews(headerLabel, collectionView)
+        collectionView.backgroundColor = .red
 
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -178,22 +176,24 @@ final class QuickAnswersSourceView: UIView,
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
+    // what i want to achieve => i need the items to be always spanning the available area, but in
+    // case they are too big then i need them to wrap in a different row.
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let availableWidth = collectionView.bounds.width
-        let maxItemWidth = UX.maxItemWidth
-        let spacing = UX.interItemSpacing
-
-        let numberOfItems = floor((availableWidth + spacing) / (maxItemWidth + spacing))
-        let itemWidth = min(maxItemWidth, (availableWidth - spacing * (numberOfItems - 1)) / numberOfItems)
-
-        // Height: thumbnail (4:3 aspect) + titleSpacing (8) + faviconSize (16)
-        let thumbnailHeight = itemWidth / QuickAnswersSourceCell.UX.thumbnailAspectRatio
-        let itemHeight = thumbnailHeight + QuickAnswersSourceCell.UX.titleSpacing + QuickAnswersSourceCell.UX.faviconSize
-        return CGSize(width: itemWidth, height: itemHeight)
+        let cellMaxWidth: CGFloat = 150
+        let insets: CGFloat = 16
+        
+        // 600
+        let availableWidth = collectionView.frame.width
+        // 2.9 ~ 2
+        let numberOfItemsPerRow = floor(availableWidth / cellMaxWidth)
+        // 300
+        let width = (availableWidth - numberOfItemsPerRow * insets) / numberOfItemsPerRow
+        
+        return CGSize(width: width, height: width * 4/3)
     }
 
     // MARK: - ThemeApplicable
@@ -211,8 +211,8 @@ final class QuickAnswersSourceView: UIView,
     let view = QuickAnswersSourceView()
     view.configure(with: [
         .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add),
-        .init(title: "Title1", thumbnail: UIImage.strokedCheckmark, favicon: UIImage.add),
-        .init(title: "Title1", thumbnail: UIImage.strokedCheckmark, favicon: UIImage.add)
+        .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add),
+        .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add)
     ])
     viewController.view.addSubview(view)
     view.translatesAutoresizingMaskIntoConstraints = false
