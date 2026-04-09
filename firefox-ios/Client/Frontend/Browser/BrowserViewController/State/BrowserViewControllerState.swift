@@ -38,7 +38,6 @@ struct BrowserViewControllerState: ScreenState {
         case readerMode
         case newTabLongPressActions
         case readerModeLongPressAction
-        case dataClearance
         case passwordGenerator
         case translationLanguagePicker(TranslationLanguagePickerData)
     }
@@ -377,8 +376,6 @@ struct BrowserViewControllerState: ScreenState {
             return handleShowNewTabLongPressAction(state: state, action: action)
         case GeneralBrowserActionType.addToReadingListLongPressAction:
             return handleAddToReadingListLongPressAction(state: state, action: action)
-        case GeneralBrowserActionType.clearData:
-            return handleClearDataAction(state: state, action: action)
         case GeneralBrowserActionType.showPasswordGenerator:
             return handleShowPasswordGeneratorAction(state: state, action: action)
         case GeneralBrowserActionType.showSummarizer:
@@ -674,19 +671,6 @@ struct BrowserViewControllerState: ScreenState {
             shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
             browserViewType: state.browserViewType,
             displayView: .readerModeLongPressAction,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
-    }
-
-    @MainActor
-    private static func handleClearDataAction(state: BrowserViewControllerState,
-                                              action: GeneralBrowserAction) -> BrowserViewControllerState {
-        return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
-            windowUUID: state.windowUUID,
-            shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
-            browserViewType: state.browserViewType,
-            displayView: .dataClearance,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
             autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action))
     }

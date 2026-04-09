@@ -1078,7 +1078,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             scrollAlpha: toolbarState.scrollAlpha,
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
             isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
             isTranslucent: toolbarState.isTranslucent,

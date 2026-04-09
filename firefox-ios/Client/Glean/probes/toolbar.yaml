@@ -288,22 +288,6 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
-  data_clearance_button_tapped:
-    type: event
-    description: |
-        Counts the number of times a user taps the data clearance
-        button in the address or navigation toolbar
-    extra_keys:
-      is_private:
-        description: Whether the user is in private mode or not
-        type: boolean
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
   translate_button_tapped:
     type: event
     description: |

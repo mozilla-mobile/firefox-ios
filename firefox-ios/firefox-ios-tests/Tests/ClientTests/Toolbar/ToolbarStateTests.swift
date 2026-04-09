@@ -45,7 +45,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(initialState.numberOfTabs, 1)
         XCTAssertFalse(initialState.showMenuWarningBadge)
         XCTAssertFalse(initialState.isNewTabFeatureEnabled)
-        XCTAssertFalse(initialState.canShowDataClearanceAction)
         XCTAssertFalse(initialState.canShowNavigationHint)
         XCTAssertTrue(initialState.shouldAnimate)
     }
@@ -61,7 +60,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 addressBorderPosition: .bottom,
                 displayNavBorder: true,
                 isNewTabFeatureEnabled: false,
-                canShowDataClearanceAction: false,
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars)
@@ -77,7 +75,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.numberOfTabs, 1)
         XCTAssertFalse(newState.showMenuWarningBadge)
         XCTAssertFalse(newState.isNewTabFeatureEnabled)
-        XCTAssertFalse(newState.canShowDataClearanceAction)
         XCTAssertFalse(newState.canShowNavigationHint)
         XCTAssertNil(newState.addressToolbar.translationConfiguration)
     }

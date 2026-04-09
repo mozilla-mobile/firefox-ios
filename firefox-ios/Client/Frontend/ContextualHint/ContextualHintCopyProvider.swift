@@ -69,9 +69,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var descriptionCopy = ""
 
         switch hint {
-        case .dataClearance:
-            descriptionCopy = CFRStrings.FeltDeletion.Body
-
         case .jumpBackIn:
                 descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
 
@@ -104,8 +101,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var actionCopy: String
 
         switch hint {
-        case .dataClearance:
-            actionCopy = ""
         case .mainMenu:
             actionCopy = ""
         case .jumpBackIn,
