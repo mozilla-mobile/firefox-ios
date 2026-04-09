@@ -92,6 +92,7 @@ public struct StandardImageIdentifiers {
         public static let microphone = "microphoneLarge"
         public static let moreHorizontalRound = "moreHorizontalRoundLarge"
         public static let newFolder = "newFolderLarge"
+        public static let newsfeed = "newsfeedLarge"
         public static let nightMode = "nightModeLarge"
         public static let nightModeFill = "nightModeFillLarge"
         public static let notificationDot = "notificationDotLarge"
