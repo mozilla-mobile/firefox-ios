@@ -130,6 +130,7 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
             options.enableAppHangTracking = self.shouldEnableAppHangTracking
             options.enableMetricKit = self.shouldEnableMetricKit
             options.enableCaptureFailedRequests = false
+            options.enableNetworkBreadcrumbs = false
             options.enableSwizzling = false
             options.beforeBreadcrumb = { crumb in
                 if crumb.type == "http" || crumb.category == "http" {
