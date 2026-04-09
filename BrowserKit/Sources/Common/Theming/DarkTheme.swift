@@ -57,6 +57,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = FXColors.DarkGrey60
     var layerSurfaceMedium = FXColors.DarkGrey80
+    var layerSurfaceMediumAlpha = FXColors.DarkGrey80.withAlphaComponent(0.8)
     var layerSurfaceMediumAlt = FXColors.DarkGrey40
     var layerGradientSummary = Gradient(colors: [
         FXColors.Red70,
