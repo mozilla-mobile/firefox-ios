@@ -538,7 +538,7 @@ public protocol MozAdsClientProtocol: AnyObject, Sendable {
     
     func recordImpression(impressionUrl: String) throws 
     
-    func reportAd(reportUrl: String) throws 
+    func reportAd(reportUrl: String, reason: MozAdsReportReason) throws 
     
     func requestImageAds(mozAdRequests: [MozAdsPlacementRequest], options: MozAdsRequestOptions?) throws  -> [String: MozAdsImage]
     
@@ -623,10 +623,11 @@ open func recordImpression(impressionUrl: String)throws   {try rustCallWithError
 }
 }
     
-open func reportAd(reportUrl: String)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
+open func reportAd(reportUrl: String, reason: MozAdsReportReason)throws   {try rustCallWithError(FfiConverterTypeMozAdsClientApiError_lift) {
     uniffi_ads_client_fn_method_mozadsclient_report_ad(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(reportUrl),$0
+        FfiConverterString.lower(reportUrl),
+        FfiConverterTypeMozAdsReportReason_lower(reason),$0
     )
 }
 }
@@ -2291,6 +2292,80 @@ public func FfiConverterTypeMozAdsIABContentTaxonomy_lower(_ value: MozAdsIabCon
 }
 
 
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+
+public enum MozAdsReportReason: Equatable, Hashable {
+    
+    case inappropriate
+    case notInterested
+    case seenTooManyTimes
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension MozAdsReportReason: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsReportReason: FfiConverterRustBuffer {
+    typealias SwiftType = MozAdsReportReason
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsReportReason {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .inappropriate
+        
+        case 2: return .notInterested
+        
+        case 3: return .seenTooManyTimes
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MozAdsReportReason, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .inappropriate:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .notInterested:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .seenTooManyTimes:
+            writeInt(&buf, Int32(3))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsReportReason_lift(_ buf: RustBuffer) throws -> MozAdsReportReason {
+    return try FfiConverterTypeMozAdsReportReason.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsReportReason_lower(_ value: MozAdsReportReason) -> RustBuffer {
+    return FfiConverterTypeMozAdsReportReason.lower(value)
+}
+
+
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -2707,7 +2782,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclient_record_impression() != 43275) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 6019) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 18252) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 2157) {
