@@ -349,6 +349,9 @@
 /* On the main menu, the accessibility label for the action that will open the page zoom tool. */
 "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "Zoom pagină";
 
+/* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "Mod de lectură";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Salvează";
 
@@ -388,6 +391,15 @@
 /* On the main menu, the title for the action that will show more menu options in the current section of the menu. */
 "MainMenu.ToolsSection.MoreOptions.Title.v141" = "Mai multe";
 
+/* On the main menu, the title for the action that will show the reader view for the webpage. */
+"MainMenu.ToolsSection.ReaderView.Title.v149" = "Mod de lectură";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned off. */
+"MainMenu.ToolsSection.ReaderViewOff.Title.v150" = "Dezactivat";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned on. */
+"MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "Activat";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Salvează";
 
@@ -408,6 +420,9 @@
 
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Tradusă în %@";
+
+/* On the main menu, the badge shown on the Translate Page item when translation is inactive. */
+"MainMenu.ToolsSection.Translation.Off.v151" = "Dezactivat";
 
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "Tradu pagina";
