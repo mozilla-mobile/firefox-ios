@@ -129,8 +129,8 @@ final class LegacyTabScrollController: NSObject,
     /// When minimal mode is active, an additional height offset is applied to provide
     /// space for displaying the minimized address bar with the domain/subdomain URL.
     private var headerOffset: CGFloat {
-        // header should not update offset when address bar is at the bottom,
-        // using height instead of isBottomSearchBar for edge case when user rotates device
+        // The header should not update its offset when the address bar is at the bottom.
+        // We're using the height instead of `isBottomSearchBar` for edge case when the user rotates the device
         guard headerHeight > 0 else { return 0 }
 
         let baseOffset = -headerHeight
