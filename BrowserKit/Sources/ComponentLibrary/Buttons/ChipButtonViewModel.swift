@@ -13,7 +13,7 @@ public struct ChipButtonViewModel {
 
     public init(
         title: String,
-        a11yIdentifier: String?,
+        a11yIdentifier: String,
         isSelected: Bool,
         touchUpAction: (@MainActor (UIButton) -> Void)?
     ) {

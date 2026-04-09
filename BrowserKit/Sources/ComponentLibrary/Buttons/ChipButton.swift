@@ -5,6 +5,7 @@
 import Common
 import UIKit
 
+/// `ChipButton` is a capsule-style button used in chip pickers
 public final class ChipButton: UIButton, ThemeApplicable {
     private struct UX {
         static let verticalInset: CGFloat = 8
@@ -22,7 +23,13 @@ public final class ChipButton: UIButton, ThemeApplicable {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+
+        configuration = UIButton.Configuration.filled()
+        configuration?.cornerStyle = .capsule
+        configuration?.background.backgroundColorTransformer = nil
+        configuration?.titleLineBreakMode = .byTruncatingTail
+
+        addTarget(self, action: #selector(tapped), for: .touchUpInside)
     }
 
     public required init?(coder: NSCoder) {
@@ -68,8 +75,6 @@ public final class ChipButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.baseForegroundColor = foregroundColor
         updatedConfiguration.background.backgroundColor = backgroundColor
-        updatedConfiguration.background.strokeWidth = 0
-        updatedConfiguration.background.strokeColor = .clear
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = self.isSelected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
@@ -102,9 +107,6 @@ public final class ChipButton: UIButton, ThemeApplicable {
             trailing: UX.horizontalInset,
         )
         configuration = updatedConfiguration
-
-        invalidateIntrinsicContentSize()
-        setNeedsUpdateConfiguration()
     }
 
     public func applyTheme(theme: Theme) {
@@ -120,27 +122,5 @@ public final class ChipButton: UIButton, ThemeApplicable {
     @objc
     private func tapped(sender: UIButton) {
         viewModel?.tappedAction?(sender)
-    }
-
-    private func commonInit() {
-        configuration = UIButton.Configuration.filled()
-        configuration?.cornerStyle = .capsule
-        configuration?.background.backgroundColorTransformer = nil
-        configuration?.titleLineBreakMode = .byTruncatingTail
-
-        titleLabel?.adjustsFontForContentSizeCategory = true
-        titleLabel?.numberOfLines = 1
-
-        addTarget(self, action: #selector(tapped), for: .touchUpInside)
-    }
-
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else {
-            return
-        }
-
-        invalidateIntrinsicContentSize()
     }
 }
