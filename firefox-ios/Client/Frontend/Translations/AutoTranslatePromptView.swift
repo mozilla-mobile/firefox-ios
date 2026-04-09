@@ -8,7 +8,7 @@ import Redux
 import Shared
 import UIKit
 
-final class AutoTranslatePromptView: UIView, ThemeApplicable {
+final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
     private struct UX {
         static let borderThickness: CGFloat = 1.0
         static let contentPadding = NSDirectionalEdgeInsets(
@@ -19,6 +19,8 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
         )
         static let contentSpacing: CGFloat = 8
     }
+
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private let windowUUID: WindowUUID
 
@@ -50,6 +52,12 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
         button.addTarget(self, action: #selector(self.didTapDismiss), for: .touchUpInside)
     }
 
+    private lazy var messageEnableStack: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = UX.contentSpacing
+    }
+
     private lazy var contentRow: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.alignment = .center
@@ -60,6 +68,11 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
         self.windowUUID = windowUUID
         super.init(frame: .zero)
         setupView()
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [UIContentSizeCategory.didChangeNotification]
+        )
     }
 
     required init?(coder: NSCoder) {
@@ -67,8 +80,10 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
     }
 
     private func setupView() {
-        contentRow.addArrangedSubview(messageLabel)
-        contentRow.addArrangedSubview(enableButton)
+        messageEnableStack.addArrangedSubview(messageLabel)
+        messageEnableStack.addArrangedSubview(enableButton)
+
+        contentRow.addArrangedSubview(messageEnableStack)
         contentRow.addArrangedSubview(closeButton)
 
         addSubview(topBorderView)
@@ -85,6 +100,22 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
             contentRow.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentPadding.leading),
             contentRow.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UX.contentPadding.trailing),
         ])
+
+        adjustLayout()
+    }
+
+    private func adjustLayout() {
+        let isAccessibility = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
+        if isAccessibility {
+            messageEnableStack.axis = .vertical
+            messageEnableStack.alignment = .leading
+            contentRow.alignment = .top
+        } else {
+            messageEnableStack.axis = .horizontal
+            messageEnableStack.alignment = .center
+            contentRow.alignment = .center
+        }
+        setNeedsLayout()
     }
 
     @objc
@@ -101,6 +132,16 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable {
             windowUUID: windowUUID,
             actionType: TranslationsActionType.didDismissAutoTranslatePrompt
         ))
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            ensureMainThread { self.adjustLayout() }
+        default: break
+        }
     }
 
     // MARK: - ThemeApplicable
