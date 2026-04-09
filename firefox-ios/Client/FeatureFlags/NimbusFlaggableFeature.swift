@@ -21,7 +21,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case feltPrivacyFeltDeletion
-    case feltPrivacySimplifiedUI
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
@@ -91,7 +90,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .hostedSummarizer,
                 .improvedAppStoreReviewTriggerFeature,
                 .feltPrivacyFeltDeletion,
-                .feltPrivacySimplifiedUI,
                 .microsurvey,
                 .nativeErrorPage,
                 .needsReloadRefactor,
@@ -165,7 +163,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
                 .feltPrivacyFeltDeletion,
-                .feltPrivacySimplifiedUI,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
                 .homepageStoriesScrollDirection,

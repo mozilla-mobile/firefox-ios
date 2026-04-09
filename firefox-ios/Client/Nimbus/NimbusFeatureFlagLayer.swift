@@ -49,7 +49,7 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
-        case .feltPrivacySimplifiedUI, .feltPrivacyFeltDeletion:
+        case .feltPrivacyFeltDeletion:
             return checkFeltPrivacyFeature(for: featureID, from: nimbus)
 
         case .hntSponsoredShortcuts:
@@ -371,8 +371,7 @@ final class NimbusFeatureFlagLayer: Sendable {
         let config = nimbus.features.feltPrivacyFeature.value()
 
         switch featureID {
-        case .feltPrivacySimplifiedUI: return config.simplifiedUiEnabled
-        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled && config.simplifiedUiEnabled
+        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled
         default: return false
         }
     }

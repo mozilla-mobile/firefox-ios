@@ -430,7 +430,7 @@ final class TabTrayViewController: UIViewController,
 
     // MARK: Themeable
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {

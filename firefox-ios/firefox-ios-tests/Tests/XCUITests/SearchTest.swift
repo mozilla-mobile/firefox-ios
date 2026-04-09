@@ -548,9 +548,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2753105
-    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
+    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
@@ -592,8 +590,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
-    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
+    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
         app.launch()
         // Disable general search suggests
         navigator.goto(SearchSettings)
