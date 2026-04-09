@@ -29,7 +29,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     // swiftlint:disable:next function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
         // For better code readability and parsability in-app, please keep in alphabetical order by title
-        var children: [Setting] =  [
+        let children: [Setting] =  [
             FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
