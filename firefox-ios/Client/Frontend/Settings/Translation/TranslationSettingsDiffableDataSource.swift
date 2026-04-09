@@ -29,6 +29,8 @@ final class TranslationSettingsDiffableDataSource:
 
     private enum UX {
         static let preferredLanguagesSectionHeaderTopMargin: CGFloat = 24
+        static let footerFadeInDuration: CGFloat = 0.25
+        static let footerFadeOutDuration: CGFloat = 0.2
     }
 
     private var currentState: TranslationSettingsState?
@@ -74,10 +76,14 @@ final class TranslationSettingsDiffableDataSource:
             var content = UIListContentConfiguration.groupedFooter()
             switch sections[indexPath.section] {
             case .enableToggle:
-                content.text = currentState?.isTranslationsEnabled == true ? .Settings.Translation.ToggleFooter : nil
+                if currentState?.isTranslationsEnabled == true {
+                    content.text = .Settings.Translation.ToggleFooter
+                }
             case .preferredLanguages:
                 let displayLanguages = currentState?.pendingLanguages ?? currentState?.preferredLanguages ?? []
-                content.text = displayLanguages.count > 1 ? .Settings.Translation.PreferredLanguages.Footer : nil
+                if displayLanguages.count > 1 {
+                    content.text = .Settings.Translation.PreferredLanguages.Footer
+                }
             case .autoTranslate:
                 content.text = .Settings.Translation.AutoTranslate.Footer
             }
@@ -133,26 +139,27 @@ final class TranslationSettingsDiffableDataSource:
         }
 
         let newText = footerText(for: section)
-        if newText != nil {
+        if let newText {
             footer.contentView.alpha = 0
             var content = UIListContentConfiguration.groupedFooter()
             content.text = newText
             footer.contentConfiguration = content
-            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+            UIView.animate(withDuration: UX.footerFadeInDuration, delay: 0, options: .curveEaseInOut) {
                 footer.contentView.alpha = 1
             }
         } else {
             UIView.animate(
-                withDuration: 0.2,
+                withDuration: UX.footerFadeOutDuration,
                 delay: 0,
                 options: .curveEaseInOut,
                 animations: { footer.contentView.alpha = 0 },
                 completion: { _ in
-                var content = UIListContentConfiguration.groupedFooter()
-                content.text = nil
-                footer.contentConfiguration = content
-                footer.contentView.alpha = 1
-            })
+                    var content = UIListContentConfiguration.groupedFooter()
+                    content.text = nil
+                    footer.contentConfiguration = content
+                    footer.contentView.alpha = 1
+                }
+            )
         }
     }
 
@@ -166,10 +173,16 @@ final class TranslationSettingsDiffableDataSource:
     private func footerText(for section: TranslationSettingsSection) -> String? {
         switch section {
         case .enableToggle:
-            return currentState?.isTranslationsEnabled == true ? .Settings.Translation.ToggleFooter : nil
+            if currentState?.isTranslationsEnabled == true {
+                return .Settings.Translation.ToggleFooter
+            }
+            return nil
         case .preferredLanguages:
             let languages = currentState?.pendingLanguages ?? currentState?.preferredLanguages ?? []
-            return languages.count > 1 ? .Settings.Translation.PreferredLanguages.Footer : nil
+            if languages.count > 1 {
+                return .Settings.Translation.PreferredLanguages.Footer
+            }
+            return nil
         case .autoTranslate:
             return .Settings.Translation.AutoTranslate.Footer
         }
