@@ -142,9 +142,12 @@ final class TranslationSettingsDiffableDataSource:
                 footer.contentView.alpha = 1
             }
         } else {
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-                footer.contentView.alpha = 0
-            }, completion: { _ in
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0,
+                options: .curveEaseInOut,
+                animations: { footer.contentView.alpha = 0 },
+                completion: { _ in
                 var content = UIListContentConfiguration.groupedFooter()
                 content.text = nil
                 footer.contentConfiguration = content
