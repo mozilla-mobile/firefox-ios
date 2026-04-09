@@ -109,12 +109,20 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                store.dispatch(GeneralBrowserAction(
-                    buttonTapped: capturedButton,
-                    translationLanguages: languages,
-                    windowUUID: action.windowUUID,
-                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                ))
+                if languages.count == 1, let singleLanguage = languages.first {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: action.windowUUID,
+                        targetLanguage: singleLanguage,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        buttonTapped: capturedButton,
+                        translationLanguages: languages,
+                        windowUUID: action.windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
             }
         } else if translationConfiguration.state == .inactive {
             guard let deviceLanguage = Locale.current.languageCode else { return }
