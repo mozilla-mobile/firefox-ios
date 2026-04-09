@@ -109,7 +109,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                if languages.count == 1, let singleLanguage = languages.first {
+                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = languages.first {
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: action.windowUUID,
                         targetLanguage: singleLanguage,
