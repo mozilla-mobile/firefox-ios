@@ -4,22 +4,22 @@
 
 import UIKit
 import Common
+import SiteImageView
 
 struct QuickAnswersSourceItem {
     let title: String
     let thumbnail: UIImage?
-    let favicon: UIImage?
+    let faviconURL: URL?
 }
 
-// TODO: - Layout, Dynamic Font Size, Code Refactor (namings)
+// TODO: - Code Refactor (namings)
 final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
-        static let thumbnailAspectRatio: CGFloat = 4.0 / 3.0
+    private struct UX {
         static let thumbnailCornerRadius: CGFloat = 16.0
         static let thumbnailBorderWidth: CGFloat = 1.0
         static let titleSpacing: CGFloat = 8.0
         static let faviconSize: CGFloat = 16.0
-        static let faviconCornerRadius: CGFloat = 8.0
+        static let faviconCornerRadius: CGFloat = faviconSize / 2.0
         static let titleGap: CGFloat = 4.0
         static let titleHeight: CGFloat = 18.0
     }
@@ -27,8 +27,10 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.thumbnailCornerRadius
+        $0.layer.borderWidth = UX.thumbnailBorderWidth
     }
-    private let faviconImageView: UIImageView = .build {
+    private let thumbnailImageContainerView: UIView = .build()
+    private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.faviconCornerRadius
@@ -52,14 +54,16 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     // MARK: - Setup
 
     private func setupSubviews() {
-        contentView.addSubviews(thumbnailImageView, faviconImageView, titleLabel)
+        contentView.addSubviews(thumbnailImageContainerView, faviconImageView, titleLabel)
+        thumbnailImageContainerView.addSubview(thumbnailImageView)
         
+        thumbnailImageView.pinToSuperview()
         NSLayoutConstraint.activate([
-            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            thumbnailImageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            faviconImageView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
+            faviconImageView.topAnchor.constraint(equalTo: thumbnailImageContainerView.bottomAnchor,
                                                   constant: UX.titleSpacing),
             faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconSize),
@@ -76,16 +80,22 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     // MARK: - Configuration
     func configure(with item: QuickAnswersSourceItem) {
         thumbnailImageView.image = item.thumbnail
-        faviconImageView.image = item.favicon
+        faviconImageView.setFavicon(
+            FaviconImageViewModel(
+                siteURLString: item.faviconURL?.absoluteString,
+                faviconCornerRadius: UX.faviconCornerRadius
+            )
+        )
         titleLabel.text = item.title
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
-        thumbnailImageView.applyShadow(
+        thumbnailImageContainerView.applyShadow(
             FxShadow.shadow200,
             theme: theme
         )
+        thumbnailImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
         titleLabel.textColor = theme.colors.textSecondary
     }
 }
@@ -110,7 +120,6 @@ final class QuickAnswersSourceView: UIView,
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-//        layout.minimumLineSpacing = UX.interItemSpacing
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
@@ -136,7 +145,6 @@ final class QuickAnswersSourceView: UIView,
     // MARK: - Setup
     private func setupSubviews() {
         addSubviews(headerLabel, collectionView)
-        collectionView.backgroundColor = .red
 
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -192,8 +200,7 @@ final class QuickAnswersSourceView: UIView,
         let numberOfItemsPerRow = floor(availableWidth / cellMaxWidth)
         // 300
         let width = (availableWidth - numberOfItemsPerRow * insets) / numberOfItemsPerRow
-        
-        return CGSize(width: width, height: width * 4/3)
+        return CGSize(width: width, height: width * 3/4)
     }
 
     // MARK: - ThemeApplicable
@@ -210,9 +217,9 @@ final class QuickAnswersSourceView: UIView,
     let viewController = UIViewController()
     let view = QuickAnswersSourceView()
     view.configure(with: [
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add),
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add),
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), favicon: UIImage.add)
+        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.google.com")),
+        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.google.com")),
+        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.facebook.com"))
     ])
     viewController.view.addSubview(view)
     view.translatesAutoresizingMaskIntoConstraints = false
