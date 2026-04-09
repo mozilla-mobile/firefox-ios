@@ -89,6 +89,7 @@ struct AddressCellView: View {
             isLandscape = UIDevice.current.orientation.isLandscape
         }
         .accessibilityLabel(address.a11ySettingsRow)
+        .buttonStyle(AddressButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
     }
 
     // MARK: - Theme Application
@@ -100,5 +101,16 @@ struct AddressCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
+    }
+}
+
+/// A address button style with a specific theme.
+struct AddressButtonStyle: ButtonStyle {
+    let theme: Theme
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(configuration.isPressed ? Color(theme.colors.layer1) : Color(theme.colors.layer2))
+            .foregroundColor(.white)
     }
 }

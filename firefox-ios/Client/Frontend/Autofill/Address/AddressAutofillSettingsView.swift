@@ -79,11 +79,7 @@ struct ListHeaderPadding: ViewModifier {
                 content
             }
         } else {
-            if !isPad {
-                content.padding(.leading, paddingSize / 2)
-            } else {
-                content
-            }
+            content
         }
     }
 }
