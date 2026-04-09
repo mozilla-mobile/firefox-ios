@@ -244,6 +244,41 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider = { _, _ in }
     }
 
+    func test_toggleTranslationsEnabled_whenEnabled_resetsStorage() {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
+        let expectation = XCTestExpectation(description: "resetStorage was called")
+        mockModelsFetcher.resetStorageWasCalledExpectation = expectation
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+        wait(for: [expectation], timeout: 2.0)
+        XCTAssertTrue(mockModelsFetcher.resetStorageWasCalled)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_toggleTranslationsEnabled_whenDisabled_doesNotResetStorage() {
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let expectation = XCTestExpectation(description: "resetStorage was called")
+        expectation.isInverted = true
+        mockModelsFetcher.resetStorageWasCalledExpectation = expectation
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+        wait(for: [expectation], timeout: 2.0)
+        XCTAssertFalse(mockModelsFetcher.resetStorageWasCalled)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
     // MARK: - toggleAutoTranslate
 
     func test_toggleAutoTranslate_whenDisabled_enablesAndDispatches() throws {

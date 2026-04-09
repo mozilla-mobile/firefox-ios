@@ -28,5 +28,4 @@ protocol TranslationsServiceProtocol {
     func discardTranslations(for windowUUID: WindowUUID) async throws
     /// Returns the unique set of languages that can be used as translation targets.
     func fetchSupportedTargetLanguages() async -> [String]
-    func resetStorage() async
 }

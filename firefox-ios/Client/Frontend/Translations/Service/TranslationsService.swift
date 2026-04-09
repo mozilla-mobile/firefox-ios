@@ -155,10 +155,6 @@ final class TranslationsService: TranslationsServiceProtocol {
         return await modelsFetcher.fetchSupportedTargetLanguages()
     }
 
-    func resetStorage() async {
-        return await modelsFetcher.resetStorage()
-    }
-
     /// Returns the device language code for a given locale, if available.
     private func deviceLanguageCode(using locale: Locale = .current) -> String? {
         return locale.languageCode

@@ -196,7 +196,7 @@ class AIControlsModelTests: XCTestCase {
 
     @MainActor
     private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs)
+        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
     }
