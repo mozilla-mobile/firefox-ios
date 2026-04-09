@@ -226,10 +226,12 @@ class BrowserViewController: UIViewController,
     // MARK: Blur views for translucent toolbars
     lazy var topBlurView: UIVisualEffectView = .build { view in
         view.effect = self.effect
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.topBlurView
     }
 
     lazy var bottomBlurView: UIVisualEffectView = .build { view in
         view.effect = self.effect
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.bottomBlurView
     }
 
     // background view is placed behind content view so view scrolled to top or bottom shows

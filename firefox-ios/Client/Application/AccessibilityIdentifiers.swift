@@ -75,6 +75,8 @@ struct AccessibilityIdentifiers {
         static let bottomContentStackView = "Browser.bottomContentStackView"
         static let contentContainer = "Browser.contentContainer"
         static let statusBarOverlay = "Browser.statusBarOverlay"
+        static let topBlurView = "Browser.topBlurView"
+        static let bottomBlurView = "Browser.bottomBlurView"
     }
 
     struct ContextualHints {
