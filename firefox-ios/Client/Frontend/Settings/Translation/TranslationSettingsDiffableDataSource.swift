@@ -27,6 +27,8 @@ final class TranslationSettingsDiffableDataSource:
     UICollectionViewDiffableDataSource<TranslationSettingsSection, TranslationSettingsItem> {
     typealias SupplementaryRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>
 
+    private var currentState: TranslationSettingsState?
+
     override init(
         collectionView: UICollectionView,
         cellProvider: @escaping CellProvider
@@ -65,9 +67,10 @@ final class TranslationSettingsDiffableDataSource:
             var content = UIListContentConfiguration.groupedFooter()
             switch sections[indexPath.section] {
             case .enableToggle:
-                content.text = .Settings.Translation.ToggleFooter
+                content.text = currentState?.isTranslationsEnabled == true ? .Settings.Translation.ToggleFooter : nil
             case .preferredLanguages:
-                content.text = .Settings.Translation.PreferredLanguages.Footer
+                let displayLanguages = currentState?.pendingLanguages ?? currentState?.preferredLanguages ?? []
+                content.text = displayLanguages.count > 1 ? .Settings.Translation.PreferredLanguages.Footer : nil
             case .autoTranslate:
                 content.text = .Settings.Translation.AutoTranslate.Footer
             }
@@ -78,6 +81,9 @@ final class TranslationSettingsDiffableDataSource:
     // MARK: - Snapshot
 
     func applySnapshot(state: TranslationSettingsState, animated: Bool) {
+        let previousState = currentState
+        currentState = state
+
         var snapshot = NSDiffableDataSourceSnapshot<TranslationSettingsSection, TranslationSettingsItem>()
         snapshot.appendSections([.enableToggle])
         snapshot.appendItems([.enableToggle], toSection: .enableToggle)
@@ -91,6 +97,24 @@ final class TranslationSettingsDiffableDataSource:
             snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
         }
 
-        apply(snapshot, animatingDifferences: animated)
+        apply(snapshot, animatingDifferences: animated) { [weak self] in
+            guard let self, let previousState else { return }
+            var sectionsToReload = [TranslationSettingsSection]()
+
+            if previousState.isTranslationsEnabled != state.isTranslationsEnabled {
+                sectionsToReload.append(.enableToggle)
+            }
+
+            let previousDisplayLanguages = previousState.pendingLanguages ?? previousState.preferredLanguages
+            let currentDisplayLanguages = state.pendingLanguages ?? state.preferredLanguages
+            if (previousDisplayLanguages.count <= 1) != (currentDisplayLanguages.count <= 1) {
+                sectionsToReload.append(.preferredLanguages)
+            }
+
+            guard !sectionsToReload.isEmpty else { return }
+            var reloadSnapshot = self.snapshot()
+            reloadSnapshot.reloadSections(sectionsToReload.filter { reloadSnapshot.sectionIdentifiers.contains($0) })
+            self.apply(reloadSnapshot, animatingDifferences: false)
+        }
     }
 }
