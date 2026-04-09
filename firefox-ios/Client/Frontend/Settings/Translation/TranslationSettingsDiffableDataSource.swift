@@ -11,11 +11,14 @@ import UIKit
 enum TranslationSettingsSection: Int, Hashable {
     case enableToggle
     case preferredLanguages
+    case autoTranslate
 }
 
 enum TranslationSettingsItem: Hashable {
     case enableToggle
     case language(PreferredLanguageDetails)
+    case addLanguage
+    case autoTranslate
 }
 
 // MARK: - Diffable Data Source
@@ -65,6 +68,8 @@ final class TranslationSettingsDiffableDataSource:
                 content.text = .Settings.Translation.ToggleFooter
             case .preferredLanguages:
                 content.text = .Settings.Translation.PreferredLanguages.Footer
+            case .autoTranslate:
+                content.text = .Settings.Translation.AutoTranslate.Footer
             }
             cell.contentConfiguration = content
         }
@@ -79,20 +84,13 @@ final class TranslationSettingsDiffableDataSource:
 
         if state.isTranslationsEnabled {
             snapshot.appendSections([.preferredLanguages])
-            let langItems = state.preferredLanguages.map { TranslationSettingsItem.language($0) }
-            snapshot.appendItems(langItems, toSection: .preferredLanguages)
+            let displayLanguages = state.pendingLanguages ?? state.preferredLanguages
+            let langItems = displayLanguages.map { TranslationSettingsItem.language($0) }
+            snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
+            snapshot.appendSections([.autoTranslate])
+            snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
         }
 
         apply(snapshot, animatingDifferences: animated)
-    }
-
-    /// Reconfigures existing cells without a structural snapshot diff.
-    /// Called from applyTheme to update colours without replacing live UISwitch instances.
-    func reconfigureVisibleCells() {
-        var snap = snapshot()
-        let allItems = snap.sectionIdentifiers.flatMap { snap.itemIdentifiers(inSection: $0) }
-        guard !allItems.isEmpty else { return }
-        snap.reconfigureItems(allItems)
-        apply(snap, animatingDifferences: true)
     }
 }

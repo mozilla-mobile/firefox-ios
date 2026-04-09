@@ -489,31 +489,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(configuredSearchBarAction.isSearchBarEnabled, false)
     }
 
-    // MARK: - Spacer
-    func test_initializeAction_configuresSpacer() throws {
-        let subject = createSubject()
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: HomepageActionType.initialize
-        )
-        let dispatchExpectation = XCTestExpectation(description: "Spacer configured middleware action dispatched")
-
-        mockStore.dispatchCalled = {
-            dispatchExpectation.fulfill()
-        }
-
-        subject.homepageProvider(AppState(), action)
-
-        wait(for: [dispatchExpectation], timeout: 1)
-
-        let (configuredSpacerAction, configuredSpacerActionCount) = try getActionInfo(for: .configuredSpacer)
-        let configuredSpacerActionType = try XCTUnwrap(configuredSpacerAction.actionType as? HomepageMiddlewareActionType)
-
-        XCTAssertEqual(configuredSpacerActionCount, 1)
-        XCTAssertEqual(configuredSpacerActionType, .configuredSpacer)
-        XCTAssertEqual(configuredSpacerAction.shouldShowSpacer, true)
-    }
-
     func test_initializeAction_dispatchesConfiguresPrivacyNotice_withTrueValue() throws {
         let mockPrivacyNoticeHelper = MockPrivacyNoticeHelper()
         mockPrivacyNoticeHelper.shouldShowResult = true

@@ -32,6 +32,7 @@ class HistoryPanel: UIViewController,
     weak var historyCoordinatorDelegate: HistoryCoordinatorDelegate?
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     var state: LibraryPanelMainState
+    var isTransitioning = false
 
     let profile: Profile
     let windowUUID: WindowUUID

@@ -72,13 +72,13 @@ final class TabManagerMiddleware: FeatureFlaggable,
         } else if let action = action as? ScreenshotAction {
             self.resolveScreenshotActions(action: action, state: state)
         } else if let action = action as? ShortcutsLibraryAction {
-            self.resolveShortcutsLibrartActions(action: action, state: state)
+            self.resolveShortcutsLibraryActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
     }
 
-    private func resolveShortcutsLibrartActions(action: ShortcutsLibraryAction, state: AppState) {
+    private func resolveShortcutsLibraryActions(action: ShortcutsLibraryAction, state: AppState) {
         switch action.actionType {
         case ShortcutsLibraryActionType.switchTabToastButtonTapped:
             tabManager(for: action.windowUUID).selectTab(action.tab)
@@ -489,7 +489,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
                                                                              toApplication: .shared)
 
         if !isTabTrayUIExperimentsEnabled {
-            // The Tab Tray uses a "SimpleToast", so the urlString will go unused
+            // The Tab Tray uses a "PlainToast", so the urlString will go unused
             let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
                                                        windowUUID: uuid,
                                                        actionType: TabPanelMiddlewareActionType.showToast)
@@ -655,12 +655,12 @@ final class TabManagerMiddleware: FeatureFlaggable,
         getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
             // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
             MainActor.assumeIsolated {
-                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked)
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked, urlString: urlString)
                 let isSyncEnabled = self.profile.hasSyncableAccount()
 
                 let model = TabPeekModel(canTabBeSaved: canBeSaved,
                                          canTabBeRemoved: isBookmarked,
-                                         canCopyURL: !(tab?.isFxHomeTab ?? false),
+                                         canCopyURL: self.canAddCopyOption(tab: tab, urlString: urlString),
                                          isSyncEnabled: isSyncEnabled,
                                          screenshot: tab?.screenshot ?? UIImage(),
                                          accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
@@ -672,12 +672,19 @@ final class TabManagerMiddleware: FeatureFlaggable,
         }
     }
 
-    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool) -> Bool {
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool, urlString: String) -> Bool {
         guard let tab else { return false }
 
         // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
-        // and it is not a homepage (FxHome) tab.
-        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab
+        // and it is not a homepage (FxHome) tab or empty url
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab && !urlString.isEmpty
+    }
+
+    private func canAddCopyOption(tab: Tab?, urlString: String) -> Bool {
+        guard let tab else { return false }
+
+        // the option is not available if is homepage (FxHome) tab or empty url
+        return !tab.isFxHomeTab && !urlString.isEmpty
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
@@ -880,6 +887,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
         canSummarize: Bool,
         summarizerConfig: SummarizerConfig? = nil
     ) {
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let translationConfig = toolbarState?.addressToolbar.translationConfiguration
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
@@ -901,7 +910,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,
-                    accountData: accountData
+                    accountData: accountData,
+                    translationConfiguration: translationConfig
                 )
             )
         )
@@ -1092,7 +1102,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     guard result.isSuccess else { return }
-                    self.removeBookmarkShortcut()
+                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
                 }
             }
     }

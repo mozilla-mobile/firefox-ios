@@ -75,6 +75,7 @@ struct MainMenuTabInfo: Equatable {
     let isInReadingList: Bool
     let isPinned: Bool
     let accountData: AccountData
+    let translationConfiguration: TranslationConfiguration?
 }
 
 struct MainMenuState: ScreenState, Sendable {

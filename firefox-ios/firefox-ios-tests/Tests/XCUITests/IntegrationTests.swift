@@ -38,6 +38,8 @@ class IntegrationTests: BaseTestCase {
                                LaunchArguments.SkipWhatsNew,
                                LaunchArguments.SkipETPCoverSheet,
                                LaunchArguments.SkipContextualHints]
+        } else {
+            launchArguments.append(LaunchArguments.StageServer)
         }
         launchArguments.append(LaunchArguments.DisableAnimations)
         try await super.setUp()

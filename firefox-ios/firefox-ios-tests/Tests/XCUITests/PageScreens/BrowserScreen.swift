@@ -74,13 +74,6 @@ final class BrowserScreen {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
     }
 
-    func handleIos15ToastIfNecessary() {
-        if #unavailable(iOS 16) {
-            // iOS 15 displays a toast that covers the reload button
-            sleep(2)
-        }
-    }
-
     func tapDownloadsToastButton() {
         let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
         downloadsButton.waitAndTap()

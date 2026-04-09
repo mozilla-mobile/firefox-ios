@@ -15,6 +15,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     private var mockTabManager: MockTabManager!
     private var summarizerConfigFactory: MockSummarizerConfigFactory!
     private var appState: AppState!
+    private let homepageURLString = "internal://local/about/home"
 
     @MainActor
     override func setUp() async throws {
@@ -501,6 +502,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject()
         let windowUUID: WindowUUID = .XCTestDefaultUUID
         let tab = createTab(profile: mockProfile)
+        mockTabManager.tabForUUID = nil
 
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
@@ -530,6 +532,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         let longString = String(repeating: "a", count: 65536)
         let urlString = "https://example.com/\(longString)"
         let tab = createTab(profile: mockProfile, urlString: urlString)
+        mockTabManager.tabForUUID = tab
 
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
@@ -553,8 +556,8 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_Homepage() throws {
         let subject = createSubject()
         let windowUUID: WindowUUID = .XCTestDefaultUUID
-        let homepageURLString = "internal://about/home"
         let tab = createTab(profile: mockProfile, urlString: homepageURLString)
+        mockTabManager.tabForUUID = tab
 
         let action = TabPeekAction(tabUUID: tab.tabUUID,
                                    windowUUID: windowUUID,
@@ -575,6 +578,106 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
     }
 
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoBookmarks_BlankURL() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: "")
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canTabBeSaved ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_CopyOption() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoCopy_Homepage() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: homepageURLString)
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
+    func testTabPanelProvider_dispatchesTabPeekDidLoadAction_NoCopy_BlankURL() throws {
+        let subject = createSubject()
+        let windowUUID: WindowUUID = .XCTestDefaultUUID
+        let tab = createTab(profile: mockProfile, urlString: "")
+        mockTabManager.tabForUUID = tab
+
+        let action = TabPeekAction(tabUUID: tab.tabUUID,
+                                   windowUUID: windowUUID,
+                                   actionType: TabPeekActionType.didLoadTabPeek)
+
+        let expectation = XCTestExpectation(description: "TabPeekModel should be returned")
+
+        mockStore.dispatchCalled = {
+            expectation.fulfill()
+        }
+
+        subject.tabsPanelProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? TabPeekAction)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertFalse(actionCalled.tabPeekModel?.canCopyURL ?? false)
+    }
+
     // MARK: - Helpers
     private func createSubject() -> TabManagerMiddleware {
         return TabManagerMiddleware(
@@ -590,7 +693,7 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
     ) -> Tab {
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
 
-        if let urlString = urlString {
+        if let urlString = urlString, !urlString.isEmpty {
             tab.url = URL(string: urlString)!
         }
         return tab

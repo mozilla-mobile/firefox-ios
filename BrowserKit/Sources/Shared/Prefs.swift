@@ -42,7 +42,6 @@ public struct PrefsKeys {
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
     public static let LoginsSaveEnabled = "saveLogins"
-    public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
@@ -169,6 +168,9 @@ public struct PrefsKeys {
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
         public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
+        public static let translationAutoTranslate = "settings.translationAutoTranslate"
+        public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
+        public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
     }
 
     // Activity Stream

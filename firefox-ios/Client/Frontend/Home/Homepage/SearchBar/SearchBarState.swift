@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
 
 /// State for the search bar section that is used in the homepage
+@CopyWithUpdates
 struct SearchBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     let shouldShowSearchBar: Bool
@@ -52,23 +54,18 @@ struct SearchBarState: StateType, Equatable {
         guard let isSearchBarEnabled = (action as? HomepageAction)?.isSearchBarEnabled else {
             return defaultState(from: state)
         }
-        return SearchBarState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             shouldShowSearchBar: isSearchBarEnabled
         )
     }
 
     private static func handleHidingSearchBar(action: Action, state: Self) -> SearchBarState {
-        return SearchBarState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             shouldShowSearchBar: false
         )
     }
 
     static func defaultState(from state: SearchBarState) -> SearchBarState {
-        return SearchBarState(
-            windowUUID: state.windowUUID,
-            shouldShowSearchBar: state.shouldShowSearchBar
-        )
+        return state.copyWithUpdates()
     }
 }

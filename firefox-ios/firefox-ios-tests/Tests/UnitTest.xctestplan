@@ -205,9 +205,6 @@
       }
     },
     {
-      "skippedTests" : [
-        "SummarizeViewModelTests"
-      ],
       "target" : {
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "SummarizeKitTests",

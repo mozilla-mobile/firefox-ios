@@ -43,14 +43,17 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.viewDidLoad
         )
 
+        // viewDidLoad dispatches twice: once synchronously with isTranslationsEnabled/isAutoTranslateEnabled,
+        // then asynchronously with the full settings (preferredLanguages, supportedLanguages, etc.)
         let expectation = XCTestExpectation(description: "didLoadSettings action dispatched")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
         let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
 
@@ -75,13 +78,14 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "didLoadSettings dispatched with disabled state")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
 
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
         let preferredCodes = dispatchedAction.preferredLanguages?.map { $0.code }
 
@@ -105,6 +109,78 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[0].code, "en")
+        XCTAssertEqual(preferredLanguages[0].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        XCTAssertEqual(preferredLanguages[1].code, "fr")
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_viewDidLoad_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
+        mockModelsFetcher.supportedTargetLanguages = ["en", "fr"]
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
+        mockProfile.prefs.setString("fr,en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+
+        let subject = createSubject(localeCode: "en")
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        )
+
+        let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[1].code, "en")
+        XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_saveLanguages_deviceLanguage_notFirst_stillHasDeviceLanguageSubtitle() throws {
+        let subject = createSubject(localeCode: "en")
+        let action = TranslationSettingsViewAction(
+            languages: ["fr", "en"],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let preferredLanguages = try XCTUnwrap(dispatched.preferredLanguages)
+
+        XCTAssertEqual(preferredLanguages[1].code, "en")
+        XCTAssertEqual(preferredLanguages[1].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_viewDidLoad_readsAutoTranslatePref_whenEnabled() throws {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.viewDidLoad
+        )
+
+        let expectation = XCTestExpectation(description: "didLoadSettings dispatched")
+        expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationSettingsProvider(mockStore.state, action)
@@ -112,11 +188,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
-        let preferredLanguages = try XCTUnwrap(dispatchedAction.preferredLanguages)
-
-        XCTAssertEqual(preferredLanguages[0].code, "en")
-        XCTAssertEqual(preferredLanguages[0].subtitleText, .Settings.Translation.PreferredLanguages.DeviceLanguage)
-        XCTAssertEqual(preferredLanguages[1].code, "fr")
+        XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, true)
         subject.translationSettingsProvider = { _, _ in }
     }
 
@@ -172,6 +244,126 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.translationSettingsProvider = { _, _ in }
     }
 
+    // MARK: - toggleAutoTranslate
+
+    func test_toggleAutoTranslate_whenDisabled_enablesAndDispatches() throws {
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationAutoTranslate)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.toggleAutoTranslate
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+        XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, true)
+        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate), true)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_toggleAutoTranslate_whenEnabled_disablesAndDispatches() throws {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.toggleAutoTranslate
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
+        XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, false)
+        XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate), false)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    // MARK: - saveLanguages
+
+    func test_saveLanguages_persistsLanguagesToPrefsAndDispatchesUpdate() throws {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languages: ["en", "fr"],
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.saveLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        let stored = mockProfile.prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages)
+        XCTAssertEqual(stored, "en,fr")
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
+        let dispatchedType = try XCTUnwrap(dispatched.actionType as? TranslationSettingsMiddlewareActionType)
+        let preferredCodes = dispatched.preferredLanguages?.map { $0.code }
+
+        XCTAssertEqual(dispatchedType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(preferredCodes, ["en", "fr"])
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_enterEditMode_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.enterEditMode
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_cancelEditMode_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_reorderLanguages_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            pendingLanguages: makeLanguages(["fr", "en"]),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.reorderLanguages
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
+    func test_removeLanguage_doesNotDispatchViaMiddleware() {
+        let subject = createSubject()
+        let action = TranslationSettingsViewAction(
+            languageCode: "fr",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.removeLanguage
+        )
+
+        subject.translationSettingsProvider(mockStore.state, action)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.translationSettingsProvider = { _, _ in }
+    }
+
     // MARK: - Unrelated action
 
     func test_unrelatedAction_doesNotDispatch() {
@@ -190,15 +382,34 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: - StoreTestUtility
 
     func setupAppState() -> AppState {
+        return makeAppState()
+    }
+
+    private func makeAppState(
+        preferredLanguages: [PreferredLanguageDetails] = [],
+        pendingLanguages: [PreferredLanguageDetails]? = nil,
+        isEditing: Bool = false
+    ) -> AppState {
         return AppState(
             presentedComponents: PresentedComponentsState(
                 components: [
                     .translationSettings(
-                        TranslationSettingsState(windowUUID: .XCTestDefaultUUID)
+                        TranslationSettingsState(
+                            windowUUID: .XCTestDefaultUUID,
+                            isTranslationsEnabled: true,
+                            isEditing: isEditing,
+                            pendingLanguages: pendingLanguages,
+                            preferredLanguages: preferredLanguages,
+                            supportedLanguages: ["en", "fr", "de"]
+                        )
                     )
                 ]
             )
         )
+    }
+
+    private func makeLanguages(_ codes: [String]) -> [PreferredLanguageDetails] {
+        return codes.map { PreferredLanguageDetails(code: $0, mainText: $0, subtitleText: nil) }
     }
 
     func setupStore() {

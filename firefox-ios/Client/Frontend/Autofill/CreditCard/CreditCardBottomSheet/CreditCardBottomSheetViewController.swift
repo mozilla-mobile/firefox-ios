@@ -117,7 +117,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
         // Only allow selection when we are in selectSavedCard state
         // No selection is allowed for save / update states
-        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard ? true : false
+        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard
         observeCardTableViewContentSize()
     }
 

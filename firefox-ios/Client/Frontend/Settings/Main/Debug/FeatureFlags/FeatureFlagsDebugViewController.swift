@@ -52,6 +52,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .bookmarksSearchFeature,
+                titleText: format(string: "Bookmarks Search"),
+                statusText: format(string: "Toggle to enable bookmarks panel search feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .deeplinkOptimizationRefactor,
                 titleText: format(string: "Deeplink Optimization Refactor"),
                 statusText: format(string: "Toggle to enable deeplink optimization refactor")
@@ -252,13 +259,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .webEngineIntegrationRefactor,
-                titleText: format(string: "Web Engine Integration Refactor"),
-                statusText: format(string: "Toggle to enable the use of WebEngine library")
             ) { [weak self] _ in
                 self?.reloadView()
             },

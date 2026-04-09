@@ -3,18 +3,26 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
 
 /// State for the Merino stories section that is used in the homepage
+@CopyWithUpdates
 struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
-    let merinoData: [MerinoStoryConfiguration]
+    let merinoData: MerinoStoryResponse
+    let hasMerinoResponseContent: Bool
     let shouldShowSection: Bool
-    let sectionHeaderState = initializeSectionHeaderState()
 
-    let footerURL = SupportUtils.URLForPocketLearnMore
+    struct Constants {
+        static var sectionHeaderConfiguration: SectionHeaderConfiguration {
+            // Computed property because feature flag configuration can change after launch
+            MerinoState.initializeSectionHeaderConfiguration()
+        }
+        static let footerURL = SupportUtils.URLForPocketLearnMore
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let userPrefs = profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
@@ -23,18 +31,21 @@ struct MerinoState: StateType, Equatable {
 
         self.init(
             windowUUID: windowUUID,
-            merinoData: [],
+            merinoData: MerinoStoryResponse(),
+            hasMerinoResponseContent: false,
             shouldShowSection: shouldShowSection
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        merinoData: [MerinoStoryConfiguration],
+        merinoData: MerinoStoryResponse,
+        hasMerinoResponseContent: Bool,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.merinoData = merinoData
+        self.hasMerinoResponseContent = hasMerinoResponseContent
         self.shouldShowSection = shouldShowSection
     }
 
@@ -46,7 +57,7 @@ struct MerinoState: StateType, Equatable {
 
         switch action.actionType {
         case MerinoMiddlewareActionType.retrievedUpdatedHomepageStories:
-            return handlePocketStoriesAction(action, state: state)
+            return handleMerinoStoriesAction(action, state: state)
         case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
         default:
@@ -54,17 +65,26 @@ struct MerinoState: StateType, Equatable {
         }
     }
 
-    private static func handlePocketStoriesAction(_ action: Action, state: MerinoState) -> MerinoState {
-        guard let pocketAction = action as? MerinoAction,
-              let pocketStories = pocketAction.merinoStories
+    private static func handleMerinoStoriesAction(_ action: Action, state: MerinoState) -> MerinoState {
+        guard let merinoAction = action as? MerinoAction,
+              let merinoResponse = merinoAction.merinoResponse
         else {
             return defaultState(from: state)
         }
 
+        let merinoContentExists = if let stories = merinoResponse.stories {
+            !stories.isEmpty
+        } else if let categories = merinoResponse.categories {
+            !categories.isEmpty
+        } else {
+            false
+        }
+
         return MerinoState(
             windowUUID: state.windowUUID,
-            merinoData: pocketStories,
-            shouldShowSection: !pocketStories.isEmpty && state.shouldShowSection
+            merinoData: merinoResponse,
+            hasMerinoResponseContent: merinoContentExists,
+            shouldShowSection: merinoContentExists && state.shouldShowSection
         )
     }
 
@@ -75,25 +95,19 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: MerinoState) -> MerinoState {
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: state.merinoData,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 
-    private static func initializeSectionHeaderState() -> SectionHeaderConfiguration {
+    private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
         let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
              .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-        let isScrollDirectionVertical = scrollDirection == .vertical  && UIDeviceDetails.userInterfaceIdiom == .phone
+        let isScrollDirectionVertical = scrollDirection == .vertical
 
         return SectionHeaderConfiguration(
             title: .FirefoxHomepage.Pocket.NewsSectionTitle,

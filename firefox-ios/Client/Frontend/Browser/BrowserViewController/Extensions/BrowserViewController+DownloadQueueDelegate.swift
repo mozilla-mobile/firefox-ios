@@ -60,10 +60,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // Handle download cancellation
         if buttonPressed, !downloadQueue.isEmpty {
             downloadQueue.cancelAll(for: windowUUID)
-
-            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                            bottomContainer: self.contentContainer,
-                                            theme: self.currentTheme())
+            showPlainToast(message: .DownloadCancelledToastLabelText)
         }
     }
 
@@ -119,9 +116,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             self.downloadProgressManager = nil
 
             if error != nil {
-                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.currentTheme())
+                self.showPlainToast(message: .DownloadCancelledToastLabelText)
             }
         }
     }

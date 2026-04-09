@@ -8,31 +8,59 @@ import Redux
 struct TranslationSettingsViewAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
+    let languageCode: String?
+    let languages: [String]?
+    let pendingLanguages: [PreferredLanguageDetails]?
+
+    init(languageCode: String? = nil,
+         languages: [String]? = nil,
+         pendingLanguages: [PreferredLanguageDetails]? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.languageCode = languageCode
+        self.languages = languages
+        self.pendingLanguages = pendingLanguages
+        self.windowUUID = windowUUID
+        self.actionType = actionType
+    }
 }
 
 struct TranslationSettingsMiddlewareAction: Action {
     let windowUUID: WindowUUID
     let actionType: ActionType
     let isTranslationsEnabled: Bool?
+    let isAutoTranslateEnabled: Bool?
     let preferredLanguages: [PreferredLanguageDetails]?
     let supportedLanguages: [String]?
+    let availableLanguages: [String]?
 
     init(isTranslationsEnabled: Bool? = nil,
+         isAutoTranslateEnabled: Bool? = nil,
          preferredLanguages: [PreferredLanguageDetails]? = nil,
          supportedLanguages: [String]? = nil,
+         availableLanguages: [String]? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.isTranslationsEnabled = isTranslationsEnabled
+        self.isAutoTranslateEnabled = isAutoTranslateEnabled
         self.preferredLanguages = preferredLanguages
         self.supportedLanguages = supportedLanguages
+        self.availableLanguages = availableLanguages
     }
 }
 
 enum TranslationSettingsViewActionType: ActionType {
     case viewDidLoad
     case toggleTranslationsEnabled
+    case toggleAutoTranslate
+    case addLanguage
+    case enterEditMode
+    case cancelEditMode
+    case reorderLanguages
+    case removeLanguage
+    case saveLanguages
 }
 
 enum TranslationSettingsMiddlewareActionType: ActionType {

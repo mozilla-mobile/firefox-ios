@@ -79,6 +79,100 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertFalse(titles.contains(.MainMenu.ToolsSection.ReaderViewTitle))
     }
 
+    // MARK: - Translation item
+
+    func test_translateItem_notPresent_whenFlagDisabled() {
+        setLanguagePickerEnabled(false)
+        let mockProfile = MockProfile()
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allTitles = sections.flatMap { $0.options }.map { $0.title }
+
+        XCTAssertFalse(allTitles.contains(.MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage))
+    }
+
+    func test_translateItem_inactive_whenStateIsInactive() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
+
+        XCTAssertNotNil(translateItem)
+    }
+
+    func test_translateItem_active_whenStateIsActive() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "fr")
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let title = String.MainMenu.ToolsSection.Translation.TranslatedPageTitle
+        let translateItem = allItems.first { $0.title == title }
+
+        XCTAssertNotNil(translateItem)
+    }
+
+    func test_translateItem_singleLanguage_inactive_showsNoEllipsis() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
+
+        XCTAssertNotNil(translateItem)
+    }
+
+    func test_translateItem_singleLanguage_active_showsNoEllipsis() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        mockProfile.prefs.setString("en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "en")
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatedPageTitle }
+
+        XCTAssertNotNil(translateItem)
+    }
+
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
@@ -87,6 +181,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
 
     private func getTabInfo(
         isHomepage: Bool = false,
+        translationConfiguration: TranslationConfiguration? = nil
     ) -> MainMenuTabInfo {
         return MainMenuTabInfo(
             tabID: "uuid",
@@ -102,7 +197,14 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
             isBookmarked: false,
             isInReadingList: false,
             isPinned: false,
-            accountData: AccountData(title: "Test Title", subtitle: "Test Subtitle")
+            accountData: AccountData(title: "Test Title", subtitle: "Test Subtitle"),
+            translationConfiguration: translationConfiguration
         )
+    }
+
+    private func setLanguagePickerEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            TranslationsFeature(enabled: true, languagePickerEnabled: enabled)
+        }
     }
 }

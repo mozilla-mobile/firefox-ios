@@ -271,7 +271,7 @@ let package = Package(
             ]),
         .target(
             name: "QuickAnswersKit",
-            dependencies: ["Common", "Shared"],
+            dependencies: ["Common", "Shared", "MLPAKit", "LLMKit"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]
@@ -293,6 +293,9 @@ let package = Package(
         .target(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
+            resources: [
+                .process("IntroVideo.mp4")
+            ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),

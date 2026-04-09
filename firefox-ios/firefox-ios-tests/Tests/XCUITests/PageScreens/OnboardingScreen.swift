@@ -104,7 +104,7 @@ final class OnboardingScreen {
     /// Handles the initial ToS screen based on app channel (Firefox Beta, Firefox, Fennec). ToS must be accepted before the
     /// onboarding flow begins.
     func handleTermsOfService() {
-        BaseTestCase().mozWaitForElementToExist(tosContinueButton)
+        BaseTestCase().mozWaitForElementToExist(tosContinueButton, timeout: TIMEOUT_LONG)
         tosContinueButton.tap()
     }
 
@@ -208,14 +208,15 @@ final class OnboardingScreen {
     func waitForCurrentScreenElements(checkCloseButton: Bool = false,
                                       checkPageControl: Bool = false,
                                       waitForImage: Bool = true) {
-        let img = app.images["\(rootA11yId)ImageView"]
+        var img: XCUIElement
         let title = sel.titleLabel(rootId: rootA11yId).element(in: app)
         let desc = sel.descriptionLabel(rootId: rootA11yId).element(in: app)
 
         if waitForImage {
-            let img = app.images["\(rootA11yId)ImageView"]
+            img = app.images["\(rootA11yId)ImageView"]
             BaseTestCase().waitForElementsToExist([img, title, desc, primaryButton])
         } else {
+            img = app.images["firefoxLoader"]
             BaseTestCase().waitForElementsToExist([title, desc, primaryButton])
         }
 
@@ -457,5 +458,15 @@ final class OnboardingScreen {
         let button = app.buttons["\(rootA11yId)SegmentedButton.\(theme)"]
         BaseTestCase().mozWaitForElementToExist(button)
         button.tap()
+    }
+
+    /// Returns the legacy ToS "Agree and Continue" button.
+    func agreeAndContinueButton() -> XCUIElement {
+        return sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
+    }
+
+    /// Returns the modern onboarding primary button (used by modern flows).
+    func onboardingPrimaryButton() -> XCUIElement {
+        return sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
     }
 }

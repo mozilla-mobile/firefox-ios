@@ -1058,6 +1058,12 @@ extension String {
                 tableName: nil,
                 value: "Sponsored",
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
+
+            public static let AllStoryCategories = MZLocalizedString(
+                key: "FirefoxHomepage.Stories.AllStoryCategories.v151",
+                tableName: "FirefoxHomepage",
+                value: "All",
+                comment: "On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected.")
             public struct Footer {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Pocket.Footer.Title.v116",
@@ -3001,6 +3007,126 @@ extension String {
                 value: "AI Controls",
                 comment: "In the settings menu, in the General section, this is the title for the AI Controls settings section"
             )
+
+            public struct HeaderCard {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.AIControls.HeaderCard.Title.v151",
+                    tableName: "Settings",
+                    value: "You always have a choice in %@",
+                    comment: "This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
+                )
+
+                public static let Message = MZLocalizedString(
+                    key: "Settings.AIControls.HeaderCard.Message.v151",
+                    tableName: "Settings",
+                    value: "That includes whether to use features enhanced with AI.",
+                    comment: "This is the message for the Header Card under the AI Controls settings section."
+                )
+
+                public static let Link = MZLocalizedString(
+                    key: "Settings.AIControls.HeaderCard.Link.v151",
+                    tableName: "Settings",
+                    value: "Learn more",
+                    comment: "This is the text for the link in the Header Card under the AI Controls settings section that links to more information."
+                )
+            }
+
+            public static let BlockAIEnhancementsTitle = MZLocalizedString(
+                key: "Settings.AIControls.BlockAIEnhancementsTitle.v151",
+                tableName: "Settings",
+                value: "Block AI Enhancements",
+                comment: "This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section."
+            )
+
+            public static let BlockAIEnhancementsDescription = MZLocalizedString(
+                key: "Settings.AIControls.BlockAIEnhancementsDescription.v151",
+                tableName: "Settings",
+                value: "Blocking means you won’t see new or current AI enhancements in %@, or pop-ups about them.",
+                comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
+            )
+
+            public static let BlockAIEnhancementsLink = MZLocalizedString(
+                key: "Settings.AIControls.BlockAIEnhancementsLink.v151",
+                tableName: "Settings",
+                value: "See what is and isn’t included",
+                comment: "In the AI Controls settings, this is the text for the link that takes the user more information on AI features."
+            )
+
+            public static let BlockedInformation = MZLocalizedString(
+                key: "Settings.AIControls.BlockedInformation.v151",
+                tableName: "Settings",
+                value: "New and current AI enhancements are blocked by default. Unblock specific features below.",
+                comment: "In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle"
+            )
+
+            public struct AIPoweredFeaturesSection {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.Title.v151",
+                    tableName: "Settings",
+                    value: "AI-POWERED FEATURES",
+                    comment: "In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps."
+                )
+
+                public struct TranslationSection {
+                    public static let Title = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151",
+                        tableName: "Settings",
+                        value: "Translation",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature"
+                    )
+
+                    public static let Message = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151",
+                        tableName: "Settings",
+                        value: "Translations stay private on your device.",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature"
+                    )
+                }
+
+                public struct PageSummariesSection {
+                    public static let Title = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151",
+                        tableName: "Settings",
+                        value: "Page Summaries",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature"
+                    )
+
+                    public static let Message = MZLocalizedString(
+                        key: "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151",
+                        tableName: "Settings",
+                        value: "Pages and summaries are never stored.",
+                        comment: "In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature"
+                    )
+                }
+
+                public static let BlockedStatus = MZLocalizedString(
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151",
+                    tableName: "Settings",
+                    value: "Blocked",
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off."
+                )
+
+                public static let AvailableStatus = MZLocalizedString(
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151",
+                    tableName: "Settings",
+                    value: "Available",
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on."
+                )
+
+                public static let AvailableStatusDescription = MZLocalizedString(
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151",
+                    tableName: "Settings",
+                    value: "**Available**: You’ll see the feature and can use it.",
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation."
+                )
+
+                public static let BlockedStatusDescription = MZLocalizedString(
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151",
+                    tableName: "Settings",
+                    value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
+                    comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
+                )
+            }
         }
 
         public struct Summarize {
@@ -3262,30 +3388,66 @@ extension String {
             )
 
             public static let ToggleFooter = MZLocalizedString(
-                key: "", // Settings.Translation.ToggleFooter.v150
+                key: "Settings.Translation.ToggleFooter.v151",
                 tableName: "Settings",
                 value: "Turn this off to remove translation from the toolbar and menu.",
-                comment: "Footer text below the enable-translations toggle in the Translation settings screen."
+                comment: "Footer text below the enable toggle in the Translation settings screen."
             )
 
             public struct PreferredLanguages {
                 public static let SectionTitle = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.SectionTitle.v150
+                    key: "Settings.Translation.PreferredLanguages.SectionTitle.v151",
                     tableName: "Settings",
                     value: "Preferred Languages",
                     comment: "Section header for the preferred languages list in the Translation settings screen."
                 )
                 public static let DeviceLanguage = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.DeviceLanguage.v150
+                    key: "Settings.Translation.PreferredLanguages.DeviceLanguage.v151",
                     tableName: "Settings",
                     value: "Device Language",
                     comment: "Subtitle on the device language row in the preferred languages list in the Translation settings screen."
                 )
                 public static let Footer = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.Footer.v150
+                    key: "Settings.Translation.PreferredLanguages.Footer.v151",
                     tableName: "Settings",
                     value: "Choose from these languages when translating.",
                     comment: "Footer text below the preferred languages list in the Translation settings screen."
+                )
+                public static let AddLanguage = MZLocalizedString(
+                    key: "Settings.Translation.PreferredLanguages.AddLanguage.v151",
+                    tableName: "Settings",
+                    value: "Add Language…",
+                    comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
+                )
+            }
+
+            public struct AutoTranslate {
+                public static let Title = MZLocalizedString(
+                    key: "Settings.Translation.AutoTranslate.Title.v151",
+                    tableName: "Settings",
+                    value: "Automatically Translate",
+                    comment: "Title for the auto-translate toggle in the Translation settings screen."
+                )
+                public static let Footer = MZLocalizedString(
+                    key: "Settings.Translation.AutoTranslate.Footer.v151",
+                    tableName: "Settings",
+                    value: "Translates pages to your top preferred language automatically.",
+                    comment: "Footer text below the auto-translate toggle in the Translation settings screen."
+                )
+            }
+
+            public struct LanguagePicker {
+                public static let NavTitle = MZLocalizedString(
+                    key: "Settings.Translation.LanguagePicker.NavTitle.v151",
+                    tableName: "Settings",
+                    value: "Select Language",
+                    comment: "Navigation bar title of the language picker shown when adding a preferred translation language."
+                )
+                public static let SearchPlaceholder = MZLocalizedString(
+                    key: "Settings.Translation.LanguagePicker.SearchPlaceholder.v151",
+                    tableName: "Settings",
+                    value: "Search",
+                    comment: "Placeholder text for the search bar in the translation language picker."
                 )
             }
         }
@@ -3987,15 +4149,25 @@ extension String {
 
         public struct LanguagePicker {
             public static let Title = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.Title.v150
+                key: "Translations.LanguagePicker.Title.v151",
                 tableName: "Translations",
                 value: "Translate Page to…",
                 comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
             public static let PreferredLanguagesTitle = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.PreferredLanguages.v150
+                key: "Translations.LanguagePicker.PreferredLanguages.v151",
                 tableName: "Translations",
                 value: "Preferred Languages…",
                 comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
+            public static let PageTranslatedTitle = MZLocalizedString(
+                key: "Translations.LanguagePicker.PageTranslatedTitle.v151",
+                tableName: "Translations",
+                value: "Page Translated to %@",
+                comment: "Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English').")
+            public static let ShowOriginal = MZLocalizedString(
+                key: "Translations.LanguagePicker.ShowOriginal.v151",
+                tableName: "Translations",
+                value: "Show Original",
+                comment: "Button in the translation action sheet to restore the page to its original language.")
         }
 
         public struct Sheet {
@@ -4092,6 +4264,19 @@ extension String {
                     value: "Please try again.",
                     comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
             }
+        }
+
+        public struct AutoTranslatePrompt {
+            public static let Message = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.Message.v151",
+                tableName: "Translations",
+                value: "Automatically translate pages when available?",
+                comment: "Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate.")
+            public static let EnableButton = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.EnableButton.v151",
+                tableName: "Translations",
+                value: "Enable",
+                comment: "Button label on the auto-translate prompt that enables the auto-translate feature when tapped.")
         }
     }
 }
@@ -4541,13 +4726,6 @@ extension String {
         tableName: "FirefoxLogins",
         value: "Update password?",
         comment: "Prompt for updating the password in the Update Password prompt.")
-
-    // Setting
-    public static let SettingToShowLoginsInAppMenu = MZLocalizedString(
-        key: "Settings.ShowLoginsInAppMenu.Title",
-        tableName: nil,
-        value: "Show in Application Menu",
-        comment: "Setting to show Logins & Passwords quick access in the application menu")
 
     // List view
     public static let LoginsListTitle = MZLocalizedString(
@@ -5473,6 +5651,24 @@ extension String {
                     tableName: "MainMenu",
                     value: "Translated",
                     comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
+
+                public static let TranslatePageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Title.v151",
+                    tableName: "MainMenu",
+                    value: "Translate Page…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open.")
+
+                public static let TranslatedPageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Translated.Title.v151",
+                    tableName: "MainMenu",
+                    value: "Translated…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open.")
+
+                public static let Off = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Off.v151",
+                    tableName: "MainMenu",
+                    value: "Off",
+                    comment: "On the main menu, the badge shown on the Translate Page item when translation is inactive.")
             }
             public struct AccessibilityLabels {
                 public static let DesktopSite = MZLocalizedString(
@@ -8443,6 +8639,12 @@ extension String {
                 tableName: "MainMenu",
                 value: "Turn off Website Dark Mode",
                 comment: "On the main menu, the title for the action that will turn Website's Dark Mode off in the application."
+            )
+            public static let SettingToShowLoginsInAppMenu = MZLocalizedString(
+                key: "Settings.ShowLoginsInAppMenu.Title",
+                tableName: nil,
+                value: "Show in Application Menu",
+                comment: "Setting to show Logins & Passwords quick access in the application menu"
             )
         }
     }

@@ -182,6 +182,7 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         // Going to tab tray and back to the website hides the search field.
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         app.cells.elementContainingText("The Book of Mozilla").waitAndTap()

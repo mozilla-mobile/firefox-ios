@@ -229,6 +229,9 @@
 /* String used to describe Firefox on the Sync onboarding page for the current version of our onboarding screens. */
 "Onboarding.Modern.Sync.Description.v140" = "Imejte zaznamke, zgodovino in gesla pri roki na vsaki napravi.";
 
+/* Description for the Sync card in the v2 onboarding flow. */
+"Onboarding.Modern.Sync.Description.v145" = "Vaši zaznamki, gesla in drugi podatki se sinhronizirajo s katerokoli drugo napravo. Vse je zaščiteno s šifriranjem, tako da imate dostop do njih samo vi.";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Začnite sinhronizirati";
 

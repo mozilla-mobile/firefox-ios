@@ -120,7 +120,11 @@ class LibraryCoordinator: BaseCoordinator,
         add(child: coordinator)
 
         // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
-        coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
+        let arrowDirection: UIPopoverArrowDirection = UIDevice.current.userInterfaceIdiom == .pad ? .any : .up
+        coordinator.start(shareType: .site(url: url),
+                          shareMessage: nil,
+                          sourceView: sourceView,
+                          popoverArrowDirection: arrowDirection)
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {

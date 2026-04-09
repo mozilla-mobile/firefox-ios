@@ -402,9 +402,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     func testGeneralSettingsDelegate_pushedTranslationSettings_withLanguagePickerDisabled() {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
-            TranslationsFeature(languagePickerEnabled: false)
-        }
+        setLanguagePickerEnabled(false)
         let subject = createSubject()
 
         subject.pressedTranslation()
@@ -414,9 +412,7 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     func testGeneralSettingsDelegate_pushedTranslationSettings_withLanguagePickerEnabled() {
-        FxNimbus.shared.features.translationsFeature.with { _, _ in
-            TranslationsFeature(languagePickerEnabled: true)
-        }
+        setLanguagePickerEnabled(true)
         let subject = createSubject()
 
         subject.pressedTranslation()
@@ -605,6 +601,12 @@ final class SettingsCoordinatorTests: XCTestCase {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    private func setLanguagePickerEnabled(_ enabled: Bool) {
+        FxNimbus.shared.features.translationsFeature.with { _, _ in
+            TranslationsFeature(languagePickerEnabled: enabled)
+        }
     }
 }
 

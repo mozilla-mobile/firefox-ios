@@ -57,9 +57,13 @@ def tps_addon(pytestconfig, tmpdir_factory):
 
 @pytest.fixture
 def tps_config(fxa_account):
-    yield {'fx_account': {
-        'username': fxa_account.email,
-        'password': fxa_account.password}}
+    yield {
+        'fx_account': {
+            'username': fxa_account.email,
+            'password': fxa_account.password,
+        },
+        'fxaStaging': True,
+    }
 
 
 @pytest.fixture
@@ -73,7 +77,9 @@ def tps_log(pytestconfig, tmpdir):
 def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
     preferences = {
         'app.update.enabled': False,
+        'security.turn_off_all_security_so_that_viruses_can_take_over_this_computer': True,
         'browser.dom.window.dump.enabled': True,
+        'devtools.console.stdout.chrome': True,
         'browser.onboarding.enabled': False,
         'browser.sessionstore.resume_from_crash': False,
         'browser.shell.checkDefaultBrowser': False,
@@ -90,8 +96,6 @@ def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
         'extensions.update.enabled': False,
         'extensions.update.notifyUser': False,
         'identity.fxaccounts.autoconfig.uri': fxa_urls['content'],
-        'identity.fxaccounts.contextParam': 'fx_desktop_v3',
-        'identity.fxaccounts.oauth.enabled': False,
         'testing.tps.skipPingValidation': True,
         'services.sync.firstSync': 'notReady',
         'services.sync.lastversion': '1.0',

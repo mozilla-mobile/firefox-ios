@@ -199,11 +199,11 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .trendingSearches:
             return checkTrendingSearches(from: nimbus)
 
+        case .videoIntroOnboarding:
+            return checkVideoIntroOnboardingFeature(from: nimbus)
+
         case .quickAnswers:
             return checkQuickAnswersFeature(from: nimbus)
-
-        case .webEngineIntegrationRefactor:
-            return checkWebEngineIntegrationRefactor(from: nimbus)
         }
     }
 
@@ -505,16 +505,16 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.onboardingFrameworkFeature.value().enableModernUi
     }
 
-    private func checkWebEngineIntegrationRefactor(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.webEngineIntegrationRefactor.value().enabled
-    }
-
     private func checkShouldUseBrandRefreshConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseBrandRefreshConfiguration
     }
 
     private func checkShouldUseJapanConfigurationFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.onboardingFrameworkFeature.value().shouldUseJapanConfiguration
+    }
+
+    private func checkVideoIntroOnboardingFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.onboardingFrameworkFeature.value().enableVideoIntro
     }
 
     private func checkNeedsReloadRefactorFeature(from nimbus: FxNimbus) -> Bool {

@@ -31,6 +31,7 @@ final class MainMenuMiddleware: FeatureFlaggable {
         static let siteProtections = "site_protections"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
+        static let translatePage = "translate_page"
         static let webpageSummary = "webpage_summary"
         static let zoom = "zoom"
     }
@@ -235,6 +236,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
 
         case .webpageSummary:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.webpageSummary)
+
+        case .translatePage:
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.translatePage)
         }
     }
 }

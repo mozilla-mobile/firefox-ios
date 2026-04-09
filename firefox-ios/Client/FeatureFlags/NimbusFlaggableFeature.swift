@@ -73,8 +73,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case translationLanguagePicker
     case trendingSearches
     case unifiedSearch
+    case videoIntroOnboarding
     case quickAnswers
-    case webEngineIntegrationRefactor
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
@@ -116,8 +116,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch,
-                .webEngineIntegrationRefactor:
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -142,6 +141,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         typealias FlagKeys = PrefsKeys.FeatureFlags
 
         switch featureID {
+        case .aiKillSwitch:
+            return PrefsKeys.Settings.aiKillSwitchFeature
         case .bottomSearchBar:
             return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
@@ -157,8 +158,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .startAtHome:
             return FlagKeys.StartAtHome
         // Cases where users do not have the option to manipulate a setting. Please add in alphabetical order.
-        case .aiKillSwitch,
-                .appearanceMenu,
+        case .appearanceMenu,
                 .appIconSelection,
                 .addressAutofillEdit,
                 .addressBarMenu,
@@ -214,7 +214,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .webEngineIntegrationRefactor:
+                .videoIntroOnboarding:
             return nil
         }
     }

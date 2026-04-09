@@ -861,6 +861,7 @@ final class BrowserCoordinator: BaseCoordinator,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showCreditCardAutofill(
@@ -868,6 +869,7 @@ final class BrowserCoordinator: BaseCoordinator,
             decryptedCard: decryptedCard,
             viewType: state,
             frame: frame,
+            viewController: viewController,
             alertContainer: alertContainer
         )
     }
@@ -1108,7 +1110,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func popToBVC() {
-        _ = router.popToViewController(browserViewController, reason: .deeplink)
+        router.popToViewController(browserViewController, reason: .deeplink)
     }
 
     // MARK: Microsurvey
@@ -1142,8 +1144,8 @@ final class BrowserCoordinator: BaseCoordinator,
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageController = NativeErrorPageViewController(
             windowUUID: windowUUID,
-            overlayManager: overlayManager,
-            tabManager: tabManager
+            tabManager: tabManager,
+            overlayManager: overlayManager
         )
 
         guard browserViewController.embedContent(errorPageController) else {

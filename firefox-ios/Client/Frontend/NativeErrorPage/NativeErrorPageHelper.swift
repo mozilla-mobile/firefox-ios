@@ -238,7 +238,7 @@ class NativeErrorPageHelper {
                 appName,
                 url.absoluteString
             )
-            let advancedInfo = "\(securityInfo)\n\(certificateInfo)"
+            let advancedInfo = "\(securityInfo)\n\n\(certificateInfo)"
             let warningText = """
             \(String.NativeErrorPage.BadCertDomain.AdvancedWarning1)
             \(String.NativeErrorPage.BadCertDomain.AdvancedWarning2)

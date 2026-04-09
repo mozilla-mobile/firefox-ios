@@ -46,14 +46,15 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
+                                viewController: UIViewController,
                                 alertContainer: UIView) {
         let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: profile.autofill,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel,
-                                                                 windowUUID: windowUUID)
-        viewController.didTapYesClosure = { [weak self] error in
+        let bottomSheetViewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel,
+                                                                            windowUUID: windowUUID)
+        bottomSheetViewController.didTapYesClosure = { [weak self] error in
             guard let self = self else { return }
             if let error = error {
                 logger.log("Error fetching credit cards",
@@ -65,24 +66,26 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 if state == .save {
                     sendCreditCardSavePromptCreateTelemetry()
                     showToast(with: .CreditCard.RememberCreditCard.CreditCardSaveSuccessToastMessage,
-                              view: alertContainer)
+                              viewController: viewController,
+                              alertContainer: alertContainer)
                 } else if state == .update {
                     sendCreditCardSavePromptUpdateTelemetry()
                     showToast(with: .CreditCard.UpdateCreditCard.CreditCardUpdateSuccessToastMessage,
-                              view: alertContainer)
+                              viewController: viewController,
+                              alertContainer: alertContainer)
                 }
 
                 self.parentCoordinator?.didFinish(from: self)
             }
         }
 
-        viewController.didTapManageCardsClosure = { [weak self] in
+        bottomSheetViewController.didTapManageCardsClosure = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.show(settings: .creditCard)
             self.parentCoordinator?.didFinish(from: self)
         }
 
-        viewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
+        bottomSheetViewController.didSelectCreditCardToFill = { [weak self] plainTextCard in
             guard let self = self else { return }
             guard let currentTab = self.tabManager.selectedTab else {
                 self.parentCoordinator?.didFinish(from: self)
@@ -110,7 +113,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController,
+            childViewController: bottomSheetViewController,
             windowUUID: windowUUID
         )
         router.present(bottomSheetVC)
@@ -226,9 +229,21 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                      object: .creditCardAutofillPromptExpanded)
     }
 
-    private func showToast(with message: String, view: UIView) {
-        SimpleToast().showAlertWithText(message,
-                                        bottomContainer: view,
-                                        theme: self.currentTheme())
+    private func showToast(with message: String,
+                           viewController: UIViewController,
+                           alertContainer: UIView) {
+        let viewModel = PlainToastViewModel(labelText: message)
+        let toast = PlainToast(viewModel: viewModel, theme: currentTheme())
+        toast.showToast(viewController: viewController,
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.leadingAnchor,
+                                               constant: Toast.UX.toastSidePadding),
+                toast.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor,
+                                                constant: -Toast.UX.toastSidePadding),
+                toast.bottomAnchor.constraint(equalTo: alertContainer.bottomAnchor)
+            ]
+        }
     }
 }

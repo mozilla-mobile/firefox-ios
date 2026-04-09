@@ -53,13 +53,23 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
 
     let prefs: Prefs
     let state: IconState?
+    /// The language code the page was translated to, if in the active state (e.g. "en", "fr").
+    let translatedToLanguage: String?
 
     // We initially set icon state as nil until we can detect the
     // web page and determine if we should show the translation icon
     // and set the icon to .inactive state.
-    init(prefs: Prefs, state: IconState? = nil) {
+    init(prefs: Prefs, state: IconState? = nil, translatedToLanguage: String? = nil) {
         self.prefs = prefs
         self.state = state
+        self.translatedToLanguage = translatedToLanguage
+    }
+
+    var isMultiLanguageFlow: Bool {
+        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) else { return false }
+        guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
+              !stored.isEmpty else { return false }
+        return stored.components(separatedBy: ",").count != 1
     }
 
     /// Determines whether to show the translate icon on the toolbar
@@ -73,5 +83,7 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
 
     static func == (lhs: TranslationConfiguration, rhs: TranslationConfiguration) -> Bool {
         return lhs.isTranslationFeatureEnabled == rhs.isTranslationFeatureEnabled
+            && lhs.state == rhs.state
+            && lhs.translatedToLanguage == rhs.translatedToLanguage
     }
 }

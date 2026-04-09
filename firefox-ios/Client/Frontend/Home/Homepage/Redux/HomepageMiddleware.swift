@@ -59,7 +59,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         case HomepageActionType.initialize:
             self.dispatchPrivacyNoticeConfigurationAction(action: action)
             self.dispatchSearchBarConfigurationAction(action: action)
-            self.dispatchSpacerConfigurationAction(action: action)
 
         case HomepageActionType.viewWillTransition, ToolbarActionType.cancelEdit,
             GeneralBrowserActionType.navigateBack, GeneralBrowserActionType.didCloseTabFromToolbar:
@@ -99,16 +98,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
         )
     }
 
-    private func dispatchSpacerConfigurationAction(action: Action) {
-        store.dispatch(
-            HomepageAction(
-                shouldShowSpacer: self.shouldShowSpacer(),
-                windowUUID: action.windowUUID,
-                actionType: HomepageMiddlewareActionType.configuredSpacer
-            )
-        )
-    }
-
     private func shouldShowSearchBar(
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
@@ -120,10 +109,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             return false
         }
         return true
-    }
-
-    private func shouldShowSpacer(for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        return device == .phone
     }
 
     // MARK: - Notifications

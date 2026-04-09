@@ -28,6 +28,10 @@ protocol LibraryPanel: UIViewController {
     @MainActor
     var state: LibraryPanelMainState { get set }
 
+    /// Used to indicate when the panel is animating after the top nav `<` back button has been tapped
+    @MainActor
+    var isTransitioning: Bool { get }
+
     @MainActor
     var bottomToolbarItems: [UIBarButtonItem] { get }
 
@@ -103,6 +107,7 @@ class LibraryPanelHelper {
         self.profile = profile
     }
 
+    @MainActor
     lazy var enabledPanels: [LibraryPanelDescriptor] = {
         let bookmarksViewModel = BookmarksPanelViewModel(profile: profile, bookmarksHandler: profile.places)
 

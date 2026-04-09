@@ -2809,8 +2809,6 @@ public enum Suggestion: Equatable, Hashable {
     )
     case weather(city: Geoname?, score: Double
     )
-    case fakespot(fakespotGrade: String, productId: String, rating: Double, title: String, totalReviews: Int64, url: String, icon: Data?, iconMimetype: String?, score: Double, matchInfo: FtsMatchInfo?
-    )
     case dynamic(suggestionType: String, data: JsonValue?, 
         /**
          * This value is optionally defined in the suggestion's remote settings
@@ -2858,10 +2856,7 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
         case 6: return .weather(city: try FfiConverterOptionTypeGeoname.read(from: &buf), score: try FfiConverterDouble.read(from: &buf)
         )
         
-        case 7: return .fakespot(fakespotGrade: try FfiConverterString.read(from: &buf), productId: try FfiConverterString.read(from: &buf), rating: try FfiConverterDouble.read(from: &buf), title: try FfiConverterString.read(from: &buf), totalReviews: try FfiConverterInt64.read(from: &buf), url: try FfiConverterString.read(from: &buf), icon: try FfiConverterOptionData.read(from: &buf), iconMimetype: try FfiConverterOptionString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf), matchInfo: try FfiConverterOptionTypeFtsMatchInfo.read(from: &buf)
-        )
-        
-        case 8: return .dynamic(suggestionType: try FfiConverterString.read(from: &buf), data: try FfiConverterOptionTypeJsonValue.read(from: &buf), dismissalKey: try FfiConverterOptionString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf)
+        case 7: return .dynamic(suggestionType: try FfiConverterString.read(from: &buf), data: try FfiConverterOptionTypeJsonValue.read(from: &buf), dismissalKey: try FfiConverterOptionString.read(from: &buf), score: try FfiConverterDouble.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -2939,22 +2934,8 @@ public struct FfiConverterTypeSuggestion: FfiConverterRustBuffer {
             FfiConverterDouble.write(score, into: &buf)
             
         
-        case let .fakespot(fakespotGrade,productId,rating,title,totalReviews,url,icon,iconMimetype,score,matchInfo):
-            writeInt(&buf, Int32(7))
-            FfiConverterString.write(fakespotGrade, into: &buf)
-            FfiConverterString.write(productId, into: &buf)
-            FfiConverterDouble.write(rating, into: &buf)
-            FfiConverterString.write(title, into: &buf)
-            FfiConverterInt64.write(totalReviews, into: &buf)
-            FfiConverterString.write(url, into: &buf)
-            FfiConverterOptionData.write(icon, into: &buf)
-            FfiConverterOptionString.write(iconMimetype, into: &buf)
-            FfiConverterDouble.write(score, into: &buf)
-            FfiConverterOptionTypeFtsMatchInfo.write(matchInfo, into: &buf)
-            
-        
         case let .dynamic(suggestionType,data,dismissalKey,score):
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(7))
             FfiConverterString.write(suggestionType, into: &buf)
             FfiConverterOptionTypeJsonValue.write(data, into: &buf)
             FfiConverterOptionString.write(dismissalKey, into: &buf)
@@ -2996,7 +2977,6 @@ public enum SuggestionProvider: UInt8, Equatable, Hashable {
     case yelp = 5
     case mdn = 6
     case weather = 7
-    case fakespot = 8
     case dynamic = 9
 
 
@@ -3031,9 +3011,7 @@ public struct FfiConverterTypeSuggestionProvider: FfiConverterRustBuffer {
         
         case 6: return .weather
         
-        case 7: return .fakespot
-        
-        case 8: return .dynamic
+        case 7: return .dynamic
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -3067,12 +3045,8 @@ public struct FfiConverterTypeSuggestionProvider: FfiConverterRustBuffer {
             writeInt(&buf, Int32(6))
         
         
-        case .fakespot:
-            writeInt(&buf, Int32(7))
-        
-        
         case .dynamic:
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(7))
         
         }
     }

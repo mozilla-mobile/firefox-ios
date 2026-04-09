@@ -45,6 +45,8 @@ final class LaunchCoordinator: BaseCoordinator,
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
+        case .videoIntro:
+            presentVideoIntro()
         case .termsOfService(let manager):
             if manager.isModernOnboardingEnabled {
                 presentModernTermsOfUse(with: manager, isFullScreen: isFullScreen)
@@ -64,6 +66,21 @@ final class LaunchCoordinator: BaseCoordinator,
         case .survey(let manager):
             presentSurvey(with: manager)
         }
+    }
+
+    // MARK: - Video Intro
+    private func presentVideoIntro() {
+        let viewController = OnboardingVideoIntroViewController(windowUUID: windowUUID)
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(
+            title: String(format: .Onboarding.TermsOfService.Title, AppName.shortName.rawValue),
+            a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
+        ))
+        viewController.onDismiss = { [weak self] in
+            self?.router.dismiss(animated: true)
+        }
+        router.present(viewController, animated: false)
     }
 
     // MARK: - Terms of Use

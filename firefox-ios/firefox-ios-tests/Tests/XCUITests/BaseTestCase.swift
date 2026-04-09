@@ -265,6 +265,7 @@ class BaseTestCase: XCTestCase {
             browserScreen.assertAddressBar_LockIconExist()
         }
         browserScreen.tapSaveButtonIfExist()
+        waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }

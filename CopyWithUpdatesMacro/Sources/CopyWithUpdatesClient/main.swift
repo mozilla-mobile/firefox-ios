@@ -9,9 +9,10 @@ import CopyWithUpdates
 @CopyWithUpdates
 struct Report {
     let venue: String
-    let sponsor: String?
-    let drinks: [String]
-    let complexStructure: [Date: [(String, Int)]]
+    let sponsor: String? // Test a trailing comment
+    let drinks: [String] /* Test a docstring trailing comments */
+    /// Test markup documentation
+    let complexStructure: [Date: [(String, Int)]/* test middle docstring comment*/] /// Test some trailing doc comments
     let characters: [String]?
     let budget: Double
 }

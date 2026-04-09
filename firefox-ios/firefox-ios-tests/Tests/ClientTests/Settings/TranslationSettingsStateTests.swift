@@ -80,6 +80,164 @@ final class TranslationSettingsStateTests: XCTestCase {
         XCTAssertEqual(newState.supportedLanguages, ["en", "de"])
     }
 
+    // MARK: - Reducer Tests - isAutoTranslateEnabled
+
+    func test_reduceMiddlewareAction_didLoadSettings_updatesAutoTranslate() {
+        let initialState = createSubject()
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsMiddlewareAction(
+            isAutoTranslateEnabled: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isAutoTranslateEnabled)
+    }
+
+    func test_reduceMiddlewareAction_didLoadSettings_preservesAutoTranslate_whenNil() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isAutoTranslateEnabled: true,
+            preferredLanguages: [],
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isAutoTranslateEnabled)
+    }
+
+    // MARK: - Reducer Tests - enterEditMode
+
+    func test_enterEditMode_setsIsEditingAndCopiesPreferredToPending() {
+        let languages = makeLanguages(["en", "fr"])
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            preferredLanguages: languages,
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.enterEditMode
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertEqual(newState.pendingLanguages, languages)
+        XCTAssertEqual(newState.preferredLanguages, languages)
+    }
+
+    // MARK: - Reducer Tests - cancelEditMode
+
+    func test_cancelEditMode_clearsIsEditingAndPendingLanguages() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isEditing: true,
+            pendingLanguages: makeLanguages(["fr"]),
+            preferredLanguages: makeLanguages(["en", "fr"]),
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsViewAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.cancelEditMode
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertFalse(newState.isEditing)
+        XCTAssertNil(newState.pendingLanguages)
+        XCTAssertEqual(newState.preferredLanguages, makeLanguages(["en", "fr"]))
+    }
+
+    // MARK: - Reducer Tests - reorderLanguages
+
+    func test_reorderLanguages_updatesPendingLanguagesWithNewOrder() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isEditing: true,
+            pendingLanguages: makeLanguages(["en", "fr"]),
+            preferredLanguages: makeLanguages(["en", "fr"]),
+            supportedLanguages: []
+        )
+        let reordered = makeLanguages(["fr", "en"])
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsViewAction(
+            pendingLanguages: reordered,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.reorderLanguages
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.pendingLanguages, reordered)
+        XCTAssertEqual(newState.preferredLanguages, makeLanguages(["en", "fr"]))
+    }
+
+    // MARK: - Reducer Tests - removeLanguage
+
+    func test_removeLanguage_removesFromPendingLanguages() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isEditing: true,
+            pendingLanguages: makeLanguages(["en", "fr", "de"]),
+            preferredLanguages: makeLanguages(["en", "fr", "de"]),
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsViewAction(
+            languageCode: "fr",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.removeLanguage
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.pendingLanguages?.map { $0.code }, ["en", "de"])
+        XCTAssertEqual(newState.preferredLanguages, makeLanguages(["en", "fr", "de"]))
+    }
+
+    func test_removeLanguage_whenNoPending_removesFromPreferred() {
+        let initialState = TranslationSettingsState(
+            windowUUID: .XCTestDefaultUUID,
+            isTranslationsEnabled: true,
+            isEditing: true,
+            preferredLanguages: makeLanguages(["en", "fr"]),
+            supportedLanguages: []
+        )
+        let reducer = translationSettingsReducer()
+
+        let action = TranslationSettingsViewAction(
+            languageCode: "en",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationSettingsViewActionType.removeLanguage
+        )
+
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.pendingLanguages?.map { $0.code }, ["fr"])
+    }
+
     // MARK: - Reducer Tests - didUpdateSettings
 
     func test_didUpdateSettings_updatesTranslationsEnabled() {

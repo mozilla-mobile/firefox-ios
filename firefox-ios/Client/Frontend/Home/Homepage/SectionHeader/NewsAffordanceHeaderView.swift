@@ -7,9 +7,6 @@ import Foundation
 
 final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     struct UX {
-        static let containerHeight: CGFloat = 56
-        static let containerBottomInset: CGFloat = 16
-        static let totalHeight: CGFloat = containerHeight + containerBottomInset
         static let stackTopInset: CGFloat = 4
         static let stackBottomInset: CGFloat = 8
         static let stackHorizontalInset: CGFloat = 20
@@ -19,12 +16,6 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
     }
 
     // MARK: - UI Elements
-    private lazy var containerView: UIView = .build { view in
-        view.isAccessibilityElement = true
-        view.accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
-        view.accessibilityTraits.insert(.header)
-    }
-
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -57,6 +48,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
         setupLayout()
     }
 
@@ -78,23 +70,13 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         stackView.addArrangedSubview(chevronImageView)
         stackView.addArrangedSubview(iconLabelStackView)
 
-        containerView.addSubview(stackView)
-        addSubview(containerView)
+        addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                                  constant: -UX.containerBottomInset),
-
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                           constant: UX.stackTopInset),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                               constant: UX.stackHorizontalInset),
-            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                constant: -UX.stackHorizontalInset),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                              constant: -UX.stackBottomInset),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.stackTopInset),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.stackHorizontalInset),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.stackHorizontalInset),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.stackBottomInset),
 
             chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize),
             chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize),

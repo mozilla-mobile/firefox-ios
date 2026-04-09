@@ -5,7 +5,7 @@
 import Foundation
 
 /// A concrete `QuickAnswersService` that records speech and emits transcription results
-/// using an underlying `TranscriptionEngine`. As well as request search results from the transcription.
+/// using an underlying `TranscriptionEngine`. As well as request results from the transcription via `ResultsService` flow.
 ///
 /// Engine selection
 /// - iOS 26+ uses `SpeechAnalyzerEngine`.
@@ -18,15 +18,21 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     }
 
     private let engine: TranscriptionEngine
+    private let resultsService: ResultsService
     private var state: RecordingState = .idle
     private var recordingTask: Task<Void, Error>?
     private var continuation: AsyncThrowingStream<SpeechResult, any Error>.Continuation?
 
-    /// Creates a new service with a platform-appropriate transcription engine.
-    init(engine: TranscriptionEngine? = nil) {
+    /// Creates a new service with a platform-appropriate transcription engine and results service.
+    init(
+        engine: TranscriptionEngine? = nil,
+        resultsService: ResultsService? = nil
+    ) {
         self.engine = engine ?? Self.makeDefaultEngine()
+        self.resultsService = resultsService ?? Self.makeResultsService()
     }
 
+    // MARK: Speech Service
     /// Starts a new voice recording session and returns a stream of transcription results.
     /// - Ensures no other recording session is active.
     /// - Prepares the underlying transcription engine.
@@ -48,12 +54,19 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         state = .idle
     }
 
-    /// Performs a search for the given text.
-    ///
-    /// - Note: Currently returns an empty success result. See `FXIOS-14949`.
+    // MARK: Results Service
+    // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
+    // also remove search terminology while we are here
+
+    /// Performs a search for the given transcription using the ResultsService.
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        // TODO: FXIOS-14949 - Add search results from search service
-        return .success(SearchResult.empty())
+        do {
+            let result = try await resultsService.fetchResults(for: text)
+            return .success(result)
+        } catch {
+            // TODO: FXIOS-15198 Handle errors appropriately
+            return .failure(.unknown)
+        }
     }
 
     // MARK: Private Methods
@@ -100,5 +113,12 @@ final class DefaultQuickAnswersService: QuickAnswersService {
                 authorizer: authorizer
             )
         }
+    }
+
+    private static func makeResultsService() -> ResultsService {
+        let factory = DefaultResultsServiceFactory(
+            config: QuickAnswersConfig()
+        )
+        return factory.make()
     }
 }

@@ -376,6 +376,17 @@ extension TopTabsViewController: TopTabCellDelegate {
         delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
+
+        // Focus voice-over on the selected tab after current tab is closed
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self,
+                  let selected = self.tabManager.selectedTab,
+                  let index = self.topTabDisplayManager.dataStore.index(of: selected) else { return }
+
+            let indexPath = IndexPath(item: index, section: 0)
+            guard let selectedCell = self.collectionView.cellForItem(at: indexPath) else { return }
+            UIAccessibility.post(notification: .layoutChanged, argument: selectedCell)
+        }
     }
 }
 

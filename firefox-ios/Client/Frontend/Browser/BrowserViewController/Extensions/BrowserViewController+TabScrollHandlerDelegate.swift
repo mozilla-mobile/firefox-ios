@@ -40,7 +40,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
     func setupToolbarAnimator() {
         let context = ToolbarContext(overKeyboardContainerHeight: overKeyboardContainerHeight,
                                      bottomContainerHeight: getBottomContainerSize().height,
-                                     headerHeight: headerHeight)
+                                     headerHeight: calculateHeaderOffset())
         toolbarAnimator = ToolbarAnimator(context: context)
         toolbarAnimator?.view = self
         toolbarAnimator?.delegate = self
@@ -53,7 +53,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         let context = ToolbarContext(
             overKeyboardContainerHeight: overKeyboardContainerHeight,
             bottomContainerHeight: getBottomContainerSize().height,
-            headerHeight: headerHeight
+            headerHeight: calculateHeaderOffset()
         )
         animator.updateToolbarContext(context)
     }
@@ -62,15 +62,28 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         return calculateOverKeyboardScrollHeight(safeAreaInsets: UIWindow.keyWindow?.safeAreaInsets)
     }
 
-    private var headerHeight: CGFloat {
-        let baseOffset = -getHeaderSize().height
+    private func calculateHeaderOffset() -> CGFloat {
+        let headerHeight = getHeaderSize().height
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
+        let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
+        let isZoomBarInHeader = (isiPad && zoomPageBar != nil)
 
-        guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
-            return baseOffset
+        // Reader mode and zoom bar in header require fully hiding all header content.
+        // Use the stable layout position to handle cases where an animation is already in progress.
+        guard !isReaderModeActive, !isZoomBarInHeader else {
+            let headerLayoutY = header.frame.minY - header.transform.ty
+            return -(headerHeight + headerLayoutY)
         }
-        return baseOffset + UX.minimalHeaderOffset
+
+        // Minimal address bar: keep a small strip visible so the domain remains readable
+        // while scrolled. Applies only when the nav toolbar (iPhone portrait) or iPad layout is visible
+        let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
+        if isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) {
+            return -headerHeight + UX.minimalHeaderOffset
+        }
+
+        // scroll the given the header height
+        return -headerHeight
     }
 
     // Checks if minimal address bar is enabled and tab is on reader mode bar or findInPage

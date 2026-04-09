@@ -217,7 +217,7 @@ final class AddressScreen {
 
     private func retryTypingText(element: XCUIElement, textField: String) {
         var taps = 5
-        sleep(1)
+        BaseTestCase().mozWaitForElementToExist(element, timeout: TIMEOUT)
         while !element.isVisible() && taps > 0 {
             element.tapIfExists()
             taps -= 1

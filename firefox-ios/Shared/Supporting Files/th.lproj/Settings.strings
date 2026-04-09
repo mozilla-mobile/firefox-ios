@@ -64,6 +64,57 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "ที่อยู่";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "พร้อมใช้งาน";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**พร้อมใช้งาน**: คุณจะเห็นคุณลักษณะนี้และสามารถใช้งานได้";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "ปิดกั้น";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**ปิดกั้น**: คุณจะไม่เห็นและไม่สามารถใช้งานคุณลักษณะนี้ สำหรับ AI บนอุปกรณ์ โมเดลที่ดาวน์โหลดไว้จะถูกลบ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "หน้าและสรุปเนื้อหาไม่เคยถูกเก็บไว้";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "สรุปเนื้อหาเว็บ";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "คุณลักษณะที่ขับเคลื่อนด้วย AI";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "การแปลจะถูกเก็บเป็นส่วนตัวบนอุปกรณ์ของคุณ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "การแปล";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "การปิดกั้นหมายความว่าคุณจะไม่เห็นการเพิ่มประสิทธิภาพโดย AI ทั้งใหม่และปัจจุบันใน %@ รวมถึงป๊อปอัปเกี่ยวกับพวกมัน";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "ดูว่ารวมอะไรและไม่รวมอะไรบ้าง";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "ปิดกั้นการเพิ่มประสิทธิภาพโดย AI";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "การเพิ่มประสิทธิภาพโดย AI ใหม่และที่มีอยู่ขณะนี้ถูกปิดกั้นตามค่าเริ่มต้น ปลดล็อกคุณลักษณะอันใดอันหนึ่งได้ด้านล่าง";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "เรียนรู้เพิ่มเติม";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "นั่นรวมถึงว่าจะใช้คุณลักษณะที่ถูกเพิ่มประสิทธิภาพด้วย AI หรือไม่";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "คุณมีทางเลือกเสมอใน %@";
+
+/* In the settings menu, in the General section, this is the title for the AI Controls settings section */
+"Settings.AIControls.Title.v150" = "ส่วนควบคุม AI";
+
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
 "Settings.Appearance.NavigationToolbar.Description.v145" = "แก้ไขปุ่มกลางแถบเครื่องมือ";
 

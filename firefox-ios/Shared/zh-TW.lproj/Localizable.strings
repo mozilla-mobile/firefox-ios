@@ -1178,7 +1178,7 @@
 "Settings.ClearPrivateData.SectionName" = "清除隱私資料";
 
 /* Button in Data Management that clears private data for the selected items. %1$@ is the number of items to be cleared. */
-"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "清除項目: %1$@";
+"Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "清除項目：%1$@";
 
 /* Copy app version alert shown in settings. */
 "Settings.CopyAppVersion.Title" = "已複製至剪貼簿";

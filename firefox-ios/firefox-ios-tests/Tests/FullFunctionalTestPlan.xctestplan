@@ -309,7 +309,6 @@
         "TabsTests\/testCloseAllTabsPrivateModeUndo_TAE()",
         "TabsTests\/testCloseAllTabsPrivateModeUndo_tabTrayExperimentOff()",
         "TabsTests\/testCloseAllTabsPrivateModeUndo_tabTrayExperimentOn()",
-        "TabsTests\/testCloseAllTabsUndo()",
         "TabsTests\/testCloseAllTabsUndo_TAE()",
         "TabsTests\/testCloseAllTabsUndo_tabTrayExperimentOff()",
         "TabsTests\/testCloseTabFromPageOptionsMenu()",

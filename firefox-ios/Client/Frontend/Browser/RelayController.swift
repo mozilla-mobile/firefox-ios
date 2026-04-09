@@ -7,94 +7,8 @@ import MozillaAppServices
 import Account
 import Shared
 
-// NOTE: This is a WIP as part of the Relay Phase 1 MVP. This code will be restructured
-// soon; unit tests are also forthcoming. For now, tracking that here: FXIOS-14222. -MR
-
-typealias RelayPopulateCompletion = @MainActor  (RelayMaskGenerationResult) -> Void
-
-/// Describes public protocol for Relay component to track state and facilitate
-/// messaging between the BVC, keyboard accessory, and A~S Relay APIs.
-protocol RelayControllerProtocol {
-    /// Returns whether Relay Settings should be available. For Phase 1 this is true if the
-    /// user is logged into Mozilla sync and already has Relay enabled on their account.
-    @MainActor
-    func shouldDisplayRelaySettings() -> Bool
-
-    /// Whether to present the UI for a Relay mask after focusing on an email field.
-    /// This should account for all logic necessary for Relay display, which includes:
-    ///    - User account status (signed into Mozilla / Relay active)
-    ///    - Allow and Block lists
-    /// - Parameter String: The website URL.
-    /// - Returns: `true` if the website is valid for Relay, after checking block/allow lists.
-    @MainActor
-    func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool
-
-    /// Requests the RelayController to populate the email tab for the actively focused field
-    /// in the given tab. A safety check is performed internally to make sure this tab is the
-    /// same one that was focused originally in `emailFieldFocused`. If the two differ, the
-    /// operation is cancelled.
-    /// - Parameter tab: the tab to populate. The email field is expected to be focused, otherwise a JS error will be logged.
-    /// - Parameter completion: the completion block called once the action is resolved.
-    @MainActor
-    func populateEmailFieldWithRelayMask(for tab: Tab,
-                                         completion: @escaping RelayPopulateCompletion)
-
-    /// Notifies the RelayController which tab is currently focused for the purposes of generating a Relay mask.
-    /// - Parameter tab: the current tab.
-    @MainActor
-    func emailFieldFocused(in tab: Tab)
-
-    @MainActor
-    var telemetry: RelayMaskTelemetry { get }
-}
-
-protocol RelayAccountStatusProvider {
-    @MainActor
-    var accountStatus: RelayAccountStatus { get set }
-}
-
-/// Describes the result of an attempt to generate a Relay mask for an email field.
-enum RelayMaskGenerationResult {
-    /// A new mask was generated successfully.
-    case newMaskGenerated
-    /// User is on a free plan and their limit has been reached.
-    /// For Phase 1, one of the user's existing masks will be randomly picked.
-    case freeTierLimitReached
-    /// Generation failed due to expired OAuth token.
-    case expiredToken
-    /// A problem occurred.
-    case error
-}
-
-/// Describes the general state of Relay availability on the user's existing Mozilla account.
-/// This begins with a state of `unknown`. For Phase 1 it is checked periodically and then
-/// cached, due to the required APIs being slow to return, we cannot hit it on-demand on the MT.
-enum RelayAccountStatus {
-    /// Relay is available.
-    case available
-    /// Relay is not available on this user's Mozilla account.
-    case unavailable
-    /// Account status is unknown.
-    case unknown
-    /// The account status is actively being updated.
-    case updating
-}
-
-@MainActor
-final class RelayAccountStatusProviderImplementation: RelayAccountStatusProvider {
-    private let logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
-
-    internal var accountStatus: RelayAccountStatus = .unknown {
-        didSet {
-            logger.log("Updated Relay account status from \(oldValue) to: \(accountStatus)", level: .info, category: .relay)
-        }
-    }
-}
-
+/// Default RelayControllerProtocol implementation.
+/// Handles account status updates and logic for Relay.
 @MainActor
 final class RelayController: RelayControllerProtocol, Notifiable {
     private enum RelayOAuthClientID: String {
@@ -190,36 +104,35 @@ final class RelayController: RelayControllerProtocol, Notifiable {
     // MARK: - RelayControllerProtocol
 
     func emailFocusShouldDisplayRelayPrompt(url: URL) -> Bool {
-        // Note: the prefs key defaults to On. No value (nil) should be treated as true.
-        guard Self.isFeatureEnabled else {
-            logger.log("Display Relay: false. Feature disabled.", level: .info, category: .relay)
-            return false
+        func bail(_ message: String) -> Bool {
+            logger.log("Display Relay: false. \(message)", level: .info, category: .relay); return false
         }
-        guard profile.prefs.boolForKey(PrefsKeys.ShowRelayMaskSuggestions) ?? true else {
-            logger.log("Display Relay: false. Local setting disabled.", level: .info, category: .relay)
-            return false
-        }
-        guard client != nil else {
-            logger.log("Display Relay: false. No Relay client.", level: .info, category: .relay)
-            return false
-        }
-        guard let relayRSClient, hasRelayAccount() else {
-            logger.log("Display Relay: false. (No client / Relay acct)", level: .info, category: .relay)
-            return false
-        }
-        guard let domain = url.baseDomain, let host = url.normalizedHost else {
-            logger.log("Display Relay: false. (Invalid domain/host.)", level: .info, category: .relay)
-            return false
-        }
+
+        guard Self.isFeatureEnabled else { return bail("Feature disabled.") }
+        let prefKey = PrefsKeys.ShowRelayMaskSuggestions
+        guard profile.prefs.boolForKey(prefKey) ?? true else { return bail("Local setting disabled.") }
+        guard client != nil else { return bail("No Relay client.") }
+        guard let relayRSClient, hasRelayAccount() else { return bail("No client / Relay account") }
+        guard let domain = url.baseDomain, let host = url.normalizedHost else { return bail("Invalid domain/host.") }
+
         let shouldShow = relayRSClient.shouldShowRelay(host: host, domain: domain, isRelayUser: true)
         logger.log("Display Relay: \(shouldShow). (Allow-list check.)", level: .info, category: .relay)
         return shouldShow
     }
 
-    func populateEmailFieldWithRelayMask(for tab: Tab,
-                                         completion: @escaping RelayPopulateCompletion) {
+    func populateEmailFieldWithRelayMask(for tab: Tab, completion: @escaping RelayPopulateCompletion) {
         populateEmailFieldWithRelayMask(for: tab, isRetry: false, completion: completion)
     }
+
+    func emailFieldFocused(in tab: Tab) {
+        focusedTab = tab
+    }
+
+    func shouldDisplayRelaySettings() -> Bool {
+        return Self.isFeatureEnabled && hasRelayAccount()
+    }
+
+    // MARK: - Private Utilities
 
     private func populateEmailFieldWithRelayMask(for tab: Tab,
                                                  isRetry: Bool,
@@ -229,9 +142,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
             return
         }
         guard focusedTab == nil || focusedTab === tab else {
-            logger.log("Attempting to populate Relay mask after tab has changed. Bailing.",
-                       level: .warning,
-                       category: .relay)
+            logger.log("Attempting to populate Relay mask after changing tab. Bailing.", level: .warning, category: .relay)
             focusedTab = nil
             // Note: this is an edge case error and in this scenario we will not call the completion at
             // all, given that we're no longer on the correct tab.
@@ -239,9 +150,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
 
         guard let webView = tab.webView, let client else {
-            logger.log("No tab webview available, or client is nil. Will not populate email field.",
-                       level: .warning,
-                       category: .relay)
+            logger.log("No tab webview, or nil client. Won't populate email.", level: .warning, category: .relay)
             completion(.error)
             return
         }
@@ -281,23 +190,11 @@ final class RelayController: RelayControllerProtocol, Notifiable {
         }
     }
 
-    func emailFieldFocused(in tab: Tab) {
-        focusedTab = tab
-    }
-
-    func shouldDisplayRelaySettings() -> Bool {
-        return Self.isFeatureEnabled && hasRelayAccount()
-    }
-
-    // MARK: - Private Utilities
-
     private func performPostLaunchUpdate() {
         let delay = updateConfig.postLaunchUpdateDelay
         Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { [weak self] _ in
             self?.logger.log("Will perform Relay post-launch refresh.", level: .info, category: .relay)
-            Task { @MainActor in
-                self?.updateRelayAccountStatus()
-            }
+            Task { @MainActor in self?.updateRelayAccountStatus() }
         }
     }
 
@@ -367,9 +264,7 @@ final class RelayController: RelayControllerProtocol, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         logger.log("Received notification '\(notification.name.rawValue)'.", level: .info, category: .relay)
-        Task { @MainActor in
-            updateRelayAccountStatus()
-        }
+        Task { @MainActor in updateRelayAccountStatus() }
     }
 
     private func updateRelayAccountStatus() {
