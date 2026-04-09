@@ -129,6 +129,10 @@ final class LegacyTabScrollController: NSObject,
     /// When minimal mode is active, an additional height offset is applied to provide
     /// space for displaying the minimized address bar with the domain/subdomain URL.
     private var headerOffset: CGFloat {
+        // header should not update offset when address bar is at the bottom,
+        // using height instead of isBottomSearchBar for edge case when user rotates device
+        guard headerHeight > 0 else { return 0 }
+
         let baseOffset = -headerHeight
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isNavToolbarVisible = if let scrollView {
@@ -138,6 +142,7 @@ final class LegacyTabScrollController: NSObject,
         guard isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) else {
             return baseOffset
         }
+
         return baseOffset + UX.heightOffset
     }
 
