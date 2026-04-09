@@ -43,10 +43,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
     }
 
-    private var isDefaultZoomEnabled: Bool {
-        featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
-    }
-
     @MainActor
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,

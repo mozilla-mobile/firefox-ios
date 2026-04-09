@@ -40,9 +40,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature(from: nimbus)
 
-        case .defaultZoomFeature:
-            return checkDefaultZoomFeature(from: nimbus)
-
         case .downloadLiveActivities:
             return checkDownloadLiveActivitiesFeature(from: nimbus)
 
@@ -431,10 +428,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkDeeplinkOptimizationRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.deeplinkOptimizationRefactorFeature.value()
         return config.enabled
-    }
-
-    private func checkDefaultZoomFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.defaultZoomFeature.value().enabled
     }
 
     private func checkDownloadLiveActivitiesFeature(from nimbus: FxNimbus) -> Bool {

@@ -21,10 +21,6 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
 
     @State private var currentTheme: Theme?
 
-    var shouldShowPageZoom: Bool {
-        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
-    }
-
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
     ///            otherwise, .light or .dark based on the manual theme.
@@ -63,10 +59,8 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
-                if shouldShowPageZoom {
-                    PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
-                        delegate?.pressedPageZoom()
-                    }
+                PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                    delegate?.pressedPageZoom()
                 }
 
                 Spacer()
