@@ -161,7 +161,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "O %1$@ preocupa-se com a sua privacidade. Saber mais na nossa %2$@";
 
 /* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Aviso de privacidade";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Informação de privacidade";
 
 /* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Ao continuar, concorda com os %@";
@@ -170,25 +170,25 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Termos de utilização do %@";
 
 /* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepare-se para correr à vontade";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepare-se para a liberdade";
 
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Definir como navegador predefinido";
 
 /* Description for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Nós protegemos os seus dados e bloqueamos automaticamente as empresas de espiar os seus cliques.";
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Protegemos os seus dados e impedimos que as empresas espiem os seus cliques.";
 
 /* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Agora não";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Diga adeus aos rastreadores bizarros";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Diga adeus aos rastreadores indesejados";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abra as suas ligações com privacidade integrada";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abra as suas ligações com privacidade intrínseca";
 
 /* Title for the welcome card in the v149 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Abra todas as suas ligações com privacidade integrada";
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Abra todas as suas ligações com privacidade intrínseca";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automático";
@@ -341,7 +341,7 @@
 "Onboarding.Modern.Welcome.Description.v140" = "Uma escolha que o protege onde quer que vá na Internet. Pode sempre mudar mais tarde.";
 
 /* Description for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Description.v145" = "Uma escolha que o protege onde quer que vá na Internet. Pode sempre mudar mais tarde.";
+"Onboarding.Modern.Welcome.Description.v145" = "Uma escolha que garante a sua proteção, onde quer que vá, na Internet. Pode sempre mudar mais tarde.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "Agora não";
@@ -353,7 +353,7 @@
 "Onboarding.Modern.Welcome.Title.v140" = "Despeça-se dos anúncios arrepiantes";
 
 /* Title for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Title.v145" = "Diga adeus aos rastreadores bizarros";
+"Onboarding.Modern.Welcome.Title.v145" = "Diga adeus aos rastreadores indesejados";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Continuar";

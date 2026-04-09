@@ -22,6 +22,18 @@
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "Traduzir";
 
+/* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
+"Translations.LanguagePicker.PageTranslatedTitle.v151" = "Página traduzida para %@";
+
+/* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
+"Translations.LanguagePicker.PreferredLanguages.v151" = "Idiomas preferenciais…";
+
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "Mostrar original";
+
+/* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
+"Translations.LanguagePicker.Title.v151" = "Traduzir página para…";
+
 /* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.Button.v145" = "Traduzir";
 
@@ -29,7 +41,7 @@
 "Translations.Sheet.ChooseLanguage.v145" = "Escolher idioma";
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
-"Translations.Sheet.Error.GeneralSubtitle.v145" = "Por favor tente novamente.";
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "Tente novamente.";
 
 /* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
 "Translations.Sheet.Error.GeneralTitle.v145" = "Não foi possível traduzir a página";
@@ -68,7 +80,7 @@
 "Translations.Sheet.TranslateFromLabel.v145" = "Traduzir de";
 
 /* This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
-"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "Traduzir Para %@";
+"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "Traduzir para %@";
 
 /* This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
 "Translations.Sheet.TranslateToLabel.v145" = "Traduzir para";
