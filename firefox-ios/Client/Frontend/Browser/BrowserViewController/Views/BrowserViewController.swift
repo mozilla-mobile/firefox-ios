@@ -1469,9 +1469,7 @@ class BrowserViewController: UIViewController,
     }
 
     func willNavigateAway(from tab: Tab?) {
-        guard let tab else {
-            return
-        }
+        guard let tab else { return }
 
         let screenshotHelper = self.screenshotHelper
         let windowUUID = self.windowUUID
