@@ -99,6 +99,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var layerGradientURL: Gradient { base.layerGradientURL }
     var layerSurfaceLow: UIColor { base.layerSurfaceLow }
     var layerSurfaceMedium: UIColor { base.layerSurfaceMedium }
+    var layerSurfaceMediumAlpha: UIColor { base.layerSurfaceMediumAlpha }
     var layerSurfaceMediumAlt: UIColor { base.layerSurfaceMediumAlt }
     var layerGradientSummary: Gradient { base.layerGradientSummary }
 
