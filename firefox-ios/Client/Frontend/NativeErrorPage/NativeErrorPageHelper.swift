@@ -24,7 +24,7 @@ let CertErrors: [Int] = [
 ]
 
 class NativeErrorPageHelper {
-    enum Constants {
+    private enum Constants {
         static let certErrorQueryParam = "certerror"
         static let badCertQueryParam = "badcert"
         static let codeQueryParam = "code"
@@ -32,6 +32,10 @@ class NativeErrorPageHelper {
         static let peerCertificateChainKey = "NSErrorPeerCertificateChainKey"
         static let defaultBadCertDomainError = "SSL_ERROR_BAD_CERT_DOMAIN"
         static let sslErrorBadCertDomainCode = -9843
+        static let wrongHostMarker = "wrong.host"
+        static let badSSLHostMarker = "badssl"
+        static let domainDescriptionMarker = "domain"
+        static let hostnameDescriptionMarker = "hostname"
     }
 
     /// Holds the parsed certificate details extracted from an NSError.
@@ -189,8 +193,9 @@ class NativeErrorPageHelper {
             let desc = error.localizedDescription.lowercased()
             if let failingURL = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL,
                let host = failingURL.host,
-               host.contains("wrong.host") || host.contains("badssl")
-               || desc.contains("domain") || desc.contains("hostname") {
+               host.contains(Constants.wrongHostMarker) || host.contains(Constants.badSSLHostMarker)
+               || desc.contains(Constants.domainDescriptionMarker)
+               || desc.contains(Constants.hostnameDescriptionMarker) {
                 queryItems.append(URLQueryItem(
                     name: Constants.certErrorQueryParam,
                     value: Constants.defaultBadCertDomainError
@@ -227,7 +232,7 @@ class NativeErrorPageHelper {
             )
         }
 
-        // TODO: FXIOS-14569
+        // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust errors instead of private APIs.
         if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
            let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int,
            certErrorCode == Constants.sslErrorBadCertDomainCode {
