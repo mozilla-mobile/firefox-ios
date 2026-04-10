@@ -1669,6 +1669,7 @@
 		C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80685D026A0C93900DCD895 /* UserResearch.swift */; };
 		C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */; };
 		B2C3D4E5F67890123456789A /* NimbusFeatureFlagsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6789012345678 /* NimbusFeatureFlagsTests.swift */; };
+		A7B8C9D0E12345678901234B /* UserFeaturePreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7B8C9D0E1234567890123 /* UserFeaturePreferencesTests.swift */; };
 		C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */; };
 		C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11EF28B3C9150062922A /* MockUserDefaults.swift */; };
 		C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */; };
@@ -1688,6 +1689,7 @@
 		C82A94F3269F68F300624AA7 /* CoreFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */; };
 		3F1E468E9C1D6C2B235CECDE /* CoreBuildFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D47B07BE70DD7C23C13187 /* CoreBuildFlags.swift */; };
 		5EBC19023A85C482AD197501 /* NimbusFeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3294BB4D24674A3EA5323E21 /* NimbusFeatureFlags.swift */; };
+		E5F6A7B8C90123456789012A /* UserFeaturePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9012345678901 /* UserFeaturePreferences.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
 		C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */; };
 		C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83432FD26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift */; };
@@ -10295,6 +10297,7 @@
 		C80685D026A0C93900DCD895 /* UserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResearch.swift; sourceTree = "<group>"; };
 		C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManagerTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6789012345678 /* NimbusFeatureFlagsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFeatureFlagsTests.swift; sourceTree = "<group>"; };
+		F6A7B8C9D0E1234567890123 /* UserFeaturePreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferencesTests.swift; sourceTree = "<group>"; };
 		C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTrackerTests.swift; sourceTree = "<group>"; };
 		C80C11EF28B3C9150062922A /* MockUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaults.swift; sourceTree = "<group>"; };
 		C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaultsTests.swift; sourceTree = "<group>"; };
@@ -10310,6 +10313,7 @@
 		C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreFlaggableFeature.swift; sourceTree = "<group>"; };
 		C2D47B07BE70DD7C23C13187 /* CoreBuildFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreBuildFlags.swift; sourceTree = "<group>"; };
 		3294BB4D24674A3EA5323E21 /* NimbusFeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFeatureFlags.swift; sourceTree = "<group>"; };
+		D4E5F6A7B8C9012345678901 /* UserFeaturePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeaturePreferences.swift; sourceTree = "<group>"; };
 		C82A94E6269CB77F00624AA7 /* LegacyFeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyFeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
 		C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsViewController.swift; sourceTree = "<group>"; };
@@ -14942,6 +14946,7 @@
 				C82A94E6269CB77F00624AA7 /* LegacyFeatureFlagsManager.swift */,
 				C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */,
 				3294BB4D24674A3EA5323E21 /* NimbusFeatureFlags.swift */,
+				D4E5F6A7B8C9012345678901 /* UserFeaturePreferences.swift */,
 			);
 			path = FeatureFlags;
 			sourceTree = "<group>";
@@ -16556,6 +16561,7 @@
 				8A96C4B728F9DD0600B75884 /* Extensions */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				A1B2C3D4E5F6789012345678 /* NimbusFeatureFlagsTests.swift */,
+				F6A7B8C9D0E1234567890123 /* UserFeaturePreferencesTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
@@ -19277,6 +19283,7 @@
 				C82A94F3269F68F300624AA7 /* CoreFlaggableFeature.swift in Sources */,
 				3F1E468E9C1D6C2B235CECDE /* CoreBuildFlags.swift in Sources */,
 				5EBC19023A85C482AD197501 /* NimbusFeatureFlags.swift in Sources */,
+				E5F6A7B8C90123456789012A /* UserFeaturePreferences.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
 				E16941B82C5119A200FF5F4E /* Autocompletable.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
@@ -20134,6 +20141,7 @@
 				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
 				B2C3D4E5F67890123456789A /* NimbusFeatureFlagsTests.swift in Sources */,
+				A7B8C9D0E12345678901234B /* UserFeaturePreferencesTests.swift in Sources */,
 				8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */,
 				8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */,
 				8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */,

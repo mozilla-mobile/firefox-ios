@@ -54,6 +54,9 @@ class DependencyHelper {
         let nimbusFeatureFlags = NimbusFeatureFlags(prefs: profile.prefs)
         AppContainer.shared.register(service: nimbusFeatureFlags as NimbusFeatureFlagProviding)
 
+        let userPreferences = UserFeaturePreferences(prefs: profile.prefs)
+        AppContainer.shared.register(service: userPreferences as UserFeaturePreferring)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }
