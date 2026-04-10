@@ -125,14 +125,18 @@ final class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() async {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() async throws {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
         await subject.removeAllTabs(isPrivateMode: false)
-        // One new normal tab (1)
+        // Five private tabs (4) + one new normal tab
+        XCTAssertEqual(subject.tabs.count, 5)
+        // Selecting the last normal tab removes all remaining private tabs, but this is done inside a Task
+        try await Task.sleep(nanoseconds: sleepTime)
+        // Once, all private tabs are removed, we have one new normal tab remaining in the array (1)
         XCTAssertEqual(subject.tabs.count, 1)
     }
 
