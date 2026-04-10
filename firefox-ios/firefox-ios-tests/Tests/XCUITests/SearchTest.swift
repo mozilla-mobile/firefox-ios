@@ -209,7 +209,6 @@ class SearchTests: FeatureFlaggedTestBase {
 
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
-        mozWaitForElementToExist(app.webViews.firstMatch)
         browserScreen.addressToolbarContainValue(value: searchEngine.lowercased())
     }
 
