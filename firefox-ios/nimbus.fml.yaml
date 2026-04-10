@@ -22,7 +22,6 @@ include:
   - nimbus-features/bookmarksSearchFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
-  - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml

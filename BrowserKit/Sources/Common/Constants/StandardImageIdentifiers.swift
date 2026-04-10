@@ -63,7 +63,6 @@ public struct StandardImageIdentifiers {
         public static let creditCard = "creditCardLarge"
         public static let cross = "crossLarge"
         public static let crossCircleFill = "crossCircleFillLarge"
-        public static let dataClearance = "dataClearanceLarge"
         public static let delete = "deleteLarge"
         public static let deviceDesktop = "deviceDesktopLarge"
         public static let deviceDesktopSend = "deviceDesktopSendLarge"

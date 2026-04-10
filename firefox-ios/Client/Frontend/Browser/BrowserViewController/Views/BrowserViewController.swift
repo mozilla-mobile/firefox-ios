@@ -240,15 +240,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: Contextual Hints
 
-    private(set) lazy var dataClearanceContextHintVC: ContextualHintViewController = {
-        let dataClearanceViewProvider = ContextualHintViewProvider(
-            forHintType: .dataClearance,
-            with: profile
-        )
-        return ContextualHintViewController(with: dataClearanceViewProvider,
-                                            windowUUID: windowUUID)
-    }()
-
     var navigationHintDoubleTapTimer: Timer?
     private(set) lazy var navigationContextHintVC: ContextualHintViewController = {
         let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
@@ -279,7 +270,6 @@ class BrowserViewController: UIViewController,
 
     private(set) lazy var searchTelemetry = SearchTelemetry(tabManager: tabManager)
     private(set) lazy var webviewTelemetry = WebViewLoadMeasurementTelemetry()
-    private(set) lazy var privateBrowsingTelemetry = PrivateBrowsingTelemetry()
     private(set) lazy var tabsTelemetry = TabsTelemetry()
 
     private let appStartupTelemetry: AppStartupTelemetry
@@ -1613,9 +1603,6 @@ class BrowserViewController: UIViewController,
         // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
         // so only necessary to dismiss when vertical size class changes
         if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            if dataClearanceContextHintVC.isPresenting {
-                dataClearanceContextHintVC.dismiss(animated: true)
-            }
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
             }
@@ -2934,8 +2921,6 @@ class BrowserViewController: UIViewController,
             _ = toggleReaderModeLongPressAction()
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
-        case .dataClearance:
-            didTapOnDataClearance()
         case .passwordGenerator:
             if let tab = tabManager.selectedTab, let frameContext = state.frameContext {
                 navigationHandler?.showPasswordGenerator(tab: tab, frameContext: frameContext)
@@ -4117,8 +4102,6 @@ class BrowserViewController: UIViewController,
     // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
         switch contextualHintType {
-        case ContextualHintType.dataClearance.rawValue:
-            configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
             configureNavigationContextualHint(button)
         case ContextualHintType.summarizeToolbarEntry.rawValue:

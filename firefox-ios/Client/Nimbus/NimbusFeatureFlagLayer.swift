@@ -49,9 +49,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .firefoxSuggestFeature:
             return checkFirefoxSuggestFeature(from: nimbus)
 
-        case .feltPrivacyFeltDeletion:
-            return checkFeltPrivacyFeature(for: featureID, from: nimbus)
-
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature(from: nimbus)
 
@@ -362,18 +359,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkQuickAnswersFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.quickAnswersFeature.value().enabled
-    }
-
-    private func checkFeltPrivacyFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.feltPrivacyFeature.value()
-
-        switch featureID {
-        case .feltPrivacyFeltDeletion: return config.feltDeletionEnabled
-        default: return false
-        }
     }
 
     private func checkSplashScreenFeature(

@@ -7,37 +7,6 @@ import Shared
 import UIKit
 
 extension BrowserViewController: PhotonActionSheetProtocol {
-    // MARK: Data Clearance CFR / Contextual Hint
-
-    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
-    // In cases, such as if user navigates to homepage or if fire icon is not available
-    func resetDataClearanceCFRTimer() {
-        dataClearanceContextHintVC.stopTimer()
-    }
-
-    func configureDataClearanceContextualHint(_ view: UIView) {
-        guard contentContainer.hasWebView,
-                tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
-        else {
-            resetDataClearanceCFRTimer()
-            return
-        }
-        dataClearanceContextHintVC.configure(
-            anchor: view,
-            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
-            andDelegate: self,
-            presentedUsing: { [weak self] in
-                self?.presentContextualHint(for: .dataClearance)
-            },
-            andActionForButton: { },
-            overlayState: overlayManager)
-    }
-
-    private func presentDataClearanceContextualHint() {
-        present(dataClearanceContextHintVC, animated: true)
-        UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
-    }
-
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     @MainActor
     func startNavigationButtonDoubleTapTimer() {
@@ -185,7 +154,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         switch hintType {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
         case .translation: presentTranslationContextualHint()
-        case .dataClearance: presentDataClearanceContextualHint()
         case .navigation: presentNavigationContextualHint()
         case .toolbarUpdate: presentToolbarUpdateContextualHint()
         default: break
@@ -207,7 +175,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     func resetCFRsTimer() {
-        resetDataClearanceCFRTimer()
         resetSummarizeToolbarCFRTimer()
     }
 
@@ -215,75 +182,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     // In cases, such as if translation icon is not available
     private func resetTranslationCFRTimer() {
         translationContextHintVC.stopTimer()
-    }
-
-    /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
-    func didTapOnDataClearance() {
-        guard !(profile.prefs.boolForKey(PrefsKeys.dataClearanceAlertShown) ?? false) else {
-            performDeletionAction()
-            return
-        }
-
-        let alert = UIAlertController(
-            title: .Alerts.FeltDeletion.Title,
-            message: .Alerts.FeltDeletion.Body,
-            preferredStyle: .alert
-        )
-
-        let cancelAction = UIAlertAction(
-            title: .Alerts.FeltDeletion.CancelButton,
-            style: .default,
-            handler: { [weak self] _ in
-                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
-            }
-        )
-
-        let deleteDataAction = UIAlertAction(
-            title: .Alerts.FeltDeletion.ConfirmButton,
-            style: .destructive,
-            handler: { [weak self] _ in
-                self?.performDeletionAction()
-            }
-        )
-
-        alert.addAction(deleteDataAction)
-        alert.addAction(cancelAction)
-        present(alert, animated: true) { [weak self] in
-            self?.profile.prefs.setBool(true, forKey: PrefsKeys.dataClearanceAlertShown)
-        }
-    }
-
-    private func performDeletionAction() {
-        self.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-        self.setupDataClearanceAnimation { timingConstant in
-            DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
-                self.closePrivateTabsAndOpenNewPrivateHomepage()
-            }
-        }
-    }
-
-    private func closePrivateTabsAndOpenNewPrivateHomepage() {
-        tabManager.removeTabs(tabManager.privateTabs)
-        tabManager.selectTab(tabManager.addTab(isPrivate: true))
-    }
-
-    /// Setup animation for data clearance flow unless reduce motion is enabled
-    /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
-    private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
-        let showAnimation = !UIAccessibility.isReduceMotionEnabled
-        let timingToMatchGradientOverlay = showAnimation ? 0.8 : 0.0
-
-        guard showAnimation else {
-            completion(timingToMatchGradientOverlay)
-            return
-        }
-        let dataClearanceAnimation = DataClearanceAnimation()
-        dataClearanceAnimation.startAnimation(
-            with: view,
-            for: toolbarHelper.shouldShowTopTabs(for: traitCollection)
-        )
-
-        completion(timingToMatchGradientOverlay)
     }
 
     func dismissUrlBar() {

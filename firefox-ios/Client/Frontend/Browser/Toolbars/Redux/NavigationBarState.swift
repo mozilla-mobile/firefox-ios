@@ -48,14 +48,6 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
-    private static let dataClearanceAction = ToolbarActionConfiguration(
-        actionType: .dataClearance,
-        iconName: StandardImageIdentifiers.Large.dataClearance,
-        isEnabled: true,
-        contextualHintType: ContextualHintType.dataClearance.rawValue,
-        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-
     private static let newTabAction = ToolbarActionConfiguration(
         actionType: .newTab,
         iconName: StandardImageIdentifiers.Large.plus,
@@ -254,7 +246,6 @@ struct NavigationBarState: StateType, Equatable {
 
         let middleAction = getMiddleButtonAction(url: url,
                                                  isPrivateMode: toolbarState.isPrivateMode,
-                                                 canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
                                                  isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                                                  middleButton: middleButton)
 
@@ -308,7 +299,6 @@ struct NavigationBarState: StateType, Equatable {
 
     private static func getMiddleButtonAction(url: URL?,
                                               isPrivateMode: Bool,
-                                              canShowDataClearanceAction: Bool,
                                               isNewTabFeatureEnabled: Bool,
                                               middleButton: NavigationBarMiddleButtonType)
     -> ToolbarActionConfiguration {
@@ -316,8 +306,7 @@ struct NavigationBarState: StateType, Equatable {
         case .home: homeAction
         case .newTab: newTabAction
         }
-        let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
-        let middleActionForWebpage = canShowDataClearanceAction ? dataClearanceAction : customizedMiddleButton
+        let middleActionForWebpage = customizedMiddleButton
         let middleActionForHomepage = searchAction
         let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 

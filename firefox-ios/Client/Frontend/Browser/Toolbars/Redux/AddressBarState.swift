@@ -55,14 +55,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
-    private static let dataClearanceAction = ToolbarActionConfiguration(
-        actionType: .dataClearance,
-        iconName: StandardImageIdentifiers.Large.dataClearance,
-        isEnabled: true,
-        contextualHintType: ContextualHintType.dataClearance.rawValue,
-        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -1092,10 +1084,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
             let canGoForward = action.canGoForward ?? toolbarState.canGoForward
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
-
-            if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
-                actions.append(dataClearanceAction)
-            }
         }
 
         return actions
@@ -1120,24 +1108,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
         let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
 
-        if !isShowingNavigationToolbar {
-            if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
-                actions.append(dataClearanceAction)
-            }
+        if !isHomepage, !isShowingNavigationToolbar {
+            let shareAction = shareAction(enabled: isLoading == false,
+                                          hasAlternativeLocationColor: hasAlternativeLocationColor)
+            actions.append(shareAction)
 
-            if !isHomepage {
-                let shareAction = shareAction(enabled: isLoading == false,
-                                              hasAlternativeLocationColor: hasAlternativeLocationColor)
-                actions.append(shareAction)
-
-                if let translationAction = configureTranslationIcon(
-                    for: action,
-                    addressBarState: addressBarState,
-                    isLoading: isLoading,
-                    hasAlternativeLocationColor: hasAlternativeLocationColor
-                ) {
-                    actions.append(translationAction)
-                }
+            if let translationAction = configureTranslationIcon(
+                for: action,
+                addressBarState: addressBarState,
+                isLoading: isLoading,
+                hasAlternativeLocationColor: hasAlternativeLocationColor
+            ) {
+                actions.append(translationAction)
             }
         } else if !isHomepage, isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
