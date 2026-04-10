@@ -142,11 +142,14 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
-        case .tabTrayTranslucency:
-            return checkTabTrayTranslucencyFeature(from: nimbus)
-
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature(from: nimbus)
+
+        case .tabTrayiPadUIExperiments:
+            return checkTabTrayiPadUIExperiments(from: nimbus)
+
+        case .tabTrayTranslucency:
+            return checkTabTrayTranslucencyFeature(from: nimbus)
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
@@ -263,13 +266,18 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.enabled
     }
 
+    private func checkTabScrollRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.tabScrollRefactorFeature.value().enabled
+    }
+
+    private func checkTabTrayiPadUIExperiments(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tabTrayUiExperiments.value()
+        return config.iPadUpdateEnabled
+    }
+
     private func checkTabTrayTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
         return config.translucency
-    }
-
-    private func checkTabScrollRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.tabScrollRefactorFeature.value().enabled
     }
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
