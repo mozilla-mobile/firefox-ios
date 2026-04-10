@@ -312,7 +312,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
         navigator.openURL(URL)
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.firstMatch)
     }
 }
 
