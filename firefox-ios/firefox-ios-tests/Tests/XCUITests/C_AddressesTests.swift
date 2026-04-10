@@ -442,7 +442,7 @@ class O_AddressesTests: BaseTestCase {
         navigateFromAutofillPasswordSettingsToNewTabScreen()
         // Go to a webpage, and select night mode on and off, check options
         navigator.openURL(path(forTestPage: "test-example.html"))
-        mozWaitForElementToExist(app.webViews.firstMatch)
+        waitUntilPageLoad()
         toggleThemeViaDisplaySettings()
     }
 
