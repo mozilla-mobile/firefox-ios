@@ -121,7 +121,10 @@ public final class DefaultCrashManager: CrashManager, @unchecked Sendable {
             options.dsn = dsn
             if self.shouldEnableTraceProfiling {
                 options.tracesSampleRate = 0.2
-                options.profilesSampleRate = 0.2
+                options.configureProfiling = {
+                    $0.sessionSampleRate = 0.2
+                    $0.lifecycle = .trace
+                }
             }
             options.environment = self.environment.rawValue
             options.releaseName = self.releaseName
