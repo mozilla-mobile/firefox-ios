@@ -232,7 +232,8 @@ class NativeErrorPageHelper {
             )
         }
 
-        // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust errors instead of private APIs.
+        // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
+        // errors instead of private APIs.
         if let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
            let certErrorCode = underlyingError.userInfo[Constants.cfStreamErrorCodeKey] as? Int,
            certErrorCode == Constants.sslErrorBadCertDomainCode {
