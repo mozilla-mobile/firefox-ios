@@ -207,10 +207,8 @@ class SearchTests: FeatureFlaggedTestBase {
 
         searchSettingsScreen.waitForSearchEngineSelectionComplete()
 
-        navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
-        mozWaitForElementToExist(app.webViews.firstMatch)
         browserScreen.addressToolbarContainValue(value: searchEngine.lowercased())
     }
 

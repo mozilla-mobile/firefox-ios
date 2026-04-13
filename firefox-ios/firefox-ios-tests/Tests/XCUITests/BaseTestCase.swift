@@ -354,10 +354,10 @@ class BaseTestCase: XCTestCase {
             navigator.goto(URLBarOpen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons["Reader View"])
 
         app.buttons["Reader View"].waitAndTap()
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].waitAndTap()
     }
 
