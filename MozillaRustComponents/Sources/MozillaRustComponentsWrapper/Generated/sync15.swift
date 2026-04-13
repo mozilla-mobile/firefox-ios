@@ -462,10 +462,28 @@ fileprivate struct FfiConverterString: FfiConverter {
 /**
  * Enumeration for the different types of device.
  *
- * Firefox Accounts separates devices into broad categories for display purposes,
- * such as distinguishing a desktop PC from a mobile phone. Upon signin, the
- * application should inspect the device it is running on and select an appropriate
+ * Firefox Accounts and the broader Sync universe separates devices into broad categories for
+ * various purposes, such as distinguishing a desktop PC from a mobile phone.
+ * Upon signin, the application should inspect the device it is running on and select an appropriate
  * [`DeviceType`] to include in its device registration record.
+ *
+ * A special variant in this enum, [`DeviceType::Unknown`] is used to capture
+ * the string values we don't recognise. It also has a custom serde serializer and deserializer
+ * which implements the following semantics:
+ * * deserializing a `DeviceType` which uses a string value we don't recognise or null will return
+ * `DeviceType::Unknown` rather than returning an error.
+ * * serializing `DeviceType::Unknown` will serialize `null`.
+ *
+ * This has a few important implications:
+ * * In general, `Option<DeviceType>` should be avoided, and a plain `DeviceType` used instead,
+ * because in that case, `None` would be semantically identical to `DeviceType::Unknown` and
+ * as mentioned above, `null` already deserializes as `DeviceType::Unknown`.
+ * * Any unknown device types can not be round-tripped via this enum - eg, if you deserialize
+ * a struct holding a `DeviceType` string value we don't recognize, then re-serialize it, the
+ * original string value is lost. We don't consider this a problem because in practice, we only
+ * upload records with *this* device's type, not the type of other devices, and it's reasonable
+ * to assume that this module knows about all valid device types for the device type it is
+ * deployed on.
  */
 
 public enum DeviceType: Equatable, Hashable {
