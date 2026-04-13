@@ -1128,7 +1128,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
@@ -1271,7 +1271,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
@@ -1385,7 +1385,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
@@ -1501,7 +1501,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
@@ -2766,7 +2766,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
