@@ -226,7 +226,7 @@ extension String {
 
         public struct Search {
             public static let SearchPlaceholder = MZLocalizedString(
-                key: "Bookmarks.Search.Placeholder.v150",
+                key: "Bookmarks.Search.Placeholder.v151",
                 tableName: "Bookmarks",
                 value: "Search bookmarks",
                 comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
