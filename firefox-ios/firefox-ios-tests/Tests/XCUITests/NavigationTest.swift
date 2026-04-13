@@ -420,16 +420,18 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // Smoketest
     func testSSL() {
         let sslScreen = SSLWarningScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
 
-        navigator.openURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
         sslScreen.tapGoBack()
         sslScreen.waitForWarningToDisappear()
 
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL("https://expired.badssl.com/")
+        toolbarScreen.openNewTabFromTabTray()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 

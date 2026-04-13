@@ -169,6 +169,12 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
+    func navigateToURL(_ url: String) {
+        tapOnAddressBar()
+        addressBar.typeText(url)
+        addressBar.typeText("\r")
+    }
+
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
