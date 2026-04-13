@@ -145,8 +145,8 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     private func fetchTilesWithAdsClient(completion: @escaping (UnifiedTileResult) -> Void) {
         logger.log("Fetching tiles with ads client", level: .info, category: .homepage)
         let mozAdRequests = [
-            MozAdsPlacementRequest(placementId: TileOrder.position1.rawValue, iabContent: nil),
-            MozAdsPlacementRequest(placementId: TileOrder.position2.rawValue, iabContent: nil)
+            MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position1.rawValue),
+            MozAdsPlacementRequest(iabContent: nil, placementId: TileOrder.position2.rawValue)
         ]
         do {
             let mozAdsTiles = try adsClient.requestTileAds(

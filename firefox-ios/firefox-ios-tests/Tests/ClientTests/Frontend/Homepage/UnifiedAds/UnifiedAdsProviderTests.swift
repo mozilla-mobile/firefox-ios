@@ -32,7 +32,7 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         recordImpressionCalledWith = impressionUrl
     }
 
-    func reportAd(reportUrl: String) throws {}
+    func reportAd(reportUrl: String, reason: MozAdsReportReason) throws {}
 
     func requestImageAds(
         mozAdRequests: [MozAdsPlacementRequest],
