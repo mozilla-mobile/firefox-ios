@@ -331,39 +331,6 @@ class PhotonActionSheet: UIViewController,
         tableViewHeightConstraint?.constant = height
     }
 
-    private func getViewsHeightSum(views: [UIView]) -> CGFloat {
-        return views.map { $0.frame.height }.reduce(0, +)
-    }
-
-    private var visibleTableViewHeaders: [UITableViewHeaderFooterView] {
-        var visibleHeaders = [UITableViewHeaderFooterView]()
-        for sectionIndex in indexesOfVisibleHeaderSections {
-            guard let sectionHeader = tableView.headerView(forSection: sectionIndex) else { continue }
-            visibleHeaders.append(sectionHeader)
-        }
-
-        return visibleHeaders
-    }
-
-    private var indexesOfVisibleHeaderSections: [Int] {
-        var visibleSectionIndexes = [Int]()
-
-        (0..<tableView.numberOfSections).forEach { index in
-            let headerRect = tableView.rect(forSection: index)
-
-            // The "visible part" of the tableView is based on the content offset and the tableView's size.
-            let visiblePartOfTableView = CGRect(x: tableView.contentOffset.x,
-                                                y: tableView.contentOffset.y,
-                                                width: tableView.bounds.size.width,
-                                                height: tableView.bounds.size.height)
-
-            if visiblePartOfTableView.intersects(headerRect) {
-                visibleSectionIndexes.append(index)
-            }
-        }
-        return visibleSectionIndexes
-    }
-
     // MARK: Notifiable
 
     func handleNotifications(_ notification: Notification) {
@@ -395,10 +362,6 @@ class PhotonActionSheet: UIViewController,
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.actions[section].count
-    }
-
-    func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
-        return false
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
