@@ -223,6 +223,14 @@ extension String {
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal.")
             }
         }
+
+        public struct Search {
+            public static let SearchPlaceholder = MZLocalizedString(
+                key: "Bookmarks.Search.Placeholder.v150",
+                tableName: "Bookmarks",
+                value: "Search bookmarks",
+                comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
+        }
     }
 }
 
