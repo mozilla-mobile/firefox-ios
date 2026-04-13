@@ -8,8 +8,6 @@ import XCTest
 
 /// Minimal mock  for TranslationModelsFetcherProtocol tests. This avoids going through remote settings.
 final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unchecked Sendable {
-    var resetStorageWasCalledExpectation: XCTestExpectation?
-    var resetStorageWasCalled = false
     var translatorWASMResult: Data?
     var modelsResult: Data?
     var modelBufferResult: Data?
@@ -37,7 +35,6 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
     }
 
     func resetStorage() async {
-        resetStorageWasCalledExpectation?.fulfill()
-        resetStorageWasCalled = true
+        // no-op for now
     }
 }

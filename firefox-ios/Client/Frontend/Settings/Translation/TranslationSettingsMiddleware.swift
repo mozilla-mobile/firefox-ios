@@ -71,7 +71,14 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
             if !newValue {
-                resetStorage()
+                Task {
+                    await modelsFetcher.resetStorage()
+                    store.dispatch(TranslationSettingsMiddlewareAction(
+                        isTranslationsEnabled: newValue,
+                        windowUUID: action.windowUUID,
+                        actionType: TranslationSettingsMiddlewareActionType.didResetStorage
+                    ))
+                }
             }
         case TranslationSettingsViewActionType.toggleAutoTranslate:
             let newValue = !isAutoTranslateEnabled
@@ -113,13 +120,6 @@ final class TranslationSettingsMiddleware {
 
         default:
             break
-        }
-    }
-
-    // This function wraps a Task. We fire and forget resetting storage.
-    private func resetStorage() {
-        Task {
-            await modelsFetcher.resetStorage()
         }
     }
 

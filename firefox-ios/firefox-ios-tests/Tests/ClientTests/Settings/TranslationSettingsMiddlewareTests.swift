@@ -203,21 +203,31 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         )
 
+        let expectation = XCTestExpectation(description: "wait for actions to dispatch")
+        expectation.expectedFulfillmentCount = 3
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
         subject.translationSettingsProvider(mockStore.state, action)
 
+        wait(for: [expectation], timeout: 1.0)
+
         // Expects ToolbarAction + TranslationSettingsMiddlewareAction
-        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 3)
 
         let toolbarAction = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let toolbarActionType = try XCTUnwrap(toolbarAction.actionType as? ToolbarActionType)
         XCTAssertEqual(toolbarActionType, ToolbarActionType.didTranslationSettingsChange)
 
-        let settingsAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        let settingsAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? TranslationSettingsMiddlewareAction)
         let settingsActionType = try XCTUnwrap(settingsAction.actionType as? TranslationSettingsMiddlewareActionType)
-
         XCTAssertEqual(settingsActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
         XCTAssertEqual(settingsAction.isTranslationsEnabled, false)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationsFeature), false)
+
+        let resetStorageAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
+        let resetStorageActionType = try XCTUnwrap(resetStorageAction.actionType as? TranslationSettingsMiddlewareActionType)
+
+        XCTAssertEqual(resetStorageActionType, TranslationSettingsMiddlewareActionType.didResetStorage)
         subject.translationSettingsProvider = { _, _ in }
     }
 
@@ -246,8 +256,10 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func test_toggleTranslationsEnabled_whenEnabled_resetsStorage() {
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
-        let expectation = XCTestExpectation(description: "resetStorage was called")
-        mockModelsFetcher.resetStorageWasCalledExpectation = expectation
+
+        let expectation = XCTestExpectation(description: "wait for actions to dispatch")
+        expectation.expectedFulfillmentCount = 3
+        mockStore.dispatchCalled = { expectation.fulfill() }
 
         let subject = createSubject()
         let action = TranslationSettingsViewAction(
@@ -256,16 +268,19 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.translationSettingsProvider(mockStore.state, action)
-        wait(for: [expectation], timeout: 2.0)
-        XCTAssertTrue(mockModelsFetcher.resetStorageWasCalled)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 3)
         subject.translationSettingsProvider = { _, _ in }
     }
 
     func test_toggleTranslationsEnabled_whenDisabled_doesNotResetStorage() {
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
-        let expectation = XCTestExpectation(description: "resetStorage was called")
-        expectation.isInverted = true
-        mockModelsFetcher.resetStorageWasCalledExpectation = expectation
+        let expectation = XCTestExpectation(description: "wait for actions to dispatch")
+        expectation.expectedFulfillmentCount = 2
+        expectation.assertForOverFulfill = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
 
         let subject = createSubject()
         let action = TranslationSettingsViewAction(
@@ -274,8 +289,10 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         )
 
         subject.translationSettingsProvider(mockStore.state, action)
+
         wait(for: [expectation], timeout: 2.0)
-        XCTAssertFalse(mockModelsFetcher.resetStorageWasCalled)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
         subject.translationSettingsProvider = { _, _ in }
     }
 
