@@ -52,9 +52,20 @@ class PersistedFirefoxAccount {
         try inner.toJson()
     }
 
-    func setUserData(userData: UserData) {
+    func handleWebChannelLogin(jsonPayload: String) throws {
         defer { tryPersistState() }
-        inner.setUserData(userData: userData)
+        try inner.handleWebChannelLogin(jsonPayload: jsonPayload)
+    }
+
+    func getSignedInUserForWebChannel() -> String? {
+        return inner.getSignedInUserForWebChannel()
+    }
+
+    func handleWebChannelPasswordChange(jsonPayload: String) throws {
+        defer { tryPersistState() }
+        try notifyAuthErrors {
+            try self.inner.handleWebChannelPasswordChange(jsonPayload: jsonPayload)
+        }
     }
 
     func beginOAuthFlow(
@@ -220,20 +231,6 @@ class PersistedFirefoxAccount {
         defer { tryPersistState() }
         return try notifyAuthErrors {
             try self.inner.getAccessToken(scope: scope, useCache: useCache)
-        }
-    }
-
-    func getSessionToken() throws -> String {
-        defer { tryPersistState() }
-        return try notifyAuthErrors {
-            try self.inner.getSessionToken()
-        }
-    }
-
-    func handleSessionTokenChange(sessionToken: String) throws {
-        defer { tryPersistState() }
-        return try notifyAuthErrors {
-            try self.inner.handleSessionTokenChange(sessionToken: sessionToken)
         }
     }
 
