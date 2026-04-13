@@ -112,11 +112,11 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function)(\"\(escaped)\")")
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
         findInPageBar?.currentResult = currentResult
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
         findInPageBar?.totalResults = totalResults
     }
 }
