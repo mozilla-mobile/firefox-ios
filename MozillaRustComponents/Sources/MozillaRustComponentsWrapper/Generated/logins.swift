@@ -2308,11 +2308,6 @@ public enum LoginsApiError: Swift.Error, Equatable, Hashable, Foundation.Localiz
     case Interrupted(reason: String
     )
     /**
-     * Sync reported that authentication failed and the user should re-enter their FxA password.
-     */
-    case SyncAuthInvalid(reason: String
-    )
-    /**
      * something internal went wrong which doesn't have a public error value
      * because the consuming app can not reasonably take any action to resolve it.
      * The underlying error will have been logged and reported.
@@ -2374,10 +2369,7 @@ public struct FfiConverterTypeLoginsApiError: FfiConverterRustBuffer {
         case 11: return .Interrupted(
             reason: try FfiConverterString.read(from: &buf)
             )
-        case 12: return .SyncAuthInvalid(
-            reason: try FfiConverterString.read(from: &buf)
-            )
-        case 13: return .UnexpectedLoginsApiError(
+        case 12: return .UnexpectedLoginsApiError(
             reason: try FfiConverterString.read(from: &buf)
             )
 
@@ -2443,13 +2435,8 @@ public struct FfiConverterTypeLoginsApiError: FfiConverterRustBuffer {
             FfiConverterString.write(reason, into: &buf)
             
         
-        case let .SyncAuthInvalid(reason):
-            writeInt(&buf, Int32(12))
-            FfiConverterString.write(reason, into: &buf)
-            
-        
         case let .UnexpectedLoginsApiError(reason):
-            writeInt(&buf, Int32(13))
+            writeInt(&buf, Int32(12))
             FfiConverterString.write(reason, into: &buf)
             
         }
