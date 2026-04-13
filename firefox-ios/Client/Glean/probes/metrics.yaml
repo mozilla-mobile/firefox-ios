@@ -2944,7 +2944,7 @@ nimbus_system:
       - 'https://mozilla-hub.atlassian.net/browse/FXIOS-15343'
     data_reviews:
       - 'https://github.com/mozilla-mobile/firefox-ios/pull/23737#issuecomment-2541639916'
-      - 'https://github.com/mozilla-mobile/firefox-ios/pull/32929'
+      - 'https://github.com/mozilla-mobile/firefox-ios/pull/32929#issuecomment-4206600919'
     data_sensitivity:
       - interaction
     notification_emails:
