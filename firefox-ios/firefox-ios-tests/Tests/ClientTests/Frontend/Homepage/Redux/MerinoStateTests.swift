@@ -18,7 +18,6 @@ final class MerinoStateTests: XCTestCase {
 
     override func tearDown() async throws {
         DependencyHelperMock().reset()
-        setupHomepageRedesignFeature(scrollDirection: .baseline)
         try await super.tearDown()
     }
 
@@ -95,23 +94,7 @@ final class MerinoStateTests: XCTestCase {
         XCTAssertFalse(newState.shouldShowSection)
     }
 
-    func test_initialState_withBaselineStoriesDirection_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .baseline)
-
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .sectionTitle)
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
-    }
-
-    func test_initialState_withHorizontalStoriesDirection_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .horizontal)
-
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .sectionTitle)
-        XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
-    }
-
-    func test_initialState_withVerticalStoriesDirection_returnsExpectedState() {
-        setupHomepageRedesignFeature(scrollDirection: .vertical)
-
+    func test_initialState_returnsExpectedSectionHeaderConfiguration() {
         XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.style, .newsAffordance)
         XCTAssertEqual(MerinoState.Constants.sectionHeaderConfiguration.isButtonHidden, true)
     }
@@ -123,11 +106,5 @@ final class MerinoStateTests: XCTestCase {
 
     private func pocketReducer() -> Reducer<MerinoState> {
         return MerinoState.reducer
-    }
-
-    private func setupHomepageRedesignFeature(scrollDirection: ScrollDirection) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
-        }
     }
 }

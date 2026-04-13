@@ -62,12 +62,6 @@ final class HomepageViewController: UIViewController,
         themeManager.getCurrentTheme(for: windowUUID)
     }
 
-    private var shouldUseNewsTransitionHeader: Bool {
-        let scrollDirection: ScrollDirection = featureFlags.getCustomState(for: .homepageStoriesScrollDirection)
-                                               ?? .baseline
-        return scrollDirection == .vertical
-    }
-
     private var availableWidth: CGFloat {
         return view.frame.size.width
     }
@@ -251,7 +245,7 @@ final class HomepageViewController: UIViewController,
     // If no scroll position exists for tab, scroll the homepage to the top
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
-        guard let activeTabUUID, isHomepageStoriesScrollDirectionVertical,
+        guard let activeTabUUID,
               let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
         else {
             scrollToTop()
@@ -651,18 +645,11 @@ final class HomepageViewController: UIViewController,
         _ story: MerinoStoryConfiguration,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let shouldShowLargeStoryCell = isHomepageStoriesScrollDirectionVertical
         let position = indexPath.item + 1
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        if shouldShowLargeStoryCell {
-            return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
-                cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
-            }
-        }
-
-        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
+        return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
             cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
@@ -684,8 +671,7 @@ final class HomepageViewController: UIViewController,
             }
 
             if case .pocket = section,
-               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
-               shouldUseNewsTransitionHeader {
+               MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance {
                 guard let newsTransitionHeaderCell = collectionView.dequeueSupplementary(
                     of: kind,
                     cellType: NewsTransitionHeaderCell.self,
@@ -784,7 +770,6 @@ final class HomepageViewController: UIViewController,
     /// in the transition)
     private func updateNewsTransitionHeaderProgress() {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
-              shouldUseNewsTransitionHeader,
               let collectionView,
               let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
                   if case .pocket = $0 {
