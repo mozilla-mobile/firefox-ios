@@ -157,7 +157,6 @@ class BookmarksTests: FeatureFlaggedTestBase {
         // Site table exists but is empty
         browserScreen.assertNumberOfSuggestedLines(expectedLines: 0)
         browserScreen.typeOnSearchBar(text: "\r")
-        //waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks

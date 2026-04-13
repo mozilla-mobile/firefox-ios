@@ -750,5 +750,4 @@ class O_AddressesTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(AddressesSettings)
     }
-
 }
