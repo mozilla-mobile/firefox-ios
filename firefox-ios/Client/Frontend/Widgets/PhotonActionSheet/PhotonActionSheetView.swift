@@ -80,23 +80,10 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         icon.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
 
-    private lazy var disclosureLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.backgroundColor = UX.SelectedOverlayColor
         selectedOverlay.isHidden = true
     }
-
-    private lazy var disclosureIndicator: UIImageView = {
-        let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(
-            named: StandardImageIdentifiers.Large.chevronRight
-        )?.withRenderingMode(.alwaysTemplate)
-        return disclosureIndicator
-    }()
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.spacing = UX.InBetweenPadding
@@ -249,8 +236,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
         verticalBorder.backgroundColor = colors.layer4
         bottomBorder.backgroundColor = colors.layer4
-
-        disclosureIndicator.tintColor = colors.iconSecondary
 
         let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? colors.iconAccentYellow : tintColor
         statusIcon.tintColor = iconTint
