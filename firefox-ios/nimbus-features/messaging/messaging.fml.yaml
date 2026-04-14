@@ -170,7 +170,7 @@ objects:
 
   StyleData:
     description: >
-      A group of properities (predominantly visual) to
+      A group of properties (predominantly visual) to
       the describe style of the message.
     fields:
       priority:
