@@ -61,7 +61,7 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
     private func pickerItems(from categories: [MerinoCategoryConfiguration]) -> [ChipPickerItem] {
         guard !categories.isEmpty else { return [] }
 
-        let allItems = ChipPickerItem(
+        let allItem = ChipPickerItem(
             id: Self.allCategoryID,
             title: .FirefoxHomepage.Pocket.AllStoryCategories,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory
@@ -74,6 +74,6 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
             )
         }
 
-        return [allItems] + categoryItems
+        return [allItem] + categoryItems
     }
 }

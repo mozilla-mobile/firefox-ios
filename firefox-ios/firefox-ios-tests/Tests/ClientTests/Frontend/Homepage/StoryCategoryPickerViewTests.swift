@@ -27,7 +27,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
 
         XCTAssertFalse(view.isHidden)
         XCTAssertEqual(buttons.count, 3)
-        XCTAssertEqual(buttons.map(\.currentTitle), [
+        XCTAssertEqual(buttons.map { $0.configuration?.title }, [
             .FirefoxHomepage.Pocket.AllStoryCategories,
             "Technology",
             "Science",
@@ -41,7 +41,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
 
         XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
                              in: view)?.isSelected == true)
-        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + "technology",
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".technology",
                              in: view)?.isSelected == false)
     }
 
@@ -52,7 +52,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
 
         XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
                              in: view)?.isSelected == false)
-        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + "technology",
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".technology",
                              in: view)?.isSelected == true)
     }
 
@@ -78,7 +78,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
             selectedCategoryID = newSelection
         }
 
-        button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + "science", in: view)?
+        button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".science", in: view)?
             .sendActions(for: .touchUpInside)
 
         XCTAssertEqual(selectedCategoryID, "science")
@@ -112,13 +112,13 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     }
 
     private func createSubject() -> StoryCategoryPickerView {
-        let view = StoryCategoryPickerView(frame: CGRect(x: 0, y: 0, width: 320, height: 44))
+        let view = StoryCategoryPickerView()
         trackForMemoryLeaks(view)
         return view
     }
 
     private func chipButtons(in view: UIView) -> [UIButton] {
-        allSubviews(in: view).compactMap { $0 as? UIButton }.filter { $0.currentTitle != nil }
+        allSubviews(in: view).compactMap { $0 as? UIButton }.filter { $0.configuration?.title != nil }
     }
 
     private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {
