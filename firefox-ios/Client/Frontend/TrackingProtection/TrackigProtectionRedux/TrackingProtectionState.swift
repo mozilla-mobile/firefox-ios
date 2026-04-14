@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
+import CopyWithUpdates
 import Foundation
 import Redux
-import Common
 
+@CopyWithUpdates
 struct TrackingProtectionState: ScreenState {
     enum NavType {
         case home
@@ -120,10 +122,8 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleClearCookiesAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             trackingProtectionEnabled: !state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
             shouldClearCookies: true,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -133,10 +133,7 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleNavigateToSettingsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -148,10 +145,7 @@ struct TrackingProtectionState: ScreenState {
     private static func handleShowTrackingProtectionDetailsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -163,10 +157,7 @@ struct TrackingProtectionState: ScreenState {
     private static func handleShowBlockedTrackersDetailsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -176,10 +167,7 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleGoBackAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -191,11 +179,7 @@ struct TrackingProtectionState: ScreenState {
     private static func handleUpdateBlockedTrackerStatsAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
-            shouldClearCookies: state.shouldClearCookies,
+        return state.copyWithUpdates(
             shouldUpdateBlockedTrackerStats: true,
             shouldUpdateConnectionStatus: false,
             navigateTo: nil,
@@ -204,10 +188,7 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleUpdateConnectionStatusAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: true,
@@ -217,10 +198,7 @@ struct TrackingProtectionState: ScreenState {
     }
 
     private static func handleShowAlertAction(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -232,10 +210,8 @@ struct TrackingProtectionState: ScreenState {
     private static func handleToggleTrackingProtectionStatusAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             trackingProtectionEnabled: !state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -247,10 +223,7 @@ struct TrackingProtectionState: ScreenState {
     private static func handleDismissTrackingProtectionAction(
         from state: TrackingProtectionState
     ) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
@@ -260,10 +233,7 @@ struct TrackingProtectionState: ScreenState {
     }
 
     static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
-        return TrackingProtectionState(
-            windowUUID: state.windowUUID,
-            trackingProtectionEnabled: state.trackingProtectionEnabled,
-            connectionSecure: state.connectionSecure,
+        return state.copyWithUpdates(
             shouldClearCookies: false,
             shouldUpdateBlockedTrackerStats: false,
             shouldUpdateConnectionStatus: false,
