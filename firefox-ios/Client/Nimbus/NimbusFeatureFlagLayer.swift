@@ -61,9 +61,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
-        case .homepageStoriesScrollDirection:
-            return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
-
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature(from: nimbus)
 
@@ -255,10 +252,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
-    }
-
-    private func checkHomepageStoriesScrollDirectionFeature(from nimbus: FxNimbus) -> ScrollDirection {
-        return nimbus.features.homepageRedesignFeature.value().storiesScrollDirection
     }
 
     private func checkSnapKitRemovalRefactor(from nimbus: FxNimbus) -> Bool {
