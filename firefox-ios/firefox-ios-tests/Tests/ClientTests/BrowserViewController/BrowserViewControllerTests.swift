@@ -531,7 +531,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
-            otherErrorPagesIsEnabled: true
+            badCertDomainErrorPageIsEnabled: true
         )
         let subject = createSubject()
         let certErrorCode = NSURLErrorServerCertificateUntrusted
@@ -549,7 +549,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: false,
-            otherErrorPagesIsEnabled: true
+            badCertDomainErrorPageIsEnabled: true
         )
         let subject = createSubject()
         let errorPageURL = URL(
@@ -566,7 +566,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
-            otherErrorPagesIsEnabled: false
+            badCertDomainErrorPageIsEnabled: false
         )
         let subject = createSubject()
         let certErrorCode = NSURLErrorServerCertificateUntrusted
@@ -636,13 +636,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setupNimbusNativeErrorPageTesting(
         isEnabled: Bool,
         noInternetConnectionErrorIsEnabled: Bool,
-        otherErrorPagesIsEnabled: Bool
+        badCertDomainErrorPageIsEnabled: Bool
     ) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
             return NativeErrorPageFeature(
+                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
                 enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled,
-                otherErrorPages: otherErrorPagesIsEnabled
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
             )
         }
     }

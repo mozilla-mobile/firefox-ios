@@ -141,6 +141,8 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
+        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }

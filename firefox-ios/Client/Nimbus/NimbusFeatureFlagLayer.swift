@@ -61,9 +61,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature(from: nimbus)
 
-        case .homepageStoriesScrollDirection:
-            return checkHomepageStoriesScrollDirectionFeature(from: nimbus) != .baseline
-
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature(from: nimbus)
 
@@ -88,8 +85,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature(from: nimbus)
 
-        case .otherErrorPages:
-            return checkOtherErrorPagesFeature(from: nimbus)
+        case .badCertDomainErrorPage:
+            return checkBadCertDomainErrorPageFeature(from: nimbus)
 
         case .recentSearches:
             return checkRecentSearchesFeature(from: nimbus)
@@ -255,10 +252,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHomepageStoriesCaterogiesFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homepageRedesignFeature.value().categoriesEnabled
-    }
-
-    private func checkHomepageStoriesScrollDirectionFeature(from nimbus: FxNimbus) -> ScrollDirection {
-        return nimbus.features.homepageRedesignFeature.value().storiesScrollDirection
     }
 
     private func checkSnapKitRemovalRefactor(from nimbus: FxNimbus) -> Bool {
@@ -450,8 +443,8 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 
-    private func checkOtherErrorPagesFeature(from nimbus: FxNimbus) -> Bool {
-        return nimbus.features.nativeErrorPageFeature.value().otherErrorPages
+    private func checkBadCertDomainErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().badCertDomainErrorPage
     }
 
     private func checkImprovedAppStoreReviewTriggerFeature(from nimbus: FxNimbus) -> Bool {

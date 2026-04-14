@@ -26,7 +26,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
-    case homepageStoriesScrollDirection
     case homepageStoryCategories
     case needsReloadRefactor
     case shouldUseBrandRefreshConfiguration
@@ -35,7 +34,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case modernOnboardingUI
     case nativeErrorPage
     case noInternetConnectionErrorPage
-    case otherErrorPages
+    case badCertDomainErrorPage
     case recentSearches
     case reportSiteIssue
     case relayIntegration
@@ -93,7 +92,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
-                .otherErrorPages,
+                .badCertDomainErrorPage,
                 .quickAnswers,
                 .recentSearches,
                 .relayIntegration,
@@ -122,7 +121,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
-    case homepageStoriesScrollDirection
     case searchBarPosition
     case startAtHome
 }
@@ -163,7 +161,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .downloadLiveActivities,
                 .firefoxJpGuideDefaultSite,
                 .homepageSearchBar,
-                .homepageStoriesScrollDirection,
                 .homepageStoryCategories,
                 .improvedAppStoreReviewTriggerFeature,
                 .shouldUseBrandRefreshConfiguration,
@@ -173,7 +170,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .nativeErrorPage,
                 .needsReloadRefactor,
                 .noInternetConnectionErrorPage,
-                .otherErrorPages,
+                .badCertDomainErrorPage,
                 .recentSearches,
                 .reportSiteIssue,
                 .sentFromFirefoxTreatmentA,
@@ -265,8 +262,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
-        case .homepageStoriesScrollDirection:
-            return FxNimbus.shared.features.homepageRedesignFeature.value().storiesScrollDirection.rawValue
         case .splashScreen:
             return nimbusSearchBar.getDefaultPosition().rawValue
         case .startAtHome:
