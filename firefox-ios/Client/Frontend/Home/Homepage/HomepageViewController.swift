@@ -1043,7 +1043,6 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-
     private func dispatchCategorySelectedAction(selectedCategoryID: String?) {
         store.dispatch(
             MerinoAction(
