@@ -193,6 +193,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .tabTrayiPadUIExperiments,
+                titleText: format(string: "Tab Tray iPad UI Experiment"),
+                statusText: format(string: "Toggle to use the new tab tray UI on iPad")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .toolbarRefactor,
                 titleText: format(string: "Toolbar Redesign"),
                 statusText: format(string: "Toggle to enable the toolbar redesign")

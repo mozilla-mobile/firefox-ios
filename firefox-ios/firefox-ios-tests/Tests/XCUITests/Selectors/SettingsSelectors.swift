@@ -24,6 +24,11 @@ protocol SettingsSelectorsSet {
     var CLEAR_PRIVATE_DATA_CELL: Selector { get }
     var ALERT_OK_BUTTON: Selector { get }
 
+    // Display / Theme
+    var DISPLAY_THEME_CELL: Selector { get }
+    var DARK_THEME_BUTTON: Selector { get }
+    var LIGHT_THEME_BUTTON: Selector { get }
+
     // General
     var NEW_TAB_CELL: Selector { get }
     var TITLE: Selector { get }
@@ -164,6 +169,25 @@ struct SettingsSelectors: SettingsSelectorsSet {
         "OK",
         description: "OK button on confirmation alert",
         groups: ["alert"]
+    )
+
+    // Display / Theme
+    let DISPLAY_THEME_CELL = Selector.tableCellById(
+        AccessibilityIdentifiers.Settings.Theme.title,
+        description: "Display Theme settings cell",
+        groups: ["settings", "theme"]
+    )
+
+    let DARK_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.darkThemeView,
+        description: "Dark theme selection button",
+        groups: ["settings", "theme"]
+    )
+
+    let LIGHT_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.lightThemeView,
+        description: "Light theme selection button",
+        groups: ["settings", "theme"]
     )
 
     let NEW_TAB_CELL = Selector.tableCellById(
