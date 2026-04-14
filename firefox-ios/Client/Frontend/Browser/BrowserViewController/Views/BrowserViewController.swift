@@ -3279,7 +3279,7 @@ class BrowserViewController: UIViewController,
     func dispatchAvailableContentHeightChangedAction() {
         // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
-           browserViewControllerState.browserViewType == .normalHomepage,
+           browserViewControllerState.browserViewType == .normalHomepage || contentContainer.hasHomepage,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
