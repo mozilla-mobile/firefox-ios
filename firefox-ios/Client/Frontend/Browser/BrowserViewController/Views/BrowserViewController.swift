@@ -4680,12 +4680,13 @@ extension BrowserViewController: TabManagerDelegate {
                     // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
                     needsReload = true
                 }
+            }
 
-                if webView.url == nil {
-                    // The webView can go gray if it was zombified due to memory pressure.
-                    // When this happens, the URL is nil, so try restoring the page upon selection.
-                    needsReload = true
-                }
+            if webView.url == nil {
+                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
+                // The webView can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                needsReload = true
             }
         }
 
