@@ -10,6 +10,7 @@ import Storage
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
+                                    UIGestureRecognizerDelegate,
                                     UIPopoverPresentationControllerDelegate,
                                     UIAdaptivePresentationControllerDelegate,
                                     FeatureFlaggable,
@@ -895,6 +896,7 @@ final class HomepageViewController: UIViewController,
         // We want any interaction with the homepage to dismiss the keyboard, including taps
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
+        tap.delegate = self
         view.addGestureRecognizer(tap)
     }
 
@@ -1272,5 +1274,17 @@ final class HomepageViewController: UIViewController,
         traitCollection: UITraitCollection
     ) -> UIModalPresentationStyle {
         .none
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer.view === view,
+              let collectionView else {
+            return true
+        }
+
+        let location = touch.location(in: collectionView)
+        return collectionView.indexPathForItem(at: location) == nil
     }
 }
