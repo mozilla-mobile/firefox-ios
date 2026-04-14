@@ -85,9 +85,7 @@ final class SendDataSetting: BoolSetting {
         cell.accessoryView = control
         cell.selectionStyle = .none
 
-        if !enabled {
-            cell.subviews.forEach { $0.alpha = 0.5 }
-        }
+        cell.contentView.alpha = enabled ? 1.0 : 0.5
 
         cell.learnMoreDidTap = { [weak self] in
             guard let self else { return }
@@ -101,6 +99,7 @@ final class SendDataSetting: BoolSetting {
         // in which case, we would to make sure that users are opted out of experiments
         // Note: Switch should be enabled only when telemetry usage is enabled
         updateControlState(isEnabled: isUsageEnabled)
+        updateCellAppearance(isEnabled: isUsageEnabled)
 
         // Set experiments study setting based on usage enabled state
         // Special Case (EXP-4780, FXIOS-10534) disable Studies if usage data is disabled
@@ -113,5 +112,14 @@ final class SendDataSetting: BoolSetting {
         control.setSwitchTappable(to: isEnabled)
         control.toggleSwitch(to: isEnabled)
         writeBool(control.switchView)
+    }
+
+    private func updateCellAppearance(isEnabled: Bool) {
+        var view: UIView? = control.superview
+        while let current = view, !(current is UITableViewCell) {
+            view = current.superview
+        }
+        guard let cell = view as? UITableViewCell else { return }
+        cell.contentView.alpha = isEnabled ? 1.0 : 0.5
     }
 }
