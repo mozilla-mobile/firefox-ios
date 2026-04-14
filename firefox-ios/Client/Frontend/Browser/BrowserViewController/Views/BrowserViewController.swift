@@ -334,8 +334,8 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isOtherErrorPagesEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    var isBadCertDomainErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
@@ -2209,7 +2209,7 @@ class BrowserViewController: UIViewController,
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
+        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
