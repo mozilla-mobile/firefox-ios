@@ -88,21 +88,21 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
-    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
+    func findInPage(didTextChange text: String) {
         find(text, function: "find")
     }
 
-    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+    func findInPage(didFindNextWithText text: String) {
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
 
-    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+    func findInPage(didFindPreviousWithText text: String) {
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
 
-    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+    func findInPageDidPressClose() {
         updateFindInPageVisibility(isVisible: false)
     }
 
@@ -112,11 +112,11 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function)(\"\(escaped)\")")
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
         findInPageBar?.currentResult = currentResult
     }
 
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
         findInPageBar?.totalResults = totalResults
     }
 }
