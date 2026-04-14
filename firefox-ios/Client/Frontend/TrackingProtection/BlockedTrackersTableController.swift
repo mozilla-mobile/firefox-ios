@@ -34,12 +34,17 @@ class BlockedTrackersTableViewController: UIViewController,
         tableView.accessibilityIdentifier = A11y.trackersTable
     }
 
-    // MARK: Navigation View
-    private let navigationView: NavigationHeaderView = .build { header in
-        header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.headerView
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.dismissVC()
+        }), for: .touchUpInside)
+        $0.showsLargeContentViewer = true
     }
 
-    private var constraints = [NSLayoutConstraint]()
     var model: BlockedTrackersTableModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -82,47 +87,29 @@ class BlockedTrackersTableViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+
         updateViewDetails()
         applyTheme()
     }
 
     // MARK: View Setup
     private func setupView() {
-        constraints.removeAll()
-        setupNavigationView()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+
         setupTableView()
         setupAccessibilityIdentifiers()
-        setupHeaderViewActions()
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    // MARK: Header View Setup
-    private func setupNavigationView() {
-        view.addSubview(navigationView)
-        let navigationViewContraints = [
-            navigationView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: TPMenuUX.UX.popoverTopDistance
-            ),
-            navigationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            navigationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            )
-        ]
-        constraints.append(contentsOf: navigationViewContraints)
     }
 
     // MARK: TableView Setup
     private func setupTableView() {
         view.addSubview(trackersTable)
-        let tableConstraints = [
+        NSLayoutConstraint.activate([
             trackersTable.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor
             ),
             trackersTable.topAnchor.constraint(
-                equalTo: navigationView.bottomAnchor,
+                equalTo: view.topAnchor,
                 constant: UX.headerDistance
             ),
             trackersTable.bottomAnchor.constraint(
@@ -132,8 +119,7 @@ class BlockedTrackersTableViewController: UIViewController,
             trackersTable.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
             )
-        ]
-        constraints.append(contentsOf: tableConstraints)
+        ])
     }
 
     private func setupDataSource() {
@@ -159,7 +145,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        navigationView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
+        self.title = model.topLevelDomain
         updateHeaderCount()
     }
 
@@ -223,30 +209,15 @@ class BlockedTrackersTableViewController: UIViewController,
         return false
     }
 
-    @objc
-    func closeButtonTapped() {
-        self.dismiss(animated: true)
-    }
-
     // MARK: Header Actions
-    private func setupHeaderViewActions() {
-        navigationView.backToMainMenuCallback = { [weak self] in
-            self?.navigationController?.popToRootViewController(animated: true)
-        }
-        navigationView.dismissMenuCallback = { [weak self] in
-            self?.navigationController?.dismissVC()
-        }
+    private func dismissVC() {
+        navigationController?.dismissVC()
     }
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        navigationView.setupAccessibility(
-            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton,
-            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.titleLabel,
-            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.backButton
-        )
+        closeButton.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton
+        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
     }
 
     // MARK: Notifications
@@ -274,7 +245,6 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     func adjustLayout() {
-        navigationView.adjustLayout()
         for cell in trackersTable.visibleCells {
             if let blockedTrackerCell = cell as? BlockedTrackerCell {
                 blockedTrackerCell.invalidateIntrinsicContentSize()
@@ -290,8 +260,8 @@ class BlockedTrackersTableViewController: UIViewController,
 
     func applyTheme() {
         let theme = currentTheme()
-        navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
+        closeButton.tintColor = theme.colors.iconPrimary
         view.backgroundColor = theme.colors.layer3
     }
 }

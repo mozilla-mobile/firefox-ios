@@ -174,7 +174,6 @@ struct AccessibilityIdentifiers {
 
         struct DetailsScreen {
             static let scrollView = "TrackingProtectionDetails.ScrollView"
-            static let headerView = "TrackingProtectionDetails.HeaderView"
             static let mainView = "TrackingProtectionDetails.MainView"
             static let containerView = "TrackingProtectionDetails.BaseView"
             static let connectionView = "TrackingProtectionDetails.ConnectionView"
@@ -218,15 +217,10 @@ struct AccessibilityIdentifiers {
         }
 
         struct BlockedTrackersLearnMore {
-            static let headerView = "BlockedTrackersLearnMore.HeaderView"
             static let containerView = "BlockedTrackersLearnMore.containerView"
             static let closeButton = "BlockedTrackersLearnMore.CloseButton"
             static let backButton = "BlockedTrackersLearnMore.BackButton"
             static let titleLabel = "BlockedTrackersLearnMore.TitleLabel"
-        }
-
-        struct CertificatesScreen {
-            static let headerView = "CertificatesViewController.HeaderView"
         }
     }
 

@@ -48,14 +48,22 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         stackView.distribution = .fill
     }
 
-    private let headerView: NavigationHeaderView = .build { header in
-        header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
-    }
     private let connectionView: TrackingProtectionStatusView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.connectionView
     }
     private let verifiedByView: TrackingProtectionVerifiedByView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.verifiedByView
+    }
+
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.dismissVC()
+        }), for: .touchUpInside)
+        $0.showsLargeContentViewer = true
     }
 
     // MARK: See Certificates View
@@ -67,7 +75,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: - Variables
 
-    private var constraints = [NSLayoutConstraint]()
     var model: TrackingProtectionDetailsModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -102,61 +109,43 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+
         updateViewDetails()
     }
 
     private func setupView() {
-        constraints.removeAll()
-
         setupContentView()
-        setupHeaderView()
         setupConnectionStatusView()
         setupVerifiedByView()
         setupSeeCertificatesView()
         setupAccessibilityIdentifiers()
-        setupHeaderViewActions()
-        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: Content View Setup
     private func setupContentView() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+
         view.addSubview(scrollView)
         scrollView.addSubview(baseView)
 
-        let contentViewContraints = [
-            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(
                 greaterThanOrEqualTo: view.bottomAnchor
             ),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             baseView.topAnchor.constraint(
-                equalTo: scrollView.topAnchor,
-                constant: UX.baseDistance
+                equalTo: scrollView.topAnchor
             ),
             baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             baseView.widthAnchor.constraint(
                 equalTo: scrollView.widthAnchor,
                 constant: -2 * TPMenuUX.UX.horizontalMargin
-            ),
-        ]
-
-        constraints.append(contentsOf: contentViewContraints)
-    }
-
-    // MARK: Header View Setup
-    private func setupHeaderView() {
-        view.addSubview(headerView)
-        let headerConstraints = [
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: TPMenuUX.UX.popoverTopDistance
             )
-        ]
-        constraints.append(contentsOf: headerConstraints)
+        ])
     }
 
     // MARK: Connection Status View Setup
@@ -182,26 +171,16 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     }
 
     // MARK: Header Actions
-    private func setupHeaderViewActions() {
-        headerView.backToMainMenuCallback = { [weak self] in
-            self?.navigationController?.popToRootViewController(animated: true)
-        }
-        headerView.dismissMenuCallback = { [weak self] in
-            self?.navigationController?.dismissVC()
-        }
+    private func dismissVC() {
+        navigationController?.dismissVC()
     }
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
         typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
-        headerView.setupAccessibility(
-            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: A11y.closeButton,
-            titleA11yId: A11y.titleLabel,
-            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: A11y.backButton
-        )
+        closeButton.accessibilityIdentifier = A11y.closeButton
+        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
         connectionView.setupAccessibilityIdentifiers(
             connectionImageA11yId: A11y.connectionImage,
             connectionStatusLabelA11yId: A11y.connectionStatusLabel,
@@ -229,13 +208,12 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize
         )
 
-        headerView.adjustLayout()
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
 
     private func updateViewDetails() {
-        headerView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
+        self.title = model.topLevelDomain
         connectionView.connectionStatusLabel.text = model.connectionStatusMessage
         if let certificate = model.certificates.first,
            let issuer = "\(certificate.issuer)".getDictionary()[CertificateKeys.commonName] {
@@ -270,8 +248,8 @@ extension TrackingProtectionDetailsViewController {
         connectionView.connectionImage.image = model.getLockIcon(theme.type)
         verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)
-        headerView.applyTheme(theme: theme)
         connectionView.applyTheme(theme: theme)
+        closeButton.tintColor = theme.colors.iconPrimary
 
         setNeedsStatusBarAppearanceUpdate()
     }

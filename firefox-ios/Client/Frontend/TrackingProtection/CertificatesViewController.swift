@@ -47,10 +47,6 @@ class CertificatesViewController: UIViewController,
         label.adjustsFontSizeToFitWidth = true
     }
 
-    private let headerView: NavigationHeaderView = .build { header in
-        header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.CertificatesScreen.headerView
-    }
-
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
@@ -58,6 +54,17 @@ class CertificatesViewController: UIViewController,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
         tableView.sectionHeaderTopPadding = 0
         tableView.separatorInset = .zero
+    }
+
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.dismissVC()
+        }), for: .touchUpInside)
+        $0.showsLargeContentViewer = true
     }
 
     // MARK: - Variables
@@ -105,41 +112,16 @@ class CertificatesViewController: UIViewController,
 
     // MARK: View Setup
     private func setupView() {
-        setupHeaderView()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+
         setupTitleConstraints()
         setupCertificatesTableView()
         setupAccessibilityIdentifiers()
     }
 
-    // MARK: Header View Setup
-    private func setupHeaderView() {
-        view.addSubview(headerView)
-        NSLayoutConstraint.activate([
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: TPMenuUX.UX.popoverTopDistance
-            )
-        ])
-        setupHeaderViewActions()
-    }
-
     // MARK: Header Actions
-    private func setupHeaderViewActions() {
-        headerView.backToMainMenuCallback = { [weak self] in
-            guard let self else { return }
-            let nav = self.navigationController
-            // When presented from error page we are the root of a modal nav stack; Back should dismiss.
-            if nav?.viewControllers.count == 1 {
-                nav?.dismissVC()
-            } else {
-                nav?.popViewController(animated: true)
-            }
-        }
-        headerView.dismissMenuCallback = { [weak self] in
-            self?.navigationController?.dismissVC()
-        }
+    private func dismissVC() {
+        navigationController?.dismissVC()
     }
 
     // MARK: Title Setup
@@ -155,7 +137,7 @@ class CertificatesViewController: UIViewController,
                 constant: -UX.titleLabelMargin
             ),
             titleLabel.topAnchor.constraint(
-                equalTo: headerView.bottomAnchor,
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: UX.titleLabelTopMargin
             )
         ])
@@ -272,39 +254,15 @@ class CertificatesViewController: UIViewController,
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
         typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
-        headerView.setupAccessibility(
-            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: A11y.closeButton,
-            titleA11yId: A11y.titleLabel,
-            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: A11y.backButton
-        )
+        closeButton.accessibilityIdentifier = A11y.closeButton
+        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
         titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
         certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
 
-    // MARK: View Transitions
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.adjustLayout()
-        }, completion: nil)
-    }
-
-    private func adjustLayout() {
-        headerView.adjustLayout()
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
-    }
-
     private func updateViewDetails() {
         certificatesTableView.reloadData()
-        headerView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
+        self.title = model.topLevelDomain
     }
 
     // MARK: - Actions
@@ -320,6 +278,6 @@ extension CertificatesViewController {
         view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
-        headerView.applyTheme(theme: theme)
+        closeButton.tintColor = theme.colors.iconPrimary
     }
 }

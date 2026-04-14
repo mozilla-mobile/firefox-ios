@@ -8,7 +8,6 @@ import UIKit
 
 class HeadersViewViewController: UIViewController, Themeable {
     let headerTitle = "Website Title"
-    let backButtonTitle = "Back"
     let headerSubtitle = "Website Subtitle"
     let errorHeaderSubtitle = "Website Error"
 
@@ -17,7 +16,6 @@ class HeadersViewViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private lazy var navigationHeaderView: NavigationHeaderView = .build()
     private lazy var headerView: HeaderView = .build()
     private lazy var errorHeaderView: HeaderView = .build()
 
@@ -37,13 +35,6 @@ class HeadersViewViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        navigationHeaderView.setViews(with: headerTitle, and: backButtonTitle)
-        navigationHeaderView.adjustLayout()
-        navigationHeaderView.setupAccessibility(closeButtonA11yLabel: "CloseA11yLabel",
-                                                closeButtonA11yId: "CloseA11yId",
-                                                backButtonA11yLabel: "BackButtonA11yLabel",
-                                                backButtonA11yId: "BackButtonA11yId")
-
         headerView.adjustLayout()
         errorHeaderView.adjustLayout()
 
@@ -53,25 +44,31 @@ class HeadersViewViewController: UIViewController, Themeable {
         errorHeaderView.setupDetails(subtitle: errorHeaderSubtitle,
                                      title: headerTitle,
                                      icon: UIImage(named: StandardImageIdentifiers.Large.logoFirefox),
-                                     warningIcon: StandardImageIdentifiers.Large.criticalFill,
+                                     warningIcon: StandardImageIdentifiers.Large.warningFill,
                                      theme: themeManager.currentTheme)
 
-        headerView.setupAccessibility(closeButtonA11yLabel: "CloseA11yLabel",
-                                      closeButtonA11yId: "CloseA11yId")
-        errorHeaderView.setupAccessibility(closeButtonA11yLabel: "ErrorCloseA11yLabel",
-                                           closeButtonA11yId: "ErrorCloseA11yId")
+        headerView.setupAccessibility(
+            faviconA11yId: "FavIconA11yId",
+            titleLabelA11yId: "TitleA11yId",
+            subtitleLabelA11yId: "SubtitlesA11yId",
+            closeButtonA11yLabel: "CloseA11yLabel",
+            closeButtonA11yId: "CloseA11yId"
+        )
+        errorHeaderView.setupAccessibility(
+            faviconA11yId: "ErrorFavIconA11yId",
+            titleLabelA11yId: "ErrorTitleA11yId",
+            subtitleLabelA11yId: "ErrorSubtitlesA11yId",
+            closeButtonA11yLabel: "ErrorCloseA11yLabel",
+            closeButtonA11yId: "ErrorCloseA11yId"
+        )
     }
 
     private func setupView() {
-        view.addSubview(navigationHeaderView)
         view.addSubview(headerView)
         view.addSubview(errorHeaderView)
 
         NSLayoutConstraint.activate([
-            navigationHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            navigationHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            navigationHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            headerView.topAnchor.constraint(equalTo: navigationHeaderView.bottomAnchor, constant: 40),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             errorHeaderView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 40),
@@ -87,7 +84,6 @@ class HeadersViewViewController: UIViewController, Themeable {
     // MARK: Themeable
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer1
-        navigationHeaderView.applyTheme(theme: themeManager.currentTheme)
         headerView.applyTheme(theme: themeManager.currentTheme)
         errorHeaderView.applyTheme(theme: themeManager.currentTheme)
     }

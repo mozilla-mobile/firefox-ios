@@ -17,15 +17,20 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
 
     var currentWindowUUID: UUID? { return windowUUID }
 
-    // MARK: Navigation View
-    private let navigationView: NavigationHeaderView = .build { header in
-        typealias A11yIds = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
-        header.accessibilityIdentifier = A11yIds.headerView
-    }
-
     private let containerView: UIView = .build { view in
         typealias A11yIds = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
         view.accessibilityIdentifier = A11yIds.containerView
+    }
+
+    private lazy var closeButton: UIButton = .build {
+        $0.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.dismissVC()
+        }), for: .touchUpInside)
+        $0.showsLargeContentViewer = true
     }
 
     init(windowUUID: WindowUUID,
@@ -54,41 +59,23 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     }
 
     private func setupLayout() {
-        setupNavigationView()
         setupContainerView()
         embedChild()
         setupAccessibilityIdentifiers()
-        setupHeaderViewActions()
-    }
-
-    // MARK: Header View Setup
-    private func setupNavigationView() {
-        view.addSubview(navigationView)
-        NSLayoutConstraint.activate([
-            navigationView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: TPMenuUX.UX.popoverTopDistance
-            ),
-            navigationView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor
-            ),
-            navigationView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor
-            )
-        ])
     }
 
     private func setNavigationViewDetails() {
-        navigationView.setViews(with: url.baseDomain ?? "", and: .KeyboardShortcuts.Back)
-        navigationView.adjustLayout()
+        self.title = url.baseDomain ?? ""
     }
 
     // MARK: Container View Setup
     private func setupContainerView() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+
         view.addSubview(containerView)
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(
-                equalTo: navigationView.bottomAnchor
+                equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
             containerView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor
@@ -128,24 +115,15 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     }
 
     // MARK: Header Actions
-    private func setupHeaderViewActions() {
-        navigationView.backToMainMenuCallback = { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
-        }
-        navigationView.dismissMenuCallback = { [weak self] in
-            self?.navigationController?.dismissVC()
-        }
+    private func dismissVC() {
+        navigationController?.dismissVC()
     }
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        navigationView.setupAccessibility(
-            closeButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton,
-            closeButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore.closeButton,
-            titleA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore.titleLabel,
-            backButtonA11yLabel: .Menu.EnhancedTrackingProtection.AccessibilityLabels.BackButton,
-            backButtonA11yId: AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore.backButton
-        )
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
+        closeButton.accessibilityIdentifier = A11y.closeButton
+        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
     }
 
     // MARK: - Themable
@@ -155,7 +133,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
 
     func applyTheme() {
         let theme = currentTheme()
-        navigationView.applyTheme(theme: theme)
+        closeButton.tintColor = theme.colors.iconPrimary
         view.backgroundColor = theme.colors.layer3
     }
 }
