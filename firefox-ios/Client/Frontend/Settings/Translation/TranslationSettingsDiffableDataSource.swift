@@ -29,20 +29,9 @@ final class TranslationSettingsDiffableDataSource:
 
     private enum UX {
         static let preferredLanguagesSectionHeaderTopMargin: CGFloat = 24
-        static let footerFadeInDuration: CGFloat = 0.25
-        static let footerFadeOutDuration: CGFloat = 0.2
     }
 
     private var currentState: TranslationSettingsState?
-    private weak var collectionView: UICollectionView?
-
-    override init(
-        collectionView: UICollectionView,
-        cellProvider: @escaping CellProvider
-    ) {
-        self.collectionView = collectionView
-        super.init(collectionView: collectionView, cellProvider: cellProvider)
-    }
 
     // MARK: - Supplementary registrations
 
@@ -94,6 +83,7 @@ final class TranslationSettingsDiffableDataSource:
     // MARK: - Snapshot
 
     func applySnapshot(state: TranslationSettingsState, animated: Bool) {
+        guard state != currentState else { return }
         let previousState = currentState
         currentState = state
 
@@ -110,81 +100,29 @@ final class TranslationSettingsDiffableDataSource:
             snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
         }
 
-        apply(snapshot, animatingDifferences: animated) { [weak self] in
-            guard let self, let previousState else { return }
+        if let previousState {
+            var sectionsToRefresh: [TranslationSettingsSection] = []
 
             if previousState.isTranslationsEnabled != state.isTranslationsEnabled {
-                self.animateFooterVisibility(for: .enableToggle)
+                sectionsToRefresh.append(.enableToggle)
             }
 
             let previousDisplayLanguages = previousState.pendingLanguages ?? previousState.preferredLanguages
             let currentDisplayLanguages = state.pendingLanguages ?? state.preferredLanguages
             if (previousDisplayLanguages.count <= 1) != (currentDisplayLanguages.count <= 1) {
-                self.animateFooterVisibility(for: .preferredLanguages)
+                sectionsToRefresh.append(.preferredLanguages)
             }
-        }
-    }
 
-    // MARK: - Footer animation
-
-    private func animateFooterVisibility(for section: TranslationSettingsSection) {
-        let currentSnapshot = snapshot()
-        guard let sectionIndex = currentSnapshot.sectionIdentifiers.firstIndex(of: section),
-              let footer = self.collectionView?.supplementaryView(
-                  forElementKind: UICollectionView.elementKindSectionFooter,
-                  at: IndexPath(item: 0, section: sectionIndex)
-              ) as? UICollectionViewListCell else {
-            silentlyReloadFooter(for: section)
-            return
-        }
-
-        let newText = footerText(for: section)
-        if let newText {
-            footer.contentView.alpha = 0
-            var content = UIListContentConfiguration.groupedFooter()
-            content.text = newText
-            footer.contentConfiguration = content
-            UIView.animate(withDuration: UX.footerFadeInDuration, delay: 0, options: .curveEaseInOut) {
-                footer.contentView.alpha = 1
-            }
-        } else {
-            UIView.animate(
-                withDuration: UX.footerFadeOutDuration,
-                delay: 0,
-                options: .curveEaseInOut,
-                animations: { footer.contentView.alpha = 0 },
-                completion: { _ in
-                    var content = UIListContentConfiguration.groupedFooter()
-                    content.text = nil
-                    footer.contentConfiguration = content
-                    footer.contentView.alpha = 1
+            if !sectionsToRefresh.isEmpty {
+                var footerSnapshot = self.snapshot()
+                let toRefresh = sectionsToRefresh.filter { footerSnapshot.sectionIdentifiers.contains($0) }
+                if !toRefresh.isEmpty {
+                    footerSnapshot.reloadSections(toRefresh)
+                    apply(footerSnapshot, animatingDifferences: false)
                 }
-            )
-        }
-    }
-
-    private func silentlyReloadFooter(for section: TranslationSettingsSection) {
-        var reloadSnapshot = snapshot()
-        guard reloadSnapshot.sectionIdentifiers.contains(section) else { return }
-        reloadSnapshot.reloadSections([section])
-        apply(reloadSnapshot, animatingDifferences: false)
-    }
-
-    private func footerText(for section: TranslationSettingsSection) -> String? {
-        switch section {
-        case .enableToggle:
-            if currentState?.isTranslationsEnabled == true {
-                return .Settings.Translation.ToggleFooter
             }
-            return nil
-        case .preferredLanguages:
-            let languages = currentState?.pendingLanguages ?? currentState?.preferredLanguages ?? []
-            if languages.count > 1 {
-                return .Settings.Translation.PreferredLanguages.Footer
-            }
-            return nil
-        case .autoTranslate:
-            return .Settings.Translation.AutoTranslate.Footer
         }
+
+        apply(snapshot, animatingDifferences: animated)
     }
 }
