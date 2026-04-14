@@ -115,7 +115,6 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
             messageEnableStack.alignment = .center
             contentRow.alignment = .center
         }
-        setNeedsLayout()
     }
 
     @objc
