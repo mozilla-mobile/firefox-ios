@@ -52,6 +52,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
+    case tabTrayiPadUIExperiments
     case tabTrayUIExperiments
     case tabTrayTranslucency
     case toolbarNavigationHint
@@ -187,6 +188,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .summarizerLanguageExpansion,
                 .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
+                .tabTrayiPadUIExperiments,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
                 .toolbarNavigationHint,
