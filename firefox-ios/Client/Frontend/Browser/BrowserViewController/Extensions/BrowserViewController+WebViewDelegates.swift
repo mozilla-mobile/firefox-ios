@@ -817,7 +817,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 // Open our helper and cancel this response from the webview
                 tab.quickLookPreviewHelper = previewHelper
                 previewHelper.open {
-                    // Once the preview is closed, we can safely release this object and let the tempory document be deleted
+                    // Once the preview is closed, we can safely release this object and let the temporary document be deleted
                     tab.quickLookPreviewHelper = nil
                 }
                 return .cancel

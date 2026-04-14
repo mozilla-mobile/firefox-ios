@@ -224,7 +224,7 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
         assert(Thread.isMainThread, "Expects to be called on the main thread.")
         if isProcessingActions {
             // processActions() does not support reentrancy. If this gets called
-            // recursively, defer next call to the subequent iteration of the MT
+            // recursively, defer next call to the subsequent iteration of the MT
             // run loop. This fixes some edge case bugs with nested dependencies
             // which can potentially cause actions to be executed twice incorrectly.
             mainQueue.async { [weak self] in

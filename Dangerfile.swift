@@ -112,7 +112,7 @@ class CodeCoverageGate {
 
         let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
         // Consider created Swift files, excluding Tests & Generated
-        // Exclusing `danger.git.modifiedFiles` for now
+        // Excluding `danger.git.modifiedFiles` for now
         let candidates = (danger.git.createdFiles).filter {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&

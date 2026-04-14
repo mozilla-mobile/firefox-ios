@@ -777,7 +777,7 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the top
+        // Start coordinate about from the center of the element, end coordinate at the top
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))
         let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
@@ -790,7 +790,7 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the bottom
+        // Start coordinate about from the center of the element, end coordinate at the bottom
         // Done rather than top to middle to avoid pulling down the notification bar
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))

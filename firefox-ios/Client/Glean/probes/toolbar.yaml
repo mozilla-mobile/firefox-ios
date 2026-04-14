@@ -101,7 +101,7 @@ toolbar:
       is_toolbar:
         type: boolean
         description: |
-         Wether the source view of this button is the Toolbar, otherwise the Menu.
+         Whether the source view of this button is the Toolbar, otherwise the Menu.
          For Toolbar layout version1 and version2 the source is the Legacy menu meanwhile for 
          baseline the Toolbar.
     bugs:

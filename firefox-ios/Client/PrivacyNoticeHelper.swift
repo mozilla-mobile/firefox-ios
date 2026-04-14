@@ -9,7 +9,7 @@ protocol PrivacyNoticeHelperProtocol {
 }
 
 struct PrivacyNoticeHelper: PrivacyNoticeHelperProtocol {
-    // Date of the last privacy notice update in miliseconds since epoch
+    // Date of the last privacy notice update in milliseconds since epoch
     // Update this value to the latest privacy notice release date when you want to show users the
     // homepage privacy notice card
     var privacyNoticeUpdateInMilliseconds: UInt64 {
