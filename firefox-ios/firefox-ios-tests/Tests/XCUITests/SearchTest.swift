@@ -289,7 +289,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
-    func testSearchStartAfterTypingTwoWords() {
+    func testSearchAfterTypingTwoWords() {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
         app.launch()
