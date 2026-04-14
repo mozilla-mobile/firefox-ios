@@ -156,6 +156,39 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func navigateToDisplaySettings() {
+        let cell = sel.DISPLAY_THEME_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.waitAndTap()
+    }
+
+    func selectDarkTheme() {
+        let button = sel.DARK_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.waitAndTap()
+    }
+
+    func selectLightTheme() {
+        let button = sel.LIGHT_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.waitAndTap()
+    }
+
+    func tapBackToSettings() {
+        guard !app.navigationBars["Settings"].exists else { return }
+        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
+        backButton.tap()
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars["Settings"])
+    }
+
+    func navigateToAutofillPasswordSettings() {
+        let settingsTable = sel.SETTINGS_TABLE.element(in: app)
+        let cell = settingsTable.cells[sel.AUTOFILLS_PASSWORDS_CELL.value]
+        BaseTestCase().mozWaitForElementToExist(cell)
+        cell.waitAndTap()
+    }
+
     func waitForBlockImagesSwitch() -> XCUIElement {
         let sw = app.otherElements.tables.cells.switches[sel.BLOCK_IMAGES_SWITCH_TITLE.value]
         BaseTestCase().mozWaitForElementToExist(sw)
