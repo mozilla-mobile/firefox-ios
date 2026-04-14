@@ -23,7 +23,8 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: true
+            transitionEnabled: true,
+            categories: []
         )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
@@ -39,7 +40,8 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: true
+            transitionEnabled: true,
+            categories: []
         )
         view.setTransitionProgress(1)
         view.layoutIfNeeded()
@@ -55,7 +57,8 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: false
+            transitionEnabled: false,
+            categories: []
         )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
