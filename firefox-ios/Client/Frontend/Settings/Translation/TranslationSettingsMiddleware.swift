@@ -53,7 +53,8 @@ final class TranslationSettingsMiddleware {
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-            let newValue = !current
+            // TODO: FXIOS-15421 Always configure new setting value instead of toggling pref
+            let newValue = action.newSettingValue ?? !current
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
             SettingsTelemetry().changedSetting(
                 PrefsKeys.Settings.translationsFeature,

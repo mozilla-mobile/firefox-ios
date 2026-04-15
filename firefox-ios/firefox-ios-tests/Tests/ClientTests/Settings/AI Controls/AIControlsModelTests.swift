@@ -85,7 +85,10 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
-    func testToggleKillSwitchOn() {
+    func testToggleKillSwitchOn() throws {
+        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
@@ -114,6 +117,10 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        wait(for: [expectation], timeout: 1.0)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertFalse(try XCTUnwrap(action.newSettingValue))
     }
 
     @MainActor
@@ -140,7 +147,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
 
         wait(for: [expectation], timeout: 1.0)
-        _ = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
         XCTAssertTrue(aiControlsModel.translationEnabled)
     }
 
@@ -153,7 +161,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         aiControlsModel.toggleTranslationsFeature(to: true)
 
         wait(for: [expectation], timeout: 1.0)
-        _ = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
     }
 
     @MainActor
@@ -208,7 +217,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
                             isEditing: false,
                             pendingLanguages: nil,
                             preferredLanguages: [],
-                            supportedLanguages: ["en", "fr", "de"]
+                            supportedLanguages: []
                         )
                     )
                 ]

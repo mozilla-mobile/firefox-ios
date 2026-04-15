@@ -72,17 +72,11 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
     @MainActor
     func toggleKillSwitch(to newValue: Bool) {
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        switch newValue {
-        case false:
-            pageSummariesEnabled = true
-            translationEnabled = true
-            prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        case true:
-            pageSummariesEnabled = false
-            translationEnabled = false
-            prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        }
+        pageSummariesEnabled = !newValue
+        translationEnabled = !newValue
+        prefs.setBool(!newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
         store.dispatch(TranslationSettingsViewAction(
+            newSettingValue: !newValue,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))
@@ -91,6 +85,7 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
     @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
         store.dispatch(TranslationSettingsViewAction(
+            newSettingValue: newValue,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))
