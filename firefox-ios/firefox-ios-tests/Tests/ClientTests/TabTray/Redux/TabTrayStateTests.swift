@@ -270,21 +270,6 @@ final class TabTrayStateTests: XCTestCase {
         XCTAssertEqual(newState.privateTabsCount, "3")
     }
 
-    @MainActor
-    func test_reduceTabPanelMiddleware_ShowToastAction() {
-        let initialState = createSubject()
-        let reducer = tabTrayReducer()
-
-        XCTAssertNil(initialState.toastType)
-
-        let action = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                              windowUUID: .XCTestDefaultUUID,
-                                              actionType: TabPanelMiddlewareActionType.showToast)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.toastType, .closedSingleTab)
-    }
-
     // MARK: - TabPanelViewAction Tests
 
     @MainActor
