@@ -48,7 +48,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
 
     func fetchContent() async throws -> CuratedRecommendationsResponse {
         if !AppConstants.isRunningTest && shouldUseMockData {
-            return MerinoTestData().getMockDataFeed(Constants.numberOfStoriesToFetchForCaching)
+            return MerinoTestData().getMockDataFeed(
+                Constants.numberOfStoriesToFetchForCaching,
+                categoriesEnabled: isHomepageStoryCategoriesEnabled
+            )
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
@@ -113,6 +116,10 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         return featureFlags.isCoreFeatureEnabled(.useMockData) || prefs.boolForKey(PrefsKeys.useMerinoTestData) ?? false
     }
 
+    private var isHomepageStoryCategoriesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
+    }
+
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {
         return curatedRecommendationLocaleFromString(
             locale: locale.replacingOccurrences(of: "_", with: "-")
@@ -130,9 +137,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     /// non-empty top-level story `data`. If the shapes do not match, we bypass the cache
     /// and fetch again so a mode switch is reflected immediately.
     private func cachedResponseMatchesCurrentHomepageStoriesMode(_ response: CuratedRecommendationsResponse) -> Bool {
-        let categoriesEnabled = featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
-
-        if categoriesEnabled {
+        if isHomepageStoryCategoriesEnabled {
             return !(response.feeds?.isEmpty ?? true)
         }
 

@@ -311,6 +311,23 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
         XCTAssertEqual(control.fetcher.callCount, 1)
     }
 
+    func test_getMockDataFeed_whenCategoriesDisabled_returnsStoriesOnly() {
+        let response = MerinoTestData().getMockDataFeed(10, categoriesEnabled: false)
+
+        XCTAssertEqual(response.data.count, 10)
+        XCTAssertNil(response.feeds)
+    }
+
+    func test_getMockDataFeed_whenCategoriesEnabled_returnsFeedsOnly() {
+        let response = MerinoTestData().getMockDataFeed(10, categoriesEnabled: true)
+        let categoryRecommendations = response.feeds?.flatMap(\.recommendations) ?? []
+
+        XCTAssertEqual(response.data.count, 0)
+        XCTAssertEqual(response.feeds?.map(\.feedId), ["travel", "technology", "science"])
+        XCTAssertEqual(response.feeds?.allSatisfy { !$0.recommendations.isEmpty }, true)
+        XCTAssertEqual(categoryRecommendations.count, 10)
+    }
+
     private func createSubject(
         thresholdHours: Double = 4,
         prefsEnabled: Bool = true,
