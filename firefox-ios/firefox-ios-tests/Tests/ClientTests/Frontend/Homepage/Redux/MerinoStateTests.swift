@@ -273,10 +273,4 @@ final class MerinoStateTests: XCTestCase {
     private func createStoryConfiguration(title: String) -> MerinoStoryConfiguration {
         MerinoStoryConfiguration(story: MerinoStory(from: .makeItem(title)))
     }
-
-    private func setupHomepageRedesignFeature(scrollDirection: ScrollDirection) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
-        }
-    }
 }
