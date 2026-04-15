@@ -6,13 +6,13 @@ import Common
 import Shared
 
 /// Protocol for checking whether a feature is enabled via Nimbus remote config.
-protocol NimbusFeatureFlagProviding: Sendable {
+protocol FeatureFlagProviding: Sendable {
     func isEnabled(_ flag: FeatureFlagID) -> Bool
 }
 
 /// Wraps NimbusFeatureFlagLayer with debug override support for beta/dev builds.
-/// Registered in AppContainer; accessed via `NimbusFeatureFlagProviding` protocol.
-final class NimbusFeatureFlags: NimbusFeatureFlagProviding, @unchecked Sendable {
+/// Registered in AppContainer; accessed via `FeatureFlagProviding` protocol.
+final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
     private let layer: NimbusFeatureFlagLayer
     private let prefs: Prefs
 
@@ -38,11 +38,11 @@ final class NimbusFeatureFlags: NimbusFeatureFlagProviding, @unchecked Sendable 
 /// Adopt this protocol to access Nimbus feature flags via AppContainer.
 /// Replaces FeatureFlaggable for Nimbus checks.
 protocol FeatureFlaggable {
-    var featureFlagsProvider: NimbusFeatureFlagProviding { get }
+    var featureFlagsProvider: FeatureFlagProviding { get }
 }
 
 extension FeatureFlaggable {
-    var featureFlagsProvider: NimbusFeatureFlagProviding {
+    var featureFlagsProvider: FeatureFlagProviding {
         AppContainer.shared.resolve()
     }
 }

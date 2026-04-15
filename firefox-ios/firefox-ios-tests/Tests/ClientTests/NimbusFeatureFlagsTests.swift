@@ -10,12 +10,12 @@ import XCTest
 
 final class NimbusFeatureFlagsTests: XCTestCase {
     private var prefs: MockProfilePrefs!
-    private var subject: NimbusFeatureFlags!
+    private var subject: FeatureFlagsProvider!
 
     override func setUp() {
         super.setUp()
         prefs = MockProfilePrefs()
-        subject = NimbusFeatureFlags(prefs: prefs)
+        subject = FeatureFlagsProvider(prefs: prefs)
     }
 
     override func tearDown() {
@@ -100,7 +100,7 @@ final class CoreBuildFlagsTests: XCTestCase {
 
 // MARK: - Test Helpers
 
-final class MockNimbusFeatureFlags: NimbusFeatureFlagProviding, @unchecked Sendable {
+final class MockNimbusFeatureFlags: FeatureFlagProviding, @unchecked Sendable {
     var enabledFlags: Set<FeatureFlagID> = []
 
     func isEnabled(_ flag: FeatureFlagID) -> Bool {

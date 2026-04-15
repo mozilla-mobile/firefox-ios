@@ -51,8 +51,8 @@ class DependencyHelper {
         appDelegate.gleanUsageReportingMetricsService
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
-        let featureFlagsProvider = NimbusFeatureFlags(prefs: profile.prefs)
-        AppContainer.shared.register(service: featureFlagsProvider as NimbusFeatureFlagProviding)
+        let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs)
+        AppContainer.shared.register(service: featureFlagsProvider as FeatureFlagProviding)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
