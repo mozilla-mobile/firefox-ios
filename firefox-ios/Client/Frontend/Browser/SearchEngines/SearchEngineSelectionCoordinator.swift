@@ -19,7 +19,7 @@ protocol SearchEngineSelectionCoordinator: AnyObject {
 }
 
 class DefaultSearchEngineSelectionCoordinator: BaseCoordinator,
-                                               FeatureFlaggable,
+                                               LegacyFeatureFlaggable,
                                                SearchEngineSelectionCoordinator {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: SearchEngineSelectionCoordinatorDelegate?

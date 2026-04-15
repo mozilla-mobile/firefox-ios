@@ -33,7 +33,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          FeatureFlaggable {
+                          LegacyFeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }

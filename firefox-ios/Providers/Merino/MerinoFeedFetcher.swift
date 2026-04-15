@@ -14,7 +14,7 @@ protocol MerinoFeedFetching: Sendable {
     ) async -> CuratedRecommendationsResponse?
 }
 
-struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
+struct MerinoFeedFetcher: MerinoFeedFetching, LegacyFeatureFlaggable {
     let baseURL: String
     let logger: Logger
 

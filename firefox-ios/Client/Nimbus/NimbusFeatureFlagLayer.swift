@@ -8,10 +8,10 @@ final class NimbusFeatureFlagLayer: Sendable {
     // MARK: - Public methods
     // swiftlint:disable:next function_body_length
     public func checkNimbusConfigFor(
-        _ featureID: NimbusFeatureFlagID,
+        _ featureID: FeatureFlagID,
         from nimbus: FxNimbus = FxNimbus.shared
     ) -> Bool {
-        // For better code readability, please keep in alphabetical order by NimbusFeatureFlagID
+        // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
@@ -202,7 +202,7 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     // MARK: - Private methods
-    private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
+    private func checkGeneralFeature(for featureID: FeatureFlagID,
                                      from nimbus: FxNimbus
     ) -> Bool {
         let config = nimbus.features.generalAppFeatures.value()
@@ -223,7 +223,7 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.isTreatmentA
     }
 
-    private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
+    private func checkAwesomeBarFeature(for featureID: FeatureFlagID,
                                         from nimbus: FxNimbus
     ) -> Bool {
         let config = nimbus.features.search.value().awesomeBar
@@ -363,13 +363,13 @@ final class NimbusFeatureFlagLayer: Sendable {
     }
 
     private func checkSplashScreenFeature(
-        for featureID: NimbusFeatureFlagID,
+        for featureID: FeatureFlagID,
         from nimbus: FxNimbus
     ) -> Bool {
         return nimbus.features.splashScreen.value().enabled
     }
 
-    private func checkStartAtHomeFeature(for featureID: NimbusFeatureFlagID, from nimbus: FxNimbus) -> StartAtHome {
+    private func checkStartAtHomeFeature(for featureID: FeatureFlagID, from nimbus: FxNimbus) -> StartAtHome {
         let config = nimbus.features.startAtHomeFeature.value()
         let nimbusSetting = config.setting
 

@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware: LegacyFeatureFlaggable {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager

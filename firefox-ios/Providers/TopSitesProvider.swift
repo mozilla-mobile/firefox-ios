@@ -36,7 +36,7 @@ extension TopSitesProvider {
     }
 }
 
-final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
+final class TopSitesProviderImplementation: TopSitesProvider, LegacyFeatureFlaggable {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs

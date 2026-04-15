@@ -8,7 +8,7 @@ import Storage
 import UIKit
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
-final class HomepageSectionLayoutProvider: FeatureFlaggable {
+final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16

@@ -11,7 +11,7 @@ struct ZoomConstants {
     static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
-class ZoomPageManager: TabEventHandler, FeatureFlaggable {
+class ZoomPageManager: TabEventHandler, LegacyFeatureFlaggable {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID

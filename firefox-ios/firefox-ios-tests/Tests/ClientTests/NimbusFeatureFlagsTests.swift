@@ -36,7 +36,7 @@ final class NimbusFeatureFlagsTests: XCTestCase {
     func testIsEnabled_withDebugOverrideSet_returnsOverride() {
         // On developer builds, debug overrides take precedence.
         // .translation has a debugKey, so we can override it.
-        guard let debugKey = NimbusFeatureFlagID.translation.debugKey else {
+        guard let debugKey = FeatureFlagID.translation.debugKey else {
             XCTFail("translation should have a debugKey")
             return
         }
@@ -55,7 +55,7 @@ final class NimbusFeatureFlagsTests: XCTestCase {
 
     func testIsEnabled_flagWithoutDebugKey_ignoresPrefs() {
         // .addressAutofillEdit has no debugKey, so prefs won't affect it
-        XCTAssertNil(NimbusFeatureFlagID.addressAutofillEdit.debugKey)
+        XCTAssertNil(FeatureFlagID.addressAutofillEdit.debugKey)
         let result = subject.isEnabled(.addressAutofillEdit)
         // Should return the Nimbus default regardless of any prefs
         XCTAssertNotNil(result)
@@ -101,9 +101,9 @@ final class CoreBuildFlagsTests: XCTestCase {
 // MARK: - Test Helpers
 
 final class MockNimbusFeatureFlags: NimbusFeatureFlagProviding, @unchecked Sendable {
-    var enabledFlags: Set<NimbusFeatureFlagID> = []
+    var enabledFlags: Set<FeatureFlagID> = []
 
-    func isEnabled(_ flag: NimbusFeatureFlagID) -> Bool {
+    func isEnabled(_ flag: FeatureFlagID) -> Bool {
         enabledFlags.contains(flag)
     }
 }

@@ -86,7 +86,7 @@ typealias TabUUID = String
 @MainActor
 class Tab: NSObject,
            ThemeApplicable,
-           FeatureFlaggable,
+           LegacyFeatureFlaggable,
            ShareTab,
            ContentBlockerTab,
            TabWebViewDelegate,

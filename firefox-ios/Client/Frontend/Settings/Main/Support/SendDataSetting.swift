@@ -12,7 +12,7 @@ final class SendDataSetting: BoolSetting {
     private let learnMoreURL: URL?
     private let a11yId: String?
     private let learnMoreA11yId: String?
-    private let featureFlagName: NimbusFeatureFlagID?
+    private let featureFlagName: FeatureFlagID?
 
     private weak var settingsDelegate: SupportSettingsDelegate?
 
@@ -30,7 +30,7 @@ final class SendDataSetting: BoolSetting {
         a11yId: String?,
         learnMoreA11yId: String?,
         settingsDelegate: SupportSettingsDelegate?,
-        featureFlagName: NimbusFeatureFlagID? = nil,
+        featureFlagName: FeatureFlagID? = nil,
         enabled: Bool = true,
         isStudiesCase: Bool = false
     ) {

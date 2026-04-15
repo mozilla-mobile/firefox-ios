@@ -20,7 +20,7 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
+final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggable {
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }

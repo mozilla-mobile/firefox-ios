@@ -10,7 +10,7 @@ import OnboardingKit
 class SceneCoordinator: BaseCoordinator,
                         LaunchCoordinatorDelegate,
                         LaunchFinishedLoadingDelegate,
-                        FeatureFlaggable {
+                        LegacyFeatureFlaggable {
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
     private var isDeeplinkOptimizationRefactorEnabled: Bool {

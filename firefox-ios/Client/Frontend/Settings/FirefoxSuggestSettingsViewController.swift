@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-class FirefoxSuggestSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class FirefoxSuggestSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     init(profile: Profile?, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
