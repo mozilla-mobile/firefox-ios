@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class TabCellCustomImage: UIImageView {
-
     // Used to display an image content starting from the top left corner instead of image center
     override func layoutSubviews() {
         super.layoutSubviews()
