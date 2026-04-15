@@ -15,6 +15,7 @@ final class SendDataSetting: BoolSetting {
     private let featureFlagName: NimbusFeatureFlagID?
 
     private weak var settingsDelegate: SupportSettingsDelegate?
+    private weak var cell: UITableViewCell?
 
     override var url: URL? { return learnMoreURL }
     override var accessibilityIdentifier: String? { return a11yId }
@@ -62,6 +63,7 @@ final class SendDataSetting: BoolSetting {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         guard let cell = cell as? ThemedLearnMoreTableViewCell else { return }
         guard let title = title?.string, let subtitle = status?.string else { return }
+        self.cell = cell
 
         cell.configure(
             title: title,
@@ -85,9 +87,7 @@ final class SendDataSetting: BoolSetting {
         cell.accessoryView = control
         cell.selectionStyle = .none
 
-        if !enabled {
-            cell.subviews.forEach { $0.alpha = 0.5 }
-        }
+        cell.contentView.alpha = enabled ? 1.0 : 0.5
 
         cell.learnMoreDidTap = { [weak self] in
             guard let self else { return }
@@ -101,6 +101,7 @@ final class SendDataSetting: BoolSetting {
         // in which case, we would to make sure that users are opted out of experiments
         // Note: Switch should be enabled only when telemetry usage is enabled
         updateControlState(isEnabled: isUsageEnabled)
+        cell?.contentView.alpha = isUsageEnabled ? 1.0 : 0.5
 
         // Set experiments study setting based on usage enabled state
         // Special Case (EXP-4780, FXIOS-10534) disable Studies if usage data is disabled
