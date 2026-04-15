@@ -517,8 +517,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
-        let normalCount = tabManager.normalTabs.count
-        let privateCount = tabManager.privateTabs.count
         tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
         triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
