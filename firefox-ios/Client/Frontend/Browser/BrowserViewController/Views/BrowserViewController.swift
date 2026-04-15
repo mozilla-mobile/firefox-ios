@@ -896,6 +896,11 @@ class BrowserViewController: UIViewController,
             scrollController.showToolbars(animated: false)
         }
 
+        // In some cases (see restoreFindInPageIfNeeded) is necessary to display manually find in page bar
+        if #available(iOS 16, *) {
+            restoreFindInPageIfNeeded()
+        }
+
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
         browserDidBecomeActive()
     }

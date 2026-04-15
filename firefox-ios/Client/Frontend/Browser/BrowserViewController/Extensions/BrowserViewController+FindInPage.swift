@@ -31,6 +31,16 @@ extension BrowserViewController {
         }
     }
 
+    @available(iOS 16, *)
+    func restoreFindInPageIfNeeded() {
+        guard let tab = tabManager.selectedTab,
+              tab.isPrivate,
+              tab.isFindInPageMode,
+              let webView = tab.webView else { return }
+
+        webView.findInteraction?.presentFindNavigator(showingReplace: false)
+    }
+
     // Used only on iOS 15
     private func useCustomFindInteraction(isVisible: Bool, tab: Tab? = nil) {
         if isVisible {
