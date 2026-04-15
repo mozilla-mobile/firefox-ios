@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Storage
 import UIKit
+
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
 final class HomepageSectionLayoutProvider: FeatureFlaggable {
@@ -47,8 +48,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct PocketConstants {
             static let preferredCellSize = CGSize(width: 361, height: 282)
             static let minimumCellWidth: CGFloat = 320
-            static let verticalStoriesCellEstimatedHeight: CGFloat = 282
-            static let verticalStoriesSpacing: CGFloat = 16
             static let minimumCellsPerRow = 1
             static let interItemSpacing: CGFloat = 16
             static let interGroupSpacing: CGFloat = 16
@@ -286,7 +285,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             bottom: UX.standardInset,
             trailing: horizontalInset
         )
-        section.interGroupSpacing = UX.interGroupSpacing
+        section.interGroupSpacing = UX.PocketConstants.interGroupSpacing
 
         return section
     }
