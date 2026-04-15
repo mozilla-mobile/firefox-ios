@@ -4,49 +4,45 @@
 
 import XCTest
 
-class TabCounterTests: BaseTestCase {
+class TabCounterTests: FeatureFlaggedTestBase {
+    private var toolbarScreen: ToolbarScreen!
+    private var tabTrayScreen: TabTrayScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2359077
     func testTabIncrement() {
-        let toolbar = ToolbarScreen(app: app)
+        app.launch()
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-
-        toolbar.assertTabsButtonValue(expectedCount: "1")
-
-        navigator.createNewTab()
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-
-        toolbar.assertTabsButtonValue(expectedCount: "2")
+        toolbarScreen.openNewTabFromTabTray()
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359078
     func testTabDecrement() {
-        let toolbar = ToolbarScreen(app: app)
-        let tabTray = TabTrayScreen(app: app)
+        app.launch()
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
+        toolbarScreen.openNewTabFromTabTray()
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "2")
 
-        toolbar.assertTabsButtonValue(expectedCount: "1")
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.closeFirstTab()
 
-        navigator.createNewTab()
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
+        tabTrayScreen.tapTabAtIndex(index: 0)
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
-        toolbar.assertTabsButtonValue(expectedCount: "2")
-
-        navigator.goto(TabTray)
-        tabTray.closeFirstTab()
-
-        app.otherElements[tabsTray].cells.element(boundBy: 0).waitAndTap()
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-
-        toolbar.assertTabsButtonValue(expectedCount: "1")
-
-        navigator.goto(TabTray)
-        XCTAssertEqual(app.cells.count, 1, "There should be only one tab in the tab tray")
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.assertTabCount(1)
     }
 }
