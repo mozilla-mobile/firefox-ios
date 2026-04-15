@@ -109,7 +109,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = languages.first {
+                let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+                let filteredLanguages = languages.filter { $0 != pageLanguage }
+                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = filteredLanguages.first {
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: action.windowUUID,
                         targetLanguage: singleLanguage,
@@ -118,7 +120,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 } else {
                     store.dispatch(GeneralBrowserAction(
                         buttonTapped: capturedButton,
-                        translationLanguages: languages,
+                        translationLanguages: filteredLanguages,
                         windowUUID: action.windowUUID,
                         actionType: GeneralBrowserActionType.showTranslationLanguagePicker
                     ))
