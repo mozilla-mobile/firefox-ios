@@ -109,7 +109,9 @@ final class TranslationSettingsDiffableDataSource:
 
             let previousDisplayLanguages = previousState.pendingLanguages ?? previousState.preferredLanguages
             let currentDisplayLanguages = state.pendingLanguages ?? state.preferredLanguages
-            if (previousDisplayLanguages.count <= 1) != (currentDisplayLanguages.count <= 1) {
+			hasMultiplePreviousLanguages = previousDisplayLanguages.count > 1
+			hasMultipleCurrentLanguages = currentDisplayLanguages.count > 1
+            if hasMultiplePreviousLanguages != hasMultipleCurrentLanguages {
                 sectionsToRefresh.append(.preferredLanguages)
             }
 
