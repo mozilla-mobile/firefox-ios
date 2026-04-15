@@ -651,7 +651,7 @@ final class HomepageViewController: UIViewController,
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
+        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
             cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
