@@ -18,7 +18,7 @@ class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler,
-                          FeatureFlaggable {
+                          LegacyFeatureFlaggable {
     var tabTrayViewController: TabTrayViewController?
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
     private let profile: Profile

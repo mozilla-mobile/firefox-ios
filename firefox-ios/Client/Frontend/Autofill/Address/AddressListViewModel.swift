@@ -9,7 +9,7 @@ import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
 @MainActor
-final class AddressListViewModel: ObservableObject, FeatureFlaggable {
+final class AddressListViewModel: ObservableObject, LegacyFeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)

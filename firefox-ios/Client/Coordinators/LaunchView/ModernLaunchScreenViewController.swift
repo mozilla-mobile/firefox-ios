@@ -8,7 +8,7 @@ import UIKit
 import SwiftUI
 import OnboardingKit
 
-class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable, Themeable {
+class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, LegacyFeatureFlaggable, Themeable {
     // MARK: - UX Constants
     private enum UX {
         static let fadeOutDuration: TimeInterval = 0.24

@@ -16,7 +16,7 @@ public enum PresentationStyle {
 /// It was also used as the Main menu in our application, and the code is a bit tangled in here
 /// due to that reason.
 @MainActor
-class PhotonActionSheetViewModel: FeatureFlaggable {
+class PhotonActionSheetViewModel: LegacyFeatureFlaggable {
     // MARK: - Properties
     var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle

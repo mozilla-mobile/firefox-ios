@@ -32,7 +32,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
-                                 FeatureFlaggable {
+                                 LegacyFeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile

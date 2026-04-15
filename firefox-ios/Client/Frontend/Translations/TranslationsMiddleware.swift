@@ -8,7 +8,7 @@ import Common
 import Shared
 
 @MainActor
-final class TranslationsMiddleware: FeatureFlaggable {
+final class TranslationsMiddleware: LegacyFeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager

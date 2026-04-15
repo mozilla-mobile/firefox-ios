@@ -10,7 +10,7 @@ import Common
 
 class SceneDelegate: UIResponder,
                      UIWindowSceneDelegate,
-                     FeatureFlaggable {
+                     LegacyFeatureFlaggable {
     var window: UIWindow?
 
     let profile: Profile = AppContainer.shared.resolve()

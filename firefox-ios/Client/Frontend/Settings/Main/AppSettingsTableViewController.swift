@@ -59,7 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      FeatureFlaggable,
+                                      LegacyFeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
                                       SharedSettingsDelegate {

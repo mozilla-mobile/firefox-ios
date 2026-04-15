@@ -15,7 +15,7 @@ import Shared
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtility {
+final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!

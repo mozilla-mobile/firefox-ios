@@ -14,7 +14,7 @@ protocol UnifiedAdsCallbackTelemetry {
     func sendClickTelemetry(tileSite: Site, position: Int)
 }
 
-final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, FeatureFlaggable {
+final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, LegacyFeatureFlaggable {
     private let adsClient: MozAdsClientProtocol
     private let networking: UnifiedTileNetworking
     private let logger: Logger
