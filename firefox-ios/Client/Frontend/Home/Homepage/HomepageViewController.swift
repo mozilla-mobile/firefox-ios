@@ -373,6 +373,8 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
+            self.homepageState = state
+
             dataSource?.updateSnapshot(
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
@@ -390,7 +392,6 @@ final class HomepageViewController: UIViewController,
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
-        self.homepageState = state
     }
 
     func unsubscribeFromRedux() {
@@ -711,7 +712,10 @@ final class HomepageViewController: UIViewController,
             sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
-            transitionEnabled: transitionEnabled
+            transitionEnabled: transitionEnabled,
+            categories: homepageState.merinoState.availableCategories,
+            selectedCategoryID: homepageState.merinoState.selectedCategoryID,
+            onSelection: dispatchCategorySelectedAction
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -765,10 +769,7 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    /// Reapplies scroll-based fade progress to the visible pocket header after scrolling or relayout.
-    /// This is a no-op unless the pocket section is present and the `newsTransitionHeaderCell` is able to transition
-    /// (the section label fallback header used when there is no room for the header to transition does not participate
-    /// in the transition)
+    /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               let collectionView,
@@ -778,21 +779,24 @@ final class HomepageViewController: UIViewController,
                   }
                   return false
               }),
-              let headerAttributes = collectionView.layoutAttributesForSupplementaryElement(
-                  ofKind: UICollectionView.elementKindSectionHeader,
-                  at: IndexPath(item: 0, section: pocketSectionIndex)
-              ),
-              let headerView = collectionView.supplementaryView(
-                  forElementKind: UICollectionView.elementKindSectionHeader,
-                  at: IndexPath(item: 0, section: pocketSectionIndex)
+              let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .spacer = $0 {
+                      return true
+                  }
+                  return false
+              }),
+              let spacerAttributes = collectionView.layoutAttributesForItem(at: IndexPath(item: 0,
+                                                                                          section: spacerSectionIndex)),
+              let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader,
+                                                                at: IndexPath(item: 0, section: pocketSectionIndex)
               ) as? NewsTransitionHeaderCell
         else {
             return
         }
 
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
-                                                                             width: collectionView.bounds.width)
-        let transitionEnabled = headerAttributes.size.height >= expectedHeaderHeight
+        // We only want the stories header to transition if there is enough empty space on the homepage,
+        // which is denoted by the existence of the spacer
+        let transitionEnabled = spacerAttributes.size.height > 0.1
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
@@ -1035,6 +1039,16 @@ final class HomepageViewController: UIViewController,
                 navigationDestination: NavigationDestination(.privacyNoticeLink(url)),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnPrivacyNoticeLink
+            )
+        )
+    }
+
+    private func dispatchCategorySelectedAction(selectedCategoryID: String?) {
+        store.dispatch(
+            MerinoAction(
+                selectedCategoryID: selectedCategoryID,
+                windowUUID: windowUUID,
+                actionType: MerinoActionType.categorySelected
             )
         )
     }

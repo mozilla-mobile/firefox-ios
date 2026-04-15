@@ -56,7 +56,8 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         else { throw Error.failure }
 
         if let cachedResponse = cache.loadResponse(),
-           cacheUpdateThresholdHasNotPassed() {
+           cacheUpdateThresholdHasNotPassed(),
+           cachedResponseMatchesCurrentHomepageStoriesMode(cachedResponse) {
             return cachedResponse
         }
 
@@ -122,5 +123,19 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         let thresholdInSeconds: TimeInterval = thresholdInHours * 60 * 60
         guard let lastUpdate = cache.lastUpdatedDate() else { return false }
         return Date() < lastUpdate.addingTimeInterval(thresholdInSeconds)
+    }
+
+    /// Returns whether the cached response shape matches the current homepage stories mode.
+    /// When categories are enabled we require non-empty `feeds`, otherwise we require
+    /// non-empty top-level story `data`. If the shapes do not match, we bypass the cache
+    /// and fetch again so a mode switch is reflected immediately.
+    private func cachedResponseMatchesCurrentHomepageStoriesMode(_ response: CuratedRecommendationsResponse) -> Bool {
+        let categoriesEnabled = featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
+
+        if categoriesEnabled {
+            return !(response.feeds?.isEmpty ?? true)
+        }
+
+        return !response.data.isEmpty
     }
 }
