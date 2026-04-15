@@ -201,7 +201,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             if details.isDeviceLanguage {
                 cell.accessories = [.reorder(displayed: .whenEditing)]
             } else {
-                let removeAction = { [weak self] in
+                let deleteActionHandler = { [weak self] in
                     guard let self else { return }
                     store.dispatch(TranslationSettingsViewAction(
                         languageCode: details.code,
@@ -209,10 +209,18 @@ final class TranslationPickerSettingsViewController: UIViewController,
                         actionType: TranslationSettingsViewActionType.removeLanguage
                     ))
                 }
-                cell.deleteHandler = removeAction
                 cell.accessories = [
-                    .delete(displayed: .whenEditing, actionHandler: removeAction),
+                    .delete(displayed: .whenEditing, actionHandler: deleteActionHandler),
                     .reorder(displayed: .whenEditing)
+                ]
+                cell.accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: .Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction,
+                        actionHandler: { _ in
+                            deleteActionHandler()
+                            return true
+                        }
+                    )
                 ]
             }
         }
