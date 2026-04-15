@@ -29,14 +29,14 @@ class URLValidationTests: BaseTestCase {
     func testDifferentURLTypes() {
         for url in urlTypes {
             browserScreen.navigateToURL(url)
-            browserScreen.assertWebViewLoaded()
+            browserScreen.assertWebViewHasContent()
             browserScreen.assertAddressBarContains(value: "mozilla.org")
             clearURL()
         }
 
         for url in urlHttpTypes {
             browserScreen.navigateToURL(url)
-            browserScreen.assertWebViewLoaded()
+            browserScreen.assertWebViewHasContent()
             browserScreen.assertAddressBarContains(value: "example.com")
             clearURL()
         }
