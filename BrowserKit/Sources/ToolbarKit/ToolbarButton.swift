@@ -129,14 +129,11 @@ class ToolbarButton: UIButton,
         largeContentImage = image
 
         configuration = config
+        removeBadgeAndMaskFromSuperview()
+
         if let buttonBadgeImage = element.bottomBadgeImage {
             addBottomBadgeImage(buttonBadgeImage)
-        } else {
-            bottomBadgeImageView?.removeFromSuperview()
-            bottomBadgeImageView = nil
-        }
-
-        if let badgeName = element.badgeImageName {
+        } else if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
             if let maskImageName = element.maskImageName {
                 addMaskIcon(maskImageName: maskImageName)
@@ -144,8 +141,6 @@ class ToolbarButton: UIButton,
                 maskImageView?.removeFromSuperview()
                 maskImageView = nil
             }
-        } else {
-            removeBadgeAndMaskFromSuperview()
         }
 
         layoutIfNeeded()
@@ -280,9 +275,11 @@ class ToolbarButton: UIButton,
     }
 
     private func removeBadgeAndMaskFromSuperview() {
+        bottomBadgeImageView?.removeFromSuperview()
         badgeImageView?.removeFromSuperview()
         maskImageView?.removeFromSuperview()
         badgeImageView = nil
+        bottomBadgeImageView = nil
         maskImageView = nil
     }
 
