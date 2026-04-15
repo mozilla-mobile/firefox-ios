@@ -57,10 +57,7 @@ final class TabCell: UICollectionViewCell,
         view.isHidden = true
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-    }
+    private lazy var screenshotView: TabCellCustomImage = .build()
 
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1

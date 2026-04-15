@@ -49,10 +49,8 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.clipsToBounds = false
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
+    private lazy var screenshotView: TabCellCustomImage = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
-        view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
     }
