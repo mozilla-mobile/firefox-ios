@@ -3388,6 +3388,12 @@ extension String {
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
                 )
+                public static let RemoveLanguageA11yAction = MZLocalizedString(
+                    key: "Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151",
+                    tableName: "Settings",
+                    value: "Delete",
+                    comment: "VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list."
+                )
             }
 
             public struct AutoTranslate {
