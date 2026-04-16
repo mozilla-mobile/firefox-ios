@@ -47,10 +47,8 @@ final class TranslationsService: TranslationsServiceProtocol {
             return preferredLanguages.count > 1
         }
 
-        for language in preferredLanguages {
-            if await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
-                return true
-            }
+        for language in preferredLanguages where await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
+            return true
         }
         return false
     }

@@ -127,7 +127,7 @@ final class TranslationsServiceTests: XCTestCase {
         let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["en", "fr"])
         XCTAssertTrue(
             result,
-            "Expected shouldOfferTranslation to be true when the page is in a preferred language and other preferred languages exist."
+            "Expected shouldOfferTranslation to be true when the page is in a preferred language and others exist."
         )
     }
 
