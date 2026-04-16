@@ -85,7 +85,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
-    private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
     // The only tab present before doing tab restoration, since deeplink happens before it
@@ -443,18 +442,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         commitChanges()
-    }
-
-    func undoCloseAllTabs() {
-        assert(Thread.isMainThread)
-        guard !backupCloseTabs.isEmpty else { return }
-        tabs = backupCloseTabs
-        commitChanges()
-        backupCloseTabs = [Tab]()
-        if backupCloseTab != nil {
-            selectTab(backupCloseTab?.tab)
-            backupCloseTab = nil
-        }
     }
 
     // MARK: - Restore tabs
