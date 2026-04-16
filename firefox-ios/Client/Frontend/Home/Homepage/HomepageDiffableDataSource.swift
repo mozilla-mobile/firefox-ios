@@ -11,7 +11,7 @@ typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 /// Holds the data source configuration for the new homepage as part of the rebuild project
 final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
-    FeatureFlaggable {
+    LegacyFeatureFlaggable {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -145,18 +145,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: .pocket(textColor))
         }
 
-        apply(snapshot, animatingDifferences: false, completion: completion)
-    }
-
-    private func getMerinoStories(
-        with merinoState: MerinoState
-    ) -> [HomepageDiffableDataSource.HomeItem]? {
-        guard merinoState.shouldShowSection,
-              let stories: [HomeItem] = merinoState.merinoData.stories?.compactMap({ .merino($0) }),
-              !stories.isEmpty
-        else { return nil }
-
-        return stories
+        apply(snapshot, animatingDifferences: true, completion: completion)
     }
 
     /// Gets the proper amount of top sites based on layout configuration
@@ -211,6 +200,12 @@ final class HomepageDiffableDataSource:
     ) -> [HomepageDiffableDataSource.HomeItem]? {
         guard state.shouldShowSection, !state.bookmarks.isEmpty else { return nil }
         return state.bookmarks.compactMap { .bookmark($0) }
+    }
+
+    private func getMerinoStories(with merinoState: MerinoState) -> [HomepageDiffableDataSource.HomeItem]? {
+        let stories: [HomeItem] = merinoState.visibleStories.map( { .merino($0) })
+        guard merinoState.shouldShowSection, !stories.isEmpty else { return nil }
+        return stories
     }
 }
 

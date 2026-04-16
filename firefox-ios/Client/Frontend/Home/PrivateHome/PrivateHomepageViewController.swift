@@ -21,7 +21,7 @@ final class PrivateHomepageViewController: UIViewController,
                                            ContentContainable,
                                            Screenshotable,
                                            Themeable,
-                                           FeatureFlaggable {
+                                           LegacyFeatureFlaggable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
         static let scrollContainerTopPadding: CGFloat = 32

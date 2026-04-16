@@ -25,7 +25,7 @@ extension UnifiedAdsProviderInterface {
     }
 }
 
-final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
+final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, LegacyFeatureFlaggable, Sendable {
     private let adsClient: MozAdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
@@ -184,7 +184,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return URL(string: UnifiedAdsProvider.stagingResourceEndpoint)
         }
         return URL(string: UnifiedAdsProvider.prodResourceEndpoint)

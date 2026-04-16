@@ -199,6 +199,7 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.goto(BrowserTabMenu)
             app.swipeUp()
         }
+        navigator.goto(SettingsScreen)
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).waitAndTap()

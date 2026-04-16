@@ -7,7 +7,7 @@ import Common
 import Shared
 
 /// The main view displaying the settings for the address bar position menu.
-struct AddressBarSettingsView: View, FeatureFlaggable {
+struct AddressBarSettingsView: View, LegacyFeatureFlaggable {
     let windowUUID: WindowUUID
     /// NOTE: To avoid duplication, the old view model is reused in the new address bar setting menu.
     /// TODO(FXIOS-12000): Once the experiment is done, we can remove the old viewmodel and move it to here.

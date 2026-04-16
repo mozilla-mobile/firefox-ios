@@ -19,7 +19,7 @@ struct DeleteUserRequest: Encodable {
     }
 }
 
-struct UnifiedAdsUserDataRemover: FeatureFlaggable {
+struct UnifiedAdsUserDataRemover: LegacyFeatureFlaggable {
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/delete_user"
     private static let stagingResourceEndpoint = "https://ads.allizom.org/v1/delete_user"
 
@@ -61,7 +61,7 @@ struct UnifiedAdsUserDataRemover: FeatureFlaggable {
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if  CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return URL(string: UnifiedAdsUserDataRemover.stagingResourceEndpoint)
         }
         return URL(string: UnifiedAdsUserDataRemover.prodResourceEndpoint)

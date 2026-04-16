@@ -8,7 +8,6 @@ class URLValidationTests: BaseTestCase {
     let urlTypes = ["www.mozilla.org", "www.mozilla.org/", "https://www.mozilla.org", "www.mozilla.org/en", "www.mozilla.org/en-",
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
-    let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
     var browserScreen: BrowserScreen!
 
     override func setUp() async throws {
@@ -29,23 +28,22 @@ class URLValidationTests: BaseTestCase {
     // Smoketest
     func testDifferentURLTypes() {
         for url in urlTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            browserScreen.assertMozillaPageLoaded(urlField: urlField)
+            browserScreen.navigateToURL(url)
+            browserScreen.assertWebViewHasContent()
+            browserScreen.assertAddressBarContains(value: "mozilla.org")
             clearURL()
         }
 
         for url in urlHttpTypes {
-            navigator.openURL(url)
-            waitUntilPageLoad()
-            browserScreen.assertExampleDomainLoaded(urlField: urlField)
+            browserScreen.navigateToURL(url)
+            browserScreen.assertWebViewHasContent()
+            browserScreen.assertAddressBarContains(value: "example.com")
             clearURL()
         }
     }
 
     private func clearURL() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarOpen)
+        browserScreen.tapOnAddressBar()
         browserScreen.clearURL()
     }
 }

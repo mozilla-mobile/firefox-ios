@@ -72,6 +72,14 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
 final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
 
+    override func setUp() {
+        super.setUp()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            HomepageRedesignFeature(categoriesEnabled: false)
+        }
+    }
+
     func testIncorrectLocalesAreNotSupported() {
         XCTAssertFalse(MerinoProvider.isLocaleSupported("en_BD"))
         XCTAssertFalse(MerinoProvider.isLocaleSupported("enCA"))
@@ -193,6 +201,78 @@ final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
 
         XCTAssertEqual(result.data.map(\.title), ["cached"])
         XCTAssertEqual(control.fetcher.callCount, 0)
+    }
+
+    func test_fetchContent_fetchesFromNetwork_whenCategoriesEnabledAndCachedResponseHasNoFeeds() async throws {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            HomepageRedesignFeature(categoriesEnabled: true)
+        }
+
+        let control = await createSubject(thresholdHours: 1)
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("cached-story")],
+            feeds: nil
+        )
+        let networkFeeds = [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network-story")],
+            feeds: networkFeeds
+        )
+
+        let result = try await control.subject.fetchContent()
+
+        XCTAssertEqual(control.fetcher.callCount, 1)
+        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
+        XCTAssertTrue(control.cache.didClear)
+    }
+
+    func test_fetchContent_returnsCached_whenCategoriesEnabledAndCachedResponseHasFeeds() async throws {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            HomepageRedesignFeature(categoriesEnabled: true)
+        }
+
+        let control = await createSubject(thresholdHours: 1)
+        let cachedFeeds = [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("cached-story")],
+            feeds: cachedFeeds
+        )
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network-story")],
+            feeds: [FeedSection.makeSection(feedId: "science", recommendations: [.makeItem("science-story")])]
+        )
+
+        let result = try await control.subject.fetchContent()
+
+        XCTAssertEqual(control.fetcher.callCount, 0)
+        XCTAssertEqual(result.feeds?.first?.feedId, "technology")
+        XCTAssertFalse(control.cache.didClear)
+    }
+
+    func test_fetchContent_fetchesFromNetwork_whenCategoriesDisabledAndCachedResponseHasNoStories() async throws {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            HomepageRedesignFeature(categoriesEnabled: false)
+        }
+
+        let control = await createSubject(thresholdHours: 1)
+        let cachedFeeds = [FeedSection.makeSection(feedId: "technology", recommendations: [.makeItem("tech-story")])]
+        let cachedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [],
+            feeds: cachedFeeds
+        )
+        control.cache.seed(response: cachedResponse, lastUpdated: Date())
+        control.fetcher.stubbedResponse = CuratedRecommendationsResponse.makeResponse(
+            items: [.makeItem("network-story")],
+            feeds: nil
+        )
+
+        let result = try await control.subject.fetchContent()
+
+        XCTAssertEqual(control.fetcher.callCount, 1)
+        XCTAssertEqual(result.data.map(\.title), ["network-story"])
+        XCTAssertTrue(control.cache.didClear)
     }
 
     func test_fetchContent_coalescesConcurrentRequests_whenCacheIsStale() async throws {

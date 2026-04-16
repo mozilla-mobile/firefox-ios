@@ -270,6 +270,8 @@ struct AccessibilityIdentifiers {
         }
 
         struct Pocket {
+            static let allCategory = "Category.All"
+            static let category = "Category"
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }

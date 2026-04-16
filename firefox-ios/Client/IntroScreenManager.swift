@@ -15,7 +15,7 @@ protocol IntroScreenManagerProtocol {
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
+struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {

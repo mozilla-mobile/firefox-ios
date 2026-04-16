@@ -5,7 +5,7 @@
 import Shared
 import Common
 
-class AIControlsModel: ObservableObject, FeatureFlaggable {
+class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool

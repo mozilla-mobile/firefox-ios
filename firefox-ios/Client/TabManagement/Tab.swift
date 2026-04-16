@@ -86,7 +86,7 @@ typealias TabUUID = String
 @MainActor
 class Tab: NSObject,
            ThemeApplicable,
-           FeatureFlaggable,
+           LegacyFeatureFlaggable,
            ShareTab,
            ContentBlockerTab,
            TabWebViewDelegate,
@@ -820,7 +820,7 @@ class Tab: NSObject,
         /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
         webView?.backgroundColor =  theme.colors.layer1
         webView?.scrollView.backgroundColor = theme.colors.layer1
-        webView?.isOpaque = !(nightMode || theme.type == .dark || theme.type == .privateMode)
+        webView?.isOpaque = !nightMode
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 

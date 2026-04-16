@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
+final class FeatureFlagsDebugViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -294,7 +294,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = NimbusFeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }

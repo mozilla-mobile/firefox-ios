@@ -41,7 +41,7 @@ enum SearchLocation: String {
 
 // FIXME: FXIOS-13987 Make truly thread safe
 class TelemetryWrapper: TelemetryWrapperProtocol,
-                        FeatureFlaggable,
+                        LegacyFeatureFlaggable,
                         Notifiable,
                         @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey

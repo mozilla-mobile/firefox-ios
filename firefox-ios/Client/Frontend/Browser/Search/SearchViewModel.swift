@@ -18,7 +18,7 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 @MainActor
-class SearchViewModel: FeatureFlaggable, LoaderListener {
+class SearchViewModel: LegacyFeatureFlaggable, LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?

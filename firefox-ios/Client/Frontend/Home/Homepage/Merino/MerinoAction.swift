@@ -17,11 +17,13 @@ struct MerinoAction: Action {
     let merinoResponse: MerinoStoryResponse?
     let isEnabled: Bool?
     let telemetryConfig: OpenPocketTelemetryConfig?
+    let selectedCategoryID: String?
 
     init(
         merinoStoryResponse: MerinoStoryResponse? = nil,
         isEnabled: Bool? = nil,
         telemetryConfig: OpenPocketTelemetryConfig? = nil,
+        selectedCategoryID: String? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {
@@ -30,6 +32,7 @@ struct MerinoAction: Action {
         self.merinoResponse = merinoStoryResponse
         self.isEnabled = isEnabled
         self.telemetryConfig = telemetryConfig
+        self.selectedCategoryID = selectedCategoryID
     }
 }
 
@@ -37,6 +40,7 @@ enum MerinoActionType: ActionType {
     case toggleShowSectionSetting
     case tapOnHomepageMerinoCell
     case viewedSection
+    case categorySelected
 }
 
 enum MerinoMiddlewareActionType: ActionType {

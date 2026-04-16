@@ -11,7 +11,7 @@ protocol StoryProviderInterface: Sendable {
     func prefetchStories() async
 }
 
-final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
+final class StoryProvider: StoryProviderInterface, LegacyFeatureFlaggable, Sendable {
     private let merinoAPI: MerinoStoriesProviding
 
     init(merinoAPI: MerinoStoriesProviding) {

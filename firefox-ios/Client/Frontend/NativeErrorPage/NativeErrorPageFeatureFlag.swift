@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct NativeErrorPageFeatureFlag: FeatureFlaggable {
+struct NativeErrorPageFeatureFlag: LegacyFeatureFlaggable {
     var isNativeErrorPageEnabled: Bool {
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }

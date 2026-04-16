@@ -10,7 +10,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
+final class BookmarksPanelViewModelTests: XCTestCase, LegacyFeatureFlaggable {
     private var profile: MockProfile!
 
     override func setUp() async throws {
