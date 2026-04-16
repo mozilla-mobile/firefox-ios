@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 @testable import SummarizeKit
 
 final class MockSummarizerServiceLifecycle: SummarizerServiceLifecycle, @unchecked Sendable {
@@ -47,6 +48,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
             isAppleSummarizerEnabled: true,
             isHostedSummarizerEnabled: false,
             isAppAttestAuthEnabled: false,
+            prefs: MockProfilePrefs(),
             config: nil
         )
         let service = try XCTUnwrap(result as? DefaultSummarizerService)
@@ -62,6 +64,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
             isAppleSummarizerEnabled: false,
             isHostedSummarizerEnabled: true,
             isAppAttestAuthEnabled: false,
+            prefs: MockProfilePrefs(),
             config: nil
         )
 
@@ -75,6 +78,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
             isAppleSummarizerEnabled: false,
             isHostedSummarizerEnabled: true,
             isAppAttestAuthEnabled: true,
+            prefs: MockProfilePrefs(),
             config: nil
         )
 
@@ -88,6 +92,7 @@ final class SummarizeServiceFactoryTests: XCTestCase {
             isAppleSummarizerEnabled: false,
             isHostedSummarizerEnabled: false,
             isAppAttestAuthEnabled: false,
+            prefs: MockProfilePrefs(),
             config: nil
         )
 

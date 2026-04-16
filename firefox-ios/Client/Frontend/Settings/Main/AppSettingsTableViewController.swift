@@ -533,6 +533,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DeleteLoginsKeysSetting(settings: self),
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
+            ChangeMLPAEndpointSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
             MerinoTestDataSetting(settings: self, settingsDelegate: self)

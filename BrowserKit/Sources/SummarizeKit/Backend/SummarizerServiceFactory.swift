@@ -5,6 +5,7 @@
 import Foundation
 import LLMKit
 import MLPAKit
+import Shared
 
 public protocol SummarizerServiceFactory {
     /// An object which responds to Summarize activities.
@@ -14,6 +15,7 @@ public protocol SummarizerServiceFactory {
               isHostedSummarizerEnabled: Bool,
               isAppAttestAuthEnabled: Bool,
               usesPermissiveGuardrails: Bool,
+              prefs: Prefs,
               config: SummarizerConfig?) -> SummarizerService?
 
     /// Returns the max words that the summarizer Service can handle.
@@ -29,6 +31,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                      isHostedSummarizerEnabled: Bool,
                      isAppAttestAuthEnabled: Bool,
                      usesPermissiveGuardrails: Bool = false,
+                     prefs: Prefs,
                      config: SummarizerConfig?) -> SummarizerService? {
         let maxWords = maxWords(isAppleSummarizerEnabled: isAppleSummarizerEnabled,
                                 isHostedSummarizerEnabled: isHostedSummarizerEnabled)
@@ -46,7 +49,11 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
             )
         } else {
             guard isHostedSummarizerEnabled,
-                  let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+                  let llmClient = makeLiteLLMClient(
+                    config: config,
+                    prefs: prefs,
+                    isAppAttestAuthEnabled: isAppAttestAuthEnabled
+                  ) else {
                 return nil
             }
 
@@ -59,7 +66,11 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         }
         #else
         guard isHostedSummarizerEnabled,
-              let llmClient = makeLiteLLMClient(config: config, isAppAttestAuthEnabled: isAppAttestAuthEnabled) else {
+              let llmClient = makeLiteLLMClient(
+                config: config,
+                prefs: prefs,
+                isAppAttestAuthEnabled: isAppAttestAuthEnabled
+              ) else {
             return nil
         }
         let llmSummarizer = LiteLLMSummarizer(client: llmClient, config: config)
@@ -84,6 +95,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
     // TODO: FXIOS-15146 - Add this to LLMKit and make creation more generic
     private func makeLiteLLMClient(
         config: SummarizerConfig,
+        prefs: Prefs,
         isAppAttestAuthEnabled: Bool
     ) -> LiteLLMClient? {
         guard let model = config.options["model"] as? String, !model.isEmpty else {
@@ -91,12 +103,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         }
 
         if isAppAttestAuthEnabled {
-            guard let endPoint = MLPAConstants.completionsEndpoint,
-                  let client = try? AppAttestClient(remoteServer: MLPAAppAttestServer()) else {
-                return nil
-            }
-            let authenticator = AppAttestRequestAuth(appAttestClient: client)
-            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+            return LiteLLMCreator.createAppAttestLiteLLM(using: prefs)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let key = LiteLLMConfig.apiKey else {
