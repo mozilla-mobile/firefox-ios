@@ -218,8 +218,13 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
 
     /// Resets any local storage of models.
     func resetStorage() async {
+        guard let client = modelsClient else {
+            logger.log("Models client not available, skipping reset.", level: .warning, category: .remoteSettings)
+            return
+        }
+
         do {
-            try modelsClient?.resetStorage()
+            try client.resetStorage()
         } catch {
             logger.log("Resetting storage for models failed with error \(error.localizedDescription).", level: .warning, category: .remoteSettings)
         }
