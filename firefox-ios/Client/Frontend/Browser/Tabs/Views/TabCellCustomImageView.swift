@@ -3,12 +3,23 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class TabCellCustomImage: UIImageView {
+    private var lastBounds: CGRect = .zero
+    private var lastImageSize: CGSize = .zero
+
     // Used to display an image content starting from the top left corner instead of image center
     override func layoutSubviews() {
         super.layoutSubviews()
 
         guard let image = image else { return }
+        guard bounds != lastBounds || image.size != lastImageSize else { return }
 
+        lastBounds = bounds
+        lastImageSize = image.size
+
+        updateContentsRect(for: image)
+    }
+
+    private func updateContentsRect(for image: UIImage) {
         let viewSize = bounds.size
         let imageSize = image.size
 
