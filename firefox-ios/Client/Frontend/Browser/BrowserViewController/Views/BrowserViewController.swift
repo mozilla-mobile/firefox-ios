@@ -3045,7 +3045,21 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            alert.title = .Translations.LanguagePicker.Title
+            let title: String = .Translations.LanguagePicker.Title
+            let attributedTitleKey = "attributedTitle"
+            alert.title = title
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [
+                        .font: DefaultDynamicFontHelper.preferredBoldFont(
+                            withTextStyle: .headline,
+                            size: UIFont.labelFontSize
+                        )
+                    ]
+                ),
+                forKey: attributedTitleKey
+            )
         }
 
         data.languages.forEach { code in
@@ -3074,15 +3088,17 @@ class BrowserViewController: UIViewController,
             ))
         })
 
-        if sourceButton == nil {
-            alert.addAction(UIAlertAction(title: .CancelString, style: .default))
+        if #available(iOS 26, *), sourceButton != nil {
+        } else {
+            alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
         if let popover = alert.popoverPresentationController {
             if let sourceButton {
                 popover.sourceView = sourceButton
                 popover.sourceRect = sourceButton.bounds
-            } else {
+                popover.permittedArrowDirections = [.up, .down]
+            } else if #unavailable(iOS 26) {
                 popover.sourceView = view
                 popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
                 popover.permittedArrowDirections = []

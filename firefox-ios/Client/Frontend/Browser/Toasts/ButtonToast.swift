@@ -41,11 +41,13 @@ class ButtonToast: Toast {
 
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
@@ -53,6 +55,7 @@ class ButtonToast: Toast {
         button.layer.cornerRadius = UX.buttonBorderRadius
         button.layer.borderWidth = UX.buttonBorderWidth
         button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.numberOfLines = 1
         button.titleLabel?.lineBreakMode = .byClipping
         button.titleLabel?.adjustsFontSizeToFitWidth = true

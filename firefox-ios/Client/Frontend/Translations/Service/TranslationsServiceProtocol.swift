@@ -28,4 +28,6 @@ protocol TranslationsServiceProtocol {
     func discardTranslations(for windowUUID: WindowUUID) async throws
     /// Returns the unique set of languages that can be used as translation targets.
     func fetchSupportedTargetLanguages() async -> [String]
+    /// Returns the BCP-47 language code of the currently displayed page (e.g. "ja", "en").
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String
 }

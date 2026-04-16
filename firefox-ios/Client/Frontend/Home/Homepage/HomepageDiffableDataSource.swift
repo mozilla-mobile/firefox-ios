@@ -53,7 +53,11 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
-        case merino(MerinoStoryConfiguration)
+        /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
+        /// a presentation-context change. Without the category context, diffable treats the same story in
+        /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
+        /// that story's on-screen position as stories are inserted above it.
+        case merino(MerinoStoryConfiguration, String?)
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -67,7 +71,7 @@ final class HomepageDiffableDataSource:
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
-                StoryCellLarge.self,
+                StoryCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -203,7 +207,9 @@ final class HomepageDiffableDataSource:
     }
 
     private func getMerinoStories(with merinoState: MerinoState) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = merinoState.visibleStories.map( { .merino($0) })
+        let stories: [HomeItem] = merinoState.visibleStories.map {
+            .merino($0, merinoState.selectedCategoryID)
+        }
         guard merinoState.shouldShowSection, !stories.isEmpty else { return nil }
         return stories
     }

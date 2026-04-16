@@ -13,18 +13,21 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     private let translateResult: Result<Void, Error>
     private let firstResponseReceivedResult: Result<Void, Error>
     private let discardResult: Result<Void, Error>
+    private let detectPageLanguageResult: Result<String, Error>
 
     // MARK: - Init
     init(
         shouldOfferTranslationResult: Result<Bool, Error> = .success(false),
         translateResult: Result<Void, Error> = .success(()),
         firstResponseReceivedResult: Result<Void, Error> = .success(()),
-        discardResult: Result<Void, Error> = .success(())
+        discardResult: Result<Void, Error> = .success(()),
+        detectPageLanguageResult: Result<String, Error> = .success("en")
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.translateResult = translateResult
         self.firstResponseReceivedResult = firstResponseReceivedResult
         self.discardResult = discardResult
+        self.detectPageLanguageResult = detectPageLanguageResult
     }
 
     // MARK: - TranslationsServiceProtocol
@@ -51,5 +54,9 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     func fetchSupportedTargetLanguages() async -> [String] {
         return []
+    }
+
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+        return try detectPageLanguageResult.get()
     }
 }

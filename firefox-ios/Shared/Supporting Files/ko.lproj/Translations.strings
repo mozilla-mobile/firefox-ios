@@ -1,3 +1,9 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "활성화";
+
+/* Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate. */
+"Translations.AutoTranslatePrompt.Message.v151" = "가능한 경우 페이지를 자동으로 번역하시겠습니까?";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
 "Translations.Banner.Close.Button.AccessibilityLabel.v145" = "번역 패널 닫기";
 

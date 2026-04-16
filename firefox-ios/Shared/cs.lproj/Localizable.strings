@@ -47,7 +47,7 @@
 "Add to Reading List" = "Přidat do seznamu ke čtení";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
-"Added page to Reading List" = "Přidat stránku do seznamu ke čtení";
+"Added page to Reading List" = "Stránka přidána do seznamu ke čtení";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Dismiss" = "OK";
@@ -224,7 +224,7 @@
 "CoverSheet.v24.ETP.Settings.Button" = "Přejít do Nastavení";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Ochrana proti sledováním reklamami";
+"CoverSheet.v24.ETP.Title" = "Ochrana před sledováním reklamami";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Vytvořit účet";
@@ -302,10 +302,10 @@
 "ErrorPages.Advanced.Button" = "Rozšířené";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Varování: nemůžeme potvrdit, že je připojení k této stránce bezpečné.";
+"ErrorPages.AdvancedWarning1.Text" = "Varování: nemůžeme potvrdit, že je spojení s tímto serverem zabezpečené.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning2.Text" = "Může to být chybná konfigurace nebo manipulace útočníkem. Pokračujte, pokud příjímáte potenciální riziko.";
+"ErrorPages.AdvancedWarning2.Text" = "Může to být chybná konfigurace nebo manipulace útočníkem. Pokračujte, pokud přijímáte potenciální riziko.";
 
 /* Warning text on the certificate error page. %@ is the domain of the website. */
 "ErrorPages.CertWarning.Description" = "Majitel webu %@ nakonfiguroval svůj server nesprávně. Abychom chránili vaše údaje před odcizením, Firefox se k tomuto webu nepřipojil.";
@@ -365,7 +365,7 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Zobrazit synchronizované panely";
 
 /* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
-"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Panely";
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Vyzvednutý panel";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Sponzorováno";
@@ -938,7 +938,7 @@
 "Reader View" = "Zobrazení čtečky";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Je dostupný Režim čtení";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Je dostupný Zobrazení čtečky";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "Označit jako přečtené";
@@ -1013,7 +1013,7 @@
 "Search.SuggestSectionTitle.v102" = "Návrhy od Firefoxu";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Nový vyhledávač se zobrazi v panelu rychlého hledání.";
+"Search.ThirdPartyEngines.AddMessage" = "Nový vyhledávač se zobrazí v panelu rychlého hledání.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
 "Search.ThirdPartyEngines.AddSuccess" = "Vyhledávač byl přidán!";
@@ -1064,13 +1064,13 @@
 "SendTo.DeviceList.Text" = "Dostupná zařízení:";
 
 /* Message in error prompt explaining why the URL is invalid. */
-"SendTo.Error.Message" = "Pouze HTTP a HTTPS odkazy mohou být sdíleny.";
+"SendTo.Error.Message" = "Sdílet lze pouze HTTP a HTTPS odkazy.";
 
 /* OK button to dismiss the error prompt. */
 "SendTo.Error.OK.Button" = "OK";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "Odkaz, který se pokoušíte sdílet, nemůže být sdílen.";
+"SendTo.Error.Title" = "Tento odkaz nelze sdílet.";
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Poslat panel";
@@ -1460,7 +1460,7 @@
 "Settings.SendUsage.Link" = "Zjistit více.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla sbírá jenom informace potřené pro vylepšování Firefoxu.";
+"Settings.SendUsage.Message" = "Mozilla sbírá jenom informace potřebné pro vylepšování Firefoxu.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Odesílat údaje o používání";

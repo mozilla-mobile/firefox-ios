@@ -86,7 +86,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Attempts to detect the language of the currently displayed page.
     /// Returns a BCP-47 language tag (e.g. "en", "fr") on success.
     /// Otherwise throws a typed `TranslationsServiceError`.
-    private func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
         let webView = try currentWebView(for: windowUUID)
         let source = WebViewLanguageSampleSource(webView: webView)
         do {

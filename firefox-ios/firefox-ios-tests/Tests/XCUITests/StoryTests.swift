@@ -44,11 +44,7 @@ class StoryTests: BaseTestCase {
     func testNewsStoriesEnabledByDefault() {
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
-        XCTAssertEqual(
-            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
-            "News"
-        )
+        mozWaitForElementToExist(app.otherElements["News"])
 
         validateNewsStoriesCount()
 
@@ -59,7 +55,7 @@ class StoryTests: BaseTestCase {
         // Enable it again
         toggleStories(shouldEnable: true)
         app.partialSwipeUp(distance: 0.2)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        mozWaitForElementToExist(app.otherElements["News"])
 
         // Tap on the first News element
         app.collectionViews
@@ -75,7 +71,7 @@ class StoryTests: BaseTestCase {
     func testValidateNewsContextMenu() {
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        mozWaitForElementToExist(app.otherElements["News"])
         // Long tap on one of the stories
         let newsCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
         app.collectionViews.cells.matching(identifier: newsCell).staticTexts.firstMatch.press(forDuration: 1.5)

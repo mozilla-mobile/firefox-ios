@@ -591,7 +591,7 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
             }
-        case .merino(let story):
+        case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -651,7 +651,7 @@ final class HomepageViewController: UIViewController,
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
+        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
             cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
@@ -1063,7 +1063,7 @@ final class HomepageViewController: UIViewController,
             return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
         case .bookmark(let state):
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
-        case .merino(let state):
+        case .merino(let state, _):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
@@ -1116,7 +1116,7 @@ final class HomepageViewController: UIViewController,
                 visitType: .bookmark
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-        case .merino(let story):
+        case .merino(let story, _):
             let destination = NavigationDestination(
                 .link,
                 url: story.url,
