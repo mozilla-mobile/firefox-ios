@@ -1227,7 +1227,7 @@ extension String {
             key: "Keyboard.Shortcuts.ShowDownloads",
             tableName: nil,
             value: "Show Downloads",
-            comment: "A label indicating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+            comment: "A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         public static let ShowFirstTab = MZLocalizedString(
             key: "Keyboard.Shortcuts.ShowFirstTab",
             tableName: nil,
@@ -1289,7 +1289,7 @@ extension String {
                 key: "Keyboard.Shortcuts.Section.Window",
                 tableName: nil,
                 value: "Window",
-                comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their available set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+                comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         }
     }
 }
@@ -2856,7 +2856,7 @@ extension String {
                     key: "Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100",
                     tableName: nil,
                     value: "Sponsored Shortcuts",
-                    comment: "This string is the title of the toggle to disable the sponsored shortcuts functionality which can be enabled in the shortcut sections. This toggle is in the settings page.")
+                    comment: "This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page.")
                 public static let Rows = MZLocalizedString(
                     key: "Settings.Homepage.Shortcuts.Rows.v100",
                     tableName: nil,
@@ -4888,7 +4888,7 @@ extension String {
         key: "Search.ThirdPartyEngines.AddSuccess",
         tableName: nil,
         value: "Added Search engine!",
-        comment: "The success message that appears after a user successfully adds a new search engine")
+        comment: "The success message that appears after a user sucessfully adds a new search engine")
     public static let ThirdPartySearchAddTitle = MZLocalizedString(
         key: "Search.ThirdPartyEngines.AddTitle",
         tableName: nil,
@@ -5072,7 +5072,7 @@ extension String {
     public static let UnableToAddPassErrorMessage = MZLocalizedString(
         key: "AddPass.Error.Message",
         tableName: nil,
-        value: "An error occurred while adding the pass to Wallet. Please try again later.",
+        value: "An error occured while adding the pass to Wallet. Please try again later.",
         comment: "Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
     public static let UnableToAddPassErrorDismiss = MZLocalizedString(
         key: "AddPass.Error.Dismiss",
@@ -6211,13 +6211,13 @@ extension String {
                 key: "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150",
                 tableName: "EnhancedTrackingProtection",
                 value: "Standard blocks common trackers after a page starts loading, so you may see a higher tracker count. %@",
-                comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
+                comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
 
             public static let trackersBlockedStrictModeFooterText = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150",
                 tableName: "EnhancedTrackingProtection",
                 value: "Strict blocks more trackers by stopping them before a page loads, so you may see a lower tracker count. %@",
-                comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
+                comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
 
             public static let trackersBlockedFooterTextLink = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Link.LearnMore.v150",
@@ -7012,17 +7012,17 @@ extension String {
         key: "TodayWidget.TopSitesGalleryTitle",
         tableName: "Today",
         value: "Top Sites",
-        comment: "Title for top sites widget to add Firefox top sites shortcuts to home screen")
+        comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
     public static let TopSitesGalleryTitleV2 = MZLocalizedString(
         key: "TodayWidget.TopSitesGalleryTitleV2",
         tableName: "Today",
         value: "Website Shortcuts",
-        comment: "Title for top sites widget to add Firefox top sites shortcuts to home screen")
+        comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
     public static let TopSitesGalleryDescription = MZLocalizedString(
         key: "TodayWidget.TopSitesGalleryDescription",
         tableName: "Today",
         value: "Add shortcuts to frequently and recently visited sites.",
-        comment: "Description for top sites widget to add Firefox top sites shortcuts to home screen")
+        comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
 
     // Quick View Open Tabs - Medium Size Widget
     public static let MoreTabsLabel = MZLocalizedString(
@@ -7471,7 +7471,7 @@ extension String {
             key: "Toolbar.Tabs.Button.A11y.Label.v135",
             tableName: "Toolbar",
             value: "Tabs open",
-            comment: "Accessibility label for the tabs button in the toolbar, specifying the number of tabs open.")
+            comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
 
         public static let TabsButtonLargeContentTitle = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
@@ -7489,7 +7489,7 @@ extension String {
             key: "Toolbar.Menu.Button.A11y.Label.v135",
             tableName: "Toolbar",
             value: "Main Menu",
-            comment: "Accessibility label for the Main Menu button in the toolbar, specifying that the button will open Main Menu")
+            comment: "Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu")
 
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(
@@ -8566,7 +8566,7 @@ extension String {
                 key: "Menu.DownloadPDF.Confirm.v129",
                 tableName: "Menu",
                 value: "Successfully Downloaded PDF",
-                comment: "Toast displayed to user after download pdf was pressed."
+                comment: "Toast displayed to user after downlaod pdf was pressed."
             )
             public static let Help = MZLocalizedString(
                 key: "Menu.Help.v99",
