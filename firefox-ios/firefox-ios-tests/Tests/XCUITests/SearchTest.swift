@@ -199,6 +199,7 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.goto(BrowserTabMenu)
             app.swipeUp()
         }
+        navigator.goto(SettingsScreen)
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).waitAndTap()
@@ -289,7 +290,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
-    func testSearchStartAfterTypingTwoWords() {
+    func testSearchAfterTypingTwoWords() {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
         app.launch()

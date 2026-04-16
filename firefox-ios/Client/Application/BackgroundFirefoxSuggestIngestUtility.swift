@@ -10,7 +10,7 @@ import Storage
 
 /// A background utility that downloads and stores new Firefox Suggest
 /// suggestions when the device is online and connected to power.
-final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureFlaggable, @unchecked Sendable {
+final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, LegacyFeatureFlaggable, @unchecked Sendable {
     static let taskIdentifier = "org.mozilla.ios.firefox.suggest.ingest"
 
     let firefoxSuggest: RustFirefoxSuggestProtocol

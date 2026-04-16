@@ -7,7 +7,7 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
+struct MainMenuConfigurationUtility: Equatable, LegacyFeatureFlaggable {
     private struct Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray

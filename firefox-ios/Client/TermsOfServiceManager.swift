@@ -14,7 +14,7 @@ protocol VersionProviding: Sendable {
 
 extension Bundle: VersionProviding {}
 
-struct TermsOfServiceManager: FeatureFlaggable, Sendable {
+struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
     var prefs: Prefs
     private let bundle: VersionProviding
 

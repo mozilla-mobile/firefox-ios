@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
+final class FeatureFlagsDebugViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -130,9 +130,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .otherErrorPages,
-                titleText: format(string: "Wrong Host Certificate Native Error Page"),
-                statusText: format(string: "Toggle to display the natively created wrong host error page")
+                with: .badCertDomainErrorPage,
+                titleText: format(string: "Bad Cert Domain Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created bad cert domain error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -189,6 +189,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .tabTrayUIExperiments,
                 titleText: format(string: "Tab Tray UI Experiment"),
                 statusText: format(string: "Toggle to use the new tab tray UI")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .tabTrayiPadUIExperiments,
+                titleText: format(string: "Tab Tray iPad UI Experiment"),
+                statusText: format(string: "Toggle to use the new tab tray UI on iPad")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -287,7 +294,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = NimbusFeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }

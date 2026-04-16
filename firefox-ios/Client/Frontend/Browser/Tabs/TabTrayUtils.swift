@@ -23,7 +23,7 @@ protocol TabTrayUtils {
 
 /// Tiny utility to simplify checking for availability of the tab tray features
 @MainActor
-struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
+struct DefaultTabTrayUtils: LegacyFeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
         static let segmentedControlHeight: CGFloat = 53

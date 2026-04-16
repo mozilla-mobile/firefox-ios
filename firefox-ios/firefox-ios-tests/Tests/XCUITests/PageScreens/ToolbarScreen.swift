@@ -28,6 +28,12 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(settingsButton, timeout: timeout)
     }
 
+    func tapSettingsMenuButton() {
+        let settingsButton = sel.SETTINGS_MENU_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(settingsButton)
+        settingsButton.waitAndTap()
+    }
+
     func assertTabsButtonExists(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
     }
@@ -47,6 +53,13 @@ final class ToolbarScreen {
 
     func tapOnTabsButton() {
         tabsButton.waitAndTap()
+    }
+
+    func openNewTabFromTabTray() {
+        tabsButton.waitAndTap()
+        let newTabInTray = app.buttons[AccessibilityIdentifiers.TabTray.newTabButton]
+        BaseTestCase().mozWaitForElementToExist(newTabInTray)
+        newTabInTray.waitAndTap()
     }
 
     func assertNewTabButtonExists() {

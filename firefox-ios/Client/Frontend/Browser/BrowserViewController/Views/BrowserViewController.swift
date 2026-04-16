@@ -37,7 +37,7 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             FeatureFlaggable,
+                             LegacyFeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
                              LegacyTabScrollController.Delegate {
@@ -282,28 +282,28 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.tabTrayUIExperiments
+        let flagToCheck = FeatureFlagID.tabTrayUIExperiments
         let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isUnifiedSearchEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.unifiedSearch
+        let flagToCheck = FeatureFlagID.unifiedSearch
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isOneTapNewTabEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarOneTapNewTab
+        let flagToCheck = FeatureFlagID.toolbarOneTapNewTab
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucency
+        let flagToCheck = FeatureFlagID.toolbarTranslucency
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarTranslucencyRefactorEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarTranslucencyRefactor
+        let flagToCheck = FeatureFlagID.toolbarTranslucencyRefactor
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
@@ -312,17 +312,17 @@ class BrowserViewController: UIViewController,
     }
 
     var isMinimalAddressBarEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarMinimalAddressBar
+        let flagToCheck = FeatureFlagID.toolbarMinimalAddressBar
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarNavigationHintEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarNavigationHint
+        let flagToCheck = FeatureFlagID.toolbarNavigationHint
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.toolbarUpdateHint
+        let flagToCheck = FeatureFlagID.toolbarUpdateHint
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
@@ -334,8 +334,8 @@ class BrowserViewController: UIViewController,
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isOtherErrorPagesEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    var isBadCertDomainErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
@@ -361,7 +361,7 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentSearchEnabled: Bool {
-        let flagToCheck = NimbusFeatureFlagID.recentSearches
+        let flagToCheck = FeatureFlagID.recentSearches
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
@@ -1461,9 +1461,7 @@ class BrowserViewController: UIViewController,
     }
 
     func willNavigateAway(from tab: Tab?) {
-        guard let tab else {
-            return
-        }
+        guard let tab else { return }
 
         let screenshotHelper = self.screenshotHelper
         let windowUUID = self.windowUUID
@@ -2209,7 +2207,7 @@ class BrowserViewController: UIViewController,
         let isNICErrorCode = url.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)))
         let noInternetConnectionEnabled = isNICErrorCode && isNICErrorPageEnabled
-        let isCertificateError = isOtherErrorPagesEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
+        let isCertificateError = isBadCertDomainErrorPageEnabled && NativeErrorPageHelper.isCertificateErrorURL(url)
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
@@ -3279,7 +3277,7 @@ class BrowserViewController: UIViewController,
     func dispatchAvailableContentHeightChangedAction() {
         // Avoid redundant state updates when neither calculated value changed.
         guard let browserViewControllerState,
-           browserViewControllerState.browserViewType == .normalHomepage,
+           browserViewControllerState.browserViewType == .normalHomepage || contentContainer.hasHomepage,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 

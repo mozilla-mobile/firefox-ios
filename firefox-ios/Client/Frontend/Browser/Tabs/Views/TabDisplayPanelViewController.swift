@@ -17,7 +17,7 @@ final class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable,
+                                     LegacyFeatureFlaggable,
                                      TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 

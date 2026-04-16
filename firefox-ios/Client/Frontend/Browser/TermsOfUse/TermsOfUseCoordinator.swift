@@ -22,7 +22,7 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
 }
 
 @MainActor
-final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
+final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, LegacyFeatureFlaggable {
     /// Prevents deep link route handling from dismissing the Terms of Use sheet
     override var isDismissible: Bool { false }
 

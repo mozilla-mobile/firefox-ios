@@ -15,7 +15,7 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-final class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+final class SearchSettingsTableViewController: ThemedTableViewController, LegacyFeatureFlaggable {
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5

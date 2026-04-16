@@ -26,7 +26,7 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
-                       FeatureFlaggable,
+                       LegacyFeatureFlaggable,
                        TabTrayThemeable,
                        Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState

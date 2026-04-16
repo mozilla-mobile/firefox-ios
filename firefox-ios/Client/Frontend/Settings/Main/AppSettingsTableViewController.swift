@@ -59,7 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      FeatureFlaggable,
+                                      LegacyFeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
                                       SharedSettingsDelegate {
@@ -271,12 +271,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
-            guard let self else { return }
+        sendTechnicalDataSettings.settingDidChange = { value in
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
-            self.tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 

@@ -218,6 +218,11 @@ enum Experiments {
         return prefsReader.hasAcceptedTermsOfUse()
     }
 
+    private static func hasDisabledAIFeatures() -> Bool {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.hasDisabledAIFeatures()
+    }
+
     static func touExperiencePoints(region: String?) -> Int32 {
         let prefsReader = ProfilePrefsReader()
         return prefsReader.getTouExperiencePoints(region: region)
@@ -257,6 +262,7 @@ enum Experiments {
             isBottomToolbarUser: isBottomToolbarUser(),
             hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
             hasAcceptedTermsOfUse: hasAcceptedTermsOfUse(),
+            userDisabledAi: hasDisabledAIFeatures(),
             isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )

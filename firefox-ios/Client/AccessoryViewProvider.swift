@@ -10,7 +10,7 @@ enum AccessoryType {
     case standard, creditCard, address, login, passwordGenerator, relayEmailMask
 }
 
-final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, FeatureFlaggable, Notifiable {
+final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, LegacyFeatureFlaggable, Notifiable {
     // MARK: - Constants
     private struct UX {
         static let accessoryViewHeight: CGFloat = 56

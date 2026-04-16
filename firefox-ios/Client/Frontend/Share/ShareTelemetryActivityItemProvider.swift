@@ -7,7 +7,7 @@ import UniformTypeIdentifiers
 
 /// A special `UIActivityItemProvider` which never shares additional content, but instead records telemetry based on the
 /// share activity chosen.
-class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sendable, FeatureFlaggable {
+class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sendable, LegacyFeatureFlaggable {
     private let shareTypeName: String
     private let shareMessage: ShareMessage?
     private let telemetry: ShareTelemetry

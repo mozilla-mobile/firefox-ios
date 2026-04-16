@@ -8,7 +8,7 @@ struct SlideOverUXConstants {
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 
-class SlideOverPresentationController: UIPresentationController, FeatureFlaggable {
+class SlideOverPresentationController: UIPresentationController, LegacyFeatureFlaggable {
     let blurEffectView: UIVisualEffectView
     var tapGestureRecognizer = UITapGestureRecognizer()
     var globalETPStatus: Bool

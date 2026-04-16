@@ -29,7 +29,7 @@ final class TabDisplayView: UIView,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
-                      FeatureFlaggable,
+                      LegacyFeatureFlaggable,
                       InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0

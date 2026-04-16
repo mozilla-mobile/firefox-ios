@@ -425,22 +425,6 @@ private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterUInt8: FfiConverterPrimitive {
-    typealias FfiType = UInt8
-    typealias SwiftType = UInt8
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt8 {
-        return try lift(readInt(&buf))
-    }
-
-    public static func write(_ value: UInt8, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(value))
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
 fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
     typealias FfiType = UInt32
     typealias SwiftType = UInt32
@@ -718,9 +702,9 @@ public protocol MozAdsClientBuilderProtocol: AnyObject, Sendable {
     
     func cacheConfig(cacheConfig: MozAdsCacheConfig)  -> MozAdsClientBuilder
     
-    func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
+    func contextIdProvider(provider: MozAdsContextIdProvider)  -> MozAdsClientBuilder
     
-    func rotationDays(rotationDays: UInt8)  -> MozAdsClientBuilder
+    func environment(environment: MozAdsEnvironment)  -> MozAdsClientBuilder
     
     func telemetry(telemetry: MozAdsTelemetry)  -> MozAdsClientBuilder
     
@@ -802,20 +786,20 @@ open func cacheConfig(cacheConfig: MozAdsCacheConfig) -> MozAdsClientBuilder  {
 })
 }
     
+open func contextIdProvider(provider: MozAdsContextIdProvider) -> MozAdsClientBuilder  {
+    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadsclientbuilder_context_id_provider(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeMozAdsContextIdProvider_lower(provider),$0
+    )
+})
+}
+    
 open func environment(environment: MozAdsEnvironment) -> MozAdsClientBuilder  {
     return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
     uniffi_ads_client_fn_method_mozadsclientbuilder_environment(
             self.uniffiCloneHandle(),
         FfiConverterTypeMozAdsEnvironment_lower(environment),$0
-    )
-})
-}
-    
-open func rotationDays(rotationDays: UInt8) -> MozAdsClientBuilder  {
-    return try!  FfiConverterTypeMozAdsClientBuilder_lift(try! rustCall() {
-    uniffi_ads_client_fn_method_mozadsclientbuilder_rotation_days(
-            self.uniffiCloneHandle(),
-        FfiConverterUInt8.lower(rotationDays),$0
     )
 })
 }
@@ -872,6 +856,190 @@ public func FfiConverterTypeMozAdsClientBuilder_lift(_ handle: UInt64) throws ->
 #endif
 public func FfiConverterTypeMozAdsClientBuilder_lower(_ value: MozAdsClientBuilder) -> UInt64 {
     return FfiConverterTypeMozAdsClientBuilder.lower(value)
+}
+
+
+
+
+
+
+public protocol MozAdsContextIdProvider: AnyObject, Sendable {
+    
+    func contextId()  -> String
+    
+}
+open class MozAdsContextIdProviderImpl: MozAdsContextIdProvider, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_ads_client_fn_clone_mozadscontextidprovider(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_ads_client_fn_free_mozadscontextidprovider(handle, $0) }
+    }
+
+    
+
+    
+open func contextId() -> String  {
+    return try!  FfiConverterString.lift(try! rustCall() {
+    uniffi_ads_client_fn_method_mozadscontextidprovider_context_id(
+            self.uniffiCloneHandle(),$0
+    )
+})
+}
+    
+
+    
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceMozAdsContextIdProvider {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceMozAdsContextIdProvider] = [UniffiVTableCallbackInterfaceMozAdsContextIdProvider(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeMozAdsContextIdProvider.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface MozAdsContextIdProvider: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeMozAdsContextIdProvider.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface MozAdsContextIdProvider: handle missing in uniffiClone")
+            }
+        },
+        contextId: { (
+            uniffiHandle: UInt64,
+            uniffiOutReturn: UnsafeMutablePointer<RustBuffer>,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> String in
+                guard let uniffiObj = try? FfiConverterTypeMozAdsContextIdProvider.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.contextId(
+                )
+            }
+
+            
+            let writeReturn = { uniffiOutReturn.pointee = FfiConverterString.lower($0) }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        }
+    )]
+}
+
+private func uniffiCallbackInitMozAdsContextIdProvider() {
+    uniffi_ads_client_fn_init_callback_vtable_mozadscontextidprovider(UniffiCallbackInterfaceMozAdsContextIdProvider.vtable)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMozAdsContextIdProvider: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<MozAdsContextIdProvider>()
+
+    typealias FfiType = UInt64
+    typealias SwiftType = MozAdsContextIdProvider
+
+    public static func lift(_ handle: UInt64) throws -> MozAdsContextIdProvider {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return MozAdsContextIdProviderImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
+    }
+
+    public static func lower(_ value: MozAdsContextIdProvider) -> UInt64 {
+         if let rustImpl = value as? MozAdsContextIdProviderImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MozAdsContextIdProvider {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: MozAdsContextIdProvider, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsContextIdProvider_lift(_ handle: UInt64) throws -> MozAdsContextIdProvider {
+    return try FfiConverterTypeMozAdsContextIdProvider.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMozAdsContextIdProvider_lower(_ value: MozAdsContextIdProvider) -> UInt64 {
+    return FfiConverterTypeMozAdsContextIdProvider.lower(value)
 }
 
 
@@ -2800,13 +2968,16 @@ private let initializationResult: InitializationResult = {
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_cache_config() != 25689) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_context_id_provider() != 44833) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_environment() != 6560) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_rotation_days() != 16906) {
+    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 36488) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclientbuilder_telemetry() != 36488) {
+    if (uniffi_ads_client_checksum_method_mozadscontextidprovider_context_id() != 21422) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadstelemetry_record_build_cache_error() != 30737) {
@@ -2828,6 +2999,7 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitMozAdsContextIdProvider()
     uniffiCallbackInitMozAdsTelemetry()
     return InitializationResult.ok
 }()

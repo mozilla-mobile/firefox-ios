@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFlaggable {
+class TopSitesRowCountSettingsController: SettingsTableViewController, LegacyFeatureFlaggable {
     let prefs: Prefs
     var numberOfRows: Int32
     nonisolated static let defaultNumberOfRows: Int32 = 2

@@ -51,6 +51,12 @@ struct ProfilePrefsReader {
         return userDefaults.bool(forKey: touKey)
     }
 
+    /// Returns `true` if the user has turned off AI Features
+    func hasDisabledAIFeatures() -> Bool {
+        let aiDisabledKey = ProfilePrefsReader.prefix + PrefsKeys.Settings.aiKillSwitchFeature
+        return userDefaults.bool(forKey: aiDisabledKey)
+    }
+
     /// Delegates calculation to ToUExperiencePointsCalculator
     /// Parameter region: The user's region code
     /// Returns: The calculated  points (0, 1, or 2) based on user settings

@@ -191,8 +191,7 @@ class CodeCoverageGate {
         \(rows.joined(separator: "\n"))
         """
 
-        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
-        if hasBypass {
+        if hasLabel(coverageBypassLabel) {
             warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
         } else {
             let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."

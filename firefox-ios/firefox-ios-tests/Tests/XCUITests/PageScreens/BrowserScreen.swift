@@ -169,6 +169,12 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
+    func navigateToURL(_ url: String) {
+        tapOnAddressBar()
+        addressBar.typeText(url)
+        addressBar.typeText("\r")
+    }
+
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
@@ -278,6 +284,11 @@ final class BrowserScreen {
 
     func assertWebViewLoaded(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch, timeout: timeout)
+    }
+
+    func assertWebViewHasContent(timeout: TimeInterval = TIMEOUT) {
+        let firstText = app.webViews.firstMatch.staticTexts.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstText, timeout: timeout)
     }
 
     func tapWebViewButton(buttonText: String) {

@@ -17,6 +17,12 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
 
     private lazy var newsAffordanceContentView: NewsAffordanceHeaderView = .build()
     private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
+    private lazy var storyCategoryPickerView: StoryCategoryPickerView = .build()
+    private lazy var sectionTitleStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+    }
 
     private var progress: CGFloat = 0
     private var transitionEnabled = true
@@ -46,11 +52,24 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
         verticalFittingPriority: UILayoutPriority
     ) -> CGSize {
-        let measuredView: UIView = transitionEnabled ? newsAffordanceContentView : sectionTitleHeaderView
-        return measuredView.systemLayoutSizeFitting(
+        let affordanceSize = newsAffordanceContentView.systemLayoutSizeFitting(
             targetSize,
             withHorizontalFittingPriority: horizontalFittingPriority,
             verticalFittingPriority: verticalFittingPriority
+        )
+        let headerSize = sectionTitleHeaderView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
+        let pickerSize = storyCategoryPickerView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
+        return CGSize(
+            width: affordanceSize.width,
+            height: max(affordanceSize.height, headerSize.height + pickerSize.height)
         )
     }
 
@@ -58,7 +77,10 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         sectionHeaderConfiguration: SectionHeaderConfiguration,
         textColor: UIColor?,
         theme: Theme,
-        transitionEnabled: Bool = true
+        transitionEnabled: Bool = true,
+        categories: [MerinoCategoryConfiguration] = [],
+        selectedCategoryID: String? = nil,
+        onSelection: (@MainActor @Sendable (String?) -> Void)? = nil
     ) {
         self.transitionEnabled = transitionEnabled
         newsAffordanceContentView.applyTheme(theme: theme)
@@ -69,6 +91,13 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
             theme: theme
         )
         sectionTitleHeaderView.moreButton.isHidden = true
+        storyCategoryPickerView.configure(
+            categories: categories,
+            selectedCategoryID: selectedCategoryID,
+            onSelection: onSelection
+        )
+        storyCategoryPickerView.applyTheme(theme: theme)
+
         updateViewState()
     }
 
@@ -86,35 +115,39 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     func applyTheme(theme: Theme) {
         newsAffordanceContentView.applyTheme(theme: theme)
         sectionTitleHeaderView.applyTheme(theme: theme)
+        storyCategoryPickerView.applyTheme(theme: theme)
     }
 
     private func setupLayout() {
         clipsToBounds = true
 
+        sectionTitleStackView.addArrangedSubview(sectionTitleHeaderView)
+        sectionTitleStackView.addArrangedSubview(storyCategoryPickerView)
+
         addSubview(newsAffordanceContentView)
-        addSubview(sectionTitleHeaderView)
+        addSubview(sectionTitleStackView)
 
         NSLayoutConstraint.activate([
             newsAffordanceContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             newsAffordanceContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
             newsAffordanceContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            sectionTitleHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            sectionTitleHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            sectionTitleHeaderView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            sectionTitleStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            sectionTitleStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            sectionTitleStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 
     private func updateViewState() {
         if transitionEnabled {
             newsAffordanceContentView.alpha = 1 - progress
-            sectionTitleHeaderView.alpha = progress
+            sectionTitleStackView.alpha = progress
             accessibilityLabel = progress < 0.5
                 ? newsAffordanceContentView.accessibilityLabel
                 : sectionTitleHeaderView.title
         } else {
             newsAffordanceContentView.alpha = 0
-            sectionTitleHeaderView.alpha = 1
+            sectionTitleStackView.alpha = 1
             accessibilityLabel = sectionTitleHeaderView.title
         }
     }

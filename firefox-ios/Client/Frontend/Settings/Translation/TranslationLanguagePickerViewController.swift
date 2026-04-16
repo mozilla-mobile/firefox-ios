@@ -85,6 +85,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
     // MARK: - Setup
 
     private func setupTableView() {
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),

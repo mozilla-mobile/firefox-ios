@@ -22,7 +22,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsShowCloseTabsToast()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
