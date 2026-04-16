@@ -3090,8 +3090,9 @@ class BrowserViewController: UIViewController,
             ))
         })
 
-        if sourceButton == nil {
-            alert.addAction(UIAlertAction(title: .CancelString, style: .default))
+        if #available(iOS 26, *), sourceButton != nil {
+        } else {
+            alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
         if let popover = alert.popoverPresentationController {
