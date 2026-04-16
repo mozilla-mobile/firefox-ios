@@ -6,6 +6,7 @@ import Shared
 import Common
 
 class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
+    let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
