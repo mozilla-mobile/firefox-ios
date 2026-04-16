@@ -6,7 +6,7 @@ import Common
 import Foundation
 import SiteImageView
 
-class StoryCellLarge: UICollectionViewCell,
+class StoryCell: UICollectionViewCell,
                       ReusableCell,
                       Notifiable,
                       ThemeApplicable {
