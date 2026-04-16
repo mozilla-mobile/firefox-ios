@@ -239,9 +239,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
                                                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
 
-        // Backup tabs for tab undo, this is not a feature on iPhone but is on iPad
-        backupCloseTabs = tabs
-
         // Scroll position for most tabs has been stored via session data when we navigate away,
         // but we need to save the selected tabs session data to persist scroll position
         saveSessionData(forTab: selectedTab)
