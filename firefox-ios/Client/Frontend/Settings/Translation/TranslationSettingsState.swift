@@ -122,46 +122,23 @@ struct TranslationSettingsState: ScreenState, Equatable {
         switch action.actionType {
         case TranslationSettingsViewActionType.enterEditMode:
             return state.copyWithUpdates(
-                isTranslationsEnabled: state.isTranslationsEnabled,
-                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
-                isEditing: true,
-                pendingLanguages: state.preferredLanguages,
-                preferredLanguages: state.preferredLanguages,
-                supportedLanguages: state.supportedLanguages,
-                availableLanguages: state.availableLanguages
+                isEditing: true
             )
         case TranslationSettingsViewActionType.cancelEditMode:
             return state.copyWithUpdates(
-                isTranslationsEnabled: state.isTranslationsEnabled,
-                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: false,
                 pendingLanguages: nil,
-                preferredLanguages: state.preferredLanguages,
-                supportedLanguages: state.supportedLanguages,
-                availableLanguages: state.availableLanguages
             )
         case TranslationSettingsViewActionType.reorderLanguages:
             return state.copyWithUpdates(
-                isTranslationsEnabled: state.isTranslationsEnabled,
-                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
-                isEditing: state.isEditing,
                 pendingLanguages: action.pendingLanguages,
-                preferredLanguages: state.preferredLanguages,
-                supportedLanguages: state.supportedLanguages,
-                availableLanguages: state.availableLanguages
             )
         case TranslationSettingsViewActionType.removeLanguage:
             guard let code = action.languageCode else { return defaultState(from: state) }
             var pending = state.pendingLanguages ?? state.preferredLanguages
             pending.removeAll { $0.code == code }
             return state.copyWithUpdates(
-                isTranslationsEnabled: state.isTranslationsEnabled,
-                isAutoTranslateEnabled: state.isAutoTranslateEnabled,
-                isEditing: state.isEditing,
                 pendingLanguages: pending,
-                preferredLanguages: state.preferredLanguages,
-                supportedLanguages: state.supportedLanguages,
-                availableLanguages: state.availableLanguages
             )
         default:
             return defaultState(from: state)
@@ -169,15 +146,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TranslationSettingsState) -> TranslationSettingsState {
-        return state.copyWithUpdates(
-            isTranslationsEnabled: state.isTranslationsEnabled,
-            isAutoTranslateEnabled: state.isAutoTranslateEnabled,
-            isEditing: state.isEditing,
-            pendingLanguages: state.pendingLanguages,
-            preferredLanguages: state.preferredLanguages,
-            supportedLanguages: state.supportedLanguages,
-            availableLanguages: state.availableLanguages
-        )
+        return state.copyWithUpdates()
     }
 
     static func == (lhs: TranslationSettingsState, rhs: TranslationSettingsState) -> Bool {
