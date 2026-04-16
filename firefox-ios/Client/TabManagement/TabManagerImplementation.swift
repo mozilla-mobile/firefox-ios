@@ -422,6 +422,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         return tabs.first(where: { $0.webView?.url == url })
     }
 
+    // TODO: FXIOS-14751 Remove related work for undo close tabs (single and all tabs)
     // MARK: - Undo Close Tab
     func undoCloseTab() {
         assert(Thread.isMainThread)
