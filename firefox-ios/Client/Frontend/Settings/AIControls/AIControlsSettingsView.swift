@@ -34,13 +34,15 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textSecondary.color)
                     .padding(.leading)
-                Link(
-                    aiControlsModel.blockAIEnhancementsLinkInfo.label,
-                    destination: aiControlsModel.blockAIEnhancementsLinkInfo.url
-                )
+                if let url = aiControlsModel.headerLinkInfo.url {
+                    Link(
+                        aiControlsModel.blockAIEnhancementsLinkInfo.label,
+                        destination: url
+                    )
                     .tint(themeColors.actionPrimary.color)
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .padding(.leading, UX.padding)
+                }
                 Spacer(minLength: UX.cardSpacing)
                 if aiControlsModel.killSwitchIsOn {
                     warningCard
@@ -89,9 +91,11 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     Text(verbatim: .Settings.AIControls.HeaderCard.Message)
                         .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundStyle(themeColors.textSecondary.color)
-                    Link(aiControlsModel.headerLinkInfo.label, destination: aiControlsModel.headerLinkInfo.url)
-                        .tint(themeColors.actionPrimary.color)
-                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    if let url = aiControlsModel.headerLinkInfo.url {
+                        Link(aiControlsModel.headerLinkInfo.label, destination: url)
+                            .tint(themeColors.actionPrimary.color)
+                            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    }
                 }
                 Spacer()
             }
@@ -155,6 +159,8 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                             aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
                         }
                     }.tint(themeColors.actionPrimary.color)
+                }
+                if aiControlsModel.translationsVisible && aiControlsModel.pageSummariesVisible {
                     Divider().foregroundStyle(themeColors.textSecondary.color)
                 }
                 if aiControlsModel.pageSummariesVisible {
