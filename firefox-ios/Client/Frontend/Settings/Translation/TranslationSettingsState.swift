@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 
 struct PreferredLanguageDetails: Equatable, Hashable {
@@ -19,7 +20,9 @@ struct PreferredLanguageDetails: Equatable, Hashable {
     }
 }
 
+@CopyWithUpdates
 struct TranslationSettingsState: ScreenState, Equatable {
+    var windowUUID: WindowUUID
     var isTranslationsEnabled: Bool
     var isAutoTranslateEnabled: Bool
     var isEditing: Bool
@@ -27,7 +30,6 @@ struct TranslationSettingsState: ScreenState, Equatable {
     var preferredLanguages: [PreferredLanguageDetails]
     var supportedLanguages: [String]
     var availableLanguages: [String]
-    var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = appState.componentState(
@@ -101,8 +103,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
         switch action.actionType {
         case TranslationSettingsMiddlewareActionType.didLoadSettings,
              TranslationSettingsMiddlewareActionType.didUpdateSettings:
-            return TranslationSettingsState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled,
                 isAutoTranslateEnabled: action.isAutoTranslateEnabled ?? state.isAutoTranslateEnabled,
                 preferredLanguages: action.preferredLanguages ?? state.preferredLanguages,
@@ -120,8 +121,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
     ) -> TranslationSettingsState {
         switch action.actionType {
         case TranslationSettingsViewActionType.enterEditMode:
-            return TranslationSettingsState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 isTranslationsEnabled: state.isTranslationsEnabled,
                 isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: true,
@@ -131,8 +131,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
                 availableLanguages: state.availableLanguages
             )
         case TranslationSettingsViewActionType.cancelEditMode:
-            return TranslationSettingsState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 isTranslationsEnabled: state.isTranslationsEnabled,
                 isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: false,
@@ -142,12 +141,11 @@ struct TranslationSettingsState: ScreenState, Equatable {
                 availableLanguages: state.availableLanguages
             )
         case TranslationSettingsViewActionType.reorderLanguages:
-            return TranslationSettingsState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 isTranslationsEnabled: state.isTranslationsEnabled,
                 isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: state.isEditing,
-                pendingLanguages: action.pendingLanguages ?? state.pendingLanguages,
+                pendingLanguages: action.pendingLanguages,
                 preferredLanguages: state.preferredLanguages,
                 supportedLanguages: state.supportedLanguages,
                 availableLanguages: state.availableLanguages
@@ -156,8 +154,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
             guard let code = action.languageCode else { return defaultState(from: state) }
             var pending = state.pendingLanguages ?? state.preferredLanguages
             pending.removeAll { $0.code == code }
-            return TranslationSettingsState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 isTranslationsEnabled: state.isTranslationsEnabled,
                 isAutoTranslateEnabled: state.isAutoTranslateEnabled,
                 isEditing: state.isEditing,
@@ -172,8 +169,7 @@ struct TranslationSettingsState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TranslationSettingsState) -> TranslationSettingsState {
-        return TranslationSettingsState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             isTranslationsEnabled: state.isTranslationsEnabled,
             isAutoTranslateEnabled: state.isAutoTranslateEnabled,
             isEditing: state.isEditing,
