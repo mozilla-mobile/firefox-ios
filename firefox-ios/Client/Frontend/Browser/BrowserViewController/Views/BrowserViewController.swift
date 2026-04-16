@@ -4620,7 +4620,7 @@ extension BrowserViewController: TabManagerDelegate {
         var needsReload = false
         if let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.accessibilityIdentifier = "contentView"
+            webView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.contentView
             webView.accessibilityElementsHidden = false
 
             updateSelectedTabWebview(selectedTab: selectedTab, previousTab: previousTab, webView: webView)

@@ -66,6 +66,7 @@ struct AccessibilityIdentifiers {
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
             static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
+            static let contentView = "contentView"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
