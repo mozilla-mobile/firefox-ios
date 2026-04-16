@@ -122,7 +122,8 @@ struct TranslationSettingsState: ScreenState, Equatable {
         switch action.actionType {
         case TranslationSettingsViewActionType.enterEditMode:
             return state.copyWithUpdates(
-                isEditing: true
+                isEditing: true,
+                pendingLanguages: state.preferredLanguages
             )
         case TranslationSettingsViewActionType.cancelEditMode:
             return state.copyWithUpdates(
