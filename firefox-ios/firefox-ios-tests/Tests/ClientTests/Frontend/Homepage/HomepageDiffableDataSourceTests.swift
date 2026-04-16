@@ -454,7 +454,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
     private func merinoTitles(from items: [HomepageItem]) -> [String] {
         items.compactMap {
-            guard case .merino(let story) = $0 else { return nil }
+            guard case .merino(let story, _) = $0 else { return nil }
             return story.title
         }
     }
