@@ -4691,7 +4691,6 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateTabCountUsingTabManager(tabManager)
-
         bottomContentStackView.removeAllArrangedViews()
 
         if let alert = selectedTab.loginAlert {
