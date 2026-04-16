@@ -101,7 +101,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             }
             .padding(.trailing, UX.foxImageOffset)
         } overlay: {
-            Image(ImageIdentifiers.foxWithStars)
+            Image(decorative: ImageIdentifiers.foxWithStars)
         }
     }
 
