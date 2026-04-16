@@ -88,16 +88,24 @@ final class TranslationSettingsDiffableDataSource:
         currentState = state
 
         var snapshot = NSDiffableDataSourceSnapshot<TranslationSettingsSection, TranslationSettingsItem>()
-        snapshot.appendSections([.enableToggle])
-        snapshot.appendItems([.enableToggle], toSection: .enableToggle)
 
-        if state.isTranslationsEnabled {
+        if state.isEditing {
             snapshot.appendSections([.preferredLanguages])
             let displayLanguages = state.pendingLanguages ?? state.preferredLanguages
             let langItems = displayLanguages.map { TranslationSettingsItem.language($0) }
-            snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
-            snapshot.appendSections([.autoTranslate])
-            snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
+            snapshot.appendItems(langItems, toSection: .preferredLanguages)
+        } else {
+            snapshot.appendSections([.enableToggle])
+            snapshot.appendItems([.enableToggle], toSection: .enableToggle)
+
+            if state.isTranslationsEnabled {
+                snapshot.appendSections([.preferredLanguages])
+                let displayLanguages = state.pendingLanguages ?? state.preferredLanguages
+                let langItems = displayLanguages.map { TranslationSettingsItem.language($0) }
+                snapshot.appendItems(langItems + [.addLanguage], toSection: .preferredLanguages)
+                snapshot.appendSections([.autoTranslate])
+                snapshot.appendItems([.autoTranslate], toSection: .autoTranslate)
+            }
         }
 
         if let previousState {

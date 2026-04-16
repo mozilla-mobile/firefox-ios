@@ -237,7 +237,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         }
 
         dataSource.reorderingHandlers.canReorderItem = { [weak self] item in
-            guard let self, state.isEditing else { return false }
+            guard let self, state.isTranslationsEnabled else { return false }
             if case .language = item { return true }
             return false
         }
@@ -249,11 +249,19 @@ final class TranslationPickerSettingsViewController: UIViewController,
                 if case .language(let details) = item { return details }
                 return nil
             }
-            store.dispatch(TranslationSettingsViewAction(
-                pendingLanguages: reorderedLanguages,
-                windowUUID: windowUUID,
-                actionType: TranslationSettingsViewActionType.reorderLanguages
-            ))
+            if state.isEditing {
+                store.dispatch(TranslationSettingsViewAction(
+                    pendingLanguages: reorderedLanguages,
+                    windowUUID: windowUUID,
+                    actionType: TranslationSettingsViewActionType.reorderLanguages
+                ))
+            } else {
+                store.dispatch(TranslationSettingsViewAction(
+                    languages: reorderedLanguages.map { $0.code },
+                    windowUUID: windowUUID,
+                    actionType: TranslationSettingsViewActionType.saveLanguages
+                ))
+            }
         }
 
         return dataSource
@@ -265,7 +273,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             guard let self, case let .language(details) = item else { return }
             cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
             if details.isDeviceLanguage {
-                cell.accessories = [.reorder(displayed: .whenEditing)]
+                cell.accessories = [.reorder(displayed: .always)]
             } else {
                 let deleteActionHandler = { [weak self] in
                     guard let self else { return }
@@ -277,7 +285,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
                 }
                 cell.accessories = [
                     .delete(displayed: .whenEditing, actionHandler: deleteActionHandler),
-                    .reorder(displayed: .whenEditing)
+                    .reorder(displayed: .always)
                 ]
                 cell.accessibilityCustomActions = [
                     UIAccessibilityCustomAction(
@@ -366,6 +374,18 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     // MARK: - UICollectionViewDelegate
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath,
+        toProposedIndexPath proposedIndexPath: IndexPath
+    ) -> IndexPath {
+        guard proposedIndexPath.section == originalIndexPath.section,
+              dataSource.itemIdentifier(for: proposedIndexPath) != .addLanguage else {
+            return originalIndexPath
+        }
+        return proposedIndexPath
+    }
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return dataSource.itemIdentifier(for: indexPath) == .addLanguage
