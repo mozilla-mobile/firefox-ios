@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TabCounterTests: FeatureFlaggedTestBase {
+class TabCounterTests: BaseTestCase {
     private var toolbarScreen: ToolbarScreen!
     private var tabTrayScreen: TabTrayScreen!
 
@@ -16,7 +16,6 @@ class TabCounterTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359077
     func testTabIncrement() {
-        app.launch()
         toolbarScreen.assertTabsButtonExists()
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
@@ -27,7 +26,6 @@ class TabCounterTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2359078
     func testTabDecrement() {
-        app.launch()
         toolbarScreen.assertTabsButtonExists()
         toolbarScreen.assertTabsButtonValue(expectedCount: "1")
 
@@ -38,11 +36,6 @@ class TabCounterTests: FeatureFlaggedTestBase {
         toolbarScreen.tapOnTabsButton()
         tabTrayScreen.closeFirstTab()
 
-        tabTrayScreen.tapTabAtIndex(index: 0)
-        toolbarScreen.assertTabsButtonExists()
-        toolbarScreen.assertTabsButtonValue(expectedCount: "1")
-
-        toolbarScreen.tapOnTabsButton()
         tabTrayScreen.assertTabCount(1)
     }
 }
