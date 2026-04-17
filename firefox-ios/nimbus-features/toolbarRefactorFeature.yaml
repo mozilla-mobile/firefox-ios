@@ -49,11 +49,6 @@ features:
           Enables minimal address bar mode on scroll to ensure the url is always visible.
         type: Boolean
         default: true
-      middle_button_customization:
-        description: >
-          Enables the middle button customization for navigation toolbar.
-        type: Boolean
-        default: true
       layout:
         description: >
           The type of layout of the toolbars.
@@ -77,7 +72,6 @@ features:
           translucency: true
           translucency-refactor: true
           minimal_address_bar: true
-          middle_button_customization: true
           layout: version1
           tab_tray_button_type: number
       - channel: developer
@@ -91,7 +85,6 @@ features:
           translucency: true
           translucency-refactor: true
           minimal_address_bar: true
-          middle_button_customization: true
           layout: version1
           tab_tray_button_type: number
 

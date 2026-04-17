@@ -59,7 +59,6 @@ enum FeatureFlagID: String, CaseIterable {
     case toolbarTranslucency
     case toolbarTranslucencyRefactor
     case toolbarMinimalAddressBar
-    case toolbarMiddleButtonCustomization
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
