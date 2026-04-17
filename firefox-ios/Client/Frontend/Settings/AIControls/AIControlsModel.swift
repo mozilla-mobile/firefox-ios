@@ -15,12 +15,12 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
 
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
-        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+        url: SupportUtils.URLForTopic(AIControlsModel.topicString, useMobilePath: true)
     )
 
     let blockAIEnhancementsLinkInfo = LinkInfo(
         label: .Settings.AIControls.BlockAIEnhancementsLink,
-        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+        url: SupportUtils.URLForTopic(AIControlsModel.topicString, useMobilePath: true)
     )
 
     let headerCardTitle: String = {
@@ -41,13 +41,14 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         return translationsVisible || pageSummariesVisible
     }
 
+    private static let topicString = "ios-ai-controls"
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
 
     struct LinkInfo {
         let label: String
-        let url: URL
+        let url: URL?
     }
 
     init(
