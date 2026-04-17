@@ -95,7 +95,6 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                 isTranslucent: toolbarHelper.shouldBlur(),
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
-                isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
                 middleButton: middleButton,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)

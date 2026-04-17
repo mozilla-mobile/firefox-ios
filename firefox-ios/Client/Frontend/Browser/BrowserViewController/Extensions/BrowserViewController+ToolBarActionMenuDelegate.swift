@@ -189,53 +189,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    func getNavigationToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
-        guard let selectedTab = tabManager.selectedTab else { return [] }
-        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        let infinity = "\u{221E}"
-        let tabCount = (count < 100) ? count.description : infinity
-
-        func action() {
-            let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, self.newTabSettings == .blankPage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
-            }
-        }
-
-        let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: StandardImageIdentifiers.Large.tab,
-                                                        iconType: .TabsButton,
-                                                        tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: StandardImageIdentifiers.Large.tab,
-                                                       iconType: .TabsButton,
-                                                       tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
-        }
-
-        return [privateBrowsingMode]
-    }
-
-    func getMoreNavigationToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = getNewTabAction()
-        let newPrivateTab = getNewPrivateTabAction()
-        let closeTab = getCloseTabAction()
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
-        }
-
-        return [newTab, closeTab]
-    }
-
-    func getNavigationToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
+    func getNavigationToolbarLongPressActions() -> [[PhotonRowActions]] {
         let newTab = getNewTabAction()
         let newPrivateTab = getNewPrivateTabAction()
         let closeTab = getCloseTabAction()
@@ -261,10 +215,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func getNewPrivateTabAction() -> PhotonRowActions {
-        let iconString = isOneTapNewTabEnabled ? StandardImageIdentifiers.Large.privateMode :
-                                                StandardImageIdentifiers.Large.plus
         return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                     iconString: iconString,
+                                     iconString: StandardImageIdentifiers.Large.privateMode,
                                      iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
@@ -274,9 +226,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func getCloseTabAction() -> PhotonRowActions {
-        let title = isOneTapNewTabEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
-                                            String.KeyboardShortcuts.CloseCurrentTab
-        return SingleActionViewModel(title: title,
+        return SingleActionViewModel(title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {

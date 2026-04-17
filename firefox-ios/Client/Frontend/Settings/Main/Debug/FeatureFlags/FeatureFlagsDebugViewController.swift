@@ -200,13 +200,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .toolbarTranslucencyRefactor,
-                titleText: format(string: "Toolbar Translucency Refactor"),
-                statusText: format(string: "Toggle to enable the toolbar translucency refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .touFeature,
                 titleText: format(string: "Terms of Use"),
                 statusText: format(string: "Toggle to enable Terms of Use feature")

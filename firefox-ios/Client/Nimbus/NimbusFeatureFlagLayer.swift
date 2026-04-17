@@ -148,15 +148,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
 
-        case .toolbarOneTapNewTab:
-            return checkToolbarOneTapNewTabFeature(from: nimbus)
-
-        case .toolbarTranslucency:
-            return checkToolbarTranslucencyFeature(from: nimbus)
-
-        case .toolbarTranslucencyRefactor:
-            return checkToolbarTranslucencyRefactorFeature(from: nimbus)
-
         case .toolbarUpdateHint:
             return checkToolbarUpdateHintFeature(from: nimbus)
 
@@ -266,21 +257,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
-    }
-
-    private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.oneTapNewTab
-    }
-
-    private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.translucency
-    }
-
-    private func checkToolbarTranslucencyRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.translucencyRefactor
     }
 
     private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {

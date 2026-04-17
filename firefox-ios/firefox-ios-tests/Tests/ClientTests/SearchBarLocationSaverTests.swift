@@ -103,8 +103,6 @@ class SearchBarLocationSaverTests: XCTestCase {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(
                 layout: layout,
-                oneTapNewTab: true,
-                translucency: false,
                 unifiedSearch: false)
         }
     }
@@ -113,8 +111,6 @@ class SearchBarLocationSaverTests: XCTestCase {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(
                 layout: .version1,
-                oneTapNewTab: false,
-                translucency: true,
                 unifiedSearch: false)
         }
     }

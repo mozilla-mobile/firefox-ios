@@ -52,9 +52,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayUIExperiments
     case tabTrayTranslucency
     case toolbarUpdateHint
-    case toolbarOneTapNewTab
-    case toolbarTranslucency
-    case toolbarTranslucencyRefactor
     case tosFeature
     case touFeature
     case trackingProtectionRefactor
@@ -95,7 +92,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .summarizerPermissiveGuardrails,
                 .tabScrollRefactorFeature,
                 .tabTrayUIExperiments,
-                .toolbarTranslucencyRefactor,
                 .touFeature,
                 .trackingProtectionRefactor,
                 .translation,
