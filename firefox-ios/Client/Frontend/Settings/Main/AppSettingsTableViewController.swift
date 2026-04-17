@@ -533,13 +533,13 @@ class AppSettingsTableViewController: SettingsTableViewController,
             DeleteLoginsKeysSetting(settings: self),
             DeleteAutofillKeysSetting(settings: self),
             ChangeRSServerSetting(settings: self),
-            ChangeMLPAEndpointSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
             MerinoTestDataSetting(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
