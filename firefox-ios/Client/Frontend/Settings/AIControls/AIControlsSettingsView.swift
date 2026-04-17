@@ -66,7 +66,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             aiControlsModel.togglePageSummariesFeature(to: newValue)
         })
         .onAppear {
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
