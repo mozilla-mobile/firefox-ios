@@ -72,38 +72,38 @@ final class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveTabs() async {
+    func testRemoveTabs() {
         let subject = createSubject(tabs: generateTabs(count: 5))
         let tabs = subject.tabs
-        await subject.removeTabs(tabs)
+        subject.removeTabs(tabs)
         XCTAssertEqual(subject.tabs.count, 0)
     }
 
     @MainActor
-    func testRemoveTabsByURLs() async {
+    func testRemoveTabsByURLs() {
         let subject = createSubject(tabs: generateTabs(count: 5))
-        await subject.removeTabs(by: [URL(string: "https://mozilla.com?item=4")!, URL(string: "https://mozilla.com?item=1")!])
+        subject.removeTabs(by: [URL(string: "https://mozilla.com?item=4")!, URL(string: "https://mozilla.com?item=1")!])
         let remainingURLs = subject.tabs.compactMap { $0.url?.absoluteString }
         XCTAssertEqual(remainingURLs, ["https://mozilla.com?item=0", "https://mozilla.com?item=2", "https://mozilla.com?item=3"])
     }
 
     @MainActor
-    func testRemoveAllTabsForPrivateMode() async {
+    func testRemoveAllTabsForPrivateMode() {
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
-        await subject.removeAllTabs(isPrivateMode: true)
+        subject.removeAllTabs(isPrivateMode: true)
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     // This test has to be run on the main thread since we are messing with the WebView.
     @MainActor
-    func testRemoveAllTabsCallsSaveTabSession() async {
+    func testRemoveAllTabsCallsSaveTabSession() {
         let subject = createSubject()
         let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab)
-        await subject.removeAllTabs(isPrivateMode: false)
+        subject.removeAllTabs(isPrivateMode: false)
 
         // Save tab session is actually called 3 times for one remove all call
         // 1. Save tab session for currently selected tab before delete to preserve scroll position
@@ -113,30 +113,26 @@ final class TabManagerTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() async {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
-        await subject.removeAllTabs(isPrivateMode: false)
+        subject.removeAllTabs(isPrivateMode: false)
         // 5, private mode tabs (4) plus one new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
     @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() async throws {
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
         (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
         var tabs = generateTabs(count: 5)
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
         let subject = createSubject(tabs: tabs)
         XCTAssertEqual(subject.tabs.count, 9)
-        await subject.removeAllTabs(isPrivateMode: false)
-        // Five private tabs (4) + one new normal tab
-        XCTAssertEqual(subject.tabs.count, 5)
-        // Selecting the last normal tab removes all remaining private tabs, but this is done inside a Task
-        try await Task.sleep(nanoseconds: sleepTime)
-        // Once, all private tabs are removed, we have one new normal tab remaining in the array (1)
+        subject.removeAllTabs(isPrivateMode: false)
+        // One new normal tab (1)
         XCTAssertEqual(subject.tabs.count, 1)
     }
 
@@ -704,7 +700,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the selected tab
-        await tabManager.removeTab(secondnormalTab.tabUUID)
+        tabManager.removeTab(secondnormalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
@@ -736,7 +732,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the selected tab
-        await tabManager.removeTab(secondNormalTab.tabUUID)
+        tabManager.removeTab(secondNormalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -777,7 +773,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the selected tab
-        await tabManager.removeTab(secondnormalTab.tabUUID)
+        tabManager.removeTab(secondnormalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -824,7 +820,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the selected tab
-        await tabManager.removeTab(secondPrivateTab.tabUUID)
+        tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
@@ -865,7 +861,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the selected tab
-        await tabManager.removeTab(secondPrivateTab.tabUUID)
+        tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed with no parent, we expect the right tab to be selected.
@@ -903,7 +899,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
         XCTAssertEqual(tabManager.selectedIndex, 1)
         // Remove the selected tab
-        await tabManager.removeTab(secondPrivateTab.tabUUID)
+        tabManager.removeTab(secondPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
@@ -938,7 +934,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // Remove the private tab, which is selected
-        await tabManager.removeTab(privateTab.tabUUID)
+        tabManager.removeTab(privateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last private tab is removed, we select the normal older tab
@@ -970,7 +966,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
 
         // Remove the last selected private tab
-        await tabManager.removeTab(firstTab.tabUUID)
+        tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected private tab is removed, and there are no normal tabs,
@@ -1009,7 +1005,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
 
         // Remove the last selected private tab
-        await tabManager.removeTab(firstTab.tabUUID)
+        tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected private tab is removed, and there are only older normal tabs remaining,
@@ -1045,7 +1041,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
 
         // Remove the last tab, which is normal and selected
-        await tabManager.removeTab(firstTab.tabUUID)
+        tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last normal tab is removed, we expect a new normal tab to be added
@@ -1081,7 +1077,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
 
         // Remove the normal selected tab
-        await tabManager.removeTab(normalTab.tabUUID)
+        tabManager.removeTab(normalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the a normal tab is removed, when there are normal older tabs, we expect an old
@@ -1120,7 +1116,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
 
         // Remove the last tab, which is older and selected
-        await tabManager.removeTab(firstTab.tabUUID)
+        tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // When the last selected older tab is removed, we expect a new normal tab to be added
@@ -1165,7 +1161,7 @@ final class TabManagerTests: XCTestCase {
 
         // Remove the unselected normal tab at an index smaller than the selected tab to cause an array shift for the
         // selected tab
-        await tabManager.removeTab(firstNormalTab.tabUUID)
+        tabManager.removeTab(firstNormalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1207,7 +1203,7 @@ final class TabManagerTests: XCTestCase {
 
         // Remove the unselected normal tab at an index larger than the selected tab so no array shift is necessary
         // for the selected tab
-        await tabManager.removeTab(thirdNormalTab.tabUUID)
+        tabManager.removeTab(thirdNormalTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1248,7 +1244,7 @@ final class TabManagerTests: XCTestCase {
 
         // Remove the unselected private tab at an index smaller than the selected tab to cause an array shift for the
         // selected tab
-        await tabManager.removeTab(firstPrivateTab.tabUUID)
+        tabManager.removeTab(firstPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1288,7 +1284,7 @@ final class TabManagerTests: XCTestCase {
 
         // Remove the unselected private tab at an index larger than the selected private tab so no array shift is necessary
         // for the selected tab
-        await tabManager.removeTab(thirdPrivateTab.tabUUID)
+        tabManager.removeTab(thirdPrivateTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
@@ -1325,7 +1321,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1)
 
         // [1] First, remove the tab at index 0
-        await tabManager.removeTab(firstTab.tabUUID)
+        tabManager.removeTab(firstTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, normalTabs - 1)
@@ -1335,7 +1331,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The selected tab index should have shifted left")
 
         // [2] Second, remove the tab at count - 1 (last tab)
-        await tabManager.removeTab(thirdTab.tabUUID)
+        tabManager.removeTab(thirdTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, normalTabs - 2)
@@ -1345,7 +1341,7 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The selected tab index should not change")
 
         // [3] Finally, remove the only tab (which is also the selected tab)
-        await tabManager.removeTab(secondTab.tabUUID)
+        tabManager.removeTab(secondTab.tabUUID)
         try await Task.sleep(nanoseconds: sleepTime)
 
         // We expect a new normal tab will be created
@@ -1359,139 +1355,139 @@ final class TabManagerTests: XCTestCase {
     // MARK: - Remove Tabs Older than
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenNotOldNormalTabs_thenNoTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenNotOldNormalTabs_thenNoTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normal, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenOlderNormalTabs_thenTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenOlderNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlderLastMonth, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenPrivateTabs_thenNoTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenPrivateTabs_thenNoTabsRemoved() {
         let numberPrivateTabs = 3
         let tabs = generateTabs(ofType: .privateAny, count: numberPrivateTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabs_thenTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlderYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneWeek_thenTabsNotRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneWeek_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlderYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneMonth_thenTabsNotRemoved() async {
+    func testRemoveNormalTabsOlderThan_whenYesterdayNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlderYesterday, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabs_thenTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabs_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlder2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneWeek_thenTabsRemoved() async {
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneWeek_thenTabsRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlder2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneWeek, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 0)
     }
 
     @MainActor
-    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneMonth_thenTabsNotRemoved() async {
+    func testRemoveNormalTabsOlderThan_when2WeeksNormalTabsOlderThanOneMonth_thenTabsNotRemoved() {
         let numberTabs = 3
         let tabs = generateTabs(ofType: .normalOlder2Weeks, count: numberTabs)
         let tabManager = createSubject(tabs: tabs)
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneMonth, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, numberTabs)
     }
 
     @MainActor
-    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsInTheMiddle_thenOrderIsProper() async {
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsInTheMiddle_thenOrderIsProper() {
         let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let olderTabs2 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
         let tabManager = createSubject(tabs: olderTabs1 + normalTabs + olderTabs2)
         tabManager.selectTab(normalTabs[safe: 0])
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 3)
         XCTAssertEqual(tabManager.selectedIndex, 0)
     }
 
     @MainActor
-    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsLast_thenOrderIsProper() async {
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsLast_thenOrderIsProper() {
         let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let tabManager = createSubject(tabs: olderTabs1 + normalTabs)
         tabManager.selectTab(normalTabs[safe: 2])
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 3)
         XCTAssertEqual(tabManager.selectedIndex, 2)
     }
 
     @MainActor
-    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsFirst_thenOrderIsProper() async {
+    func testRemoveNormalsTabsOlderThan_whenSelectedTabIsFirst_thenOrderIsProper() {
         let olderTabs1 = generateTabs(ofType: .normalOlder2Weeks, count: 10)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let tabManager = createSubject(tabs: normalTabs + olderTabs1)
         tabManager.selectTab(normalTabs[safe: 0])
 
-        await tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
+        tabManager.removeNormalTabsOlderThan(period: .oneDay, currentDate: testDate)
 
         XCTAssertEqual(tabManager.normalTabs.count, 3)
         XCTAssertEqual(tabManager.selectedIndex, 0)
@@ -1537,12 +1533,12 @@ final class TabManagerTests: XCTestCase {
      }
 
      @MainActor
-     func testNormalTabs_cacheInvalidatedAfterTabRemoved() async {
+     func testNormalTabs_cacheInvalidatedAfterTabRemoved() {
          let tabs = generateTabs(count: 3)
          let subject = createSubject(tabs: tabs)
          XCTAssertEqual(subject.normalTabs.count, 3)
 
-         await subject.removeTab(tabs[0].tabUUID)
+        subject.removeTab(tabs[0].tabUUID)
          XCTAssertEqual(
             subject.normalTabs.count,
             2,
@@ -1551,7 +1547,7 @@ final class TabManagerTests: XCTestCase {
      }
 
      @MainActor
-     func testNormalAndPrivateTabs_consistentAfterMutation() async {
+     func testNormalAndPrivateTabs_consistentAfterMutation() {
          // Both computed properties read from the same cached split.
          // They must agree on the total after a mutation.
          var tabs = generateTabs(count: 4)
@@ -1561,7 +1557,7 @@ final class TabManagerTests: XCTestCase {
          _ = subject.normalTabs
          _ = subject.privateTabs // Should hit the same cache, does not recompute.
 
-         await subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
+        subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
 
          let normalTabs = subject.normalTabs
          let privateTabs = subject.privateTabs
