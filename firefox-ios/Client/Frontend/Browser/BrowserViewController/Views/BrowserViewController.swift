@@ -3389,17 +3389,13 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    // TODO: FXIOS-TODO - Make closeAllPrivateTabs async
     func closeAllPrivateTabs() {
-        Task { @MainActor in
-            await tabManager.removeTabs(tabManager.privateTabs)
-
-            guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
-                tabManager.selectTab(tabManager.addTab())
-                return
-            }
-            tabManager.selectTab(tab)
+        tabManager.removeTabs(tabManager.privateTabs)
+        guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
+            tabManager.selectTab(tabManager.addTab())
+            return
         }
+        tabManager.selectTab(tab)
     }
 
     func switchToTabForURLOrOpen(

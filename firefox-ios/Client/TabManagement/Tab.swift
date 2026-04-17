@@ -599,7 +599,8 @@ class Tab: NSObject,
 
         url = currentlyOpenUrl
 
-        // TODO: FXIOS-TODO Make clearAndResetTabHistory async
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
         Task {
             await close()
         }

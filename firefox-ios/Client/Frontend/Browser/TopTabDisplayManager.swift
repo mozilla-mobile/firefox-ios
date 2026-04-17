@@ -341,11 +341,7 @@ class TopTabDisplayManager: NSObject {
         // TODO: FXIOS-TODO - Why do we call get tabs here, can we remove it
         _ = getTabs()
         tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-
-        // TODO: FXIOS-TODO Make performCloseAction async
-        Task {
-            await tabManager.removeTab(tab.tabUUID)
-        }
+        tabManager.removeTab(tab.tabUUID)
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually

@@ -231,11 +231,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabsPanelTelemetry.tabClosed(mode: tab.isPrivate ? .private : .normal)
-
-                // Legacy Photon menu will be gone with FXIOS-15138
-                Task { @MainActor in
-                    await self.tabManager.removeTab(tab.tabUUID)
-                }
+                self.tabManager.removeTab(tab.tabUUID)
                 store.dispatch(
                     GeneralBrowserAction(
                         windowUUID: self.windowUUID,
