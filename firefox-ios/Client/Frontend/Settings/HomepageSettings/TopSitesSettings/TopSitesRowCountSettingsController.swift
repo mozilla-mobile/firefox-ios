@@ -23,11 +23,6 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-
     override func generateSettings() -> [SettingSection] {
         updateNumberofRows()
         let createSetting: (Int32) -> CheckmarkSetting = { num in
@@ -37,10 +32,18 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
                 return num == self.numberOfRows
             },
                                     onChecked: {
+                guard self.numberOfRows != num else { return }
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()
-                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+
+                store.dispatch(
+                    TopSitesAction(
+                        numberOfRows: Int(num),
+                        windowUUID: self.windowUUID,
+                        actionType: TopSitesActionType.updatedNumberOfRows
+                    )
+                )
             })
         }
 
