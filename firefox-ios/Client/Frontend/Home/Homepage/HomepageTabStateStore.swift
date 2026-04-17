@@ -14,6 +14,8 @@ protocol HomepageTabStateStoring: AnyObject {
     func removeState(for tabUUID: TabUUID)
 }
 
+/// Stores homepage UI state keyed by `TabUUID` so it can be restored while
+/// the shared homepage controller is reused across tabs.
 final class HomepageTabStateStore: HomepageTabStateStoring {
     private var states: [TabUUID: HomepageTabState] = [:]
 
