@@ -32,7 +32,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 Text(aiControlsModel.blockAIEnhancementsDescription)
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textSecondary.color)
-                    .padding(.leading)
+                    .padding(.leading, UX.padding)
                 if let url = aiControlsModel.headerLinkInfo.url {
                     Link(
                         aiControlsModel.blockAIEnhancementsLinkInfo.label,
@@ -50,15 +50,10 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 if aiControlsModel.hasVisibleAIFeatures {
                     aiFeaturesControls
                 }
+                if aiControlsModel.hasVisibleAIFeatures {
+                    aiFeaturesControlsStatusDescription
+                }
             }.padding(.horizontal, UX.padding)
-            if aiControlsModel.hasVisibleAIFeatures {
-                VStack(alignment: .leading, spacing: UX.rowSpacing) {
-                    Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription))
-                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                    Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription))
-                        .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                }.padding(.horizontal, UX.padding*2)
-            }
         }
         .background(themeColors.layer1.color)
         .onChange(of: aiControlsModel.killSwitchIsOn, perform: { newValue in
@@ -70,6 +65,9 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         .onChange(of: aiControlsModel.pageSummariesEnabled, perform: { newValue in
             aiControlsModel.togglePageSummariesFeature(to: newValue)
         })
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
@@ -113,6 +111,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             Toggle(isOn: $aiControlsModel.killSwitchIsOn) {
                 Text(verbatim: .Settings.AIControls.BlockAIEnhancementsTitle)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textPrimary.color)
             }
             .tint(themeColors.actionPrimary.color)
         }
@@ -139,7 +138,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.Title)
             .font(.caption)
             .foregroundStyle(themeColors.textSecondary.color)
-            .padding(.leading)
+            .padding(.leading, UX.padding)
         RoundedCard(
             background: themeColors.layer5.color,
             cornerRadius: UX.cornerRadius,
@@ -177,6 +176,19 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    var aiFeaturesControlsStatusDescription: some View {
+        VStack(alignment: .leading, spacing: UX.rowSpacing) {
+            Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription))
+                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                .foregroundStyle(themeColors.textSecondary.color)
+            Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription))
+                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                .foregroundStyle(themeColors.textSecondary.color)
+        }
+        .padding(.leading, UX.padding)
     }
 
     @ViewBuilder
