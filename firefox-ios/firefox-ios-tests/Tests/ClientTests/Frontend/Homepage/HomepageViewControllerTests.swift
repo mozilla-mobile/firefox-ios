@@ -516,9 +516,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(
-                enabled: isEnabled
-            )
+            return ToolbarRefactorFeature()
         }
     }
 
