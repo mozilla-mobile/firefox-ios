@@ -467,7 +467,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupToolBarAppearance(theme: Theme) {
-        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+        guard tabTrayUtils.shouldDisplayExperimentUI() else { return }
 
         // When Reduce Transparency is on, fall through to set a solid
         // appearance so button backgrounds use the correct theme color.
@@ -489,7 +489,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupNavigationBarAppearance(theme: Theme) {
-        guard tabTrayUtils.isTabTrayUIExperimentsEnabled else { return }
+        guard tabTrayUtils.shouldDisplayExperimentUI() else { return }
 
         let backgroundAlpha = tabTrayUtils.backgroundAlpha()
         let color = theme.colors.layer1.withAlphaComponent(backgroundAlpha)
@@ -578,7 +578,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupBlurView() {
-        guard tabTrayUtils.isTabTrayUIExperimentsEnabled, tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
+        guard tabTrayUtils.shouldDisplayExperimentUI(), tabTrayUtils.isTabTrayTranslucencyEnabled else { return }
 
         if #available(iOS 26, *) { return }
 
@@ -629,7 +629,7 @@ final class TabTrayViewController: UIViewController,
             titleWidthConstraint?.isActive = true
         }
 
-        let isTabTrayEnabled = tabTrayUtils.isTabTrayUIExperimentsEnabled && tabTrayUtils.isTabTrayTranslucencyEnabled
+        let isTabTrayEnabled = tabTrayUtils.shouldDisplayExperimentUI() && tabTrayUtils.isTabTrayTranslucencyEnabled
         let topConstraintTo = isTabTrayEnabled ? view.topAnchor : view.safeAreaLayoutGuide.topAnchor
 
         NSLayoutConstraint.activate([
