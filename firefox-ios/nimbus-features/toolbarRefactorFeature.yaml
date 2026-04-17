@@ -9,11 +9,6 @@ features:
           If true, enables the one tap new tab feature for users.
         type: Boolean
         default: true
-      navigation_hint:
-        description: >
-          If true, enables the navigation contextual hint.
-        type: Boolean
-        default: true
       toolbar_update_hint:
         description: >
           If true, enables the toolbar update contextual hint.
@@ -60,7 +55,6 @@ features:
         value:
           unified_search: false
           one_tap_new_tab: true
-          navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true
@@ -72,7 +66,6 @@ features:
         value:
           unified_search: false
           one_tap_new_tab: true
-          navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
           translucency: true

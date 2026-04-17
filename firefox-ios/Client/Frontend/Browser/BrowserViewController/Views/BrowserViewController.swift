@@ -316,11 +316,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
-    var isToolbarNavigationHintEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarNavigationHint
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-    }
-
     var isToolbarUpdateHintEnabled: Bool {
         let flagToCheck = FeatureFlagID.toolbarUpdateHint
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)

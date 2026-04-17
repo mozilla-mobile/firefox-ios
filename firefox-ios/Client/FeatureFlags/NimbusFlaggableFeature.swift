@@ -70,7 +70,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tabTrayiPadUIExperiments,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
-                .toolbarNavigationHint,
                 .toolbarUpdateHint,
                 .toolbarOneTapNewTab,
                 .toolbarSwipingTabs,

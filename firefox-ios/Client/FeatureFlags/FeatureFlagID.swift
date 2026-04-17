@@ -51,7 +51,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayiPadUIExperiments
     case tabTrayUIExperiments
     case tabTrayTranslucency
-    case toolbarNavigationHint
     case toolbarUpdateHint
     case toolbarOneTapNewTab
     case toolbarSwipingTabs
