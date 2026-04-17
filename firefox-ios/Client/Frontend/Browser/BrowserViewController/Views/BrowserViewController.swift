@@ -138,8 +138,7 @@ class BrowserViewController: UIViewController,
         view.accessibilityIdentifier = AccessibilityIdentifiers.Browser.statusBarOverlay
     }
     private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build(nil, {
-        AddressToolbarContainer(isMinimalAddressBarEnabled: self.isMinimalAddressBarEnabled,
-                                toolbarHelper: self.toolbarHelper)
+        AddressToolbarContainer(toolbarHelper: self.toolbarHelper)
     })
     private(set) lazy var readerModeCache: ReaderModeCache = DiskReaderModeCache.shared
     private(set) lazy var overlayManager: OverlayModeManager = DefaultOverlayModeManager()
@@ -309,11 +308,6 @@ class BrowserViewController: UIViewController,
 
     var isSwipingTabsEnabled: Bool {
         return toolbarHelper.isSwipingTabsEnabled
-    }
-
-    var isMinimalAddressBarEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarMinimalAddressBar
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isToolbarUpdateHintEnabled: Bool {
@@ -1220,6 +1214,8 @@ class BrowserViewController: UIViewController,
                 onStopDownloads(notificationWindowUUID: windowUUID)
             case .SettingsDismissed:
                 onSettingsDismissed()
+            case .ReadingListUpdated:
+                updateReaderModeBar()
             default: break
             }
         }
@@ -1247,7 +1243,8 @@ class BrowserViewController: UIViewController,
                 .PageZoomSettingsChanged,
                 .RemoteTabNotificationTapped,
                 .StopDownloads,
-                .SettingsDismissed
+                .SettingsDismissed,
+                .ReadingListUpdated
             ]
         )
     }
