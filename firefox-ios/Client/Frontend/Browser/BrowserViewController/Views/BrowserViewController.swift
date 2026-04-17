@@ -5076,7 +5076,14 @@ extension BrowserViewController: KeyboardHelperDelegate {
             // When animation duration is zero the keyboard is already showing and we don't need
             // to update the toolbar again. This is the case when we are moving between fields in a form.
             if state.animationDuration > 0 {
-                updateToolbarDisplay()
+                // Use performWithoutAnimation to prevent the keyboard's animation context
+                // from leaking into updateToolbarDisplay. Without this, the keyboard's
+                // animation curve captures property changes on the status bar overlay and
+                // blur views, causing a visible left-to-right fill artifact with UIGlassEffect
+                // on iOS 26+. (See: https://github.com/nickmilo/firefox-ios/issues/32283)
+                UIView.performWithoutAnimation {
+                    self.updateToolbarDisplay()
+                }
             }
         } else {
             updateToolbarDisplay()
@@ -5111,8 +5118,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         cancelEditingMode()
         if isToolbarTranslucencyRefactorEnabled {
-            updateBlurViews()
-            addOrUpdateMaskViewIfNeeded()
+            // Prevent keyboard animation context leak (same as keyboardWillShow fix)
+            UIView.performWithoutAnimation {
+                self.updateBlurViews()
+                self.addOrUpdateMaskViewIfNeeded()
+            }
         } else {
             updateToolbarDisplay()
         }
