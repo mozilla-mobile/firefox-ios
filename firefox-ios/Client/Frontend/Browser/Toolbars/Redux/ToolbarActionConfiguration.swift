@@ -58,7 +58,7 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
                actionType == .readerMode ||
                actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
-               actionType == .translate ||
+               (actionType == .translate && isSelected) ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }
