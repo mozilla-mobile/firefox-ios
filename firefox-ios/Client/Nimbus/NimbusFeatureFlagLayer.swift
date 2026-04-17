@@ -154,9 +154,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .toolbarSwipingTabs:
             return checkToolbarSwipingTabsFeature(from: nimbus)
 
-        case .toolbarTranslucencyRefactor:
-            return checkToolbarTranslucencyRefactorFeature(from: nimbus)
-
         case .toolbarMinimalAddressBar:
             return checkToolbarMinimalAddressBarFeature(from: nimbus)
 
@@ -285,11 +282,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.swipingTabs
-    }
-
-    private func checkToolbarTranslucencyRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.translucencyRefactor
     }
 
     private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {

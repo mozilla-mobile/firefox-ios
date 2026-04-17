@@ -15,10 +15,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isSpacerClearBackground = false
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
-    private var isToolbarTranslucencyRefactorEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().translucencyRefactor
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -102,9 +98,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
             spacer.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
         insetSpacer = spacer
-        if !isToolbarTranslucencyRefactorEnabled {
-            layoutIfNeeded()
-        }
     }
 
     func moveSpacerToBack() {
@@ -117,9 +110,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
         removeArrangedView(insetSpacer)
         self.insetSpacer = nil
-        if !isToolbarTranslucencyRefactorEnabled {
-            layoutIfNeeded()
-        }
     }
 
     func applyTheme(theme: Theme) {

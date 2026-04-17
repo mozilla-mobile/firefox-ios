@@ -29,11 +29,6 @@ features:
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
         default: true
-      translucency-refactor:
-        description: >
-          Enables translucency refactor for toolbars.
-        type: Boolean
-        default: true
       minimal_address_bar:
         description: >
           Enables minimal address bar mode on scroll to ensure the url is always visible.
@@ -63,7 +58,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency-refactor: true
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
@@ -75,7 +69,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency-refactor: true
           minimal_address_bar: true
           middle_button_customization: true
           layout: version1
