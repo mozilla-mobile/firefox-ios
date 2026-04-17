@@ -105,7 +105,6 @@ class SearchBarLocationSaverTests: XCTestCase {
                 enabled: isEnabled,
                 layout: layout,
                 navigationHint: true,
-                oneTapNewTab: true,
                 swipingTabs: false,
                 translucency: false,
                 unifiedSearch: false)
@@ -118,7 +117,6 @@ class SearchBarLocationSaverTests: XCTestCase {
                 enabled: true,
                 layout: .version1,
                 navigationHint: true,
-                oneTapNewTab: false,
                 swipingTabs: true,
                 translucency: true,
                 unifiedSearch: false)

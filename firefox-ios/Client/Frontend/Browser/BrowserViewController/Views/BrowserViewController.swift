@@ -292,11 +292,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
-    var isOneTapNewTabEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarOneTapNewTab
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-    }
-
     var isToolbarTranslucencyEnabled: Bool {
         let flagToCheck = FeatureFlagID.toolbarTranslucency
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
@@ -3249,13 +3244,7 @@ class BrowserViewController: UIViewController,
         guard presentedViewController == nil else { return }
 
         var actions: [[PhotonRowActions]] = []
-        let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        if useToolbarRefactorLongPressActions {
-            actions = getNavigationToolbarRefactorLongPressActions()
-        } else {
-            actions.append(getNavigationToolbarLongPressActionsForModeSwitching())
-            actions.append(getMoreNavigationToolbarLongPressActions())
-        }
+        actions = getNavigationToolbarLongPressActions()
 
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,

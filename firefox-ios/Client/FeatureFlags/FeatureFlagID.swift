@@ -53,7 +53,6 @@ enum FeatureFlagID: String, CaseIterable {
     case tabTrayTranslucency
     case toolbarNavigationHint
     case toolbarUpdateHint
-    case toolbarOneTapNewTab
     case toolbarRefactor
     case toolbarSwipingTabs
     case toolbarTranslucency
