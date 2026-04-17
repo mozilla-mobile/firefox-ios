@@ -181,7 +181,7 @@ class MainMenuCoordinator: BaseCoordinator, LegacyFeatureFlaggable {
                 let pageLanguage = isTranslated
                     ? translationConfig?.sourceLanguage
                     : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
-                let filteredLanguages = languages.filter { $0 != pageLanguage }
+                let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
                 if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: windowUUID,

@@ -183,7 +183,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
             let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
             let supported = await translationsService.fetchSupportedTargetLanguages()
             let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-            let filteredLanguages = languages.filter { $0 != sourceLanguage }
+            let filteredLanguages = languages.filter { $0 != sourceLanguage && $0 != translatedToLanguage }
             store.dispatch(GeneralBrowserAction(
                 buttonTapped: capturedButton,
                 translationLanguages: filteredLanguages,
