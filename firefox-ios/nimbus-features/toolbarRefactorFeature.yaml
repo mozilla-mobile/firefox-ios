@@ -29,11 +29,6 @@ features:
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
         default: true
-      minimal_address_bar:
-        description: >
-          Enables minimal address bar mode on scroll to ensure the url is always visible.
-        type: Boolean
-        default: true
       middle_button_customization:
         description: >
           Enables the middle button customization for navigation toolbar.
@@ -58,7 +53,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          minimal_address_bar: true
           middle_button_customization: true
           layout: version1
           tab_tray_button_type: number
@@ -69,7 +63,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          minimal_address_bar: true
           middle_button_customization: true
           layout: version1
           tab_tray_button_type: number

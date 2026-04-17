@@ -78,7 +78,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         // Minimal address bar: keep a small strip visible so the domain remains readable
         // while scrolled. Applies only when the nav toolbar (iPhone portrait) or iPad layout is visible
         let isNavToolbarVisible = ToolbarHelper().shouldShowNavigationToolbar(for: view.traitCollection)
-        if isMinimalAddressBarEnabled && (isiPad || isNavToolbarVisible) {
+        if isiPad || isNavToolbarVisible {
             return -headerHeight + UX.minimalHeaderOffset
         }
 
@@ -91,7 +91,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         guard let tab = tabManager.selectedTab,
               let tabURL = tab.url else { return false }
 
-        return isMinimalAddressBarEnabled && !tab.isFindInPageMode && !tabURL.isReaderModeURL
+        return !tab.isFindInPageMode && !tabURL.isReaderModeURL
     }
 
     /// Helper method for testing overKeyboardScrollHeight behavior.
@@ -103,8 +103,7 @@ extension BrowserViewController: TabScrollHandler.Delegate,
         let isReaderModeActive = tabManager.selectedTab?.url?.isReaderModeURL == true
 
         // Return full height if conditions aren't met for adjustment.
-        let shouldAdjustHeight = isMinimalAddressBarEnabled
-                                  && isBottomSearchBar
+        let shouldAdjustHeight = isBottomSearchBar
                                   && zoomPageBar == nil
                                   && !isReaderModeActive
         guard shouldAdjustHeight else { return containerHeight }

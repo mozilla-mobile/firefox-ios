@@ -55,7 +55,6 @@ enum FeatureFlagID: String, CaseIterable {
     case toolbarUpdateHint
     case toolbarRefactor
     case toolbarSwipingTabs
-    case toolbarMinimalAddressBar
     case toolbarMiddleButtonCustomization
     case tosFeature
     case touFeature
