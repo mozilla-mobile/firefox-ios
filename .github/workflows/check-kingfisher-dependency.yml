@@ -81,3 +81,21 @@ jobs:
         title: Bump FXIOS [Dependency] Auto update SPM for v${{ env.next_app_version }} with latest Kingfisher ${{ env.kingfisher_version }}
         branch: update-spm-new-kingfisher-tag-${{ env.kingfisher_version }}
         token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set job log URL
+      if: always()
+      run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+
+    - name: Send Slack notification if action fails
+      if: '!cancelled()'
+      id: slack
+      uses: slackapi/slack-github-action@v2.0.0
+      env:
+        ACTION_NAME: Kingfisher dependency update
+        JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
+        JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
+      with:
+        payload-file-path: "./test-fixtures/ci/slack-notification-payload-generic.json"
+        payload-templated: true
+        webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
+        webhook-type: incoming-webhook

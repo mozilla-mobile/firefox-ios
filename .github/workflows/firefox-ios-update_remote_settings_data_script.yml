@@ -67,10 +67,11 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v2.0.0
         env:
+          ACTION_NAME: remote settings fetch
           JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
           JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
         with:
-          payload-file-path: "./test-fixtures/ci/slack-notification-payload-remote-settings-fetch.json"
+          payload-file-path: "./test-fixtures/ci/slack-notification-payload-generic.json"
           payload-templated: true
           webhook: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
           webhook-type: incoming-webhook
