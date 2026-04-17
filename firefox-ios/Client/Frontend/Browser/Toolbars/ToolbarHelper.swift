@@ -6,7 +6,6 @@ import Common
 import Foundation
 
 protocol ToolbarHelperInterface {
-    var isToolbarRefactorEnabled: Bool { get }
     var isSwipingTabsEnabled: Bool { get }
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
 
@@ -28,14 +27,9 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
 
-    var isToolbarRefactorEnabled: Bool {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
-
     var isSwipingTabsEnabled: Bool {
         // Swipe is not enabled on iPads
-        let isiPad = userInterfaceIdiom == .pad
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabs && !isiPad
+        return userInterfaceIdiom != .pad
     }
 
     var userInterfaceIdiom: UIUserInterfaceIdiom
@@ -63,8 +57,7 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
 
     @MainActor
     func shouldBlur() -> Bool {
-        return isToolbarRefactorEnabled &&
-            !isReduceTransparencyEnabled
+		return !isReduceTransparencyEnabled
     }
 
     @MainActor

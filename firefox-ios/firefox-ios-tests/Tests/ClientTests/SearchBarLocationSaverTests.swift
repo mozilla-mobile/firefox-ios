@@ -102,10 +102,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     private func setupNimbusToolbarLayoutTesting(isEnabled: Bool, layout: ToolbarLayoutType?) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(
-                enabled: isEnabled,
                 layout: layout,
-                navigationHint: true,
-                swipingTabs: false,
                 unifiedSearch: false)
         }
     }
@@ -113,10 +110,7 @@ class SearchBarLocationSaverTests: XCTestCase {
     private func resetNimbusToolbarLayoutTesting() {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
             return ToolbarRefactorFeature(
-                enabled: true,
                 layout: .version1,
-                navigationHint: true,
-                swipingTabs: true,
                 unifiedSearch: false)
         }
     }

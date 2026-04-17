@@ -20,10 +20,6 @@ struct AddressBarSettingsView: View, LegacyFeatureFlaggable {
 
     @State private var currentTheme: Theme?
 
-    var shouldShowNavigationBarConfig: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMiddleButtonCustomization, checking: .buildOnly)
-    }
-
     var selectedMiddleButtonType: NavigationBarMiddleButtonType {
         if let rawValue = prefs.stringForKey(PrefsKeys.Settings.navigationToolbarMiddleButton),
            let selectedButton = NavigationBarMiddleButtonType(rawValue: rawValue) {
@@ -58,12 +54,10 @@ struct AddressBarSettingsView: View, LegacyFeatureFlaggable {
                 .modifier(SectionStyle(theme: currentTheme, cornerRadius: UX.cornerRadius))
             }
 
-            if shouldShowNavigationBarConfig {
-                NavigationToolbarSection(theme: currentTheme,
-                                         selectedOption: selectedMiddleButtonType,
-                                         onChange: updateMiddleNavigationToolbarButton,
-                                         cornerRadius: UX.cornerRadius)
-            }
+            NavigationToolbarSection(theme: currentTheme,
+                                     selectedOption: selectedMiddleButtonType,
+                                     onChange: updateMiddleNavigationToolbarButton,
+                                     cornerRadius: UX.cornerRadius)
             Spacer()
         }
         .modifier(PaddingStyle(theme: currentTheme, spacing: UX.spacing))

@@ -133,9 +133,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 
-        case .toolbarRefactor:
-            return checkToolbarRefactorFeature(from: nimbus)
-
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
@@ -150,15 +147,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
-
-        case .toolbarSwipingTabs:
-            return checkToolbarSwipingTabsFeature(from: nimbus)
-
-        case .toolbarMiddleButtonCustomization:
-            return checkToolbarMiddleButtonCustomizationFeature(from: nimbus)
-
-        case .toolbarNavigationHint:
-            return checkToolbarNavigationHintFeature(from: nimbus)
 
         case .toolbarUpdateHint:
             return checkToolbarUpdateHintFeature(from: nimbus)
@@ -266,29 +254,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.enabled
     }
 
-    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.enabled
-    }
-
     private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
-    }
-
-    private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.swipingTabs
-    }
-
-    private func checkToolbarMiddleButtonCustomizationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.middleButtonCustomization
-    }
-
-    private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.navigationHint
     }
 
     private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {
