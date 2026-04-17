@@ -13,10 +13,10 @@ public struct LiteLLMStreamResponse: Codable, Sendable {
         self.choices = choices
         self.references = references
     }
-    
+
     public let choices: [StreamChoice]?
     public let references: [LiteLLMReference]?
-    
+
     public func accumulate(_ response: Self) -> Self {
         let choices = (self.choices ?? []) + (response.choices ?? [])
         let references = (self.references ?? []) + (response.references ?? [])

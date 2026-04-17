@@ -106,7 +106,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
     }
-    
+
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         audioWaveform.startAnimating()

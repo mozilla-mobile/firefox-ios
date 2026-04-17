@@ -23,14 +23,14 @@ final class DefaultResultsService: ResultsService {
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         let message = LiteLLMMessage(role: .user, content: transcription)
-        
+
         guard let completionResult = try await client?.requestChatCompletionStreamed(
             messages: [message],
             config: config
         ) else {
             throw SpeechError.unknown
         }
-        
+
         var response = LiteLLMStreamResponse(choices: [], references: [])
         do {
             for try await partialResponse in completionResult {
@@ -39,7 +39,7 @@ final class DefaultResultsService: ResultsService {
         } catch {
             print(error)
         }
-        
+
         print("FF: \(response)")
 
         // Build the content by concatenating all content deltas

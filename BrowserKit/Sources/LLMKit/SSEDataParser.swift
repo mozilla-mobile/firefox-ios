@@ -86,7 +86,7 @@ final class SSEDataParser {
         print("FF: \(rawEvent)")
         var trimmedEvent = rawEvent.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedEvent.isEmpty else { return nil }
-        
+
         // Remove event data in case are present
         trimmedEvent.removeFirst("event: data\n".count)
 

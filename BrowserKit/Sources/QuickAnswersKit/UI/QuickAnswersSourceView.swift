@@ -137,7 +137,7 @@ final class QuickAnswersSourceView: UIView,
         static let interItemSpacing: CGFloat = 16.0
         static let maxItemWidth: CGFloat = 150.0
     }
-    
+
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
         $0.text = "Sources"
@@ -155,7 +155,7 @@ final class QuickAnswersSourceView: UIView,
         collectionView.delegate = self
         return collectionView
     }()
-    
+
     var onSourceTapped: ((QuickAnswersSourceItem) -> Void)?
     private var items: [QuickAnswersSourceItem] = []
     private var theme: Theme?
@@ -191,7 +191,7 @@ final class QuickAnswersSourceView: UIView,
         collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
     }
-    
+
     // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
@@ -210,7 +210,7 @@ final class QuickAnswersSourceView: UIView,
         }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         onSourceTapped?(items[indexPath.item])
     }
@@ -225,7 +225,7 @@ final class QuickAnswersSourceView: UIView,
     ) -> CGSize {
         let cellMaxWidth: CGFloat = 150
         let insets: CGFloat = 16
-        
+
         // 600
         let availableWidth = collectionView.frame.width
         // 2.9 ~ 2
@@ -242,7 +242,6 @@ final class QuickAnswersSourceView: UIView,
         collectionView.reloadData()
     }
 }
-
 
 @available(iOS 17, *)
 #Preview {

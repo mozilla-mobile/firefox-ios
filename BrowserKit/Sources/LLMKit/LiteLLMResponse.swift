@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 struct LiteLLMResponse: Codable {
     let id: String
     let choices: [LiteLLMChoice]
