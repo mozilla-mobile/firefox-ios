@@ -3004,7 +3004,9 @@ class BrowserViewController: UIViewController,
         languageCode: String
     ) {
         let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
-        alert.title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
+        let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
+        let attributedTitleKey = "attributedTitle"
+        alert.title = title
         let showOriginalAction = UIAlertAction(
             title: .Translations.LanguagePicker.ShowOriginal,
             style: .default
@@ -3019,6 +3021,18 @@ class BrowserViewController: UIViewController,
         }
         alert.addAction(showOriginalAction)
         alert.preferredAction = showOriginalAction
+        alert.setValue(
+            NSAttributedString(
+                string: title,
+                attributes: [
+                    .font: DefaultDynamicFontHelper.preferredBoldFont(
+                        withTextStyle: .headline,
+                        size: UIFont.labelFontSize
+                    )
+                ]
+            ),
+            forKey: attributedTitleKey
+        )
     }
 
     func didTapOnHome() {
