@@ -932,7 +932,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         if selectedTab?.isPrivate ?? false {
             selectedIndex = -1
         }
-        for tab in privateTabs {
+        privateTabs.forEach { tab in
             // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
             // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
             Task {
@@ -1037,7 +1037,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
-
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }

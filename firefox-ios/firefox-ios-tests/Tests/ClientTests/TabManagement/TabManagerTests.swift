@@ -1538,7 +1538,7 @@ final class TabManagerTests: XCTestCase {
          let subject = createSubject(tabs: tabs)
          XCTAssertEqual(subject.normalTabs.count, 3)
 
-        subject.removeTab(tabs[0].tabUUID)
+         subject.removeTab(tabs[0].tabUUID)
          XCTAssertEqual(
             subject.normalTabs.count,
             2,
@@ -1556,9 +1556,9 @@ final class TabManagerTests: XCTestCase {
 
          _ = subject.normalTabs
          _ = subject.privateTabs // Should hit the same cache, does not recompute.
-
-        subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
-
+         
+         subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
+         
          let normalTabs = subject.normalTabs
          let privateTabs = subject.privateTabs
          XCTAssertEqual(

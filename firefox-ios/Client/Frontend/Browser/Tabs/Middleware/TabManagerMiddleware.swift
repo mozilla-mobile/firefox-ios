@@ -122,7 +122,6 @@ final class TabManagerMiddleware: LegacyFeatureFlaggable,
             guard let tabsState = state.componentState(TabsPanelState.self,
                                                        for: .tabsPanel,
                                                        window: action.windowUUID) else { return }
-
             tabPeekCloseTab(with: tabUUID,
                             uuid: action.windowUUID,
                             isPrivate: tabsState.isPrivateMode)
