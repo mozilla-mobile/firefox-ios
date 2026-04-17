@@ -24,17 +24,21 @@ class AIControlsModelTests: XCTestCase {
     }
 
     @MainActor
-    func testHeaderLinkInfo() {
+    func testHeaderLinkInfo() throws {
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "Learn more")
-        XCTAssertEqual(aiControlsModel.headerLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
+        let actualURL = try XCTUnwrap(aiControlsModel.headerLinkInfo.url?.absoluteString)
+        let expectedURL = try XCTUnwrap(SupportUtils.URLForTopic("ios-ai-controls", useMobilePath: true)?.absoluteString)
+        XCTAssertEqual(actualURL, expectedURL)
     }
 
     @MainActor
-    func testBlockAIEnhancementsLinkInfo() {
+    func testBlockAIEnhancementsLinkInfo() throws {
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.label, "See what is and isn’t included")
-        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
+        let actualURL = try XCTUnwrap(aiControlsModel.blockAIEnhancementsLinkInfo.url?.absoluteString)
+        let expectedURL = try XCTUnwrap(SupportUtils.URLForTopic("ios-ai-controls", useMobilePath: true)?.absoluteString)
+        XCTAssertEqual(actualURL, expectedURL)
     }
 
     @MainActor
