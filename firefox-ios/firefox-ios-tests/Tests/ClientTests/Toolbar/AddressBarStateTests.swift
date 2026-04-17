@@ -266,16 +266,21 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(
-            state: initialState,
-            reducer: reducer
-        )
-        let newState = reducer(
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        // we need this state change in order to populate the AddressBarState
+        // with the reader mode state from the Toolbar action
+        let readerModeStateChange = reducer(
             urlDidChangeState,
             ToolbarAction(
-                canSummarize: true,
                 readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+        let newState = reducer(
+            readerModeStateChange,
+            ToolbarAction(
+                canSummarize: true,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didSummarizeSettingsChange
             )
