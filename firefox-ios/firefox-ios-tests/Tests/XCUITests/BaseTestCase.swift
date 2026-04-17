@@ -78,8 +78,15 @@ class BaseTestCase: XCTestCase {
 
     func removeApp() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
-        let iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        var icon: XCUIElement
+        var iPadIcon: XCUIElement
+        if isFennec {
+            icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        } else {
+            icon = springboard.icons.containingText("Firefox").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Firefox").element(boundBy: 1)
+        }
         if icon.exists {
             if #available(iOS 26, *), iPad() {
                 iPadIcon.press(forDuration: 1.0)
