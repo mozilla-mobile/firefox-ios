@@ -1191,7 +1191,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         if isReaderModeWithSummarizerEnabled {
             actions.append(readerModeWithSummarizerAction(isSelected: readerModeState == .active,
                                                           hasAlternativeLocationColor: hasAlternativeLocationColor))
-        } else if isSummarizeFeatureForToolbarOn && canSummarize, readerModeState != .active, !UIWindow.isLandscape {
+        } else if isSummarizeFeatureForToolbarOn, canSummarize, readerModeState == .available, !UIWindow.isLandscape {
             actions.append(summaryAction(hasAlternativeLocationColor: hasAlternativeLocationColor))
         } else if readerModeState?.isEnabled == true {
             actions.append(readerModeAction(isSelected: readerModeState == .active,
