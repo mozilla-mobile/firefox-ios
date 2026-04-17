@@ -455,7 +455,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     // MARK: - didTranslationSettingsChange tests
 
-    func test_didTranslationSettingsChange_withFeatureEnabled_andEligiblePage_dispatchesReceivedTranslationLanguage() throws {
+    func test_didTranslationSettingsChange_featureEnabled_eligiblePage_dispatchesReceivedTranslationLanguage() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(shouldOfferTranslationResult: .success(true))
         let subject = createSubject(translationsService: mockTranslationService)
