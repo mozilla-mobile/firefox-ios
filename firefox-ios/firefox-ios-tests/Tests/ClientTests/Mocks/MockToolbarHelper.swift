@@ -12,8 +12,6 @@ class MockToolbarHelper: ToolbarHelperInterface {
     }
 
     var isToolbarRefactorEnabled = true
-    var isToolbarTranslucencyEnabled = true
-    var isToolbarTranslucencyRefactorEnabled = false
     var isReduceTransparencyEnabled = false
     var isSwipingTabsEnabled = true
     var userInterfaceIdiom: UIUserInterfaceIdiom = .phone
@@ -37,7 +35,6 @@ class MockToolbarHelper: ToolbarHelperInterface {
     @MainActor
     func shouldBlur() -> Bool {
         return isToolbarRefactorEnabled &&
-            isToolbarTranslucencyEnabled &&
             !isReduceTransparencyEnabled
     }
 

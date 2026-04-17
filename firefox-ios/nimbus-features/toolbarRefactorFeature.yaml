@@ -9,11 +9,6 @@ features:
           Enables the feature
         type: Boolean
         default: true
-      one_tap_new_tab:
-        description: >
-          If true, enables the one tap new tab feature for users.
-        type: Boolean
-        default: true
       navigation_hint:
         description: >
           If true, enables the navigation contextual hint.
@@ -32,16 +27,6 @@ features:
       swiping_tabs:
         description: >
           Enables swipe gestures to switch between browser tabs.
-        type: Boolean
-        default: true
-      translucency:
-        description: >
-          Enables translucency for toolbars.
-        type: Boolean
-        default: true
-      translucency-refactor:
-        description: >
-          Enables translucency refactor for toolbars.
         type: Boolean
         default: true
       middle_button_customization:
@@ -65,12 +50,9 @@ features:
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: true
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency: true
-          translucency-refactor: true
           middle_button_customization: true
           layout: version1
           tab_tray_button_type: number
@@ -78,12 +60,9 @@ features:
         value:
           enabled: true
           unified_search: false
-          one_tap_new_tab: true
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency: true
-          translucency-refactor: true
           middle_button_customization: true
           layout: version1
           tab_tray_button_type: number
