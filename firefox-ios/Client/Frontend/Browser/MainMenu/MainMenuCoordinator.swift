@@ -178,7 +178,9 @@ class MainMenuCoordinator: BaseCoordinator, LegacyFeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                let pageLanguage = try? await TranslationsService().detectPageLanguage(for: windowUUID)
+                let pageLanguage = isTranslated
+                    ? translationConfig?.sourceLanguage
+                    : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
                 let filteredLanguages = languages.filter { $0 != pageLanguage }
                 if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
                     store.dispatch(TranslationLanguageSelectedAction(

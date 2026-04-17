@@ -2936,21 +2936,7 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            let title: String = .Translations.LanguagePicker.Title
-            let attributedTitleKey = "attributedTitle"
-            alert.title = title
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
+            alert.title = .Translations.LanguagePicker.Title
         }
 
         data.languages.forEach { code in
@@ -2984,6 +2970,22 @@ class BrowserViewController: UIViewController,
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
+        if let title = alert.title {
+            let attributedTitleKey = "attributedTitle"
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [
+                        .font: DefaultDynamicFontHelper.preferredBoldFont(
+                            withTextStyle: .headline,
+                            size: UIFont.labelFontSize
+                        )
+                    ]
+                ),
+                forKey: attributedTitleKey
+            )
+        }
+
         if let popover = alert.popoverPresentationController {
             if let sourceButton {
                 popover.sourceView = sourceButton
@@ -3004,9 +3006,7 @@ class BrowserViewController: UIViewController,
         languageCode: String
     ) {
         let langName = Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
-        let title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
-        let attributedTitleKey = "attributedTitle"
-        alert.title = title
+        alert.title = String(format: .Translations.LanguagePicker.PageTranslatedTitle, langName)
         let showOriginalAction = UIAlertAction(
             title: .Translations.LanguagePicker.ShowOriginal,
             style: .default
@@ -3021,18 +3021,6 @@ class BrowserViewController: UIViewController,
         }
         alert.addAction(showOriginalAction)
         alert.preferredAction = showOriginalAction
-        alert.setValue(
-            NSAttributedString(
-                string: title,
-                attributes: [
-                    .font: DefaultDynamicFontHelper.preferredBoldFont(
-                        withTextStyle: .headline,
-                        size: UIFont.labelFontSize
-                    )
-                ]
-            ),
-            forKey: attributedTitleKey
-        )
     }
 
     func didTapOnHome() {
