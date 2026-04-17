@@ -453,6 +453,82 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.webpageRestoredCalledCount, 1)
     }
 
+    // MARK: - didTranslationSettingsChange tests
+
+    func test_didTranslationSettingsChange_withFeatureEnabled_andEligiblePage_dispatchesReceivedTranslationLanguage() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(shouldOfferTranslationResult: .success(true))
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+
+        let expectation = XCTestExpectation(description: "receivedTranslationLanguage dispatched after feature enabled")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+        XCTAssertEqual(actionType, ToolbarActionType.receivedTranslationLanguage)
+        XCTAssertEqual(actionCalled.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+    }
+
+    func test_didTranslationSettingsChange_withFeatureDisabled_doesNotDispatchAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let mockTranslationService = MockTranslationsService(shouldOfferTranslationResult: .success(true))
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+
+        let expectation = XCTestExpectation(description: "no action dispatched when feature disabled")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_didTranslationSettingsChange_clearsStoredTargetLanguageForRetry() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+
+        let toggleAction = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+        subject.translationsProvider(mockStore.state, toggleAction)
+
+        let retryAction = TranslationsAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TranslationsActionType.didTapRetryFailedTranslation
+        )
+
+        let expectation = XCTestExpectation(description: "no retry dispatch after settings change cleared state")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, retryAction)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     // MARK: - Auto-translate tests
 
     func test_urlDidChangeAction_withAutoTranslateEnabled_andPreferredLanguages_translatesAutomatically() throws {

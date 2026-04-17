@@ -73,6 +73,14 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         case TranslationsActionType.didTapEnableAutoTranslate:
             self.profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
 
+        case ToolbarActionType.didTranslationSettingsChange:
+            guard let action = (action as? ToolbarAction) else { return }
+            self.selectedTargetLanguages[windowUUID] = nil
+            self.translationFlowIds[windowUUID] = nil
+            self.restoringWindows.remove(windowUUID)
+            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+            self.checkTranslationsAreEligible(for: action)
+
         default:
            break
         }
@@ -210,7 +218,9 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
         let supported = await translationsService.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
-        guard let targetLanguage = preferred.first else { return false }
+        let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+        let filteredPreferred = preferred.filter { $0 != pageLanguage }
+        guard let targetLanguage = filteredPreferred.first else { return false }
         let isPrivate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
