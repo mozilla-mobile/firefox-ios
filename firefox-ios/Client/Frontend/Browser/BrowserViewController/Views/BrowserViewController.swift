@@ -5045,7 +5045,7 @@ extension BrowserViewController: JavascriptPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
-        // Technically is not changing tabs but is loosing focus on urlbar
+        // Technically is not changing tabs but is losing focus on urlbar
         overlayManager.switchTab(shouldCancelLoading: true)
     }
 

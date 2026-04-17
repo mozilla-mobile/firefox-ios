@@ -38,7 +38,7 @@ fi
 which -s virtualenv
 if [[ $? != 0 ]] ; then
     # Install virtualenv
-	echo "Installing vitualenv"
+	echo "Installing virtualenv"
     pip3 install virtualenv
 else
 	echo "virtualenv already installed"

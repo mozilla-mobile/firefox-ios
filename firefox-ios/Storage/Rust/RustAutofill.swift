@@ -311,7 +311,7 @@ public class RustAutofill: @unchecked Sendable {
     }
 
     /// Iterates through the stored credit cards checking that each record can be decrypted. If any records cannot be
-    /// decrypted, they are locally scrubbed to potentially be overwritten by a perviously synced server record.
+    /// decrypted, they are locally scrubbed to potentially be overwritten by a previously synced server record.
     ///
     /// This function is meant to be executed only once (which is enforced via the `CreditCardsHaveBeenVerified` pref)
     /// and is called before a credit card sync in `RustSyncManager`.

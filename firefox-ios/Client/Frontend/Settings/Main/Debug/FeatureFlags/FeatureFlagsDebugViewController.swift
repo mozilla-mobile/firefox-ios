@@ -47,7 +47,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
             FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new apperance menu")
+                statusText: format(string: "Toggle to show the new appearance menu")
             ) { [weak self] _ in
                 self?.reloadView()
             },

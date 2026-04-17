@@ -88,7 +88,7 @@ class PlainToast: Toast {
         labelStackView.addArrangedSubview(titleLabel)
         if let descriptionText = viewModel.descriptionText {
             titleLabel.lineBreakMode = .byClipping
-            titleLabel.numberOfLines = 1 // if showing a description we cant wrap to the second line
+            titleLabel.numberOfLines = 1 // if showing a description we can't wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
 
             descriptionLabel.text = descriptionText

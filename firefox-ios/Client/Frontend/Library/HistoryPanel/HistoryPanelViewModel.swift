@@ -144,7 +144,7 @@ final class HistoryPanelViewModel: LegacyFeatureFlaggable, @unchecked Sendable {
                         "Error searching history panel",
                         level: .warning,
                         category: .sync,
-                        description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                        description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
                     )
                     completion(false)
                     return
