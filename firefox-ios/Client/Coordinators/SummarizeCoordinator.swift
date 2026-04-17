@@ -73,6 +73,7 @@ final class SummarizeCoordinator: BaseCoordinator,
             isHostedSummarizerEnabled: isHostedSummarizerEnabled,
             isAppAttestAuthEnabled: isAppAttestAuthEnabled,
             usesPermissiveGuardrails: usesPermissiveGuardrails,
+            prefs: prefs,
             config: config) else {
             parentCoordinatorDelegate?.didFinish(from: self)
             return

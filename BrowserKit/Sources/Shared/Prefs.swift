@@ -139,6 +139,10 @@ public struct PrefsKeys {
         public static let signedInFxaAccount = "signedInFxaAccountKey"
     }
 
+    public struct MLPASettings {
+        public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
