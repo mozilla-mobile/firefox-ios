@@ -133,9 +133,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 
-        case .toolbarRefactor:
-            return checkToolbarRefactorFeature(from: nimbus)
-
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
@@ -272,11 +269,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkTabTrayUIExperiments(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayUiExperiments.value()
-        return config.enabled
-    }
-
-    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
         return config.enabled
     }
 
