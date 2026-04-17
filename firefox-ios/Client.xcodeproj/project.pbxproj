@@ -1076,6 +1076,7 @@
 		8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AF0C52C9A1167009691B5 /* TabPeekStateTests.swift */; };
 		8A7C12612E01DB0F00F2D7FA /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7C12602E01DB0C00F2D7FA /* SearchBarCell.swift */; };
 		8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */; };
+		8A7D08E52FBE2EBC0035999C /* HomepageTabStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7D08E42FBE2EBC0035999C /* HomepageTabStateStore.swift */; };
 		8A7D1AC52BA3542600162F4B /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A7D1AC42BA3542600162F4B /* splashScreen.json */; };
 		8A8158CB2C2C77B000281F72 /* MicrosurveyTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8158CA2C2C77B000281F72 /* MicrosurveyTelemetry.swift */; };
 		8A827E302C20C7F5008D5E3C /* MicrosurveyMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A827E2E2C20C55E008D5E3C /* MicrosurveyMiddlewareTests.swift */; };
@@ -9376,6 +9377,7 @@
 		8A7AF0C52C9A1167009691B5 /* TabPeekStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekStateTests.swift; sourceTree = "<group>"; };
 		8A7C12602E01DB0C00F2D7FA /* SearchBarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCell.swift; sourceTree = "<group>"; };
 		8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageViewController.swift; sourceTree = "<group>"; };
+		8A7D08E42FBE2EBC0035999C /* HomepageTabStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageTabStateStore.swift; sourceTree = "<group>"; };
 		8A7D1AC42BA3542600162F4B /* splashScreen.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splashScreen.json; sourceTree = "<group>"; };
 		8A8158CA2C2C77B000281F72 /* MicrosurveyTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyTelemetry.swift; sourceTree = "<group>"; };
 		8A827E2E2C20C55E008D5E3C /* MicrosurveyMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyMiddlewareTests.swift; sourceTree = "<group>"; };
@@ -13941,6 +13943,7 @@
 				8A454D2A2CB7079A009436D9 /* Header */,
 				8ABDBAA42CB6BF3A00B51F63 /* Merino */,
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
+				8A7D08E42FBE2EBC0035999C /* HomepageTabStateStore.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
 				8AD3AFC22D143EF000CFC887 /* HomepageDimensionImplementation.swift */,
 				8AF347DC2CADD0E100624036 /* Redux */,
@@ -18962,6 +18965,7 @@
 				A093CD292F35408E0017774C /* MozAdsClientFactory.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* LegacyWallpaperBackgroundView.swift in Sources */,
 				8A7D08E32CAAF7C30035999C /* HomepageViewController.swift in Sources */,
+				8A7D08E52FBE2EBC0035999C /* HomepageTabStateStore.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				39E186DF2F7D991700FD3FFA /* MerinoCategory.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,

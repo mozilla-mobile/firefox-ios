@@ -69,6 +69,7 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Private constants
     private let tabManager: TabManager
+    private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
@@ -83,6 +84,7 @@ final class HomepageViewController: UIViewController,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          tabManager: TabManager,
+         homepageTabStateStore: HomepageTabStateStoring = HomepageTabStateStore(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -94,6 +96,7 @@ final class HomepageViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.tabManager = tabManager
+        self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -247,7 +250,7 @@ final class HomepageViewController: UIViewController,
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
         guard let activeTabUUID,
-              let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
+              let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
             scrollToTop()
             return
@@ -283,8 +286,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func saveVerticalScrollOffset() {
-        guard let activeTabUUID, let tab = tabManager.getTabForUUID(uuid: activeTabUUID) else { return }
-        tab.homepageScrollOffset = collectionView?.contentOffset.y
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.scrollOffsetY = collectionView?.contentOffset.y
+        }
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
