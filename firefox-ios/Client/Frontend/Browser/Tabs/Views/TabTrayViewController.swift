@@ -42,10 +42,6 @@ final class TabTrayViewController: UIViewController,
             static let width: CGFloat = 343
         }
 
-        struct Toast {
-            static let undoDelay = DispatchTimeInterval.seconds(0)
-            static let undoDuration = DispatchTimeInterval.seconds(3)
-        }
         static let fixedSpaceWidth: CGFloat = 32
         static let segmentedControlHorizontalSpacing: CGFloat = 16
         static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
@@ -111,7 +107,6 @@ final class TabTrayViewController: UIViewController,
         return childPanelControllers[index]
     }
 
-    var shownToast: Toast?
     var logger: Logger
 
     // MARK: - UI
@@ -398,18 +393,6 @@ final class TabTrayViewController: UIViewController,
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
             tabTrayState.showCloseConfirmation = false
-        }
-
-        if let toastType = tabTrayState.toastType {
-            presentToast(toastType: toastType) { [weak self] undoClose in
-                guard let self else { return }
-
-                // Undo the action described by the toast
-                if let action = (toastType.reduxAction(for: self.windowUUID) as? TabPanelViewAction), undoClose {
-                    store.dispatch(action)
-                }
-                self.shownToast = nil
-            }
         }
 
         if let enableDeleteTabsButton = tabTrayState.enableDeleteTabsButton {
@@ -720,53 +703,6 @@ final class TabTrayViewController: UIViewController,
             return themeManager.resolvedTheme(with: tabTrayState.isPrivateMode)
         } else {
             return themeManager.getCurrentTheme(for: windowUUID)
-        }
-    }
-
-    private func presentToast(toastType: ToastType, completion: @escaping @MainActor (Bool) -> Void) {
-        if let currentToast = shownToast {
-            currentToast.dismiss(false)
-        }
-
-        if toastType.reduxAction(for: windowUUID) is TabPanelViewAction {
-            let viewModel = ButtonToastViewModel(labelText: toastType.title, buttonText: toastType.buttonText)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: retrieveTheme(),
-                                    completion: { buttonPressed in
-                completion(buttonPressed)
-            })
-            showToast(toast)
-            shownToast = toast
-        } else {
-            let viewModel = PlainToastViewModel(labelText: toastType.title)
-            let toast = PlainToast(viewModel: viewModel, theme: retrieveTheme())
-            showToast(toast)
-        }
-    }
-
-    private func showToast(_ toast: Toast,
-                           afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
-                           duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
-        toast.showToast(viewController: self,
-                        delay: UX.Toast.undoDelay,
-                        duration: UX.Toast.undoDuration) { toast in
-            if self.tabTrayUtils.shouldDisplayExperimentUI(), !self.isRegularLayout {
-                [
-                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                   constant: Toast.UX.toastSidePadding),
-                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                    constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.segmentedControl.topAnchor)
-                ]
-            } else {
-                [
-                    toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                                   constant: Toast.UX.toastSidePadding),
-                    toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                    constant: -Toast.UX.toastSidePadding),
-                    toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-                ]
-            }
         }
     }
 
