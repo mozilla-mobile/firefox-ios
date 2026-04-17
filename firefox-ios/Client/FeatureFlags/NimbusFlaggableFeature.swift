@@ -72,7 +72,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tabTrayTranslucency,
                 .toolbarUpdateHint,
                 .toolbarOneTapNewTab,
-                .toolbarSwipingTabs,
                 .toolbarTranslucency,
                 .toolbarTranslucencyRefactor,
                 .toolbarMinimalAddressBar,

@@ -39,8 +39,7 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
 
     var isSwipingTabsEnabled: Bool {
         // Swipe is not enabled on iPads
-        let isiPad = userInterfaceIdiom == .pad
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().swipingTabs && !isiPad
+        return userInterfaceIdiom != .pad
     }
 
     var userInterfaceIdiom: UIUserInterfaceIdiom

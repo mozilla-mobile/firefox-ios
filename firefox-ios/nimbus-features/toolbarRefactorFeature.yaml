@@ -19,11 +19,6 @@ features:
           Enables the unified search feature.
         type: Boolean
         default: false
-      swiping_tabs:
-        description: >
-          Enables swipe gestures to switch between browser tabs.
-        type: Boolean
-        default: true
       translucency:
         description: >
           Enables translucency for toolbars.
@@ -56,7 +51,6 @@ features:
           unified_search: false
           one_tap_new_tab: true
           toolbar_update_hint: false
-          swiping_tabs: true
           translucency: true
           translucency-refactor: true
           minimal_address_bar: true
@@ -67,7 +61,6 @@ features:
           unified_search: false
           one_tap_new_tab: true
           toolbar_update_hint: false
-          swiping_tabs: true
           translucency: true
           translucency-refactor: true
           minimal_address_bar: true
