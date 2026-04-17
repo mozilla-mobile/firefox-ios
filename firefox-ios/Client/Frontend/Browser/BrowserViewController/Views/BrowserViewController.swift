@@ -4668,19 +4668,15 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     private func updateSelectedTabWebview(selectedTab: Tab, previousTab: Tab?, webView: TabWebView) {
-        if !isToolbarTranslucencyRefactorEnabled {
-            updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
-        } else {
-            if selectedTab.isFxHomeTab && previousTab != nil {
-                store.dispatch(
-                    GeneralBrowserAction(
-                        windowUUID: windowUUID,
-                        actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-                    )
+        if selectedTab.isFxHomeTab && previousTab != nil {
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
                 )
-            } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
-                updateInContentHomePanel(url)
-            }
+            )
+        } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
+            updateInContentHomePanel(url)
         }
     }
 
@@ -4723,45 +4719,6 @@ extension BrowserViewController: TabManagerDelegate {
             scrollController.tab = selectedTab
         } else {
             scrollController.tabProvider = TabProviderAdapter(selectedTab)
-        }
-
-        var needsReload = false
-        if let webView = selectedTab.webView {
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
-
-            if !isToolbarTranslucencyRefactorEnabled {
-                updateEmbeddedContent(isHomeTab: selectedTab.isFxHomeTab, with: webView, previousTab: previousTab)
-            } else {
-                if selectedTab.isFxHomeTab && previousTab != nil {
-                    store.dispatch(
-                        GeneralBrowserAction(
-                            windowUUID: windowUUID,
-                            actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-                        )
-                    )
-                } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
-                    updateInContentHomePanel(url)
-                }
-            }
-
-            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
-                if selectedTab.isFxHomeTab {
-                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
-                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
-                    needsReload = true
-                }
-            }
-
-            if webView.url == nil {
-                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
-            }
         }
 
         updateTabCountUsingTabManager(tabManager)
