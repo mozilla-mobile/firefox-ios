@@ -292,11 +292,6 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
-    var isToolbarTranslucencyEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarTranslucency
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
-    }
-
     var isToolbarTranslucencyRefactorEnabled: Bool {
         let flagToCheck = FeatureFlagID.toolbarTranslucencyRefactor
         return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
@@ -629,7 +624,6 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let enableBlur = isToolbarTranslucencyEnabled
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let isKeyboardShowing = keyboardState != nil
 
@@ -654,12 +648,12 @@ class BrowserViewController: UIViewController,
             let offset = scrollOffset ?? statusBarOverlay.scrollOffset
             topBlurView.alpha = isFxHomeTab ? offset : 1
         } else {
-            header.isClearBackground = enableBlur
+            header.isClearBackground = true
             topBlurView.alpha = 1
         }
 
-        overKeyboardContainer.isClearBackground = (enableBlur && !isKeyboardShowing) || shouldClearBackground
-        bottomContainer.isClearBackground = enableBlur
+        overKeyboardContainer.isClearBackground = !isKeyboardShowing || shouldClearBackground
+        bottomContainer.isClearBackground = true
         bottomBlurView.isHidden = isScrollAlphaZero
         bottomContainer.isHidden = isScrollAlphaZero
 
@@ -1407,7 +1401,7 @@ class BrowserViewController: UIViewController,
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: !isToolbarTranslucencyEnabled)
+        updateToolbarStateForTraitCollection(traitCollection, shouldUpdateBlurViews: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1671,8 +1665,6 @@ class BrowserViewController: UIViewController,
     }
 
     private func setupBlurViews() {
-        guard isToolbarTranslucencyEnabled else { return }
-
         view.insertSubview(topBlurView, aboveSubview: contentContainer)
         view.insertSubview(bottomBlurView, aboveSubview: contentContainer)
 

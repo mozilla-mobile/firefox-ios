@@ -29,11 +29,6 @@ features:
           Enables swipe gestures to switch between browser tabs.
         type: Boolean
         default: true
-      translucency:
-        description: >
-          Enables translucency for toolbars.
-        type: Boolean
-        default: true
       translucency-refactor:
         description: >
           Enables translucency refactor for toolbars.
@@ -68,7 +63,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency: true
           translucency-refactor: true
           minimal_address_bar: true
           middle_button_customization: true
@@ -81,7 +75,6 @@ features:
           navigation_hint: true
           toolbar_update_hint: false
           swiping_tabs: true
-          translucency: true
           translucency-refactor: true
           minimal_address_bar: true
           middle_button_customization: true

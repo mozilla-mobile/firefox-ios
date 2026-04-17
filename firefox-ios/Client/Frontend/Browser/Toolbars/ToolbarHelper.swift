@@ -7,7 +7,6 @@ import Foundation
 
 protocol ToolbarHelperInterface {
     var isToolbarRefactorEnabled: Bool { get }
-    var isToolbarTranslucencyEnabled: Bool { get }
     var isToolbarTranslucencyRefactorEnabled: Bool { get }
     var isSwipingTabsEnabled: Bool { get }
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
@@ -32,10 +31,6 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
 
     var isToolbarRefactorEnabled: Bool {
         FxNimbus.shared.features.toolbarRefactorFeature.value().enabled
-    }
-
-    var isToolbarTranslucencyEnabled: Bool {
-        FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
     }
 
     var isToolbarTranslucencyRefactorEnabled: Bool {
@@ -74,7 +69,6 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
     @MainActor
     func shouldBlur() -> Bool {
         return isToolbarRefactorEnabled &&
-            isToolbarTranslucencyEnabled &&
             !isReduceTransparencyEnabled
     }
 

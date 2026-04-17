@@ -106,7 +106,6 @@ class SearchBarLocationSaverTests: XCTestCase {
                 layout: layout,
                 navigationHint: true,
                 swipingTabs: false,
-                translucency: false,
                 unifiedSearch: false)
         }
     }
@@ -118,7 +117,6 @@ class SearchBarLocationSaverTests: XCTestCase {
                 layout: .version1,
                 navigationHint: true,
                 swipingTabs: true,
-                translucency: true,
                 unifiedSearch: false)
         }
     }

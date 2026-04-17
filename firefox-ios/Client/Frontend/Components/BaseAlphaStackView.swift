@@ -15,10 +15,6 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isSpacerClearBackground = false
     lazy var toolbarHelper: ToolbarHelperInterface = ToolbarHelper()
 
-    private var isToolbarTranslucencyEnabled: Bool {
-        return FxNimbus.shared.features.toolbarRefactorFeature.value().translucency
-    }
-
     private var isToolbarTranslucencyRefactorEnabled: Bool {
         return FxNimbus.shared.features.toolbarRefactorFeature.value().translucencyRefactor
     }
