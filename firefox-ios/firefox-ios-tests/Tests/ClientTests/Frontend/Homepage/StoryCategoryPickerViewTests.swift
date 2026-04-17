@@ -12,7 +12,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     func test_configure_withEmptyCategories_hidesView() {
         let view = createSubject()
 
-        view.configure(categories: [], selectedCategoryID: nil, onSelection: nil)
+        view.configure(categories: [], selectedNewsfeedCategoryID: nil, onSelection: nil)
 
         XCTAssertTrue(view.isHidden)
         XCTAssertTrue(chipButtons(in: view).isEmpty)
@@ -21,7 +21,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     func test_configure_withCategories_showsViewAndPrependsAllCategory() {
         let view = createSubject()
 
-        view.configure(categories: testCategories, selectedCategoryID: nil, onSelection: nil)
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: nil, onSelection: nil)
 
         let buttons = chipButtons(in: view)
 
@@ -37,7 +37,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     func test_configure_withNilSelectedCategory_selectsAllCategory() {
         let view = createSubject()
 
-        view.configure(categories: testCategories, selectedCategoryID: nil, onSelection: nil)
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: nil, onSelection: nil)
 
         XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
                              in: view)?.isSelected == true)
@@ -48,7 +48,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     func test_configure_withSelectedFeedID_selectsMatchingCategory() {
         let view = createSubject()
 
-        view.configure(categories: testCategories, selectedCategoryID: "technology", onSelection: nil)
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: "technology", onSelection: nil)
 
         XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
                              in: view)?.isSelected == false)
@@ -58,30 +58,30 @@ final class StoryCategoryPickerViewTests: XCTestCase {
 
     func test_selectingAllCategory_callsOnSelectionWithNil() {
         let view = createSubject()
-        var selectedCategoryID: String? = "technology"
+        var selectedNewsfeedCategoryID: String? = "technology"
 
-        view.configure(categories: testCategories, selectedCategoryID: "technology") { newSelection in
-            selectedCategoryID = newSelection
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: "technology") { newSelection in
+            selectedNewsfeedCategoryID = newSelection
         }
 
         button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory, in: view)?
             .sendActions(for: .touchUpInside)
 
-        XCTAssertNil(selectedCategoryID)
+        XCTAssertNil(selectedNewsfeedCategoryID)
     }
 
     func test_selectingSpecificCategory_callsOnSelectionWithFeedID() {
         let view = createSubject()
-        var selectedCategoryID: String?
+        var selectedNewsfeedCategoryID: String?
 
-        view.configure(categories: testCategories, selectedCategoryID: nil) { newSelection in
-            selectedCategoryID = newSelection
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: nil) { newSelection in
+            selectedNewsfeedCategoryID = newSelection
         }
 
         button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".science", in: view)?
             .sendActions(for: .touchUpInside)
 
-        XCTAssertEqual(selectedCategoryID, "science")
+        XCTAssertEqual(selectedNewsfeedCategoryID, "science")
     }
 
     private var testCategories: [MerinoCategoryConfiguration] {

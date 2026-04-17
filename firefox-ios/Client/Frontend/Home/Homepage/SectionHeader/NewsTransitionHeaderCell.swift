@@ -79,7 +79,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         theme: Theme,
         transitionEnabled: Bool = true,
         categories: [MerinoCategoryConfiguration] = [],
-        selectedCategoryID: String? = nil,
+        selectedNewsfeedCategoryID: String? = nil,
         onSelection: (@MainActor @Sendable (String?) -> Void)? = nil
     ) {
         self.transitionEnabled = transitionEnabled
@@ -93,7 +93,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         sectionTitleHeaderView.moreButton.isHidden = true
         storyCategoryPickerView.configure(
             categories: categories,
-            selectedCategoryID: selectedCategoryID,
+            selectedNewsfeedCategoryID: selectedNewsfeedCategoryID,
             onSelection: onSelection
         )
         storyCategoryPickerView.applyTheme(theme: theme)

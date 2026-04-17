@@ -27,11 +27,11 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
 
     func configure(
         categories: [MerinoCategoryConfiguration],
-        selectedCategoryID: String?,
+        selectedNewsfeedCategoryID: String?,
         onSelection: (@MainActor (String?) -> Void)?
     ) {
         let items = pickerItems(from: categories)
-        let selectedPickerID = selectedCategoryID ?? Self.allCategoryID
+        let selectedPickerID = selectedNewsfeedCategoryID ?? Self.allCategoryID
 
         chipPickerView.configure(
             items: items,
