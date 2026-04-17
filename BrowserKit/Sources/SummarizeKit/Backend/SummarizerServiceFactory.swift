@@ -96,14 +96,14 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
                 return nil
             }
             let authenticator = AppAttestRequestAuth(appAttestClient: client)
-            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint, endPoint: "chat/completion")
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let key = LiteLLMConfig.apiKey else {
                 return nil
             }
             let authenticator = BearerRequestAuth(apiKey: key)
-            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint)
+            return LiteLLMClient(authenticator: authenticator, baseURL: endPoint, endPoint: "chat/completion")
         }
     }
 }

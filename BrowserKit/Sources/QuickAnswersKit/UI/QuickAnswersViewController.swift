@@ -29,7 +29,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -38,6 +38,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.navigationHandler?.dismissQuickAnswers(with: nil)
+        }), for: .touchUpInside)
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: TransitionAnimator
@@ -59,7 +62,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.init(
             navigationHandler: navigationHandler,
             // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
-            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            viewModel: QuickAnswersViewModel(service: DefaultQuickAnswersService()),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -98,9 +101,14 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     override public func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
+        setupSourceTapHandler()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         backgroundRecordEffect.startAnimating()
+    }
+    
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         audioWaveform.startAnimating()
         registerViewModelUpdates()
     }
@@ -146,10 +154,27 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.body)
+                self?.contentView.configureAnswer(result.content)
+                if !result.sources.isEmpty {
+                    let sourceItems = result.sources.map { source in
+                        QuickAnswersSourceItem(
+                            title: source.title,
+                            thumbnailURL: source.url,
+                            faviconURL: source.faviconURL
+                        )
+                    }
+                    self?.contentView.configureSources(sourceItems)
+                }
             }
         }
         viewModel.startRecordingVoice()
+    }
+
+    private func setupSourceTapHandler() {
+        contentView.onSourceTapped = { [weak self] item in
+            guard let url = item.thumbnailURL else { return }
+            self?.navigationHandler?.dismissQuickAnswers(with: .url(url))
+        }
     }
 
     // MARK: - Themeable

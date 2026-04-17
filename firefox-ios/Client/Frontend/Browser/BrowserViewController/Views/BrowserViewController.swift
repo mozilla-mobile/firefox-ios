@@ -2858,6 +2858,8 @@ class BrowserViewController: UIViewController,
                 return
             }
             navigationHandler?.openLearnMoreFromNativeErrorPage(url: url)
+        case .quickAnswers:
+            navigationHandler?.showQuickAnswers()
         }
     }
 
@@ -4405,7 +4407,7 @@ extension BrowserViewController: LegacyTabDelegate {
         let nightModeHelper = NightModeHelper()
         tab.addContentScriptToCustomWorld(nightModeHelper, name: NightModeHelper.name())
 
-        // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
+        // XXX: Bug 1390200 - Disable NSUserActivity/able NSUserActivity/CoreSpotlight temporarily
         // let spotlightHelper = SpotlightHelper(tab: tab)
         // tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 

@@ -10,6 +10,7 @@ import Foundation
 /// Mock implementation of LiteLLMClient for testing.
 final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
+    var respondWithReferences: [LiteLLMReference] = []
     var respondWithError: Error?
     var requestChatCompletionCallCount = 0
     var requestChatCompletionStreamedCallCount = 0
@@ -19,13 +20,16 @@ final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     func requestChatCompletion(
         messages: [LiteLLMMessage],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMCompletionResult {
         requestChatCompletionCallCount += 1
         lastMessages = messages
         lastConfig = config
 
         if let error = respondWithError { throw error }
-        return respondWith.joined(separator: " ")
+        return LiteLLMCompletionResult(
+            content: respondWith.joined(separator: " "),
+            references: respondWithReferences
+        )
     }
 
     func requestChatCompletionStreamed(

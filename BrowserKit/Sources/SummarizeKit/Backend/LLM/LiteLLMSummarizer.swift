@@ -27,7 +27,7 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         // System message is used for the `modelInstructions`, user message for the `contentToSummarize`.
         let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
         do {
-            return try await client.requestChatCompletion(messages: messages, config: config)
+            return try await client.requestChatCompletion(messages: messages, config: config).content
         } catch {
             throw mapError(error)
         }
@@ -50,7 +50,7 @@ final class LiteLLMSummarizer: SummarizerProtocol {
                /// When `next()` returns nil, the underlying stream has no more data
                /// returning nil in turn ends the AsyncThrowingStream
                guard let chunk = try await stream.next() else { return nil }
-               accumulator += chunk
+               accumulator += chunk.choices?.first?.delta.content ?? ""
                return accumulator
            } catch {
                throw self.mapError(error)

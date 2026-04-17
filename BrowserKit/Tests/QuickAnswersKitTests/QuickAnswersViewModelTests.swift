@@ -23,7 +23,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
     func testStartRecordingVoice_receivesSpeechResult_triggersSearch() {
         let partialResult = SpeechResult(text: "Hello", isFinal: false)
         let finalResult = SpeechResult(text: "Hello world", isFinal: true)
-        let searchResult = SearchResult(title: "Test", body: "Body", url: nil)
+        let searchResult = SearchResult(title: "Test", body: "Body", url: nil, sources: [])
         mockService.speechResults = [partialResult, finalResult]
         mockService.searchResult = .success(searchResult)
         let expectation = XCTestExpectation()

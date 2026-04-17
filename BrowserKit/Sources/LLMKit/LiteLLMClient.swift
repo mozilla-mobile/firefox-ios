@@ -10,6 +10,7 @@ import MLPAKit
 public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     private let authenticator: RequestAuthProtocol
     private let baseURL: URL
+    private let endPoint: String
 
     private let session: URLSession
     static let postMethod = "POST"
@@ -22,11 +23,13 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     public init(
         authenticator: RequestAuthProtocol,
         baseURL: URL,
+        endPoint: String,
         urlSession: URLSession = URLSession.shared
     ) {
         self.authenticator = authenticator
         self.baseURL = baseURL
         self.session = urlSession
+        self.endPoint = endPoint
     }
 
     /// Sends a chat completion request in non-streaming mode.
@@ -36,7 +39,7 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     public func requestChatCompletion(
         messages: [LiteLLMMessage],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMCompletionResult {
         let request: URLRequest
         do {
             request = try await makeRequest(messages: messages, config: config)
@@ -53,27 +56,32 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     public func requestChatCompletionStreamed(
         messages: [LiteLLMMessage],
         config: LLMConfig
-    ) async throws -> AsyncThrowingStream<String, Error> {
+    ) async throws -> AsyncThrowingStream<LiteLLMStreamResponse, Error> {
         let request: URLRequest
         do {
             request = try await makeRequest(messages: messages, config: config)
         } catch {
-            return AsyncThrowingStream<String, Error>(unfolding: { throw LiteLLMClientError.requestCreationFailed })
+            return AsyncThrowingStream<LiteLLMStreamResponse, Error>(unfolding: { throw LiteLLMClientError.requestCreationFailed })
         }
         return handleStreamingRequest(request: request)
     }
 
-    private func handleNonStreamingRequest(request: URLRequest) async throws -> String {
+    private func handleNonStreamingRequest(request: URLRequest) async throws -> LiteLLMCompletionResult {
         let (data, response) = try await session.data(for: request)
         try validate(response: response)
-        let decodedResponse = try JSONDecoder().decode(LiteLLMResponse.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let decodedResponse = try decoder.decode(LiteLLMResponse.self, from: data)
         guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
-        return content
+        return LiteLLMCompletionResult(
+            content: content,
+            references: decodedResponse.references ?? []
+        )
     }
 
     /// TODO(FXIOS-12994): Add tests for streaming requests.
     /// Specifically, we need to test for the interaction with SSEDataParser and how it handles multiple requests at a time.
-    private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<String, Error> {
+    private func handleStreamingRequest(request: URLRequest) -> AsyncThrowingStream<LiteLLMStreamResponse, Error> {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
@@ -85,9 +93,9 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
                     for try await byteChunk in asyncBytes {
                         let responses: [LiteLLMStreamResponse] = try sseParser.parse(Data([byteChunk]))
                         for response in responses {
-                            if let text = response.choices.first?.delta.content {
-                                continuation.yield(text)
-                            }
+//                            if let text = response.choices.first?.delta.content {
+                            continuation.yield(response)
+//                            }
                         }
                     }
                     sseParser.flush()
@@ -100,12 +108,12 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
     }
 
     // MARK: - Helpers
-
+// "chat/completions"
     func makeRequest(
         messages: [LiteLLMMessage],
         config: LLMConfig
     ) async throws -> URLRequest {
-        let endpoint = baseURL.appendingPathComponent("chat/completions")
+        let endpoint = baseURL.appendingPathComponent(endPoint)
         var request = URLRequest(url: endpoint)
         request.httpMethod = Self.postMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

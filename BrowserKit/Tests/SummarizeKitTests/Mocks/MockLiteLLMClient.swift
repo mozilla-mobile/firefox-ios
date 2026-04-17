@@ -16,9 +16,12 @@ public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable
     public func requestChatCompletion(
         messages: [LiteLLMMessage],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMCompletionResult {
         if let error = respondWithError { throw error }
-        return respondWith.joined(separator: " ")
+        return LiteLLMCompletionResult(
+            content: respondWith.joined(separator: " "),
+            references: []
+        )
     }
 
     public func requestChatCompletionStreamed(

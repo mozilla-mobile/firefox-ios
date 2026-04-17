@@ -135,6 +135,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     @MainActor
     func popToBVC()
+
+    @MainActor
+    func showQuickAnswers()
 }
 
 extension BrowserNavigationHandler {

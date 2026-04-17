@@ -41,4 +41,5 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnPrivacyNoticeLink
     case tapOnShowCertificatesFromErrorPage
     case tapOnNativeErrorPageLearnMore
+    case tapOnQuickAnswersButton
 }

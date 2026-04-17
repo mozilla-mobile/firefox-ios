@@ -232,12 +232,12 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .estimated(UX.standardSingleItemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(UX.standardSingleItemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
@@ -251,9 +251,9 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: horizontalInset,
+            leading: 16.0,
             bottom: UX.spacingBetweenSections,
-            trailing: horizontalInset)
+            trailing: 16.0)
 
         return section
     }

@@ -4,9 +4,11 @@
 
 import Foundation
 
+
 struct LiteLLMResponse: Codable {
     let id: String
     let choices: [LiteLLMChoice]
+    let references: [LiteLLMReference]?
 }
 
 struct LiteLLMChoice: Codable {
@@ -14,4 +16,10 @@ struct LiteLLMChoice: Codable {
     let message: LiteLLMMessage?
     let delta: LiteLLMMessage?
     let finishReason: String?
+}
+
+public struct LiteLLMReference: Codable, Sendable {
+    public let title: String
+    public let url: URL?
+    public let faviconUrl: URL?
 }

@@ -23,30 +23,42 @@ final class DefaultResultsService: ResultsService {
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         let message = LiteLLMMessage(role: .user, content: transcription)
-        guard let stream = try await requestChatCompletion(for: message) else {
-            // TODO: FXIOS-15196 - Remove error once LLMCLient is not nil
-            throw SpeechError.unknown
-        }
-
-        var fullResponse = ""
-        for try await chunk in stream {
-            fullResponse += chunk
-        }
-
-        return try formatResult(from: fullResponse)
-    }
-
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> AsyncThrowingStream<String, Error>? {
-        // TODO: FXIOS-15196 - Remove optional when creating the appropriate client
-        return try await client?.requestChatCompletionStreamed(
+        
+        guard let completionResult = try await client?.requestChatCompletionStreamed(
             messages: [message],
             config: config
-        )
-    }
+        ) else {
+            throw SpeechError.unknown
+        }
+        
+        var response = LiteLLMStreamResponse(choices: [], references: [])
+        do {
+            for try await partialResponse in completionResult {
+                response = response.accumulate(partialResponse)
+            }
+        } catch {
+            print(error)
+        }
+        
+        print("FF: \(response)")
 
-    private func formatResult(from response: String) throws -> SearchResult {
-        // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-        // depending on UI to be a stream instead. For now, return the full response as the body.
-        return SearchResult(title: "Quick Answer", body: response, url: nil)
+        // Build the content by concatenating all content deltas
+        let content: String = response.choices?.reduce("") { acc, choice in
+            var next = acc
+            if let c = choice.delta.content {
+                next += c
+            }
+            return next
+        } ?? ""
+
+        // Map references to SearchResultSource if available; otherwise empty array
+        let sources: [SearchResultSource] = response.references?.map { ref in
+            SearchResultSource(title: ref.title, url: ref.url, faviconURL: ref.faviconUrl)
+        } ?? []
+
+        return SearchResult(
+            content: content,
+            sources: sources
+        )
     }
 }

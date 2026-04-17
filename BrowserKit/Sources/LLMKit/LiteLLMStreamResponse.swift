@@ -4,20 +4,32 @@
 
 import Foundation
 
-struct LiteLLMStreamResponse: Codable {
-    let id: String
-    let created: Int
-    let model: String
-    let object: String
-    let choices: [StreamChoice]
+public struct LiteLLMStreamResponse: Codable, Sendable {
+//    let id: String
+//    let created: Int
+//    let model: String
+//    let object: String
+    public init(choices: [StreamChoice], references: [LiteLLMReference]?) {
+        self.choices = choices
+        self.references = references
+    }
+    
+    public let choices: [StreamChoice]?
+    public let references: [LiteLLMReference]?
+    
+    public func accumulate(_ response: Self) -> Self {
+        let choices = (self.choices ?? []) + (response.choices ?? [])
+        let references = (self.references ?? []) + (response.references ?? [])
+        return LiteLLMStreamResponse(choices: choices, references: references)
+    }
 }
 
-struct StreamChoice: Codable {
-    let index: Int
-    let delta: Delta
+public struct StreamChoice: Codable, Sendable {
+//    let index: Int
+    public let delta: Delta
 }
 
-struct Delta: Codable {
-    let role: String?
-    let content: String?
+public struct Delta: Codable, Sendable {
+    public let role: String?
+    public let content: String?
 }

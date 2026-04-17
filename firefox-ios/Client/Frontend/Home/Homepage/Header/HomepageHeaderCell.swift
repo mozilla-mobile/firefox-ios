@@ -8,12 +8,13 @@ import Common
 import Shared
 
 // Header for the homepage in both normal and private mode
-// Contains the firefox logo and the private browsing shortcut button
+// Contains the firefox logo and the quick answers button
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
+        static let quickAnswersButtonSize = CGSize(width: 40, height: 40)
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -21,6 +22,9 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     }
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
+
+    /// Called when the quick answers button is tapped
+    var onQuickAnswersTapped: (() -> Void)?
 
     private var headerState: HeaderState?
     private var hasConfiguredView = false
@@ -50,6 +54,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
 
+    private lazy var quickAnswersButton: UIButton = .build { button in
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        let image = UIImage(systemName: "waveform", withConfiguration: config)
+        button.setImage(image, for: .normal)
+        button.accessibilityIdentifier = "HomepageHeaderCell.quickAnswersButton"
+        button.accessibilityLabel = String.FirefoxHomepage.QuickAnswersButtonAccessibilityLabel
+        button.addTarget(self, action: #selector(self.quickAnswersButtonTapped), for: .touchUpInside)
+    }
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,11 +82,15 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
+            stackContainer.addArrangedSubview(UIView()) // flexible spacer
+            stackContainer.addArrangedSubview(quickAnswersButton)
             contentView.addSubview(stackContainer)
 
             NSLayoutConstraint.activate([
                 logoStackView.topAnchor.constraint(equalTo: logoContainerView.topAnchor),
-                logoStackView.bottomAnchor.constraint(equalTo: logoContainerView.bottomAnchor)
+                logoStackView.bottomAnchor.constraint(equalTo: logoContainerView.bottomAnchor),
+                quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize.width),
+                quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize.height),
             ])
 
             hasConfiguredView = true
@@ -93,7 +110,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
 
-            logoContainerView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
+//            logoContainerView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
         ]
 
         NSLayoutConstraint.activate(headerConstraints)
@@ -116,6 +133,11 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         setupView(with: headerState.showiPadSetup)
     }
 
+    @objc
+    private func quickAnswersButtonTapped() {
+        onQuickAnswersTapped?()
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         // TODO: FXIOS-10851 This can be moved to the new homescreen wallpaper fetching redux
@@ -135,5 +157,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
                 .withRenderingMode(.alwaysTemplate)
             logoTextImage.tintColor = theme.colors.textPrimary
         }
+        quickAnswersButton.tintColor = theme.colors.textPrimary
     }
 }

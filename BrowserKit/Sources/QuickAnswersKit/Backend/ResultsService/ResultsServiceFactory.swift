@@ -12,6 +12,13 @@ protocol ResultsServiceFactory {
     func make() -> ResultsService
 }
 
+struct AuthService: RequestAuthProtocol {
+    func authenticate(request: inout URLRequest) async throws {
+        guard let apiKey = Bundle.main.infoDictionary?["LinerAPIKey"] as? String else { return }
+        request.addValue(apiKey, forHTTPHeaderField: "x-api-key")
+    }
+}
+
 // MARK: - Default Implementation
 public struct DefaultResultsServiceFactory: ResultsServiceFactory {
     let config: QuickAnswersConfig
@@ -26,6 +33,8 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
     // MARK: - Private Helpers
     private func makeLiteLLMClient() -> LiteLLMClient? {
         // TODO: FXIOS-15196 - Create LiteLLMClient with proper configurations and authenticator
-        return nil
+        let baseURL = URL(string: "https://api.getliner.com")!
+        let endPoint = "v1/quick-answer"
+        return LiteLLMClient(authenticator: AuthService(), baseURL: baseURL, endPoint: endPoint)
     }
 }

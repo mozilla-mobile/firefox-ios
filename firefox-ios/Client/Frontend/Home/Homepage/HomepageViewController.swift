@@ -561,9 +561,16 @@ final class HomepageViewController: UIViewController,
     ) -> UICollectionViewCell {
         switch item {
         case .header(let state):
-            return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
+            return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { [weak self] cell in
+                guard let self else { return }
                 cell.configure(headerState: state)
                 cell.applyTheme(theme: currentTheme)
+                cell.onQuickAnswersTapped = {
+                    self.dispatchNavigationBrowserAction(
+                        with: NavigationDestination(.quickAnswers),
+                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+                    )
+                }
             }
         case .privacyNotice:
             return configuredCell(cellType: PrivacyNoticeCell.self, at: indexPath) { cell in

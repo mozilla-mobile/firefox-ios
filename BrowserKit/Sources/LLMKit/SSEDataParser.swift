@@ -83,8 +83,12 @@ final class SSEDataParser {
 
     /// Processes a single raw event line, extracting the payload and decoding it.
     private func processEvent<T: Decodable>(_ rawEvent: String) throws -> T? {
-        let trimmedEvent = rawEvent.trimmingCharacters(in: .whitespacesAndNewlines)
+        print("FF: \(rawEvent)")
+        var trimmedEvent = rawEvent.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedEvent.isEmpty else { return nil }
+        
+        // Remove event data in case are present
+        trimmedEvent.removeFirst("event: data\n".count)
 
         // Attempt to extract payload
         guard let payload = extractPayload(from: trimmedEvent),
@@ -107,6 +111,7 @@ final class SSEDataParser {
 
     /// Extracts the payload from a valid event line by removing the data prefix.
     private func extractPayload(from line: String) -> String? {
+        print("FF: is valid line: \(isValidEventLine(line))")
         guard isValidEventLine(line) else { return nil }
         return String(line.dropFirst(Constants.dataPrefix.count))
     }

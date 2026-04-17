@@ -14,16 +14,16 @@ public protocol HeroImageViewModel {
     var fallbackFaviconSize: CGSize { get }
 }
 
-struct DefaultHeroImageViewModel: HeroImageViewModel {
-    var urlStringRequest: String
-    var type: SiteImageType
-    var generalCornerRadius: CGFloat
-    var faviconCornerRadius: CGFloat
-    var faviconBorderWidth: CGFloat
-    var heroImageSize: CGSize
-    var fallbackFaviconSize: CGSize
+public struct DefaultHeroImageViewModel: HeroImageViewModel {
+    public var urlStringRequest: String
+    public var type: SiteImageType
+    public var generalCornerRadius: CGFloat
+    public var faviconCornerRadius: CGFloat
+    public var faviconBorderWidth: CGFloat
+    public var heroImageSize: CGSize
+    public var fallbackFaviconSize: CGSize
 
-    init(urlStringRequest: String,
+    public init(urlStringRequest: String,
          generalCornerRadius: CGFloat,
          faviconCornerRadius: CGFloat,
          faviconBorderWidth: CGFloat,

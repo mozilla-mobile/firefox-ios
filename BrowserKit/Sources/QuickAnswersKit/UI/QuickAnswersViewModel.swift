@@ -38,6 +38,7 @@ final class QuickAnswersViewModel {
                 onStateChange?(.recordVoice(result, nil))
                 guard result.isFinal else { continue }
                 await searchVoiceResult(result)
+                try await service.stopRecording()
                 break
             }
         } catch {

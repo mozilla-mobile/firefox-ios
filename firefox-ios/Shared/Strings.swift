@@ -981,6 +981,12 @@ extension String {
             value: "Homepage",
             comment: "The title for the Firefox homepage, only used to denote the name of the destination screen in the system back navigation button long-press menu")
 
+        public static let QuickAnswersButtonAccessibilityLabel = MZLocalizedString(
+            key: "FirefoxHome.QuickAnswersButton.AccessibilityLabel.v141",
+            tableName: "FirefoxHomepage",
+            value: "Quick Answer",
+            comment: "Accessibility label for the Quick Answer button on the Firefox homepage header, next to the Firefox logo. This button opens the voice-powered quick answer feature.")
+
         public struct PrivacyNotice {
             public static let Body = MZLocalizedString(
                 key: "FirefoxHome.PrivacyNotice.Body.v148",

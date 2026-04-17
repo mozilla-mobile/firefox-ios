@@ -11,6 +11,7 @@ import Storage
 import Redux
 import PDFKit
 import SummarizeKit
+import QuickAnswersKit
 
 import enum MozillaAppServices.VisitType
 import struct MozillaAppServices.CreditCard
@@ -202,6 +203,30 @@ final class BrowserCoordinator: BaseCoordinator,
         coordinator.parentCoordinator = self
         add(child: coordinator)
         coordinator.start()
+    }
+
+    func showQuickAnswers() {
+        let quickAnswersCoordinator = QuickAnswersCoordinator(
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            router: router,
+            onNavigate: { [weak self] navigationType in
+                guard let self else { return }
+                switch navigationType {
+                case .url(let url):
+                    self.browserViewController.homePanel(
+                        didSelectURL: url,
+                        visitType: .link,
+                        isGoogleTopSite: false
+                    )
+                case .searchResult(let query):
+                    self.browserViewController.handle(query: query, isPrivate: false)
+                }
+            }
+        )
+        add(child: quickAnswersCoordinator)
+        quickAnswersCoordinator.start()
     }
 
     func showEditBookmark(parentFolder: FxBookmarkNode, bookmark: FxBookmarkNode) {
