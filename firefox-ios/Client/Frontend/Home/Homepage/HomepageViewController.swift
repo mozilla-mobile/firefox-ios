@@ -59,7 +59,6 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
-
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
         return homepageTabStateStore.state(for: activeTabUUID)
