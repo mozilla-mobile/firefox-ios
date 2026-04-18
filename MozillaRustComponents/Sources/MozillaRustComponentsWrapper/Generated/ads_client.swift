@@ -2941,25 +2941,25 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_clear_cache() != 63953) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_clear_cache() != 10112) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_record_click() != 2) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_record_click() != 19322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_record_impression() != 43275) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_record_impression() != 14955) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 18252) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_report_ad() != 25103) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 2157) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_image_ads() != 6313) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 37780) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_spoc_ads() != 3662) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 26296) {
+    if (uniffi_ads_client_checksum_method_mozadsclient_request_tile_ads() != 44275) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_ads_client_checksum_method_mozadsclientbuilder_build() != 36609) {
