@@ -789,15 +789,6 @@ final class LocationView: UIView,
             attributes: [.foregroundColor: color]
         )
     }
-
-    // MARK: - UIGestureRecognizerDelegate
-    func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-    ) -> Bool {
-        // When long pressing a button make sure the textfield's long press gesture is not triggered
-        return !(otherGestureRecognizer.view is UIButton)
-    }
 }
 
 fileprivate extension UIImage {
