@@ -104,10 +104,9 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
             }
             return
         }
+        transcriptLabel.text = text
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             placeholderLabel.alpha = 0.0
-        } completion: { [weak self] _ in
-            self?.transcriptLabel.text = text
         }
     }
 

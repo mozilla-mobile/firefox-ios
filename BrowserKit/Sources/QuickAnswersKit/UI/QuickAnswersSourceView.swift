@@ -8,11 +8,10 @@ import SiteImageView
 
 struct QuickAnswersSourceItem {
     let title: String
-    let thumbnail: UIImage?
+    let thumbnailURL: URL?
     let faviconURL: URL?
 }
 
-// TODO: - Code Refactor (namings)
 final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let thumbnailCornerRadius: CGFloat = 16.0
@@ -21,20 +20,13 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         static let faviconSize: CGFloat = 16.0
         static let faviconCornerRadius: CGFloat = faviconSize / 2.0
         static let titleGap: CGFloat = 4.0
-        static let titleHeight: CGFloat = 18.0
     }
-    private let thumbnailImageView: UIImageView = .build {
-        $0.contentMode = .scaleAspectFill
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = UX.thumbnailCornerRadius
-        $0.layer.borderWidth = UX.thumbnailBorderWidth
-    }
+    private let thumbnailImageView: HeroImageView = .build()
     private let thumbnailImageContainerView: UIView = .build()
     private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = UX.faviconCornerRadius
-        $0.adjustsImageSizeForAccessibilityContentSizeCategory = true
     }
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.footnote.scaledFont()
@@ -79,7 +71,17 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
 
     // MARK: - Configuration
     func configure(with item: QuickAnswersSourceItem) {
-        thumbnailImageView.image = item.thumbnail
+        if let thumbnailURLString = item.thumbnailURL?.absoluteString {
+            let heroImageViewModel = DefaultHeroImageViewModel(
+                urlStringRequest: thumbnailURLString,
+                generalCornerRadius: UX.thumbnailCornerRadius,
+                faviconCornerRadius: UX.faviconCornerRadius,
+                faviconBorderWidth: UX.thumbnailBorderWidth,
+                heroImageSize: .zero,
+                fallbackFaviconSize: CGSize(width: UX.faviconSize, height: UX.faviconSize)
+            )
+            thumbnailImageView.setHeroImage(heroImageViewModel)
+        }
         faviconImageView.setFavicon(
             FaviconImageViewModel(
                 siteURLString: item.faviconURL?.absoluteString,
@@ -95,13 +97,17 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
             FxShadow.shadow200,
             theme: theme
         )
-        thumbnailImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        let heroImageColors = HeroImageViewColor(
+            faviconTintColor: theme.colors.iconPrimary,
+            faviconBackgroundColor: theme.colors.layer1,
+            faviconBorderColor: theme.colors.borderPrimary
+        )
+        thumbnailImageView.updateHeroImageTheme(with: heroImageColors)
         titleLabel.textColor = theme.colors.textSecondary
     }
 }
 
-// MARK: - Source View
-
+// TODO: - FXIOS-14720 Add Strings and accessibility ids
 final class QuickAnswersSourceView: UIView,
                                     UICollectionViewDataSource,
                                     UICollectionViewDelegateFlowLayout,
@@ -184,22 +190,14 @@ final class QuickAnswersSourceView: UIView,
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
-    // what i want to achieve => i need the items to be always spanning the available area, but in
-    // case they are too big then i need them to wrap in a different row.
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let cellMaxWidth: CGFloat = 150
-        let insets: CGFloat = 16
-        
-        // 600
         let availableWidth = collectionView.frame.width
-        // 2.9 ~ 2
-        let numberOfItemsPerRow = floor(availableWidth / cellMaxWidth)
-        // 300
-        let width = (availableWidth - numberOfItemsPerRow * insets) / numberOfItemsPerRow
+        let numberOfItemsPerRow = floor(availableWidth / UX.maxItemWidth)
+        let width = (availableWidth - numberOfItemsPerRow * UX.interItemSpacing) / numberOfItemsPerRow
         return CGSize(width: width, height: width * 3/4)
     }
 
@@ -209,26 +207,4 @@ final class QuickAnswersSourceView: UIView,
         headerLabel.textColor = theme.colors.textPrimary
         collectionView.reloadData()
     }
-}
-
-
-@available(iOS 17, *)
-#Preview {
-    let viewController = UIViewController()
-    let view = QuickAnswersSourceView()
-    view.configure(with: [
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.google.com")),
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.google.com")),
-        .init(title: "Title1", thumbnail: UIImage(resource: .test), faviconURL: URL(string: "https://www.facebook.com"))
-    ])
-    viewController.view.addSubview(view)
-    view.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-        view.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor),
-        view.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor),
-        view.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor),
-        view.bottomAnchor.constraint(equalTo: viewController.view.bottomAnchor),
-    ])
-    view.applyTheme(theme: LightTheme())
-    return viewController
 }
