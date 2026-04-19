@@ -964,11 +964,23 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        let isNonBadDomainCertError = CertErrors.contains(nsError.code)
-            && !NativeErrorPageHelper.isBadCertDomainError(nsError)
+        let noInternetErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        let isNoInternetError = isNICErrorPageEnabled && nsError.code == noInternetErrorCode
+        let isBadCertDomainError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
+            for: nsError,
+            isOtherErrorPagesEnabled: isOtherErrorPagesEnabled
+        )
 
-        if isNativeErrorPageEnabled && !isNonBadDomainCertError {
+        if isNativeErrorPageEnabled && (isNoInternetError || isBadCertDomainError) {
+            let errorType: NativeErrorPageHelper.NetworkErrorType? = if isNoInternetError {
+                .noInternetConnection
+            } else if isBadCertDomainError {
+                .badCertDomain
+            } else {
+                nil
+            }
             let action = NativeErrorPageAction(networkError: nsError,
+                                               errorType: errorType,
                                                windowUUID: windowUUID,
                                                actionType: NativeErrorPageActionType.receivedError
             )
@@ -1081,8 +1093,10 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
-                let isCertificateError = isBadCertDomainErrorPageEnabled
-                    && NativeErrorPageHelper.isBadCertDomainError(error)
+                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
+                    for: error,
+                    isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
+                )
 
                 if isNoInternetError || isCertificateError {
                     if isCertificateError {
@@ -1093,8 +1107,16 @@ extension BrowserViewController: WKNavigationDelegate {
                             logger: logger
                         )
                     }
+                    let errorType: NativeErrorPageHelper.NetworkErrorType? = if isNoInternetError {
+                        .noInternetConnection
+                    } else if isCertificateError {
+                        .badCertDomain
+                    } else {
+                        nil
+                    }
                     let action = NativeErrorPageAction(
                         networkError: error,
+                        errorType: errorType,
                         windowUUID: windowUUID,
                         actionType: NativeErrorPageActionType.receivedError
                     )
