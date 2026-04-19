@@ -968,7 +968,7 @@ extension BrowserViewController: WKNavigationDelegate {
         let isNoInternetError = isNICErrorPageEnabled && nsError.code == noInternetErrorCode
         let isBadCertDomainError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
             for: nsError,
-            isOtherErrorPagesEnabled: isOtherErrorPagesEnabled
+            isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
         )
 
         if isNativeErrorPageEnabled && (isNoInternetError || isBadCertDomainError) {
