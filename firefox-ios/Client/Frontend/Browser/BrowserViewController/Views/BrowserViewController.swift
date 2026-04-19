@@ -4661,7 +4661,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if selectedTab.isFxHomeTab && previousTab != nil {
+            if selectedTab.isFxHomeTab && previousTab != nil && !webView.isLoading {
                 store.dispatch(
                     GeneralBrowserAction(
                         windowUUID: windowUUID,
@@ -4674,14 +4674,14 @@ extension BrowserViewController: TabManagerDelegate {
 
             // FXIOS-14783: Experimentation on removing this code, do not add anything in there
             if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
-                if selectedTab.isFxHomeTab {
+                if selectedTab.isFxHomeTab && !webView.isLoading {
                     // Added as initial fix for WKWebView memory leak. Needs further investigation.
                     // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
                     // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
                     needsReload = true
                 }
 
-                if webView.url == nil {
+                if webView.url == nil && !webView.isLoading {
                     // The webView can go gray if it was zombified due to memory pressure.
                     // When this happens, the URL is nil, so try restoring the page upon selection.
                     needsReload = true
@@ -4702,7 +4702,7 @@ extension BrowserViewController: TabManagerDelegate {
                                          canGoForward: selectedTab.canGoForward,
                                          windowUUID: windowUUID)
 
-        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
+        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url), !selectedTab.isLoading {
             addressToolbarContainer.hideProgressBar()
         }
 
