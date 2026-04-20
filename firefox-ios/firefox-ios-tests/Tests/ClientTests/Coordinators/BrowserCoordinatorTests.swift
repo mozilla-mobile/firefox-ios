@@ -628,7 +628,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
     func testShowQuickAnswers_didFinish_removesChild() throws {
         let subject = createSubject()
         subject.showQuickAnswers()
-        
+
         let coordinator = try XCTUnwrap(subject.childCoordinators.first as? QuickAnswersCoordinator)
         subject.didFinish(from: coordinator)
 

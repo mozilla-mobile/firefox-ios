@@ -91,7 +91,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
                 stackContainer.addArrangedSubview(UIView())
                 stackContainer.addArrangedSubview(quickAnswersButton)
             }
-            
+
             contentView.addSubview(stackContainer)
             logoStackView.pinToSuperview()
 

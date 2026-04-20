@@ -489,7 +489,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
 
         let action = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
         let newState = reducer(initialState, action)
-        
+
         XCTAssertEqual(newState.navigationDestination?.destination, .quickAnswers)
     }
 
