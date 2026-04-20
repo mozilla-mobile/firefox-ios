@@ -3090,9 +3090,9 @@ extension String {
                 )
 
                 public static let BlockedStatusDescription = MZLocalizedString(
-                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151",
+                    key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v152",
                     tableName: "Settings",
-                    value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
+                    value: "**Blocked**: You won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
                     comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
                 )
             }
@@ -8659,6 +8659,14 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Private Browsing Data Erased",
                 comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast."
+            )
+        }
+        struct v151 {
+            public static let BlockedStatusDescription = MZLocalizedString(
+                key: "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151",
+                tableName: "Settings",
+                value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
+                comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
             )
         }
     }
