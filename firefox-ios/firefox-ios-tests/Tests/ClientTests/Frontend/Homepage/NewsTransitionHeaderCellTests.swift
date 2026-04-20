@@ -67,6 +67,53 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
         XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 1)
     }
 
+    func test_updatePickerState_updatesCategorySelection() {
+        let view = createSubject()
+
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: false,
+            categories: testCategories,
+            selectedNewsfeedCategoryID: nil
+        )
+
+        view.updatePickerState(selectedNewsfeedCategoryID: "science", newsfeedCategoryPickerOffsetX: 0)
+
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
+                             in: view)?.isSelected == false)
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".science",
+                             in: view)?.isSelected == true)
+    }
+
+    private var testCategories: [MerinoCategoryConfiguration] {
+        [
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "technology",
+                    recommendations: [],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Technology",
+                    subtitle: nil,
+                    receivedFeedRank: 2
+                )
+            ),
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "science",
+                    recommendations: [],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Science",
+                    subtitle: nil,
+                    receivedFeedRank: 1
+                )
+            ),
+        ]
+    }
+
     private func createSubject() -> NewsTransitionHeaderCell {
         let view = NewsTransitionHeaderCell(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
         trackForMemoryLeaks(view)
@@ -83,6 +130,12 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
 
     private func sectionTitleStackView(in view: UIView) -> UIStackView? {
         return allSubviews(in: view).compactMap { $0 as? UIStackView }.first
+    }
+
+    private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {
+        return allSubviews(in: view)
+            .compactMap { $0 as? UIButton }
+            .first(where: { $0.accessibilityIdentifier == a11yID })
     }
 
     private func allSubviews(in view: UIView) -> [UIView] {

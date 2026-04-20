@@ -122,7 +122,7 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
     }
 
     // MARK: = UIScrollViewDelegate
-    
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         onScroll?(scrollView.contentOffset.x)
     }
