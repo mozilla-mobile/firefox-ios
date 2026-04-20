@@ -30,7 +30,7 @@ final class HomepageDiffableDataSource:
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
-        case pocket(TextColor?, String?)
+        case pocket(TextColor?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -146,7 +146,7 @@ final class HomepageDiffableDataSource:
         }
 
         if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
-            let pocketSection = HomeSection.pocket(textColor, selectedNewsfeedCategoryID)
+            let pocketSection = HomeSection.pocket(textColor)
             snapshot.appendSections([pocketSection])
             snapshot.appendItems(stories, toSection: pocketSection)
         }
