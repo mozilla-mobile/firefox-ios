@@ -72,6 +72,14 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         return true
     }
 
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     required init?(coder: NSCoder) {
         fatalError()
     }
