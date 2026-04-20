@@ -78,7 +78,7 @@ extension SearchBarLocationProvider {
     }
 }
 
-final class SearchBarSettingsViewModel: LegacyFeatureFlaggable {
+final class SearchBarSettingsViewModel: FeatureFlaggable, HasUserFeaturePreferences {
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
@@ -89,7 +89,7 @@ final class SearchBarSettingsViewModel: LegacyFeatureFlaggable {
     }
 
     var isNewAddressBarOn: Bool {
-        featureFlags.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.addressBarMenu)
     }
 
     var title: String {
@@ -101,11 +101,7 @@ final class SearchBarSettingsViewModel: LegacyFeatureFlaggable {
     }
 
     var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
+        userPreferences.searchBarPosition
     }
 
     // TODO: FXIOS-12830 view models should not contain Views that require main actor isolation
@@ -133,9 +129,9 @@ final class SearchBarSettingsViewModel: LegacyFeatureFlaggable {
 extension SearchBarSettingsViewModel {
     @MainActor
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
-        let previousPosition: SearchBarPosition? = featureFlags.getCustomState(for: .searchBarPosition)
+        let previousPosition = userPreferences.searchBarPosition
 
-        featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
+        userPreferences.setSearchBarPosition(searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition, previousPosition: previousPosition)
 
