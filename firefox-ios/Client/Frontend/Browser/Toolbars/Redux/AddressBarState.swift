@@ -485,7 +485,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: toolbarAction.translationConfiguration,
+            translationConfiguration: toolbarAction.translationConfiguration?.state != nil
+                ? toolbarAction.translationConfiguration
+                : state.translationConfiguration,
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
@@ -1155,11 +1157,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isFeatureEnabledFromState = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
         let shouldShowTranslationIcon = isFeatureEnabledFromAction || isFeatureEnabledFromState
         guard shouldShowTranslationIcon else { return nil }
-        let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
-        guard let state = configuration?.state else { return nil }
+        let iconState = action.translationConfiguration?.state ?? addressBarState.translationConfiguration?.state
+        guard let iconState else { return nil }
         return translateAction(
             enabled: isLoading == false,
-            state: state,
+            state: iconState,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
     }
