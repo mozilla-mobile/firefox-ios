@@ -488,12 +488,21 @@ final class BookmarksViewController: SiteTableViewController,
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
               keyboardHeight > 0 else {
             bottomStackView.removeKeyboardSpacer()
+			updateInsets()
             return
         }
 
         let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
+		updateInsets()
     }
+
+	private func updateInsets() {
+		let bottomInset = bottomStackView.isHidden ? 0 : searchbar.bounds.height
+
+		tableView.contentInset.bottom = bottomInset
+		tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+	}
 
     private func setupEmptyStateView() {
         view.addSubview(a11yEmptyStateScrollView)
