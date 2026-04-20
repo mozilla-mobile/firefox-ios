@@ -485,13 +485,25 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: toolbarAction.translationConfiguration?.state != nil
-                ? toolbarAction.translationConfiguration
-                : state.translationConfiguration,
+            translationConfiguration: resolveTranslationConfig(
+                from: toolbarAction,
+                existingConfig: state.translationConfiguration
+            ),
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
+    }
+
+    private static func resolveTranslationConfig(
+        from action: ToolbarAction,
+        existingConfig: TranslationConfiguration?
+    ) -> TranslationConfiguration? {
+        guard let actionConfig = action.translationConfiguration else { return nil }
+        if actionConfig.state == nil, let existingIconState = existingConfig?.state {
+            return TranslationConfiguration(prefs: actionConfig.prefs, state: existingIconState)
+        }
+        return actionConfig
     }
 
     @MainActor
