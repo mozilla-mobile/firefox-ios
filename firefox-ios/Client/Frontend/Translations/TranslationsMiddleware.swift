@@ -58,6 +58,10 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
             self.clearFlowId(for: action)
             self.checkTranslationsAreEligible(for: action)
 
+        case ToolbarActionType.websiteLoadingStateDidChange:
+            guard let action = (action as? ToolbarAction) else { return }
+            self.handleWebsiteLoadingStateDidChange(for: action, and: state)
+
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
             self.handleTappingOnTranslateButton(for: action, and: state)
@@ -76,6 +80,28 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         default:
            break
         }
+    }
+
+    private func handleWebsiteLoadingStateDidChange(for action: ToolbarAction, and state: AppState) {
+        guard action.isLoading == false else { return }
+
+        guard let toolbarState = state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        ) else { return }
+
+        let translationConfig = toolbarState.addressToolbar.translationConfiguration
+        guard translationConfig?.isTranslationFeatureEnabled == true,
+              translationConfig?.state == nil,
+              toolbarState.addressToolbar.url?.isWebPage() == true else { return }
+
+        let syntheticAction = ToolbarAction(
+            translationConfiguration: translationConfig,
+            windowUUID: action.windowUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+        checkTranslationsAreEligible(for: syntheticAction)
     }
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {

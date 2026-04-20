@@ -215,6 +215,102 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    // MARK: - websiteLoadingStateDidChange tests
+
+    func test_websiteLoadingStateDidChange_whenTranslationPending_dispatchesReceivedTranslationLanguage() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+
+        let stateWithPendingTranslation = AppState.reducer(mockStore.state, ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        ))
+
+        let loadingAction = ToolbarAction(
+            isLoading: false,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.websiteLoadingStateDidChange
+        )
+
+        let expectation = XCTestExpectation(
+            description: "expect receivedTranslationLanguage to be fired after page finishes loading"
+        )
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(stateWithPendingTranslation, loadingAction)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(actionCalled.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(actionType, ToolbarActionType.receivedTranslationLanguage)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+    }
+
+    func test_websiteLoadingStateDidChange_whenTranslationAlreadyDetermined_doesNotDispatch() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+
+        let stateWithKnownTranslationState = setupAppStateWithTranslationConfig(for: .inactive)
+
+        let loadingAction = ToolbarAction(
+            isLoading: false,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.websiteLoadingStateDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "no dispatch when translation state already known")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(stateWithKnownTranslationState, loadingAction)
+
+        wait(for: [expectation], timeout: 0.5)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_websiteLoadingStateDidChange_whileStillLoading_doesNotDispatch() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+
+        let stateWithPendingTranslation = AppState.reducer(mockStore.state, ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        ))
+
+        let loadingAction = ToolbarAction(
+            isLoading: true,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.websiteLoadingStateDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "no dispatch while page is still loading")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(stateWithPendingTranslation, loadingAction)
+
+        wait(for: [expectation], timeout: 0.5)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     // MARK: - didTapButton tests
     func test_didTapButtonAction_withoutFF_doesNotDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: false)
