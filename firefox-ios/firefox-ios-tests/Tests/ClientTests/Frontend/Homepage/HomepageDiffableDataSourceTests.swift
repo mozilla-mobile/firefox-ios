@@ -226,7 +226,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             )
         )
 
-        dataSource.updateSn apshot(
+        dataSource.updateSnapshot(
             state: categorizedState,
             selectedNewsfeedCategoryID: "technology",
             jumpBackInDisplayConfig: mockSectionConfig
