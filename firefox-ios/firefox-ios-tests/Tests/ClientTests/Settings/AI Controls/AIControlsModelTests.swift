@@ -49,24 +49,34 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
     }
 
     @MainActor
-    func testHasVisibleAIFeatures() {
+    func testHasVisibleAIFeaturesWithTranslationsOnly() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
-        let aiControlsModel1 = createSubject(prefs: mockPrefs)
-        XCTAssertTrue(aiControlsModel1.hasVisibleAIFeatures)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
+        XCTAssertTrue(aiControlsModel.hasVisibleAIFeatures)
+    }
 
+    @MainActor
+    func testHasVisibleAIFeaturesWithSummariesOnly() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
-        let aiControlsModel2 = createSubject(prefs: mockPrefs)
-        XCTAssertTrue(aiControlsModel2.hasVisibleAIFeatures)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
+        XCTAssertTrue(aiControlsModel.hasVisibleAIFeatures)
+    }
 
+    @MainActor
+    func testHasVisibleAIFeaturesWithNoneEnabled() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: false)
-        let aiControlsModel3 = createSubject(prefs: mockPrefs)
-        XCTAssertFalse(aiControlsModel3.hasVisibleAIFeatures)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
+        XCTAssertFalse(aiControlsModel.hasVisibleAIFeatures)
     }
 
     @MainActor
     func testInitialize() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: true)
-        let aiControlsModel = createSubject(prefs: mockPrefs)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
         XCTAssertFalse(aiControlsModel.translationEnabled)
@@ -75,7 +85,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
     @MainActor
     func testInitializeWithTranslationFeatureFlagDisabled() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
-        let aiControlsModel = createSubject(prefs: mockPrefs)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.pageSummariesVisible)
         XCTAssertFalse(aiControlsModel.translationsVisible)
     }
@@ -83,7 +94,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
     @MainActor
     func testInitializeWithPageSummariesFeatureFlagDisabled() {
         setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
-        let aiControlsModel = createSubject(prefs: mockPrefs)
+        let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
+        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertFalse(aiControlsModel.pageSummariesVisible)
         XCTAssertTrue(aiControlsModel.translationsVisible)
     }
@@ -203,9 +215,23 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    private func createMockSummarizerConfig(isEnabled: Bool) -> MockSummarizerNimbusUtils {
+        let mock = MockSummarizerNimbusUtils()
+        mock.isSummarizeFeatureEnabled = isEnabled
+        mock.isSummarizeFeatureToggledOn = isEnabled
+        return mock
+    }
+
     @MainActor
-    private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
+    private func createSubject(
+        prefs: Prefs,
+        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+    ) -> AIControlsModel {
+        let subject = AIControlsModel(
+            prefs: prefs,
+            windowUUID: .XCTestDefaultUUID,
+            summarizerConfiguration: summarizerConfiguration
+        )
         trackForMemoryLeaks(subject)
         return subject
     }
