@@ -131,7 +131,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         audioWaveform.startAnimating()
         registerViewModelUpdates()
     }
-    
+
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         contentView.adjustBottomInsets(for: privacyButton.frame.height)
@@ -172,7 +172,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
-            
+
             privacyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             privacyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             privacyButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,

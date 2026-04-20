@@ -91,7 +91,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     func adjustBottomInsets(for height: CGFloat) {
         scrollView.contentInset.bottom = height
     }
-    
+
     func configureTranscript(_ text: String) {
         // if the placeholder is visible then hide it before adding text to the transcription label.
         // This is needed to don't overlap the show of the transcription with the placeholder label
