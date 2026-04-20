@@ -308,12 +308,16 @@ extension BrowserViewController {
 
     @objc
     func zoomIn() {
+        guard !contentContainer.hasAnyHomepage else { return }
+
         let zoomValue = zoomManager.zoomIn()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomValue)
     }
 
     @objc
     func zoomOut() {
+        guard !contentContainer.hasAnyHomepage else { return }
+
         let zoomValue = zoomManager.zoomOut()
         zoomPageBar?.updateZoomLabel(zoomValue: zoomValue)
     }
