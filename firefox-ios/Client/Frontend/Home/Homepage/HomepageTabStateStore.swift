@@ -6,6 +6,7 @@ import Foundation
 
 struct HomepageTabState: Equatable {
     var scrollOffsetY: CGFloat?
+    var selectedNewsfeedCategoryID: String?
 }
 
 protocol HomepageTabStateStoring: AnyObject {

@@ -14,7 +14,6 @@ struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: MerinoStoryResponse
     let hasMerinoResponseContent: Bool
-    let selectedCategoryID: String? // nil = All stories
     let shouldShowSection: Bool
 
     struct Constants {
@@ -34,7 +33,6 @@ struct MerinoState: StateType, Equatable {
             windowUUID: windowUUID,
             merinoData: MerinoStoryResponse(),
             hasMerinoResponseContent: false,
-            selectedCategoryID: nil,
             shouldShowSection: shouldShowSection
         )
     }
@@ -43,13 +41,11 @@ struct MerinoState: StateType, Equatable {
         windowUUID: WindowUUID,
         merinoData: MerinoStoryResponse,
         hasMerinoResponseContent: Bool,
-        selectedCategoryID: String?,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.merinoData = merinoData
         self.hasMerinoResponseContent = hasMerinoResponseContent
-        self.selectedCategoryID = selectedCategoryID
         self.shouldShowSection = shouldShowSection
     }
 
@@ -64,8 +60,6 @@ struct MerinoState: StateType, Equatable {
             return handleMerinoStoriesAction(action, state: state)
         case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
-        case MerinoActionType.categorySelected:
-            return handleCategorySelectedAction(action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -85,7 +79,6 @@ struct MerinoState: StateType, Equatable {
             windowUUID: state.windowUUID,
             merinoData: merinoResponse,
             hasMerinoResponseContent: merinoContentExists,
-            selectedCategoryID: state.selectedCategoryID,
             shouldShowSection: merinoContentExists && state.shouldShowSection
         )
     }
@@ -99,25 +92,6 @@ struct MerinoState: StateType, Equatable {
 
         return state.copyWithUpdates(
             shouldShowSection: isEnabled
-        )
-    }
-
-    private static func handleCategorySelectedAction(_ action: Action, state: MerinoState) -> MerinoState {
-        guard let merinoAction = action as? MerinoAction
-        else {
-            return defaultState(from: state)
-        }
-
-        /// `copyWithUpdates` uses a double-optional for optional fields:
-        /// - `.some(.some(value))` sets a concrete value
-        /// - `.some(nil)` leaves the existing value unchanged
-        /// - `nil` clears the property
-        /// We need to pass the outer optional explicitly here so tapping the client-side  "All" category can clear
-        /// `selectedCategoryID` back to `nil`.
-        return state.copyWithUpdates(
-            selectedCategoryID: merinoAction.selectedCategoryID == nil
-                ? (nil as String??)
-                : .some(merinoAction.selectedCategoryID)
         )
     }
 
@@ -142,10 +116,10 @@ extension MerinoState {
         (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
     }
 
-    var visibleStories: [MerinoStoryConfiguration] {
+    func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
         if !availableCategories.isEmpty {
-            if let selectedCategoryID {
-                return availableCategories.first(where: { $0.feedID == selectedCategoryID })?.recommendations ?? []
+            if let selectedNewsfeedCategoryID {
+                return availableCategories.first(where: { $0.feedID == selectedNewsfeedCategoryID })?.recommendations ?? []
             }
             return availableCategories.flatMap(\.recommendations)
         }

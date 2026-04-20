@@ -59,6 +59,11 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
+    private var currentHomepageTabState: HomepageTabState {
+        guard let activeTabUUID else { return HomepageTabState() }
+        return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -167,6 +172,8 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
 
         activeTabUUID = tabManager.selectedTab?.tabUUID
+        refreshHomepageDataSourceSnapshot()
+
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -382,6 +389,7 @@ final class HomepageViewController: UIViewController,
 
             dataSource?.updateSnapshot(
                 state: state,
+                selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             ) { [weak self] in
                 // Force the collection view to finish applying the latest layout before re-syncing the
@@ -653,7 +661,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         let position = indexPath.item + 1
-        let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
+        let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear, nil)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
         return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
@@ -719,8 +727,8 @@ final class HomepageViewController: UIViewController,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
             categories: homepageState.merinoState.availableCategories,
-            selectedCategoryID: homepageState.merinoState.selectedCategoryID,
-            onSelection: dispatchCategorySelectedAction
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -762,7 +770,7 @@ final class HomepageViewController: UIViewController,
                 theme: currentTheme
             )
             return sectionLabelCell
-        case .pocket(let textColor):
+        case .pocket(let textColor, _):
             sectionLabelCell.configure(
                 sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
                 textColor: textColor,
@@ -1048,13 +1056,19 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchCategorySelectedAction(selectedCategoryID: String?) {
-        store.dispatch(
-            MerinoAction(
-                selectedCategoryID: selectedCategoryID,
-                windowUUID: windowUUID,
-                actionType: MerinoActionType.categorySelected
-            )
+    private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
+        }
+        refreshHomepageDataSourceSnapshot()
+    }
+
+    private func refreshHomepageDataSourceSnapshot() {
+        dataSource?.updateSnapshot(
+            state: homepageState,
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
 

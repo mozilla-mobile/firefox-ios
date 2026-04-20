@@ -30,7 +30,7 @@ final class HomepageDiffableDataSource:
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
-        case pocket(TextColor?)
+        case pocket(TextColor?, String?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -96,6 +96,7 @@ final class HomepageDiffableDataSource:
 
     func updateSnapshot(
         state: HomepageState,
+        selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
         completion: (() -> Void)? = nil
     ) {
@@ -144,9 +145,10 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
-        if let stories = getMerinoStories(with: state.merinoState) {
-            snapshot.appendSections([.pocket(textColor)])
-            snapshot.appendItems(stories, toSection: .pocket(textColor))
+        if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
+            let pocketSection = HomeSection.pocket(textColor, selectedNewsfeedCategoryID)
+            snapshot.appendSections([pocketSection])
+            snapshot.appendItems(stories, toSection: pocketSection)
         }
 
         apply(snapshot, animatingDifferences: true, completion: completion)
@@ -206,9 +208,12 @@ final class HomepageDiffableDataSource:
         return state.bookmarks.compactMap { .bookmark($0) }
     }
 
-    private func getMerinoStories(with merinoState: MerinoState) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = merinoState.visibleStories.map {
-            .merino($0, merinoState.selectedCategoryID)
+    private func getMerinoStories(
+        with merinoState: MerinoState,
+        selectedNewsfeedCategoryID: String?
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        let stories: [HomeItem] = merinoState.visibleStories(selectedNewsfeedCategoryID: selectedNewsfeedCategoryID).map {
+            .merino($0, selectedNewsfeedCategoryID)
         }
         guard merinoState.shouldShowSection, !stories.isEmpty else { return nil }
         return stories
