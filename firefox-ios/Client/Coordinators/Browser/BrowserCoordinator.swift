@@ -1039,7 +1039,7 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
+    func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1077,6 +1077,25 @@ final class BrowserCoordinator: BaseCoordinator,
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
+    }
+
+    func showQuickAnswers() {
+        guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        let coordinator = QuickAnswersCoordinator(
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            router: router
+        ) { [weak self] navigationType in
+            switch navigationType {
+            case .url(let url):
+                self?.openURLinNewTab(url)
+            case .searchResult(let query):
+                self?.browserViewController.openSearchNewTab(query)
+            }
+        }
+        add(child: coordinator)
+        coordinator.start()
     }
 
     func showPrivacyNoticeLink(url: URL) {

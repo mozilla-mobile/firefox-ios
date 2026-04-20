@@ -192,28 +192,24 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
-                                              heightDimension: .estimated(UX.standardSingleItemHeight))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(UX.HeaderConstants.estimatedHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
-                                               heightDimension: .estimated(UX.standardSingleItemHeight))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(UX.HeaderConstants.estimatedHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let containerWidth = environment.container.contentSize.width
-        let effectiveInsets = environment.container.effectiveContentInsets
-        let headerWidth = HomepageHeaderCell.UX.contentWidth()
-        let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
-        let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
 
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: horizontalInset,
+            leading: leadingInset,
             bottom: UX.spacingBetweenSections,
-            trailing: horizontalInset)
+            trailing: leadingInset)
 
         return section
     }

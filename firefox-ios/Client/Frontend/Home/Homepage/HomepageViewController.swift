@@ -563,7 +563,12 @@ final class HomepageViewController: UIViewController,
         switch item {
         case .header(let state):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state)
+                cell.configure(headerState: state) { [weak self] in
+                    self?.dispatchNavigationBrowserAction(
+                        with: NavigationDestination(.quickAnswers),
+                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+                    )
+                }
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
