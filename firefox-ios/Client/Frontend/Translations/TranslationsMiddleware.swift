@@ -75,6 +75,8 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
 
         case ToolbarActionType.didTranslationSettingsChange:
             guard let action = (action as? ToolbarAction) else { return }
+            // Clear stale per-window state so eligibility is re-evaluated from scratch
+            // rather than acting on cached flow data from before the settings change.
             self.selectedTargetLanguages[windowUUID] = nil
             self.translationFlowIds[windowUUID] = nil
             self.restoringWindows.remove(windowUUID)
