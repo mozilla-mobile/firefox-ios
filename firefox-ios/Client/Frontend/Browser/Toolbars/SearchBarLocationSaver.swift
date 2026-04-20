@@ -17,8 +17,10 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, HasUserFeaturePreferen
     ///   - profile: the user's profile
     ///   - userInterfaceIdiom: the interface type for the device
     @MainActor
-    func saveUserSearchBarLocation(profile: Profile,
-                                   userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    func saveUserSearchBarLocation(
+        profile: Profile,
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) {
         let isFreshInstall = profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil
         let hasSearchBarPosition = profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition) != nil
 
@@ -27,13 +29,9 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, HasUserFeaturePreferen
 
         guard userInterfaceIdiom != .pad else {
             userPreferences.setSearchBarPosition(.top)
-            let isAtBottom = isBottomSearchBar
-            let searchBarPosition: SearchBarPosition = isAtBottom ? .bottom : .top
-            userPreferences.setSearchBarPosition(searchBarPosition)
             return
         }
 
-        // Set the address bar to the bottom for new users enrolled in `version1` or `version2` toolbar experiment.
         userPreferences.setSearchBarPosition(.bottom)
     }
 }

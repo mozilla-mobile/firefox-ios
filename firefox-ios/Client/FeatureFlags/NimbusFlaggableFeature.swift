@@ -164,8 +164,8 @@ struct NimbusFlaggableFeature {
     /// in the `featureKey()` function - with which to write to UserDefaults, then the
     /// feature cannot be turned on/off.
     public func setUserPreference(to option: String) {
-        guard !option.isEmpty,
-              let optionsKey = featureKey
-        else { return }
+        guard !option.isEmpty else { return }
+        // TODO: to be removed with 15192
+        // no-op for now
     }
 }
