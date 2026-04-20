@@ -5,7 +5,7 @@
 import Shared
 import Common
 
-class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
+class AIControlsModel: ObservableObject, FeatureFlaggable, HasUserFeaturePreferences {
     let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
@@ -66,9 +66,9 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
 
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
-        translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        translationsVisible = featureFlagsProvider.isEnabled(.translation)
 
-        killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.isAIKillSwitchEnabled
     }
 
     @MainActor
