@@ -488,21 +488,20 @@ final class BookmarksViewController: SiteTableViewController,
         guard let keyboardHeight = keyboardState?.intersectionHeightForView(view),
               keyboardHeight > 0 else {
             bottomStackView.removeKeyboardSpacer()
-			updateInsets()
             return
         }
 
         let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
-		updateInsets()
     }
 
-	private func updateInsets() {
-		let bottomInset = bottomStackView.isHidden ? 0 : searchbar.bounds.height
+    private func updateBottomSearchBarLayout(isHidden: Bool) {
+        bottomStackView.isHidden = isHidden
 
-		tableView.contentInset.bottom = bottomInset
-		tableView.verticalScrollIndicatorInsets.bottom = bottomInset
-	}
+        let bottomInset = isHidden ? 0 : searchbar.bounds.height
+        tableView.contentInset.bottom = bottomInset
+        tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+    }
 
     private func setupEmptyStateView() {
         view.addSubview(a11yEmptyStateScrollView)
@@ -930,7 +929,7 @@ extension BookmarksViewController: UISearchBarDelegate {
 
     func startSearchState() {
         updatePanelState(newState: .bookmarks(state: .search))
-        bottomStackView.isHidden = false
+        updateBottomSearchBarLayout(isHidden: false)
         searchbar.becomeFirstResponder()
         sendPanelChangeNotification()
     }
@@ -940,7 +939,7 @@ extension BookmarksViewController: UISearchBarDelegate {
 
         searchbar.text = ""
         searchbar.resignFirstResponder()
-        bottomStackView.isHidden = true
+        updateBottomSearchBarLayout(isHidden: true)
 
         // Transition back to non-searching state
         updatePanelState(newState: viewModel.isRootNode
