@@ -5078,7 +5078,7 @@ extension String {
     public static let UnableToAddPassErrorMessage = MZLocalizedString(
         key: "AddPass.Error.Message",
         tableName: nil,
-        value: "An error occurred while adding the pass to Wallet. Please try again later.",
+        value: "An error occured while adding the pass to Wallet. Please try again later.",
         comment: "Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
     public static let UnableToAddPassErrorDismiss = MZLocalizedString(
         key: "AddPass.Error.Dismiss",

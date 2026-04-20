@@ -170,7 +170,7 @@ struct UIConstants {
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block web fonts to reduce page size", comment: "Label on About screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”).")
         static let addPassErrorAlertTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert.")
-        static let addPassErrorAlertMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occurred while adding the pass to Wallet. Please try again later.", comment: "Message of the 'Add Pass Failed' alert.")
+        static let addPassErrorAlertMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Wallet. Please try again later.", comment: "Message of the 'Add Pass Failed' alert.")
         static let addPassErrorAlertDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "Ok", comment: "Button to dismiss the 'Add Pass Failed' alert.")
         static let authenticationReason = NSLocalizedString("Authentication.reason", value: "Authenticate to return to %@", comment: "%@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app.")
         static let newSessionFromBiometricFailure = NSLocalizedString("BiometricPrompt.newSession", value: "New Session", comment: "Create a new session after failing a biometric check")
