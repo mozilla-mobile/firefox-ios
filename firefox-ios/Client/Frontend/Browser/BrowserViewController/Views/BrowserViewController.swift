@@ -4682,7 +4682,8 @@ extension BrowserViewController: TabManagerDelegate {
                 }
             }
 
-            if webView.url == nil {
+            // Do not reload if it's an about:blank page [FXIOS-14782]
+            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
                 logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
                 // The webView can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
