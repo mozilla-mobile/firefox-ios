@@ -181,12 +181,16 @@ struct AIControlsSettingsView: View, ThemeApplicable {
     @ViewBuilder
     var aiFeaturesControlsStatusDescription: some View {
         VStack(alignment: .leading, spacing: UX.rowSpacing) {
-            Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription))
-                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                .foregroundStyle(themeColors.textSecondary.color)
-            Text(.init(.Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription))
-                .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
-                .foregroundStyle(themeColors.textSecondary.color)
+            if let text = aiControlsModel.availableStatusDescription {
+                Text(text)
+                    .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+            }
+            if let text = aiControlsModel.blockedStatusDescription {
+                Text(text)
+                    .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+            }
         }
         .padding(.leading, UX.padding)
     }
