@@ -32,7 +32,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
-                                 LegacyFeatureFlaggable, // TODO: ROUX remove post Feature Flag Migration
+                                 LegacyFeatureFlaggable, // TODO: ROUX remove post 15190
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface

@@ -59,7 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      LegacyFeatureFlaggable, // TODO: ROUX remove post Feature Flag Migration
+                                      LegacyFeatureFlaggable, // TODO: ROUX remove post 15190
                                       FeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
