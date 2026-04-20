@@ -26,6 +26,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
         mockAdsClient = MockMozAdsClient()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
@@ -33,6 +34,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         logger = nil
         gleanWrapper = nil
         mockAdsClient = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
