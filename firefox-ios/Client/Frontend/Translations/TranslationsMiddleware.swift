@@ -247,7 +247,10 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
                     for: action.windowUUID,
                     using: preferredLanguages
                 )
-                guard isEligible else { return }
+                guard isEligible else {
+                    self.dispatchClearTranslationIcon(windowUUID: action.windowUUID)
+                    return
+                }
 
                 // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
@@ -275,6 +278,14 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
                 )
             }
         }
+    }
+
+    private func dispatchClearTranslationIcon(windowUUID: WindowUUID) {
+        store.dispatch(ToolbarAction(
+            translationConfiguration: nil,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.receivedTranslationLanguage
+        ))
     }
 
     private func retrieveTranslations(

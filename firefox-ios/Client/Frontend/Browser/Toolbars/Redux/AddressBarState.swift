@@ -485,11 +485,25 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             canSummarize: state.canSummarize,
-            translationConfiguration: toolbarAction.translationConfiguration,
+            translationConfiguration: resolveTranslationConfig(
+                from: toolbarAction,
+                existingConfig: state.translationConfiguration
+            ),
             didStartTyping: state.didStartTyping,
             isEmptySearch: isEmptySearch,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
+    }
+
+    private static func resolveTranslationConfig(
+        from action: ToolbarAction,
+        existingConfig: TranslationConfiguration?
+    ) -> TranslationConfiguration? {
+        guard let actionConfig = action.translationConfiguration else { return nil }
+        if actionConfig.state == nil, let existingIconState = existingConfig?.state {
+            return TranslationConfiguration(prefs: actionConfig.prefs, state: existingIconState)
+        }
+        return actionConfig
     }
 
     @MainActor
@@ -1155,11 +1169,11 @@ struct AddressBarState: StateType, Sendable, Equatable {
         let isFeatureEnabledFromState = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
         let shouldShowTranslationIcon = isFeatureEnabledFromAction || isFeatureEnabledFromState
         guard shouldShowTranslationIcon else { return nil }
-        let configuration = action.translationConfiguration ?? addressBarState.translationConfiguration
-        guard let state = configuration?.state else { return nil }
+        let iconState = action.translationConfiguration?.state ?? addressBarState.translationConfiguration?.state
+        guard let iconState else { return nil }
         return translateAction(
             enabled: isLoading == false,
-            state: state,
+            state: iconState,
             hasAlternativeLocationColor: hasAlternativeLocationColor
         )
     }
