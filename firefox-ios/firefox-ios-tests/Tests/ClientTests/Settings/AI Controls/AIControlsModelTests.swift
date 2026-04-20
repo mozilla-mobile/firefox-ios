@@ -22,7 +22,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         ], prefix: "")
         mockProfile.prefs = mockPrefs
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
     override func tearDown() async throws {
@@ -50,7 +50,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testHasVisibleAIFeaturesWithTranslationsOnly() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true)
         let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
         let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.hasVisibleAIFeatures)
@@ -58,23 +58,15 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testHasVisibleAIFeaturesWithSummariesOnly() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false)
         let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.hasVisibleAIFeatures)
     }
 
     @MainActor
-    func testHasVisibleAIFeaturesWithNoneEnabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: false)
-        let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
-        let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
-        XCTAssertFalse(aiControlsModel.hasVisibleAIFeatures)
-    }
-
-    @MainActor
     func testInitialize() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true)
         let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.killSwitchIsOn)
@@ -84,7 +76,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testInitializeWithTranslationFeatureFlagDisabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false, isSummariesEnabled: true)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: false)
         let mockSummarizer = createMockSummarizerConfig(isEnabled: true)
         let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertTrue(aiControlsModel.pageSummariesVisible)
@@ -93,7 +85,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testInitializeWithPageSummariesFeatureFlagDisabled() {
-        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true, isSummariesEnabled: false)
+        setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: true)
         let mockSummarizer = createMockSummarizerConfig(isEnabled: false)
         let aiControlsModel = createSubject(prefs: mockPrefs, summarizerConfiguration: mockSummarizer)
         XCTAssertFalse(aiControlsModel.pageSummariesVisible)
@@ -205,13 +197,9 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         }
     }
 
-    private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
+    private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
             return TranslationsFeature(enabled: isTranslationsEnabled)
-        }
-
-        FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isSummariesEnabled)
         }
     }
 
