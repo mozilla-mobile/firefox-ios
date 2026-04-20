@@ -23,12 +23,14 @@ final class StatusBarOverlayTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

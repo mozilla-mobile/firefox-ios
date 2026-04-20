@@ -48,7 +48,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 }
 
 /// This protocol provides access to search bar location properties related to `FeatureFlagsManager`.
-protocol SearchBarLocationProvider: LegacyFeatureFlaggable {
+protocol SearchBarLocationProvider: HasUserFeaturePreferences {
     var isSearchBarLocationFeatureEnabled: Bool { get }
     var searchBarPosition: SearchBarPosition { get }
     @MainActor
@@ -58,17 +58,12 @@ protocol SearchBarLocationProvider: LegacyFeatureFlaggable {
 extension SearchBarLocationProvider {
     var isSearchBarLocationFeatureEnabled: Bool {
         let isiPad = UIDeviceDetails.userInterfaceIdiom == .pad
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
 
-        return isFeatureEnabled && !isiPad
+        return !isiPad
     }
 
     var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
+        userPreferences.searchBarPosition
     }
 
     var isBottomSearchBar: Bool {
