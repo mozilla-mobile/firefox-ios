@@ -13,7 +13,7 @@ import SummarizeKit
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-final class TabManagerMiddleware: FeatureFlaggable,
+final class TabManagerMiddleware: LegacyFeatureFlaggable,
                                   CanRemoveQuickActionBookmark {
     private let profile: Profile
     private let logger: Logger
@@ -449,30 +449,12 @@ final class TabManagerMiddleware: FeatureFlaggable,
                                                    windowUUID: uuid,
                                                    actionType: TabPanelViewActionType.tabPanelDidLoad)
             store.dispatch(didLoadAction)
-
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
-            }
         } else if shouldDismiss {
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
 
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            }
             addNewTabIfPrivate(uuid: uuid)
-        } else if !isTabTrayUIExperimentsEnabled {
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
         }
     }
 
@@ -487,15 +469,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-
-        if !isTabTrayUIExperimentsEnabled {
-            // The Tab Tray uses a "PlainToast", so the urlString will go unused
-            let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
-        }
-
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
                                      object: .bookmark,
@@ -544,24 +517,11 @@ final class TabManagerMiddleware: FeatureFlaggable,
         guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
-        let normalCount = tabManager.normalTabs.count
-        let privateCount = tabManager.privateTabs.count
         tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
         triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
-        if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
-            let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
-                                                  windowUUID: uuid,
-                                                  actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(action)
-        } else {
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            }
+        if !tabsState.isPrivateMode {
             addNewTabIfPrivate(uuid: uuid)
         }
 

@@ -32,7 +32,7 @@ class UrlBarTests: BaseTestCase {
         tapUrlBarValidateKeyboardAndIcon()
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")
-        // The search is conducted correctly trough the default search engine
+        // The search is conducted correctly through the default search engine
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], value: "google.com")
         // Add a custom search engine and add it as default search engine
         navigator.goto(SearchSettings)
@@ -46,7 +46,7 @@ class UrlBarTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
-        // The search is conducted correctly trough the default search engine
+        // The search is conducted correctly through the default search engine
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], value: "bing.com")
     }
 

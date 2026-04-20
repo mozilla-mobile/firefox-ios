@@ -30,6 +30,8 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
 
     private(set) lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     // MARK: - Variables

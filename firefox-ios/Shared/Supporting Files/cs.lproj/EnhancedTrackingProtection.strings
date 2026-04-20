@@ -44,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Vymazat";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Smazání cookies a dat stránek %@ může vést k odhlášení ze stránek a vymazání nákupního košíku.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Smazání cookies a dat stránek pro %@ vás může odhlásit z webů a vyprázdnit vám nákupní košíky.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Vymazat cookies a uložená data";

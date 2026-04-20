@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware: LegacyFeatureFlaggable {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -95,8 +95,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 isTranslucent: toolbarHelper.shouldBlur(),
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
-                isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
-                canShowDataClearanceAction: canShowDataClearanceAction(),
                 middleButton: middleButton,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
@@ -297,11 +295,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
 
-        case .dataClearance:
-            toolbarTelemetry.dataClearanceButtonTapped(isPrivate: toolbarState.isPrivateMode)
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.clearData)
-            store.dispatch(action)
         case .summarizer:
             Task { @MainActor in
                 guard let webView = windowManager.tabManager(for: action.windowUUID).selectedTab?.webView else { return }
@@ -521,13 +514,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
-    }
-
-    private func canShowDataClearanceAction() -> Bool {
-        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
-
-        return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 
     private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {

@@ -139,6 +139,10 @@ public struct PrefsKeys {
         public static let signedInFxaAccount = "signedInFxaAccountKey"
     }
 
+    public struct MLPASettings {
+        public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
@@ -147,7 +151,6 @@ public struct PrefsKeys {
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
-        case dataClearanceKey = "ContextualHintDataClearance"
         case jumpBackinKey = "ContextualHintJumpBackin"
         case jumpBackInConfiguredKey = "JumpBackInConfigured"
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
@@ -237,9 +240,6 @@ public struct PrefsKeys {
 
     // The timestamp where the app was last opened as default browser
     public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
-
-    // Used to only show the felt deletion alert confirmation once, used for private mode
-    public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"

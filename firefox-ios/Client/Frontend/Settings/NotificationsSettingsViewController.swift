@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Common
 
-final class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+final class NotificationsSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     private lazy var syncNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,

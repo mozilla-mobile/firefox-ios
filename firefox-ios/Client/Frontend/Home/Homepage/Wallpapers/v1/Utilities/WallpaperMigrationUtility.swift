@@ -40,7 +40,7 @@ struct WallpaperMigrationUtility {
                 return
             }
 
-            try store(portait: portrait,
+            try store(portrait: portrait,
                       landscape: landscape,
                       for: matchingWallpaper,
                       with: storageUtility)
@@ -55,12 +55,12 @@ struct WallpaperMigrationUtility {
 
     // MARK: - Private helpers
     private func store(
-        portait: UIImage,
+        portrait: UIImage,
         landscape: UIImage,
         for wallpaper: Wallpaper,
         with storageUtility: WallpaperStorageUtility
     ) throws {
-        try storageUtility.store(portait,
+        try storageUtility.store(portrait,
                                  withName: wallpaper.portraitID,
                                  andKey: wallpaper.id)
         try storageUtility.store(landscape,

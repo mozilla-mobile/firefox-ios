@@ -23,7 +23,7 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("example.com")
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.firstMatch)
         browserScreen.waitForClipboardToastToDisappear()
         toolBarScreen.tapShareButton()
         photonActionSheetScreen.assertPhotonActionSheetExists()
@@ -37,7 +37,7 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL(path(forTestPage: "test-example.html"))
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.webViews.firstMatch)
 
         // Open Page Action Menu Sheet and Pin the site
         navigator.nowAt(BrowserTab)

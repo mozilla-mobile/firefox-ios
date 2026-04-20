@@ -551,24 +551,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
-    func testDidTapButton_tapOnDataClearanceButton_dispatchesClearData() throws {
-        try didTapButton(buttonType: .dataClearance, expectedActionType: GeneralBrowserActionType.clearData)
-
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.DataClearanceButtonTappedExtra>
-        )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.DataClearanceButtonTappedExtra
-        )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.dataClearanceButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
-    }
-
     func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
         summarizerConfigFactory.returnedConfig = .defaultConfig
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)

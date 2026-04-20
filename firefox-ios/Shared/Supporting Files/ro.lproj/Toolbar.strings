@@ -7,6 +7,9 @@
 /* Accessibility label for the summarize button that can be displayed in the address toolbar. */
 "Toolbar.NewTab.Button.v142" = "Fă rezumatul paginii";
 
+/* Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar. */
+"Toolbar.ReaderModeWithSummarizer.Button.v150" = "Mod de lectură. Rezumatul paginii este disponibil.";
+
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Închide fila";
 

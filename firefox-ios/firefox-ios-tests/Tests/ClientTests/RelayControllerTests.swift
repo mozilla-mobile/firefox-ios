@@ -9,6 +9,7 @@ import MozillaAppServices
 import Shared
 import TestKit
 import XCTest
+import WebKit
 @testable import Client
 
 @MainActor
@@ -155,6 +156,7 @@ class RelayControllerTests: XCTestCase {
                                        gleanWrapper: MockGleanWrapper(),
                                        clientConfig: .prod,
                                        updateConfig: mockConfig,
+                                       javascriptEvaluator: MockRelayJavascriptEvaluator(),
                                        notificationCenter: MockNotificationCenter())
         trackForMemoryLeaks(subject)
         return subject
@@ -189,6 +191,15 @@ final class MockRelayRemoteSettingsClient: RelayRemoteSettingsClientProtocol {
 
     func shouldShowRelay(host: String, domain: String, isRelayUser: Bool) -> Bool {
         return domain == "goodwebsite.com"
+    }
+}
+
+final class MockRelayJavascriptEvaluator: RelayJavascriptEvaluator {
+    func evaluateJavaScript(_ javaScript: String,
+                            for: WKWebView,
+                            in frame: WKFrameInfo?,
+                            contentWorld: WKContentWorld) async throws -> Any? {
+        return nil
     }
 }
 

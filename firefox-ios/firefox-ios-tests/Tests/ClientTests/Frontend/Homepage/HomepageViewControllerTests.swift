@@ -13,15 +13,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     var mockThemeManager: MockThemeManager?
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockThrottler: MockThrottler!
+    var homepageTabStateStore: HomepageTabStateStore!
 
     override func setUp() async throws {
         try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
+        homepageTabStateStore = HomepageTabStateStore()
         setupStore()
     }
 
     override func tearDown() async throws {
+        homepageTabStateStore = nil
         mockThrottler = nil
         mockNotificationCenter = nil
         mockThemeManager = nil
@@ -71,7 +74,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         homepageVC.newState(state: newState)
         let scrollView = UIScrollView()
 
-        XCTAssertNil(mockStatusBarScrollDelegate.savedScrollView)
+        mockStatusBarScrollDelegate.savedScrollView = nil
 
         homepageVC.scrollViewDidScroll(scrollView)
 
@@ -333,12 +336,11 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     }
 
     func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
-        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
         let tabManager = HomepageRestoreContentOffsetTabManager()
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
-        tab.homepageScrollOffset = 180
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
         let subject = createSubject(tabManager: tabManager)
 
         subject.loadViewIfNeeded()
@@ -401,7 +403,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.viewWillDisappear(false)
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_scrollViewDidEndDragging_savesVerticalScrollOffset() {
@@ -425,7 +427,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.scrollViewDidEndDragging(UIScrollView(), willDecelerate: false)
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_scrollViewDidEndDecelerating_savesVerticalScrollOffset() {
@@ -449,7 +451,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
@@ -477,57 +479,6 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(wallpaperHeightConstraint.constant, 300)
     }
 
-    func test_configureSupplementaryHeader_withoutNewsAffordanceStyle_usesLabelButtonHeaderCell() async throws {
-        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .baseline)
-
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
-        subject.newState(state: populatedState)
-        subject.view.layoutIfNeeded()
-
-        let collectionView = try getCollectionView(from: subject)
-        let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
-        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
-
-        let header = try XCTUnwrap(
-            collectionView.dataSource?.collectionView?(
-                collectionView,
-                viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                at: headerIndexPath
-            )
-        )
-
-        XCTAssertTrue(header is LabelButtonHeaderCell)
-    }
-
-    func test_configureSupplementaryHeader_withNewsAffordanceStyle_usesNewsTransitionHeaderCell() async throws {
-        guard UIDevice.current.userInterfaceIdiom == .phone else {
-            throw XCTSkip("News affordance is phone-only.")
-        }
-        setupNimbusStoriesScrollDirectionTesting(scrollDirection: .vertical)
-
-        let subject = createSubject()
-        subject.loadViewIfNeeded()
-        let populatedState = await getPopulatedCollectionViewState(from: HomepageState(windowUUID: .XCTestDefaultUUID))
-        subject.newState(state: populatedState)
-        subject.view.layoutIfNeeded()
-
-        let collectionView = try getCollectionView(from: subject)
-        let pocketSectionIndex = try getPocketSectionIndex(from: collectionView)
-        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
-
-        let header = try XCTUnwrap(
-            collectionView.dataSource?.collectionView?(
-                collectionView,
-                viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-                at: headerIndexPath
-            )
-        )
-
-        XCTAssertTrue(header is NewsTransitionHeaderCell)
-    }
-
     private func createSubject(
         tabManager: TabManager = MockTabManager(),
         statusBarScrollDelegate: StatusBarScrollDelegate? = nil
@@ -543,6 +494,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             tabManager: tabManager,
+            homepageTabStateStore: homepageTabStateStore,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),
@@ -568,15 +520,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(
-                enabled: isEnabled
-            )
-        }
-    }
-
-    private func setupNimbusStoriesScrollDirectionTesting(scrollDirection: ScrollDirection) {
-        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
-            return HomepageRedesignFeature(storiesScrollDirection: scrollDirection)
+            return ToolbarRefactorFeature()
         }
     }
 

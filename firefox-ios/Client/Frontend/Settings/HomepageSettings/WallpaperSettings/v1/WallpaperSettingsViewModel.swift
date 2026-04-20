@@ -11,7 +11,7 @@ public enum WallpaperSettingsError: Error {
 }
 
 // TODO: FXIOS-14150 - WallpaperSettingsViewModel shouldn't be @unchecked Sendable
-final class WallpaperSettingsViewModel: FeatureFlaggable, @unchecked Sendable {
+final class WallpaperSettingsViewModel: LegacyFeatureFlaggable, @unchecked Sendable {
     typealias a11yIds = AccessibilityIdentifiers.Settings.Homepage.CustomizeFirefox.Wallpaper
     typealias stringIds = String.Settings.Homepage.Wallpaper
 
@@ -237,7 +237,7 @@ private extension WallpaperSettingsViewModel {
             let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
             // We are passing the wallpaperConfiguration here even though right now it is not being used
             // by the middleware that is responding to this action. It will be as soon as we move the wallpaper
-            // manager logic to the middlware.
+            // manager logic to the middleware.
             ensureMainThread {
                 let action = WallpaperAction(
                     wallpaperConfiguration: wallpaperConfig,

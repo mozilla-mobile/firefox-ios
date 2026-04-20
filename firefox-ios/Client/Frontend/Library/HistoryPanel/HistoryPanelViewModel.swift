@@ -11,7 +11,7 @@ import SwiftUI
 import struct MozillaAppServices.VisitTransitionSet
 
 // TODO: FXIOS-13450 Make HistoryPanelViewModel actually sendable
-final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
+final class HistoryPanelViewModel: LegacyFeatureFlaggable, @unchecked Sendable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case lastHour
@@ -144,7 +144,7 @@ final class HistoryPanelViewModel: FeatureFlaggable, @unchecked Sendable {
                         "Error searching history panel",
                         level: .warning,
                         category: .sync,
-                        description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                        description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
                     )
                     completion(false)
                     return

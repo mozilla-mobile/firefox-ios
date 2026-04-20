@@ -47,8 +47,6 @@ final class NavigationBarStateTests: XCTestCase, StoreTestUtility {
                 isTranslucent: true,
                 addressBorderPosition: .none,
                 displayNavBorder: true,
-                isNewTabFeatureEnabled: true,
-                canShowDataClearanceAction: false,
                 middleButton: .newTab,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars

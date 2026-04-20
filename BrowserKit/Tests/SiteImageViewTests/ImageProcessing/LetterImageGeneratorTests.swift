@@ -68,7 +68,7 @@ final class LetterImageGeneratorTests: XCTestCase {
     func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forM() async throws {
         let subject = DefaultLetterImageGenerator()
         let siteString = "mozilla.com"
-        let expectedBackgroundColor = UIColor(red: 0.223, green: 0.576, blue: 0.125, alpha: 1.0)
+        let expectedBackgroundColor = UIColor(red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
         let image = try await subject.generateLetterImage(siteString: siteString)
@@ -80,7 +80,7 @@ final class LetterImageGeneratorTests: XCTestCase {
     func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forF() async throws {
         let subject = DefaultLetterImageGenerator()
         let siteString = "firefox.com"
-        let expectedBackgroundColor = UIColor(red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
+        let expectedBackgroundColor = UIColor(red: 0.035, green: 0.588, blue: 0.973, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
         let image = try await subject.generateLetterImage(siteString: siteString)
@@ -89,10 +89,21 @@ final class LetterImageGeneratorTests: XCTestCase {
         testColor(capturedColor: capturedColor, expectedColor: expectedBackgroundColor)
     }
 
+    // "," is chosen because it hashes to index 41 — the last palette bucket,
+    // which was previously unreachable due to an off-by-one in the color index.
+    func testGenerateBackgroundColor_lastPaletteColorIsReachable() {
+        let subject = DefaultLetterImageGenerator()
+        let expectedLastPaletteColor = UIColor(red: 1.0, green: 0.655, blue: 0.702, alpha: 1.0)
+
+        let color = subject.generateBackgroundColor(forSite: ",")
+
+        testColor(capturedColor: color, expectedColor: expectedLastPaletteColor)
+    }
+
     func testGenerateLetterImage_returnsImageWithCorrectBackgroundColor_forNonAlphaCharacter() async throws {
         let subject = DefaultLetterImageGenerator()
         let siteString = "?$%^"
-        let expectedBackgroundColor = UIColor(red: 0.003, green: 0.639, blue: 0.615, alpha: 1.0)
+        let expectedBackgroundColor = UIColor(red: 1.0, green: 0.655, blue: 0.573, alpha: 1.0)
         let pixelSamplePoint = CGPoint(x: 5, y: 5)
 
         let image = try await subject.generateLetterImage(siteString: siteString)

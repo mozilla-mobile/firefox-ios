@@ -28,6 +28,10 @@ final class SpringboardScreen {
         sel.FENNEC_ICONS.query(in: springboard)
     }
 
+    private var firefoxIconQuery: XCUIElementQuery {
+        sel.FIREFOX_ICON.query(in: springboard)
+    }
+
     private var newTabButton: XCUIElement {
         sel.NEW_TAB_BUTTON.element(in: springboard)
     }
@@ -59,6 +63,12 @@ final class SpringboardScreen {
         icon.press(forDuration: duration)
     }
 
+    func longPressFirefoxIcon(at index: Int = 0, duration: TimeInterval = 1.0) {
+        let icon = index == 0 ? firefoxIconQuery.firstMatch : firefoxIconQuery.element(boundBy: index)
+        BaseTestCase().mozWaitForElementToExist(icon)
+        icon.press(forDuration: duration)
+    }
+
     // MARK: - Context Menu Actions
 
     func tapNewTabButton() {
@@ -77,6 +87,11 @@ final class SpringboardScreen {
 
     func assertFennecIconExists(at index: Int = 0, timeout: TimeInterval = TIMEOUT) {
         let icon = fennecIconsQuery.element(boundBy: index)
+        BaseTestCase().mozWaitForElementToExist(icon, timeout: timeout)
+    }
+
+    func assertFirefoxIconExists(at index: Int = 0, timeout: TimeInterval = TIMEOUT) {
+        let icon = firefoxIconQuery.element(boundBy: index)
         BaseTestCase().mozWaitForElementToExist(icon, timeout: timeout)
     }
 

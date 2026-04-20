@@ -17,7 +17,6 @@ enum ContextualHintType: String {
     case jumpBackIn = "JumpBackIn"
     case jumpBackInSyncedTab = "JumpBackInSyncedTab"
     case mainMenu = "MainMenu"
-    case dataClearance = "DataClearance"
     case navigation = "Navigation"
     case relay = "Relay"
     case toolbarUpdate = "ToolbarUpdate"

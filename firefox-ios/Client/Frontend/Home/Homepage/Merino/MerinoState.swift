@@ -14,6 +14,7 @@ struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: MerinoStoryResponse
     let hasMerinoResponseContent: Bool
+    let selectedCategoryID: String? // nil = All stories
     let shouldShowSection: Bool
 
     struct Constants {
@@ -33,6 +34,7 @@ struct MerinoState: StateType, Equatable {
             windowUUID: windowUUID,
             merinoData: MerinoStoryResponse(),
             hasMerinoResponseContent: false,
+            selectedCategoryID: nil,
             shouldShowSection: shouldShowSection
         )
     }
@@ -41,11 +43,13 @@ struct MerinoState: StateType, Equatable {
         windowUUID: WindowUUID,
         merinoData: MerinoStoryResponse,
         hasMerinoResponseContent: Bool,
+        selectedCategoryID: String?,
         shouldShowSection: Bool
     ) {
         self.windowUUID = windowUUID
         self.merinoData = merinoData
         self.hasMerinoResponseContent = hasMerinoResponseContent
+        self.selectedCategoryID = selectedCategoryID
         self.shouldShowSection = shouldShowSection
     }
 
@@ -60,6 +64,8 @@ struct MerinoState: StateType, Equatable {
             return handleMerinoStoriesAction(action, state: state)
         case MerinoActionType.toggleShowSectionSetting:
             return handleSettingsToggleAction(action, state: state)
+        case MerinoActionType.categorySelected:
+            return handleCategorySelectedAction(action, state: state)
         default:
             return defaultState(from: state)
         }
@@ -72,18 +78,14 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let merinoContentExists = if let stories = merinoResponse.stories {
-            !stories.isEmpty
-        } else if let categories = merinoResponse.categories {
-            !categories.isEmpty
-        } else {
-            false
-        }
+        let merinoContentExists = !(merinoResponse.stories?.isEmpty ?? true) ||
+                                  !(merinoResponse.categories?.isEmpty ?? true)
 
         return MerinoState(
             windowUUID: state.windowUUID,
             merinoData: merinoResponse,
             hasMerinoResponseContent: merinoContentExists,
+            selectedCategoryID: state.selectedCategoryID,
             shouldShowSection: merinoContentExists && state.shouldShowSection
         )
     }
@@ -100,19 +102,53 @@ struct MerinoState: StateType, Equatable {
         )
     }
 
+    private static func handleCategorySelectedAction(_ action: Action, state: MerinoState) -> MerinoState {
+        guard let merinoAction = action as? MerinoAction
+        else {
+            return defaultState(from: state)
+        }
+
+        /// `copyWithUpdates` uses a double-optional for optional fields:
+        /// - `.some(.some(value))` sets a concrete value
+        /// - `.some(nil)` leaves the existing value unchanged
+        /// - `nil` clears the property
+        /// We need to pass the outer optional explicitly here so tapping the client-side  "All" category can clear
+        /// `selectedCategoryID` back to `nil`.
+        return state.copyWithUpdates(
+            selectedCategoryID: merinoAction.selectedCategoryID == nil
+                ? (nil as String??)
+                : .some(merinoAction.selectedCategoryID)
+        )
+    }
+
     static func defaultState(from state: MerinoState) -> MerinoState {
         return state.copyWithUpdates()
     }
 
     private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
-        let scrollDirection: ScrollDirection = LegacyFeatureFlagsManager.shared
-             .getCustomState(for: .homepageStoriesScrollDirection) ?? .baseline
-        let isScrollDirectionVertical = scrollDirection == .vertical
-
         return SectionHeaderConfiguration(
             title: .FirefoxHomepage.Pocket.NewsSectionTitle,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
-            style: isScrollDirectionVertical ? .newsAffordance : .sectionTitle
+            style: .newsAffordance
         )
+    }
+}
+
+/// `@CopyWithUpdates` currently treats computed properties declared inside the struct as
+/// initializer/copy fields, which breaks generation with "extra arguments" errors.
+/// Keep derived accessors in this extension as a workaround.
+extension MerinoState {
+    var availableCategories: [MerinoCategoryConfiguration] {
+        (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
+    }
+
+    var visibleStories: [MerinoStoryConfiguration] {
+        if !availableCategories.isEmpty {
+            if let selectedCategoryID {
+                return availableCategories.first(where: { $0.feedID == selectedCategoryID })?.recommendations ?? []
+            }
+            return availableCategories.flatMap(\.recommendations)
+        }
+        return merinoData.stories ?? []
     }
 }

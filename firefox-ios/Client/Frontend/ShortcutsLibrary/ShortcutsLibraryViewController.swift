@@ -8,7 +8,7 @@ import Redux
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
-                                      FeatureFlaggable,
+                                      LegacyFeatureFlaggable,
                                       StoreSubscriber,
                                       Themeable,
                                       DismissalNotifiable {

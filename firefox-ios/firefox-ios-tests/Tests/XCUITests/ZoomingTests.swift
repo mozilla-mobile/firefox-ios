@@ -66,7 +66,7 @@ final class ZoomingTests: BaseTestCase {
         openURLAndNavigateToZoom(index: 0)
         validateZoomActions()
 
-        // Repite the secuence again
+        // Repeat the sequence again
         XCUIDevice.shared.orientation = .landscapeLeft
         validateZoomActionsLandscape()
     }

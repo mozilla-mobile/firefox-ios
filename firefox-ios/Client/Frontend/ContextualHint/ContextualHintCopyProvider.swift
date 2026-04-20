@@ -12,7 +12,7 @@ enum ContextualHintCopyType {
 
 /// `ContextualHintCopyProvider` exists to provide the requested description or action strings back
 /// for the specified `ContextualHintType`.
-struct ContextualHintCopyProvider: FeatureFlaggable {
+struct ContextualHintCopyProvider: LegacyFeatureFlaggable {
     typealias CFRStrings = String.ContextualHints
 
     /// Arrow direction infuences toolbar copy, so it exists here.
@@ -69,9 +69,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var descriptionCopy = ""
 
         switch hint {
-        case .dataClearance:
-            descriptionCopy = CFRStrings.FeltDeletion.Body
-
         case .jumpBackIn:
                 descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
 
@@ -104,8 +101,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var actionCopy: String
 
         switch hint {
-        case .dataClearance:
-            actionCopy = ""
         case .mainMenu:
             actionCopy = ""
         case .jumpBackIn,

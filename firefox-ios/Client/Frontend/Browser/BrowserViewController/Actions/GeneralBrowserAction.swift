@@ -79,7 +79,6 @@ enum GeneralBrowserActionType: ActionType {
     case addNewTab
     case showNewTabLongPressActions
     case addToReadingListLongPressAction
-    case clearData
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen

@@ -5,7 +5,8 @@
 import Shared
 import Common
 
-class AIControlsModel: ObservableObject, FeatureFlaggable {
+class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
+    let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
     @Published var pageSummariesEnabled: Bool
@@ -14,12 +15,12 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
 
     let headerLinkInfo = LinkInfo(
         label: .Settings.AIControls.HeaderCard.Link,
-        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+        url: SupportUtils.URLForTopic(AIControlsModel.topicString, useMobilePath: true)
     )
 
     let blockAIEnhancementsLinkInfo = LinkInfo(
         label: .Settings.AIControls.BlockAIEnhancementsLink,
-        url: URL(string: "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")!
+        url: SupportUtils.URLForTopic(AIControlsModel.topicString, useMobilePath: true)
     )
 
     let headerCardTitle: String = {
@@ -40,21 +41,24 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         return translationsVisible || pageSummariesVisible
     }
 
+    private static let topicString = "ios-ai-controls"
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
 
     struct LinkInfo {
         let label: String
-        let url: URL
+        let url: URL?
     }
 
     init(
         prefs: Prefs,
+        windowUUID: WindowUUID,
         translationConfiguration: TranslationConfiguration? = nil,
         summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
     ) {
         self.prefs = prefs
+        self.windowUUID = windowUUID
         self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
         self.summarizerConfiguration = summarizerConfiguration
 
@@ -67,24 +71,26 @@ class AIControlsModel: ObservableObject, FeatureFlaggable {
         killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
     }
 
+    @MainActor
     func toggleKillSwitch(to newValue: Bool) {
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        switch newValue {
-        case false:
-            pageSummariesEnabled = true
-            translationEnabled = true
-            prefs.setBool(true, forKey: PrefsKeys.Settings.translationsFeature)
-            prefs.setBool(true, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        case true:
-            pageSummariesEnabled = false
-            translationEnabled = false
-            prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
-            prefs.setBool(false, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        }
+        pageSummariesEnabled = !newValue
+        translationEnabled = !newValue
+        prefs.setBool(!newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
+        store.dispatch(TranslationSettingsViewAction(
+            newSettingValue: !newValue,
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        ))
     }
 
+    @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
-        prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
+        store.dispatch(TranslationSettingsViewAction(
+            newSettingValue: newValue,
+            windowUUID: windowUUID,
+            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
+        ))
     }
 
     func togglePageSummariesFeature(to newValue: Bool) {

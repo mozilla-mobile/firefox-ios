@@ -26,7 +26,7 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
-                       FeatureFlaggable,
+                       LegacyFeatureFlaggable,
                        TabTrayThemeable,
                        Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState
@@ -163,7 +163,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {

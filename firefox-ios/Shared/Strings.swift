@@ -58,29 +58,6 @@ private func MZLocalizedString(
 // MARK: - Alerts
 extension String {
     public struct Alerts {
-        public struct FeltDeletion {
-            public static let Title = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Title.v122",
-                tableName: "Alerts",
-                value: "End your private session?",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert.")
-            public static let Body = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Body.v122",
-                tableName: "Alerts",
-                value: "Close all private tabs and delete history, cookies, and all other site data.",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert.")
-            public static let ConfirmButton = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Button.Confirm.v122",
-                tableName: "Alerts",
-                value: "Delete session data",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that.")
-            public static let CancelButton = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Button.Cancel.v122",
-                tableName: "Alerts",
-                value: "Cancel",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
-        }
-
         public struct AddToCalendar {
             public static let Title = MZLocalizedString(
                 key: "Alerts.AddToCalendar.Title.v134",
@@ -246,6 +223,14 @@ extension String {
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal.")
             }
         }
+
+        public struct Search {
+            public static let SearchPlaceholder = MZLocalizedString(
+                key: "Bookmarks.Search.Placeholder.v151",
+                tableName: "Bookmarks",
+                value: "Search bookmarks",
+                comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
+        }
     }
 }
 
@@ -325,14 +310,6 @@ extension String {
                 tableName: "Summarize",
                 value: "Tap to summarize this page. Touch and hold for Reader View.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
-        }
-
-        public struct FeltDeletion {
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.FeltDeletion.Body.v122",
-                tableName: "ContextualHints",
-                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
         }
 
         public struct Translations {
@@ -1153,14 +1130,6 @@ extension String {
                 tableName: "FirefoxHomepage",
                 value: "Who might be able to see my activity?",
                 comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
-        }
-
-        public struct FeltDeletion {
-            public static let ToastTitle = MZLocalizedString(
-                key: "FirefoxHomepage.FeltDeletion.Link.v122",
-                tableName: "FirefoxHomepage",
-                value: "Private Browsing Data Erased",
-                comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast.")
         }
     }
 }
@@ -3418,6 +3387,12 @@ extension String {
                     tableName: "Settings",
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
+                )
+                public static let RemoveLanguageA11yAction = MZLocalizedString(
+                    key: "Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151",
+                    tableName: "Settings",
+                    value: "Delete",
+                    comment: "VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list."
                 )
             }
 
@@ -7435,11 +7410,6 @@ extension String {
 
 // MARK: - Tab Toolbar
 extension String {
-    public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
-        key: "TabToolbar.Accessibility.DataClearance.v122",
-        tableName: "TabToolbar",
-        value: "Data Clearance",
-        comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
     public static let TabToolbarStopAccessibilityLabel = MZLocalizedString(
         key: "Stop",
         tableName: nil,
@@ -8645,6 +8615,50 @@ extension String {
                 tableName: nil,
                 value: "Show in Application Menu",
                 comment: "Setting to show Logins & Passwords quick access in the application menu"
+            )
+        }
+        struct v150 {
+            public static let ContextualHintsFeltDeletionBody = MZLocalizedString(
+                key: "ContextualHints.FeltDeletion.Body.v122",
+                tableName: "ContextualHints",
+                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode."
+            )
+            public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
+                key: "TabToolbar.Accessibility.DataClearance.v122",
+                tableName: "TabToolbar",
+                value: "Data Clearance",
+                comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data."
+            )
+            public static let FeltDeletionTitle = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Title.v122",
+                tableName: "Alerts",
+                value: "End your private session?",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert."
+            )
+            public static let FeltDeletionBody = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Body.v122",
+                tableName: "Alerts",
+                value: "Close all private tabs and delete history, cookies, and all other site data.",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert."
+            )
+            public static let FeltDeletionConfirmButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Confirm.v122",
+                tableName: "Alerts",
+                value: "Delete session data",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that."
+            )
+            public static let FeltDeletionCancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v122",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session."
+            )
+            public static let FeltDeletionToastTitle = MZLocalizedString(
+                key: "FirefoxHomepage.FeltDeletion.Link.v122",
+                tableName: "FirefoxHomepage",
+                value: "Private Browsing Data Erased",
+                comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast."
             )
         }
     }

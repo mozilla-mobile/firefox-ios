@@ -11,7 +11,7 @@
 "Summarizer.Error.MissingPageContent.Message.v142" = "Stránka se stále načítá. Počkejte, až se načte, a poté klepněte na tlačítko Shrnout.";
 
 /* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
-"Summarizer.Error.RateLimited.Message.v142" = "Tento momentálně nelze zpracovat. Zkuste to znovu později!";
+"Summarizer.Error.RateLimited.Message.v142" = "Toto momentálně nelze zpracovat. Zkuste to znovu později!";
 
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Chyba při vytváření souhrnu stránky. Zkuste to znovu později.";
@@ -41,7 +41,7 @@
 "Summarizer.RetryButton.Label.v142" = "Opakovat";
 
 /* The a11y label for the web page view that shows on top of the summary view. Tapping or dragging on the view will close the summary page. */
-"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Přetažením nebo klepnutím webové stránky zavřete souhrn";
+"Summarizer.TabSnapshot.Accessibility.Label.v145" = "Přetažením nebo klepnutím na webovou stránku zavřete souhrn";
 
 /* The label for the toast that shows when shaking and the summary is not available for that page. */
 "Summarizer.ToastLabel.v149" = "Souhrn není k dispozici";
@@ -50,7 +50,7 @@
 "Summarizer.ToS.InfoLabel.LearnMoreButton.Label.v143" = "Jak to funguje";
 
 /* The a11y label for the allow button on the info panel when the user has not yet accepted the ToS. */
-"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "Přijetí souhlasu";
+"Summarizer.ToS.InfoPanel.AllowButton.Accessibility.Label.v145" = "Přijmout souhlas";
 
 /* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Pokračovat";

@@ -5,7 +5,10 @@
 "Toolbar.NewTab.Button.v130" = "Nova kartica";
 
 /* Accessibility label for the summarize button that can be displayed in the address toolbar. */
-"Toolbar.NewTab.Button.v142" = "Sažmi stranicu";
+"Toolbar.NewTab.Button.v142" = "Izradi sažetak stranice";
+
+/* Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar. */
+"Toolbar.ReaderModeWithSummarizer.Button.v150" = "Prikaz čitača. Dostupan je sažetak stranice.";
 
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Zatvori ovu karticu";

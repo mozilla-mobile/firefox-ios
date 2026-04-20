@@ -36,7 +36,7 @@ updateNimbusFML() {
     addFeatureFilesToNimbus $NIMBUSFML
 }
 
-# Takes a given feature name in camelCase and coverts it to kebab-case
+# Takes a given feature name in camelCase and converts it to kebab-case
 configureFeatureName() {
     echo $1 | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]'
 }

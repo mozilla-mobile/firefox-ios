@@ -91,7 +91,6 @@ enum TabPanelMiddlewareActionType: ActionType {
     case willAppearTabPanel
     case didChangeTabPanel
     case refreshTabs
-    case showToast
     case scrollToTab
 }
 

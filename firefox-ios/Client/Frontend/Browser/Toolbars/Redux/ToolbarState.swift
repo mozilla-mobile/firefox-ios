@@ -21,8 +21,6 @@ struct ToolbarState: ScreenState, Sendable {
     let scrollAlpha: Float
     var numberOfTabs: Int
     var showMenuWarningBadge: Bool
-    var isNewTabFeatureEnabled: Bool
-    var canShowDataClearanceAction: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
     var isTranslucent: Bool
@@ -53,8 +51,6 @@ struct ToolbarState: ScreenState, Sendable {
                   numberOfTabs: toolbarState.numberOfTabs,
                   scrollAlpha: toolbarState.scrollAlpha,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-                  isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-                  canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
                   isTranslucent: toolbarState.isTranslucent,
@@ -79,8 +75,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: 1,
             scrollAlpha: 1,
             showMenuWarningBadge: false,
-            isNewTabFeatureEnabled: false,
-            canShowDataClearanceAction: false,
             canShowNavigationHint: false,
             shouldAnimate: true,
             isTranslucent: false,
@@ -104,8 +98,6 @@ struct ToolbarState: ScreenState, Sendable {
         numberOfTabs: Int,
         scrollAlpha: Float,
         showMenuWarningBadge: Bool,
-        isNewTabFeatureEnabled: Bool,
-        canShowDataClearanceAction: Bool,
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
         isTranslucent: Bool,
@@ -126,8 +118,6 @@ struct ToolbarState: ScreenState, Sendable {
         self.numberOfTabs = numberOfTabs
         self.scrollAlpha = scrollAlpha
         self.showMenuWarningBadge = showMenuWarningBadge
-        self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
-        self.canShowDataClearanceAction = canShowDataClearanceAction
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
         self.isTranslucent = isTranslucent
@@ -228,8 +218,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: isTranslucent,
@@ -257,8 +245,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: toolbarAction.scrollAlpha ?? state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
             isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
@@ -285,8 +271,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -313,8 +297,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -341,8 +323,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -374,8 +354,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -402,8 +380,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -430,8 +406,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -458,8 +432,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: true,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -486,8 +458,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: false,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -517,8 +487,6 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
@@ -550,8 +518,6 @@ struct ToolbarState: ScreenState, Sendable {
                             numberOfTabs: state.numberOfTabs,
                             scrollAlpha: state.scrollAlpha,
                             showMenuWarningBadge: state.showMenuWarningBadge,
-                            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                            canShowDataClearanceAction: state.canShowDataClearanceAction,
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
                             isTranslucent: state.isTranslucent,

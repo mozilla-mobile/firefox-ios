@@ -10,7 +10,7 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
+final class BookmarksPanelViewModelTests: XCTestCase, LegacyFeatureFlaggable {
     private var profile: MockProfile!
 
     override func setUp() async throws {
@@ -598,8 +598,8 @@ private final class MockPinnedSites: MockablePinnedSites, @unchecked Sendable {
     }
 
     override func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> {
-        let deffered = Deferred<Maybe<Bool>>()
-        deffered.fill(Maybe(success: isPinnedTopSite))
-        return deffered
+        let deferred = Deferred<Maybe<Bool>>()
+        deferred.fill(Maybe(success: isPinnedTopSite))
+        return deferred
     }
 }

@@ -47,18 +47,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
 
-    func testClearDataAction() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.displayView)
-
-        let action = getAction(for: .clearData)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.displayView, .dataClearance)
-    }
-
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

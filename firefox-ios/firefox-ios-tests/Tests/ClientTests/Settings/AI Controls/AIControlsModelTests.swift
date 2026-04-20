@@ -7,11 +7,13 @@ import Shared
 
 @testable import Client
 
-class AIControlsModelTests: XCTestCase {
+class AIControlsModelTests: XCTestCase, StoreTestUtility {
+    private var mockStore: MockStoreForMiddleware<AppState>!
     var mockPrefs: MockProfilePrefs!
 
     override func setUp() async throws {
         try await super.setUp()
+        setupStore()
         let mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
@@ -23,18 +25,27 @@ class AIControlsModelTests: XCTestCase {
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
-    @MainActor
-    func testHeaderLinkInfo() {
-        let aiControlsModel = createSubject(prefs: mockPrefs)
-        XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "Learn more")
-        XCTAssertEqual(aiControlsModel.headerLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
+    override func tearDown() async throws {
+        resetStore()
+        try await super.tearDown()
     }
 
     @MainActor
-    func testBlockAIEnhancementsLinkInfo() {
+    func testHeaderLinkInfo() throws {
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        XCTAssertEqual(aiControlsModel.headerLinkInfo.label, "Learn more")
+        let actualURL = try XCTUnwrap(aiControlsModel.headerLinkInfo.url?.absoluteString)
+        let expectedURL = try XCTUnwrap(SupportUtils.URLForTopic("ios-ai-controls", useMobilePath: true)?.absoluteString)
+        XCTAssertEqual(actualURL, expectedURL)
+    }
+
+    @MainActor
+    func testBlockAIEnhancementsLinkInfo() throws {
         let aiControlsModel = createSubject(prefs: mockPrefs)
         XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.label, "See what is and isn’t included")
-        XCTAssertEqual(aiControlsModel.blockAIEnhancementsLinkInfo.url.absoluteString, "https://www.mozilla.org/en-US/privacy/firefox-privacy-policy/")
+        let actualURL = try XCTUnwrap(aiControlsModel.blockAIEnhancementsLinkInfo.url?.absoluteString)
+        let expectedURL = try XCTUnwrap(SupportUtils.URLForTopic("ios-ai-controls", useMobilePath: true)?.absoluteString)
+        XCTAssertEqual(actualURL, expectedURL)
     }
 
     @MainActor
@@ -78,7 +89,10 @@ class AIControlsModelTests: XCTestCase {
     }
 
     @MainActor
-    func testToggleKillSwitchOn() {
+    func testToggleKillSwitchOn() throws {
+        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
@@ -107,10 +121,18 @@ class AIControlsModelTests: XCTestCase {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        wait(for: [expectation], timeout: 1.0)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertFalse(try XCTUnwrap(action.newSettingValue))
     }
 
     @MainActor
-    func testToggleKillSwitchOff() {
+    func testToggleKillSwitchOff() throws {
+        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
 
@@ -120,12 +142,6 @@ class AIControlsModelTests: XCTestCase {
             XCTFail("No pref value for ai kill switch feature")
         }
 
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
-            XCTAssertTrue(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
-
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) {
             XCTAssertTrue(prefVal)
         } else {
@@ -133,31 +149,24 @@ class AIControlsModelTests: XCTestCase {
         }
 
         XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+
+        wait(for: [expectation], timeout: 1.0)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
         XCTAssertTrue(aiControlsModel.translationEnabled)
     }
 
     @MainActor
-    func testToggleTranslationsFeatureOn() {
+    func testToggleTranslationsFeature() throws {
+        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleTranslationsFeature(to: true)
 
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
-            XCTAssertTrue(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
-    }
-
-    @MainActor
-    func testToggleTranslationsFeatureOff() {
-        let aiControlsModel = createSubject(prefs: mockPrefs)
-        aiControlsModel.toggleTranslationsFeature(to: false)
-
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
-            XCTAssertFalse(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
+        wait(for: [expectation], timeout: 1.0)
+        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
+        XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
     }
 
     @MainActor
@@ -196,8 +205,36 @@ class AIControlsModelTests: XCTestCase {
 
     @MainActor
     private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs)
+        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    func setupAppState() -> Client.AppState {
+        return AppState(
+            presentedComponents: PresentedComponentsState(
+                components: [
+                    .translationSettings(
+                        TranslationSettingsState(
+                            windowUUID: .XCTestDefaultUUID,
+                            isTranslationsEnabled: true,
+                            isEditing: false,
+                            pendingLanguages: nil,
+                            preferredLanguages: [],
+                            supportedLanguages: []
+                        )
+                    )
+                ]
+            )
+        )
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }

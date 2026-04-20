@@ -24,7 +24,6 @@ struct AccessibilityIdentifiers {
         static let shareButton = "TabLocationView.shareButton"
         static let summarizeButton = "TabLocationView.summarizeButton"
         static let backButton = "TabToolbar.backButton"
-        static let fireButton = "TabToolbar.fireButton"
         static let forwardButton = "TabToolbar.forwardButton"
         static let tabsButton = "TabToolbar.tabsButton"
         static let addNewTabButton = "TabToolbar.addNewTabButton"
@@ -75,6 +74,8 @@ struct AccessibilityIdentifiers {
         static let bottomContentStackView = "Browser.bottomContentStackView"
         static let contentContainer = "Browser.contentContainer"
         static let statusBarOverlay = "Browser.statusBarOverlay"
+        static let topBlurView = "Browser.topBlurView"
+        static let bottomBlurView = "Browser.bottomBlurView"
     }
 
     struct ContextualHints {
@@ -269,6 +270,8 @@ struct AccessibilityIdentifiers {
         }
 
         struct Pocket {
+            static let allCategory = "Category.All"
+            static let category = "Category"
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }

@@ -8,7 +8,7 @@ import MozillaAppServices
 struct MerinoTestData {
     /// Because we're not testing the Merino API/AS module, we're simply providing some
     /// dummy data here.
-    func getMockDataFeed(_ numberOfStories: Int) -> CuratedRecommendationsResponse {
+    func getMockDataFeed(_ numberOfStories: Int, categoriesEnabled: Bool = false) -> CuratedRecommendationsResponse {
         var mockData = mockFeedData(startingRank: 0)
         while mockData.count < numberOfStories {
             mockData.append(contentsOf: mockFeedData(startingRank: Int64(mockData.count)))
@@ -16,13 +16,43 @@ struct MerinoTestData {
 
         return CuratedRecommendationsResponse(
             recommendedAt: 123,
-            data: mockData,
-            feeds: mockCategoryData()
+            data: categoriesEnabled ? [] : mockData,
+            feeds: categoriesEnabled ? mockCategoryData() : nil
         )
     }
 
     private func mockCategoryData() -> [FeedSection] {
-        return []
+        let stories = mockFeedData(startingRank: 0)
+
+        return [
+            FeedSection(
+                feedId: "travel",
+                receivedFeedRank: 0,
+                recommendations: Array(stories[0..<4]),
+                title: "Travel",
+                layout: Layout(name: "", responsiveLayouts: []),
+                isFollowed: false,
+                isBlocked: false
+            ),
+            FeedSection(
+                feedId: "technology",
+                receivedFeedRank: 1,
+                recommendations: Array(stories[4..<7]),
+                title: "Technology",
+                layout: Layout(name: "", responsiveLayouts: []),
+                isFollowed: false,
+                isBlocked: false
+            ),
+            FeedSection(
+                feedId: "science",
+                receivedFeedRank: 2,
+                recommendations: Array(stories[7..<10]),
+                title: "Science",
+                layout: Layout(name: "4", responsiveLayouts: []),
+                isFollowed: false,
+                isBlocked: false
+            ),
+        ]
     }
 
     private func mockFeedData(startingRank: Int64) -> [RecommendationDataItem] {

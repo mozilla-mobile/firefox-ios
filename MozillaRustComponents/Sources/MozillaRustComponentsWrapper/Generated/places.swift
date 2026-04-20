@@ -566,17 +566,9 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 public protocol PlacesApiProtocol: AnyObject, Sendable {
     
-    func bookmarksReset() throws 
-    
-    func bookmarksSync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url) throws  -> String
-    
-    func historySync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url) throws  -> String
-    
     func newConnection(connType: ConnectionType) throws  -> PlacesConnection
     
     func registerWithSyncManager() 
-    
-    func resetHistory() throws 
     
 }
 open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
@@ -632,37 +624,6 @@ open class PlacesApi: PlacesApiProtocol, @unchecked Sendable {
     
 
     
-open func bookmarksReset()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_bookmarks_reset(
-            self.uniffiCloneHandle(),$0
-    )
-}
-}
-    
-open func bookmarksSync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_bookmarks_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(keyId),
-        FfiConverterString.lower(accessToken),
-        FfiConverterString.lower(syncKey),
-        FfiConverterTypeUrl_lower(tokenserverUrl),$0
-    )
-})
-}
-    
-open func historySync(keyId: String, accessToken: String, syncKey: String, tokenserverUrl: Url)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_history_sync(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(keyId),
-        FfiConverterString.lower(accessToken),
-        FfiConverterString.lower(syncKey),
-        FfiConverterTypeUrl_lower(tokenserverUrl),$0
-    )
-})
-}
-    
 open func newConnection(connType: ConnectionType)throws  -> PlacesConnection  {
     return try  FfiConverterTypePlacesConnection_lift(try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
     uniffi_places_fn_method_placesapi_new_connection(
@@ -674,13 +635,6 @@ open func newConnection(connType: ConnectionType)throws  -> PlacesConnection  {
     
 open func registerWithSyncManager()  {try! rustCall() {
     uniffi_places_fn_method_placesapi_register_with_sync_manager(
-            self.uniffiCloneHandle(),$0
-    )
-}
-}
-    
-open func resetHistory()throws   {try rustCallWithError(FfiConverterTypePlacesApiError_lift) {
-    uniffi_places_fn_method_placesapi_reset_history(
             self.uniffiCloneHandle(),$0
     )
 }
@@ -4481,22 +4435,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_places_checksum_func_places_api_new() != 61152) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_places_checksum_method_placesapi_bookmarks_reset() != 9496) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesapi_bookmarks_sync() != 10687) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesapi_history_sync() != 37447) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_places_checksum_method_placesapi_new_connection() != 496) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesapi_register_with_sync_manager() != 34707) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_places_checksum_method_placesapi_reset_history() != 11417) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_places_checksum_method_placesconnection_accept_result() != 5027) {

@@ -8,14 +8,14 @@
 "Copy URL" = "Kopiuj adres";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
-"Menu.SendLinkToDevice" = "Wyślij odnośnik do";
+"Menu.SendLinkToDevice" = "Wyślij odnośnik na urządzenie";
 
 /* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
 "Open Last Bookmark" = "Otwórz ostatnią zakładkę";
 
-/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
-"Preview of %@" = "Podgląd %@";
-
 /* Label for preview action on Tab Tray Tab to send the current tab to another device */
-"Send to Device" = "Wyślij odnośnik do";
+"Send to Device" = "Wyślij na urządzenie";
+
+/* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
+"TabPeek.RemoveBookmark.v146" = "Usuń zakładkę";
 

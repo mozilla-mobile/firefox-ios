@@ -29,19 +29,26 @@ final class TranslationsService: TranslationsServiceProtocol {
         self.logger = logger
     }
 
-    /// Determines whether translation should be offered by checking any of the given
-    /// preferred target languages against the detected page language.
-    /// Returns `true` if at least one preferred language has an available model pair.
+    /// Determines whether translation should be offered by checking the detected page language
+    /// against the given preferred target languages. Returns `true` if:
+    /// - The page language is already one of the user's preferred languages and there is at
+    ///   least one other preferred language to translate to (language-picker flow), OR
+    /// - The page language is not in the preferred list and at least one preferred language
+    ///   has an available model pair.
     /// NOTE: `fetchModels` inspects Remote Settings metadata and returns JSON data
     /// describing the pipeline, it does not fetch large model attachments.
     func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
         guard !preferredLanguages.isEmpty else { return false }
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        for language in preferredLanguages {
-            guard language != pageLanguage else { continue }
-            if await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
-                return true
-            }
+
+        // If the page is already in one of the user's preferred languages, offer the
+        // translation picker as long as there is at least one other language to translate to.
+        if preferredLanguages.contains(pageLanguage) {
+            return preferredLanguages.count > 1
+        }
+
+        for language in preferredLanguages where await modelsFetcher.fetchModels(from: pageLanguage, to: language) != nil {
+            return true
         }
         return false
     }
@@ -86,7 +93,7 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Attempts to detect the language of the currently displayed page.
     /// Returns a BCP-47 language tag (e.g. "en", "fr") on success.
     /// Otherwise throws a typed `TranslationsServiceError`.
-    private func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
         let webView = try currentWebView(for: windowUUID)
         let source = WebViewLanguageSampleSource(webView: webView)
         do {

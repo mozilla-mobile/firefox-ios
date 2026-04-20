@@ -534,13 +534,13 @@ objects:
       body:
         type: Text
         description: >
-          The body text dispalyed on the card, in less prominent text.
+          The body text displayed on the card, in less prominent text.
           This should never be defaulted.
         default: ""
       image:
         type: NimbusOnboardingHeaderImage
         description: >
-          The image that should be dispalyed on the card.
+          The image that should be displayed on the card.
         default: welcome-globe
       link:
         type: Option<NimbusOnboardingLink>
@@ -741,7 +741,7 @@ enums:
   OnboardingInstructionsPopupActions:
     description: >
       The identifiers for the different actions available for the
-      insturction card in onboarding
+      instruction card in onboarding
     variants:
       open-ios-fx-settings:
         description: >
