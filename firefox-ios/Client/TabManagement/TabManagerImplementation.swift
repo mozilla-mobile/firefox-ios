@@ -88,7 +88,6 @@ final class TabManagerImplementation: NSObject,
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
-    private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
     // The only tab present before doing tab restoration, since deeplink happens before it
@@ -242,9 +241,6 @@ final class TabManagerImplementation: NSObject,
                                                 restorePosition: tabs.firstIndex(of: tab),
                                                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
-
-        // Backup tabs for tab undo, this is not a feature on iPhone but is on iPad
-        backupCloseTabs = tabs
 
         // Scroll position for most tabs has been stored via session data when we navigate away,
         // but we need to save the selected tabs session data to persist scroll position
@@ -425,6 +421,7 @@ final class TabManagerImplementation: NSObject,
         return tabs.first(where: { $0.webView?.url == url })
     }
 
+    // TODO: FXIOS-14751 Remove related work for undo close tabs (single and all tabs)
     // MARK: - Undo Close Tab
     func undoCloseTab() {
         assert(Thread.isMainThread)
@@ -445,18 +442,6 @@ final class TabManagerImplementation: NSObject,
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         commitChanges()
-    }
-
-    func undoCloseAllTabs() {
-        assert(Thread.isMainThread)
-        guard !backupCloseTabs.isEmpty else { return }
-        tabs = backupCloseTabs
-        commitChanges()
-        backupCloseTabs = [Tab]()
-        if backupCloseTab != nil {
-            selectTab(backupCloseTab?.tab)
-            backupCloseTab = nil
-        }
     }
 
     // MARK: - Restore tabs

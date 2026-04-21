@@ -3990,11 +3990,6 @@ extension String {
             comment: "When user choose to have Blank Page as homepage, this will be displayed as tab title.")
 
         public struct CloseTabsToast {
-            public static let Title = MZLocalizedString(
-                key: "CloseTabsToast.Title.v113",
-                tableName: "TabsTray",
-                value: "Tabs Closed: %d",
-                comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. ")
             public static let SingleTabTitle = MZLocalizedString(
                 key: "CloseTabsToast.SingleTabTitle.v113",
                 tableName: "TabsTray",
@@ -8660,6 +8655,11 @@ extension String {
                 value: "Private Browsing Data Erased",
                 comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast."
             )
+            public static let TabTrayCloseTabsToastTitle = MZLocalizedString(
+                key: "CloseTabsToast.Title.v113",
+                tableName: "TabsTray",
+                value: "Tabs Closed: %d",
+                comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. ")
         }
         struct v151 {
             public static let BlockedStatusDescription = MZLocalizedString(
