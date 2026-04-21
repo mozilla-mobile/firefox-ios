@@ -45,13 +45,13 @@ let LocalizedRootBookmarkFolderStrings = [
 ]
 
 @MainActor
-final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol {
+final class BookmarksPanelViewModel: BookmarksPanelViewModelProtocol, FeatureFlaggable {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
 
     private var isBookmarksSearchEnabled: Bool {
-        LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.bookmarksSearchFeature)
     }
 
     var isRootNode: Bool {
