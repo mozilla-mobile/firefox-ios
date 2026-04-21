@@ -16,6 +16,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     private let scrollView: UIScrollView = .build {
         $0.showsVerticalScrollIndicator = false
         $0.alwaysBounceVertical = false
+        $0.clipsToBounds = false
     }
     private let contentView: UIView = .build()
     private let placeholderLabel: UILabel = .build {
@@ -139,7 +140,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureSources(_ items: [QuickAnswersSourceItem]) {
+    func configureSources(_ items: [QuickAnswersSourceCell.Item]) {
         sourceView.configure(with: items)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             sourceView.alpha = 1.0

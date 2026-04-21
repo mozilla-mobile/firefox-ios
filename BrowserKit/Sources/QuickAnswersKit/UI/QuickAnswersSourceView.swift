@@ -6,32 +6,40 @@ import UIKit
 import Common
 import SiteImageView
 
-struct QuickAnswersSourceItem {
-    let title: String
-    let thumbnailURL: URL?
-    let faviconURL: URL?
-}
-
 final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let thumbnailCornerRadius: CGFloat = 16.0
         static let thumbnailBorderWidth: CGFloat = 1.0
-        static let titleSpacing: CGFloat = 8.0
+        static let thumbnailShadowBlurRadius: CGFloat = 64.0
+        static let thumbnailShadowOffset = CGSize(width: 0.0, height: 8.0)
+        static let thumbnailShadowOpacity: Float = 1.0
+        static let titleRowTopSpacing: CGFloat = 8.0
+        static let titleRowSpacing: CGFloat = 4.0
         static let faviconSize: CGFloat = 16.0
         static let faviconCornerRadius: CGFloat = faviconSize / 2.0
-        static let titleGap: CGFloat = 4.0
     }
+    
+    struct Item {
+        let title: String
+        let thumbnailURL: URL?
+        let faviconURL: URL?
+    }
+    
     private let thumbnailImageView: HeroImageView = .build()
-    private let thumbnailImageContainerView: UIView = .build()
     private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = UX.faviconCornerRadius
     }
     private let titleLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.footnote.scaledFont()
         $0.lineBreakMode = .byTruncatingTail
         $0.adjustsFontForContentSizeCategory = true
+        $0.setContentCompressionResistancePriority(.required, for: .vertical)
+    }
+    private let titleStackView: UIStackView = .build {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.spacing = UX.titleRowSpacing
     }
 
     override init(frame: CGRect) {
@@ -46,31 +54,28 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     // MARK: - Setup
 
     private func setupSubviews() {
-        contentView.addSubviews(thumbnailImageContainerView, faviconImageView, titleLabel)
-        thumbnailImageContainerView.addSubview(thumbnailImageView)
-        
-        thumbnailImageView.pinToSuperview()
-        NSLayoutConstraint.activate([
-            thumbnailImageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            thumbnailImageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            thumbnailImageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        titleStackView.addArrangedSubview(faviconImageView)
+        titleStackView.addArrangedSubview(titleLabel)
+        contentView.addSubviews(thumbnailImageView, titleStackView)
 
-            faviconImageView.topAnchor.constraint(equalTo: thumbnailImageContainerView.bottomAnchor,
-                                                  constant: UX.titleSpacing),
-            faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+        NSLayoutConstraint.activate([
+            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            titleStackView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor,
+                                                constant: UX.titleRowTopSpacing),
+            titleStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
             faviconImageView.widthAnchor.constraint(equalToConstant: UX.faviconSize),
             faviconImageView.heightAnchor.constraint(equalToConstant: UX.faviconSize),
-            faviconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
-            titleLabel.centerYAnchor.constraint(equalTo: faviconImageView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: faviconImageView.trailingAnchor,
-                                                constant: UX.titleGap),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 
     // MARK: - Configuration
-    func configure(with item: QuickAnswersSourceItem) {
+    func configure(with item: Item) {
         if let thumbnailURLString = item.thumbnailURL?.absoluteString {
             let heroImageViewModel = DefaultHeroImageViewModel(
                 urlStringRequest: thumbnailURLString,
@@ -93,14 +98,19 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
-        thumbnailImageContainerView.applyShadow(
-            FxShadow.shadow200,
+        thumbnailImageView.applyShadow(
+            FxShadow(
+                blurRadius: UX.thumbnailShadowBlurRadius,
+                offset: UX.thumbnailShadowOffset,
+                opacity: UX.thumbnailShadowOpacity,
+                colorProvider: { $0.colors.shadowDefault }
+            ),
             theme: theme
         )
         let heroImageColors = HeroImageViewColor(
             faviconTintColor: theme.colors.iconPrimary,
             faviconBackgroundColor: theme.colors.layer1,
-            faviconBorderColor: theme.colors.borderPrimary
+            faviconBorderColor: theme.colors.shadowStrong
         )
         thumbnailImageView.updateHeroImageTheme(with: heroImageColors)
         titleLabel.textColor = theme.colors.textSecondary
@@ -116,6 +126,7 @@ final class QuickAnswersSourceView: UIView,
         static let headerSpacing: CGFloat = 8.0
         static let interItemSpacing: CGFloat = 16.0
         static let maxItemWidth: CGFloat = 150.0
+        static let thumbnailAspectRatio: CGFloat = 3.0 / 4.0
     }
     
     private let headerLabel: UILabel = .build {
@@ -129,15 +140,17 @@ final class QuickAnswersSourceView: UIView,
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isScrollEnabled = false
+        collectionView.clipsToBounds = false
         collectionView.backgroundColor = .clear
         collectionView.register(cellType: QuickAnswersSourceCell.self)
         collectionView.dataSource = self
         collectionView.delegate = self
         return collectionView
     }()
-    
-    private var items: [QuickAnswersSourceItem] = []
+
+    private var items: [QuickAnswersSourceCell.Item] = []
     private var theme: Theme?
+    private var contentSizeObservation: NSKeyValueObservation?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -162,10 +175,31 @@ final class QuickAnswersSourceView: UIView,
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
+        
+        contentSizeObservation = collectionView.observe(
+            \.contentSize,
+            options: [.new, .old]
+        ) { [weak self] _, change in
+            guard change.newValue != change.oldValue else { return }
+            DispatchQueue.main.async {
+                self?.invalidateIntrinsicContentSize()
+            }
+        }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        // We need to override the intrinsic content size since the SourceView is embedded into a scroll view
+        // this results in the collectionView not being able to calculate its intrinsic content size thus we need
+        // to calculate it directly.
+        let headerHeight = headerLabel.intrinsicContentSize.height + UX.headerSpacing
+        return CGSize(
+            width: UIView.noIntrinsicMetric,
+            height: headerHeight + collectionView.contentSize.height
+        )
     }
 
     // MARK: - Configuration
-    func configure(with items: [QuickAnswersSourceItem]) {
+    func configure(with items: [QuickAnswersSourceCell.Item]) {
         self.items = items
         collectionView.reloadData()
     }
@@ -198,9 +232,9 @@ final class QuickAnswersSourceView: UIView,
         let availableWidth = collectionView.frame.width
         let numberOfItemsPerRow = floor(availableWidth / UX.maxItemWidth)
         let width = (availableWidth - numberOfItemsPerRow * UX.interItemSpacing) / numberOfItemsPerRow
-        return CGSize(width: width, height: width * 3/4)
+        return CGSize(width: width, height: width * UX.thumbnailAspectRatio)
     }
-
+    
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
