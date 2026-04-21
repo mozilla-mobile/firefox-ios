@@ -171,6 +171,7 @@ final class HomepageViewController: UIViewController,
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
             HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
             )
@@ -379,6 +380,11 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             self.homepageState = state
+
+            // TODO: - FXIOS-13970: Don't apply the snapshot before the first layout pass completes,
+            // otherwise the snapshot is ignored and the homepage appears blank/frozen.
+            // The state is still stored above so it's correct when the initialize action fires.
+            guard didFinishFirstLayout else { return }
 
             dataSource?.updateSnapshot(
                 state: state,

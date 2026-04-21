@@ -31,6 +31,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
+        stackView.alignment = .center
     }
 
     private lazy var logoContainerView: UIView = .build()
@@ -78,7 +79,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     // MARK: - UI Setup
 
-    private func setupView(with showiPadSetup: Bool) {
+    private func setupView(headerState: HeaderState) {
         if !hasConfiguredView {
             contentView.backgroundColor = .clear
             logoStackView.addArrangedSubview(logoImage)
@@ -86,10 +87,17 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
-            if featureFlagsProvider.isEnabled(.quickAnswers) {
-                // Add spacer view to stretch the logo and the button to leading and trailing
-                stackContainer.addArrangedSubview(UIView())
-                stackContainer.addArrangedSubview(quickAnswersButton)
+            if featureFlagsProvider.isEnabled(.quickAnswers), !headerState.isPrivate {
+                if headerState.showiPadSetup {
+                    // On iPad, add button directly to contentView so logo remains centered
+                    contentView.addSubview(quickAnswersButton)
+                    stackContainer.alignment = .fill
+                } else {
+                    // On iPhone, add spacer view to stretch the logo and the button to leading and trailing
+                    stackContainer.addArrangedSubview(UIView())
+                    stackContainer.addArrangedSubview(quickAnswersButton)
+                    stackContainer.alignment = .center
+                }
             }
 
             contentView.addSubview(stackContainer)
@@ -114,11 +122,17 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).priority(.defaultLow),
             stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).priority(.defaultLow),
 
-            logoContainerView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor),
-
             quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
             quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
         ]
+        // Instead of checking on the state check if the quickAnswer button was added to the superview in order to avoid
+        // potential crashes.
+        // When the button is added to the contentView it is the iPad layout.
+        if quickAnswersButton.superview == contentView {
+            headerConstraints.append(contentsOf: [
+                quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            ])
+        }
 
         NSLayoutConstraint.activate(headerConstraints)
     }
@@ -138,7 +152,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     func configure(headerState: HeaderState, onQuickAnswersTapped: (() -> Void)? = nil) {
         self.headerState = headerState
         self.onQuickAnswersTapped = onQuickAnswersTapped
-        setupView(with: headerState.showiPadSetup)
+        setupView(headerState: headerState)
     }
 
     // MARK: - ThemeApplicable

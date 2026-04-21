@@ -193,12 +193,12 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(UX.HeaderConstants.estimatedHeight))
+                                              heightDimension: .estimated(UX.standardSingleItemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(UX.HeaderConstants.estimatedHeight))
+                                               heightDimension: .estimated(UX.standardSingleItemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
