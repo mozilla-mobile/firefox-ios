@@ -322,12 +322,16 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         context.containerView.addSubview(toView)
 
+        let isIpad = browserVC.traitCollection.userInterfaceIdiom == .pad &&
+                     browserVC.traitCollection.horizontalSizeClass == .regular
+        let shouldCropUsingContentContainerFrame = UIWindow.isPortrait && !isIpad
+
         // Trigger animation async to be non blocking and allow UI to render
         DispatchQueue.main.async {
             let tabSnapshot = self.buildTabSnapshot(
                 selectedTab: selectedTab,
                 contentContainer: contentContainer,
-                browserVC: browserVC
+                shouldCropUsingContentContainerFrame: shouldCropUsingContentContainerFrame
             )
             context.containerView.addSubview(tabSnapshot)
 
@@ -366,17 +370,14 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
     private func buildTabSnapshot(
         selectedTab: Tab,
         contentContainer: UIView,
-        browserVC: BrowserViewController
+        shouldCropUsingContentContainerFrame: Bool
     ) -> UIView {
         let tabSnapshot = UIImageView(image: selectedTab.screenshot)
-
-        let isIpad = browserVC.traitCollection.userInterfaceIdiom == .pad &&
-                     browserVC.traitCollection.horizontalSizeClass == .regular
 
         // ScreenshotHelper applies contentContainer bounds only on iPhone portrait.
         // Otherwise, the stored tab screenshot is based on the webView bounds.
         if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
-            to: UIWindow.isPortrait && !isIpad
+            to: shouldCropUsingContentContainerFrame
             ? CGRect(
                 x: contentContainer.frame.origin.x * image.scale,
                 y: contentContainer.frame.origin.y * image.scale,
