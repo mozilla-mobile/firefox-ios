@@ -540,6 +540,25 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockFileManager.removeItemAtURLCalled, session.count)
     }
 
+    // MARK: - HTTPS Navigation Policy
+    @MainActor
+    func testCreateWebview_setsHTTPSNavigationPolicy() throws {
+        guard #available(iOS 18.2, *) else {
+            throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
+        }
+
+        let subject = createSubject()
+        let configuration = WKWebViewConfiguration()
+
+        subject.createWebview(configuration: configuration)
+
+        let policy = subject.webView?.configuration
+            .defaultWebpagePreferences?
+            .preferredHTTPSNavigationPolicy
+        XCTAssertEqual(policy, .upgradeToHTTPS)
+        subject.close()
+    }
+
     // MARK: - Helpers
     @MainActor
     private func createSubject() -> Tab {
