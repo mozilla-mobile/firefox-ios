@@ -30,6 +30,18 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         )
     }()
 
+    let blockedStatusDescription = {
+        try? AttributedString(
+            markdown: .Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription
+        )
+    }()
+
+    let availableStatusDescription = {
+        try? AttributedString(
+            markdown: .Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription
+        )
+    }()
+
     let blockAIEnhancementsDescription: String = {
         String(
             format: .Settings.AIControls.BlockAIEnhancementsDescription,
