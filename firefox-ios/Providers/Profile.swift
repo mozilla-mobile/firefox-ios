@@ -660,8 +660,8 @@ open class BrowserProfile: Profile,
         let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
         let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
         let config = RemoteSettingsConfig(server: remoteSettingsServer,
-                                           bucketName: bucketName,
-                                           appContext: remoteSettingsAppContext())
+                                          bucketName: bucketName,
+                                          appContext: remoteSettingsAppContext())
 
         let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
         let path = url.path
