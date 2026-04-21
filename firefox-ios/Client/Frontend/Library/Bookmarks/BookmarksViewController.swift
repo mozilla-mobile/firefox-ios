@@ -15,7 +15,7 @@ final class BookmarksViewController: SiteTableViewController,
                                      CanRemoveQuickActionBookmark,
                                      UITableViewDropDelegate,
                                      Notifiable,
-                                     LegacyFeatureFlaggable {
+                                     FeatureFlaggable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -57,7 +57,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private var isBookmarksSearchEnabled: Bool {
-        featureFlags.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.bookmarksSearchFeature)
     }
 
     private var toolbarButtonItems: [UIBarButtonItem] {
