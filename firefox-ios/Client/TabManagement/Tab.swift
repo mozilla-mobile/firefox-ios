@@ -520,9 +520,9 @@ class Tab: NSObject,
         self.configuration = requiredConfiguration
 
         if #available(iOS 18.2, *),
-        featureFlags.isFeatureEnabled(.httpsOnlyMode, checking: .buildAndUser) {
+        featureFlags.isFeatureEnabled(.httpsUpgrade, checking: .buildAndUser) {
             let pagePrefs = requiredConfiguration.defaultWebpagePreferences ?? WKWebpagePreferences()
-            pagePrefs.preferredHTTPSNavigationPolicy = .upgradeToHTTPS
+            pagePrefs.preferredHTTPSNavigationPolicy = .automaticFallbackToHTTP
             requiredConfiguration.defaultWebpagePreferences = pagePrefs
         }
 

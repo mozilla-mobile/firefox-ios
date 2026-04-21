@@ -542,20 +542,37 @@ class TabTests: XCTestCase {
 
     // MARK: - HTTPS Navigation Policy
     @MainActor
-    func testCreateWebview_setsHTTPSNavigationPolicy() throws {
+    func testCreateWebview_whenHTTPSUpgradeEnabled_setsUpgradePolicy() throws {
         guard #available(iOS 18.2, *) else {
             throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
         }
 
-        let subject = createSubject()
-        let configuration = WKWebViewConfiguration()
+        setHTTPSUpgradeFeature(isEnabled: true)
 
-        subject.createWebview(configuration: configuration)
+        let subject = createSubject()
+        subject.createWebview(configuration: WKWebViewConfiguration())
 
         let policy = subject.webView?.configuration
             .defaultWebpagePreferences?
             .preferredHTTPSNavigationPolicy
-        XCTAssertEqual(policy, .upgradeToHTTPS)
+        XCTAssertEqual(policy, .automaticFallbackToHTTP)
+
+        subject.close()
+    }
+
+    @MainActor
+    func testCreateWebview_whenHTTPSUpgradeDisabled_doesNotSetUpgradePolicy() throws {
+        guard #available(iOS 18.2, *) else {
+            throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
+        }
+        setHTTPSUpgradeFeature(isEnabled: false)
+        let subject = createSubject()
+        subject.createWebview(configuration: WKWebViewConfiguration())
+
+        let policy = subject.webView?.configuration
+            .defaultWebpagePreferences?
+            .preferredHTTPSNavigationPolicy
+        XCTAssertNotEqual(policy, .automaticFallbackToHTTP)
         subject.close()
     }
 
@@ -570,6 +587,12 @@ class TabTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setHTTPSUpgradeFeature(isEnabled: Bool = true) {
+        FxNimbus.shared.features.httpsUpgradeFeature.with { _, _ in
+            return HttpsUpgradeFeature(enabled: isEnabled)
+        }
     }
 }
 
