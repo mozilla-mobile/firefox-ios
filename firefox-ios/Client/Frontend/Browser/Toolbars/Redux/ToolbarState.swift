@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 import ToolbarKit
 
+@CopyWithUpdates
 struct ToolbarState: ScreenState, Sendable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
@@ -37,26 +39,7 @@ struct ToolbarState: ScreenState, Sendable {
             return
         }
 
-        self.init(windowUUID: toolbarState.windowUUID,
-                  toolbarPosition: toolbarState.toolbarPosition,
-                  toolbarLayout: toolbarState.toolbarLayout,
-                  tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
-                  isPrivateMode: toolbarState.isPrivateMode,
-                  addressToolbar: toolbarState.addressToolbar,
-                  navigationToolbar: toolbarState.navigationToolbar,
-                  isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                  isShowingTopTabs: toolbarState.isShowingTopTabs,
-                  canGoBack: toolbarState.canGoBack,
-                  canGoForward: toolbarState.canGoForward,
-                  numberOfTabs: toolbarState.numberOfTabs,
-                  scrollAlpha: toolbarState.scrollAlpha,
-                  showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-                  canShowNavigationHint: toolbarState.canShowNavigationHint,
-                  shouldAnimate: toolbarState.shouldAnimate,
-                  isTranslucent: toolbarState.isTranslucent,
-                  previousTabScreenshot: toolbarState.previousTabScreenshot,
-                  nextTabScreenshot: toolbarState.nextTabScreenshot
-        )
+        self = toolbarState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID) {
@@ -203,26 +186,13 @@ struct ToolbarState: ScreenState, Sendable {
         else { return defaultState(from: state) }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-        return ToolbarState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             toolbarPosition: position,
             toolbarLayout: toolbarLayout,
             tabTrayButtonStyle: tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            isTranslucent: isTranslucent
         )
     }
 
@@ -230,11 +200,7 @@ struct ToolbarState: ScreenState, Sendable {
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
+        return state.copyWithUpdates(
             isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -242,90 +208,38 @@ struct ToolbarState: ScreenState, Sendable {
             isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
             canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
             canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
             scrollAlpha: toolbarAction.scrollAlpha ?? state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
-            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent
         )
     }
 
     @MainActor
     private static func handleShowMenuWarningBadge(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge
         )
     }
 
     @MainActor
     private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs
         )
     }
 
     @MainActor
     private static func handleDidSetTabScreenshot(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
             previousTabScreenshot: toolbarAction.previousTabScreenshot,
             nextTabScreenshot: toolbarAction.nextTabScreenshot
         )
@@ -339,130 +253,52 @@ struct ToolbarState: ScreenState, Sendable {
         }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-        return ToolbarState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             toolbarPosition: position,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action)
         )
     }
 
     @MainActor
     private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
             canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-            canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            canGoForward: toolbarAction.canGoForward ?? state.canGoForward
         )
     }
 
     @MainActor
     private static func handleTraitCollectionDidChange(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
             isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
-            isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs
         )
     }
 
     @MainActor
     private static func handleNavigationButtonDoubleTapped(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: true,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            canShowNavigationHint: true
         )
     }
 
     @MainActor
     private static func handleNavigationHintFinishedPresenting(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: false,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            canShowNavigationHint: false
         )
     }
 
@@ -472,26 +308,9 @@ struct ToolbarState: ScreenState, Sendable {
             return defaultState(from: state)
         }
 
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            toolbarLayout: state.toolbarLayout,
-            tabTrayButtonStyle: state.tabTrayButtonStyle,
-            isPrivateMode: state.isPrivateMode,
+        return state.copyWithUpdates(
             addressToolbar: AddressBarState.reducer(state.addressToolbar, searchEngineSelectionAction),
-            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            scrollAlpha: state.scrollAlpha,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            canShowNavigationHint: state.canShowNavigationHint,
-            shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent,
-            previousTabScreenshot: state.previousTabScreenshot,
-            nextTabScreenshot: state.nextTabScreenshot
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction)
         )
     }
 
@@ -504,24 +323,6 @@ struct ToolbarState: ScreenState, Sendable {
     }
 
     static func defaultState(from state: ToolbarState) -> ToolbarState {
-        return ToolbarState(windowUUID: state.windowUUID,
-                            toolbarPosition: state.toolbarPosition,
-                            toolbarLayout: state.toolbarLayout,
-                            tabTrayButtonStyle: state.tabTrayButtonStyle,
-                            isPrivateMode: state.isPrivateMode,
-                            addressToolbar: state.addressToolbar,
-                            navigationToolbar: state.navigationToolbar,
-                            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                            isShowingTopTabs: state.isShowingTopTabs,
-                            canGoBack: state.canGoBack,
-                            canGoForward: state.canGoForward,
-                            numberOfTabs: state.numberOfTabs,
-                            scrollAlpha: state.scrollAlpha,
-                            showMenuWarningBadge: state.showMenuWarningBadge,
-                            canShowNavigationHint: state.canShowNavigationHint,
-                            shouldAnimate: state.shouldAnimate,
-                            isTranslucent: state.isTranslucent,
-                            previousTabScreenshot: state.previousTabScreenshot,
-                            nextTabScreenshot: state.nextTabScreenshot)
+        return state.copyWithUpdates()
     }
 }
