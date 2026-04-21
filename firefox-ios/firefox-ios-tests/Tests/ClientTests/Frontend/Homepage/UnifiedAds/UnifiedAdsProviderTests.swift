@@ -65,23 +65,23 @@ class UnifiedAdsProviderTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+        setupNimbusAdsClientTesting(isEnabled: false)
         TelemetryContextualIdentifier.setupContextId()
         mockAdsClient = MockMozAdsClient()
-        setupNimbusAdsClientTesting(isEnabled: false)
         networking = MockUnifiedTileNetworking()
     }
 
     override func tearDown() async throws {
         mockAdsClient = nil
         networking = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
     private func setupNimbusAdsClientTesting(isEnabled: Bool) {
         FxNimbus.shared.features.adsClient.with { _, _ in
-            return AdsClient(
-                status: isEnabled
-            )
+            AdsClient(status: isEnabled)
         }
     }
 

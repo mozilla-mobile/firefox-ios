@@ -14,7 +14,7 @@ protocol UnifiedAdsCallbackTelemetry {
     func sendClickTelemetry(tileSite: Site, position: Int)
 }
 
-final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, LegacyFeatureFlaggable {
+final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, FeatureFlaggable {
     private let adsClient: MozAdsClientProtocol
     private let networking: UnifiedTileNetworking
     private let logger: Logger
@@ -33,7 +33,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Leg
     }
 
     private var isAdsClientEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.adsClient)
     }
 
     /// Impression telemetry can only be sent for `Site`s with `SiteType` `.sponsoredSite`.
