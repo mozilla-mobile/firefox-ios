@@ -18,13 +18,13 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         static let faviconSize: CGFloat = 16.0
         static let faviconCornerRadius: CGFloat = faviconSize / 2.0
     }
-    
+
     struct Item {
         let title: String
         let thumbnailURL: URL?
         let faviconURL: URL?
     }
-    
+
     private let thumbnailImageView: HeroImageView = .build()
     private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
@@ -128,7 +128,7 @@ final class QuickAnswersSourceView: UIView,
         static let maxItemWidth: CGFloat = 150.0
         static let thumbnailAspectRatio: CGFloat = 3.0 / 4.0
     }
-    
+
     private let headerLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.caption1.scaledFont()
         $0.text = "Sources"
@@ -175,7 +175,7 @@ final class QuickAnswersSourceView: UIView,
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-        
+
         contentSizeObservation = collectionView.observe(
             \.contentSize,
             options: [.new, .old]
@@ -203,7 +203,7 @@ final class QuickAnswersSourceView: UIView,
         self.items = items
         collectionView.reloadData()
     }
-    
+
     // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
@@ -222,7 +222,7 @@ final class QuickAnswersSourceView: UIView,
         }
         return cell
     }
-    
+
     // MARK: - UICollectionViewDelegateFlowLayout
     func collectionView(
         _ collectionView: UICollectionView,
@@ -234,7 +234,7 @@ final class QuickAnswersSourceView: UIView,
         let width = (availableWidth - numberOfItemsPerRow * UX.interItemSpacing) / numberOfItemsPerRow
         return CGSize(width: width, height: width * UX.thumbnailAspectRatio)
     }
-    
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
