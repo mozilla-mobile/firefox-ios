@@ -7,7 +7,7 @@
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": "GitHub Action :github: remote settings fetch",
+                        "text": "GitHub Action :github: ${{ env.ACTION_NAME }}",
                         "emoji": true
                     }
                 },
