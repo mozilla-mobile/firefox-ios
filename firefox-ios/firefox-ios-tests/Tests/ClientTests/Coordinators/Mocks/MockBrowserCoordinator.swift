@@ -175,7 +175,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     func openLearnMoreFromNativeErrorPage(url: URL) {
         openLearnMoreFromNativeErrorPageCalled += 1
     }
-    
+
     func showQuickAnswers() {
         showQuickAnswersCalled += 1
     }
