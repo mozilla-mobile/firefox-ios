@@ -17,7 +17,7 @@ final class HeaderStateTests: XCTestCase {
     }
 
     @MainActor
-    func test_viewDidLoadAction_returnsExpectedState() {
+    func test_viewWillAppearAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
@@ -26,7 +26,7 @@ final class HeaderStateTests: XCTestCase {
             HomepageAction(
                 showiPadSetup: true,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.viewDidLoad
+                actionType: HomepageActionType.viewWillAppear
             )
         )
 

@@ -203,13 +203,13 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
+        let horizontalInset = UX.leadingInset(traitCollection: environment.traitCollection)
 
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
-            leading: leadingInset,
+            leading: horizontalInset,
             bottom: UX.spacingBetweenSections,
-            trailing: leadingInset)
+            trailing: horizontalInset)
 
         return section
     }
