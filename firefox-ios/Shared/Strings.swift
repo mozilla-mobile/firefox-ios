@@ -949,6 +949,109 @@ extension String {
     }
 }
 
+extension String {
+    public struct WorldCup {
+        // MARK: - Follow Team Card (Homepage Entry Point)
+        public struct FollowTeamCard {
+            public static let Title = MZLocalizedString(
+                key: "WorldCup.FollowTeamCard.Title.v150",
+                tableName: "WorldCup",
+                value: "Keep Tabs on the World Cup",
+                comment: "Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
+            public static let Description = MZLocalizedString(
+                key: "WorldCup.FollowTeamCard.Description.v151",
+                tableName: "WorldCup",
+                value: "Get live match updates and more.",
+                comment: "Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
+            public static let CTA = MZLocalizedString(
+                key: "WorldCup.FollowTeamCard.CTA.v151",
+                tableName: "WorldCup",
+                value: "Follow Your Team",
+                comment: "Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "WorldCup.FollowTeamCard.Close.AccessibilityLabel.v151",
+                tableName: "WorldCup",
+                value: "Hide World Cup Updates",
+                comment: "Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event.")
+        }
+
+
+        // MARK: - Country Picker
+        public struct CountryPicker {
+            public static let Title = MZLocalizedString(
+                key: "WorldCup.CountryPicker.Title.v151",
+                tableName: "WorldCup",
+                value: "Follow Your Team",
+                comment: "Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
+                tableName: "WorldCup",
+                value: "Close World Cup Country Picker",
+                comment: "Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker.")
+            // Note: "North America" and "CONCACAF" overlap in scope
+            // CONCACAF is the FIFA confederation covering North America, Central America, and the Caribbean.
+            // For completeness, we are including a all the geographic region headers as well as the CONCACAF confederation header 
+            // in case the UI groups countries by geographic region rather than strictly by confederation.
+            public struct Confederation {
+                public static let NorthAmerica = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.NorthAmerica.v151",
+                    tableName: "WorldCup",
+                    value: "North America",
+                    comment: "Section header for the North America region in the World Cup country picker.")
+                public static let CentralAmerica = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.CentralAmerica.v151",
+                    tableName: "WorldCup",
+                    value: "Central America",
+                    comment: "Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation.")
+                public static let Africa = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.Africa.v151",
+                    tableName: "WorldCup",
+                    value: "Africa",
+                    comment: "Section header for the Africa region in the World Cup country picker.")
+                public static let Asia = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.Asia.v151",
+                    tableName: "WorldCup",
+                    value: "Asia",
+                    comment: "Section header for the Asia region in the World Cup country picker.")
+                public static let CONCACAF = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Confederation.CONCACAF.v151",
+                    tableName: "WorldCup",
+                    value: "CONCACAF",
+                    comment: "Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean.")
+                public static let Europe = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.Europe.v151",
+                    tableName: "WorldCup",
+                    value: "Europe",
+                    comment: "Section header for the Europe region in the World Cup country picker.")
+                public static let Oceania = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.Oceania.v151",
+                    tableName: "WorldCup",
+                    value: "Oceania",
+                    comment: "Section header for the Oceania region in the World Cup country picker.")
+                public static let SouthAmerica = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Continent.SouthAmerica.v151",
+                    tableName: "WorldCup",
+                    value: "South America",
+                    comment: "Section header for the South America region in the World Cup country picker.")
+            }
+
+            // MARK: Country Names (not resolvable via Intl APIs)
+            public struct CountryName {
+                public static let England = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Country.England.v151",
+                    tableName: "WorldCup",
+                    value: "England",
+                    comment: "Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string.")
+                public static let Scotland = MZLocalizedString(
+                    key: "WorldCup.CountryPicker.Country.Scotland.v151",
+                    tableName: "WorldCup",
+                    value: "Scotland",
+                    comment: "Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string.")
+            }
+        }
+    }
+}
+
 // MARK: - Firefox Homepage
 extension String {
     public struct FirefoxHomepage {
