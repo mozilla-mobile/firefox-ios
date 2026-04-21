@@ -379,7 +379,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
-        if isSearchBarLocationFeatureEnabled, let profile {
+        if let profile {
             generalSettings.append(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
             )

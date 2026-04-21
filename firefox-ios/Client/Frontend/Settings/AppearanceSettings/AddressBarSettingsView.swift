@@ -7,7 +7,7 @@ import Common
 import Shared
 
 /// The main view displaying the settings for the address bar position menu.
-struct AddressBarSettingsView: View, LegacyFeatureFlaggable {
+struct AddressBarSettingsView: View, HasUserFeaturePreferences {
     let windowUUID: WindowUUID
     /// NOTE: To avoid duplication, the old view model is reused in the new address bar setting menu.
     /// TODO(FXIOS-12000): Once the experiment is done, we can remove the old viewmodel and move it to here.
@@ -30,7 +30,7 @@ struct AddressBarSettingsView: View, LegacyFeatureFlaggable {
     }
 
     private var addressBarPosition: SearchBarPosition {
-        LegacyFeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .bottom
+        userPreferences.searchBarPosition
     }
 
     private var viewBackground: Color {
