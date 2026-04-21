@@ -1,6 +1,33 @@
+/* Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu */
+"Toolbar.Menu.Button.A11y.Label.v135" = "Menu główne";
+
 /* Accessibility label for the new tab button that can be displayed in the navigation or address toolbar. */
 "Toolbar.NewTab.Button.v130" = "Nowa karta";
 
+/* Accessibility label for the summarize button that can be displayed in the address toolbar. */
+"Toolbar.NewTab.Button.v142" = "Streść stronę";
+
+/* Accessibility label for the reader view button with a bottom badge that indicates that the summary is available for the page. The button is displayed in the address bar. */
+"Toolbar.ReaderModeWithSummarizer.Button.v150" = "Popraw czytelność. Dostępne jest streszczenie strony.";
+
 /* Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed */
 "Toolbar.Tab.CloseThisTab.Button.v130" = "Zamknij tę kartę";
+
+/* Accessibility label for the tabs button in the toolbar, specifing the number of tabs open. */
+"Toolbar.Tabs.Button.A11y.Label.v135" = "Otwarte karty";
+
+/* Large content title for the tabs button in the toolbar, specifying the number of tabs open. %@ is the number of open tabs. */
+"Toolbar.Tabs.Button.A11y.LargeContentTitle.v137" = "Otwarte karty: %@";
+
+/* Large content title for the tabs button in the toolbar, specifying that more than 99 tabs are open. */
+"Toolbar.Tabs.Button.A11y.OverflowLargeContentTitle.v137" = "Otwarte karty: 99+";
+
+/* Accessibility label for the translation button that can be displayed in the address toolbar and is shown to indicate the page is already translated. */
+"Toolbar.Translation.ButtonActive.AccessibilityLabel.v145" = "Wyświetl stronę w oryginalnym języku";
+
+/* Accessibility label for the translation button that can be displayed in the address toolbar and used to translate a webpage. */
+"Toolbar.Translation.ButtonInactive.AccessibilityLabel.v145" = "Przetłumacz stronę";
+
+/* Accessibility label for a loading button that can be displayed in the address toolbar to indicate that the page is in the process of being translated. */
+"Toolbar.Translation.LoadingButton.AccessibilityLabel.v145" = "Tłumaczenie strony";
 

@@ -15,7 +15,7 @@ import Shared
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtility {
+final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -26,6 +26,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
     private var scrollDelegate: MockStatusBarScrollDelegate!
     private var browserViewController: MockBrowserViewController!
     private var mockStore: MockStoreForMiddleware<AppState>!
+    private var homepageTabStateStore: HomepageTabStateStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -44,6 +45,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         glean = MockGleanWrapper()
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
+        homepageTabStateStore = HomepageTabStateStore()
         setupStore()
     }
 
@@ -58,6 +60,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         glean = nil
         scrollDelegate = nil
         browserViewController = nil
+        homepageTabStateStore = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -670,6 +673,31 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         subject.didFinish(from: childCoordinator)
 
         XCTAssertEqual(subject.childCoordinators.count, 0)
+    }
+
+    // MARK: - TabManagerDelegate
+
+    func testDidRemoveTab_removesHomepageTabStateForTab() throws {
+        let subject = createSubject()
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
+
+        subject.tabManager(tabManager, didRemoveTab: tab, isRestoring: false)
+
+        XCTAssertNil(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY)
+    }
+
+    func testDidRemoveTab_keepsHomepageTabStateForOtherTabs() throws {
+        let subject = createSubject()
+        let removedTab = MockTab(profile: profile, windowUUID: windowUUID)
+        let otherTab = MockTab(profile: profile, windowUUID: windowUUID)
+        homepageTabStateStore.updateState(for: removedTab.tabUUID) { $0.scrollOffsetY = 120 }
+        homepageTabStateStore.updateState(for: otherTab.tabUUID) { $0.scrollOffsetY = 240 }
+
+        subject.tabManager(tabManager, didRemoveTab: removedTab, isRestoring: false)
+
+        XCTAssertNil(homepageTabStateStore.state(for: removedTab.tabUUID).scrollOffsetY)
+        XCTAssertEqual(homepageTabStateStore.state(for: otherTab.tabUUID).scrollOffsetY, 240)
     }
 
     // MARK: - Search route
@@ -1346,6 +1374,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable, StoreTestUtil
         let subject = BrowserCoordinator(router: mockRouter,
                                          screenshotService: screenshotService,
                                          tabManager: tabManager,
+                                         homepageTabStateStore: homepageTabStateStore,
                                          profile: profile,
                                          glean: glean,
                                          applicationHelper: applicationHelper)

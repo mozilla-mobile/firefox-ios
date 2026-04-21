@@ -11,7 +11,7 @@
 "NSFaceIDUsageDescription" = "Firefox vyžaduje Face ID pro přístup k uloženým heslům a platebním metodám.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";
+"NSLocationWhenInUseUsageDescription" = "Stránky, které navštěvujete, mohou chtít znát vaše umístění.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Firefox používá váš mikrofon k zaznamenávání a odesílání zvuku.";

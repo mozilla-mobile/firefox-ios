@@ -33,7 +33,7 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          FeatureFlaggable {
+                          LegacyFeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
     }
@@ -52,6 +52,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let touExperimentsTracking: ToUExperimentsTracking
+    private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
@@ -66,6 +67,7 @@ final class BrowserCoordinator: BaseCoordinator,
     init(router: Router,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
+         homepageTabStateStore: HomepageTabStateStore = HomepageTabStateStore(),
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -79,6 +81,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.windowManager = windowManager
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
+        self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
@@ -143,6 +146,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
             tabManager: tabManager,
+            homepageTabStateStore: homepageTabStateStore,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
@@ -1247,6 +1251,10 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+    }
+
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        homepageTabStateStore.removeState(for: tab.tabUUID)
     }
 
     // MARK: - TabTrayCoordinatorDelegate

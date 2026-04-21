@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
+class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, LegacyFeatureFlaggable {
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel

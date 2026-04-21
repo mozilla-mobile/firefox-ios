@@ -23,20 +23,24 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         $0.text = "Ask anything…"
         $0.numberOfLines = 0
         $0.textAlignment = .center
+        $0.adjustsFontForContentSizeCategory = true
     }
     private let transcriptLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.title2.scaledFont()
         $0.numberOfLines = 0
+        $0.adjustsFontForContentSizeCategory = true
     }
     private let searchingLabel: UILabel = .build {
         $0.font = FXFontStyles.Bold.callout.scaledFont()
         $0.text = "Answering…"
         $0.alpha = 0.0
+        $0.adjustsFontForContentSizeCategory = true
     }
     private let answerLabel: UILabel = .build {
         $0.font = FXFontStyles.Regular.body.scaledFont()
         $0.numberOfLines = 0
         $0.alpha = 0.0
+        $0.adjustsFontForContentSizeCategory = true
     }
     private var theme: Theme?
 
@@ -84,6 +88,10 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
     }
 
     // MARK: - Configuration
+    func adjustBottomInsets(for height: CGFloat) {
+        scrollView.contentInset.bottom = height
+    }
+
     func configureTranscript(_ text: String) {
         // if the placeholder is visible then hide it before adding text to the transcription label.
         // This is needed to don't overlap the show of the transcription with the placeholder label

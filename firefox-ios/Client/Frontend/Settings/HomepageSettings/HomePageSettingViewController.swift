@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Common
 
-class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
+class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -270,7 +270,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, FeatureFlaggable {
+    class TopSitesSettings: Setting, LegacyFeatureFlaggable {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -304,7 +304,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, FeatureFlaggable {
+    class WallpaperSettings: Setting, LegacyFeatureFlaggable {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

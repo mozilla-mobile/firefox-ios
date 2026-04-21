@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import Client
+import XCTest
 
 /// Minimal mock  for TranslationModelsFetcherProtocol tests. This avoids going through remote settings.
 final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unchecked Sendable {
@@ -31,5 +32,9 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
 
     func fetchSupportedTargetLanguages() async -> [String] {
         return supportedTargetLanguages
+    }
+
+    func resetStorage() async {
+        // no-op for now
     }
 }

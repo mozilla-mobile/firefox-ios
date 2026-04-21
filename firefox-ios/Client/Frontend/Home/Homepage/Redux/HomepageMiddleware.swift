@@ -9,7 +9,7 @@ import Common
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
 @MainActor
-final class HomepageMiddleware: FeatureFlaggable, Notifiable {
+final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
     private let profile: Profile
     private let homepageTelemetry: HomepageTelemetry
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol

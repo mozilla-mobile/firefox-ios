@@ -17,7 +17,7 @@ class RemoteTabsViewController: UIViewController,
                                 Themeable,
                                 CollapsibleTableViewSection,
                                 LibraryPanelContextMenu,
-                                FeatureFlaggable,
+                                LegacyFeatureFlaggable,
                                 UITableViewDelegate,
                                 UITableViewDataSource {
     struct UX {

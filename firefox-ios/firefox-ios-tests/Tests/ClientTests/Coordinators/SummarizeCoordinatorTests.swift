@@ -28,6 +28,7 @@ class MockSummarizerServiceFactory: SummarizerServiceFactory {
               isHostedSummarizerEnabled: Bool,
               isAppAttestAuthEnabled: Bool,
               usesPermissiveGuardrails: Bool,
+              prefs: Prefs,
               config: SummarizerConfig?) -> SummarizerService? {
         return DefaultSummarizerService(summarizer: MockSummarizer(), lifecycleDelegate: lifecycleDelegate, maxWords: 10)
     }

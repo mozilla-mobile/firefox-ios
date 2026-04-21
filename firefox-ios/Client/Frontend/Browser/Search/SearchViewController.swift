@@ -37,7 +37,7 @@ protocol SearchViewControllerDelegate: AnyObject {
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             SearchViewDelegate,
-                            FeatureFlaggable,
+                            LegacyFeatureFlaggable,
                             Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 

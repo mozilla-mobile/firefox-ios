@@ -13,7 +13,7 @@ import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
 import enum MozillaAppServices.MozAdsEnvironment
 
-class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
+class AppDelegate: UIResponder, UIApplicationDelegate, LegacyFeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all

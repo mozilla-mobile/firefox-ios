@@ -11,7 +11,7 @@
 "Addresses.Settings.SaveToFirefox.Title.v130" = "Zachowuj adresy w przeglądarce %@";
 
 /* Description text for the content unavailable view informing users they can create or add new addresses. */
-"Addresses.Settings.SecureSaveInfo.Description.v130" = "Bezpiecznie zachowuj swoje dane, aby później mieć do nich szybki dostęp.";
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "Bezpiecznie zachowuj swoje dane, by później mieć do nich szybki dostęp.";
 
 /* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
 "Addresses.Settings.Switch.Description.v124" = "W tym numery telefonów i adresy e-mail";
@@ -31,7 +31,7 @@
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "Zachowuj karty w przeglądarce %@";
 
-/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+/* Accessibility label for a credit card list item in autofill settings screen. %1$@ is the credit card issuer (e.g. Visa), %2$@ is the name of the credit card holder, %3$@ is the last 4 digits of the credit card, %4$@ is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%1$@, wystawiona na nazwisko %2$@, kończąca się na %3$@, wygasa %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
@@ -64,8 +64,134 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Adresy";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "Dostępne";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**Dostępne**: funkcja będzie widoczna i można z niej korzystać.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "Zablokowane";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Zablokowane**: funkcja nie będzie widoczna i nie można z niej korzystać. W przypadku sztucznej inteligencji na urządzeniu wszystkie pobrane modele zostaną usunięte.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Strony i streszczenia nigdy nie są przechowywane.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "Streszczenia stron";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "Funkcje korzystające ze sztucznej inteligencji";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "Tłumaczenia pozostają prywatne na Twoim urządzeniu.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "Tłumaczenie";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "Blokowanie oznacza, że nie zobaczysz nowych ani obecnych ulepszeń SI w przeglądarce %@ czy nawet informacji o nich.";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "Zobacz, co to obejmuje, a co nie";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "Blokuj ulepszenia SI";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "Nowe i obecne ulepszenia SI są domyślnie blokowane. Poniżej można odblokować konkretne funkcje.";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "Więcej informacji";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "Także w korzystaniu z funkcji ulepszonych za pomocą sztucznej inteligencji.";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "W przeglądarce %@ zawsze masz wybór";
+
+/* In the settings menu, in the General section, this is the title for the AI Controls settings section */
+"Settings.AIControls.Title.v150" = "Sterowanie SI";
+
+/* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.Description.v145" = "Zmienia funkcję przycisku na środku paska narzędzi.";
+
+/* Section header title in Appearance settings that configures the middle button of the bottom toolbar. */
+"Settings.Appearance.NavigationToolbar.SectionHeader.v145" = "Przycisk paska narzędzi";
+
+/* Default section header title under page zoom settings. Indicates the default value for all websites */
+"Settings.Appearance.Zoom.Default.Title.v140" = "Domyślne";
+
+/* Button to reset specific zoom site levels back to default */
+"Settings.Appearance.Zoom.Reset.Button.v140" = "Przywróć ustawienia strony";
+
+/* Page zoom section header title in Appearance settings */
+"Settings.Appearance.Zoom.SectionHeader.v140" = "Ustawienia powiększenia";
+
+/* Specific site settings section footer title under page zoom settings. Explain how to add elements to the list */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Footer.v140" = "By dodać witrynę do tej listy, otwórz ją i dostosuj powiększenie strony w menu";
+
+/* Specific site settings section header title under page zoom settings. List all websites with custom zoom level */
+"Settings.Appearance.Zoom.SpecificSiteZoom.Title.v140" = "Ustawienia poszczególnych witryn";
+
+/* Page zoom settings title in Appearance settings */
+"Settings.Appearance.Zoom.Title.v140" = "Powiększenie strony";
+
+/* Zoom level title under page zoom settings to select the default zoom level for all websites */
+"Settings.Appearance.Zoom.ZoomLevelTitle.v140" = "Poziom powiększenia";
+
+/* In the settings menu, in the General section, this is the title for Autofills & Passwords customization section. */
+"Settings.AutofillAndPassword.Title.v137" = "Automatyczne wypełnianie i hasła";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Metody płatności";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay. */
+"Settings.Autoplay.AllowAudioAndVideo.v137" = "Zezwalaj na dźwięk i wideo";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying. */
+"Settings.Autoplay.BlockAudio.v137" = "Blokuj dźwięk";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.BlockAudioAndVideo.v137" = "Blokuj dźwięk i wideo";
+
+/* In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying. */
+"Settings.Autoplay.Footer.v137" = "Ustawienia automatycznego odtwarzania będą stosowane tylko do nowo otwartych kart. Zmian nie można zastosować do istniejących kart, chyba że aplikacja zostanie ponownie uruchomiona.";
+
+/* In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour. */
+"Settings.Autoplay.SettingsTitle.v137" = "Automatyczne odtwarzanie";
+
+/* This is the title for Links customization under the Browsing settings section. */
+"Settings.Browsing.Links.v137" = "Odnośniki";
+
+/* This is the title for Media customization under the Browsing settings section. */
+"Settings.Browsing.Media.v137" = "Multimedia";
+
+/* This is the title for Tabs customization under the Browsing settings section. */
+"Settings.Browsing.Tabs.v137" = "Karty";
+
+/* In the settings menu, in the General section, this is the title for Browsing customization section. */
+"Settings.Browsing.Title.v137" = "Przeglądanie";
+
+/* Title for a link that explains how Mozilla send crash reports. */
+"Settings.CrashReports.Link.v136" = "Więcej informacji";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Message.v136" = "To pomaga nam w diagnozowaniu i naprawianiu problemów z przeglądarką.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports. */
+"Settings.CrashReports.Title.v135" = "Automatycznie wysyłaj zgłoszenia awarii";
+
+/* Title for a link that explains how Mozilla send daily usage ping. */
+"Settings.DailyUsagePing.Link.v136" = "Więcej informacji";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. %@ is the company name (e.g. Mozilla). */
+"Settings.DailyUsagePing.Message.v135" = "To pomaga organizacji %@ oszacować liczbę aktywnych użytkowników.";
+
+/* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
+"Settings.DailyUsagePing.Title.v135" = "Dzienny sygnał o użyciu";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title.v119" = "Konto";
@@ -76,10 +202,10 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Synchronizacja";
 
-/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both %1$@ and %2$@ are the app name (e.g. Firefox). */
 "Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Wyłączono wszystkie powiadomienia przeglądarki %1$@. Włącz je w ustawieniach urządzenia → Powiadomienia → %2$@";
 
-/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Więcej informacji o przydatnych funkcjach i jak najlepiej wykorzystać przeglądarkę %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
@@ -88,11 +214,26 @@
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Powiadomienia";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. %@ is the app name (e.g. Firefox). */
 "Settings.Notifications.TurnOnNotificationsMessage.v112" = "Przejdź do ustawień urządzenia, by włączyć powiadomienia w przeglądarce %@";
 
-/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+/* This is the title informing the user that they need to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Włącz powiadomienia";
+
+/* Show Firefox Browser Privacy Notice page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Settings.PrivacyNotice.Title.v137" = "Zasady ochrony prywatności";
+
+/* Title for a link that explains what Mozilla means by Rollouts */
+"Settings.Rollouts.Link.v148" = "Więcej informacji";
+
+/* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
+"Settings.Rollouts.Message.v148" = "%@ ulepszy funkcje oraz zwiększy wydajność i stabilność pomiędzy aktualizacjami. Zmiany będą wprowadzane zdalnie.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
+"Settings.Rollouts.Title.v148" = "Zezwól na zdalne ulepszenia";
+
+/* In the settings menu, in the General section, this is the title for the option that allows user to disable the autohide feature of the tab and address bar. */
+"Settings.ScrollToHideTabAndAddressBar.Title.v138" = "Przewijanie ukrywa pasek kart i adresów";
 
 /* Accessibility label for default search engine setting. */
 "Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Domyślna wyszukiwarka";
@@ -139,15 +280,123 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Karty z innych urządzeń";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Otrzymuj podpowiedzi od przeglądarki %@ związane z wyszukiwanymi słowami";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Podpowiedzi z Internetu";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. %@ is the app name (e.g. Firefox). - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Wspieraj przeglądarkę %@, od czasu do czasu wyświetlając sponsorowane podpowiedzi";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Podpowiedzi sponsorów";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v136" = "Więcej informacji";
+
+/* Title for a link that explains what Mozilla means by Studies */
+"Settings.Studies.Link.v148" = "Więcej informacji";
+
+/* A short description that explains that Mozilla is running studies */
+"Settings.Studies.Message.v136" = "Wypróbuj funkcje i pomysły, zanim zostaną udostępnione wszystkim użytkownikom.";
+
+/* A short description that explains that Mozilla is running studies. %@ is the app name (e.g. Firefox). */
+"Settings.Studies.Message.v148" = "%@ losowo wybiera użytkowników do testowania funkcji, co poprawia jakość dla wszystkich.";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v136" = "Instaluj i przeprowadzaj badania";
+
+/* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
+"Settings.Studies.Title.v148" = "Zezwól na badanie korzystania z funkcji";
+
+/* This is the footer text for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.FooterTitle.v142" = "Dodaje funkcję streszczania stron.";
+
+/* This is the footer text for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.FooterTitle.v142" = "Potrząśnij urządzeniem na boki, by streścić stronę.";
+
+/* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Potrząśnięcie streszcza";
+
+/* This is the section title for the gestures features under the Summarize settings section. */
+"Settings.Summarize.GesturesSection.Title.v142" = "Gesty";
+
+/* The accessibility label for the language picker button in the Summarize settings. */
+"Settings.Summarize.LanguageSection.PickerButtonAccessibilityLabel.v149" = "Wybierz język";
+
+/* The label for the picker option to select the preferred app language for the summarizer inside the Summarize settings. The preferred app language refers to the language that the user has selected to use for the app in the app settings. */
+"Settings.Summarize.LanguageSection.PreferredAppLanguageLabel.v149" = "Preferowany język aplikacji";
+
+/* The title for the language choose section for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.Title.v149" = "Język";
+
+/* The label for the picker option to select the website language for the summarizer inside the Summarize settings. */
+"Settings.Summarize.LanguageSection.WebsiteLanguageLabel.v149" = "Język witryn";
+
+/* This is the title for the setting that toggles the Summarize feature under the Summarize settings section. */
+"Settings.Summarize.SummarizePagesTitle.v142" = "Streszczanie stron";
+
+/* In the settings menu, in the General section, this is the title for the Summarize settings section. */
+"Settings.Summarize.Title.v142" = "Streszczenia stron";
+
+/* Title for a link that explains how Mozilla send technical and interaction data. */
+"Settings.TechnicalData.Link.v136" = "Więcej informacji";
+
+/* On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. %@ is the app name (e.g. Firefox). */
+"Settings.TechnicalData.Message.v136" = "Informacje o Twoim urządzeniu, konfiguracji sprzętowej i użyciu pomagają ulepszać funkcje oraz zwiększać wydajność i stabilność przeglądarki %@.";
+
+/* On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data. */
+"Settings.TechnicalData.Title.v136" = "Wysyłaj dane techniczne i o interakcjach";
+
+/* Terms of Use settings section title */
+"Settings.TermsOfUse.Title.v137" = "Warunki korzystania";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the home button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.Home.v145" = "Strona startowa";
+
+/* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
+"Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "Nowa karta";
+
+/* Footer text below the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Footer.v151" = "Automatycznie tłumaczy strony na preferowany język użytkownika.";
+
+/* Title for the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Title.v151" = "Tłumacz automatycznie";
+
+/* Navigation bar title of the language picker shown when adding a preferred translation language. */
+"Settings.Translation.LanguagePicker.NavTitle.v151" = "Wybierz język";
+
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "Szukaj";
+
+/* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
+"Settings.Translation.PreferredLanguages.AddLanguage.v151" = "Dodaj język…";
+
+/* Subtitle on the device language row in the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.DeviceLanguage.v151" = "Język urządzenia";
+
+/* Footer text below the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.Footer.v151" = "Wybieraj z tych języków podczas tłumaczenia.";
+
+/* Section header for the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Preferowane języki";
+
+/* This is the section title text for the the Translation feature under the Translation settings section. */
+"Settings.Translation.SectionTitle.v145" = "Preferencje tłumaczenia";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been disabled. */
+"Settings.Translation.SettingOff.v145" = "Wyłączone";
+
+/* In the settings menu, in the General section, this is the text to show next to the Translation setting title and indicates if the translation feature has been enabled. */
+"Settings.Translation.SettingOn.v145" = "Włączone";
+
+/* In the settings menu, in the General section, this is the title for the Translation settings section. */
+"Settings.Translation.Title.v145" = "Tłumaczenie";
+
+/* Footer text below the enable toggle in the Translation settings screen. */
+"Settings.Translation.ToggleFooter.v151" = "Wyłącz, aby usunąć tłumaczenie z paska narzędzi i menu.";
+
+/* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
+"Settings.Translation.ToggleTitle.v145" = "Tłumaczenia";
 

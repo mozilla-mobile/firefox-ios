@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
+final class FeatureFlagsDebugViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -47,7 +47,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new apperance menu")
+                statusText: format(string: "Toggle to show the new appearance menu")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -200,20 +200,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .toolbarRefactor,
-                titleText: format(string: "Toolbar Redesign"),
-                statusText: format(string: "Toggle to enable the toolbar redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .toolbarTranslucencyRefactor,
-                titleText: format(string: "Toolbar Translucency Refactor"),
-                statusText: format(string: "Toggle to enable the toolbar translucency refactor")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .touFeature,
                 titleText: format(string: "Terms of Use"),
                 statusText: format(string: "Toggle to enable Terms of Use feature")
@@ -294,7 +280,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = NimbusFeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }

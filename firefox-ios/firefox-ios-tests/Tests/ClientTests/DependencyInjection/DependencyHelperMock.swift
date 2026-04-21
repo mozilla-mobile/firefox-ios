@@ -68,6 +68,12 @@ final class DependencyHelperMock {
         MockGleanUsageReportingMetricsService(profile: profile)
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
+        let nimbusFeatureFlags = FeatureFlagsProvider(prefs: profile.prefs)
+        AppContainer.shared.register(service: nimbusFeatureFlags as FeatureFlagProviding)
+
+        let userFeaturePreferenceManager = UserFeaturePreferenceManager(prefs: profile.prefs)
+        AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

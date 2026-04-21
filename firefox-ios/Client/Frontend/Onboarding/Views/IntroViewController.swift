@@ -12,7 +12,7 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
-                           FeatureFlaggable,
+                           LegacyFeatureFlaggable,
                            StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30

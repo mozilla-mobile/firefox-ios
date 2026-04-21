@@ -48,7 +48,7 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 }
 
 /// This protocol provides access to search bar location properties related to `FeatureFlagsManager`.
-protocol SearchBarLocationProvider: FeatureFlaggable {
+protocol SearchBarLocationProvider: LegacyFeatureFlaggable {
     var isSearchBarLocationFeatureEnabled: Bool { get }
     var searchBarPosition: SearchBarPosition { get }
     @MainActor
@@ -78,7 +78,7 @@ extension SearchBarLocationProvider {
     }
 }
 
-final class SearchBarSettingsViewModel: FeatureFlaggable {
+final class SearchBarSettingsViewModel: LegacyFeatureFlaggable {
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs

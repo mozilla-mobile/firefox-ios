@@ -84,11 +84,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan, nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
             .spacer,
-            .pocket(.systemCyan)
+            .pocket(.systemCyan, nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -182,13 +182,85 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil, nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
             .spacer,
-            .pocket(nil)
+            .pocket(nil, nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withCategorizedStoriesAndNoSelection_returnsFlattenedStories() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let snapshot = dataSource.snapshot()
+        let items = snapshot.itemIdentifiers(inSection: .pocket(nil, nil))
+
+        XCTAssertEqual(items.count, 3)
+        XCTAssertEqual(merinoTitles(from: items), ["science 1", "science 2", "technology 1"])
+    }
+
+    @MainActor
+    func test_updateSnapshot_withCategorizedStoriesAndSelectedCategory_returnsSelectedCategoryStories() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let categorizedState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        dataSource.updateSnapshot(
+            state: categorizedState,
+            selectedNewsfeedCategoryID: "technology",
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
+
+        let snapshot = dataSource.snapshot()
+        let items = snapshot.itemIdentifiers(inSection: .pocket(nil, "technology"))
+
+        XCTAssertEqual(items.count, 1)
+        XCTAssertEqual(merinoTitles(from: items), ["technology 1"])
+    }
+
+    @MainActor
+    func test_updateSnapshot_withCategorizedStoriesAndMissingSelectedCategory_omitsPocketSection() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let categorizedState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            MerinoAction(
+                merinoStoryResponse: MerinoStoryResponse(categories: createCategories()),
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
+            )
+        )
+
+        dataSource.updateSnapshot(
+            state: categorizedState,
+            selectedNewsfeedCategoryID: "missing-category",
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
+
+        let snapshot = dataSource.snapshot()
+
+        XCTAssertFalse(snapshot.sectionIdentifiers.contains(.pocket(nil, "missing-category")))
     }
 
     @MainActor
@@ -339,6 +411,44 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             MerinoStoryConfiguration(story: MerinoStory(from: $0))
         }
         return stories
+    }
+
+    private func createCategories() -> [MerinoCategoryConfiguration] {
+        [
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "technology",
+                    recommendations: [createStory(title: "technology 1")],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Technology",
+                    subtitle: nil,
+                    receivedFeedRank: 2
+                )
+            ),
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "science",
+                    recommendations: [createStory(title: "science 1"), createStory(title: "science 2")],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Science",
+                    subtitle: nil,
+                    receivedFeedRank: 1
+                )
+            ),
+        ]
+    }
+
+    private func createStory(title: String) -> MerinoStoryConfiguration {
+        return MerinoStoryConfiguration(story: MerinoStory(from: .makeItem(title)))
+    }
+
+    private func merinoTitles(from items: [HomepageItem]) -> [String] {
+        items.compactMap {
+            guard case .merino(let story, _) = $0 else { return nil }
+            return story.title
+        }
     }
 
     private var mockSectionConfig: JumpBackInSectionLayoutConfiguration {

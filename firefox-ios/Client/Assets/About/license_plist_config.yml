@@ -42,7 +42,7 @@ options:
   # Generate a GitHub personal access token and add it here if your requests are rate limited
   # gitHubToken: # Your token here
 
-# Manually specify additional remote respositories not picked up by LicensePlist
+# Manually specify additional remote repositories not picked up by LicensePlist
 # You should also add your NPM packages here too and add license files as needed (as per package.json).
 github:
   - owner: mozilla-mobile
@@ -67,7 +67,7 @@ github:
   - owner: entonio
     name: CopyWithChanges
 
-# Manually specify additional non-remote respositories not picked up by LicensePlist
+# Manually specify additional non-remote repositories not picked up by LicensePlist
 manual:
   - name: "Mozilla Rust Components"
     file: "LicenseFiles/Mozilla Public License Version 2.txt"

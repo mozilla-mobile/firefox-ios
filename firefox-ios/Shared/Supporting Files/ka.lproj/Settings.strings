@@ -107,7 +107,7 @@
 "Settings.AIControls.HeaderCard.Link.v151" = "ვრცლად";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "ეს გულისხმობს, იყენებდეს თუ არა ხელგონით მომუშავე შესაძლებლობები.";
+"Settings.AIControls.HeaderCard.Message.v151" = "ეს გულისხმობს, იყენებდეს თუ არა ხელგონის შესაძლებლობებს.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "არჩევანის უფლებას ყოველთვის მოგცემთ %@";
@@ -317,7 +317,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "შეარხიეთ მოწყობილობა გვერდის შესაჯამებლად.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "შერხევა შეჯამებისთვის";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "შერხევით შეჯამება";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "ჟესტები";

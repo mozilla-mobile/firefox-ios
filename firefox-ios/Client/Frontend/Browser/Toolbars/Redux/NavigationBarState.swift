@@ -246,7 +246,6 @@ struct NavigationBarState: StateType, Equatable {
 
         let middleAction = getMiddleButtonAction(url: url,
                                                  isPrivateMode: toolbarState.isPrivateMode,
-                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                                                  middleButton: middleButton)
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
@@ -299,7 +298,6 @@ struct NavigationBarState: StateType, Equatable {
 
     private static func getMiddleButtonAction(url: URL?,
                                               isPrivateMode: Bool,
-                                              isNewTabFeatureEnabled: Bool,
                                               middleButton: NavigationBarMiddleButtonType)
     -> ToolbarActionConfiguration {
         let customizedMiddleButton = switch middleButton {

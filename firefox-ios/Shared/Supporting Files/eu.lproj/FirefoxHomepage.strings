@@ -59,5 +59,5 @@
 "FirefoxHomepage.Stories.AllStoryCategories.v151" = "Denak";
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
-"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%2$@/%1$@";
+"FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@/%2$@";
 

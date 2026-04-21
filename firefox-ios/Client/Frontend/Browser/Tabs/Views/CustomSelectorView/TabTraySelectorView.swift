@@ -25,7 +25,7 @@ struct TabTraySelectorUX {
 
 class TabTraySelectorView: UIView,
                            ThemeApplicable,
-                           FeatureFlaggable {
+                           LegacyFeatureFlaggable {
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme

@@ -1249,7 +1249,7 @@ open class BrowserSchema: Schema {
 
         if from < 19 && to >= 19 {
             if !self.run(db, queries: [
-                // Adds tables/indicies for metadata content
+                // Adds tables/indices for metadata content
                 pageMetadataCreate,
                 indexPageMetadataCacheKeyCreate]) {
                 return false

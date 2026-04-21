@@ -427,8 +427,14 @@
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "Omset sida";
 
+/* On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Title.v151" = "Omset sida…";
+
 /* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Omsett";
+
+/* On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v151" = "Omsett…";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Av";

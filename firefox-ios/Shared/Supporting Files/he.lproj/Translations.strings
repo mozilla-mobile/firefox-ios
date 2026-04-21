@@ -1,3 +1,9 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "הפעלה";
+
+/* Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate. */
+"Translations.AutoTranslatePrompt.Message.v151" = "לתרגם דפים באופן אוטומטי כשהדבר אפשרי?";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
 "Translations.Banner.Close.Button.AccessibilityLabel.v145" = "סגירת חלונית התרגומים";
 

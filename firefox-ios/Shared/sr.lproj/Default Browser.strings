@@ -1,0 +1,48 @@
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Постављање Firefox-а као вашег подразумеваног прегледача је глас за отворен и приступачан интернет.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Поставите за подразумевани бољи интернет";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Сазнајте како";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Поставите везе са веб сајтова, е-поште и порука да се аутоматски отварају у Firefox-у.";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Изаберите Firefox као свој подразумевани прегледач како бисте брзину, безбедност и приватност учинили аутоматским.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Унапредите свакодневно прегледање";
+
+/* Description for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox блокира преко 3.000 пратилаца по кориснику сваког месеца у просеку. Поставите нас за свој подразумевани прегледач за потпуну приватност.";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox има покривену приватност";
+
+/* Title for small home tab banner that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Промените свој подразумевани прегледач";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Иди у подешавања";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Иди у подешавања";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Тапните на подразумевану апликацију прегледача";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Изаберите Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Подразумевана апликација прегледача";
+
+/* Button title for deferring the default browser onboarding (skip setting Firefox as default for now). */
+"DefaultBrowserOnboarding.SkipButton" = "Урадићу ово касније";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Постави као подразумевани прегледач";
+

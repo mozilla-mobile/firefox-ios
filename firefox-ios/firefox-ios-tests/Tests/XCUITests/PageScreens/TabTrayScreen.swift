@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 @MainActor
 final class TabTrayScreen {
@@ -189,6 +190,16 @@ final class TabTrayScreen {
         let closeTabButton = app.collectionViews.buttons["Close Tab"]
         BaseTestCase().mozWaitForElementToExist(closeTabButton)
         closeTabButton.waitAndTap()
+    }
+
+    func closeFirstTab() {
+        if BaseTestCase().iPad() {
+            app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
+        } else {
+            app.otherElements[AccessibilityIdentifiers.TabTray.tabsTray]
+                .collectionViews.cells.element(boundBy: 0)
+                .buttons[AccessibilityIdentifiers.TabTray.closeButton].waitAndTap()
+        }
     }
 
     func assertNoWebViewLeakDetected(timeout: TimeInterval = TIMEOUT) {
