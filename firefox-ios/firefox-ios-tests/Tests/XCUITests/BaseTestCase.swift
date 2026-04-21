@@ -805,7 +805,7 @@ extension XCUIElement {
             .withOffset(CGVector(dx: centerX, dy: centerY + (elementBounds.size.height/2) * distance))
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
     }
-    
+
     func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
         guard exists else {
