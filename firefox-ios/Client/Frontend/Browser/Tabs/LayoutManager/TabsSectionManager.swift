@@ -132,7 +132,9 @@ final class TabsSectionManager: LegacyFeatureFlaggable {
 
     /// Uses aspect ratio math to derive cell height from actual cell width so that portrait
     /// gets taller cells and landscape gets shorter cells
-    private func experimentLayoutSectionIpad(_ layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+    private func experimentLayoutSectionIpad(
+        _ layoutEnvironment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
         let availableWidth = layoutEnvironment.container.effectiveContentSize.width
         let availableHeight = layoutEnvironment.container.effectiveContentSize.height
         let maxNumberOfCellsPerRow = Int(availableWidth / UX.cellEstimatedWidth)

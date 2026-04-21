@@ -236,6 +236,8 @@ final class TabCell: UICollectionViewCell,
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
+        tabModel = nil
+        accessibilityLabel = nil
         screenshotView.image = nil
         backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
