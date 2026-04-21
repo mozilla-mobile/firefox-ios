@@ -76,12 +76,6 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
         pageSummariesEnabled = !newValue
         translationEnabled = !newValue
-        prefs.setBool(!newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        store.dispatch(TranslationSettingsViewAction(
-            newSettingValue: !newValue,
-            windowUUID: windowUUID,
-            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
-        ))
     }
 
     @MainActor
