@@ -7,6 +7,7 @@ import XCTest
 final class CookiePersistenceTests: BaseTestCase {
     private var browserScreen: BrowserScreen!
     private var toolbarScreen: ToolbarScreen!
+    private var tabTrayScreen: TabTrayScreen!
 
     let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
@@ -22,6 +23,7 @@ final class CookiePersistenceTests: BaseTestCase {
         try await super.setUp()
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
     }
 
     func testCookiePersistenceBasic() {
@@ -71,7 +73,7 @@ final class CookiePersistenceTests: BaseTestCase {
     func testCookiePersistenceOpenRegularTabAfterPrivateTab() {
         // Go to private tab
         toolbarScreen.switchToPrivateBrowsing()
-        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        tabTrayScreen.tapOnNewTabButton()
 
         // Open URL for Cookie login
         openCookieSite()
@@ -85,14 +87,14 @@ final class CookiePersistenceTests: BaseTestCase {
 
         // Open regular tabs
         // navigate to website and expect not to be login
-        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+        toolbarScreen.tapOnTabsButton()
         mozWaitForElementToExist(app.buttons["Private"])
         if iPad() {
             app.segmentedControls.buttons.firstMatch.waitAndTap()
         } else {
             app.buttons["Tabs"].tap()
         }
-        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        tabTrayScreen.tapOnNewTabButton()
 
         openCookieSite()
         mozWaitForElementToExist(webview.staticTexts["LOGGED_OUT"])
