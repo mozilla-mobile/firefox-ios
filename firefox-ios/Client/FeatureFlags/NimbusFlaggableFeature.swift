@@ -59,6 +59,7 @@ struct NimbusFlaggableFeature {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .httpsUpgrade,
                 .quickAnswers,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
