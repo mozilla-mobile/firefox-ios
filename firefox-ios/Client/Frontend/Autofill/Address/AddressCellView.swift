@@ -17,7 +17,6 @@ struct AddressCellView: View {
         static let listIconPadding: CGFloat = -8
         static let hStackSpacing: CGFloat = 24
         static let vStackSpacing: CGFloat = 0
-        static let spacerHeight: CGFloat = 0
         static let dividerHeight: CGFloat = 1
     }
 
@@ -30,7 +29,11 @@ struct AddressCellView: View {
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
+    @State private var backgroundColor: Color = .clear
+    @State private var highlightColor: Color = .clear
 
+    @State private var isHighlighted = false
+    @GestureState private var isPressing = false
     @State private var isLandscape = false
 
     private(set) var address: Address
@@ -39,44 +42,64 @@ struct AddressCellView: View {
     // MARK: - Body
 
     var body: some View {
-        Button(action: onTap) {
-            VStack(alignment: .leading, spacing: UX.vStackSpacing) {
-                HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
-                    Image(StandardImageIdentifiers.Large.location)
-                        .renderingMode(.template)
-                        .accessibilityHidden(true)
-                        .modifier(ListItemIconPadding(isLandscape: isLandscape,
-                                                      paddingSize: UX.listIconPadding))
-                        .foregroundColor(iconPrimary)
-                        .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
-                    VStack(alignment: .leading) {
-                        if !address.name.isEmpty {
-                            Text(address.name)
-                                .font(.body)
-                                .foregroundColor(textColor)
-                                .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
-                        }
-                        if !address.streetAddress.isEmpty {
-                            Text(address.streetAddress)
-                                .font(.subheadline)
-                                .foregroundColor(customLightGray)
-                        }
-                        if !address.addressCityStateZipcode.isEmpty {
-                            Text(address.addressCityStateZipcode)
-                                .font(.subheadline)
-                                .foregroundColor(customLightGray)
-                        }
+        VStack(spacing: UX.vStackSpacing) {
+            HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
+                Image(StandardImageIdentifiers.Large.location)
+                    .renderingMode(.template)
+                    .accessibilityHidden(true)
+                    .modifier(ListItemIconPadding(isLandscape: isLandscape,
+                                                  paddingSize: UX.listIconPadding))
+                    .foregroundColor(iconPrimary)
+                    .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
+                VStack(alignment: .leading) {
+                    if !address.name.isEmpty {
+                        Text(address.name)
+                            .font(.body)
+                            .foregroundColor(textColor)
+                            .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     }
-                    Spacer()
+                    if !address.streetAddress.isEmpty {
+                        Text(address.streetAddress)
+                            .font(.subheadline)
+                            .foregroundColor(customLightGray)
+                    }
+                    if !address.addressCityStateZipcode.isEmpty {
+                        Text(address.addressCityStateZipcode)
+                            .font(.subheadline)
+                            .foregroundColor(customLightGray)
+                    }
                 }
+                Spacer()
             }
             .padding()
-            Spacer().frame(height: UX.spacerHeight)
             Divider().frame(height: UX.dividerHeight)
         }
+        .contentShape(Rectangle())
+        .onChange(of: isPressing) { pressing in
+            if pressing {
+                isHighlighted = true
+            } else {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isHighlighted = false
+                }
+            }
+        }
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .updating($isPressing) { _, state, _ in state = true }
+                .onEnded { value in
+                    let isWithinTapBounds = abs(value.translation.width) < 20
+                        && abs(value.translation.height) < 20
+                    if isWithinTapBounds {
+                        onTap()
+                    }
+                }
+        )
         .listRowInsets(EdgeInsets())
-        .listRowBackground(Color(themeManager.getCurrentTheme(for: windowUUID).colors.layer2)
-            .edgesIgnoringSafeArea([.leading, .trailing]))
+        .listRowBackground(
+            (isHighlighted ? highlightColor : backgroundColor)
+                .edgesIgnoringSafeArea([.leading, .trailing])
+        )
         .listRowSeparator(.hidden)
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -89,7 +112,8 @@ struct AddressCellView: View {
             isLandscape = UIDevice.current.orientation.isLandscape
         }
         .accessibilityLabel(address.a11ySettingsRow)
-        .buttonStyle(AddressButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction { onTap() }
     }
 
     // MARK: - Theme Application
@@ -101,16 +125,7 @@ struct AddressCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
-    }
-}
-
-/// A address button style with a specific theme.
-struct AddressButtonStyle: ButtonStyle {
-    let theme: Theme
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(configuration.isPressed ? Color(theme.colors.layer1) : Color(theme.colors.layer2))
-            .foregroundColor(.white)
+        backgroundColor = Color(color.layer2)
+        highlightColor = Color(color.layer5Hover)
     }
 }
