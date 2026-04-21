@@ -97,7 +97,6 @@ struct MainMenuState: ScreenState, Sendable {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
 
-
     init(appState: AppState, uuid: WindowUUID) {
         guard let mainMenuState = appState.componentState(
             MainMenuState.self,
