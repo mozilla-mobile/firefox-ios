@@ -13,7 +13,7 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showiPadSetup: Bool
-    
+
     init(
         windowUUID: WindowUUID,
         isPrivate: Bool = false,
