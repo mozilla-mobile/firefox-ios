@@ -130,29 +130,29 @@ struct RemoteTabsPanelState: ScreenState, Sendable {
                                                    state: RemoteTabsPanelState) -> RemoteTabsPanelState {
         let allowsRefresh = reason.allowsRefresh
         return state.copyWithUpdates(refreshState: .idle,
-                                    allowsRefresh: allowsRefresh,
-                                    showingEmptyState: reason)
+                                     allowsRefresh: allowsRefresh,
+                                     showingEmptyState: reason)
     }
 
     private static func handleRefreshDidSucceedAction(clientAndTabs: [ClientAndTabs],
                                                       state: RemoteTabsPanelState,
                                                       action: RemoteTabsPanelAction) -> RemoteTabsPanelState {
         return state.copyWithUpdates(refreshState: .idle,
-                                    allowsRefresh: true,
-                                    clientAndTabs: clientAndTabs,
-                                    showingEmptyState: nil,
-                                    devices: action.devices ?? state.devices)
+                                     allowsRefresh: true,
+                                     clientAndTabs: clientAndTabs,
+                                     showingEmptyState: nil,
+                                     devices: action.devices ?? state.devices)
     }
 
     private static func handleRemoteDevicesChangedAction(devices: [Device],
                                                          state: RemoteTabsPanelState) -> RemoteTabsPanelState {
         return state.copyWithUpdates(refreshState: .idle,
-                                    devices: devices)
+                                     devices: devices)
     }
 
     private static func handleSyncDidBeginAction(state: RemoteTabsPanelState) -> RemoteTabsPanelState {
         return state.copyWithUpdates(refreshState: .syncingTabs,
-                                    allowsRefresh: false)
+                                     allowsRefresh: false)
     }
 
     static func defaultState(from state: RemoteTabsPanelState) -> RemoteTabsPanelState {
