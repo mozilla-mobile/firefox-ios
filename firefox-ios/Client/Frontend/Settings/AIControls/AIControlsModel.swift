@@ -5,7 +5,10 @@
 import Shared
 import Common
 
-class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
+class AIControlsModel: ObservableObject,
+                       LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                       FeatureFlaggable,
+                       UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
@@ -80,7 +83,7 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
         translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
 
-        killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.isAIKillSwitchEnabled
     }
 
     @MainActor
