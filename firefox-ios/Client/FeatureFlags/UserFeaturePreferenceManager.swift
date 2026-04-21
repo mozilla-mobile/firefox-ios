@@ -132,11 +132,11 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
 
 /// Adopt this protocol to access user feature preferences via AppContainer.
 /// Replaces FeatureFlaggable for user preference checks.
-protocol HasUserFeaturePreferences {
+protocol UserFeaturePreferenceProvider {
     var userPreferences: UserFeaturePreferring { get }
 }
 
-extension HasUserFeaturePreferences {
+extension UserFeaturePreferenceProvider {
     var userPreferences: UserFeaturePreferring {
         AppContainer.shared.resolve()
     }

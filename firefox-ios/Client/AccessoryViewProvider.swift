@@ -13,7 +13,7 @@ enum AccessoryType {
 final class AccessoryViewProvider: UIView,
                                    Themeable,
                                    InjectedThemeUUIDIdentifiable,
-                                   HasUserFeaturePreferences,
+                                   UserFeaturePreferenceProvider,
                                    Notifiable {
     // MARK: - Constants
     private struct UX {

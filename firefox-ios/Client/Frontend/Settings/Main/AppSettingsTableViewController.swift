@@ -59,7 +59,8 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      LegacyFeatureFlaggable,
+                                      LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                      FeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
                                       SharedSettingsDelegate {
@@ -403,7 +404,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        if featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.aiKillSwitch) {
             generalSettings.append(AIControlsSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 

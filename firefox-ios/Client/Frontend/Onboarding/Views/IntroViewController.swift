@@ -12,7 +12,7 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
-                           HasUserFeaturePreferences,
+                           UserFeaturePreferenceProvider,
                            StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
