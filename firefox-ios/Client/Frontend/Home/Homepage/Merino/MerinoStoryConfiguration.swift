@@ -4,7 +4,7 @@
 
 import Foundation
 
-/// Converts the Merino story model to be presentable for the `MerinoStandardCell` view
+/// Converts the Merino story model to be presentable for the `StoryCell` view
 final class MerinoStoryConfiguration: Sendable, Equatable, Hashable {
     private let story: MerinoStory
 

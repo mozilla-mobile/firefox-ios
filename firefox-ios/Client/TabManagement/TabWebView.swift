@@ -17,7 +17,7 @@ protocol TabWebViewDelegate: AnyObject {
     func tabWebViewShouldShowAccessoryView(_ tabWebView: TabWebView) -> Bool
 }
 
-class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, FeatureFlaggable {
+class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable, LegacyFeatureFlaggable {
     lazy var accessoryView: AccessoryViewProvider = .build(nil, {
         AccessoryViewProvider(windowUUID: self.windowUUID)
     })

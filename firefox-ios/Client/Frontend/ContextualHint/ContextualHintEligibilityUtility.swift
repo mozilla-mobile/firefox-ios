@@ -35,8 +35,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         var hintTypeShouldBePresented = false
 
         switch hintType {
-        case .dataClearance:
-            hintTypeShouldBePresented = true
         case .jumpBackIn:
             hintTypeShouldBePresented = canJumpBackInBePresented
         case .jumpBackInSyncedTab:

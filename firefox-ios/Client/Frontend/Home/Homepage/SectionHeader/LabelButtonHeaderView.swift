@@ -7,16 +7,9 @@ import ComponentLibrary
 import Foundation
 
 /// Firefox homepage section header view
-class LabelButtonHeaderView: UICollectionReusableView,
-                             ReusableCell,
-                             ThemeApplicable,
-                             Notifiable {
+class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
     struct UX {
         static let inBetweenSpace: CGFloat = 12
-        static let topSpacing: CGFloat = 0
-        static let bottomSpace: CGFloat = 16
-        static let bottomButtonSpace: CGFloat = 6
-        static let leadingInset: CGFloat = 0
     }
 
     // MARK: - UIElements
@@ -37,6 +30,8 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     private(set) lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     // MARK: - Variables
@@ -47,6 +42,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var bottomConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -65,18 +61,11 @@ class LabelButtonHeaderView: UICollectionReusableView,
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.leadingInset),
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            // Collection view sizing can temporarily collapse supplementary views to zero height.
-            // Keep the inset in normal layouts, but let auto layout relax it during that pass.
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
-                .priority(UILayoutPriority(999)),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        // Setting custom values to resolve horizontal ambiguity
-        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
-        titleLabel.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
 
         adjustLayout()
     }
@@ -86,8 +75,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     // MARK: - Helper functions
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    func prepareForReuse() {
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
         moreButton.accessibilityIdentifier = nil
@@ -96,19 +84,19 @@ class LabelButtonHeaderView: UICollectionReusableView,
     }
 
     func configure(
-        state: SectionHeaderConfiguration,
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
         moreButtonAction: (@MainActor (UIButton) -> Void)? = nil,
         textColor: UIColor?,
         theme: Theme
     ) {
-        self.title = state.title
-        titleLabel.accessibilityIdentifier = state.a11yIdentifier
+        self.title = sectionHeaderConfiguration.title
+        titleLabel.accessibilityIdentifier = sectionHeaderConfiguration.a11yIdentifier
 
-        moreButton.isHidden = state.isButtonHidden
-        if !state.isButtonHidden {
+        moreButton.isHidden = sectionHeaderConfiguration.isButtonHidden
+        if !sectionHeaderConfiguration.isButtonHidden {
             let moreButtonViewModel = ActionButtonViewModel(
-                title: state.buttonTitle ?? .BookmarksSavedShowAllText,
-                a11yIdentifier: state.buttonA11yIdentifier,
+                title: sectionHeaderConfiguration.buttonTitle ?? .BookmarksSavedShowAllText,
+                a11yIdentifier: sectionHeaderConfiguration.buttonA11yIdentifier,
                 touchUpAction: moreButtonAction
             )
             moreButton.configure(

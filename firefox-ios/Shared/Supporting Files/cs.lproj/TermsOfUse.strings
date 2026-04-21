@@ -8,7 +8,7 @@
 "TermsOfUse.CloseButton.v150" = "Zavřít";
 
 /* Introductory message in the Terms of Use sheet that mentions updated Terms of Use and Privacy Notice. %@ will be replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Description.v142" = "Zavedli jsme Podmínky používání aplikace %@ a aktualizovali jsme Oznámení o ochraně osobních údajů.";
+"TermsOfUse.Description.v142" = "Zavedli jsme Podmínky použití aplikace %@ a aktualizovali jsme Oznámení o ochraně osobních údajů.";
 
 /* Text shown in the Terms of Use bottom sheet for variants 1 and 2. %@ is replaced with the localized 'here' link text. */
 "TermsOfUse.LearnMoreHere.v147" = "Můžete se dozvědět více %@.";
@@ -23,7 +23,7 @@
 "TermsOfUse.Link.PrivacyNotice.v142" = "Zásady ochrany osobních údajů";
 
 /* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
-"TermsOfUse.Link.TermsOfUse.v142" = "Podmínky používání aplikace %@";
+"TermsOfUse.Link.TermsOfUse.v142" = "Podmínky použití aplikace %@";
 
 /* Label for the button that allows the user to postpone accepting the Terms of Use. */
 "TermsOfUse.RemindMeLaterButton.v142" = "Upozornit mě později";

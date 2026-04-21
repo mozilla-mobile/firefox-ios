@@ -8,13 +8,12 @@ import UIKit
 import SwiftUI
 import OnboardingKit
 
-class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable, Themeable {
+class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, LegacyFeatureFlaggable, Themeable {
     // MARK: - UX Constants
     private enum UX {
         static let fadeOutDuration: TimeInterval = 0.24
         static let fadeOutDelay: TimeInterval = 0
         static let fadeOutAlpha: CGFloat = 0.0
-        static let minimumDisplayTimeSeconds: TimeInterval = 0.1
         static let logoSize: CGFloat = 125.0
     }
 
@@ -73,6 +72,14 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         return true
     }
 
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -97,9 +104,7 @@ class ModernLaunchScreenViewController: UIViewController, LaunchFinishedLoadingD
         if isLoading {
             shouldLoadNextLaunchType = true
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + UX.minimumDisplayTimeSeconds) { [weak self] in
-                self?.viewModel.loadNextLaunchType()
-            }
+            viewModel.loadNextLaunchType()
         }
     }
 

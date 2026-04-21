@@ -11,4 +11,14 @@ public enum OnboardingVariant: String, Sendable {
     case modern
     case japan
     case brandRefresh
+
+    /// Whether the UI for the Onboarding should be according to the brand refresh.
+    var shouldShowBrandRefreshUI: Bool {
+        switch self {
+        case .legacy, .modern:
+            return false
+        case .brandRefresh, .japan:
+            return true
+        }
+    }
 }

@@ -1,0 +1,33 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Двапут тапните и задржите за више опција";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Веза није безбедна. Побољшана заштита од праћења је искључена.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Безбедна веза. Побољшана заштита од праћења је искључена.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Веза није безбедна";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Безбедна веза";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "Заштита од праћења";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "Заштита од праћења";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Подели ову страницу";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Подели";
+
+/* Large content title for the tabs button. %@ is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "Прикажи језичке: %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Уклони страницу";
+

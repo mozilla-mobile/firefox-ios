@@ -12,7 +12,7 @@ extension Bool {
 }
 
 extension UInt8 {
-    /// Convert a byte to its Bool equivalen.
+    /// Convert a byte to its Bool equivalent.
     func toBool() -> Bool {
         return self != 0
     }

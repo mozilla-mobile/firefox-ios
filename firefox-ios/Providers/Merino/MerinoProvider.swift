@@ -8,12 +8,10 @@ import MozillaAppServices
 import Shared
 
 protocol MerinoStoriesProviding: Sendable {
-    typealias StoryResult = Swift.Result<[RecommendationDataItem], Error>
-
-    func fetchStories(_ itemCount: Int) async throws -> [RecommendationDataItem]
+    func fetchContent() async throws -> CuratedRecommendationsResponse
 }
 
-final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
+final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unchecked Sendable {
     private struct Constants {
         static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
         static let numberOfStoriesToFetchForCaching = 100
@@ -25,7 +23,7 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
     private var logger: Logger
     private let fetcher: MerinoFeedFetching
     private let lock = NSLock()
-    private var inFlightTask: Task<[RecommendationDataItem], Never>?
+    private var inFlightTask: Task<CuratedRecommendationsResponse?, Never>?
 
     enum Error: Swift.Error {
         case failure
@@ -48,22 +46,28 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         )
     }
 
-    func fetchStories(_ numberOfRequestedStories: Int) async throws -> [RecommendationDataItem] {
+    func fetchContent() async throws -> CuratedRecommendationsResponse {
         if !AppConstants.isRunningTest && shouldUseMockData {
-            return Array(MerinoTestData().getMockDataFeed(numberOfRequestedStories))
+            return MerinoTestData().getMockDataFeed(
+                Constants.numberOfStoriesToFetchForCaching,
+                categoriesEnabled: isHomepageStoryCategoriesEnabled
+            )
         }
 
         guard prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true,
               MerinoProvider.isLocaleSupported(Locale.current.identifier)
         else { throw Error.failure }
 
-        if let cachedItems = cache.loadRecommendations(),
-           cacheUpdateThresholdHasNotPassed() {
-            return Array(cachedItems.prefix(numberOfRequestedStories))
+        if let cachedResponse = cache.loadResponse(),
+           cacheUpdateThresholdHasNotPassed(),
+           cachedResponseMatchesCurrentHomepageStoriesMode(cachedResponse) {
+            return cachedResponse
         }
 
-        let items = await createTask().value
-        return Array(items.prefix(numberOfRequestedStories))
+        guard let response = await createTask().value else {
+            throw Error.failure
+        }
+        return response
     }
 
     static func isLocaleSupported(_ locale: String) -> Bool {
@@ -72,33 +76,48 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         )
     }
 
-    private func createTask() -> Task<[RecommendationDataItem], Never> {
+    private func createTask() -> Task<CuratedRecommendationsResponse?, Never> {
         lock.withLock {
             if let existing = inFlightTask { return existing }
 
-            let newTask = Task<[RecommendationDataItem], Never> { [self] in
+            let newTask = Task<CuratedRecommendationsResponse?, Never> { [self] in
                 defer { self.lock.withLock { self.inFlightTask = nil } }
                 guard let currentLocale = iOSToMerinoLocale(from: Locale.current.identifier) else {
-                    return []
+                    return nil
                 }
-                let items = await fetcher.fetch(
+
+                let region = SystemLocaleProvider().regionCode()
+                let regionCode: String? = region == "und" ? nil : region
+
+                let response = await fetcher.fetch(
                     itemCount: Constants.numberOfStoriesToFetchForCaching,
                     locale: currentLocale,
+                    region: regionCode,
                     userAgent: UserAgent.getUserAgent()
                 )
-                if !items.isEmpty {
+
+                // Only cache items if we have a response, and it has some sort
+                // of data we'd like to actually save
+                if let response,
+                   !response.data.isEmpty || response.feeds != nil {
                     cache.clearCache()
-                    cache.save(items)
+                    cache.save(response)
                 }
-                return items
+
+                return response
             }
+
             inFlightTask = newTask
             return newTask
         }
     }
 
     private var shouldUseMockData: Bool {
-        return featureFlags.isCoreFeatureEnabled(.useMockData) || prefs.boolForKey(PrefsKeys.useMerinoTestData) ?? false
+        return CoreBuildFlags.isUsingMockData || prefs.boolForKey(PrefsKeys.useMerinoTestData) ?? false
+    }
+
+    private var isHomepageStoryCategoriesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
     }
 
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {
@@ -111,5 +130,17 @@ final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked
         let thresholdInSeconds: TimeInterval = thresholdInHours * 60 * 60
         guard let lastUpdate = cache.lastUpdatedDate() else { return false }
         return Date() < lastUpdate.addingTimeInterval(thresholdInSeconds)
+    }
+
+    /// Returns whether the cached response shape matches the current homepage stories mode.
+    /// When categories are enabled we require non-empty `feeds`, otherwise we require
+    /// non-empty top-level story `data`. If the shapes do not match, we bypass the cache
+    /// and fetch again so a mode switch is reflected immediately.
+    private func cachedResponseMatchesCurrentHomepageStoriesMode(_ response: CuratedRecommendationsResponse) -> Bool {
+        if isHomepageStoryCategoriesEnabled {
+            return !(response.feeds?.isEmpty ?? true)
+        }
+
+        return !response.data.isEmpty
     }
 }

@@ -44,6 +44,7 @@ class TabsTests: BaseTestCase {
         if iPad() {
             toolBarScreen.tapOnTabsButton()
         } else {
+            waitForTabsButton()
             navigator.goto(TabTray)
         }
         tabTrayScreen.assertTabCellVisibleAndHasCorrectLabel(
@@ -78,6 +79,7 @@ class TabsTests: BaseTestCase {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlExample)
@@ -127,14 +129,12 @@ class TabsTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         toolBarScreen.tapOnTabsButton()
         tabTrayScreen.tapOnNewTabButton()
-        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         tabTrayScreen.undoRemovingAllTabs()
         firefoxHomePageScreen.assertTopSitesItemCellExist()
         navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         tabTrayScreen.waitForTabWithLabel(urlLabel)
     }
@@ -366,6 +366,7 @@ class TabsTests: BaseTestCase {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
 
+        waitForTabsButton()
         navigator.goto(TabTray)
         tabTrayScreen.longPressTabCellAtIndex(0)
         tabTrayScreen.tapCloseTabFromContextMenu()
@@ -388,6 +389,7 @@ class TabsTests: BaseTestCase {
         navigator.createNewTab()
         navigator.openURL("localhost:\(serverPort)/test-fixture/test-mozilla-org.html")
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         // Experiment from #25337: "Undo" button no longer available on iPhone.
@@ -422,6 +424,7 @@ class TabsTests: BaseTestCase {
             navigator.createNewTab()
         }
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
         let closeButton = StandardImageIdentifiers.Large.cross
@@ -467,6 +470,7 @@ class TabsTests: BaseTestCase {
 
 fileprivate extension BaseTestCase {
     func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
+        waitForTabsButton()
         navigator.goto(TabTray)
         if #available(iOS 16, *) {
             var numTabsOpen = userState.numTabs
@@ -597,6 +601,7 @@ class TabsTestsIphone: BaseTestCase {
         // Check that the tab has changed to the new open one and that the user is in private mode
         waitUntilPageLoad()
         browserScreen.addressToolbarContainValue(value: "iana")
+        waitForTabsButton()
         navigator.goto(TabTray)
         tabTrayScreen.assertTabButtonEnabled(at: 0)
     }

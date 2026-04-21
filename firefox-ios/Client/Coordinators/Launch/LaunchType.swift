@@ -9,6 +9,9 @@ enum LaunchCoordinatorType {
 }
 
 enum LaunchType {
+    /// Showing the video intro, displayed before terms of service on a fresh install
+    case videoIntro
+
     /// Showing the terms of service
     case termsOfService(manager: TermsOfServiceManager)
 
@@ -44,6 +47,8 @@ enum LaunchType {
     /// - Returns: if the launch type needs to be full screen or not
     func isFullScreenAvailable(isIphone: Bool) -> Bool {
         switch self {
+        case .videoIntro:
+            return true
         case .termsOfService:
             return true
         case .intro(let introManager):

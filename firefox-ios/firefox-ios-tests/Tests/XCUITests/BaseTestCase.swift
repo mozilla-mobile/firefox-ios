@@ -78,8 +78,15 @@ class BaseTestCase: XCTestCase {
 
     func removeApp() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
-        let iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        var icon: XCUIElement
+        var iPadIcon: XCUIElement
+        if isFennec {
+            icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        } else {
+            icon = springboard.icons.containingText("Firefox").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Firefox").element(boundBy: 1)
+        }
         if icon.exists {
             if #available(iOS 26, *), iPad() {
                 iPadIcon.press(forDuration: 1.0)
@@ -265,6 +272,7 @@ class BaseTestCase: XCTestCase {
             browserScreen.assertAddressBar_LockIconExist()
         }
         browserScreen.tapSaveButtonIfExist()
+        waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
     }
@@ -353,10 +361,10 @@ class BaseTestCase: XCTestCase {
             navigator.goto(URLBarOpen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons["Reader View"])
 
         app.buttons["Reader View"].waitAndTap()
-        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].waitAndTap()
     }
 
@@ -776,7 +784,7 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the top
+        // Start coordinate about from the center of the element, end coordinate at the top
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))
         let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
@@ -789,7 +797,7 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the bottom
+        // Start coordinate about from the center of the element, end coordinate at the bottom
         // Done rather than top to middle to avoid pulling down the notification bar
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))

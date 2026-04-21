@@ -121,6 +121,19 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         }
     }
 
+    func test_launchWithLaunchType_withVideoIntroType_callsCoordinatorCorrectly() {
+        let subject = createSubject()
+        let launchType: LaunchType = .videoIntro
+
+        subject.launchWith(launchType: launchType)
+
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        guard case .videoIntro = coordinatorDelegate.savedLaunchType else {
+            XCTFail("Expected video intro launch type")
+            return
+        }
+    }
+
     func test_launchBrowser_callsCoordinatorDelegate() {
         let subject = createSubject()
 

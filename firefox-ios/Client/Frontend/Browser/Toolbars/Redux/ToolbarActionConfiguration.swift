@@ -5,7 +5,7 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
     enum ActionType {
         case back
         case forward
@@ -20,9 +20,9 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
         case trackingProtection
         case locationView
         case readerMode
+        case readerModeWithSummarizer
         case summarizer
         case translate
-        case dataClearance
         case cancelEdit
     }
 
@@ -30,6 +30,8 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
     var actionLabel: String?
     var iconName: String?
     var badgeImageName: String?
+    /// The image for the bottom badge in a `ToolbarButton`.
+    var bottomBadgeImage: UIImage?
     var maskImageName: String?
     var templateModeForImage = true
     var loadingConfig: LoadingConfig?
@@ -54,6 +56,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .reload ||
                actionType == .newTab ||
                actionType == .readerMode ||
+               actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
                (actionType == .tabs && isShowingTopTabs == false)
     }

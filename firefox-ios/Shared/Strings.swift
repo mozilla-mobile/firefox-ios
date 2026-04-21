@@ -58,29 +58,6 @@ private func MZLocalizedString(
 // MARK: - Alerts
 extension String {
     public struct Alerts {
-        public struct FeltDeletion {
-            public static let Title = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Title.v122",
-                tableName: "Alerts",
-                value: "End your private session?",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert.")
-            public static let Body = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Body.v122",
-                tableName: "Alerts",
-                value: "Close all private tabs and delete history, cookies, and all other site data.",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert.")
-            public static let ConfirmButton = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Button.Confirm.v122",
-                tableName: "Alerts",
-                value: "Delete session data",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that.")
-            public static let CancelButton = MZLocalizedString(
-                key: "Alerts.FeltDeletion.Button.Cancel.v122",
-                tableName: "Alerts",
-                value: "Cancel",
-                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
-        }
-
         public struct AddToCalendar {
             public static let Title = MZLocalizedString(
                 key: "Alerts.AddToCalendar.Title.v134",
@@ -246,6 +223,14 @@ extension String {
                     comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the library modal.")
             }
         }
+
+        public struct Search {
+            public static let SearchPlaceholder = MZLocalizedString(
+                key: "Bookmarks.Search.Placeholder.v151",
+                tableName: "Bookmarks",
+                value: "Search bookmarks",
+                comment: "Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL.")
+        }
     }
 }
 
@@ -325,14 +310,6 @@ extension String {
                 tableName: "Summarize",
                 value: "Tap to summarize this page. Touch and hold for Reader View.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the summarize button on the new toolbar layout.")
-        }
-
-        public struct FeltDeletion {
-            public static let Body = MZLocalizedString(
-                key: "ContextualHints.FeltDeletion.Body.v122",
-                tableName: "ContextualHints",
-                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
         }
 
         public struct Translations {
@@ -1154,14 +1131,6 @@ extension String {
                 value: "Who might be able to see my activity?",
                 comment: "The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode.")
         }
-
-        public struct FeltDeletion {
-            public static let ToastTitle = MZLocalizedString(
-                key: "FirefoxHomepage.FeltDeletion.Link.v122",
-                tableName: "FirefoxHomepage",
-                value: "Private Browsing Data Erased",
-                comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast.")
-        }
     }
 }
 
@@ -1258,7 +1227,7 @@ extension String {
             key: "Keyboard.Shortcuts.ShowDownloads",
             tableName: nil,
             value: "Show Downloads",
-            comment: "A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+            comment: "A label indicating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         public static let ShowFirstTab = MZLocalizedString(
             key: "Keyboard.Shortcuts.ShowFirstTab",
             tableName: nil,
@@ -1320,7 +1289,7 @@ extension String {
                 key: "Keyboard.Shortcuts.Section.Window",
                 tableName: nil,
                 value: "Window",
-                comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
+                comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their available set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         }
     }
 }
@@ -2887,7 +2856,7 @@ extension String {
                     key: "Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100",
                     tableName: nil,
                     value: "Sponsored Shortcuts",
-                    comment: "This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page.")
+                    comment: "This string is the title of the toggle to disable the sponsored shortcuts functionality which can be enabled in the shortcut sections. This toggle is in the settings page.")
                 public static let Rows = MZLocalizedString(
                     key: "Settings.Homepage.Shortcuts.Rows.v100",
                     tableName: nil,
@@ -3041,7 +3010,7 @@ extension String {
             public static let BlockAIEnhancementsDescription = MZLocalizedString(
                 key: "Settings.AIControls.BlockAIEnhancementsDescription.v151",
                 tableName: "Settings",
-                value: "Blocking means you won’t see new or current AI enhancements in %@, or popups about them.",
+                value: "Blocking means you won’t see new or current AI enhancements in %@, or pop-ups about them.",
                 comment: "This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox)."
             )
 
@@ -3388,48 +3357,54 @@ extension String {
             )
 
             public static let ToggleFooter = MZLocalizedString(
-                key: "", // Settings.Translation.ToggleFooter.v150
+                key: "Settings.Translation.ToggleFooter.v151",
                 tableName: "Settings",
                 value: "Turn this off to remove translation from the toolbar and menu.",
-                comment: "Footer text below the enable-translations toggle in the Translation settings screen."
+                comment: "Footer text below the enable toggle in the Translation settings screen."
             )
 
             public struct PreferredLanguages {
                 public static let SectionTitle = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.SectionTitle.v150
+                    key: "Settings.Translation.PreferredLanguages.SectionTitle.v151",
                     tableName: "Settings",
                     value: "Preferred Languages",
                     comment: "Section header for the preferred languages list in the Translation settings screen."
                 )
                 public static let DeviceLanguage = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.DeviceLanguage.v150
+                    key: "Settings.Translation.PreferredLanguages.DeviceLanguage.v151",
                     tableName: "Settings",
                     value: "Device Language",
                     comment: "Subtitle on the device language row in the preferred languages list in the Translation settings screen."
                 )
                 public static let Footer = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.Footer.v150
+                    key: "Settings.Translation.PreferredLanguages.Footer.v151",
                     tableName: "Settings",
                     value: "Choose from these languages when translating.",
                     comment: "Footer text below the preferred languages list in the Translation settings screen."
                 )
                 public static let AddLanguage = MZLocalizedString(
-                    key: "", // Settings.Translation.PreferredLanguages.AddLanguage.v150
+                    key: "Settings.Translation.PreferredLanguages.AddLanguage.v151",
                     tableName: "Settings",
                     value: "Add Language…",
                     comment: "Row label in the preferred languages list that opens the language picker to add a new preferred language for translation."
+                )
+                public static let RemoveLanguageA11yAction = MZLocalizedString(
+                    key: "Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151",
+                    tableName: "Settings",
+                    value: "Delete",
+                    comment: "VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list."
                 )
             }
 
             public struct AutoTranslate {
                 public static let Title = MZLocalizedString(
-                    key: "", // Settings.Translation.AutoTranslate.Title.v150
+                    key: "Settings.Translation.AutoTranslate.Title.v151",
                     tableName: "Settings",
                     value: "Automatically Translate",
                     comment: "Title for the auto-translate toggle in the Translation settings screen."
                 )
                 public static let Footer = MZLocalizedString(
-                    key: "", // Settings.Translation.AutoTranslate.Footer.v150
+                    key: "Settings.Translation.AutoTranslate.Footer.v151",
                     tableName: "Settings",
                     value: "Translates pages to your top preferred language automatically.",
                     comment: "Footer text below the auto-translate toggle in the Translation settings screen."
@@ -3438,13 +3413,13 @@ extension String {
 
             public struct LanguagePicker {
                 public static let NavTitle = MZLocalizedString(
-                    key: "", // Settings.Translation.LanguagePicker.NavTitle.v150
+                    key: "Settings.Translation.LanguagePicker.NavTitle.v151",
                     tableName: "Settings",
                     value: "Select Language",
                     comment: "Navigation bar title of the language picker shown when adding a preferred translation language."
                 )
                 public static let SearchPlaceholder = MZLocalizedString(
-                    key: "", // Settings.Translation.LanguagePicker.SearchPlaceholder.v150
+                    key: "Settings.Translation.LanguagePicker.SearchPlaceholder.v151",
                     tableName: "Settings",
                     value: "Search",
                     comment: "Placeholder text for the search bar in the translation language picker."
@@ -4149,22 +4124,22 @@ extension String {
 
         public struct LanguagePicker {
             public static let Title = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.Title.v150
+                key: "Translations.LanguagePicker.Title.v151",
                 tableName: "Translations",
                 value: "Translate Page to…",
                 comment: "Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into.")
             public static let PreferredLanguagesTitle = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.PreferredLanguages.v150
+                key: "Translations.LanguagePicker.PreferredLanguages.v151",
                 tableName: "Translations",
                 value: "Preferred Languages…",
                 comment: "Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen.")
             public static let PageTranslatedTitle = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.PageTranslatedTitle.v150
+                key: "Translations.LanguagePicker.PageTranslatedTitle.v151",
                 tableName: "Translations",
                 value: "Page Translated to %@",
                 comment: "Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English').")
             public static let ShowOriginal = MZLocalizedString(
-                key: "", // Translations.LanguagePicker.ShowOriginal.v150
+                key: "Translations.LanguagePicker.ShowOriginal.v151",
                 tableName: "Translations",
                 value: "Show Original",
                 comment: "Button in the translation action sheet to restore the page to its original language.")
@@ -4264,6 +4239,19 @@ extension String {
                     value: "Please try again.",
                     comment: "On the translation feature bottom sheet, this is the text that describes that an error has occurred.")
             }
+        }
+
+        public struct AutoTranslatePrompt {
+            public static let Message = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.Message.v151",
+                tableName: "Translations",
+                value: "Automatically translate pages when available?",
+                comment: "Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate.")
+            public static let EnableButton = MZLocalizedString(
+                key: "Translations.AutoTranslatePrompt.EnableButton.v151",
+                tableName: "Translations",
+                value: "Enable",
+                comment: "Button label on the auto-translate prompt that enables the auto-translate feature when tapped.")
         }
     }
 }
@@ -4906,7 +4894,7 @@ extension String {
         key: "Search.ThirdPartyEngines.AddSuccess",
         tableName: nil,
         value: "Added Search engine!",
-        comment: "The success message that appears after a user sucessfully adds a new search engine")
+        comment: "The success message that appears after a user successfully adds a new search engine")
     public static let ThirdPartySearchAddTitle = MZLocalizedString(
         key: "Search.ThirdPartyEngines.AddTitle",
         tableName: nil,
@@ -5639,8 +5627,20 @@ extension String {
                     value: "Translated",
                     comment: "On the main menu, the title for the action that shows that the content of the webpage is already translated.")
 
+                public static let TranslatePageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Title.v151",
+                    tableName: "MainMenu",
+                    value: "Translate Page…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open.")
+
+                public static let TranslatedPageTitleMultiLanguage = MZLocalizedString(
+                    key: "MainMenu.ToolsSection.Translation.Translated.Title.v151",
+                    tableName: "MainMenu",
+                    value: "Translated…",
+                    comment: "On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open.")
+
                 public static let Off = MZLocalizedString(
-                    key: "", // MainMenu.ToolsSection.Translation.Off.v150
+                    key: "MainMenu.ToolsSection.Translation.Off.v151",
                     tableName: "MainMenu",
                     value: "Off",
                     comment: "On the main menu, the badge shown on the Translate Page item when translation is inactive.")
@@ -6217,13 +6217,13 @@ extension String {
                 key: "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150",
                 tableName: "EnhancedTrackingProtection",
                 value: "Standard blocks common trackers after a page starts loading, so you may see a higher tracker count. %@",
-                comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
+                comment: "Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
 
             public static let trackersBlockedStrictModeFooterText = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150",
                 tableName: "EnhancedTrackingProtection",
                 value: "Strict blocks more trackers by stopping them before a page loads, so you may see a lower tracker count. %@",
-                comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more")
+                comment: "Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more")
 
             public static let trackersBlockedFooterTextLink = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Link.LearnMore.v150",
@@ -7018,17 +7018,17 @@ extension String {
         key: "TodayWidget.TopSitesGalleryTitle",
         tableName: "Today",
         value: "Top Sites",
-        comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
+        comment: "Title for top sites widget to add Firefox top sites shortcuts to home screen")
     public static let TopSitesGalleryTitleV2 = MZLocalizedString(
         key: "TodayWidget.TopSitesGalleryTitleV2",
         tableName: "Today",
         value: "Website Shortcuts",
-        comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
+        comment: "Title for top sites widget to add Firefox top sites shortcuts to home screen")
     public static let TopSitesGalleryDescription = MZLocalizedString(
         key: "TodayWidget.TopSitesGalleryDescription",
         tableName: "Today",
         value: "Add shortcuts to frequently and recently visited sites.",
-        comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
+        comment: "Description for top sites widget to add Firefox top sites shortcuts to home screen")
 
     // Quick View Open Tabs - Medium Size Widget
     public static let MoreTabsLabel = MZLocalizedString(
@@ -7410,11 +7410,6 @@ extension String {
 
 // MARK: - Tab Toolbar
 extension String {
-    public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
-        key: "TabToolbar.Accessibility.DataClearance.v122",
-        tableName: "TabToolbar",
-        value: "Data Clearance",
-        comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data.")
     public static let TabToolbarStopAccessibilityLabel = MZLocalizedString(
         key: "Stop",
         tableName: nil,
@@ -7482,7 +7477,7 @@ extension String {
             key: "Toolbar.Tabs.Button.A11y.Label.v135",
             tableName: "Toolbar",
             value: "Tabs open",
-            comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+            comment: "Accessibility label for the tabs button in the toolbar, specifying the number of tabs open.")
 
         public static let TabsButtonLargeContentTitle = MZLocalizedString(
             key: "Toolbar.Tabs.Button.A11y.LargeContentTitle.v137",
@@ -7500,7 +7495,7 @@ extension String {
             key: "Toolbar.Menu.Button.A11y.Label.v135",
             tableName: "Toolbar",
             value: "Main Menu",
-            comment: "Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu")
+            comment: "Accessibility label for the Main Menu button in the toolbar, specifying that the button will open Main Menu")
 
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(
@@ -8577,7 +8572,7 @@ extension String {
                 key: "Menu.DownloadPDF.Confirm.v129",
                 tableName: "Menu",
                 value: "Successfully Downloaded PDF",
-                comment: "Toast displayed to user after downlaod pdf was pressed."
+                comment: "Toast displayed to user after download pdf was pressed."
             )
             public static let Help = MZLocalizedString(
                 key: "Menu.Help.v99",
@@ -8620,6 +8615,50 @@ extension String {
                 tableName: nil,
                 value: "Show in Application Menu",
                 comment: "Setting to show Logins & Passwords quick access in the application menu"
+            )
+        }
+        struct v150 {
+            public static let ContextualHintsFeltDeletionBody = MZLocalizedString(
+                key: "ContextualHints.FeltDeletion.Body.v122",
+                tableName: "ContextualHints",
+                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode."
+            )
+            public static let TabToolbarDataClearanceAccessibilityLabel = MZLocalizedString(
+                key: "TabToolbar.Accessibility.DataClearance.v122",
+                tableName: "TabToolbar",
+                value: "Data Clearance",
+                comment: "Accessibility label for the tab toolbar fire button in private mode, used to provide users a way to end and delete their private session data."
+            )
+            public static let FeltDeletionTitle = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Title.v122",
+                tableName: "Alerts",
+                value: "End your private session?",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert."
+            )
+            public static let FeltDeletionBody = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Body.v122",
+                tableName: "Alerts",
+                value: "Close all private tabs and delete history, cookies, and all other site data.",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert."
+            )
+            public static let FeltDeletionConfirmButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Confirm.v122",
+                tableName: "Alerts",
+                value: "Delete session data",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that."
+            )
+            public static let FeltDeletionCancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v122",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session."
+            )
+            public static let FeltDeletionToastTitle = MZLocalizedString(
+                key: "FirefoxHomepage.FeltDeletion.Link.v122",
+                tableName: "FirefoxHomepage",
+                value: "Private Browsing Data Erased",
+                comment: "When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast."
             )
         }
     }

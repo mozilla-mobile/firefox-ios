@@ -6,7 +6,7 @@ import Shared
 
 // Holds the configuration / state of the translation button on the toolbar
 // Whether we should show translate button and which mode (inactive, loading, active)
-struct TranslationConfiguration: Equatable, FeatureFlaggable {
+struct TranslationConfiguration: Equatable, LegacyFeatureFlaggable {
     /// This is used to configure the translation icon state.
     /// States:
     /// inactive - page has not been translated yet
@@ -63,6 +63,13 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         self.prefs = prefs
         self.state = state
         self.translatedToLanguage = translatedToLanguage
+    }
+
+    var isMultiLanguageFlow: Bool {
+        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) else { return false }
+        guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
+              !stored.isEmpty else { return false }
+        return stored.components(separatedBy: ",").count != 1
     }
 
     /// Determines whether to show the translate icon on the toolbar

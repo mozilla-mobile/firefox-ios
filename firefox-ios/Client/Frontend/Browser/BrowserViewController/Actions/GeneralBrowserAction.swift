@@ -19,6 +19,7 @@ struct GeneralBrowserAction: Action {
     let isNativeErrorPage: Bool?
     let frameContext: PasswordGeneratorFrameContext?
     let summarizerConfig: SummarizerConfig?
+    let summarizerTrigger: SummarizerTrigger
     let translationLanguages: [String]?
     let isPageTranslated: Bool?
     let translatedToLanguage: String?
@@ -30,6 +31,7 @@ struct GeneralBrowserAction: Action {
          isNativeErrorPage: Bool? = nil,
          frameContext: PasswordGeneratorFrameContext? = nil,
          summarizerConfig: SummarizerConfig? = nil,
+         summarizerTrigger: SummarizerTrigger = .shakeGesture,
          translationLanguages: [String]? = nil,
          isPageTranslated: Bool? = nil,
          translatedToLanguage: String? = nil,
@@ -45,6 +47,7 @@ struct GeneralBrowserAction: Action {
         self.isNativeErrorPage = isNativeErrorPage
         self.frameContext = frameContext
         self.summarizerConfig = summarizerConfig
+        self.summarizerTrigger = summarizerTrigger
         self.translationLanguages = translationLanguages
         self.isPageTranslated = isPageTranslated
         self.translatedToLanguage = translatedToLanguage
@@ -76,12 +79,12 @@ enum GeneralBrowserActionType: ActionType {
     case addNewTab
     case showNewTabLongPressActions
     case addToReadingListLongPressAction
-    case clearData
     case showPasswordGenerator
     case didSelectedTabChangeToHomepage
     case enteredZeroSearchScreen
     case didUnhideToolbar
     case didCloseTabFromToolbar
+    case didTapReaderModeBarSummarizerButton
     case shakeMotionEnded
     case showTranslationLanguagePicker
 }

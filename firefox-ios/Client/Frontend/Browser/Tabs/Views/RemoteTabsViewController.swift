@@ -17,7 +17,7 @@ class RemoteTabsViewController: UIViewController,
                                 Themeable,
                                 CollapsibleTableViewSection,
                                 LibraryPanelContextMenu,
-                                FeatureFlaggable,
+                                LegacyFeatureFlaggable,
                                 UITableViewDelegate,
                                 UITableViewDataSource {
     struct UX {
@@ -188,7 +188,7 @@ class RemoteTabsViewController: UIViewController,
 
     // MARK: Themeable
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {

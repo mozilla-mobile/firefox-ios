@@ -165,10 +165,12 @@ class BrowsingPDFTests: BaseTestCase {
         // Open the PDF URL and wait for the page to load
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
+        waitForTabsButton()
 
         // Navigate to the browser menu and perform the bookmark action
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
+        waitForTabsButton()
 
         // Navigate to the bookmarks section
         navigator.goto(BrowserTabMenu)

@@ -417,8 +417,11 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
         let newState = BrowserViewControllerState.reducer(
             BrowserViewControllerState(windowUUID: .XCTestDefaultUUID),
-            GeneralBrowserAction(windowUUID: .XCTestDefaultUUID,
-                                 actionType: GeneralBrowserActionType.showSummarizer)
+            GeneralBrowserAction(
+                summarizerConfig: .defaultConfig,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: GeneralBrowserActionType.showSummarizer
+            )
         )
         subject.newState(state: newState)
 
@@ -528,7 +531,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
-            otherErrorPagesIsEnabled: true
+            badCertDomainErrorPageIsEnabled: true
         )
         let subject = createSubject()
         let certErrorCode = NSURLErrorServerCertificateUntrusted
@@ -546,7 +549,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: false,
-            otherErrorPagesIsEnabled: true
+            badCertDomainErrorPageIsEnabled: true
         )
         let subject = createSubject()
         let errorPageURL = URL(
@@ -563,7 +566,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         setupNimbusNativeErrorPageTesting(
             isEnabled: true,
             noInternetConnectionErrorIsEnabled: true,
-            otherErrorPagesIsEnabled: false
+            badCertDomainErrorPageIsEnabled: false
         )
         let subject = createSubject()
         let certErrorCode = NSURLErrorServerCertificateUntrusted
@@ -575,6 +578,18 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.updateInContentHomePanel(errorPageURL)
 
         XCTAssertEqual(browserCoordinator.showNativeErrorPageCalled, 0)
+    }
+
+    // MARK: - ReaderMode
+
+    func testReaderModeBar_didSelectSummarizeButton_dispatchesGeneralBrowserAction() throws {
+        let subject = createSubject()
+
+        subject.readerModeBar(ReaderModeBarView(frame: .zero), didSelectButton: .summarizer)
+
+        let dispatchAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchActionType = try XCTUnwrap(dispatchAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
     // MARK: - Private
@@ -596,19 +611,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(enabled: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(swipingTabs: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
+            return HostedSummarizerFeature()
         }
     }
 
@@ -621,13 +636,13 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     private func setupNimbusNativeErrorPageTesting(
         isEnabled: Bool,
         noInternetConnectionErrorIsEnabled: Bool,
-        otherErrorPagesIsEnabled: Bool
+        badCertDomainErrorPageIsEnabled: Bool
     ) {
         FxNimbus.shared.features.nativeErrorPageFeature.with { _, _ in
             return NativeErrorPageFeature(
+                badCertDomainErrorPage: badCertDomainErrorPageIsEnabled,
                 enabled: isEnabled,
-                noInternetConnectionError: noInternetConnectionErrorIsEnabled,
-                otherErrorPages: otherErrorPagesIsEnabled
+                noInternetConnectionError: noInternetConnectionErrorIsEnabled
             )
         }
     }

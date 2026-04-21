@@ -22,7 +22,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsShowCloseTabsToast()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
@@ -70,13 +70,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) {
-            let longPressRecognizer = UILongPressGestureRecognizer(
-                target: self,
-                action: #selector(TopTabsViewController.newTabLongPressed)
-            )
-            button.addGestureRecognizer(longPressRecognizer)
-        }
+
+        let longPressRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(TopTabsViewController.newTabLongPressed)
+        )
+        button.addGestureRecognizer(longPressRecognizer)
+
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
         button.showsLargeContentViewer = true
@@ -376,6 +376,17 @@ extension TopTabsViewController: TopTabCellDelegate {
         delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
+
+        // Focus voice-over on the selected tab after current tab is closed
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self,
+                  let selected = self.tabManager.selectedTab,
+                  let index = self.topTabDisplayManager.dataStore.index(of: selected) else { return }
+
+            let indexPath = IndexPath(item: index, section: 0)
+            guard let selectedCell = self.collectionView.cellForItem(at: indexPath) else { return }
+            UIAccessibility.post(notification: .layoutChanged, argument: selectedCell)
+        }
     }
 }
 

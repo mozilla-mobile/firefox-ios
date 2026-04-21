@@ -64,6 +64,54 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "მისამართები";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "ხელმისაწვდომი";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**ხელმისაწვდომი**: ახერხებთ იხილოთ და გამოიყენოთ ეს შესაძლებლობა.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "შეზღუდული";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**შეზღუდული**: ვერ იხილავთ და ვერ გამოიყენებთ ამ შესაძლებლობას. მოწყობილობაზე მომუშავე ხელგონი ან წინათ ჩამოტვირთული ნებისმიერი მოდელი მოცილებულია.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "გვერდები და მათი შეჯამებები არასდროს შეინახება.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "გვერდის შეჯამებები";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "ᲮᲔᲚᲒᲝᲜᲘᲗ ᲛᲝᲛᲣᲨᲐᲕᲔ ᲨᲔᲡᲐᲫᲚᲔᲑᲚᲝᲑᲔᲑᲘ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "თარგმნილი მასალა საიდუმლოდ რჩება მოწყობილობაზევე.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "თარგმნა";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "შეზღუდვა გულისხმობს, რომ %@ აღარ გიჩვენებთ ახალ ან არსებულ AI-შესაძლებლობებს, არც მათ შესახებ ამომხტომ ცნობებს.";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "იხილეთ, რა არის და რას მოიცავს";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "შეიზღუდოს AI-შესაძლებლობები";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "ახალი ან არსებული AI-შესაძლებლობები შეიზღუდება ნაგულისხმევად. ცალკეულ შესაძლებლობას შეზღუდვა მოხსენით ქვემოთ.";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "ვრცლად";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "ეს გულისხმობს, იყენებდეს თუ არა ხელგონის შესაძლებლობებს.";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "არჩევანის უფლებას ყოველთვის მოგცემთ %@";
+
 /* In the settings menu, in the General section, this is the title for the AI Controls settings section */
 "Settings.AIControls.Title.v150" = "AI-სამართავი";
 
@@ -179,7 +227,7 @@
 "Settings.Rollouts.Link.v148" = "ვრცლად";
 
 /* A short description that explains that Mozilla may change features remotely. %@ is the app name (e.g. Firefox). */
-"Settings.Rollouts.Message.v148" = "%@ შეძლებს გააუმჯობესოს შესაძლებლობები, წარმადობა და მდგრადობა განახლებებს შორის შუალედშიც. ცვლილებები დაშორებული რეჟიმით.";
+"Settings.Rollouts.Message.v148" = "%@ გააუმჯობესებს შესაძლებლობებს, წარმადობასა და მდგრადობას განახლებებს შორის შუალედშიც. ცვლილებები აისახება დაშორებულად.";
 
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all rollouts. */
 "Settings.Rollouts.Title.v148" = "დაშორებულად გაუმჯობესების ნებართვა";
@@ -269,7 +317,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "შეარხიეთ მოწყობილობა გვერდის შესაჯამებლად.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "შერხევა შეჯამებისთვის";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "შერხევით შეჯამება";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "ჟესტები";
@@ -310,6 +358,30 @@
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "ახალი ჩანართი";
 
+/* Footer text below the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Footer.v151" = "ითარგმნოს გვერდები მითითებული სასურველი ენებიდან პირველივეზე.";
+
+/* Title for the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Title.v151" = "თავისთავად თარგმნა";
+
+/* Navigation bar title of the language picker shown when adding a preferred translation language. */
+"Settings.Translation.LanguagePicker.NavTitle.v151" = "ენის შერჩევა";
+
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "ძიება";
+
+/* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
+"Settings.Translation.PreferredLanguages.AddLanguage.v151" = "ენის დამატება…";
+
+/* Subtitle on the device language row in the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.DeviceLanguage.v151" = "მოწყობილობის ენა";
+
+/* Footer text below the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.Footer.v151" = "აირჩიეთ ამ ენებიდან თარგმნისას.";
+
+/* Section header for the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.SectionTitle.v151" = "სასურველი ენები";
+
 /* This is the section title text for the the Translation feature under the Translation settings section. */
 "Settings.Translation.SectionTitle.v145" = "თარგმნის პარამეტრები";
 
@@ -321,6 +393,9 @@
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "თარგმნა";
+
+/* Footer text below the enable toggle in the Translation settings screen. */
+"Settings.Translation.ToggleFooter.v151" = "ამის გამორთვით მოცილდება თარგმნა ხელსაწყოთა ზოლიდან და მენიუდან.";
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "თარგმნის ჩართვა";

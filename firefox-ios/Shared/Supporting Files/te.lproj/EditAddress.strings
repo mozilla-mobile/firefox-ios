@@ -1,0 +1,33 @@
+/* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "దేశం";
+
+/* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "దేశం లేదా ప్రాంతం";
+
+/* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
+"Addresses.EditAddress.AutofillAddressCounty.v129" = "కౌంటీ";
+
+/* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
+"Addresses.EditAddress.AutofillAddressDepartment.v129" = "విభాగం";
+
+/* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
+"Addresses.EditAddress.AutofillAddressDistrict.v129" = "జిల్లా";
+
+/* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "ఈమెయిల్";
+
+/* Label for the field where users specify the name of an island, if applicable. Important for addresses in archipelagic regions, aiding in precise location identification during autofill. */
+"Addresses.EditAddress.AutofillAddressIsland.v129" = "ద్వీపం";
+
+/* Label for the field where the user inputs their full name as part of an address form. Essential for personalized form submissions and ensuring information accuracy in autofilled forms. */
+"Addresses.EditAddress.AutofillAddressName.v129" = "పేరు";
+
+/* Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill. */
+"Addresses.EditAddress.AutofillAddressNeighborhood.v129" = "పరిసర ప్రాంతం";
+
+/* Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings. */
+"Addresses.EditAddress.AutofillAddressOrganization.v129" = "సంస్థ";
+
+/* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
+"Addresses.EditAddress.AutofillAddressState.v129" = "రాష్ట్రం";
+

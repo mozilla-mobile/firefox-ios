@@ -30,6 +30,16 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen = OnboardingScreen(app: app, flowType: flowType)
         firefoxHomePageScreen = FirefoxHomePageScreen(app: app)
         settingsScreen = SettingScreen(app: app)
+
+        // Launch the app so we can detect UI elements and decide whether to run these tests.
+        launchApp()
+
+        // If the legacy "Agree and Continue" button is not present, skip the entire class.
+        let agreeButton = onboardingScreen.agreeAndContinueButton()
+        if !agreeButton.waitForExistence(timeout: 4) {
+            throw XCTSkip("Skipping LegacyOnboardingTests because legacy" +
+                          " 'Agree and Continue' button not found (not running legacy flow)")
+        }
     }
 
     override func tearDown() async throws {
@@ -44,9 +54,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
         guard #available(iOS 17.0, *), !skipPlatform else {
             throw XCTSkip("Skipping first run tour")
         }
-
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
         onboardingScreen.completeOnboardingFlow(isIpad: iPad())
 
@@ -57,8 +64,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // MARK: Testing Dark Mode
     // https://mozilla.testrail.io/index.php?/cases/view/2793818
     func testLegacyOnboardingFirstRunTourDarkMode() throws {
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
         onboardingScreen.closeTour()
         firefoxHomePageScreen.dismissNewChangesPopupIfNeeded()
@@ -145,8 +150,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testLegacyOnboardingOnboardingSignIn() throws {
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
         onboardingScreen.goToNextScreenViaSecondary()
 
@@ -160,8 +163,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testLegacyOnboardingCloseTour() {
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
         onboardingScreen.closeTourIfNeeded()
 
@@ -172,8 +173,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // MARK: Toolbar Position
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
     func testLegacyOnboardingSelectAddressBarTopPlacement() {
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial onboarding screen title label to appear
@@ -213,8 +212,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
     func testLegacyOnboardingSelectAddressBarBottomPlacement() throws {
-        launchApp()
-
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial onboarding screen title label to appear
@@ -258,9 +255,7 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: Skipping Onboarding with Close Button
     // https://mozilla.testrail.io/index.php?/cases/view/2575177
-    func testLegacyOnboardingCloseOptionLastCard() {
-        launchApp()
-
+    func testLegacyOnboardingCloseOptionLastCard() throws {
         onboardingScreen.handleTermsOfService()
 
         // Wait for the initial title label to appear
@@ -294,8 +289,6 @@ class LegacyOnboardingTests: FeatureFlaggedTestSuite {
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/3193571
     func testLegacyOnboardingValidateContinueButtonAndSettings() {
-        launchApp()
-
         onboardingScreen.assertContinueButtonIsOnTheBottom()
         onboardingScreen.handleTermsOfService()
 

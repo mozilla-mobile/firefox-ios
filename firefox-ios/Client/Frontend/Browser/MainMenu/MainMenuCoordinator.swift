@@ -46,7 +46,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
 }
 
-class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
+class MainMenuCoordinator: BaseCoordinator, LegacyFeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
@@ -161,7 +161,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             DefaultApplicationHelper().openSettings()
 
         case .webpageSummary(let config):
-            dismissMenuModal(animated: true)
             navigationHandler?.showSummarizePanel(.mainMenu, config: config)
 
         case .translatePage:
@@ -169,18 +168,33 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             let translationConfig = toolbarState?.addressToolbar.translationConfiguration
             let isTranslated = translationConfig?.state == .active
             let translatedLanguage = translationConfig?.translatedToLanguage
+            let isSingleLanguageFlow = if let translationConfig {
+                !translationConfig.isMultiLanguageFlow
+            } else {
+                false
+            }
             let prefs = profile.prefs
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                store.dispatch(GeneralBrowserAction(
-                    translationLanguages: languages,
-                    isPageTranslated: isTranslated,
-                    translatedToLanguage: translatedLanguage,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                ))
+                let pageLanguage = try? await TranslationsService().detectPageLanguage(for: windowUUID)
+                let filteredLanguages = languages.filter { $0 != pageLanguage }
+                if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: windowUUID,
+                        targetLanguage: language,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        translationLanguages: filteredLanguages,
+                        isPageTranslated: isTranslated,
+                        translatedToLanguage: translatedLanguage,
+                        windowUUID: windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
             }
         }
     }

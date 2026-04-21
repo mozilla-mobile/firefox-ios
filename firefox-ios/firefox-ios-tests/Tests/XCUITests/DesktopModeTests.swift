@@ -236,7 +236,6 @@ class DesktopModeTestsIphone: BaseTestCase {
         browserScreen.assertMobileUserAgentIsDisplayed()
 
         navigator.nowAt(BrowserTab)
-        browserScreen.handleIos15ToastIfNecessary()
         switchToDesktopSite()
         browserScreen.assertDesktopUserAgentIsDisplayed()
 

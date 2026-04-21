@@ -47,11 +47,10 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
     }
 
     lazy var summarizerProvider: Middleware<AppState> = { state, action in
-        switch action.actionType {
-        case GeneralBrowserActionType.shakeMotionEnded:
-            self.handleShakeMotionEnded(windowUUID: action.windowUUID)
-        default:
-            break
+        if let action = action as? GeneralBrowserAction {
+            self.handleGeneralBrowserAction(action: action)
+        } else if let action = action as? ToolbarAction {
+            self.handleToolbarAction(action: action)
         }
     }
 
@@ -62,21 +61,72 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         )
     }
 
-    private func handleShakeMotionEnded(windowUUID: WindowUUID) {
+    // MARK: - GeneralBrowserAction
+    private func handleGeneralBrowserAction(action: GeneralBrowserAction) {
+        switch action.actionType {
+        case GeneralBrowserActionType.didTapReaderModeBarSummarizerButton:
+            fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                self.handleDidTapReaderModeSummarizerButton(windowUUID: action.windowUUID, summarizerConfig: $0)
+            }
+        case GeneralBrowserActionType.showReaderMode:
+            fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
+            }
+        case GeneralBrowserActionType.shakeMotionEnded:
+            fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                self.handleShakeMotionEnded(windowUUID: action.windowUUID, summarizerConfig: $0)
+            }
+        default:
+            break
+        }
+    }
+
+    private func fetchSummarizerConfig(windowUUID: WindowUUID, completion: @escaping (SummarizerConfig?) -> Void) {
         guard let webView = windowManager.tabManager(for: windowUUID).selectedTab?.webView else { return }
         Task {
-            guard let summarizerConfig = await makeConfiguration(from: webView) else {
-                dispatchShakeToSummarizeNotAvailable(windowUUID: windowUUID)
-                return
-            }
-            store.dispatch(
-                SummarizeAction(
-                    windowUUID: windowUUID,
-                    actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-                    summarizerConfig: summarizerConfig
-                )
-            )
+            let configuration = await makeConfiguration(from: webView)
+            completion(configuration)
         }
+    }
+
+    private func handleDidTapReaderModeSummarizerButton(windowUUID: WindowUUID, summarizerConfig: SummarizerConfig?) {
+        guard let summarizerConfig else { return }
+        store.dispatch(
+            GeneralBrowserAction(
+                summarizerConfig: summarizerConfig,
+                summarizerTrigger: .readerModeBarButton,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showSummarizer,
+            )
+        )
+    }
+
+    private func handleShowReaderMode(windowUUID: WindowUUID, summarizerConfig: SummarizerConfig?) {
+        guard summarizerConfig != nil else {
+            dispatchSummaryNotAvailable(windowUUID: windowUUID)
+            return
+        }
+        store.dispatch(
+            SummarizeAction(
+                windowUUID: windowUUID,
+                actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
+            )
+        )
+    }
+
+    private func handleShakeMotionEnded(windowUUID: WindowUUID, summarizerConfig: SummarizerConfig?) {
+        guard let summarizerConfig else {
+            dispatchShakeToSummarizeNotAvailable(windowUUID: windowUUID)
+            return
+        }
+        store.dispatch(
+            GeneralBrowserAction(
+                summarizerConfig: summarizerConfig,
+                summarizerTrigger: .shakeGesture,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showSummarizer,
+            )
+        )
     }
 
     private func dispatchShakeToSummarizeNotAvailable(windowUUID: WindowUUID) {
@@ -91,6 +141,33 @@ final class SummarizerMiddleware: SummarizerConfigFactory {
         )
     }
 
+    // MARK: - ToolbarAction
+    private func handleToolbarAction(action: ToolbarAction) {
+        switch action.actionType {
+        case ToolbarActionType.didSummarizeSettingsChange:
+            guard action.canSummarize else {
+                dispatchSummaryNotAvailable(windowUUID: action.windowUUID)
+                return
+            }
+            fetchSummarizerConfig(windowUUID: action.windowUUID) {
+                // The behavior is the same for show reader mode action
+                self.handleShowReaderMode(windowUUID: action.windowUUID, summarizerConfig: $0)
+            }
+        default:
+            break
+        }
+    }
+
+    private func dispatchSummaryNotAvailable(windowUUID: WindowUUID) {
+        store.dispatch(
+            SummarizeAction(
+                windowUUID: windowUUID,
+                actionType: SummarizeMiddlewareActionType.summaryNotAvailable,
+            )
+        )
+    }
+
+    // MARK: - SummarizerConfigFactory
     func makeConfiguration(from webView: WKWebView) async -> SummarizerConfig? {
         guard summarizerNimbusUtils.isSummarizeFeatureToggledOn else { return nil }
 

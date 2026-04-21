@@ -267,6 +267,7 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
             enablePanGestureRecognizer()
             if shouldCompleteTransition {
                 webPagePreview.isHidden = true
+                webPagePreview.alpha = 1
                 store.dispatch(
                     ToolbarAction(
                         shouldAnimate: false,
@@ -284,6 +285,8 @@ final class AddressBarPanGestureHandler: NSObject, StoreSubscriber {
                                                         actionType: GeneralBrowserActionType.addNewTab))
                 }
             } else {
+                webPagePreview.isHidden = true
+                webPagePreview.alpha = 1
                 statusBarOverlay.restoreOverlay(animated: !UIAccessibility.isReduceMotionEnabled,
                                                 isHomepage: contentContainer.hasHomepage)
             }

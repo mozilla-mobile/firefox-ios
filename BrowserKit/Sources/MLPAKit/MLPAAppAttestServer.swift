@@ -11,10 +11,16 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         let challenge: String
     }
 
+    private let environmentType: MLPAEnvironment
     private let bundleIdentifier: String
     private let urlSession: URLSessionProtocol
 
-    public init(urlSession: URLSessionProtocol = URLSession.shared, bundleIdentifier: String = AppInfo.bundleIdentifier) {
+    public init(
+        with type: MLPAEnvironment = .prod,
+        urlSession: URLSessionProtocol = URLSession.shared,
+        bundleIdentifier: String = AppInfo.bundleIdentifier
+    ) {
+        self.environmentType = type
         self.urlSession = urlSession
         self.bundleIdentifier = bundleIdentifier
     }
@@ -26,7 +32,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
     /// because Base64 values can contain `+`, `/`, and `=` characters that
     /// would otherwise break the URL.
     public func fetchChallenge(for keyId: String) async throws -> String {
-        guard let challengeEndpoint = MLPAConstants.challengeEndpoint else {
+        guard let challengeEndpoint = MLPAConstants.challengeEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "challengeEndpoint")
         }
 
@@ -53,7 +59,7 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         attestationObject: Data,
         challenge: String
     ) async throws {
-        guard let attestEndpoint = MLPAConstants.attestEndpoint else {
+        guard let attestEndpoint = MLPAConstants.attestEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "attestEndpoint")
         }
 

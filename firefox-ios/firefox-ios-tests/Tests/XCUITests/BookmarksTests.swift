@@ -17,6 +17,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var libraryScreen: LibraryScreen!
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
+    private var settingsScreen: SettingScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -26,6 +27,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen = LibraryScreen(app: app)
         homepageSettingsScreen = HomepageSettingsScreen(app: app)
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -137,36 +139,36 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSitesScreen.assertVisible()
-        }
+        topSitesScreen.assertVisible()
+
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "www.google")
         browserScreen.assertTypeSuggestText(text: "www.google")
         browserScreen.typeOnSearchBar(text: ".com")
         browserScreen.typeOnSearchBar(text: "\r")
-        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
 
         // Enter new url
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        toolbarScreen.openNewTabFromTabTray()
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
         browserScreen.assertNumberOfSuggestedLines(expectedLines: 0)
         browserScreen.typeOnSearchBar(text: "\r")
-        waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks
         bookmark(isLockIconOff: false)
 
-        // Now the site should be suggested
+        // Clear history so only bookmark suggestions appear
         toolbarScreen.assertSettingsButtonExists()
         navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(BrowserTab)
+        settingsScreen.tapBackToSettings()
+        settingsScreen.closeSettingsWithDoneButton()
+
+        // Now the site should be suggested via bookmark
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "mozilla.org")
         browserScreen.assertTypeSuggestText(text: "mozilla.org")
@@ -371,6 +373,9 @@ class BookmarksTests: FeatureFlaggedTestBase {
         homepageSettingsScreen.disableBookmarkToggle()
         homepageSettingsScreen.assertBookmarkToggleIsDisabled()
         navigator.nowAt(HomeSettings)
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         browserScreen.tapCancelButtonIfExist()
@@ -441,6 +446,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         if #unavailable(iOS 16) {
             navigator.performAction(Action.CloseURLBarOpen)
         }
+        waitForTabsButton()
         navigator.goto(TabTray)
         // Tap to "Remove bookmark"
         if XCUIDevice.shared.orientation == .landscapeLeft {

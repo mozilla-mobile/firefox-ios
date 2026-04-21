@@ -9,12 +9,13 @@ import OnboardingKit
 protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
+    var shouldShowVideoIntro: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
     var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
+struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {
@@ -27,6 +28,10 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
 
     var isModernOnboardingEnabled: Bool {
         featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+    }
+
+    var shouldShowVideoIntro: Bool {
+        featureFlags.isFeatureEnabled(.videoIntroOnboarding, checking: .buildOnly)
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {

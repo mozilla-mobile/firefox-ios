@@ -60,6 +60,7 @@ let LoginsSettings = "LoginsSettings"
 let MailAppSettings = "MailAppSettings"
 let ShowTourInSettings = "ShowTourInSettings"
 let TrackingProtectionSettings = "TrackingProtectionSettings"
+let EnhancedTrackingProtection = "EnhancedTrackingProtection"
 let Intro_FxASignin = "Intro_FxASignin"
 let WebImageContextMenu = "WebImageContextMenu"
 let WebLinkContextMenu = "WebLinkContextMenu"
@@ -140,6 +141,8 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
+        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        BaseTestCase().mozWaitElementHittable(element: backButton, timeout: TIMEOUT)
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
@@ -210,7 +213,7 @@ class Action {
     static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
     static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
 
-    static let TogglePocketInNewTab = "TogglePocketInNewTab"
+    static let ToggleStoriesInNewTab = "ToggleStoriesInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
     static let ToggleJumpBackIn = "ToggleJumpBackIn"
@@ -289,6 +292,7 @@ class Action {
     static let SelectToolbarBottom = "SelectToolbarBottom"
     static let SelectToolbarTop = "SelectToolbarTop"
     static let SelectShortcuts = "TopSitesSettings"
+    static let SelectTrackersBlocked = "TrackersBlocked"
 }
 
 private let defaultURL = "https://www.mozilla.org/en-US/book/"

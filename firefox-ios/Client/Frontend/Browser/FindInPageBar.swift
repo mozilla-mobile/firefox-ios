@@ -7,16 +7,16 @@ import UIKit
 
 protocol FindInPageBarDelegate: AnyObject {
     @MainActor
-    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)
+    func findInPage(didTextChange text: String)
 
     @MainActor
-    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String)
+    func findInPage(didFindPreviousWithText text: String)
 
     @MainActor
-    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String)
+    func findInPage(didFindNextWithText text: String)
 
     @MainActor
-    func findInPageDidPressClose(_ findInPage: FindInPageBar)
+    func findInPageDidPressClose()
 }
 
 class FindInPageBar: UIView, ThemeApplicable {
@@ -105,7 +105,7 @@ class FindInPageBar: UIView, ThemeApplicable {
 
         set {
             searchText.text = newValue
-            didTextChange(searchText)
+            didTextChange()
         }
     }
 
@@ -158,25 +158,25 @@ class FindInPageBar: UIView, ThemeApplicable {
     }
 
     @objc
-    private func didFindPrevious(_ sender: UIButton) {
-        delegate?.findInPage(self, didFindPreviousWithText: searchText.text ?? "")
+    private func didFindPrevious() {
+        delegate?.findInPage(didFindPreviousWithText: searchText.text ?? "")
     }
 
     @objc
-    private func didFindNext(_ sender: UIButton) {
-        delegate?.findInPage(self, didFindNextWithText: searchText.text ?? "")
+    private func didFindNext() {
+        delegate?.findInPage(didFindNextWithText: searchText.text ?? "")
     }
 
     @objc
-    private func didTextChange(_ sender: UITextField) {
+    private func didTextChange() {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         saveSearchText(searchText.text)
-        delegate?.findInPage(self, didTextChange: searchText.text ?? "")
+        delegate?.findInPage(didTextChange: searchText.text ?? "")
     }
 
     @objc
-    private func didPressClose(_ sender: UIButton) {
-        delegate?.findInPageDidPressClose(self)
+    private func didPressClose() {
+        delegate?.findInPageDidPressClose()
     }
 
     private func saveSearchText(_ searchText: String?) {

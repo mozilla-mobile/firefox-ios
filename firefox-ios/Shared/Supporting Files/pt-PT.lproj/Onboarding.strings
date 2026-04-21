@@ -89,7 +89,7 @@
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Dark.v148" = "Escuro";
 
 /* Description for the theme selection card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Escolha o seu tema favorito ou faça com que o %@ corresponda ao seu dispositivo, colocando-o em controlo.";
+"Onboarding.Modern.BrandRefresh.Customization.Theme.Description.v148" = "Selecione o tema que mais gosta ou deixe que o %@ acompanhe as definições do seu dispositivo, dando-lhe total controlo.";
 
 /* Option for the light theme in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Customization.Theme.Light.v148" = "Claro";
@@ -119,19 +119,19 @@
 "Onboarding.Modern.BrandRefresh.Marketing.Title.v148" = "Ajude-nos a construir uma Internet melhor";
 
 /* Description for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Descubra funcionalidades de privacidade no %@ e envie separadores entre os seus dispositivos com segurança.";
+"Onboarding.Modern.BrandRefresh.Notification.Description.v148" = "Descubra funcionalidades de privacidade no %@ e envie separadores entre os seus dispositivos, com segurança.";
 
 /* Button to skip the notification card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Notification.Skip.Action.v148" = "Agora não";
 
 /* Title for the notification card in the v148 brand refresh onboarding flow. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "As notificações ajudam-no(a) a manter-se mais seguro(a) com o %@";
+"Onboarding.Modern.BrandRefresh.Notification.Title.v148" = "As notificações ajudam a manter-se em segurança com o %@";
 
 /* Button to turn on notifications in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Ativar notificações";
+"Onboarding.Modern.BrandRefresh.Notification.TurnOn.Action.v148" = "Ativar as notificações";
 
 /* Description for the sync card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Obtenha marcadores, palavras-passe e muito mais em qualquer dispositivo, num piscar de olhos. Os seus dados pessoais permanecem seguros e protegidos com encriptação.";
+"Onboarding.Modern.BrandRefresh.Sync.Description.v148" = "Obtenha marcadores, palavras-passe e muito mais, em qualquer dispositivo, num piscar de olhos. Os seus dados pessoais permanecem seguros e protegidos com encriptação.";
 
 /* Button to start the sync setup process in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Sync.SignIn.Action.v148" = "Começar a sincronizar";
@@ -140,7 +140,7 @@
 "Onboarding.Modern.BrandRefresh.Sync.Skip.Action.v148" = "Agora não";
 
 /* Title for the sync card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "Continue de onde ficou, instantaneamente";
+"Onboarding.Modern.BrandRefresh.Sync.Title.v148" = "Retome rapidamente, de onde ficou";
 
 /* Button title for agreeing to Terms of Use in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148" = "Concordar e continuar";
@@ -149,7 +149,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.AgreementButtonTitle.v148.v2" = "Continuar";
 
 /* Description for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Rápido, seguro e não o irá vender. A navegação ficou melhor.";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Description.v148" = "Rápido, seguro e sem interesses ocultos. A sua experiência de navegação melhorou muito.";
 
 /* The text for the manage settings link button in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.ManageLink.v148" = "Gerir definições";
@@ -161,7 +161,7 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeAgreement.v148" = "O %1$@ preocupa-se com a sua privacidade. Saber mais na nossa %2$@";
 
 /* The text for the Privacy Notice link button in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Aviso de privacidade";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.PrivacyNoticeLink.v148" = "Informação de privacidade";
 
 /* Agreement text for Terms of Use in the v148 brand refresh onboarding flow. %@ is the Terms of Use link button that redirects the user to the Terms of Use page. */
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseAgreement.v148" = "Ao continuar, concorda com os %@";
@@ -170,25 +170,25 @@
 "Onboarding.Modern.BrandRefresh.TermsOfUse.TermsOfUseLink.v148" = "Termos de utilização do %@";
 
 /* Title for the Terms of Use card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepare-se para correr à vontade";
+"Onboarding.Modern.BrandRefresh.TermsOfUse.Title.v148" = "Prepare-se para a liberdade";
 
 /* Action button to set the app as the default browser in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.ActionTreatmentA.v148" = "Definir como navegador predefinido";
 
 /* Description for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Nós protegemos os seus dados e bloqueamos automaticamente as empresas de espiar os seus cliques.";
+"Onboarding.Modern.BrandRefresh.Welcome.Description.v148" = "Protegemos os seus dados e impedimos que as empresas espiem os seus cliques.";
 
 /* Button to skip the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Skip.v148" = "Agora não";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Diga adeus aos rastreadores bizarros";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148" = "Diga adeus aos rastreadores indesejados";
 
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abra as suas ligações com privacidade integrada";
+"Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "Abra as suas ligações com privacidade intrínseca";
 
 /* Title for the welcome card in the v149 brand refresh onboarding flow. */
-"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Abra todas as suas ligações com privacidade integrada";
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "Abra todas as suas ligações com privacidade intrínseca";
 
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "Automático";
@@ -200,7 +200,7 @@
 "Onboarding.Modern.Customization.Theme.Dark.v145" = "Escuro";
 
 /* Description for the theme selection card. %@ is the app name (e.g. Firefox). */
-"Onboarding.Modern.Customization.Theme.Description.v145" = "Escolha o seu tema favorito ou faça com que o %@ corresponda ao seu dispositivo, colocando-o em controlo.";
+"Onboarding.Modern.Customization.Theme.Description.v145" = "Selecione o tema que mais gosta ou deixe que o %@ acompanhe as definições do seu dispositivo, dando-lhe total controlo.";
 
 /* Option for the light theme. */
 "Onboarding.Modern.Customization.Theme.Light.v145" = "Claro";
@@ -212,13 +212,13 @@
 "Onboarding.Modern.Customization.Toolbar.Bottom.Action.v140" = "Fundo";
 
 /* Action to set the toolbar to the bottom. */
-"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Fundo";
+"Onboarding.Modern.Customization.Toolbar.Bottom.Action.v145" = "Em baixo";
 
 /* Continue button on the toolbar customization card. */
 "Onboarding.Modern.Customization.Toolbar.Continue.Action.v145" = "Continuar";
 
 /* Description for the toolbar customization card. */
-"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Comece a digitar para obter sugestões de pesquisa, os seus sites favoritos, marcadores, histórico e motores de pesquisa – tudo num único sítio.";
+"Onboarding.Modern.Customization.Toolbar.Description.v145" = "Comece a digitar para obter sugestões de pesquisa, os seus sites favoritos, marcadores, histórico e motores de pesquisa – tudo num único local.";
 
 /* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
 "Onboarding.Modern.Customization.Toolbar.Title.v140" = "Escolha onde colocar a sua barra de endereço";
@@ -230,7 +230,7 @@
 "Onboarding.Modern.Customization.Toolbar.Top.Action.v140" = "Topo";
 
 /* Action to set the toolbar to the top. */
-"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "Topo";
+"Onboarding.Modern.Customization.Toolbar.Top.Action.v145" = "No topo";
 
 /* Button to skip the entire onboarding flow. */
 "Onboarding.Modern.General.Skip.v145" = "Ignorar";
@@ -239,7 +239,7 @@
 "Onboarding.Modern.Sync.Description.v140" = "Obtenha os seus marcadores, histórico e palavras-passe em qualquer dispositivo.";
 
 /* Description for the Sync card in the v2 onboarding flow. */
-"Onboarding.Modern.Sync.Description.v145" = "Os seus marcadores, palavras-passe e muito mais, sincronizados em qualquer dispositivo. Tudo está protegido com encriptação, para que apenas você possa aceder.";
+"Onboarding.Modern.Sync.Description.v145" = "Os seus marcadores, palavras-passe e muito mais, sincronizados em qualquer dispositivo. Está tudo protegido com encriptação, para que apenas você possa aceder.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Modern.Sync.SignIn.Action.v140" = "Começar a sincronizar";
@@ -266,7 +266,7 @@
 "Onboarding.Modern.TermsOfService.AgreementButtonTitle.v145" = "Continuar";
 
 /* Description for the Terms of Service screen in the v2 onboarding flow. The '\n' symbols denote line breaks. %@ is the company name (e.g. Mozilla) */
-"Onboarding.Modern.TermsOfService.Description.v145" = "Proteção automática para as suas informações pessoais Carregue sites rapidamente e pesquise de forma mais inteligente Trazido a si pela organização sem fins lucrativos %@, em que confia há mais de 20 anos";
+"Onboarding.Modern.TermsOfService.Description.v145" = "Proteção automática das suas informações pessoais\nCarregue sites rapidamente e pesquise de forma mais inteligente\nTrazido a si pela %@, a organização sem fins lucrativos e de confiança, há mais de 20 anos";
 
 /* Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen. */
 "Onboarding.Modern.TermsOfService.ManageLink.v140" = "Gerir";
@@ -341,7 +341,7 @@
 "Onboarding.Modern.Welcome.Description.v140" = "Uma escolha que o protege onde quer que vá na Internet. Pode sempre mudar mais tarde.";
 
 /* Description for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Description.v145" = "Uma escolha que o protege onde quer que vá na Internet. Pode sempre mudar mais tarde.";
+"Onboarding.Modern.Welcome.Description.v145" = "Uma escolha que garante a sua proteção, onde quer que vá, na Internet. Pode sempre mudar mais tarde.";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Modern.Welcome.Skip.v140" = "Agora não";
@@ -353,7 +353,7 @@
 "Onboarding.Modern.Welcome.Title.v140" = "Despeça-se dos anúncios arrepiantes";
 
 /* Title for the welcome card in the v2 onboarding flow. */
-"Onboarding.Modern.Welcome.Title.v145" = "Diga adeus aos rastreadores bizarros";
+"Onboarding.Modern.Welcome.Title.v145" = "Diga adeus aos rastreadores indesejados";
 
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Continuar";

@@ -112,7 +112,7 @@ class CodeCoverageGate {
 
         let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
         // Consider created Swift files, excluding Tests & Generated
-        // Exclusing `danger.git.modifiedFiles` for now
+        // Excluding `danger.git.modifiedFiles` for now
         let candidates = (danger.git.createdFiles).filter {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
@@ -191,8 +191,7 @@ class CodeCoverageGate {
         \(rows.joined(separator: "\n"))
         """
 
-        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
-        if hasBypass {
+        if hasLabel(coverageBypassLabel) {
             warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
         } else {
             let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."

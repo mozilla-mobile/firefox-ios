@@ -74,13 +74,6 @@ final class BrowserScreen {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
     }
 
-    func handleIos15ToastIfNecessary() {
-        if #unavailable(iOS 16) {
-            // iOS 15 displays a toast that covers the reload button
-            sleep(2)
-        }
-    }
-
     func tapDownloadsToastButton() {
         let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
         downloadsButton.waitAndTap()
@@ -174,6 +167,12 @@ final class BrowserScreen {
 
     func typeOnSearchBar(text: String) {
         addressBar.typeText(text)
+    }
+
+    func navigateToURL(_ url: String) {
+        tapOnAddressBar()
+        addressBar.typeText(url)
+        addressBar.typeText("\r")
     }
 
     func assertCancelButtonOnUrlBarExists() {
@@ -285,6 +284,11 @@ final class BrowserScreen {
 
     func assertWebViewLoaded(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch, timeout: timeout)
+    }
+
+    func assertWebViewHasContent(timeout: TimeInterval = TIMEOUT) {
+        let firstText = app.webViews.firstMatch.staticTexts.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstText, timeout: timeout)
     }
 
     func tapWebViewButton(buttonText: String) {

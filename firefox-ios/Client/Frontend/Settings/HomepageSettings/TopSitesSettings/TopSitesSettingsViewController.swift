@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-final class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+final class TopSitesSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     // MARK: - Initializers
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)

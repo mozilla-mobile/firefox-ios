@@ -272,6 +272,9 @@ class LoginTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
+        if !iPad() {
+            waitForTabsButton()
+        }
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
@@ -491,6 +494,7 @@ class LoginTest: BaseTestCase {
         // There is a Saved Password toggle option (enabled)
         loginSettingsScreen.assertSavePasswordsToggleIsEnabled()
         navigator.goto(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(testLoginPage)
@@ -555,7 +559,7 @@ class LoginTest: BaseTestCase {
         // Tap on the cancel button
         if #available(iOS 26, *) {
             if iPad() {
-                // Tapping on app on iPad to dimiss the keyboard
+                // Tapping on app on iPad to dismiss the keyboard
                 app.waitAndTap()
             } else {
                 app.buttons["close"].waitAndTap()

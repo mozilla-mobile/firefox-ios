@@ -25,6 +25,6 @@ final class TranslationToggleCell: UICollectionViewListCell, ThemeApplicable {
         contentConfiguration = content
         toggle.onTintColor = theme.colors.actionPrimary
         backgroundConfiguration = .listGroupedCell()
-        backgroundConfiguration?.backgroundColor = theme.colors.layer2
+        backgroundConfiguration?.backgroundColor = theme.colors.layer5
     }
 }

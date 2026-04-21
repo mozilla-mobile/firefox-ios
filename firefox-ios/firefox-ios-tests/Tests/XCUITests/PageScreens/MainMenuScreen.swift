@@ -33,4 +33,10 @@ final class MainMenuScreen {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)
     }
+
+    func tapSettings() {
+        let settings = sel.SETTINGS_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(settings)
+        settings.waitAndTap()
+    }
 }

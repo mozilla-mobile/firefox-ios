@@ -29,7 +29,7 @@ final class TabDisplayView: UIView,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
-                      FeatureFlaggable,
+                      LegacyFeatureFlaggable,
                       InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
@@ -42,6 +42,7 @@ final class TabDisplayView: UIView,
     private let windowUUID: WindowUUID
     var theme: Theme?
     weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
+    private var tabTrayUtils: TabTrayUtils
 
     lazy var dataSource =
     TabDisplayDiffableDataSource(
@@ -76,8 +77,7 @@ final class TabDisplayView: UIView,
         })
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
+        return tabTrayUtils.shouldDisplayExperimentUI()
     }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
@@ -126,11 +126,13 @@ final class TabDisplayView: UIView,
 
     public init(panelType: TabTrayPanelType,
                 state: TabsPanelState,
-                windowUUID: WindowUUID) {
+                windowUUID: WindowUUID,
+                tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.panelType = panelType
         self.tabsState = state
         self.tabsSectionManager = TabsSectionManager()
         self.windowUUID = windowUUID
+        self.tabTrayUtils = tabTrayUtils
         super.init(frame: .zero)
         setupLayout()
         configureDataSource()

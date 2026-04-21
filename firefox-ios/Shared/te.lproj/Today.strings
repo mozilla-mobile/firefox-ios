@@ -13,6 +13,9 @@
 /* Open New Tab button label */
 "TodayWidget.NewTabButtonLabelV1" = "కొత్త వెతుకులాట";
 
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "తెరిచివున్న ట్యాబులు లేవు.";
+
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "అంతరంగిక వెతుకులాట";
 

@@ -151,7 +151,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
+final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
@@ -164,8 +164,8 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
     }
 
-    var isOtherErrorPagesEnabled: Bool {
-        return NativeErrorPageFeatureFlag().isOtherErrorPagesEnabled
+    var isBadCertDomainErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
     @MainActor
@@ -183,7 +183,7 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         )
 
         let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = isOtherErrorPagesEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+        let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
         if isNoInternetError || isCertificateError {

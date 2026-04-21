@@ -10,7 +10,7 @@ import ComponentLibrary
 import OnboardingKit
 
 @MainActor
-final class OnboardingService: FeatureFlaggable {
+final class OnboardingService: LegacyFeatureFlaggable {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?

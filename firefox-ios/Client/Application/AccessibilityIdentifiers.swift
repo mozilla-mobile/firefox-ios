@@ -19,11 +19,11 @@ struct AccessibilityIdentifiers {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let readerModeButton = "TabLocationView.readerModeButton"
+        static let readerModeWithSummarizerButton = "TabLocationView.readerModeWithSummarizerButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
         static let summarizeButton = "TabLocationView.summarizeButton"
         static let backButton = "TabToolbar.backButton"
-        static let fireButton = "TabToolbar.fireButton"
         static let forwardButton = "TabToolbar.forwardButton"
         static let tabsButton = "TabToolbar.tabsButton"
         static let addNewTabButton = "TabToolbar.addNewTabButton"
@@ -74,6 +74,8 @@ struct AccessibilityIdentifiers {
         static let bottomContentStackView = "Browser.bottomContentStackView"
         static let contentContainer = "Browser.contentContainer"
         static let statusBarOverlay = "Browser.statusBarOverlay"
+        static let topBlurView = "Browser.topBlurView"
+        static let bottomBlurView = "Browser.bottomBlurView"
     }
 
     struct ContextualHints {
@@ -195,10 +197,12 @@ struct AccessibilityIdentifiers {
 
         struct BlockedTrackers {
             static let headerView = "BlockedTrackers.HeaderView"
+            static let footerView = "BlockedTrackers.FooterView"
             static let mainView = "BlockedTrackers.MainView"
             static let containerView = "BlockedTrackers.BaseView"
             static let trackersTable = "BlockedTrackers.TrackersTable"
             static let totalTrackersBlockedLabel = "BlockedTrackers.TotalTrackersBlockedLabel"
+            static let trackersBlockedInfoTextView = "BlockedTrackers.TrackersBlockedInfoTextView"
 
             static let crossSiteTitle = "BlockedTrackers.CrossSiteTitle"
             static let crossSiteImage = "BlockedTrackers.CrossSiteImage"
@@ -211,6 +215,14 @@ struct AccessibilityIdentifiers {
 
             static let socialMediaTitle = "BlockedTrackers.SocialMediaTitle"
             static let socialMediaImage = "BlockedTrackers.SocialMediaImage"
+        }
+
+        struct BlockedTrackersLearnMore {
+            static let headerView = "BlockedTrackersLearnMore.HeaderView"
+            static let containerView = "BlockedTrackersLearnMore.containerView"
+            static let closeButton = "BlockedTrackersLearnMore.CloseButton"
+            static let backButton = "BlockedTrackersLearnMore.BackButton"
+            static let titleLabel = "BlockedTrackersLearnMore.TitleLabel"
         }
 
         struct CertificatesScreen {
@@ -258,6 +270,8 @@ struct AccessibilityIdentifiers {
         }
 
         struct Pocket {
+            static let allCategory = "Category.All"
+            static let category = "Category"
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }
@@ -303,6 +317,14 @@ struct AccessibilityIdentifiers {
             static let privacyPolicyLink = "Microsurvey.Prompt.PrivacyPolicyLink"
             static let submitButton = "Microsurvey.Survey.SubmitButton"
             static let radioButton = "Microsurvey.Survey.RadioButton"
+        }
+    }
+
+    struct Translations {
+        struct AutoTranslatePrompt {
+            static let messageLabel = "Translations.AutoTranslatePrompt.MessageLabel"
+            static let enableButton = "Translations.AutoTranslatePrompt.EnableButton"
+            static let closeButton = "Translations.AutoTranslatePrompt.CloseButton"
         }
     }
 
@@ -411,6 +433,10 @@ struct AccessibilityIdentifiers {
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
         static let bottomSheetCloseButton = "Onboarding.bottomSheetCloseButton"
+
+        struct VideoIntro {
+            static let continueButton = "Onboarding.VideoIntro.ContinueButton"
+        }
 
         struct Wallpaper {
             static let card = "wallpaperCard"
@@ -910,6 +936,13 @@ struct AccessibilityIdentifiers {
         static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
         static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
         static let brightnessSlider = "ReaderMode.brightnessSlider"
+
+        struct BarView {
+            static let readStatusButton = "ReaderModeBarView.readStatusButton"
+            static let settingsButton = "ReaderModeBarView.settingsButton"
+            static let listStatusButton = "ReaderModeBarView.listStatusButton"
+            static let summarizerButton = "ReaderModeBarView.summarizerButton"
+        }
     }
 }
 // swiftlint:enable line_length

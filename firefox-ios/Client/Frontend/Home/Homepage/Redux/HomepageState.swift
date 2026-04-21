@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 
+@CopyWithUpdates
 struct HomepageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
 
@@ -54,22 +56,7 @@ struct HomepageState: ScreenState, Equatable {
             return
         }
 
-        self.init(
-            windowUUID: homepageState.windowUUID,
-            headerState: homepageState.headerState,
-            messageState: homepageState.messageState,
-            topSitesState: homepageState.topSitesState,
-            searchState: homepageState.searchState,
-            jumpBackInState: homepageState.jumpBackInState,
-            bookmarkState: homepageState.bookmarkState,
-            pocketState: homepageState.merinoState,
-            wallpaperState: homepageState.wallpaperState,
-            isZeroSearch: homepageState.isZeroSearch,
-            shouldTriggerImpression: homepageState.shouldTriggerImpression,
-            shouldShowPrivacyNotice: homepageState.shouldShowPrivacyNotice,
-            availableContentHeight: homepageState.availableContentHeight,
-            availableWallpaperHeight: homepageState.availableWallpaperHeight
-        )
+        self = homepageState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID) {
@@ -81,7 +68,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
-            pocketState: MerinoState(windowUUID: windowUUID),
+            merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
             shouldTriggerImpression: false,
@@ -99,7 +86,7 @@ struct HomepageState: ScreenState, Equatable {
         searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
-        pocketState: MerinoState,
+        merinoState: MerinoState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
         shouldTriggerImpression: Bool,
@@ -114,7 +101,7 @@ struct HomepageState: ScreenState, Equatable {
         self.searchState = searchState
         self.jumpBackInState = jumpBackInState
         self.bookmarkState = bookmarkState
-        self.merinoState = pocketState
+        self.merinoState = merinoState
         self.wallpaperState = wallpaperState
         self.isZeroSearch = isZeroSearch
         self.shouldTriggerImpression = shouldTriggerImpression
@@ -153,21 +140,16 @@ struct HomepageState: ScreenState, Equatable {
 
     @MainActor
     private static func handleInitializeAndViewWillTransitionAction(state: HomepageState, action: Action) -> HomepageState {
-        return HomepageState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldTriggerImpression: false
         )
     }
 
@@ -175,21 +157,17 @@ struct HomepageState: ScreenState, Equatable {
     private static func handleEmbeddedHomepageAction(state: HomepageState,
                                                      action: Action,
                                                      isZeroSearch: Bool) -> HomepageState {
-        return HomepageState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldTriggerImpression: false
         )
     }
 
@@ -203,19 +181,16 @@ struct HomepageState: ScreenState, Equatable {
         let availableContentHeight = homepageAction.availableContentHeight ?? state.availableContentHeight
         let availableWallpaperHeight = homepageAction.availableWallpaperHeight ?? state.availableWallpaperHeight
 
-        return HomepageState(
-            windowUUID: state.windowUUID,
+         return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
             availableContentHeight: availableContentHeight,
             availableWallpaperHeight: availableWallpaperHeight
         )
@@ -223,117 +198,76 @@ struct HomepageState: ScreenState, Equatable {
 
     @MainActor
     private static func handlePrivacyNoticeCloseButtonTappedAction(state: HomepageState, action: Action) -> HomepageState {
-        return HomepageState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: false,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldShowPrivacyNotice: false
         )
     }
 
     @MainActor
     private static func handleDidTabChangeToHomepageAction(state: HomepageState, action: Action) -> HomepageState {
-        return HomepageState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: true,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldTriggerImpression: true
         )
     }
 
     @MainActor
     private static func handlePrivacyNoticeInitialization(action: Action, state: Self) -> HomepageState {
-        return HomepageState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             headerState: HeaderState.reducer(state.headerState, action),
             messageState: MessageCardState.reducer(state.messageState, action),
             topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            pocketState: MerinoState.reducer(state.merinoState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
-            isZeroSearch: state.isZeroSearch,
             shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: true,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+            shouldShowPrivacyNotice: true
         )
     }
 
     @MainActor
     private static func passthroughState(from state: HomepageState, action: Action) -> HomepageState {
-        let headerState = HeaderState.reducer(state.headerState, action)
-        let messageState = MessageCardState.reducer(state.messageState, action)
-        let merinoState = MerinoState.reducer(state.merinoState, action)
-        let searchState = SearchBarState.reducer(state.searchState, action)
-        let jumpBackInState = JumpBackInSectionState.reducer(state.jumpBackInState, action)
-        let bookmarkState = BookmarksSectionState.reducer(state.bookmarkState, action)
-        let topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
-        let wallpaperState = WallpaperState.reducer(state.wallpaperState, action)
-
-        return HomepageState(
-            windowUUID: state.windowUUID,
-            headerState: headerState,
-            messageState: messageState,
-            topSitesState: topSitesState,
-            searchState: searchState,
-            jumpBackInState: jumpBackInState,
-            bookmarkState: bookmarkState,
-            pocketState: merinoState,
-            wallpaperState: wallpaperState,
-            isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+        return state.copyWithUpdates(
+            headerState: HeaderState.reducer(state.headerState, action),
+            messageState: MessageCardState.reducer(state.messageState, action),
+            topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
+            searchState: SearchBarState.reducer(state.searchState, action),
+            jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
+            bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
+            merinoState: MerinoState.reducer(state.merinoState, action),
+            wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
+            shouldTriggerImpression: false
         )
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
-        let messageState = MessageCardState.defaultState(from: state.messageState)
-        let topSitesState = TopSitesSectionState.defaultState(from: state.topSitesState)
-        let searchState = SearchBarState.defaultState(from: state.searchState)
-        let jumpBackInState = JumpBackInSectionState.defaultState(from: state.jumpBackInState)
-        let bookmarkState = BookmarksSectionState.defaultState(from: state.bookmarkState)
-        let merinoState = MerinoState.defaultState(from: state.merinoState)
-        let wallpaperState = WallpaperState.defaultState(from: state.wallpaperState)
-
-        return HomepageState(
-            windowUUID: state.windowUUID,
-            headerState: state.headerState,
-            messageState: messageState,
-            topSitesState: topSitesState,
-            searchState: searchState,
-            jumpBackInState: jumpBackInState,
-            bookmarkState: bookmarkState,
-            pocketState: merinoState,
-            wallpaperState: wallpaperState,
-            isZeroSearch: state.isZeroSearch,
-            shouldTriggerImpression: false,
-            shouldShowPrivacyNotice: state.shouldShowPrivacyNotice,
-            availableContentHeight: state.availableContentHeight,
-            availableWallpaperHeight: state.availableWallpaperHeight
+        return state.copyWithUpdates(
+            messageState: MessageCardState.defaultState(from: state.messageState),
+            topSitesState: TopSitesSectionState.defaultState(from: state.topSitesState),
+            searchState: SearchBarState.defaultState(from: state.searchState),
+            jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState),
+            bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
+            merinoState: MerinoState.defaultState(from: state.merinoState),
+            wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
+            shouldTriggerImpression: false
         )
     }
 }

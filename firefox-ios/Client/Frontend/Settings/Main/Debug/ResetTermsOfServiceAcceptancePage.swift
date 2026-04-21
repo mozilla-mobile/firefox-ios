@@ -4,7 +4,7 @@
 
 import Shared
 
-class ResetTermsOfServiceAcceptancePage: HiddenSetting, FeatureFlaggable {
+class ResetTermsOfServiceAcceptancePage: HiddenSetting, LegacyFeatureFlaggable {
     private weak var settingsDelegate: DebugSettingsDelegate?
 
     init(settings: SettingsTableViewController,

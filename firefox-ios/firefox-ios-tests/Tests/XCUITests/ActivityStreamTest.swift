@@ -116,6 +116,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         }
         waitUntilPageLoad()
         // navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitForTabsButton()
         navigator.goto(TabTray)
         if iPad() {
             app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.waitAndTap()
@@ -123,6 +124,7 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
             app.cells.buttons[AccessibilityIdentifiers.TabTray.closeButton].firstMatch.waitAndTap()
         }
         navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if iPad() {
@@ -243,9 +245,6 @@ class ActivityStreamTest: FeatureFlaggedTestBase {
         BaseTestCase().waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         tabTray.assertCellExists(named: siteName)
-        if iPad() {
-            navigator.goto(TabTray)
-        }
         tabTray.assertFirstCellVisible()
         tabTray.assertTabCount(1)
     }

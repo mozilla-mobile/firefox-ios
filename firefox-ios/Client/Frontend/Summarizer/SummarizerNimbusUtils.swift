@@ -35,7 +35,7 @@ extension SummarizerNimbusUtils {
 }
 
 /// Tiny utility to simplify checking for availability of the summarizers
-struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
+struct DefaultSummarizerNimbusUtils: LegacyFeatureFlaggable, SummarizerNimbusUtils {
     private let prefs: Prefs
     private let localeProvider: LocaleProvider
     private let appleIntelligenceUtil: AppleIntelligenceUtil

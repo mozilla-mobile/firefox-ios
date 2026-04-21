@@ -6,6 +6,7 @@ import XCTest
 
 protocol SpringboardSelectorsSet {
     var FENNEC_ICONS: Selector { get }
+    var FIREFOX_ICON: Selector { get }
     var NEW_TAB_BUTTON: Selector { get }
     var NEW_PRIVATE_TAB_BUTTON: Selector { get }
     var OPEN_LAST_BOOKMARK_BUTTON: Selector { get }
@@ -15,6 +16,7 @@ protocol SpringboardSelectorsSet {
 struct SpringboardSelectors: SpringboardSelectorsSet {
     private enum IDs {
         static let fennecIconsPrefix = "Fennec "
+        static let firefoxIcon = "Firefox"
         static let newTabButton = "New Tab"
         static let newPrivateTabButton = "New Private Tab"
         static let openLastBookmarkButton = "org.mozilla.ios.Fennec.OpenLastBookmark"
@@ -26,6 +28,15 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
         ),
         value: IDs.fennecIconsPrefix,
         description: "Fennec app icons on springboard",
+        groups: ["springboard", "icons"]
+    )
+
+    let FIREFOX_ICON = Selector(
+        strategy: .predicate(
+            NSPredicate(format: "identifier BEGINSWITH %@", IDs.firefoxIcon)
+        ),
+        value: IDs.firefoxIcon,
+        description: "Firefox app icons on springboard",
         groups: ["springboard", "icons"]
     )
 
@@ -50,6 +61,7 @@ struct SpringboardSelectors: SpringboardSelectorsSet {
     var all: [Selector] {
         [
             FENNEC_ICONS,
+            FIREFOX_ICON,
             NEW_TAB_BUTTON,
             NEW_PRIVATE_TAB_BUTTON,
             OPEN_LAST_BOOKMARK_BUTTON

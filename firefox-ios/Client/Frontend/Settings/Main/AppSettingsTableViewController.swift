@@ -59,7 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      FeatureFlaggable,
+                                      LegacyFeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
                                       SharedSettingsDelegate {
@@ -271,12 +271,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
-            guard let self else { return }
+        sendTechnicalDataSettings.settingDidChange = { value in
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
-            self.tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -541,6 +539,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))

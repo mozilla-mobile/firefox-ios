@@ -87,7 +87,7 @@ final class MainMenuStateTests: XCTestCase {
             )
 
             guard let currentDestination = newState.navigationDestination?.destination else {
-                return XCTFail("Execting to find a destination, but it was nil")
+                return XCTFail("Expecting to find a destination, but it was nil")
             }
 
             XCTAssertEqual(currentDestination, destination)

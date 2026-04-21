@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
+struct AppIconSelectionView: View, ThemeApplicable, LegacyFeatureFlaggable {
     private let windowUUID: WindowUUID
     private let logger: Logger
     private let telemetry: AppIconSelectionTelemetry

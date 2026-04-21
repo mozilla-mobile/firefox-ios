@@ -17,6 +17,9 @@ public struct ToolbarElement: Equatable {
     /// Mask name of the badge's toolbar element
     let maskImageName: String?
 
+    /// The image for the bottom badge of the toolbar element
+    let bottomBadgeImage: UIImage?
+
     /// Indicated whether to use template mode or not for an image
     let templateModeForImage: Bool
 
@@ -83,6 +86,7 @@ public struct ToolbarElement: Equatable {
     public init(iconName: String? = nil,
                 title: String? = nil,
                 badgeImageName: String? = nil,
+                bottomBadgeImage: UIImage? = nil,
                 maskImageName: String? = nil,
                 templateModeForImage: Bool = true,
                 loadingConfig: LoadingConfig? = nil,
@@ -107,6 +111,7 @@ public struct ToolbarElement: Equatable {
         self.iconName = iconName
         self.title = title
         self.badgeImageName = badgeImageName
+        self.bottomBadgeImage = bottomBadgeImage
         self.maskImageName = maskImageName
         self.templateModeForImage = templateModeForImage
         self.loadingConfig = loadingConfig
@@ -134,6 +139,7 @@ public struct ToolbarElement: Equatable {
         lhs.iconName == rhs.iconName &&
         lhs.title == rhs.title &&
         lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.bottomBadgeImage == rhs.bottomBadgeImage &&
         lhs.maskImageName == rhs.maskImageName &&
         lhs.templateModeForImage == rhs.templateModeForImage &&
         lhs.loadingConfig == rhs.loadingConfig &&

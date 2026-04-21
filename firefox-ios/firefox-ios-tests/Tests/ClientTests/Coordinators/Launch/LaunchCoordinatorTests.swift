@@ -41,6 +41,16 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Video Intro
+    func testStart_videoIntro_present() throws {
+        let subject = createSubject(isIphone: true)
+        subject.start(with: .videoIntro)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(presentedViewController as? OnboardingVideoIntroViewController)
+    }
+
     // MARK: - Terms of Service
     func testStart_termsOfServiceNotIphone_present() throws {
         let termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)

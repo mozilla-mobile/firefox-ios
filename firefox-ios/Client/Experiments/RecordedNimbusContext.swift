@@ -48,6 +48,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
     var isBottomToolbarUser: Bool
     var hasEnabledTipsNotifications: Bool
     var hasAcceptedTermsOfUse: Bool
+    var userDisabledAi: Bool
     var isAppleIntelligenceAvailable: Bool
     var cannotUseAppleIntelligence: Bool
     var appVersion: String?
@@ -68,6 +69,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
          isBottomToolbarUser: Bool,
          hasEnabledTipsNotifications: Bool,
          hasAcceptedTermsOfUse: Bool,
+         userDisabledAi: Bool,
          isAppleIntelligenceAvailable: Bool,
          cannotUseAppleIntelligence: Bool,
          eventQueries: [String: String] = RecordedNimbusContext.EVENT_QUERIES,
@@ -84,6 +86,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
         self.isBottomToolbarUser = isBottomToolbarUser
         self.hasEnabledTipsNotifications = hasEnabledTipsNotifications
         self.hasAcceptedTermsOfUse = hasAcceptedTermsOfUse
+        self.userDisabledAi  = userDisabledAi
         self.isAppleIntelligenceAvailable = isAppleIntelligenceAvailable
         self.cannotUseAppleIntelligence = cannotUseAppleIntelligence
 
@@ -161,12 +164,12 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
                 isBottomToolbarUser: isBottomToolbarUser,
                 hasEnabledTipsNotifications: hasEnabledTipsNotifications,
                 hasAcceptedTermsOfUse: hasAcceptedTermsOfUse,
+                userDisabledAi: userDisabledAi,
                 isAppleIntelligenceAvailable: isAppleIntelligenceAvailable,
                 cannotUseAppleIntelligence: cannotUseAppleIntelligence,
                 touExperiencePoints: touExperiencePoints.toInt64()
             )
         )
-        GleanMetrics.Pings.shared.nimbus.submit()
         logger.log("record end", level: .debug, category: .experiments)
     }
 
@@ -207,6 +210,7 @@ final class RecordedNimbusContext: RecordedContext, @unchecked Sendable {
             "is_bottom_toolbar_user": isBottomToolbarUser,
             "has_enabled_tips_notifications": hasEnabledTipsNotifications,
             "has_accepted_terms_of_use": hasAcceptedTermsOfUse,
+            "user_disabled_ai": userDisabledAi,
             "is_apple_intelligence_available": isAppleIntelligenceAvailable,
             "cannot_use_apple_intelligence": cannotUseAppleIntelligence,
             "tou_experience_points": touExperiencePoints as Any

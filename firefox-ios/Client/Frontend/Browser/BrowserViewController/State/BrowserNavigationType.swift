@@ -18,7 +18,7 @@ enum BrowserNavigationDestination: Equatable {
     case zeroSearch
     case shortcutsLibrary
     case privacyNoticeLink(URL)
-    case summarizer(config: SummarizerConfig)
+    case summarizer(config: SummarizerConfig, trigger: SummarizerTrigger)
     case certificatesFromErrorPage
     case nativeErrorPageLearnMore
 

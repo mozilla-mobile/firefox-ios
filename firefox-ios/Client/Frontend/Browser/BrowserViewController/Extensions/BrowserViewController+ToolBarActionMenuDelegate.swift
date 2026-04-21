@@ -7,41 +7,9 @@ import Shared
 import UIKit
 
 extension BrowserViewController: PhotonActionSheetProtocol {
-    // MARK: Data Clearance CFR / Contextual Hint
-
-    // Reset the CFR timer for the data clearance button to avoid presenting the CFR
-    // In cases, such as if user navigates to homepage or if fire icon is not available
-    func resetDataClearanceCFRTimer() {
-        dataClearanceContextHintVC.stopTimer()
-    }
-
-    func configureDataClearanceContextualHint(_ view: UIView) {
-        guard contentContainer.hasWebView,
-                tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
-        else {
-            resetDataClearanceCFRTimer()
-            return
-        }
-        dataClearanceContextHintVC.configure(
-            anchor: view,
-            withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
-            andDelegate: self,
-            presentedUsing: { [weak self] in
-                self?.presentContextualHint(for: .dataClearance)
-            },
-            andActionForButton: { },
-            overlayState: overlayManager)
-    }
-
-    private func presentDataClearanceContextualHint() {
-        present(dataClearanceContextHintVC, animated: true)
-        UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
-    }
-
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     @MainActor
     func startNavigationButtonDoubleTapTimer() {
-        guard isToolbarNavigationHintEnabled else { return }
         if navigationHintDoubleTapTimer == nil {
             navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
                 ensureMainThread {
@@ -185,7 +153,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         switch hintType {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
         case .translation: presentTranslationContextualHint()
-        case .dataClearance: presentDataClearanceContextualHint()
         case .navigation: presentNavigationContextualHint()
         case .toolbarUpdate: presentToolbarUpdateContextualHint()
         default: break
@@ -207,7 +174,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     func resetCFRsTimer() {
-        resetDataClearanceCFRTimer()
         resetSummarizeToolbarCFRTimer()
     }
 
@@ -217,128 +183,13 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         translationContextHintVC.stopTimer()
     }
 
-    /// Triggers clearing the users private session data, an alert is shown once and then, deletion is done directly after
-    func didTapOnDataClearance() {
-        guard !(profile.prefs.boolForKey(PrefsKeys.dataClearanceAlertShown) ?? false) else {
-            performDeletionAction()
-            return
-        }
-
-        let alert = UIAlertController(
-            title: .Alerts.FeltDeletion.Title,
-            message: .Alerts.FeltDeletion.Body,
-            preferredStyle: .alert
-        )
-
-        let cancelAction = UIAlertAction(
-            title: .Alerts.FeltDeletion.CancelButton,
-            style: .default,
-            handler: { [weak self] _ in
-                self?.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: false)
-            }
-        )
-
-        let deleteDataAction = UIAlertAction(
-            title: .Alerts.FeltDeletion.ConfirmButton,
-            style: .destructive,
-            handler: { [weak self] _ in
-                self?.performDeletionAction()
-            }
-        )
-
-        alert.addAction(deleteDataAction)
-        alert.addAction(cancelAction)
-        present(alert, animated: true) { [weak self] in
-            self?.profile.prefs.setBool(true, forKey: PrefsKeys.dataClearanceAlertShown)
-        }
-    }
-
-    private func performDeletionAction() {
-        self.privateBrowsingTelemetry.sendDataClearanceTappedTelemetry(didConfirm: true)
-        self.setupDataClearanceAnimation { timingConstant in
-            DispatchQueue.main.asyncAfter(deadline: .now() + timingConstant) {
-                self.closePrivateTabsAndOpenNewPrivateHomepage()
-            }
-        }
-    }
-
-    private func closePrivateTabsAndOpenNewPrivateHomepage() {
-        tabManager.removeTabs(tabManager.privateTabs)
-        tabManager.selectTab(tabManager.addTab(isPrivate: true))
-    }
-
-    /// Setup animation for data clearance flow unless reduce motion is enabled
-    /// - Parameter completion: returns the proper timing to match animation on when to close tabs and display toast
-    private func setupDataClearanceAnimation(completion: @escaping (Double) -> Void) {
-        let showAnimation = !UIAccessibility.isReduceMotionEnabled
-        let timingToMatchGradientOverlay = showAnimation ? 0.8 : 0.0
-
-        guard showAnimation else {
-            completion(timingToMatchGradientOverlay)
-            return
-        }
-        let dataClearanceAnimation = DataClearanceAnimation()
-        dataClearanceAnimation.startAnimation(
-            with: view,
-            for: toolbarHelper.shouldShowTopTabs(for: traitCollection)
-        )
-
-        completion(timingToMatchGradientOverlay)
-    }
-
     func dismissUrlBar() {
         if addressToolbarContainer.inOverlayMode {
             addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
 
-    func getNavigationToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
-        guard let selectedTab = tabManager.selectedTab else { return [] }
-        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        let infinity = "\u{221E}"
-        let tabCount = (count < 100) ? count.description : infinity
-
-        func action() {
-            let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, self.newTabSettings == .blankPage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
-            }
-        }
-
-        let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: StandardImageIdentifiers.Large.tab,
-                                                        iconType: .TabsButton,
-                                                        tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: StandardImageIdentifiers.Large.tab,
-                                                       iconType: .TabsButton,
-                                                       tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
-        }
-
-        return [privateBrowsingMode]
-    }
-
-    func getMoreNavigationToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = getNewTabAction()
-        let newPrivateTab = getNewPrivateTabAction()
-        let closeTab = getCloseTabAction()
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
-        }
-
-        return [newTab, closeTab]
-    }
-
-    func getNavigationToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
+    func getNavigationToolbarLongPressActions() -> [[PhotonRowActions]] {
         let newTab = getNewTabAction()
         let newPrivateTab = getNewPrivateTabAction()
         let closeTab = getCloseTabAction()
@@ -364,10 +215,8 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func getNewPrivateTabAction() -> PhotonRowActions {
-        let iconString = isOneTapNewTabEnabled ? StandardImageIdentifiers.Large.privateMode :
-                                                StandardImageIdentifiers.Large.plus
         return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                     iconString: iconString,
+                                     iconString: StandardImageIdentifiers.Large.privateMode,
                                      iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
@@ -377,9 +226,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func getCloseTabAction() -> PhotonRowActions {
-        let title = isOneTapNewTabEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
-                                            String.KeyboardShortcuts.CloseCurrentTab
-        return SingleActionViewModel(title: title,
+        return SingleActionViewModel(title: String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {

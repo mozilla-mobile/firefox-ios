@@ -37,7 +37,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     var isEditingFeatureEnabled: Bool {
         AddressLocaleFeatureValidator.isValidRegion(for: currentRegionCode) ||
-        featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.addressAutofillEdit)
     }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?

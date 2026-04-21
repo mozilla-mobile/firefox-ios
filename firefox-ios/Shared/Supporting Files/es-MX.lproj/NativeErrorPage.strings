@@ -19,6 +19,21 @@
 /* On certificate error page, this is the label prefix for the error code. %@ is the error code (e.g. SSL_ERROR_BAD_CERT_DOMAIN). */
 "NativeErrorPage.BadCertDomain.ErrorCodeLabel.v149" = "Código de error: %@";
 
+/* On certificate error page, this is the text on a button that will hide the advanced information section. */
+"NativeErrorPage.BadCertDomain.HideAdvancedButton.v149" = "Ocultar opciones avanzadas";
+
+/* On certificate error page, this is a link to learn more about certificate errors. */
+"NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Saber más";
+
+/* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Ir a %@ (Acción riesgosa)";
+
+/* On certificate error page, this is the title warning the user about a potential security issue. */
+"NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Ten cuidado. Algo no parece estar bien.";
+
+/* On certificate error page, this is a link that will show the site’s certificate details. */
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Ver el certificado del sitio";
+
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Recargar";
 
@@ -27,6 +42,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Ten cuidado. Algo no parece estar bien.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Volver (recomendado)";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Intenta conectarte en un dispositivo diferente. Verifica tu módem o router. Desconéctate y vuelve a conectarte al Wi-Fi.";

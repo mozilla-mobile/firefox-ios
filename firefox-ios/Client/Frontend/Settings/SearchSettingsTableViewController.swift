@@ -15,7 +15,7 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-final class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+final class SearchSettingsTableViewController: ThemedTableViewController, LegacyFeatureFlaggable {
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5
@@ -332,21 +332,19 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private func configureCellForPrivateSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            buildSettingWith(
-                prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                titleText: String.localizedStringWithFormat(
-                    .Settings.Search.PrivateSessionSetting
-                ),
-                statusText: String.localizedStringWithFormat(
-                    .Settings.Search.PrivateSessionDescription
-                ),
-                cell: cell,
-                selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-            )
-            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
-        }
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+            defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.PrivateSessionSetting
+            ),
+            statusText: String.localizedStringWithFormat(
+                .Settings.Search.PrivateSessionDescription
+            ),
+            cell: cell,
+            selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+        )
+        cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
     }
 
     // MARK: Pre Search Cells
@@ -488,8 +486,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .preSearch:
             return visiblePreSearchItems.count
         case .searchEnginesSuggestions:
-            return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-            ? SearchSuggestItem.allCases.count : 1
+            return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
             return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
             ? FirefoxSuggestItem.allCases.count : 3

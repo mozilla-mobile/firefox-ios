@@ -159,6 +159,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
 
@@ -419,16 +420,18 @@ class NavigationTest: FeatureFlaggedTestSuite {
     // Smoketest
     func testSSL() {
         let sslScreen = SSLWarningScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
 
-        navigator.openURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
         sslScreen.tapGoBack()
         sslScreen.waitForWarningToDisappear()
 
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL("https://expired.badssl.com/")
+        toolbarScreen.openNewTabFromTabTray()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
@@ -489,6 +492,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
@@ -502,6 +506,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         openContextMenuForArticleLink()
         app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
@@ -509,10 +514,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/25093
-            // Waiting is needed before switching to private tab in order to display the expected domain
-            sleep(3)
-            // workaround end
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
             navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         }
         numTabs = app.otherElements[tabsTray].cells.count
@@ -594,8 +596,13 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let browserScreen = BrowserScreen(app: app)
         waitForTabsButton()
         springBoardScreen.pressHomeButton()
-        springBoardScreen.assertFennecIconExists()
-        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
         springBoardScreen.tapNewTabButton()
         navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
@@ -614,8 +621,13 @@ class NavigationTest: FeatureFlaggedTestSuite {
         let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
         waitForTabsButton()
         app.terminate()
-        springBoardScreen.assertFennecIconExists()
-        springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
         springBoardScreen.tapNewPrivateButton()
         onboardingScreen.handleTermsOfService()
         onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
@@ -633,7 +645,7 @@ class NavigationTest: FeatureFlaggedTestSuite {
         guard #available(iOS 18, *) else {
             throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
         }
-        let springboardScreen = SpringboardScreen(springboard: springboard)
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
         let browserScreen = BrowserScreen(app: app)
         let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
 
@@ -648,12 +660,17 @@ class NavigationTest: FeatureFlaggedTestSuite {
         // Terminate app and go to springboard
         app.terminate()
 
-        springboardScreen.assertFennecIconExists()
-        springboardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
 
         // Verify all context menu options are present
-        springboardScreen.assertAllContextMenuOptionsExist()
-        springboardScreen.tapOpenLastBookmarkButton()
+        springBoardScreen.assertAllContextMenuOptionsExist()
+        springBoardScreen.tapOpenLastBookmarkButton()
 
         // Close onboarding if it appears
         onboardingScreen.handleTermsOfService()

@@ -349,6 +349,9 @@
 /* On the main menu, the accessibility label for the action that will open the page zoom tool. */
 "MainMenu.ToolsSection.AccessibilityLabels.PageZoom.Title.v142" = "بەت چوڭلۇقى";
 
+/* On the main menu, the accessibility label for the action that will show or hide the reader view of the webpage. */
+"MainMenu.ToolsSection.AccessibilityLabels.ReaderView.v150" = "ئوقۇرمەن كۆرۈنۈشى";
+
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "ساقلا";
 
@@ -391,6 +394,12 @@
 /* On the main menu, the title for the action that will show the reader view for the webpage. */
 "MainMenu.ToolsSection.ReaderView.Title.v149" = "ئوقۇرمەن كۆرۈنۈشى";
 
+/* On the main menu, the label for the action that indicates that Reader view is turned off. */
+"MainMenu.ToolsSection.ReaderViewOff.Title.v150" = "تاقاق";
+
+/* On the main menu, the label for the action that indicates that Reader view is turned on. */
+"MainMenu.ToolsSection.ReaderViewOn.Title.v150" = "ئوچۇق";
+
 /* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
 "MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "ساقلا";
 
@@ -411,6 +420,9 @@
 
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "%@ غا تەرجىمە قىلىندى";
+
+/* On the main menu, the badge shown on the Translate Page item when translation is inactive. */
+"MainMenu.ToolsSection.Translation.Off.v151" = "تاقاق";
 
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "بەت تەرجىمە";

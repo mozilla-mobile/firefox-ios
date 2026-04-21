@@ -22,7 +22,7 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
 }
 
 @MainActor
-final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
+final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, LegacyFeatureFlaggable {
     /// Prevents deep link route handling from dismissing the Terms of Use sheet
     override var isDismissible: Bool { false }
 
@@ -102,9 +102,10 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        linkVC.modalTransitionStyle = .coverVertical
-        presentedVC?.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        navController.modalTransitionStyle = .coverVertical
+        presentedVC?.present(navController, animated: true)
     }
 
     func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
