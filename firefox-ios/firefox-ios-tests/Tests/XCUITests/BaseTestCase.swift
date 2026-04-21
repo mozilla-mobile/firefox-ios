@@ -805,6 +805,27 @@ extension XCUIElement {
             .withOffset(CGVector(dx: centerX, dy: centerY + (elementBounds.size.height/2) * distance))
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
     }
+    
+    func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+        guard exists else {
+            while !exists {
+                if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                    XCTFail("Timed out waiting for element \(self) to exist in \(timeout) seconds")
+                    break
+                }
+                usleep(10000)
+            }
+            return
+        }
+    }
+
+    func mozWaitElementHittable(timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
+    }
 }
 
 extension XCUIElementQuery {
