@@ -31,7 +31,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.alignment = .center
     }
 
     private lazy var logoContainerView: UIView = .build()
@@ -91,15 +90,12 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
                 if headerState.showiPadSetup {
                     // On iPad, add button directly to contentView so logo remains centered
                     contentView.addSubview(quickAnswersButton)
-                    stackContainer.alignment = .fill
                 } else {
                     // On iPhone, add spacer view to stretch the logo and the button to leading and trailing
                     stackContainer.addArrangedSubview(UIView())
                     stackContainer.addArrangedSubview(quickAnswersButton)
-                    stackContainer.alignment = .center
                 }
             }
-
             contentView.addSubview(stackContainer)
             logoStackView.pinToSuperview()
 
@@ -130,7 +126,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         // When the button is added to the contentView it is the iPad layout.
         if quickAnswersButton.superview == contentView {
             headerConstraints.append(contentsOf: [
-                quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+                quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor)
             ])
         }
 
@@ -143,7 +140,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
-            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height)
+            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
+            logoContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.firefoxLogoImageSize.height)
         ]
 
         NSLayoutConstraint.activate(logoConstraints)
