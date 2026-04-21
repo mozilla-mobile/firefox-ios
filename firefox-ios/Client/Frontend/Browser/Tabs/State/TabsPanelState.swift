@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import CopyWithUpdates
 
+@CopyWithUpdates
 struct TabsPanelState: ScreenState, Equatable {
     struct ScrollState: Equatable {
         let toIndex: Int
@@ -34,12 +36,7 @@ struct TabsPanelState: ScreenState, Equatable {
             return
         }
 
-        self.init(windowUUID: panelState.windowUUID,
-                  isPrivateMode: panelState.isPrivateMode,
-                  tabs: panelState.tabs,
-                  scrollState: panelState.scrollState,
-                  didTapAddTab: panelState.didTapAddTab,
-                  urlRequest: panelState.urlRequest)
+        self = panelState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID, isPrivateMode: Bool = false) {
@@ -88,7 +85,7 @@ struct TabsPanelState: ScreenState, Equatable {
             TabPanelMiddlewareActionType.didChangeTabPanel:
             guard let tabsModel = action.tabDisplayModel else { return defaultState(from: state) }
 
-            return TabsPanelState(windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                                   isPrivateMode: tabsModel.isPrivateMode,
                                   tabs: tabsModel.tabs)
 
@@ -97,23 +94,18 @@ struct TabsPanelState: ScreenState, Equatable {
                 forState: state,
                 withScrollBehavior: .scrollToSelectedTab(shouldAnimate: false)
             )
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
+            return state.copyWithUpdates(
                                   scrollState: scrollModel)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             guard let tabModel = action.tabDisplayModel else { return defaultState(from: state) }
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
+            return state.copyWithUpdates(
                                   tabs: tabModel.tabs)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
             let scrollModel = createTabScrollBehavior(forState: state, withScrollBehavior: scrollBehavior)
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
+            return state.copyWithUpdates(
                                   scrollState: scrollModel)
 
         default:
@@ -122,9 +114,7 @@ struct TabsPanelState: ScreenState, Equatable {
     }
 
     static func defaultState(from state: TabsPanelState) -> TabsPanelState {
-        return TabsPanelState(windowUUID: state.windowUUID,
-                              isPrivateMode: state.isPrivateMode,
-                              tabs: state.tabs)
+        return state.copyWithUpdates()
     }
 
     static func createTabScrollBehavior(
