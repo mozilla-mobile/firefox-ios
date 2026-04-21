@@ -324,7 +324,11 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // Trigger animation async to be non blocking and allow UI to render
         DispatchQueue.main.async {
-            let tabSnapshot = self.buildTabSnapshot(selectedTab: selectedTab, contentContainer: contentContainer)
+            let tabSnapshot = self.buildTabSnapshot(
+                selectedTab: selectedTab,
+                contentContainer: contentContainer,
+                browserVC: browserVC
+            )
             context.containerView.addSubview(tabSnapshot)
 
             var tabCell: ExperimentTabCell?
@@ -359,16 +363,31 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
         }
     }
 
-    private func buildTabSnapshot(selectedTab: Tab, contentContainer: UIView) -> UIView {
+    private func buildTabSnapshot(
+        selectedTab: Tab,
+        contentContainer: UIView,
+        browserVC: BrowserViewController
+    ) -> UIView {
         let tabSnapshot = UIImageView(image: selectedTab.screenshot)
-        // crop the tab screenshot to the contentContainer frame so the animation
-        // and the initial transform doesn't stutter
+
+        let isIpad = browserVC.traitCollection.userInterfaceIdiom == .pad &&
+                     browserVC.traitCollection.horizontalSizeClass == .regular
+
+        // ScreenshotHelper applies contentContainer bounds only on iPhone portrait.
+        // Otherwise, the stored tab screenshot is based on the webView bounds.
         if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
-            to: CGRect(
+            to: UIWindow.isPortrait && !isIpad
+            ? CGRect(
                 x: contentContainer.frame.origin.x * image.scale,
                 y: contentContainer.frame.origin.y * image.scale,
                 width: contentContainer.frame.width * image.scale,
                 height: contentContainer.frame.height * image.scale
+            )
+            : CGRect(
+                x: 0,
+                y: 0,
+                width: contentContainer.bounds.width * image.scale,
+                height: contentContainer.bounds.height * image.scale
             )
         ) {
             tabSnapshot.image = UIImage(cgImage: croppedImage)
