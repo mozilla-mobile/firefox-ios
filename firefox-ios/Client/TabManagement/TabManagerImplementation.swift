@@ -20,7 +20,10 @@ struct BackupCloseTab {
     var isSelected: Bool
 }
 
-final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggable {
+final class TabManagerImplementation: NSObject,
+                                      TabManager,
+                                      LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                      FeatureFlaggable {
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
@@ -39,7 +42,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     private var tabsInternalCache: (normal: [Tab], private: [Tab])?
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
 
     var count: Int {
