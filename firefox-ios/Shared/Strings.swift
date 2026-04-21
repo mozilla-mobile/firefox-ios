@@ -1027,7 +1027,7 @@ extension String {
                     comment: "Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string.")
             }
         }
-        
+
         public struct HomepageWidget {
             public static let LiveLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.LiveLabel.v151",
@@ -1069,7 +1069,7 @@ extension String {
                 tableName: "WorldCup",
                 value: "FT",
                 comment: "The abbreviation for 'full time' used in the World Cup widget when showing the result of a match.")
-            
+
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.FollowTeamCard.Title.v151",
@@ -1092,7 +1092,7 @@ extension String {
                     value: "Hide World Cup Updates",
                     comment: "Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event.")
             }
-            
+
             public struct TemporaryView {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.TemporaryView.Title.v151",
@@ -1105,7 +1105,7 @@ extension String {
                     value: "We'll keep you updated as the World Cup approaches",
                     comment: "The description for the temporary view in the World Cup widget showing the team that has been previously selected.")
             }
-            
+
             public struct GroupPhase {
                 public static let GroupA = MZLocalizedString(
                     key: "WorldCup.GroupPhase.GroupA.Title.v151",
@@ -1173,7 +1173,7 @@ extension String {
                     value: "Related matches",
                     comment: "The label for the section in the World Cup widget showing the related matches of a team for the group phase.")
             }
-            
+
             public struct RoundPhase {
                 public static let ScrollIndicatorAccessibilityLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151",
@@ -1236,7 +1236,7 @@ extension String {
                     value: "2026 WORLD CUP CHAMPIONS",
                     comment: "The label for the World Cup championship winner in the World Cup widget.")
             }
-            
+
             public struct EliminatedTeamSection {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151",
@@ -1264,7 +1264,6 @@ extension String {
                     value: "Choose Team",
                     comment: "The label for the button in the eliminated section that takes the user back to the team selection screen.")
             }
-            
         }
     }
 }
