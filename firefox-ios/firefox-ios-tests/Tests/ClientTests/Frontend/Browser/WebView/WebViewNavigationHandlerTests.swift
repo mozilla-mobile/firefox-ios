@@ -44,7 +44,7 @@ class WebViewNavigationHandlerTests: XCTestCase {
     @MainActor
     func testFilterNullFrame() {
         let handler: (WKNavigationActionPolicy) -> Void = { policy in
-            XCTAssertEqual(policy, .cancel, "Doesnt allow null target frame")
+            XCTAssertEqual(policy, .cancel, "Doesn't allow null target frame")
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: handler)

@@ -162,6 +162,30 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
+    func assertAutomaticThemeSelected(_ selected: Bool = true) {
+        let button = sel.AUTOMATIC_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        let value = button.value as? String
+        let expected = selected ? "1" : "0"
+        XCTAssertEqual(value, expected, "Expected 'Automatic Theme' button selected=\(selected), but got \(String(describing: value))")
+    }
+
+    func assertLightThemeSelected(_ selected: Bool = true) {
+        let button = sel.LIGHT_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        let value = button.value as? String
+        let expected = selected ? "1" : "0"
+        XCTAssertEqual(value, expected, "Expected 'Light Theme' button selected=\(selected), but got \(String(describing: value))")
+    }
+
+    func assertDarkThemeSelected(_ selected: Bool = true) {
+        let button = sel.DARK_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        let value = button.value as? String
+        let expected = selected ? "1" : "0"
+        XCTAssertEqual(value, expected, "Expected 'Dark Theme' button selected=\(selected), but got \(String(describing: value))")
+    }
+
     func selectDarkTheme() {
         let button = sel.DARK_THEME_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(button)
@@ -170,6 +194,12 @@ final class SettingScreen {
 
     func selectLightTheme() {
         let button = sel.LIGHT_THEME_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(button)
+        button.waitAndTap()
+    }
+
+    func selectAutomaticTheme() {
+        let button = sel.AUTOMATIC_THEME_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(button)
         button.waitAndTap()
     }

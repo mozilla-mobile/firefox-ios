@@ -78,10 +78,10 @@ let package = Package(
             exact: "7.1.1"),
         .package(
             url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
-            exact: "2.0.0"),
+            exact: "2.1.1"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.36.0"),
+            exact: "9.10.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),

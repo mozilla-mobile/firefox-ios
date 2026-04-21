@@ -34,7 +34,7 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 ///
 /// This should be done with the `withExperiment(featureId:)` method.
 /// ```
-/// button.text = Exeriments.shared.withExperiment(featureId: .submitButton) { branchId in
+/// button.text = Experiments.shared.withExperiment(featureId: .submitButton) { branchId in
 ///    switch branchId {
 ///      NimbusExperimentBranch.treatment -> return "Ok then"
 ///      else -> return "OK"

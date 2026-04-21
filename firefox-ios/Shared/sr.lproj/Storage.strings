@@ -1,0 +1,15 @@
+/* The title of the folder that contains mobile bookmarks. */
+"Bookmarks" = "Обележивачи";
+
+/* The name of the folder that contains desktop bookmarks in the menu. */
+"Bookmarks Menu" = "Мени обележивача";
+
+/* The name of the folder that contains desktop bookmarks in the toolbar. */
+"Bookmarks Toolbar" = "Трака са обележивачима";
+
+/* The legacy title of the folder that contains mobile bookmarks. */
+"Mobile Bookmarks" = "Мобилни обележивачи";
+
+/* The name of the folder that contains unsorted desktop bookmarks. */
+"Unsorted Bookmarks" = "Несортирани обележивачи";
+

@@ -70,13 +70,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeat
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) {
-            let longPressRecognizer = UILongPressGestureRecognizer(
-                target: self,
-                action: #selector(TopTabsViewController.newTabLongPressed)
-            )
-            button.addGestureRecognizer(longPressRecognizer)
-        }
+
+        let longPressRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(TopTabsViewController.newTabLongPressed)
+        )
+        button.addGestureRecognizer(longPressRecognizer)
+
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
         button.showsLargeContentViewer = true

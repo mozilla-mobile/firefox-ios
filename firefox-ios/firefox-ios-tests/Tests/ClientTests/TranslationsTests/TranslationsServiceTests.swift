@@ -115,6 +115,22 @@ final class TranslationsServiceTests: XCTestCase {
         )
     }
 
+    func test_shouldOfferTranslation_returnsTrue_whenPageLanguageMatchesFirstPreferredLanguageAndOthersExist() async throws {
+        let subject = createSubject(
+            detectedLanguage: "en",
+            languageDetectorError: nil,
+            modelsAvailable: false
+        )
+
+        setupWebViewForTabManager()
+
+        let result = try await subject.shouldOfferTranslation(for: .XCTestDefaultUUID, using: ["en", "fr"])
+        XCTAssertTrue(
+            result,
+            "Expected shouldOfferTranslation to be true when the page is in a preferred language and others exist."
+        )
+    }
+
     func test_shouldOfferTranslation_returnsTrue_whenFallbackPreferredLanguageHasModel() async throws {
         let subject = createSubject(
             detectedLanguage: "de",

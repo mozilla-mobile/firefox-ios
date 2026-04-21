@@ -11,7 +11,7 @@
 "Alerts.AddToCalendar.Title.v134" = "Přidat do kalendáře?";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
-"Alerts.FeltDeletion.Body.v122" = "Zavře všechny anonymní panely a vymažte historii, soubory cookie a všechna další data webu.";
+"Alerts.FeltDeletion.Body.v122" = "Zavře všechny anonymní panely a vymaže historii, soubory cookie a všechna další data webu.";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
 "Alerts.FeltDeletion.Button.Cancel.v122" = "Zrušit";

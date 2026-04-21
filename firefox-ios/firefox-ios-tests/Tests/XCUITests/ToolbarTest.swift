@@ -171,7 +171,7 @@ class ToolbarTests: FeatureFlaggedTestBase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             if !isPrivate {
                 app.partialSwipeUp(distance: 0.2)
-                mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+                mozWaitForElementToExist(app.otherElements["News"])
             }
             navigator.nowAt(BrowserTab)
             mozWaitElementHittable(element: app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)

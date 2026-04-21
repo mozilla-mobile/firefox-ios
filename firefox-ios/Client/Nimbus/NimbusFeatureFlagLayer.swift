@@ -133,9 +133,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature(from: nimbus)
 
-        case .toolbarRefactor:
-            return checkToolbarRefactorFeature(from: nimbus)
-
         case .unifiedSearch:
             return checkUnifiedSearchFeature(from: nimbus)
 
@@ -150,27 +147,6 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments(from: nimbus)
-
-        case .toolbarOneTapNewTab:
-            return checkToolbarOneTapNewTabFeature(from: nimbus)
-
-        case .toolbarSwipingTabs:
-            return checkToolbarSwipingTabsFeature(from: nimbus)
-
-        case .toolbarTranslucency:
-            return checkToolbarTranslucencyFeature(from: nimbus)
-
-        case .toolbarTranslucencyRefactor:
-            return checkToolbarTranslucencyRefactorFeature(from: nimbus)
-
-        case .toolbarMinimalAddressBar:
-            return checkToolbarMinimalAddressBarFeature(from: nimbus)
-
-        case .toolbarMiddleButtonCustomization:
-            return checkToolbarMiddleButtonCustomizationFeature(from: nimbus)
-
-        case .toolbarNavigationHint:
-            return checkToolbarNavigationHintFeature(from: nimbus)
 
         case .toolbarUpdateHint:
             return checkToolbarUpdateHintFeature(from: nimbus)
@@ -278,49 +254,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         return config.enabled
     }
 
-    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.enabled
-    }
-
     private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.unifiedSearch
-    }
-
-    private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.oneTapNewTab
-    }
-
-    private func checkToolbarSwipingTabsFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.swipingTabs
-    }
-
-    private func checkToolbarTranslucencyFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.translucency
-    }
-
-    private func checkToolbarTranslucencyRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.translucencyRefactor
-    }
-
-    private func checkToolbarMinimalAddressBarFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.minimalAddressBar
-    }
-
-    private func checkToolbarMiddleButtonCustomizationFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.middleButtonCustomization
-    }
-
-    private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.navigationHint
     }
 
     private func checkRelayIntegration(from nimbus: FxNimbus) -> Bool {

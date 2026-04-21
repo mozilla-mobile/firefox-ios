@@ -30,7 +30,7 @@ final class HomepageDiffableDataSource:
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
-        case pocket(TextColor?)
+        case pocket(TextColor?, String?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -53,7 +53,11 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
-        case merino(MerinoStoryConfiguration)
+        /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
+        /// a presentation-context change. Without the category context, diffable treats the same story in
+        /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
+        /// that story's on-screen position as stories are inserted above it.
+        case merino(MerinoStoryConfiguration, String?)
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -67,7 +71,7 @@ final class HomepageDiffableDataSource:
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
-                StoryCellLarge.self,
+                StoryCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -92,6 +96,7 @@ final class HomepageDiffableDataSource:
 
     func updateSnapshot(
         state: HomepageState,
+        selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
         completion: (() -> Void)? = nil
     ) {
@@ -140,9 +145,10 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems([.searchBar], toSection: .searchBar)
         }
 
-        if let stories = getMerinoStories(with: state.merinoState) {
-            snapshot.appendSections([.pocket(textColor)])
-            snapshot.appendItems(stories, toSection: .pocket(textColor))
+        if let stories = getMerinoStories(with: state.merinoState, selectedNewsfeedCategoryID: selectedNewsfeedCategoryID) {
+            let pocketSection = HomeSection.pocket(textColor, selectedNewsfeedCategoryID)
+            snapshot.appendSections([pocketSection])
+            snapshot.appendItems(stories, toSection: pocketSection)
         }
 
         apply(snapshot, animatingDifferences: true, completion: completion)
@@ -202,8 +208,13 @@ final class HomepageDiffableDataSource:
         return state.bookmarks.compactMap { .bookmark($0) }
     }
 
-    private func getMerinoStories(with merinoState: MerinoState) -> [HomepageDiffableDataSource.HomeItem]? {
-        let stories: [HomeItem] = merinoState.visibleStories.map( { .merino($0) })
+    private func getMerinoStories(
+        with merinoState: MerinoState,
+        selectedNewsfeedCategoryID: String?
+    ) -> [HomepageDiffableDataSource.HomeItem]? {
+        let stories: [HomeItem] = merinoState.visibleStories(selectedNewsfeedCategoryID: selectedNewsfeedCategoryID).map {
+            .merino($0, selectedNewsfeedCategoryID)
+        }
         guard merinoState.shouldShowSection, !stories.isEmpty else { return nil }
         return stories
     }

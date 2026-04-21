@@ -5,6 +5,8 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
+    private var settingScreen: SettingScreen!
+
     override func setUp() async throws {
         // Fresh install the app
         // removeApp() does not work on iOS 15 and 16 intermittently
@@ -15,12 +17,13 @@ class DisplaySettingTests: BaseTestCase {
         }
         // The app is correctly installed
         try await super.setUp()
+        settingScreen = SettingScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(DisplaySettings)
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToDisplaySettings()
         waitForElementsToExist(
             [
                 app.navigationBars["Appearance"],
@@ -33,34 +36,26 @@ class DisplaySettingTests: BaseTestCase {
             waitForElementsToExist([app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkModeToggle]])
         }
 
-        let automaticIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].value
-        XCTAssertEqual(automaticIsSelected as? String, "1")
-
-        let lightThemeValue = app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].value
-        XCTAssertEqual(lightThemeValue as? String, "0")
-
-        let darkThemeValue = app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].value
-        XCTAssertEqual(darkThemeValue as? String, "0")
+        settingScreen.assertAutomaticThemeSelected()
+        settingScreen.assertLightThemeSelected(false)
+        settingScreen.assertDarkThemeSelected(false)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3298823
     func testCheckSystemThemeChanges() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(DisplaySettings)
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToDisplaySettings()
 
         // Select Light mode
-        navigator.performAction(Action.SelectLightTheme)
-        let lightIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.lightThemeView].value
-        XCTAssertEqual(lightIsSelected as? String, "1")
+        settingScreen.selectLightTheme()
+        settingScreen.assertLightThemeSelected()
 
         // Select Dark mode
-        navigator.performAction(Action.SelectDarkTheme)
-        let darkIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.darkThemeView].value
-        XCTAssertEqual(darkIsSelected as? String, "1")
+        settingScreen.selectDarkTheme()
+        settingScreen.assertDarkThemeSelected()
 
         // Select Automatic mode
-        navigator.performAction(Action.SelectAutomaticTheme)
-        let automaticIsSelected = app.buttons[AccessibilityIdentifiers.Settings.Appearance.automaticThemeView].value
-        XCTAssertEqual(automaticIsSelected as? String, "1")
+        settingScreen.selectAutomaticTheme()
+        settingScreen.assertAutomaticThemeSelected()
     }
 }

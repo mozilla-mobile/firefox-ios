@@ -123,7 +123,7 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
             // so this call will always try to update an existing bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,
                                                          parentFolderGUID: selectedFolder.guid)
-            // Only update the recent folder pref if it doesn't match whats saved in the pref
+            // Only update the recent folder pref if it doesn't match what's saved in the pref
             if selectedFolder.guid != self?.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
                 switch result {
                 case .success:

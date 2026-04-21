@@ -159,8 +159,6 @@ class Tab: NSObject,
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
     var isFindInPageMode = false
-    // Stores the vertical homepage offset for this tab when reusing the shared HomepageViewController.
-    var homepageScrollOffset: CGFloat?
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -917,7 +915,7 @@ class Tab: NSObject,
                     self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
                 }
 
-                // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
+                // Don't add a source URL if it is a local one. That's happen when reloading the PDF content
                 guard let sourceURL, !isSourceFileURL else { return }
                 self?.temporaryDocumentsSession[url] = sourceURL
                 self?.documentLogger.registerDownloadFinish(url: sourceURL)

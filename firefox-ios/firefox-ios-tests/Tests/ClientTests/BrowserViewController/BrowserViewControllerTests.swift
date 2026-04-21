@@ -611,19 +611,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(enabled: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(swipingTabs: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
+            return HostedSummarizerFeature()
         }
     }
 

@@ -13,15 +13,18 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     var mockThemeManager: MockThemeManager?
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockThrottler: MockThrottler!
+    var homepageTabStateStore: HomepageTabStateStore!
 
     override func setUp() async throws {
         try await super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
+        homepageTabStateStore = HomepageTabStateStore()
         setupStore()
     }
 
     override func tearDown() async throws {
+        homepageTabStateStore = nil
         mockThrottler = nil
         mockNotificationCenter = nil
         mockThemeManager = nil
@@ -335,9 +338,9 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     func test_restoreContentOffset_withStoredOffset_setsCollectionViewOffset() {
         let tabManager = HomepageRestoreContentOffsetTabManager()
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
-        tab.homepageScrollOffset = 180
         tabManager.tabs = [tab]
         tabManager.selectedTab = tab
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
         let subject = createSubject(tabManager: tabManager)
 
         subject.loadViewIfNeeded()
@@ -400,7 +403,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.viewWillDisappear(false)
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_scrollViewDidEndDragging_savesVerticalScrollOffset() {
@@ -424,7 +427,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.scrollViewDidEndDragging(UIScrollView(), willDecelerate: false)
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_scrollViewDidEndDecelerating_savesVerticalScrollOffset() {
@@ -448,7 +451,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
         subject.scrollViewDidEndDecelerating(UIScrollView())
 
-        XCTAssertEqual(tab.homepageScrollOffset, 140)
+        XCTAssertEqual(homepageTabStateStore.state(for: tab.tabUUID).scrollOffsetY, 140)
     }
 
     func test_newState_updatesWallpaperHeightConstraint_withAvailableWallpaperHeight() throws {
@@ -491,6 +494,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             tabManager: tabManager,
+            homepageTabStateStore: homepageTabStateStore,
             overlayManager: mockOverlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: UIView(),
@@ -516,9 +520,7 @@ final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(
-                enabled: isEnabled
-            )
+            return ToolbarRefactorFeature()
         }
     }
 

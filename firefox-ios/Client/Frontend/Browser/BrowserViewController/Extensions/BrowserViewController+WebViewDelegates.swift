@@ -817,7 +817,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 // Open our helper and cancel this response from the webview
                 tab.quickLookPreviewHelper = previewHelper
                 previewHelper.open {
-                    // Once the preview is closed, we can safely release this object and let the tempory document be deleted
+                    // Once the preview is closed, we can safely release this object
+                    // and let the temporary document be deleted
                     tab.quickLookPreviewHelper = nil
                 }
                 return .cancel
@@ -1195,9 +1196,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // Because we are not calling updateInContentHomePanel in updateUIForReaderHomeStateForTab we need to
             // call it here so that we can load the webpage from tapping a link on the homepage
             // TODO: FXIOS-14355 Remove this call in favor of newState update
-            if isToolbarTranslucencyRefactorEnabled {
-                updateInContentHomePanel(tab.url, focusUrlBar: true)
-            }
+            updateInContentHomePanel(tab.url, focusUrlBar: true)
         }
     }
 

@@ -6,6 +6,7 @@ import Foundation
 import MozillaAppServices
 
 final class MockRemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked Sendable {
+    var resetStorageWasCalled = false
     private let collectionNameValue: String
     private let records: [RemoteSettingsRecord]
     private let attachmentsById: [String: Data]
@@ -47,6 +48,6 @@ final class MockRemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked S
     }
 
     func resetStorage() throws {
-        // no-op for tests for now
+        resetStorageWasCalled = true
     }
 }

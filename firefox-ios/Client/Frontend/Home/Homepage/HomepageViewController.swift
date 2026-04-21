@@ -59,6 +59,11 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
+    private var currentHomepageTabState: HomepageTabState {
+        guard let activeTabUUID else { return HomepageTabState() }
+        return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -69,6 +74,7 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Private constants
     private let tabManager: TabManager
+    private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
@@ -83,6 +89,7 @@ final class HomepageViewController: UIViewController,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          tabManager: TabManager,
+         homepageTabStateStore: HomepageTabStateStoring = HomepageTabStateStore(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -94,6 +101,7 @@ final class HomepageViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.tabManager = tabManager
+        self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -164,6 +172,8 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
 
         activeTabUUID = tabManager.selectedTab?.tabUUID
+        refreshHomepageDataSourceSnapshot()
+
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -247,7 +257,7 @@ final class HomepageViewController: UIViewController,
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
         guard let activeTabUUID,
-              let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
+              let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
             scrollToTop()
             return
@@ -283,8 +293,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func saveVerticalScrollOffset() {
-        guard let activeTabUUID, let tab = tabManager.getTabForUUID(uuid: activeTabUUID) else { return }
-        tab.homepageScrollOffset = collectionView?.contentOffset.y
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.scrollOffsetY = collectionView?.contentOffset.y
+        }
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -377,6 +389,7 @@ final class HomepageViewController: UIViewController,
 
             dataSource?.updateSnapshot(
                 state: state,
+                selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
             ) { [weak self] in
                 // Force the collection view to finish applying the latest layout before re-syncing the
@@ -591,7 +604,7 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
             }
-        case .merino(let story):
+        case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -648,10 +661,10 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         let position = indexPath.item + 1
-        let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
+        let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear, nil)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
+        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
             cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
@@ -714,8 +727,8 @@ final class HomepageViewController: UIViewController,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
             categories: homepageState.merinoState.availableCategories,
-            selectedCategoryID: homepageState.merinoState.selectedCategoryID,
-            onSelection: dispatchCategorySelectedAction
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -757,7 +770,7 @@ final class HomepageViewController: UIViewController,
                 theme: currentTheme
             )
             return sectionLabelCell
-        case .pocket(let textColor):
+        case .pocket(let textColor, _):
             sectionLabelCell.configure(
                 sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
                 textColor: textColor,
@@ -1043,13 +1056,19 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchCategorySelectedAction(selectedCategoryID: String?) {
-        store.dispatch(
-            MerinoAction(
-                selectedCategoryID: selectedCategoryID,
-                windowUUID: windowUUID,
-                actionType: MerinoActionType.categorySelected
-            )
+    private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
+        }
+        refreshHomepageDataSourceSnapshot()
+    }
+
+    private func refreshHomepageDataSourceSnapshot() {
+        dataSource?.updateSnapshot(
+            state: homepageState,
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
         )
     }
 
@@ -1063,7 +1082,7 @@ final class HomepageViewController: UIViewController,
             return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
         case .bookmark(let state):
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
-        case .merino(let state):
+        case .merino(let state, _):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
@@ -1116,7 +1135,7 @@ final class HomepageViewController: UIViewController,
                 visitType: .bookmark
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-        case .merino(let story):
+        case .merino(let story, _):
             let destination = NavigationDestination(
                 .link,
                 url: story.url,

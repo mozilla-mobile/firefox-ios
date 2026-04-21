@@ -6,7 +6,6 @@ import Common
 import Shared
 
 struct AIControlsSettingsView: View, ThemeApplicable {
-    let windowUUID: WindowUUID
     @ObservedObject var aiControlsModel: AIControlsModel
 
     // MARK: - Theming
@@ -34,13 +33,15 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textSecondary.color)
                     .padding(.leading)
-                Link(
-                    aiControlsModel.blockAIEnhancementsLinkInfo.label,
-                    destination: aiControlsModel.blockAIEnhancementsLinkInfo.url
-                )
+                if let url = aiControlsModel.headerLinkInfo.url {
+                    Link(
+                        aiControlsModel.blockAIEnhancementsLinkInfo.label,
+                        destination: url
+                    )
                     .tint(themeColors.actionPrimary.color)
                     .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                     .padding(.leading, UX.padding)
+                }
                 Spacer(minLength: UX.cardSpacing)
                 if aiControlsModel.killSwitchIsOn {
                     warningCard
@@ -70,8 +71,8 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             aiControlsModel.togglePageSummariesFeature(to: newValue)
         })
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            guard let uuid = notification.windowUUID, uuid == aiControlsModel.windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
         }
     }
 
@@ -89,15 +90,17 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     Text(verbatim: .Settings.AIControls.HeaderCard.Message)
                         .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundStyle(themeColors.textSecondary.color)
-                    Link(aiControlsModel.headerLinkInfo.label, destination: aiControlsModel.headerLinkInfo.url)
-                        .tint(themeColors.actionPrimary.color)
-                        .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    if let url = aiControlsModel.headerLinkInfo.url {
+                        Link(aiControlsModel.headerLinkInfo.label, destination: url)
+                            .tint(themeColors.actionPrimary.color)
+                            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    }
                 }
                 Spacer()
             }
             .padding(.trailing, UX.foxImageOffset)
         } overlay: {
-            Image(ImageIdentifiers.foxWithStars)
+            Image(decorative: ImageIdentifiers.foxWithStars)
         }
     }
 
@@ -155,6 +158,8 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                             aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
                         }
                     }.tint(themeColors.actionPrimary.color)
+                }
+                if aiControlsModel.translationsVisible && aiControlsModel.pageSummariesVisible {
                     Divider().foregroundStyle(themeColors.textSecondary.color)
                 }
                 if aiControlsModel.pageSummariesVisible {
@@ -215,7 +220,6 @@ private struct RoundedCard<Content: View>: View {
 
 #Preview {
     AIControlsSettingsView(
-        windowUUID: WindowUUID.DefaultUITestingUUID,
-        aiControlsModel: AIControlsModel(prefs: MockProfilePrefs())
+        aiControlsModel: AIControlsModel(prefs: MockProfilePrefs(), windowUUID: WindowUUID.DefaultUITestingUUID)
     )
 }

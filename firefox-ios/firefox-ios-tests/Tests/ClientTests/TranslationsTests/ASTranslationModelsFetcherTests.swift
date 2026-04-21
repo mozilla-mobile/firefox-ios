@@ -240,6 +240,16 @@ final class ASTranslationModelsFetcherTests: XCTestCase {
         XCTAssertEqual(versionSet.first, "2.0", "Expected version to be best highest version below max")
     }
 
+    func testResetStorage() async {
+        let settingsClient = MockRemoteSettingsClient(
+            records: [],
+            attachmentsById: [:]
+        )
+        let subject = createSubject(modelsClient: settingsClient)
+        await subject.resetStorage()
+        XCTAssertTrue(settingsClient.resetStorageWasCalled)
+    }
+
     private func createSubject(
         records: [RemoteSettingsRecord] = [],
         attachmentsById: [String: Data] = [:],

@@ -32,7 +32,7 @@
 "NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Buďte opatrní. Něco není v pořádku.";
 
 /* On certificate error page, this is a link that will show the site’s certificate details. */
-"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Zobrazit certifikát stránky";
+"NativeErrorPage.BadCertDomain.ViewCertificateLink.v149" = "Zobrazit certifikát serveru";
 
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Znovu načíst";

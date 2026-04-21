@@ -47,7 +47,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
             FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new apperance menu")
+                statusText: format(string: "Toggle to show the new appearance menu")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -196,20 +196,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 with: .tabTrayiPadUIExperiments,
                 titleText: format(string: "Tab Tray iPad UI Experiment"),
                 statusText: format(string: "Toggle to use the new tab tray UI on iPad")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .toolbarRefactor,
-                titleText: format(string: "Toolbar Redesign"),
-                statusText: format(string: "Toggle to enable the toolbar redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .toolbarTranslucencyRefactor,
-                titleText: format(string: "Toolbar Translucency Refactor"),
-                statusText: format(string: "Toggle to enable the toolbar translucency refactor")
             ) { [weak self] _ in
                 self?.reloadView()
             },
