@@ -14,6 +14,9 @@ private let MozErrorDownloadsNotEnabled = 100
 private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
 private let ErrorPageBadCertParam = "badcert"
+private let ErrorPageCertErrorParam = "certerror"
+private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
+private let CFStreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
@@ -35,6 +38,28 @@ private let LegacyCertErrorCodes = [
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
 ]
+
+private let LegacyDefaultCertError = "SEC_ERROR_UNKNOWN_ISSUER"
+
+private func legacyCertErrorString(
+    forNetworkErrorCode networkErrorCode: Int,
+    streamErrorCode: Int?
+) -> String {
+    if let streamErrorCode, let certError = LegacyCertErrorCodes[streamErrorCode] {
+        return certError
+    }
+
+    switch networkErrorCode {
+    case NSURLErrorServerCertificateHasBadDate:
+        return "SEC_ERROR_EXPIRED_CERTIFICATE"
+    case NSURLErrorServerCertificateUntrusted,
+         NSURLErrorServerCertificateHasUnknownRoot,
+         NSURLErrorServerCertificateNotYetValid:
+        return LegacyDefaultCertError
+    default:
+        return LegacyDefaultCertError
+    }
+}
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
@@ -251,13 +276,8 @@ final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
             }
             errDomain = ""
         } else if LegacyCertErrors.contains(errCode) {
-            guard let url = request.url,
-                  let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                  let certError = comp.valueForQuery("certerror")
-            else {
-                assertionFailure("Error unwrapping the cert error")
-                return nil
-            }
+            let certError = components.valueForQuery(ErrorPageCertErrorParam)
+                ?? legacyCertErrorString(forNetworkErrorCode: errCode, streamErrorCode: nil)
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
             actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
@@ -323,16 +343,17 @@ class ErrorPageHelper {
         // user to go back or continue. The certificate itself is encoded and added as
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
-        if LegacyCertErrors.contains(error.code),
-            let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
-            let cert = certChain.first,
-            let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
-            let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int {
-            let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
-            queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
+        if LegacyCertErrors.contains(error.code) {
+            if let certChain = error.userInfo[PeerCertificateChainKey] as? [SecCertificate],
+               let cert = certChain.first {
+                let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
+                queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
+            }
 
-            let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
-            queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))
+            let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
+            let certErrorCode = underlyingError?.userInfo[CFStreamErrorCodeKey] as? Int
+            let certError = legacyCertErrorString(forNetworkErrorCode: error.code, streamErrorCode: certErrorCode)
+            queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }
 
         components.queryItems = queryItems
