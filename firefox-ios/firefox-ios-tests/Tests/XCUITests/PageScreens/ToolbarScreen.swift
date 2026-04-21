@@ -15,12 +15,14 @@ final class ToolbarScreen {
     }
 
     private var tabsButton: XCUIElement { sel.TABS_BUTTON.element(in: app) }
-    private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
-    private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
+    private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app) }
+    private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
     private var tabToolbarMenuButton: XCUIElement { sel.TABTOOLBAR_MENUBUTTON.element(in: app) }
     private var shareButton: XCUIElement { sel.SHARE_BUTTON.element(in: app) }
     private var translateButton: XCUIElement { sel.TRANSLATE_BUTTON.element(in: app) }
-    private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
+    private var translateLoadingButton: XCUIElement {
+        sel.TRANSLATE_LOADING_BUTTON.element(in: app)
+    }
     private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
 
     func assertSettingsButtonExists(timeout: TimeInterval = TIMEOUT) {
@@ -46,7 +48,8 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
 
         guard let tabsOpen = tabsButton.value as? String, tabsOpen == "\(expectedCount)" else {
-            XCTFail("Tabs button counter is not showing the correct count. Expected: \(expectedCount)")
+            XCTFail(
+                "Tabs button counter is not showing the correct count. Expected: \(expectedCount)")
             return
         }
     }
@@ -69,7 +72,8 @@ final class ToolbarScreen {
     func assertTabsButtonValue(expectedCount: String) {
         BaseTestCase().mozWaitForElementToExist(tabsButton)
         let tabsButtonValue = tabsButton.value as? String
-        XCTAssertEqual(expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
+        XCTAssertEqual(
+            expectedCount, tabsButtonValue, "Expected \(expectedCount) open tabs after switching")
     }
 
     func pressBackButton(duration: TimeInterval) {
@@ -177,5 +181,13 @@ final class ToolbarScreen {
         case .active:
             BaseTestCase().mozWaitForElementToNotExist(translateActiveButton)
         }
+    }
+
+    func switchToPrivateBrowsing() {
+        tabsButton.waitAndTap()
+        let base = BaseTestCase()
+        let privateModeButton = app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)0"]
+        base.mozWaitForElementToExist(privateModeButton)
+        privateModeButton.waitAndTap()
     }
 }

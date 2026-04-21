@@ -5,6 +5,9 @@
 import XCTest
 
 final class CookiePersistenceTests: BaseTestCase {
+    private var browserScreen: BrowserScreen!
+    private var toolbarScreen: ToolbarScreen!
+
     let cookieSiteURL = "http://localhost:\(serverPort)/test-fixture/test-cookie-store.html"
     let topSitesTitle = ["Facebook", "YouTube", "Wikipedia"]
 
@@ -17,6 +20,8 @@ final class CookiePersistenceTests: BaseTestCase {
 
         // The app is correctly installed
         try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
     }
 
     func testCookiePersistenceBasic() {
@@ -50,11 +55,9 @@ final class CookiePersistenceTests: BaseTestCase {
 
         // Open a few tabs
         topSitesTitle.forEach { title in
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(NewTabScreen)
+            toolbarScreen.openNewTabFromTabTray()
             app.collectionViews.links.staticTexts[title].waitAndTap()
             waitUntilPageLoad()
-            navigator.nowAt(BrowserTab)
         }
 
         // Relaunch app
@@ -67,11 +70,8 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceOpenRegularTabAfterPrivateTab() {
         // Go to private tab
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        if userState.isPrivate {
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
-            navigator.nowAt(BrowserTab)
-        }
+        toolbarScreen.switchToPrivateBrowsing()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
 
         // Open URL for Cookie login
         openCookieSite()
@@ -110,13 +110,8 @@ final class CookiePersistenceTests: BaseTestCase {
     }
 
     private func openCookieSite() {
-        navigator.openURL(path(forTestPage: "test-cookie-store.html"))
+        browserScreen.navigateToURL(cookieSiteURL)
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        let webview = app.webViews.firstMatch
-        mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
-        mozWaitForElementToExist(webview.textFields.firstMatch)
-        mozWaitForElementToExist(webview.buttons["Login"])
-        mozWaitForElementToExist(webview.buttons["Logout"])
+        browserScreen.assertCookiePageLoaded()
     }
 }

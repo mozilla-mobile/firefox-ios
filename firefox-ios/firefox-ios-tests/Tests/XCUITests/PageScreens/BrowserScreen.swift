@@ -382,4 +382,12 @@ final class BrowserScreen {
         let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
         BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
     }
+
+    func assertCookiePageLoaded() {
+        let webview = app.webViews.firstMatch
+        BaseTestCase().mozWaitForElementToExist(webview.staticTexts["Cookie Test Page"])
+        BaseTestCase().mozWaitForElementToExist(webview.textFields.firstMatch)
+        BaseTestCase().mozWaitForElementToExist(webview.buttons["Login"])
+        BaseTestCase().mozWaitForElementToExist(webview.buttons["Logout"])
+    }
  }
