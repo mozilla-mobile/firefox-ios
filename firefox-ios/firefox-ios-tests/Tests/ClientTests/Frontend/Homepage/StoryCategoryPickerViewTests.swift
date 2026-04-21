@@ -60,9 +60,9 @@ final class StoryCategoryPickerViewTests: XCTestCase {
         let view = createSubject()
         var selectedNewsfeedCategoryID: String? = "technology"
 
-        view.configure(categories: testCategories, selectedNewsfeedCategoryID: "technology") { newSelection in
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: "technology", onSelection: { newSelection in
             selectedNewsfeedCategoryID = newSelection
-        }
+        })
 
         button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory, in: view)?
             .sendActions(for: .touchUpInside)
@@ -74,9 +74,9 @@ final class StoryCategoryPickerViewTests: XCTestCase {
         let view = createSubject()
         var selectedNewsfeedCategoryID: String?
 
-        view.configure(categories: testCategories, selectedNewsfeedCategoryID: nil) { newSelection in
+        view.configure(categories: testCategories, selectedNewsfeedCategoryID: nil, onSelection: { newSelection in
             selectedNewsfeedCategoryID = newSelection
-        }
+        })
 
         button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".science", in: view)?
             .sendActions(for: .touchUpInside)

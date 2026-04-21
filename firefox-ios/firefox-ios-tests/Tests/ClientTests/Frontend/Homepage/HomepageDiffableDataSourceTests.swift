@@ -84,11 +84,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan, nil)), 20)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
             .spacer,
-            .pocket(.systemCyan, nil)
+            .pocket(.systemCyan)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -182,11 +182,11 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil, nil)), 20)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
             .spacer,
-            .pocket(nil, nil)
+            .pocket(nil)
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
@@ -207,7 +207,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
-        let items = snapshot.itemIdentifiers(inSection: .pocket(nil, nil))
+        let items = snapshot.itemIdentifiers(inSection: .pocket(nil))
 
         XCTAssertEqual(items.count, 3)
         XCTAssertEqual(merinoTitles(from: items), ["science 1", "science 2", "technology 1"])
@@ -233,7 +233,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        let items = snapshot.itemIdentifiers(inSection: .pocket(nil, "technology"))
+        let items = snapshot.itemIdentifiers(inSection: .pocket(nil))
 
         XCTAssertEqual(items.count, 1)
         XCTAssertEqual(merinoTitles(from: items), ["technology 1"])
@@ -260,7 +260,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
 
-        XCTAssertFalse(snapshot.sectionIdentifiers.contains(.pocket(nil, "missing-category")))
+        XCTAssertFalse(snapshot.sectionIdentifiers.contains(.pocket(nil)))
     }
 
     @MainActor

@@ -80,6 +80,8 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         transitionEnabled: Bool = true,
         categories: [MerinoCategoryConfiguration] = [],
         selectedNewsfeedCategoryID: String? = nil,
+        newsfeedCategoryPickerOffsetX: CGFloat? = nil,
+        onCategoryPickerScroll: ((CGFloat) -> Void)? = nil,
         onSelection: (@MainActor @Sendable (String?) -> Void)? = nil
     ) {
         self.transitionEnabled = transitionEnabled
@@ -94,6 +96,8 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         storyCategoryPickerView.configure(
             categories: categories,
             selectedNewsfeedCategoryID: selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: newsfeedCategoryPickerOffsetX,
+            onScroll: onCategoryPickerScroll,
             onSelection: onSelection
         )
         storyCategoryPickerView.applyTheme(theme: theme)
@@ -110,6 +114,16 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         guard self.transitionEnabled != transitionEnabled else { return }
         self.transitionEnabled = transitionEnabled
         updateViewState()
+    }
+
+    func updatePickerState(
+        selectedNewsfeedCategoryID: String?,
+        newsfeedCategoryPickerOffsetX: CGFloat?
+    ) {
+        storyCategoryPickerView.applyNewsfeedPickerState(
+            selectedNewsfeedCategoryID: selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: newsfeedCategoryPickerOffsetX
+        )
     }
 
     func applyTheme(theme: Theme) {
