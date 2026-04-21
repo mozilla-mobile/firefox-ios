@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct AppIconSelectionView: View, ThemeApplicable, LegacyFeatureFlaggable {
+struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
     private let windowUUID: WindowUUID
     private let logger: Logger
     private let telemetry: AppIconSelectionTelemetry
@@ -36,7 +36,7 @@ struct AppIconSelectionView: View, ThemeApplicable, LegacyFeatureFlaggable {
     }
 
     var availableAppIcons: [AppIcon] {
-        guard featureFlags.isFeatureEnabled(.appIconSelection, checking: .buildOnly)
+        guard featureFlagsProvider.isEnabled(.appIconSelection)
         else {
             return AppIcon.allCases.filter({ $0.isFunIcon == false })
         }
