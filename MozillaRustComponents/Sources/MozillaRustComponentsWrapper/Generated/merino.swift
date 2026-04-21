@@ -693,9 +693,10 @@ public protocol SuggestClientProtocol: AnyObject, Sendable {
     /**
      * Fetches suggestions from the merino suggest endpoint for the given query.
      *
-     * Returns the raw JSON response body as a string.
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
      */
-    func getSuggestions(query: String, options: SuggestOptions) throws  -> String
+    func getSuggestions(query: String, options: SuggestOptions) throws  -> String?
     
 }
 /**
@@ -771,10 +772,11 @@ public convenience init(config: SuggestConfig)throws  {
     /**
      * Fetches suggestions from the merino suggest endpoint for the given query.
      *
-     * Returns the raw JSON response body as a string.
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
      */
-open func getSuggestions(query: String, options: SuggestOptions)throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
+open func getSuggestions(query: String, options: SuggestOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
     uniffi_merino_fn_method_suggestclient_get_suggestions(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(query),
@@ -2858,7 +2860,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 52246) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_method_suggestclient_get_suggestions() != 12398) {
+    if (uniffi_merino_checksum_method_suggestclient_get_suggestions() != 55159) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 18166) {
