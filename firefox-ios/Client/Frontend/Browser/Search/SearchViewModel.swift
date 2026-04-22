@@ -18,7 +18,10 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 @MainActor
-class SearchViewModel: LegacyFeatureFlaggable, LoaderListener {
+class SearchViewModel: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                       FeatureFlaggable,
+                       UserFeaturePreferenceProvider,
+                       LoaderListener {
     private var profile: Profile
     private var tabManager: TabManager
     private var suggestClient: SearchSuggestClient?
@@ -301,7 +304,7 @@ class SearchViewModel: LegacyFeatureFlaggable, LoaderListener {
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
 
-        guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
                 && (includeNonSponsored || includeSponsored) else {
             if !firefoxSuggestions.isEmpty {
                 firefoxSuggestions = []
