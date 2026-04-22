@@ -518,175 +518,6 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 
 
-public protocol RemoteSettingsProtocol: AnyObject, Sendable {
-    
-    /**
-     * Download an attachment with the provided id to the provided path.
-     */
-    func downloadAttachmentToPath(attachmentId: String, path: String) throws 
-    
-    /**
-     * Fetch all records for the configuration this client was initialized with.
-     */
-    func getRecords() throws  -> RemoteSettingsResponse
-    
-    /**
-     * Fetch all records added to the server since the provided timestamp,
-     * using the configuration this client was initialized with.
-     */
-    func getRecordsSince(timestamp: UInt64) throws  -> RemoteSettingsResponse
-    
-}
-open class RemoteSettings: RemoteSettingsProtocol, @unchecked Sendable {
-    fileprivate let handle: UInt64
-
-    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public struct NoHandle {
-        public init() {}
-    }
-
-    // TODO: We'd like this to be `private` but for Swifty reasons,
-    // we can't implement `FfiConverter` without making this `required` and we can't
-    // make it `required` without making it `public`.
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    required public init(unsafeFromHandle handle: UInt64) {
-        self.handle = handle
-    }
-
-    // This constructor can be used to instantiate a fake object.
-    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
-    //
-    // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public init(noHandle: NoHandle) {
-        self.handle = 0
-    }
-
-#if swift(>=5.8)
-    @_documentation(visibility: private)
-#endif
-    public func uniffiCloneHandle() -> UInt64 {
-        return try! rustCall { uniffi_remote_settings_fn_clone_remotesettings(self.handle, $0) }
-    }
-    /**
-     * Construct a new Remote Settings client with the given configuration.
-     */
-public convenience init(remoteSettingsConfig: RemoteSettingsConfig)throws  {
-    let handle =
-        try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
-    uniffi_remote_settings_fn_constructor_remotesettings_new(
-        FfiConverterTypeRemoteSettingsConfig_lower(remoteSettingsConfig),$0
-    )
-}
-    self.init(unsafeFromHandle: handle)
-}
-
-    deinit {
-        if handle == 0 {
-            // Mock objects have handle=0 don't try to free them
-            return
-        }
-
-        try! rustCall { uniffi_remote_settings_fn_free_remotesettings(handle, $0) }
-    }
-
-    
-
-    
-    /**
-     * Download an attachment with the provided id to the provided path.
-     */
-open func downloadAttachmentToPath(attachmentId: String, path: String)throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
-    uniffi_remote_settings_fn_method_remotesettings_download_attachment_to_path(
-            self.uniffiCloneHandle(),
-        FfiConverterString.lower(attachmentId),
-        FfiConverterString.lower(path),$0
-    )
-}
-}
-    
-    /**
-     * Fetch all records for the configuration this client was initialized with.
-     */
-open func getRecords()throws  -> RemoteSettingsResponse  {
-    return try  FfiConverterTypeRemoteSettingsResponse_lift(try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
-    uniffi_remote_settings_fn_method_remotesettings_get_records(
-            self.uniffiCloneHandle(),$0
-    )
-})
-}
-    
-    /**
-     * Fetch all records added to the server since the provided timestamp,
-     * using the configuration this client was initialized with.
-     */
-open func getRecordsSince(timestamp: UInt64)throws  -> RemoteSettingsResponse  {
-    return try  FfiConverterTypeRemoteSettingsResponse_lift(try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
-    uniffi_remote_settings_fn_method_remotesettings_get_records_since(
-            self.uniffiCloneHandle(),
-        FfiConverterUInt64.lower(timestamp),$0
-    )
-})
-}
-    
-
-    
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeRemoteSettings: FfiConverter {
-    typealias FfiType = UInt64
-    typealias SwiftType = RemoteSettings
-
-    public static func lift(_ handle: UInt64) throws -> RemoteSettings {
-        return RemoteSettings(unsafeFromHandle: handle)
-    }
-
-    public static func lower(_ value: RemoteSettings) -> UInt64 {
-        return value.uniffiCloneHandle()
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettings {
-        let handle: UInt64 = try readInt(&buf)
-        return try lift(handle)
-    }
-
-    public static func write(_ value: RemoteSettings, into buf: inout [UInt8]) {
-        writeInt(&buf, lower(value))
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettings_lift(_ handle: UInt64) throws -> RemoteSettings {
-    return try FfiConverterTypeRemoteSettings.lift(handle)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettings_lower(_ value: RemoteSettings) -> UInt64 {
-    return FfiConverterTypeRemoteSettings.lower(value)
-}
-
-
-
-
-
-
 /**
  * Client for a single Remote Settings collection
  *
@@ -711,6 +542,11 @@ public protocol RemoteSettingsClientProtocol: AnyObject, Sendable {
      * attachment data.
      */
     func getAttachment(record: RemoteSettingsRecord) throws  -> Data
+    
+    /**
+     * Returns the last_modified value for the collection as an unsigned int64.
+     */
+    func getLastModifiedTimestamp()  -> UInt64?
     
     /**
      * Get the current set of records.
@@ -835,6 +671,17 @@ open func getAttachment(record: RemoteSettingsRecord)throws  -> Data  {
     uniffi_remote_settings_fn_method_remotesettingsclient_get_attachment(
             self.uniffiCloneHandle(),
         FfiConverterTypeRemoteSettingsRecord_lower(record),$0
+    )
+})
+}
+    
+    /**
+     * Returns the last_modified value for the collection as an unsigned int64.
+     */
+open func getLastModifiedTimestamp() -> UInt64?  {
+    return try!  FfiConverterOptionUInt64.lift(try! rustCall() {
+    uniffi_remote_settings_fn_method_remotesettingsclient_get_last_modified_timestamp(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -989,7 +836,7 @@ public protocol RemoteSettingsServiceProtocol: AnyObject, Sendable {
      * Only intended for QA/debugging.  Swapping the remote settings server in the middle of
      * execution can cause weird effects.
      */
-    func updateConfig(config: RemoteSettingsConfig2) throws 
+    func updateConfig(config: RemoteSettingsConfig) throws 
     
 }
 /**
@@ -1049,12 +896,12 @@ open class RemoteSettingsService: RemoteSettingsServiceProtocol, @unchecked Send
      * directory does not exist, it will be created when the storage is first used. Only the
      * directory and the SQLite files will be created, any parent directories must already exist.
      */
-public convenience init(storageDir: String, config: RemoteSettingsConfig2) {
+public convenience init(storageDir: String, config: RemoteSettingsConfig) {
     let handle =
         try! rustCall() {
     uniffi_remote_settings_fn_constructor_remotesettingsservice_new(
         FfiConverterString.lower(storageDir),
-        FfiConverterTypeRemoteSettingsConfig2_lower(config),$0
+        FfiConverterTypeRemoteSettingsConfig_lower(config),$0
     )
 }
     self.init(unsafeFromHandle: handle)
@@ -1117,10 +964,10 @@ open func sync()throws  -> [String]  {
      * Only intended for QA/debugging.  Swapping the remote settings server in the middle of
      * execution can cause weird effects.
      */
-open func updateConfig(config: RemoteSettingsConfig2)throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
+open func updateConfig(config: RemoteSettingsConfig)throws   {try rustCallWithError(FfiConverterTypeRemoteSettingsError_lift) {
     uniffi_remote_settings_fn_method_remotesettingsservice_update_config(
             self.uniffiCloneHandle(),
-        FfiConverterTypeRemoteSettingsConfig2_lower(config),$0
+        FfiConverterTypeRemoteSettingsConfig_lower(config),$0
     )
 }
 }
@@ -1244,83 +1091,9 @@ public func FfiConverterTypeAttachment_lower(_ value: Attachment) -> RustBuffer 
 
 
 /**
- * Custom configuration for the client.
- * Currently includes the following:
- * - `server`: The Remote Settings server to use. If not specified, defaults to the production server (`RemoteSettingsServer::Prod`).
- * - `server_url`: An optional custom Remote Settings server URL. Deprecated; please use `server` instead.
- * - `bucket_name`: The optional name of the bucket containing the collection on the server. If not specified, the standard bucket will be used.
- * - `collection_name`: The name of the collection for the settings server.
+ * Remote settings configuration
  */
 public struct RemoteSettingsConfig: Equatable, Hashable {
-    public var collectionName: String
-    public var bucketName: String?
-    public var serverUrl: String?
-    public var server: RemoteSettingsServer?
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(collectionName: String, bucketName: String? = nil, serverUrl: String? = nil, server: RemoteSettingsServer? = nil) {
-        self.collectionName = collectionName
-        self.bucketName = bucketName
-        self.serverUrl = serverUrl
-        self.server = server
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension RemoteSettingsConfig: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeRemoteSettingsConfig: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettingsConfig {
-        return
-            try RemoteSettingsConfig(
-                collectionName: FfiConverterString.read(from: &buf), 
-                bucketName: FfiConverterOptionString.read(from: &buf), 
-                serverUrl: FfiConverterOptionString.read(from: &buf), 
-                server: FfiConverterOptionTypeRemoteSettingsServer.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: RemoteSettingsConfig, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.collectionName, into: &buf)
-        FfiConverterOptionString.write(value.bucketName, into: &buf)
-        FfiConverterOptionString.write(value.serverUrl, into: &buf)
-        FfiConverterOptionTypeRemoteSettingsServer.write(value.server, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettingsConfig_lift(_ buf: RustBuffer) throws -> RemoteSettingsConfig {
-    return try FfiConverterTypeRemoteSettingsConfig.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettingsConfig_lower(_ value: RemoteSettingsConfig) -> RustBuffer {
-    return FfiConverterTypeRemoteSettingsConfig.lower(value)
-}
-
-
-/**
- * Remote settings configuration
- *
- * This is the version used in the new API, hence the `2` at the end.  The plan is to move
- * consumers to the new API, remove the RemoteSettingsConfig struct, then remove the `2` from this
- * name.
- */
-public struct RemoteSettingsConfig2: Equatable, Hashable {
     /**
      * The Remote Settings server to use. Defaults to [RemoteSettingsServer::Prod],
      */
@@ -1357,23 +1130,23 @@ public struct RemoteSettingsConfig2: Equatable, Hashable {
 }
 
 #if compiler(>=6)
-extension RemoteSettingsConfig2: Sendable {}
+extension RemoteSettingsConfig: Sendable {}
 #endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public struct FfiConverterTypeRemoteSettingsConfig2: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettingsConfig2 {
+public struct FfiConverterTypeRemoteSettingsConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettingsConfig {
         return
-            try RemoteSettingsConfig2(
+            try RemoteSettingsConfig(
                 server: FfiConverterOptionTypeRemoteSettingsServer.read(from: &buf), 
                 bucketName: FfiConverterOptionString.read(from: &buf), 
                 appContext: FfiConverterOptionTypeRemoteSettingsContext.read(from: &buf)
         )
     }
 
-    public static func write(_ value: RemoteSettingsConfig2, into buf: inout [UInt8]) {
+    public static func write(_ value: RemoteSettingsConfig, into buf: inout [UInt8]) {
         FfiConverterOptionTypeRemoteSettingsServer.write(value.server, into: &buf)
         FfiConverterOptionString.write(value.bucketName, into: &buf)
         FfiConverterOptionTypeRemoteSettingsContext.write(value.appContext, into: &buf)
@@ -1384,15 +1157,15 @@ public struct FfiConverterTypeRemoteSettingsConfig2: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRemoteSettingsConfig2_lift(_ buf: RustBuffer) throws -> RemoteSettingsConfig2 {
-    return try FfiConverterTypeRemoteSettingsConfig2.lift(buf)
+public func FfiConverterTypeRemoteSettingsConfig_lift(_ buf: RustBuffer) throws -> RemoteSettingsConfig {
+    return try FfiConverterTypeRemoteSettingsConfig.lift(buf)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRemoteSettingsConfig2_lower(_ value: RemoteSettingsConfig2) -> RustBuffer {
-    return FfiConverterTypeRemoteSettingsConfig2.lower(value)
+public func FfiConverterTypeRemoteSettingsConfig_lower(_ value: RemoteSettingsConfig) -> RustBuffer {
+    return FfiConverterTypeRemoteSettingsConfig.lower(value)
 }
 
 
@@ -1637,64 +1410,6 @@ public func FfiConverterTypeRemoteSettingsRecord_lower(_ value: RemoteSettingsRe
 
 
 /**
- * Data structure representing the top-level response from the Remote Settings.
- * [last_modified] will be extracted from the etag header of the response.
- */
-public struct RemoteSettingsResponse: Equatable, Hashable {
-    public var records: [RemoteSettingsRecord]
-    public var lastModified: UInt64
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(records: [RemoteSettingsRecord], lastModified: UInt64) {
-        self.records = records
-        self.lastModified = lastModified
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension RemoteSettingsResponse: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeRemoteSettingsResponse: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettingsResponse {
-        return
-            try RemoteSettingsResponse(
-                records: FfiConverterSequenceTypeRemoteSettingsRecord.read(from: &buf), 
-                lastModified: FfiConverterUInt64.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: RemoteSettingsResponse, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeRemoteSettingsRecord.write(value.records, into: &buf)
-        FfiConverterUInt64.write(value.lastModified, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettingsResponse_lift(_ buf: RustBuffer) throws -> RemoteSettingsResponse {
-    return try FfiConverterTypeRemoteSettingsResponse.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeRemoteSettingsResponse_lower(_ value: RemoteSettingsResponse) -> RustBuffer {
-    return FfiConverterTypeRemoteSettingsResponse.lower(value)
-}
-
-
-/**
  * Public error class, this is what we return to consumers
  */
 public enum RemoteSettingsError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
@@ -1882,6 +1597,30 @@ public func FfiConverterTypeRemoteSettingsServer_lower(_ value: RemoteSettingsSe
     return FfiConverterTypeRemoteSettingsServer.lower(value)
 }
 
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionUInt64: FfiConverterRustBuffer {
+    typealias SwiftType = UInt64?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterUInt64.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterUInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2212,19 +1951,13 @@ private let initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettings_download_attachment_to_path() != 64720) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_remote_settings_checksum_method_remotesettings_get_records() != 36167) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_remote_settings_checksum_method_remotesettings_get_records_since() != 45558) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_collection_name() != 54184) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_attachment() != 10695) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_last_modified_timestamp() != 46461) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsclient_get_records() != 52048) {
@@ -2251,13 +1984,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 41684) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 29011) {
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 23848) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_remote_settings_checksum_constructor_remotesettings_new() != 20240) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_remote_settings_checksum_constructor_remotesettingsservice_new() != 58353) {
+    if (uniffi_remote_settings_checksum_constructor_remotesettingsservice_new() != 24841) {
         return InitializationResult.apiChecksumMismatch
     }
 
