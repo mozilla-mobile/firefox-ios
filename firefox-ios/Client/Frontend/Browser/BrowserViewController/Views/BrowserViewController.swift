@@ -564,6 +564,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
         updateMicrosurveyConstraints()
+        updateAutoTranslatePromptConstraints()
         updateToolbarDisplay()
         addOrUpdateMaskViewIfNeeded()
 
@@ -2070,13 +2071,27 @@ class BrowserViewController: UIViewController,
     private func removeAutoTranslatePrompt() {
         guard let prompt = autoTranslatePrompt else { return }
 
-        if isBottomSearchBar {
-            overKeyboardContainer.removeArrangedView(prompt)
-        } else {
-            bottomContainer.removeArrangedView(prompt)
+        if let parent = prompt.superview as? BaseAlphaStackView {
+            parent.removeArrangedView(prompt)
         }
 
         autoTranslatePrompt = nil
+    }
+
+    private func updateAutoTranslatePromptConstraints() {
+        guard let prompt = autoTranslatePrompt else { return }
+
+        if let parent = prompt.superview as? BaseAlphaStackView {
+            parent.removeArrangedView(prompt)
+        }
+
+        if isBottomSearchBar {
+            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
+        } else {
+            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
+        }
+
+        prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - Native Error Page
