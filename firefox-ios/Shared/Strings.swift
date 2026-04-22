@@ -1251,7 +1251,7 @@ extension String {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151",
                     tableName: "WorldCup",
-                    value: "Still want to Follow Along ?",
+                    value: "Still want to Follow Along?",
                     comment: "The title of the section in the World Cup widget that shows when the selected team was eliminated.")
                 public static let Description = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151",
