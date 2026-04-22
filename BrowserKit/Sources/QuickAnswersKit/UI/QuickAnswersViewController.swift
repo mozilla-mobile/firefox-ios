@@ -38,7 +38,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -47,6 +47,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.addAction(
+            UIAction(handler: { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }),
+            for: .touchUpInside
+        )
     }
     private let privacyButton: UIButton = .build {
         if #available(iOS 26, *) {
