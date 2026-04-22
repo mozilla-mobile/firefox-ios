@@ -44,7 +44,7 @@ protocol TopSitesManagerInterface: Sendable {
 }
 
 /// Manager to fetch the top sites data, the data gets updated from notifications on specific user actions
-final class TopSitesManager: TopSitesManagerInterface, LegacyFeatureFlaggable {
+final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProvider {
     private let logger: Logger
     private let profile: Profile
     private let googleTopSiteManager: GoogleTopSiteManagerProvider
@@ -122,7 +122,7 @@ final class TopSitesManager: TopSitesManagerInterface, LegacyFeatureFlaggable {
     }
 
     private var shouldLoadSponsoredTiles: Bool {
-        return featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly)
+        return userPreferences.isSponsoredShortcutsEnabled
     }
 
     @MainActor
