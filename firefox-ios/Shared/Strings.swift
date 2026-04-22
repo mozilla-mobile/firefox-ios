@@ -1219,7 +1219,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151",
                     tableName: "WorldCup",
                     value: "FINAL",
-                    comment: "The label for the 'Final' phase in the World Cup widget.")
+                    comment: "The label for the 'Final' match in the World Cup widget.")
                 public static let UpcomingLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151",
                     tableName: "WorldCup",
