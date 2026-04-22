@@ -758,8 +758,6 @@
 		612194E32CE507CF001664BB /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */; };
 		612194E62CE50A93001664BB /* WallpaperAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E52CE50A93001664BB /* WallpaperAction.swift */; };
 		612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612194E72CE50A9B001664BB /* WallpaperState.swift */; };
-		613489A32D942A020009AF01 /* ToastTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A22D942A020009AF01 /* ToastTelemetry.swift */; };
-		613489A52D9443610009AF01 /* ToastTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613489A42D9443610009AF01 /* ToastTelemetryTests.swift */; };
 		61497F3C2F687B5A00BC5ACA /* AIControlsSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */; };
 		61497F3E2F68856600BC5ACA /* MockGeneralSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */; };
 		614985482F6B0B6500BC5ACA /* AIControlsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614985472F6B0B6200BC5ACA /* AIControlsModel.swift */; };
@@ -1690,7 +1688,6 @@
 		C820439A2523DC4500740B71 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
-		C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C825E9822832A425006CB811 /* NimbusSearchBarLayer.swift */; };
 		C82A94F2269F68ED00624AA7 /* LegacyFeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* LegacyFeatureFlagsManager.swift */; };
 		C82A94F3269F68F300624AA7 /* CoreFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
@@ -8814,8 +8811,6 @@
 		612194E22CE507CF001664BB /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		612194E52CE50A93001664BB /* WallpaperAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperAction.swift; sourceTree = "<group>"; };
 		612194E72CE50A9B001664BB /* WallpaperState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperState.swift; sourceTree = "<group>"; };
-		613489A22D942A020009AF01 /* ToastTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetry.swift; sourceTree = "<group>"; };
-		613489A42D9443610009AF01 /* ToastTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTelemetryTests.swift; sourceTree = "<group>"; };
 		61497F3B2F687B5A00BC5ACA /* AIControlsSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsSettingTests.swift; sourceTree = "<group>"; };
 		61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGeneralSettingsDelegate.swift; sourceTree = "<group>"; };
 		614985472F6B0B6200BC5ACA /* AIControlsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIControlsModel.swift; sourceTree = "<group>"; };
@@ -10430,7 +10425,6 @@
 		C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extension.swift"; sourceTree = "<group>"; };
 		C81B78A3280752A20000C15F /* NimbusFeatureFlagLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFeatureFlagLayer.swift; sourceTree = "<group>"; };
 		C81C66C329F00D1000F6422F /* UserActivityRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActivityRouteTests.swift; sourceTree = "<group>"; };
-		C825E9822832A425006CB811 /* NimbusSearchBarLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSearchBarLayer.swift; sourceTree = "<group>"; };
 		C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreFlaggableFeature.swift; sourceTree = "<group>"; };
 		C82A94E6269CB77F00624AA7 /* LegacyFeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyFeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
@@ -14243,7 +14237,6 @@
 				C7F0514F2D95EA5C00EC52C0 /* HistoryDeletionUtilityTelemetryTests.swift */,
 				0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */,
 				0ABCD45C2D356006005D704A /* TermsOfServiceTelemetryTests.swift */,
-				613489A42D9443610009AF01 /* ToastTelemetryTests.swift */,
 				ED6C230F2DFB4F36005EDE1D /* UserTelemetryTests.swift */,
 				2109726D2DCA8831001162A2 /* ZoomTelemetryTests.swift */,
 			);
@@ -15269,7 +15262,6 @@
 				254B76092B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift */,
 				C81B78A3280752A20000C15F /* NimbusFeatureFlagLayer.swift */,
 				C87D8B7F2818333F00A6307D /* NimbusManager.swift */,
-				C825E9822832A425006CB811 /* NimbusSearchBarLayer.swift */,
 				C88E7A5E2A0554FC0072E638 /* OnboardingFeatureLayer */,
 				E1AF27422A17BCF700CE5991 /* TestData */,
 			);
@@ -16384,7 +16376,6 @@
 				8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */,
 				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
-				613489A22D942A020009AF01 /* ToastTelemetry.swift */,
 				ED232E9F2DFA3BF00046DA47 /* UserTelemetry.swift */,
 				8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */,
 			);
@@ -18884,7 +18875,6 @@
 				8A9B7A8A2F1A120100ABCDEF /* NewsAffordanceHeaderView.swift in Sources */,
 				8A91D4112F7D6C7800A1B2C3 /* NewsTransitionHeaderCell.swift in Sources */,
 				8A91D4132F7D6C7900A1B2C3 /* StoryCategoryPickerView.swift in Sources */,
-				C825E9832832A425006CB811 /* NimbusSearchBarLayer.swift in Sources */,
 				8AF347DE2CADD1B200624036 /* HomepageState.swift in Sources */,
 				8A75AF9C2DE8A1CF00B2C592 /* StartAtHomeMiddleware.swift in Sources */,
 				C8DC90C92A0675E70008832B /* MarkupParsingUtility.swift in Sources */,
@@ -19537,7 +19527,6 @@
 				8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */,
 				1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */,
 				437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */,
-				613489A32D942A020009AF01 /* ToastTelemetry.swift in Sources */,
 				C7F051692DB2F38000EC52C0 /* ContextMenuPreviewViewController.swift in Sources */,
 				E1442FD1294782D9003680B0 /* UIModalPresentationStyle+Photon.swift in Sources */,
 				21EEAA1D2D4005DE00595119 /* NativeErrorPageFeatureFlag.swift in Sources */,
@@ -20101,7 +20090,6 @@
 				8C61A2812F3371330021C88D /* BrowserViewControllerKVOTests.swift in Sources */,
 				21FB43CB2E7AF25D00A8818D /* MockHistoryHandler.swift in Sources */,
 				E1EAA5EF2D49182700D3039C /* NavigationBarStateTests.swift in Sources */,
-				613489A52D9443610009AF01 /* ToastTelemetryTests.swift in Sources */,
 				E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */,
 				C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */,
 				C25017362ECBAD0A0071506F /* MockRemoteSettingsClient.swift in Sources */,

@@ -13,7 +13,8 @@ protocol ContextualHintEligibilityUtilityProtocol {
 
 struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol,
                                          ContextualHintPrefsKeysProvider,
-                                         SearchBarLocationProvider {
+                                         SearchBarLocationProvider,
+                                         LegacyFeatureFlaggable {
     var profile: Profile
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?

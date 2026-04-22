@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import UIKit
 
-struct NimbusFlaggableFeature: HasNimbusSearchBar {
+struct NimbusFlaggableFeature {
     // MARK: - Variables
     private let profile: Profile
     private var featureID: FeatureFlagID
@@ -18,8 +18,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .aiKillSwitch:
             return PrefsKeys.Settings.aiKillSwitchFeature
-        case .bottomSearchBar:
-            return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
         case .homepageBookmarksSectionDefault:
@@ -134,10 +132,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         }
 
         switch featureID {
-        case .bottomSearchBar:
-            return nimbusSearchBar.getDefaultPosition().rawValue
         case .splashScreen:
-            return nimbusSearchBar.getDefaultPosition().rawValue
+            return SearchBarPosition.bottom.rawValue
         case .startAtHome:
             return FxNimbus.shared.features.startAtHomeFeature.value().setting.rawValue
         default: return nil
@@ -168,15 +164,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// in the `featureKey()` function - with which to write to UserDefaults, then the
     /// feature cannot be turned on/off.
     public func setUserPreference(to option: String) {
-        guard !option.isEmpty,
-              let optionsKey = featureKey
-        else { return }
-
-        switch featureID {
-        case .bottomSearchBar:
-            profile.prefs.setString(option, forKey: optionsKey)
-
-        default: break
-        }
+        guard !option.isEmpty else { return }
+        // TODO: to be removed with 15192
+        // no-op for now
     }
 }

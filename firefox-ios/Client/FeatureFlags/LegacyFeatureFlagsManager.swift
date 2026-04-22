@@ -87,14 +87,12 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlagLayer, @unchecked Sendable 
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
         switch featureID {
-        case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
         case .startAtHome: return StartAtHome(rawValue: userSetting) as? T
         }
     }
 
     private func convertCustomIDToStandard(_ featureID: FeatureFlagIDWithCustomOptions) -> FeatureFlagID {
         switch featureID {
-        case .searchBarPosition: return .bottomSearchBar
         case .startAtHome: return .startAtHome
         }
     }
@@ -132,10 +130,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlagLayer, @unchecked Sendable 
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {
-        case .searchBarPosition:
-            if let option = desiredState as? SearchBarPosition {
-                feature.setUserPreference(to: option.rawValue)
-            }
         case .startAtHome:
             if let option = desiredState as? StartAtHome {
                 feature.setUserPreference(to: option.rawValue)

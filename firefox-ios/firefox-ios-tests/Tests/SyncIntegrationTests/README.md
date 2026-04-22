@@ -5,9 +5,14 @@ you have these, make sure you're in the `SyncIntegrationTests` directory and
 run the following:
 
 ```
+$ export FXA_CI_SECRET=[secret]
 $ pipenv install --python 3.12
 $ pipenv run pytest
 ```
+
+`FXA_CI_SECRET` can be obtained via the FxA team. This variable will be used 
+in the `fxa-ci` header to bypass reCAPTCHA-like challenges during automated
+testing.
 
 The tests will build and install the application to the simulator, which can
 cause a delay where there will be no feedback to the user. Also, note that each

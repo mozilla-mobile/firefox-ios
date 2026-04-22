@@ -73,8 +73,32 @@ def tps_log(pytestconfig, tmpdir):
     yield tps_log
 
 
+@pytest.fixture(scope='session')
+def fxa_ci_addon(tmpdir_factory):
+    secret = os.getenv('FXA_CI_SECRET', '')
+    addon_dir = tmpdir_factory.mktemp('fxa_ci_addon')
+    addon_dir.join('manifest.json').write(json.dumps({
+        'manifest_version': 2,
+        'name': 'FxA CI Header',
+        'version': '1.0',
+        'browser_specific_settings': {
+            'gecko': {'id': 'fxa-ci-header@mozilla.org'},
+        },
+        'permissions': ['webRequest', 'webRequestBlocking', '<all_urls>'],
+        'background': {'scripts': ['background.js']},
+    }))
+    addon_dir.join('background.js').write(
+        'browser.webRequest.onBeforeSendHeaders.addListener('
+        '(d) => { d.requestHeaders.push({ name: "fxa-ci", value: %s });'
+        ' return { requestHeaders: d.requestHeaders }; },'
+        ' { urls: ["<all_urls>"] }, ["blocking", "requestHeaders"]);'
+        % json.dumps(secret)
+    )
+    return str(addon_dir)
+
+
 @pytest.fixture
-def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
+def tps_profile(pytestconfig, tps_addon, fxa_ci_addon, tps_config, tps_log, fxa_urls):
     preferences = {
         'app.update.enabled': False,
         'security.turn_off_all_security_so_that_viruses_can_take_over_this_computer': True,
@@ -112,7 +136,7 @@ def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
         'tps.seconds_since_epoch': int(time.time()),
         'xpinstall.signatures.required': False
     }
-    profile = Profile(addons=[tps_addon], preferences=preferences)
+    profile = Profile(addons=[tps_addon, fxa_ci_addon], preferences=preferences)
     pytestconfig._profile = profile.profile
     yield profile
 
