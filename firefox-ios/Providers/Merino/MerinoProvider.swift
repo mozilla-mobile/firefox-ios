@@ -11,7 +11,7 @@ protocol MerinoStoriesProviding: Sendable {
     func fetchContent() async throws -> CuratedRecommendationsResponse
 }
 
-final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unchecked Sendable {
+final class MerinoProvider: MerinoStoriesProviding, FeatureFlaggable, @unchecked Sendable {
     private struct Constants {
         static let merinoServicesBaseURL = "https://merino.services.mozilla.com"
         static let numberOfStoriesToFetchForCaching = 100
@@ -117,7 +117,7 @@ final class MerinoProvider: MerinoStoriesProviding, LegacyFeatureFlaggable, @unc
     }
 
     private var isHomepageStoryCategoriesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.homepageStoryCategories)
     }
 
     private func iOSToMerinoLocale(from locale: String) -> CuratedRecommendationLocale? {
