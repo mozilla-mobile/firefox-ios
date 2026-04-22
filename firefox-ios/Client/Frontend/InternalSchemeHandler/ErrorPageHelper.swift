@@ -14,6 +14,11 @@ private let MozErrorDownloadsNotEnabled = 100
 private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
 private let ErrorPageBadCertParam = "badcert"
+private let ErrorPageCertErrorParam = "certerror"
+private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
+private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
+private let CertErrorExpired = "SEC_ERROR_EXPIRED_CERTIFICATE"
+private let CertErrorUnknownIssuer = "SEC_ERROR_UNKNOWN_ISSUER"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
@@ -251,10 +256,10 @@ final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
             }
             errDomain = ""
         } else if LegacyCertErrors.contains(errCode) {
-            let certError = components.valueForQuery("certerror")
+            let certError = components.valueForQuery(ErrorPageCertErrorParam)
                 ?? (errCode == NSURLErrorServerCertificateHasBadDate
-                    ? "SEC_ERROR_EXPIRED_CERTIFICATE"
-                    : "SEC_ERROR_UNKNOWN_ISSUER")
+                    ? CertErrorExpired
+                    : CertErrorUnknownIssuer)
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
             actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
@@ -321,19 +326,19 @@ class ErrorPageHelper {
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
         if LegacyCertErrors.contains(error.code) {
-            if let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
+            if let certChain = error.userInfo[PeerCertificateChainKey] as? [SecCertificate],
                let cert = certChain.first {
                 let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
                 queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
             }
 
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
-            let certErrorCode = underlyingError?.userInfo["_kCFStreamErrorCodeKey"] as? Int
+            let certErrorCode = underlyingError?.userInfo[StreamErrorCodeKey] as? Int
             let certError = LegacyCertErrorCodes[certErrorCode ?? Int.min]
                 ?? (error.code == NSURLErrorServerCertificateHasBadDate
-                    ? "SEC_ERROR_EXPIRED_CERTIFICATE"
-                    : "SEC_ERROR_UNKNOWN_ISSUER")
-            queryItems.append(URLQueryItem(name: "certerror", value: certError))
+                    ? CertErrorExpired
+                    : CertErrorUnknownIssuer)
+            queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }
 
         components.queryItems = queryItems
