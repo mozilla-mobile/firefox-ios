@@ -43,27 +43,25 @@ struct ToolbarState: ScreenState, Sendable {
     }
 
     init(windowUUID: WindowUUID) {
-        self.init(
-            windowUUID: windowUUID,
-            toolbarPosition: .top,
-            toolbarLayout: .version1,
-            tabTrayButtonStyle: .number,
-            isPrivateMode: false,
-            addressToolbar: AddressBarState(windowUUID: windowUUID),
-            navigationToolbar: NavigationBarState(windowUUID: windowUUID),
-            isShowingNavigationToolbar: true,
-            isShowingTopTabs: false,
-            canGoBack: false,
-            canGoForward: false,
-            numberOfTabs: 1,
-            scrollAlpha: 1,
-            showMenuWarningBadge: false,
-            canShowNavigationHint: false,
-            shouldAnimate: true,
-            isTranslucent: false,
-            previousTabScreenshot: nil,
-            nextTabScreenshot: nil
-        )
+        self.windowUUID = windowUUID
+        self.toolbarPosition = .top
+        self.toolbarLayout = .version1
+        self.tabTrayButtonStyle = .number
+        self.isPrivateMode = false
+        self.addressToolbar = AddressBarState(windowUUID: windowUUID)
+        self.navigationToolbar = NavigationBarState(windowUUID: windowUUID)
+        self.isShowingNavigationToolbar = true
+        self.isShowingTopTabs = false
+        self.canGoBack = false
+        self.canGoForward = false
+        self.numberOfTabs = 1
+        self.scrollAlpha = 1
+        self.showMenuWarningBadge = false
+        self.canShowNavigationHint = false
+        self.shouldAnimate = true
+        self.isTranslucent = false
+        self.previousTabScreenshot = nil
+        self.nextTabScreenshot = nil
     }
 
     init(
@@ -200,17 +198,26 @@ struct ToolbarState: ScreenState, Sendable {
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let isPrivateMode = toolbarAction.isPrivate ?? state.isPrivateMode
+        let isShowingNavigationToolbar = toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar
+        let isShowingTopTabs = toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs
+        let canGoBack = toolbarAction.canGoBack ?? state.canGoBack
+        let canGoForward = toolbarAction.canGoForward ?? state.canGoForward
+        let scrollAlpha = toolbarAction.scrollAlpha ?? state.scrollAlpha
+        let shouldAnimate = toolbarAction.shouldAnimate ?? state.shouldAnimate
+        let isTranslucent = toolbarAction.isTranslucent ?? state.isTranslucent
+
         return state.copyWithUpdates(
-            isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
+            isPrivateMode: isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
-            isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-            canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-            canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
-            scrollAlpha: toolbarAction.scrollAlpha ?? state.scrollAlpha,
-            shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
-            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent
+            isShowingNavigationToolbar: isShowingNavigationToolbar,
+            isShowingTopTabs: isShowingTopTabs,
+            canGoBack: canGoBack,
+            canGoForward: canGoForward,
+            scrollAlpha: scrollAlpha,
+            shouldAnimate: shouldAnimate,
+            isTranslucent: isTranslucent
         )
     }
 
