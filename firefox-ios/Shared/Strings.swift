@@ -1229,7 +1229,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedLabel.v151",
                     tableName: "WorldCup",
                     value: "FINAL",
-                    comment: "The label that shows that the match ended without any penalties in the World Cup widget.")
+                    comment: "FINAL stands for "final result", it's not about the final match. The label shows that the match ended without any penalties in the World Cup widget.")
                 public static let MatchEndedPenaltiesLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedPenaltiesLabel.v151",
                     tableName: "WorldCup",
