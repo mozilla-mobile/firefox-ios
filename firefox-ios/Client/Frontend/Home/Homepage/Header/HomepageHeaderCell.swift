@@ -37,6 +37,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     private lazy var logoStackView: UIStackView = .build { view in
         view.backgroundColor = .clear
+        view.alignment = .center
         view.accessibilityIdentifier = a11y.logoID
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
@@ -59,6 +60,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
         button.configuration?.cornerStyle = .capsule
         // TODO: - FXIOS-14720 Add Strings for accessibility label
         button.accessibilityIdentifier = a11y.quickAnswersButton
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = false
         button.addAction(
             UIAction(handler: { [weak self] _ in
                 self?.onQuickAnswersTapped?()

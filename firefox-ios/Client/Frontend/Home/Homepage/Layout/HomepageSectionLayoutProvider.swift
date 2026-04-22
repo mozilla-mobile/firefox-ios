@@ -33,7 +33,6 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         }
 
         struct HeaderConstants {
-            static let estimatedHeight: CGFloat = 40
             static let bottomSpacing: CGFloat = 30
         }
 

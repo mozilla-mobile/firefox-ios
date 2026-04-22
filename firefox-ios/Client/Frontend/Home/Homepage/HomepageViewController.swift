@@ -381,10 +381,6 @@ final class HomepageViewController: UIViewController,
         if homepageState != state {
             self.homepageState = state
 
-            // TODO: - FXIOS-13970: Don't apply the snapshot before the first layout pass completes,
-            // otherwise the snapshot is ignored and the homepage appears blank/frozen.
-            guard didFinishFirstLayout else { return }
-
             dataSource?.updateSnapshot(
                 state: state,
                 jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
