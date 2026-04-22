@@ -15,7 +15,6 @@ enum FeatureFlagID: String, CaseIterable {
     case appIconSelection
     case badCertDomainErrorPage
     case bookmarksSearchFeature
-    case bottomSearchBar
     case deeplinkOptimizationRefactor
     case downloadLiveActivities
     case firefoxJpGuideDefaultSite
@@ -108,6 +107,5 @@ enum FeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `FeatureFlagID`
 enum FeatureFlagIDWithCustomOptions {
-    case searchBarPosition
     case startAtHome
 }

@@ -225,16 +225,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
-        let selectedState = HomepageState.reducer(
-            categorizedState,
-            MerinoAction(
-                selectedCategoryID: "technology",
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
 
-        dataSource.updateSnapshot(state: selectedState, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(
+            state: categorizedState,
+            selectedNewsfeedCategoryID: "technology",
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
 
         let snapshot = dataSource.snapshot()
         let items = snapshot.itemIdentifiers(inSection: .pocket(nil))
@@ -255,16 +251,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
-        let selectedState = HomepageState.reducer(
-            categorizedState,
-            MerinoAction(
-                selectedCategoryID: "missing-category",
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
 
-        dataSource.updateSnapshot(state: selectedState, jumpBackInDisplayConfig: mockSectionConfig)
+        dataSource.updateSnapshot(
+            state: categorizedState,
+            selectedNewsfeedCategoryID: "missing-category",
+            jumpBackInDisplayConfig: mockSectionConfig
+        )
 
         let snapshot = dataSource.snapshot()
 

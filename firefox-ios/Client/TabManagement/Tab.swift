@@ -598,12 +598,17 @@ class Tab: NSObject,
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        close()
+
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        Task {
+            await close()
+        }
     }
 
-    func close() {
-        webView?.pauseAllMediaPlayback {}
-        webView?.closeAllMediaPresentations {}
+    func close() async {
+        await webView?.pauseAllMediaPlayback()
+        await webView?.closeAllMediaPresentations()
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)

@@ -12,7 +12,7 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
-                           LegacyFeatureFlaggable,
+                           UserFeaturePreferenceProvider,
                            StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -376,11 +376,11 @@ extension IntroViewController: OnboardingCardDelegate {
         case .themeSystemDefault:
             turnSystemTheme(on: true)
         case .toolbarBottom:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+            userPreferences.setSearchBarPosition(.bottom)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         case .toolbarTop:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
+            userPreferences.setSearchBarPosition(.top)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.top]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         }

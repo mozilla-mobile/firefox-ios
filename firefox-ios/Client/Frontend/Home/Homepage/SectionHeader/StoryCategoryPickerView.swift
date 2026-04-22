@@ -27,15 +27,19 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
 
     func configure(
         categories: [MerinoCategoryConfiguration],
-        selectedCategoryID: String?,
-        onSelection: (@MainActor (String?) -> Void)?
+        selectedNewsfeedCategoryID: String?,
+        newsfeedCategoryPickerOffsetX: CGFloat? = nil,
+        onScroll: ((CGFloat) -> Void)? = nil,
+        onSelection: (@MainActor (String?) -> Void)? = nil
     ) {
         let items = pickerItems(from: categories)
-        let selectedPickerID = selectedCategoryID ?? Self.allCategoryID
+        let selectedPickerID = selectedNewsfeedCategoryID ?? Self.allCategoryID
 
         chipPickerView.configure(
             items: items,
             selectedID: selectedPickerID,
+            contentOffsetX: newsfeedCategoryPickerOffsetX ?? 0,
+            onScroll: onScroll,
             onSelection: { selectedID in
                 onSelection?(selectedID == Self.allCategoryID ? nil : selectedID)
             }
@@ -45,6 +49,11 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         chipPickerView.applyTheme(theme: theme)
+    }
+
+    func applyNewsfeedPickerState(selectedNewsfeedCategoryID: String?, newsfeedCategoryPickerOffsetX: CGFloat?) {
+        chipPickerView.updateSelectedID(selectedNewsfeedCategoryID ?? Self.allCategoryID)
+        chipPickerView.updateContentOffsetX(newsfeedCategoryPickerOffsetX ?? 0)
     }
 
     private func setupLayout() {

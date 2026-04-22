@@ -95,46 +95,6 @@ final class MerinoStateTests: XCTestCase {
     }
 
     @MainActor
-    func test_categorySelected_withSpecificCategory_updatesSelectedCategoryID() {
-        let initialState = createSubject()
-        let reducer = pocketReducer()
-
-        let newState = reducer(
-            initialState,
-            MerinoAction(
-                selectedCategoryID: "technology",
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
-
-        XCTAssertEqual(newState.selectedCategoryID, "technology")
-    }
-
-    @MainActor
-    func test_categorySelected_withNilCategory_clearsSelectedCategoryID() {
-        let initialState = pocketReducer()(
-            createSubject(),
-            MerinoAction(
-                selectedCategoryID: "technology",
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
-
-        let newState = pocketReducer()(
-            initialState,
-            MerinoAction(
-                selectedCategoryID: nil,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
-
-        XCTAssertNil(newState.selectedCategoryID)
-    }
-
-    @MainActor
     func test_availableCategories_returnsCategoriesSortedByRank() {
         let categories = [
             MerinoCategoryConfiguration(
@@ -183,13 +143,15 @@ final class MerinoStateTests: XCTestCase {
             )
         )
 
-        XCTAssertEqual(state.visibleStories.map(\.title), ["science1", "science2", "technology1"])
+        XCTAssertEqual(
+            state.visibleStories(selectedNewsfeedCategoryID: nil).map(\.title),
+            ["science1", "science2", "technology1"]
+        )
     }
 
     @MainActor
     func test_visibleStories_withSelectedCategory_returnsOnlySelectedCategoryStories() {
-        let reducer = pocketReducer()
-        let categorizedState = reducer(
+        let state = pocketReducer()(
             createSubject(),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(categories: createTestCategories()),
@@ -197,16 +159,11 @@ final class MerinoStateTests: XCTestCase {
                 actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
             )
         )
-        let selectedState = reducer(
-            categorizedState,
-            MerinoAction(
-                selectedCategoryID: "technology",
-                windowUUID: .XCTestDefaultUUID,
-                actionType: MerinoActionType.categorySelected
-            )
-        )
 
-        XCTAssertEqual(selectedState.visibleStories.map(\.title), ["technology1"])
+        XCTAssertEqual(
+            state.visibleStories(selectedNewsfeedCategoryID: "technology").map(\.title),
+            ["technology1"]
+        )
     }
 
     @MainActor

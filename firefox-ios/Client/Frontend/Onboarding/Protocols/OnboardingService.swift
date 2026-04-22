@@ -10,7 +10,7 @@ import ComponentLibrary
 import OnboardingKit
 
 @MainActor
-final class OnboardingService: LegacyFeatureFlaggable {
+final class OnboardingService: UserFeaturePreferenceProvider {
     // MARK: - Properties
     private weak var delegate: OnboardingServiceDelegate?
     private weak var navigationDelegate: OnboardingNavigationDelegate?
@@ -153,11 +153,11 @@ final class OnboardingService: LegacyFeatureFlaggable {
         case .themeSystemDefault:
             themeManager.setSystemTheme(isOn: true)
         case .toolbarBottom:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+            userPreferences.setSearchBarPosition(.bottom)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.bottom]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         case .toolbarTop:
-            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
+            userPreferences.setSearchBarPosition(.top)
             let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: SearchBarPosition.top]
             notificationCenter.post(name: .SearchBarPositionDidChange, withObject: notificationObject)
         }

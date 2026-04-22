@@ -96,8 +96,6 @@ class MockTabManager: TabManager {
 
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {}
 
-    func undoCloseAllTabs() {}
-
     func undoCloseTab() {}
 
     func clearAllTabsHistory() {}
@@ -135,8 +133,6 @@ class MockTabManager: TabManager {
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
                                          previousTabUUID: String) {}
-
-    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Client.Tab], previousTabUUID: String, isPrivate: Bool) {}
 
     @discardableResult
     func addTab(_ request: URLRequest?,

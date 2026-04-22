@@ -37,7 +37,8 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             LegacyFeatureFlaggable,
+                             LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                             FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
                              LegacyTabScrollController.Delegate {
@@ -313,7 +314,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
 
     var isHomepageSearchBarEnabled: Bool {
@@ -350,7 +351,6 @@ class BrowserViewController: UIViewController,
     // MARK: Computed vars
 
     lazy var isBottomSearchBar: Bool = {
-        guard isSearchBarLocationFeatureEnabled else { return false }
         return searchBarPosition == .bottom
     }()
 
@@ -700,7 +700,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateAddressToolbarContainerPosition(for traitCollection: UITraitCollection) {
-        guard searchBarPosition == .bottom, isSearchBarLocationFeatureEnabled else { return }
+        guard searchBarPosition == .bottom else { return }
 
         let isNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
         let newPosition: SearchBarPosition = isNavToolbar ? .bottom : .top
@@ -2936,21 +2936,7 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            let title: String = .Translations.LanguagePicker.Title
-            let attributedTitleKey = "attributedTitle"
-            alert.title = title
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
+            alert.title = .Translations.LanguagePicker.Title
         }
 
         data.languages.forEach { code in
@@ -2982,6 +2968,22 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        }
+
+        if let title = alert.title {
+            let attributedTitleKey = "attributedTitle"
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [
+                        .font: DefaultDynamicFontHelper.preferredBoldFont(
+                            withTextStyle: .headline,
+                            size: UIFont.labelFontSize
+                        )
+                    ]
+                ),
+                forKey: attributedTitleKey
+            )
         }
 
         if let popover = alert.popoverPresentationController {
@@ -4680,12 +4682,14 @@ extension BrowserViewController: TabManagerDelegate {
                     // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
                     needsReload = true
                 }
+            }
 
-                if webView.url == nil {
-                    // The webView can go gray if it was zombified due to memory pressure.
-                    // When this happens, the URL is nil, so try restoring the page upon selection.
-                    needsReload = true
-                }
+            // Do not reload if it's an about:blank page [FXIOS-14782]
+            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
+                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
+                // The webView can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                needsReload = true
             }
         }
 

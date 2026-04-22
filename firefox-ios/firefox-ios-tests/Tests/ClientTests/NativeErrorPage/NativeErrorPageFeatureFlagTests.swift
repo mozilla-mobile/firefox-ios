@@ -9,16 +9,18 @@ import XCTest
 class NativeErrorPageFeatureFlagTests: XCTestCase {
     var subject: NativeErrorPageFeatureFlag!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         let profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         subject = NativeErrorPageFeatureFlag()
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         subject = nil
-        super.tearDown()
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     func testFeatureFlag_WhenNativeErrorPageEnabled_ThenFeatureIsEnabled() {
