@@ -1229,12 +1229,12 @@ extension String {
                     key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedLabel.v151",
                     tableName: "WorldCup",
                     value: "FINAL",
-                    comment: "FINAL stands for "final result", it's not about the final match. The label shows that the match ended without any penalties in the World Cup widget.")
+                    comment: "FINAL stands for 'final result', it's not about the final match. The label shows that the match ended without any penalties in the World Cup widget.")
                 public static let MatchEndedPenaltiesLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedPenaltiesLabel.v151",
                     tableName: "WorldCup",
                     value: "FINAL %@ on penalties",
-                    comment: "FINAL stands for "final result", it's not about the final match. The label for the match results when a match ends in a penalty shootout in the World Cup widget. The '%@' placeholder will be replaced with the number of penalties scored i.e 3-2.")
+                    comment: "FINAL stands for 'final result', it's not about the final match. The label for the match results when a match ends in a penalty shootout in the World Cup widget. The '%@' placeholder will be replaced with the number of penalties scored i.e 3-2.")
                 public static let WinThirdPlaceLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.WinThirdPlaceLabel.v151",
                     tableName: "WorldCup",
