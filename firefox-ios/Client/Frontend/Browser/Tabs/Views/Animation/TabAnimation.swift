@@ -376,22 +376,27 @@ extension TabTrayViewController: BasicAnimationControllerDelegate {
 
         // ScreenshotHelper applies contentContainer bounds only on iPhone portrait.
         // Otherwise, the stored tab screenshot is based on the webView bounds.
-        if let image = tabSnapshot.image, let croppedImage = image.cgImage?.cropping(
-            to: shouldCropUsingContentContainerFrame
-            ? CGRect(
-                x: contentContainer.frame.origin.x * image.scale,
-                y: contentContainer.frame.origin.y * image.scale,
-                width: contentContainer.frame.width * image.scale,
-                height: contentContainer.frame.height * image.scale
-            )
-            : CGRect(
-                x: 0,
-                y: 0,
-                width: contentContainer.bounds.width * image.scale,
-                height: contentContainer.bounds.height * image.scale
-            )
-        ) {
-            tabSnapshot.image = UIImage(cgImage: croppedImage)
+        if let image = tabSnapshot.image {
+            let cropRect: CGRect
+            if shouldCropUsingContentContainerFrame {
+                cropRect = CGRect(
+                    x: contentContainer.frame.origin.x * image.scale,
+                    y: contentContainer.frame.origin.y * image.scale,
+                    width: contentContainer.frame.width * image.scale,
+                    height: contentContainer.frame.height * image.scale
+                )
+            } else {
+                cropRect = CGRect(
+                    x: 0,
+                    y: 0,
+                    width: contentContainer.bounds.width * image.scale,
+                    height: contentContainer.bounds.height * image.scale
+                )
+            }
+
+            if let croppedImage = image.cgImage?.cropping(to: cropRect) {
+                tabSnapshot.image = UIImage(cgImage: croppedImage)
+            }
         }
 
         tabSnapshot.clipsToBounds = true
