@@ -77,10 +77,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
             isLoading: false,
             readerModeState: nil,
             canSummarize: false,
-            translationConfiguration: nil,
             didStartTyping: false,
             isEmptySearch: true,
-            alternativeSearchEngine: nil
+            alternativeSearchEngine: nil,
+            translationConfiguration: nil
         )
     }
 
@@ -102,10 +102,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
          isLoading: Bool,
          readerModeState: ReaderModeState?,
          canSummarize: Bool,
-         translationConfiguration: TranslationConfiguration?,
          didStartTyping: Bool,
          isEmptySearch: Bool,
-         alternativeSearchEngine: SearchEngineModel?) {
+         alternativeSearchEngine: SearchEngineModel?,
+         translationConfiguration: TranslationConfiguration?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.leadingPageActions = leadingPageActions
