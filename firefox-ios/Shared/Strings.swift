@@ -1214,7 +1214,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151",
                     tableName: "WorldCup",
                     value: "BRONZE FINAL",
-                    comment: "The label for the 'Bronze final' phase in the World Cup widget.")
+                    comment: "The label for the 'Bronze final' match in the World Cup widget.")
                 public static let FinalLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151",
                     tableName: "WorldCup",
