@@ -5085,10 +5085,6 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressPrivateMode() {
         updateZoomPageBarVisibility(visible: false)
     }
-
-    func topTabsShowCloseTabsToast() {
-        showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
-    }
 }
 
 extension BrowserViewController {
