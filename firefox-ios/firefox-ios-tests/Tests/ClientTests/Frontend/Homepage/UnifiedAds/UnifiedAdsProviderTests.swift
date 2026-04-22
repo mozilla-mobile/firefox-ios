@@ -424,6 +424,7 @@ class UnifiedAdsProviderTests: XCTestCase {
             "test": "test"
         }
     ]
+    }
     """
 
     let invertedTiles = """
