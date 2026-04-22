@@ -175,6 +175,22 @@ class UnifiedAdsProviderTests: XCTestCase {
         }
     }
 
+    func testFetchTiles_whenDataHasExtraField_thenReturnsProperTile() {
+        networking.data = getData(from: tilesWithExtraField)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 1)
+                XCTAssertEqual(tiles[0].name, "Test1")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
     // MARK: - Cache
 
     func testCaching_whenCacheData_thenSucceedsFromCache() {
@@ -391,6 +407,24 @@ class UnifiedAdsProviderTests: XCTestCase {
     ]
 }
 """
+
+    let tilesWithExtraField = """
+    {
+    "newtab_mobile_tile_1": [
+        {
+            "format": "tile",
+            "url": "https://www.test1.com",
+            "callbacks": {
+                "click": "https://www.test2.com",
+                "impression": "https://www.test3.com"
+            },
+            "image_url": "https://www.test4.com",
+            "name": "Test1",
+            "block_key": "12345",
+            "test": "test"
+        }
+    ]
+    """
 
     let invertedTiles = """
 {
