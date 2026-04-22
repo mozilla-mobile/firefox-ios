@@ -205,8 +205,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         viewModel.startRecordingVoice()
     }
 
-    // MARK: - Permission Alerts
-
+    // MARK: - Speech Error
+    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     private func handleSpeechError(_ error: SpeechError) {
         switch error {
         case .microphonePermissionDenied(let isFirstTime):
@@ -231,7 +231,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             break
         }
     }
-
+    
+    // TODO: - FXIOS-14720 Add Strings and accessibility ids
     private func showPermissionAlert(title: String, message: String) {
         let alertController = UIAlertController(
             title: title,

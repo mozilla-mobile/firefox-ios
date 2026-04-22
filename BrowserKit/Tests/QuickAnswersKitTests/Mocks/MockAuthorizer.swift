@@ -6,10 +6,19 @@
 final class MockAuthorizer: AuthorizeProvider {
     let micAuthorized: Bool
     let speechAuthorized: Bool
+    let micUndetermined: Bool
+    let speechUndetermined: Bool
 
-    init(micAuthorized: Bool = true, speechAuthorized: Bool = true) {
+    init(
+        micAuthorized: Bool = true,
+        speechAuthorized: Bool = true,
+        micUndetermined: Bool = false,
+        speechUndetermined: Bool = false
+    ) {
         self.micAuthorized = micAuthorized
         self.speechAuthorized = speechAuthorized
+        self.micUndetermined = micUndetermined
+        self.speechUndetermined = speechUndetermined
     }
 
     func isMicrophonePermissionAuthorized() async -> Bool {
@@ -18,5 +27,13 @@ final class MockAuthorizer: AuthorizeProvider {
 
     func isSpeechPermissionAuthorized() async -> Bool {
         speechAuthorized
+    }
+
+    func isMicrophonePermissionUndetermined() -> Bool {
+        micUndetermined
+    }
+
+    func isSpeechPermissionUndetermined() -> Bool {
+        speechUndetermined
     }
 }

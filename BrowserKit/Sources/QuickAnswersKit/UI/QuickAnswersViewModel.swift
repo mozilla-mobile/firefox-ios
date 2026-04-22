@@ -30,15 +30,8 @@ final class QuickAnswersViewModel {
 
     // TODO: FXIOS-14880 - Update view model
     private func recordVoiceTask() async throws {
-        let stream: AsyncThrowingStream<SpeechResult, Error>
         do {
-            stream = try await service.record()
-        } catch {
-            guard let speechError = error as? SpeechError else { return }
-            onStateChange?(.recordVoice(.empty(), speechError))
-            return
-        }
-        do {
+            let stream = try await service.record()
             for try await result in stream {
                 try Task.checkCancellation()
                 recentSpeechResult = result

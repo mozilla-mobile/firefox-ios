@@ -15,7 +15,7 @@ struct SpeechAnalyzerEngineTests {
     let testHelper = SwiftTestingHelper()
 
     @Test
-    func test_prepare_microphoneDenied_speechDenied_throwsError() async {
+    func test_prepare_microphoneDenied_speechDenied_throwsMicrophoneError() async {
         guard #available(iOS 26.0, *) else {
             return
         }
@@ -23,7 +23,7 @@ struct SpeechAnalyzerEngineTests {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 
@@ -31,7 +31,23 @@ struct SpeechAnalyzerEngineTests {
     }
 
     @Test
-    func test_prepare_microphoneDenied_speechGranted_throwsError() async {
+    func test_prepare_microphoneDenied_firstTime_throwsMicrophoneFirstTimeError() async {
+        guard #available(iOS 26.0, *) else {
+            return
+        }
+
+        let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false, micUndetermined: true)
+        let subject = createSubject(authorizer: authorizer)
+
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: true)) {
+            try await subject.prepare()
+        }
+
+        #expect(audioManager.configureAudioSessionCallCount == 0)
+    }
+
+    @Test
+    func test_prepare_microphoneDenied_speechGranted_throwsMicrophoneError() async {
         guard #available(iOS 26.0, *) else {
             return
         }
@@ -39,7 +55,7 @@ struct SpeechAnalyzerEngineTests {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 
