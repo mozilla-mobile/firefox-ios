@@ -1108,7 +1108,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.TemporaryView.Title.v151",
                     tableName: "WorldCup",
                     value: "You are following",
-                    comment: "The title for the temporary view in the World Cup widget showing the team that has been previously selected.")
+                    comment: "The title for the temporary view in the World Cup widget showing the team that has been previously selected. It's followed on a new line by the name of the team, displayed with a larger font.")
                 public static let Description = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.TemporaryView.Description.v151",
                     tableName: "WorldCup",
