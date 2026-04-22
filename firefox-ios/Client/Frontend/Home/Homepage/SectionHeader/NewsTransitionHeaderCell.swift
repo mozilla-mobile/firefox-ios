@@ -133,7 +133,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     }
 
     private func setupLayout() {
-        clipsToBounds = true
+        clipsToBounds = false
 
         sectionTitleStackView.addArrangedSubview(sectionTitleHeaderView)
         sectionTitleStackView.addArrangedSubview(storyCategoryPickerView)

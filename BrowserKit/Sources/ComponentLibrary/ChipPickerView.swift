@@ -13,6 +13,7 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
 
     private lazy var scrollView: UIScrollView = .build { scrollView in
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.clipsToBounds = false
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
@@ -30,6 +31,7 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        clipsToBounds = false
         setupLayout()
     }
 
