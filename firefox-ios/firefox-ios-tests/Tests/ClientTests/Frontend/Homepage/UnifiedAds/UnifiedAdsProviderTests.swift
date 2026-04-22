@@ -56,6 +56,22 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         if let error = mockError { throw error }
         return mockAdsTiles ?? [:]
     }
+
+    func recordClick(clickUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
+        // no-op for tests for now
+    }
+
+    func recordImpression(impressionUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
+        // no-op for tests for now
+    }
+
+    func reportAd(
+        reportUrl: String,
+        reason: MozillaAppServices.MozAdsReportReason,
+        options: MozillaAppServices.MozAdsCallbackOptions?
+    ) throws {
+        // no-op for tests for now
+    }
 }
 
 @MainActor
