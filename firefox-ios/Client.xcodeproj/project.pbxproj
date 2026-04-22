@@ -31,6 +31,7 @@
 		03911AC02F27CA5D0010967A /* TermsOfUseMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03911ABF2F27CA5D0010967A /* TermsOfUseMigrationTests.swift */; };
 		03911E482F3200F50010967A /* ToUExperimentsTrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03911E472F3200F50010967A /* ToUExperimentsTrackingTests.swift */; };
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
+		03D1A0052F98C84100E2C30F /* ErrorPageHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D1A0042F98C84100E2C30F /* ErrorPageHandlerTests.swift */; };
 		03D994682EE820D40081D209 /* TermsOfUseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D994672EE820C60081D209 /* TermsOfUseStateTests.swift */; };
 		03D9946A2EE821190081D209 /* TermsOfUseLinkTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D994692EE821090081D209 /* TermsOfUseLinkTypeTests.swift */; };
 		03D9946C2EE8214F0081D209 /* TermsOfUseCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D9946B2EE821350081D209 /* TermsOfUseCoordinatorTests.swift */; };
@@ -2642,6 +2643,7 @@
 		03A14EF0A7BA733D9C3F2D93 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Search.strings"; sourceTree = "<group>"; };
 		03C046A8AFBF02D99DF6EAC2 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RelativeDatesTests.swift; sourceTree = "<group>"; };
+		03D1A0042F98C84100E2C30F /* ErrorPageHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPageHandlerTests.swift; sourceTree = "<group>"; };
 		03D994672EE820C60081D209 /* TermsOfUseStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseStateTests.swift; sourceTree = "<group>"; };
 		03D994692EE821090081D209 /* TermsOfUseLinkTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseLinkTypeTests.swift; sourceTree = "<group>"; };
 		03D9946B2EE821350081D209 /* TermsOfUseCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfUseCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -16671,6 +16673,7 @@
 				0B6AB0402DCA3CB900F03AF6 /* DocumentLoggerTests.swift */,
 				39BF0CD62EB512C5002064F5 /* ImpressionTrackingUtilityTests.swift */,
 				1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */,
+				03D1A0042F98C84100E2C30F /* ErrorPageHandlerTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				399BA7FF2F901D8600CCC502 /* UserFeaturePreferenceManagerTests.swift */,
@@ -19872,6 +19875,7 @@
 				961577942A39008100391E8D /* SponsoredTileDataUtilityTests.swift in Sources */,
 				1D2A1B592F3BAB5200157ACB /* RelayMaskSettingsViewControllerTests.swift in Sources */,
 				8A093D812A4B58330099ABA5 /* MockSettingsFlowDelegate.swift in Sources */,
+				03D1A0052F98C84100E2C30F /* ErrorPageHandlerTests.swift in Sources */,
 				431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */,
 				BDB4E7212F337AAB000DB45F /* LocationTextFieldTests.swift in Sources */,
 				C21326992F5713F000746393 /* SummarizerLanguageProviderTests.swift in Sources */,
