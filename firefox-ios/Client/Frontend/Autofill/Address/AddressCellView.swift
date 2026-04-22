@@ -46,7 +46,6 @@ struct AddressCellView: View {
             HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
                 Image(decorative: StandardImageIdentifiers.Large.location)
                     .renderingMode(.template)
-                    .accessibilityHidden(true)
                     .modifier(ListItemIconPadding(isLandscape: isLandscape,
                                                   paddingSize: UX.listIconPadding))
                     .foregroundColor(iconPrimary)
