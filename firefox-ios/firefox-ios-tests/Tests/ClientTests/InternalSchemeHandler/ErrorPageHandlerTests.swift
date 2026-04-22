@@ -4,6 +4,8 @@
 
 import Foundation
 import XCTest
+import WebKit
+import Shared
 
 @testable import Client
 
@@ -61,5 +63,24 @@ final class ErrorPageHandlerTests: XCTestCase {
         XCTAssertNotNil(result)
         let html = String(data: result?.1 ?? Data(), encoding: .utf8)
         XCTAssertEqual(html?.contains("SEC_ERROR_EXPIRED_CERTIFICATE"), true)
+    }
+
+    @MainActor
+    func testLoadPage_withCertificateErrorWithoutUnderlyingError_stillAddsCertErrorQuery() {
+        let subject = ErrorPageHelper(certStore: nil)
+        let webView = MockTabWebView(
+            frame: .zero,
+            configuration: WKWebViewConfiguration(),
+            windowUUID: .XCTestDefaultUUID
+        )
+        let failingURL = URL(string: "https://expired.badssl.com/")!
+        let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorServerCertificateUntrusted)
+
+        subject.loadPage(error, forUrl: failingURL, inWebView: webView)
+
+        let loadedURL = try? XCTUnwrap(webView.loadedRequest?.url)
+        let components = loadedURL.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
+        let certError = components?.queryItems?.first(where: { $0.name == "certerror" })?.value
+        XCTAssertEqual(certError, "SEC_ERROR_UNKNOWN_ISSUER")
     }
 }

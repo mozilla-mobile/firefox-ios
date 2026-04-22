@@ -49,16 +49,11 @@ private func legacyCertErrorString(
         return certError
     }
 
-    switch networkErrorCode {
-    case NSURLErrorServerCertificateHasBadDate:
+    // fallback for iOS 26.4
+    if networkErrorCode == NSURLErrorServerCertificateHasBadDate {
         return "SEC_ERROR_EXPIRED_CERTIFICATE"
-    case NSURLErrorServerCertificateUntrusted,
-         NSURLErrorServerCertificateHasUnknownRoot,
-         NSURLErrorServerCertificateNotYetValid:
-        return LegacyDefaultCertError
-    default:
-        return LegacyDefaultCertError
     }
+    return LegacyDefaultCertError
 }
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
