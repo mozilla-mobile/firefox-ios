@@ -961,11 +961,11 @@ extension String {
                 key: "WorldCup.CountryPicker.DoneButtonTitle.v151",
                 tableName: "WorldCup",
                 value: "Done",
-                comment: "Title for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
+                comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
                 tableName: "WorldCup",
-                value: "Close World Cup Country Picker",
+                value: "Close World Cup country picker",
                 comment: "Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker.")
             // Note: "North America" and "CONCACAF" overlap in scope
             // CONCACAF is the FIFA confederation covering North America, Central America, and the Caribbean.
@@ -1069,13 +1069,23 @@ extension String {
                 tableName: "WorldCup",
                 value: "FT",
                 comment: "The abbreviation for 'full time' used in the World Cup widget when showing the result of a match.")
+            public static let ErrorLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.ErrorLabel.v151",
+                tableName: "WorldCup",
+                value: "We couldn’t load match data. Please refresh.",
+                comment: "A generic error message used in the World Cup widget when the match data could not be loaded.")
+            public static let RetryButtonLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.RetryButtonLabel.v151",
+                tableName: "WorldCup",
+                value: "Refresh",
+                comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
 
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.FollowTeamCard.Title.v151",
                     tableName: "WorldCup",
                     value: "Keep Tabs on the World Cup",
-                    comment: "Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
+                    comment: "Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed.")
                 public static let Description = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.FollowTeamCard.Description.v151",
                     tableName: "WorldCup",
@@ -1089,7 +1099,7 @@ extension String {
                 public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151",
                     tableName: "WorldCup",
-                    value: "Hide World Cup Updates",
+                    value: "Hide World Cup updates",
                     comment: "Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event.")
             }
 
