@@ -117,7 +117,6 @@ final class TabManagerMiddleware: LegacyFeatureFlaggable,
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.closeTab:
-            // TODO: verify if this works for closing a tab from an unselected tab panel
             guard let tabsState = state.componentState(TabsPanelState.self,
                                                        for: .tabsPanel,
                                                        window: action.windowUUID) else { return }
@@ -433,7 +432,7 @@ final class TabManagerMiddleware: LegacyFeatureFlaggable,
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
-        let shouldDismiss = self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
+        let shouldDismiss = closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
         triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
         if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {

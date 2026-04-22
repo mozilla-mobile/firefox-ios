@@ -208,13 +208,13 @@ final class TabManagerImplementation: NSObject,
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        self.removeTab(tab, flushToDisk: true)
-        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        removeTab(tab, flushToDisk: true)
+        updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false)
+            removeTab(tab, flushToDisk: false)
         }
         commitChanges()
     }
@@ -248,7 +248,7 @@ final class TabManagerImplementation: NSObject,
 
         for tab in currentModeTabs {
             // Remove each tab without persisting changes
-            self.removeTab(tab, flushToDisk: false)
+            removeTab(tab, flushToDisk: false)
             if tab == currentModeTabs.last {
                 // Select tab calls preserve tabs so we don't need to call it again
                 if tab.isPrivate,
@@ -296,7 +296,11 @@ final class TabManagerImplementation: NSObject,
                        category: .tabs)
         }
 
-        tab.close()
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        Task {
+            await tab.close()
+        }
 
         // Notify of tab removal
         self.delegates.forEach {
@@ -917,7 +921,11 @@ final class TabManagerImplementation: NSObject,
             selectedIndex = -1
         }
         privateTabs.forEach { tab in
-            tab.close()
+            // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+            // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+            Task {
+                await tab.close()
+            }
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
 
