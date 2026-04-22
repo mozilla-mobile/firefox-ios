@@ -31,9 +31,6 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .addressBarMenu:
             return checkAddressBarMenuFeature(from: nimbus)
 
-        case .bottomSearchBar:
-            return checkAwesomeBarFeature(for: featureID, from: nimbus)
-
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature(from: nimbus)
 
@@ -197,17 +194,6 @@ final class NimbusFeatureFlagLayer: Sendable {
     private func checkSentFromFirefoxFeatureTreatmentA(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.sentFromFirefoxFeature.value()
         return config.isTreatmentA
-    }
-
-    private func checkAwesomeBarFeature(for featureID: FeatureFlagID,
-                                        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.search.value().awesomeBar
-
-        switch featureID {
-        case .bottomSearchBar: return config.position.isPositionFeatureEnabled
-        default: return false
-        }
     }
 
     private func checkHNTSponsoredShortcutsFeature(from nimbus: FxNimbus) -> Bool {

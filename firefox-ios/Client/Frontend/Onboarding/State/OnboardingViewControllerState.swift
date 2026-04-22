@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import CopyWithUpdates
 
+@CopyWithUpdates
 struct OnboardingViewControllerState: ScreenState {
     let windowUUID: WindowUUID
 
@@ -40,6 +42,6 @@ struct OnboardingViewControllerState: ScreenState {
     }
 
     static func defaultState(from state: OnboardingViewControllerState) -> OnboardingViewControllerState {
-        return OnboardingViewControllerState(windowUUID: state.windowUUID)
+		return state.copyWithUpdates()
     }
 }

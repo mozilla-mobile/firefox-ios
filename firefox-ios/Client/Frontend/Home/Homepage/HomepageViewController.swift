@@ -59,6 +59,11 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
+    private var currentHomepageTabState: HomepageTabState {
+        guard let activeTabUUID else { return HomepageTabState() }
+        return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -167,6 +172,10 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
 
         activeTabUUID = tabManager.selectedTab?.tabUUID
+        refreshHomepageDataSourceSnapshot { [weak self] in
+            self?.updateNewsHeaderPickerState()
+        }
+
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
@@ -381,12 +390,7 @@ final class HomepageViewController: UIViewController,
         if homepageState != state {
             self.homepageState = state
 
-            dataSource?.updateSnapshot(
-                state: state,
-                jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-            ) { [weak self] in
-                // Force the collection view to finish applying the latest layout before re-syncing the
-                // visible stories header, since transition progress depends on the resolved header frame.
+            refreshHomepageDataSourceSnapshot { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -725,8 +729,10 @@ final class HomepageViewController: UIViewController,
             theme: currentTheme,
             transitionEnabled: transitionEnabled,
             categories: homepageState.merinoState.availableCategories,
-            selectedCategoryID: homepageState.merinoState.selectedCategoryID,
-            onSelection: dispatchCategorySelectedAction
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
+            onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -784,12 +790,6 @@ final class HomepageViewController: UIViewController,
     private func updateNewsTransitionHeaderProgress() {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               let collectionView,
-              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
-                  if case .pocket = $0 {
-                      return true
-                  }
-                  return false
-              }),
               let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
                   if case .spacer = $0 {
                       return true
@@ -798,9 +798,7 @@ final class HomepageViewController: UIViewController,
               }),
               let spacerAttributes = collectionView.layoutAttributesForItem(at: IndexPath(item: 0,
                                                                                           section: spacerSectionIndex)),
-              let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader,
-                                                                at: IndexPath(item: 0, section: pocketSectionIndex)
-              ) as? NewsTransitionHeaderCell
+              let headerView = getNewsTransitionHeader()
         else {
             return
         }
@@ -1054,14 +1052,55 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func dispatchCategorySelectedAction(selectedCategoryID: String?) {
-        store.dispatch(
-            MerinoAction(
-                selectedCategoryID: selectedCategoryID,
-                windowUUID: windowUUID,
-                actionType: MerinoActionType.categorySelected
-            )
+    private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
+        }
+        refreshHomepageDataSourceSnapshot()
+    }
+
+    private func updateNewsfeedCategoryPickerOffsetX(_ newsfeedCategoryPickerOffsetX: CGFloat) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.newsfeedCategoryPickerOffsetX = newsfeedCategoryPickerOffsetX
+        }
+    }
+
+    private func refreshHomepageDataSourceSnapshot(completion: (() -> Void)? = nil) {
+        dataSource?.updateSnapshot(
+            state: homepageState,
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+        ) {
+            completion?()
+        }
+    }
+
+    /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
+    /// This keeps the category picker selection and horizontal offset in sync across tab switches
+    private func updateNewsHeaderPickerState() {
+        guard let headerView = getNewsTransitionHeader() else { return }
+        headerView.updatePickerState(
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX
         )
+    }
+
+    private func getNewsTransitionHeader() -> NewsTransitionHeaderCell? {
+        guard let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 { return true }
+                  return false
+              })
+        else {
+            return nil
+        }
+
+        return collectionView.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionHeader,
+            at: IndexPath(item: 0, section: pocketSectionIndex)
+        ) as? NewsTransitionHeaderCell
     }
 
     private func getSiteForContextMenu(for item: HomepageItem) -> Site? {

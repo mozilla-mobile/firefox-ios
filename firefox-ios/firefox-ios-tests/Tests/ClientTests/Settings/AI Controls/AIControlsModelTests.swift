@@ -21,8 +21,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
         mockProfile.prefs = mockPrefs
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
     override func tearDown() async throws {

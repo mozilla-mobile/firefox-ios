@@ -26,6 +26,7 @@ protocol SettingsSelectorsSet {
 
     // Display / Theme
     var DISPLAY_THEME_CELL: Selector { get }
+    var AUTOMATIC_THEME_BUTTON: Selector { get }
     var DARK_THEME_BUTTON: Selector { get }
     var LIGHT_THEME_BUTTON: Selector { get }
 
@@ -175,6 +176,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
     let DISPLAY_THEME_CELL = Selector.tableCellById(
         AccessibilityIdentifiers.Settings.Theme.title,
         description: "Display Theme settings cell",
+        groups: ["settings", "theme"]
+    )
+
+    let AUTOMATIC_THEME_BUTTON = Selector.buttonId(
+        AccessibilityIdentifiers.Settings.Appearance.automaticThemeView,
+        description: "Automatic theme selection button",
         groups: ["settings", "theme"]
     )
 

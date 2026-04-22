@@ -4,7 +4,8 @@
 
 import Foundation
 
-struct NativeErrorPageFeatureFlag: LegacyFeatureFlaggable {
+struct NativeErrorPageFeatureFlag: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                   FeatureFlaggable {
     var isNativeErrorPageEnabled: Bool {
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }
@@ -17,6 +18,6 @@ struct NativeErrorPageFeatureFlag: LegacyFeatureFlaggable {
 
     /// Flag for showing bad certificate domain native error page
     var isBadCertDomainErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.badCertDomainErrorPage, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.badCertDomainErrorPage)
     }
 }

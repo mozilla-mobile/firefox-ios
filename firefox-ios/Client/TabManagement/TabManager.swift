@@ -89,8 +89,6 @@ protocol TabManager: AnyObject {
 
     // MARK: - Undo Close
     func undoCloseTab()
-    /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
-    func undoCloseAllTabs()
 
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?

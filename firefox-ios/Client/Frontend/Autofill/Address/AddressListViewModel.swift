@@ -9,7 +9,7 @@ import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
 @MainActor
-final class AddressListViewModel: ObservableObject, LegacyFeatureFlaggable {
+final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)
@@ -37,7 +37,7 @@ final class AddressListViewModel: ObservableObject, LegacyFeatureFlaggable {
 
     var isEditingFeatureEnabled: Bool {
         AddressLocaleFeatureValidator.isValidRegion(for: currentRegionCode) ||
-        featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.addressAutofillEdit)
     }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?

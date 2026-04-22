@@ -34,16 +34,13 @@ protocol UserFeaturePreferring: Sendable {
 final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Sendable {
     private let prefs: Prefs
     private let nimbusLayer: NimbusFeatureFlagLayer
-    private let nimbusSearchBar: NimbusSearchBarLayer
 
     init(
         prefs: Prefs,
-        nimbusLayer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer,
-        nimbusSearchBar: NimbusSearchBarLayer = NimbusManager.shared.bottomSearchBarLayer
+        nimbusLayer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer
     ) {
         self.prefs = prefs
         self.nimbusLayer = nimbusLayer
-        self.nimbusSearchBar = nimbusSearchBar
     }
 
     // MARK: - Bool preferences
@@ -85,7 +82,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
            let position = SearchBarPosition(rawValue: raw) {
             return position
         }
-        return nimbusSearchBar.getDefaultPosition()
+        return .top
     }
 
     var startAtHomeSetting: StartAtHome {
@@ -135,11 +132,11 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
 
 /// Adopt this protocol to access user feature preferences via AppContainer.
 /// Replaces FeatureFlaggable for user preference checks.
-protocol HasUserFeaturePreferences {
+protocol UserFeaturePreferenceProvider {
     var userPreferences: UserFeaturePreferring { get }
 }
 
-extension HasUserFeaturePreferences {
+extension UserFeaturePreferenceProvider {
     var userPreferences: UserFeaturePreferring {
         AppContainer.shared.resolve()
     }

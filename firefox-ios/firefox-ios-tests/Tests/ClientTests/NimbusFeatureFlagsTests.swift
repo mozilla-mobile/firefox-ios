@@ -26,13 +26,6 @@ final class NimbusFeatureFlagsTests: XCTestCase {
 
     // MARK: - Tests
 
-    func testIsEnabled_delegatesToNimbusLayer() {
-        // The layer returns Nimbus defaults (from FxNimbus.shared).
-        // bottomSearchBar defaults to true in Nimbus config for developer builds.
-        let result = subject.isEnabled(.bottomSearchBar)
-        XCTAssertTrue(result)
-    }
-
     func testIsEnabled_withDebugOverrideSet_returnsOverride() {
         // On developer builds, debug overrides take precedence.
         // .translation has a debugKey, so we can override it.
@@ -65,9 +58,8 @@ final class NimbusFeatureFlagsTests: XCTestCase {
 
     func testMockConformance() {
         let mock = MockNimbusFeatureFlags()
-        mock.enabledFlags = [.bottomSearchBar, .translation]
+        mock.enabledFlags = [.translation]
 
-        XCTAssertTrue(mock.isEnabled(.bottomSearchBar))
         XCTAssertTrue(mock.isEnabled(.translation))
         XCTAssertFalse(mock.isEnabled(.reportSiteIssue))
     }

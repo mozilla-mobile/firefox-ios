@@ -217,7 +217,7 @@ final class FormAutofillHelperTests: XCTestCase {
     }
 
     @MainActor
-    func test_formAutofillHelper_foundFieldValuesClosure_doesntLeak() {
+    func test_formAutofillHelper_foundFieldValuesClosure_doesntLeak() async {
         let tab = Tab(profile: profile, windowUUID: windowUUID)
         let subject = FormAutofillHelper(tab: tab)
         trackForMemoryLeaks(subject)
@@ -229,7 +229,7 @@ final class FormAutofillHelperTests: XCTestCase {
             tabWebView.accessoryView.savedCardsClosure = {}
         }
 
-        tab.close()
+        await tab.close()
     }
 
     @MainActor

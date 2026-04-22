@@ -564,6 +564,36 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
+    func test_urlDidChangeAction_withNilIconState_preservesExistingTranslationConfig() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+    }
+
     func test_traitCollectionDidChangedAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()

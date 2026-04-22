@@ -217,6 +217,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         let toolbarAction = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let toolbarActionType = try XCTUnwrap(toolbarAction.actionType as? ToolbarActionType)
         XCTAssertEqual(toolbarActionType, ToolbarActionType.didTranslationSettingsChange)
+        XCTAssertNil(toolbarAction.translationConfiguration?.state)
 
         let settingsAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? TranslationSettingsMiddlewareAction)
         let settingsActionType = try XCTUnwrap(settingsAction.actionType as? TranslationSettingsMiddlewareActionType)
@@ -247,6 +248,7 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
         let toolbarAction = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
         let toolbarActionType = try XCTUnwrap(toolbarAction.actionType as? ToolbarActionType)
         XCTAssertEqual(toolbarActionType, ToolbarActionType.didTranslationSettingsChange)
+        XCTAssertNil(toolbarAction.translationConfiguration?.state)
 
         let settingsAction = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsMiddlewareAction)
         XCTAssertEqual(settingsAction.isTranslationsEnabled, true)
