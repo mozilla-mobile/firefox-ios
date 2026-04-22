@@ -86,7 +86,7 @@ typealias TabUUID = String
 @MainActor
 class Tab: NSObject,
            ThemeApplicable,
-           LegacyFeatureFlaggable,
+           FeatureFlaggable,
            ShareTab,
            ContentBlockerTab,
            TabWebViewDelegate,
@@ -700,7 +700,7 @@ class Tab: NSObject,
             // FXIOS-14783: Experimentation on removing the isAboutHome check
             // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
             let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
-            let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
+            let experimentEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
 
             if experimentEnabled || !isAboutHome {
                 webView.reloadFromOrigin()
