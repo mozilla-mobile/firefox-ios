@@ -2936,21 +2936,7 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            let title: String = .Translations.LanguagePicker.Title
-            let attributedTitleKey = "attributedTitle"
-            alert.title = title
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
+            alert.title = .Translations.LanguagePicker.Title
         }
 
         data.languages.forEach { code in
@@ -2982,6 +2968,22 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        }
+
+        if let title = alert.title {
+            let attributedTitleKey = "attributedTitle"
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [
+                        .font: DefaultDynamicFontHelper.preferredBoldFont(
+                            withTextStyle: .headline,
+                            size: UIFont.labelFontSize
+                        )
+                    ]
+                ),
+                forKey: attributedTitleKey
+            )
         }
 
         if let popover = alert.popoverPresentationController {
