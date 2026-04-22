@@ -44,7 +44,7 @@ struct AddressCellView: View {
     var body: some View {
         VStack(spacing: UX.vStackSpacing) {
             HStack(alignment: .midIconAndLabel, spacing: UX.hStackSpacing) {
-                Image(StandardImageIdentifiers.Large.location)
+                Image(decorative: StandardImageIdentifiers.Large.location)
                     .renderingMode(.template)
                     .accessibilityHidden(true)
                     .modifier(ListItemIconPadding(isLandscape: isLandscape,
