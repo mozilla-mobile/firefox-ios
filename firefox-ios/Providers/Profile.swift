@@ -141,7 +141,6 @@ protocol Profile: AnyObject, Sendable {
     func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func addTabToCommandQueue(_ deviceId: String, url: URL)
-    func removeTabFromCommandQueue(_ deviceId: String, url: URL)
     func flushTabCommands(toDeviceId: String?)
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
@@ -542,10 +541,6 @@ open class BrowserProfile: Profile,
 
     func addTabToCommandQueue(_ deviceId: String, url: URL) {
         tabs.addRemoteCommand(deviceId: deviceId, url: url)
-    }
-
-    func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
-        tabs.removeRemoteCommand(deviceId: deviceId, url: url)
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {

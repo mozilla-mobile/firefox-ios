@@ -319,10 +319,6 @@ final class MockProfile: Client.Profile, @unchecked Sendable {
         return
     }
 
-    public func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
-        return
-    }
-
     public func flushTabCommands(toDeviceId: String?) {
         return
     }
