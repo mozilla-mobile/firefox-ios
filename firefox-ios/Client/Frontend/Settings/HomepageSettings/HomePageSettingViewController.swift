@@ -6,7 +6,9 @@ import Foundation
 import Shared
 import Common
 
-class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+class HomePageSettingViewController: SettingsTableViewController,
+                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -149,7 +151,7 @@ class HomePageSettingViewController: SettingsTableViewController, LegacyFeatureF
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: featureFlags.isFeatureEnabled(.homepageBookmarksSectionDefault, checking: .userOnly),
+                defaultValue: userPreferences.isHomepageBookmarksSectionEnabled,
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
