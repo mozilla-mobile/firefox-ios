@@ -32,10 +32,18 @@ class TopSitesRowCountSettingsController: SettingsTableViewController, FeatureFl
                 return num == self.numberOfRows
             },
                                     onChecked: {
+                guard self.numberOfRows != num else { return }
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()
-                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+
+                store.dispatch(
+                    TopSitesAction(
+                        numberOfRows: Int(num),
+                        windowUUID: self.windowUUID,
+                        actionType: TopSitesActionType.updatedNumberOfRows
+                    )
+                )
             })
         }
 
