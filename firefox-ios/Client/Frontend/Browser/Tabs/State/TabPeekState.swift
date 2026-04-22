@@ -8,6 +8,7 @@ import CopyWithUpdates
 
 @CopyWithUpdates
 struct TabPeekState: ScreenState {
+    let windowUUID: WindowUUID
     let showAddToBookmarks: Bool
     let showRemoveBookmark: Bool
     let showSendToDevice: Bool
@@ -15,7 +16,6 @@ struct TabPeekState: ScreenState {
     let showCloseTab: Bool
     let previewAccessibilityLabel: String
     let screenshot: UIImage
-    let windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let tabPeekState = appState.componentState(
