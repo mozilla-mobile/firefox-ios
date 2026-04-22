@@ -556,8 +556,6 @@ class TabTests: XCTestCase {
             .defaultWebpagePreferences?
             .preferredHTTPSNavigationPolicy
         XCTAssertEqual(policy, .automaticFallbackToHTTP)
-
-        subject.close()
     }
 
     @MainActor
@@ -573,7 +571,6 @@ class TabTests: XCTestCase {
             .defaultWebpagePreferences?
             .preferredHTTPSNavigationPolicy
         XCTAssertNotEqual(policy, .automaticFallbackToHTTP)
-        subject.close()
     }
 
     // MARK: - Helpers
