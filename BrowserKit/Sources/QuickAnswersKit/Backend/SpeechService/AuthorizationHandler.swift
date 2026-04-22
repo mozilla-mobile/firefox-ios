@@ -27,4 +27,12 @@ struct AuthorizationHandler: AuthorizeProvider {
         }
         return status == .authorized
     }
+
+    func isMicrophonePermissionUndetermined() -> Bool {
+        AVAudioSession.sharedInstance().recordPermission == .undetermined
+    }
+
+    func isSpeechPermissionUndetermined() -> Bool {
+        SFSpeechRecognizer.authorizationStatus() == .notDetermined
+    }
 }

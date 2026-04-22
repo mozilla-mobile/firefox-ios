@@ -39,8 +39,10 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
+        let isMicFirstTime = authorizer.isMicrophonePermissionUndetermined()
+
         guard await isPermissionGranted() else {
-            throw SpeechError.permissionDenied
+            throw SpeechError.microphonePermissionDenied(isFirstTime: isMicFirstTime)
         }
         try audioManager.configureAudioSession()
     }

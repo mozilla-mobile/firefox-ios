@@ -76,4 +76,6 @@ protocol SpeechRecognizerProvider: Sendable {
 protocol AuthorizeProvider: Sendable {
     func isMicrophonePermissionAuthorized() async -> Bool
     func isSpeechPermissionAuthorized() async -> Bool
+    func isMicrophonePermissionUndetermined() -> Bool
+    func isSpeechPermissionUndetermined() -> Bool
 }

@@ -1041,38 +1041,43 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
   func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
-        guard isSummarizerOn,
-              tabManager.selectedTab?.isFxHomeTab == false,
-              let webView = tabManager.selectedTab?.webView else { return }
-        let contentContainer = browserViewController.contentContainer
-        let browserFrame = browserViewController.view.frame
-        var browserScreenshot = browserViewController.view.snapshot
-        if let croppedImage = browserScreenshot.cgImage?.cropping(
-            to: CGRect(
-                x: contentContainer.frame.origin.x * browserScreenshot.scale,
-                y: contentContainer.frame.origin.y * browserScreenshot.scale,
-                width: contentContainer.frame.width * browserScreenshot.scale,
-                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
-            )) {
-            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
-        }
-
-        guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
-        let coordinator = SummarizeCoordinator(
-            browserSnapshot: browserScreenshot,
-            browserSnapshotTopOffset: contentContainer.frame.origin.y,
-            webView: webView,
-            parentCoordinatorDelegate: self,
-            trigger: trigger,
-            prefs: profile.prefs,
-            windowUUID: windowUUID,
-            config: config,
-            router: router) { [weak self] url in
-            guard let url else { return }
-            self?.openURLinNewTab(url)
-        }
-        add(child: coordinator)
-        coordinator.start()
+      let coord = QuickAnswersCoordinator(parentCoordinatorDelegate: self, windowUUID: windowUUID, themeManager: themeManager, router: router) { _ in
+          
+      }
+      add(child: coord)
+      coord.start()
+//      guard isSummarizerOn,
+//              tabManager.selectedTab?.isFxHomeTab == false,
+//              let webView = tabManager.selectedTab?.webView else { return }
+//        let contentContainer = browserViewController.contentContainer
+//        let browserFrame = browserViewController.view.frame
+//        var browserScreenshot = browserViewController.view.snapshot
+//        if let croppedImage = browserScreenshot.cgImage?.cropping(
+//            to: CGRect(
+//                x: contentContainer.frame.origin.x * browserScreenshot.scale,
+//                y: contentContainer.frame.origin.y * browserScreenshot.scale,
+//                width: contentContainer.frame.width * browserScreenshot.scale,
+//                height: (browserFrame.height - abs(contentContainer.frame.origin.y)) * browserScreenshot.scale
+//            )) {
+//            browserScreenshot = UIImage(cgImage: croppedImage, scale: UIScreen.main.scale, orientation: .up)
+//        }
+//
+//        guard !childCoordinators.contains(where: { $0 is SummarizeCoordinator }) else { return }
+//        let coordinator = SummarizeCoordinator(
+//            browserSnapshot: browserScreenshot,
+//            browserSnapshotTopOffset: contentContainer.frame.origin.y,
+//            webView: webView,
+//            parentCoordinatorDelegate: self,
+//            trigger: trigger,
+//            prefs: profile.prefs,
+//            windowUUID: windowUUID,
+//            config: config,
+//            router: router) { [weak self] url in
+//            guard let url else { return }
+//            self?.openURLinNewTab(url)
+//        }
+//        add(child: coordinator)
+//        coordinator.start()
     }
 
     func showShortcutsLibrary() {

@@ -38,7 +38,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -47,6 +47,9 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.addAction(UIAction(handler: { [weak self] _ in
+            self?.navigationHandler?.dismissQuickAnswers(with: nil)
+        }), for: .touchUpInside)
     }
     private let privacyButton: UIButton = .build {
         if #available(iOS 26, *) {
@@ -86,7 +89,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.init(
             navigationHandler: navigationHandler,
             // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
-            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            viewModel: QuickAnswersViewModel(service: DefaultQuickAnswersService()),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -186,8 +189,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private func registerViewModelUpdates() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, _):
-                self?.contentView.configureTranscript(result.text)
+            case .recordVoice(let result, let error):
+                if let error {
+                    self?.handleSpeechError(error)
+                } else {
+                    self?.contentView.configureTranscript(result.text)
+                }
             case .loadingSearchResult:
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
@@ -196,6 +203,55 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             }
         }
         viewModel.startRecordingVoice()
+    }
+
+    // MARK: - Permission Alerts
+
+    private func handleSpeechError(_ error: SpeechError) {
+        switch error {
+        case .microphonePermissionDenied(let isFirstTime):
+            if isFirstTime {
+                navigationHandler?.dismissQuickAnswers(with: nil)
+            } else {
+                showPermissionAlert(
+                    title: "Microphone Access Required",
+                    message: "Microphone access was denied. Please enable it in Settings to use Quick Answers."
+                )
+            }
+        case .speechRecognitionPermissionDenied(let isFirstTime):
+            if isFirstTime {
+                navigationHandler?.dismissQuickAnswers(with: nil)
+            } else {
+                showPermissionAlert(
+                    title: "Speech Recognition Required",
+                    message: "Speech recognition access was denied. Please enable it in Settings to use Quick Answers."
+                )
+            }
+        default:
+            break
+        }
+    }
+
+    private func showPermissionAlert(title: String, message: String) {
+        let alertController = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+        )
+        alertController.addAction(
+            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }
+        )
+        present(alertController, animated: true)
     }
 
     // MARK: - Themeable
