@@ -1940,7 +1940,7 @@ class BrowserViewController: UIViewController,
         }
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
             if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
@@ -4685,7 +4685,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
 
             // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
                 if selectedTab.isFxHomeTab {
                     // Added as initial fix for WKWebView memory leak. Needs further investigation.
                     // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
@@ -4744,7 +4744,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         /// If the selectedTab is showing an error page trigger a reload
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly),
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor),
            let url = selectedTab.url,
            let internalUrl = InternalURL(url),
            internalUrl.isErrorPage {
@@ -4752,7 +4752,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
             // Do not reload when it's an about:blank page or has a temporary document
             if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
                 needsReload = false
