@@ -51,11 +51,11 @@ enum RemoteTabsPanelEmptyStateReason {
 /// State for RemoteTabsPanel. WIP.
 @CopyWithUpdates
 struct RemoteTabsPanelState: ScreenState, Sendable {
+    let windowUUID: WindowUUID
     let refreshState: RemoteTabsPanelRefreshState
     let allowsRefresh: Bool
     let clientAndTabs: [ClientAndTabs]
     let showingEmptyState: RemoteTabsPanelEmptyStateReason?// If showing empty (or error) state
-    let windowUUID: WindowUUID
     let devices: [Device]
 
     init(appState: AppState, uuid: WindowUUID) {
