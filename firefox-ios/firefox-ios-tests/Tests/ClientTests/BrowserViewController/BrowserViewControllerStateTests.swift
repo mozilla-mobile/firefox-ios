@@ -482,6 +482,34 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    // MARK: - Quick Answers
+    func test_tapOnQuickAnswersButton_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .quickAnswers)
+    }
+
+    func test_navigationDestinationHandled_clearsNavigationDestination() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let navigateAction = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let navigatedState = reducer(initialState, navigateAction)
+
+        let handledAction = getNavigationBrowserAction(
+            for: .navigationDestinationHandled,
+            destination: .quickAnswers
+        )
+        let handledState = reducer(navigatedState, handledAction)
+
+        XCTAssertNotNil(navigatedState.navigationDestination)
+        XCTAssertNil(handledState.navigationDestination)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
@@ -492,7 +520,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     private func getAction(for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
-        return  GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+        return GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 
     private func getNavigationBrowserAction(

@@ -38,7 +38,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -47,6 +47,12 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.addAction(
+            UIAction(handler: { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }),
+            for: .touchUpInside
+        )
     }
     private let privacyButton: UIButton = .build {
         if #available(iOS 26, *) {
@@ -60,7 +66,10 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             with: nil
         )
         // TODO: - FXIOS-14720 Add Strings and accessibility ids
-        $0.configuration?.title = "Protected by Firefox"
+        $0.configuration?.attributedTitle = AttributedString(
+            "Protected by Firefox",
+            attributes: AttributeContainer([.font: FXFontStyles.Regular.body.scaledFont()])
+        )
         $0.configuration?.imagePadding = UX.privacyButtonImagePadding
         $0.configuration?.contentInsets = UX.privacyButtonContentInset
         $0.configuration?.cornerStyle = .fixed
@@ -205,7 +214,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
         privacyButton.configuration?.baseBackgroundColor = theme.colors.layerAccentPrivateNonOpaque
-        privacyButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        privacyButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
         contentView.applyTheme(theme: theme)

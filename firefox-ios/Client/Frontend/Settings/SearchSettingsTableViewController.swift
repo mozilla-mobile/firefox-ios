@@ -15,7 +15,10 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-final class SearchSettingsTableViewController: ThemedTableViewController, LegacyFeatureFlaggable {
+final class SearchSettingsTableViewController: ThemedTableViewController,
+                                               LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                               FeatureFlaggable,
+                                               UserFeaturePreferenceProvider {
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5
@@ -69,7 +72,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
     }
 
     var isRecentSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     // Determines how to display the pre search settings based on the feature flags
@@ -411,7 +414,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
     }
 
     private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
                 defaultValue: model.shouldShowFirefoxSuggestions,
@@ -429,7 +432,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
     }
 
     private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
                 defaultValue: model.shouldShowSponsoredSuggestions,
@@ -488,7 +491,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
         case .searchEnginesSuggestions:
             return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
-            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            return featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
             ? FirefoxSuggestItem.allCases.count : 3
         }
     }
@@ -504,7 +507,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
-            searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
+            searchEnginePicker.selectedSearchEngineID = model.defaultEngine?.engineID
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count

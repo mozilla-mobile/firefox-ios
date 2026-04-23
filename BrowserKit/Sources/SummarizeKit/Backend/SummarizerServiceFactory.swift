@@ -92,18 +92,17 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         return 0
     }
 
-    // TODO: FXIOS-15146 - Add this to LLMKit and make creation more generic
     private func makeLiteLLMClient(
         config: SummarizerConfig,
         prefs: Prefs,
         isAppAttestAuthEnabled: Bool
-    ) -> LiteLLMClient? {
+    ) -> LiteLLMClientProtocol? {
         guard let model = config.options["model"] as? String, !model.isEmpty else {
             return nil
         }
 
         if isAppAttestAuthEnabled {
-            return LiteLLMCreator.createAppAttestLiteLLM(using: prefs)
+            return LiteLLMCreator().createAppAttestLiteLLM(using: prefs)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let key = LiteLLMConfig.apiKey else {

@@ -246,6 +246,7 @@ struct AccessibilityIdentifiers {
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
             static let closeButton = "FirefoxHomepage.closeButton"
+            static let quickAnswersButton = "FirefoxHomepage.quickAnswersButton"
         }
 
         struct MoreButtons {
@@ -649,6 +650,7 @@ struct AccessibilityIdentifiers {
             struct Addresses {
                 static let title = "Addresses"
                 static let addAddress = "Add address"
+                static let addressCell = "AddressCell"
             }
         }
 

@@ -37,7 +37,8 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             LegacyFeatureFlaggable,
+                             LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                             FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
                              LegacyTabScrollController.Delegate {
@@ -313,11 +314,11 @@ class BrowserViewController: UIViewController,
     }
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
 
     var isHomepageSearchBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.homepageSearchBar)
     }
 
     var isSummarizerToolbarFeatureEnabled: Bool {
@@ -330,7 +331,7 @@ class BrowserViewController: UIViewController,
 
     private var isRecentOrTrendingSearchEnabled: Bool {
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
@@ -563,6 +564,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
         updateMicrosurveyConstraints()
+        updateAutoTranslatePromptConstraints()
         updateToolbarDisplay()
         addOrUpdateMaskViewIfNeeded()
 
@@ -1239,7 +1241,7 @@ class BrowserViewController: UIViewController,
     /// As part of the homepage search bar work, we want to only hide the toolbar when the homepage search bar appears.
     /// The homepage search bar should not appear if we are in editing mode.
     private func shouldHideAddressToolbar() {
-        guard featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) else { return }
+        guard featureFlagsProvider.isEnabled(.homepageSearchBar) else { return }
         let toolbarState = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
@@ -1939,7 +1941,7 @@ class BrowserViewController: UIViewController,
         }
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
             if webView.url == nil, selectedTab.url?.absoluteString != "about:blank" {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
@@ -1986,7 +1988,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
-        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
+        guard featureFlagsProvider.isEnabled(.microsurvey), microsurvey == nil else { return }
 
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
@@ -2068,14 +2070,21 @@ class BrowserViewController: UIViewController,
 
     private func removeAutoTranslatePrompt() {
         guard let prompt = autoTranslatePrompt else { return }
+        prompt.removeFromSuperview()
+        autoTranslatePrompt = nil
+    }
+
+    private func updateAutoTranslatePromptConstraints() {
+        guard let prompt = autoTranslatePrompt else { return }
+        prompt.removeFromSuperview()
 
         if isBottomSearchBar {
-            overKeyboardContainer.removeArrangedView(prompt)
+            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         } else {
-            bottomContainer.removeArrangedView(prompt)
+            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         }
 
-        autoTranslatePrompt = nil
+        prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - Native Error Page
@@ -2662,6 +2671,14 @@ class BrowserViewController: UIViewController,
         case _ where state.navigationDestination != nil:
             guard let destination = state.navigationDestination else { return }
             handleNavigation(to: destination)
+            // clear the navigation state for BrowserViewControllerState to make diffing works for subsequent navigations.
+            store.dispatch(
+                NavigationBrowserAction(
+                    navigationDestination: destination,
+                    windowUUID: windowUUID,
+                    actionType: NavigationBrowserActionType.navigationDestinationHandled
+                )
+            )
         default: break
         }
     }
@@ -2740,6 +2757,8 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .quickAnswers:
+            navigationHandler?.showQuickAnswers()
         case .privacyNoticeLink(let url):
             navigationHandler?.showPrivacyNoticeLink(url: url)
         case .certificatesFromErrorPage:
@@ -2935,21 +2954,7 @@ class BrowserViewController: UIViewController,
         if data.isTranslated, let langCode = data.translatedToLanguage {
             configureShowOriginalHeader(for: alert, languageCode: langCode)
         } else {
-            let title: String = .Translations.LanguagePicker.Title
-            let attributedTitleKey = "attributedTitle"
-            alert.title = title
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
+            alert.title = .Translations.LanguagePicker.Title
         }
 
         data.languages.forEach { code in
@@ -2981,6 +2986,22 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
+        }
+
+        if let title = alert.title {
+            let attributedTitleKey = "attributedTitle"
+            alert.setValue(
+                NSAttributedString(
+                    string: title,
+                    attributes: [
+                        .font: DefaultDynamicFontHelper.preferredBoldFont(
+                            withTextStyle: .headline,
+                            size: UIFont.labelFontSize
+                        )
+                    ]
+                ),
+                forKey: attributedTitleKey
+            )
         }
 
         if let popover = alert.popoverPresentationController {
@@ -4672,7 +4693,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
 
             // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+            if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
                 if selectedTab.isFxHomeTab {
                     // Added as initial fix for WKWebView memory leak. Needs further investigation.
                     // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
@@ -4731,7 +4752,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
         /// If the selectedTab is showing an error page trigger a reload
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly),
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor),
            let url = selectedTab.url,
            let internalUrl = InternalURL(url),
            internalUrl.isErrorPage {
@@ -4739,7 +4760,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
             // Do not reload when it's an about:blank page or has a temporary document
             if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
                 needsReload = false
@@ -5071,10 +5092,6 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidPressPrivateMode() {
         updateZoomPageBarVisibility(visible: false)
-    }
-
-    func topTabsShowCloseTabsToast() {
-        showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
     }
 }
 

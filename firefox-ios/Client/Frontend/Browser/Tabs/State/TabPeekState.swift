@@ -4,8 +4,11 @@
 
 import Redux
 import Common
+import CopyWithUpdates
 
+@CopyWithUpdates
 struct TabPeekState: ScreenState {
+    let windowUUID: WindowUUID
     let showAddToBookmarks: Bool
     let showRemoveBookmark: Bool
     let showSendToDevice: Bool
@@ -13,7 +16,6 @@ struct TabPeekState: ScreenState {
     let showCloseTab: Bool
     let previewAccessibilityLabel: String
     let screenshot: UIImage
-    let windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let tabPeekState = appState.componentState(
@@ -25,14 +27,7 @@ struct TabPeekState: ScreenState {
             return
         }
 
-        self.init(windowUUID: tabPeekState.windowUUID,
-                  showAddToBookmarks: tabPeekState.showAddToBookmarks,
-                  showRemoveBookmark: tabPeekState.showRemoveBookmark,
-                  showSendToDevice: tabPeekState.showSendToDevice,
-                  showCopyURL: tabPeekState.showCopyURL,
-                  showCloseTab: tabPeekState.showCloseTab,
-                  previewAccessibilityLabel: tabPeekState.previewAccessibilityLabel,
-                  screenshot: tabPeekState.screenshot)
+        self = tabPeekState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID,
@@ -62,7 +57,7 @@ struct TabPeekState: ScreenState {
         switch action.actionType {
         case TabPeekActionType.loadTabPeek:
             guard let tabPeekModel = action.tabPeekModel else { return state }
-            return TabPeekState(windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                                 showAddToBookmarks: tabPeekModel.canTabBeSaved,
                                 showRemoveBookmark: tabPeekModel.canTabBeRemoved,
                                 showSendToDevice: tabPeekModel.isSyncEnabled && tabPeekModel.canTabBeSaved,
@@ -75,6 +70,6 @@ struct TabPeekState: ScreenState {
     }
 
     static func defaultState(from state: TabPeekState) -> TabPeekState {
-        return TabPeekState(windowUUID: state.windowUUID)
+        return state.copyWithUpdates()
     }
 }

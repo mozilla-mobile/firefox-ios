@@ -23,7 +23,6 @@ protocol TabManager: AnyObject {
     var recentlyAccessedNormalTabs: [Tab] { get }
 
     var selectedTab: Tab? { get }
-    var backupCloseTab: BackupCloseTab? { get set }
 
     var tabs: [Tab] { get }
     var normalTabs: [Tab] { get }
@@ -86,11 +85,6 @@ protocol TabManager: AnyObject {
 
     /// Remove normal tabs older than a certain period of time
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date)
-
-    // MARK: - Undo Close
-    func undoCloseTab()
-    /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
-    func undoCloseAllTabs()
 
     // MARK: Get Tab
     func getTabForUUID(uuid: TabUUID) -> Tab?

@@ -33,7 +33,6 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         }
 
         struct HeaderConstants {
-            static let estimatedHeight: CGFloat = 40
             static let bottomSpacing: CGFloat = 30
         }
 
@@ -192,22 +191,18 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(UX.standardSingleItemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(UX.standardSingleItemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let containerWidth = environment.container.contentSize.width
-        let effectiveInsets = environment.container.effectiveContentInsets
-        let headerWidth = HomepageHeaderCell.UX.contentWidth()
-        let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
-        let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
+        let horizontalInset = UX.leadingInset(traitCollection: environment.traitCollection)
 
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,

@@ -59,6 +59,7 @@ struct NimbusFlaggableFeature {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .httpsUpgrade,
                 .quickAnswers,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
@@ -76,7 +77,8 @@ struct NimbusFlaggableFeature {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .videoIntroOnboarding:
+                .videoIntroOnboarding,
+                .worldCupWidget:
             return nil
         }
     }

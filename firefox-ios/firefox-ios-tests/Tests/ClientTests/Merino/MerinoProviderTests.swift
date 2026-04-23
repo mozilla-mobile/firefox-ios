@@ -71,13 +71,22 @@ private final class MockCache: CuratedRecommendationsCacheProtocol {
 
 final class MerinoProviderTests: XCTestCase, @unchecked Sendable {
     private let storiesFlag = PrefsKeys.UserFeatureFlagPrefs.ASPocketStories
+    private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+    override func setUp() async throws {
+        try await super.setUp()
+        profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
             HomepageRedesignFeature(categoriesEnabled: false)
         }
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        profile = nil
+        try await super.tearDown()
     }
 
     func testIncorrectLocalesAreNotSupported() {

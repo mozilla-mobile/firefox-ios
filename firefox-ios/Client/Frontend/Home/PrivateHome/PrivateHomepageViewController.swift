@@ -82,7 +82,7 @@ final class PrivateHomepageViewController: UIViewController,
     private lazy var homepageHeaderCell: HomepageHeaderCell = {
         let header = HomepageHeaderCell()
         header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        header.configure(headerState: HeaderState(windowUUID: windowUUID))
+        header.configure(headerState: HeaderState(windowUUID: windowUUID, isPrivate: true))
         return header
     }()
 

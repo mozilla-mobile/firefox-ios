@@ -15,7 +15,7 @@ final class BookmarksViewController: SiteTableViewController,
                                      CanRemoveQuickActionBookmark,
                                      UITableViewDropDelegate,
                                      Notifiable,
-                                     LegacyFeatureFlaggable {
+                                     FeatureFlaggable {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -57,7 +57,7 @@ final class BookmarksViewController: SiteTableViewController,
     }
 
     private var isBookmarksSearchEnabled: Bool {
-        featureFlags.isFeatureEnabled(.bookmarksSearchFeature, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.bookmarksSearchFeature)
     }
 
     private var toolbarButtonItems: [UIBarButtonItem] {
@@ -495,6 +495,14 @@ final class BookmarksViewController: SiteTableViewController,
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
+    private func updateBottomSearchBarLayout(isHidden: Bool) {
+        bottomStackView.isHidden = isHidden
+
+        let bottomInset = isHidden ? 0 : searchbar.bounds.height
+        tableView.contentInset.bottom = bottomInset
+        tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+    }
+
     private func setupEmptyStateView() {
         view.addSubview(a11yEmptyStateScrollView)
         a11yEmptyStateScrollView.addSubview(emptyStateView)
@@ -921,7 +929,7 @@ extension BookmarksViewController: UISearchBarDelegate {
 
     func startSearchState() {
         updatePanelState(newState: .bookmarks(state: .search))
-        bottomStackView.isHidden = false
+        updateBottomSearchBarLayout(isHidden: false)
         searchbar.becomeFirstResponder()
         sendPanelChangeNotification()
     }
@@ -931,7 +939,7 @@ extension BookmarksViewController: UISearchBarDelegate {
 
         searchbar.text = ""
         searchbar.resignFirstResponder()
-        bottomStackView.isHidden = true
+        updateBottomSearchBarLayout(isHidden: true)
 
         // Transition back to non-searching state
         updatePanelState(newState: viewModel.isRootNode

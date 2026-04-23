@@ -10,7 +10,7 @@ import Common
 
 class SceneDelegate: UIResponder,
                      UIWindowSceneDelegate,
-                     LegacyFeatureFlaggable {
+                     FeatureFlaggable {
     var window: UIWindow?
 
     let profile: Profile = AppContainer.shared.resolve()
@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder,
     private let logger: Logger = DefaultLogger.shared
     private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
 
     // MARK: - Connecting / Disconnecting Scenes

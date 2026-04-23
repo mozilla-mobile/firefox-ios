@@ -14,20 +14,11 @@ enum SwitchPrivacyModeResult {
     case usedExistingTab
 }
 
-struct BackupCloseTab {
-    var tab: Tab
-    var restorePosition: Int?
-    var isSelected: Bool
-}
-
-final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggable {
+final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
-    // FXIOS-15007 - `backupCloseTab` is never niled when the undo toast is cleared,
-    // causing us to retain the tab object indefinitely
-    var backupCloseTab: BackupCloseTab?
     var notificationCenter: NotificationProtocol
     private(set) var tabs: [Tab] {
         didSet {
@@ -39,7 +30,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     private var tabsInternalCache: (normal: [Tab], private: [Tab])?
 
     var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
 
     var count: Int {
@@ -85,7 +76,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
     private let windowIsNew: Bool
     private let profile: Profile
     private weak var navigationDelegate: WKNavigationDelegate?
-    private var backupCloseTabs = [Tab]()
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
     // The only tab present before doing tab restoration, since deeplink happens before it
@@ -206,13 +196,13 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        self.removeTab(tab, flushToDisk: true)
-        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
+        removeTab(tab, flushToDisk: true)
+        updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
     }
 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false)
+            removeTab(tab, flushToDisk: false)
         }
         commitChanges()
     }
@@ -230,18 +220,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
     func removeAllTabs(isPrivateMode: Bool) {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
-        var currentSelectedTab: BackupCloseTab?
-
-        // Backup the selected tab in separate variable as the `removeTab` method called below for each tab will
-        // automatically update tab selection as if there was a single tab removal.
-        if let tab = selectedTab, tab.isPrivate == isPrivateMode {
-            currentSelectedTab = BackupCloseTab(tab: tab,
-                                                restorePosition: tabs.firstIndex(of: tab),
-                                                isSelected: selectedTab?.tabUUID == tab.tabUUID)
-        }
-
-        // Backup tabs for tab undo, this is not a feature on iPhone but is on iPad
-        backupCloseTabs = tabs
 
         // Scroll position for most tabs has been stored via session data when we navigate away,
         // but we need to save the selected tabs session data to persist scroll position
@@ -249,7 +227,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
         for tab in currentModeTabs {
             // Remove each tab without persisting changes
-            self.removeTab(tab, flushToDisk: false)
+            removeTab(tab, flushToDisk: false)
             if tab == currentModeTabs.last {
                 // Select tab calls preserve tabs so we don't need to call it again
                 if tab.isPrivate,
@@ -262,8 +240,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
                 }
             }
         }
-        // Save the tab state that existed prior to removals (preserves original selected tab)
-        backupCloseTab = currentSelectedTab
     }
 
     /// Remove a tab, will notify delegate of the tab removal
@@ -285,9 +261,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
         }
 
         tab.cancelDocumentDownload()
-        backupCloseTab = BackupCloseTab(tab: tab,
-                                        restorePosition: removalIndex,
-                                        isSelected: selectedTab?.tabUUID == tab.tabUUID)
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
@@ -297,7 +270,11 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
                        category: .tabs)
         }
 
-        tab.close()
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        Task {
+            await tab.close()
+        }
 
         // Notify of tab removal
         self.delegates.forEach {
@@ -420,40 +397,6 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
     func getTabForURL(_ url: URL) -> Tab? {
         return tabs.first(where: { $0.webView?.url == url })
-    }
-
-    // MARK: - Undo Close Tab
-    func undoCloseTab() {
-        assert(Thread.isMainThread)
-        guard let backupCloseTab = self.backupCloseTab else { return }
-
-        let previouslySelectedTab = selectedTab
-        if let index = backupCloseTab.restorePosition {
-            tabs.insert(backupCloseTab.tab, at: index)
-        } else {
-            tabs.append(backupCloseTab.tab)
-        }
-
-        if backupCloseTab.isSelected {
-            self.selectTab(backupCloseTab.tab)
-        } else if let tabToSelect = previouslySelectedTab {
-            self.selectTab(tabToSelect)
-        }
-
-        delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-        commitChanges()
-    }
-
-    func undoCloseAllTabs() {
-        assert(Thread.isMainThread)
-        guard !backupCloseTabs.isEmpty else { return }
-        tabs = backupCloseTabs
-        commitChanges()
-        backupCloseTabs = [Tab]()
-        if backupCloseTab != nil {
-            selectTab(backupCloseTab?.tab)
-            backupCloseTab = nil
-        }
     }
 
     // MARK: - Restore tabs
@@ -929,7 +872,11 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
             selectedIndex = -1
         }
         privateTabs.forEach { tab in
-            tab.close()
+            // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+            // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+            Task {
+                await tab.close()
+            }
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
 
@@ -942,7 +889,7 @@ final class TabManagerImplementation: NSObject, TabManager, LegacyFeatureFlaggab
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        let isNativeErrorPage = featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        let isNativeErrorPage = featureFlagsProvider.isEnabled(.nativeErrorPage)
 
         // If app starts with error url, first homepage appears and
         // then error page is loaded. To directly load error page

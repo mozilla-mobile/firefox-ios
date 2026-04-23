@@ -7,7 +7,9 @@ import Foundation
 import UIKit
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-class FirefoxSuggestSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+class FirefoxSuggestSettingsViewController: SettingsTableViewController,
+                                            FeatureFlaggable,
+                                            UserFeaturePreferenceProvider {
     init(profile: Profile?, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -32,7 +34,7 @@ class FirefoxSuggestSettingsViewController: SettingsTableViewController, LegacyF
         }
 
         var sections: [SettingSection] = [SettingSection(title: nil, children: [enabled])]
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             sections.append(SettingSection(
                 title: nil,
                 children: [

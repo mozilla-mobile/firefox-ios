@@ -17,10 +17,12 @@ final class BookmarksPanelViewModelTests: XCTestCase, LegacyFeatureFlaggable {
         try await super.setUp()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
         profile = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

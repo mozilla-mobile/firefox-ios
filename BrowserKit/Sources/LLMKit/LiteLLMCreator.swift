@@ -4,8 +4,14 @@
 import Shared
 import MLPAKit
 
-public struct LiteLLMCreator {
-    public static func createAppAttestLiteLLM(using prefs: Prefs) -> LiteLLMClient? {
+public protocol LiteLLMCreating {
+    func createAppAttestLiteLLM(using prefs: Prefs) -> LiteLLMClientProtocol?
+}
+
+public struct LiteLLMCreator: LiteLLMCreating {
+    public init() { }
+
+    public func createAppAttestLiteLLM(using prefs: Prefs) -> LiteLLMClientProtocol? {
         let mlpaEnvironmentKey = prefs.stringForKey(PrefsKeys.MLPASettings.mlpaEndpointEnvironment) ?? ""
         let mlpaEnvironment = MLPAEnvironment(rawValue: mlpaEnvironmentKey) ?? .prod
         guard let endPoint = MLPAConstants.completionsEndpoint(with: mlpaEnvironment),

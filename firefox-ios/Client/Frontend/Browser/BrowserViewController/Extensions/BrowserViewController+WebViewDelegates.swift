@@ -270,7 +270,14 @@ extension BrowserViewController: WKUIDelegate {
 
             let previewViewController = ContextMenuPreviewViewController()
             previewViewController.view.isUserInteractionEnabled = false
-            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+
+            let configuration = webView.configuration
+            // Ensures the preview doesn't autoplay media [FXIOS-15375]
+            configuration.allowsInlineMediaPlayback = false
+            configuration.allowsPictureInPictureMediaPlayback = false
+            configuration.mediaTypesRequiringUserActionForPlayback = .all
+            configuration.allowsAirPlayForMediaPlayback = false
+            let clonedWebView = WKWebView(frame: webView.frame, configuration: configuration)
 
             previewViewController.view.addSubview(clonedWebView)
             clonedWebView.pinToSuperview()

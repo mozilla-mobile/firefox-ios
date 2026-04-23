@@ -17,10 +17,9 @@ final class SearchViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(firefoxSuggest: MockRustFirefoxSuggest())
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        LegacyFeatureFlagsManager.shared.set(feature: .firefoxSuggestFeature, to: true)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()
         mockDelegate = MockSearchDelegate()
@@ -44,6 +43,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile = nil
         mockDelegate = nil
         try await super.tearDown()

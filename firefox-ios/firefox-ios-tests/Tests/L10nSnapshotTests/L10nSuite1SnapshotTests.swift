@@ -99,7 +99,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testWebViewAuthenticationDialog() {
-        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/")
+        navigator.openURL("https://httpbin.org/basic-auth/user/passwd")
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         // The auth dialog no longer shown in debugDescription.
         // The presence of the keyboard is a good indicator that the user/pass window appears.

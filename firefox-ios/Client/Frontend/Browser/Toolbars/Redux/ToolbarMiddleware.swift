@@ -369,6 +369,9 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
+        case .translate:
+            // Long-press on translate is handled in TranslationsMiddleware.
+            break
         default:
             break
         }

@@ -172,6 +172,7 @@ struct BrowserViewControllerState: ScreenState {
             NavigationBrowserActionType.tapOnShareSheet,
             NavigationBrowserActionType.tapOnHomepageSearchBar,
             NavigationBrowserActionType.tapOnShortcutsShowAllButton,
+            NavigationBrowserActionType.tapOnQuickAnswersButton,
             NavigationBrowserActionType.tapOnPrivacyNoticeLink,
             NavigationBrowserActionType.tapOnShowCertificatesFromErrorPage,
             NavigationBrowserActionType.tapOnNativeErrorPageLearnMore:
@@ -179,6 +180,16 @@ struct BrowserViewControllerState: ScreenState {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
                 autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action),
                 navigationDestination: action.navigationDestination
+            )
+        case NavigationBrowserActionType.navigationDestinationHandled:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                windowUUID: state.windowUUID,
+                shouldShowReaderModeBarSummarizerButton: state.shouldShowReaderModeBarSummarizerButton,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                autoTranslatePromptState: AutoTranslatePromptState.reducer(state.autoTranslatePromptState, action),
+                navigationDestination: nil
             )
         default:
             return passthroughState(from: state, action: action)

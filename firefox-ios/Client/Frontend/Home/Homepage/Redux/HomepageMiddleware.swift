@@ -9,7 +9,7 @@ import Common
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
 @MainActor
-final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
+final class HomepageMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let homepageTelemetry: HomepageTelemetry
     private let privacyNoticeHelper: PrivacyNoticeHelperProtocol
@@ -102,7 +102,7 @@ final class HomepageMiddleware: LegacyFeatureFlaggable, Notifiable {
         for device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
         and isLandscape: Bool = UIWindow.isLandscape
     ) -> Bool {
-        let isHomepageSearchEnabled = featureFlags.isFeatureEnabled(.homepageSearchBar, checking: .buildOnly)
+        let isHomepageSearchEnabled = featureFlagsProvider.isEnabled(.homepageSearchBar)
         let isCompact = device == .phone && !isLandscape
 
         guard isHomepageSearchEnabled, isCompact else {

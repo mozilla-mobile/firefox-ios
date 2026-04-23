@@ -22,17 +22,23 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         return "test-context-id"
     }
 
-    func recordClick(clickUrl: String) throws {
+    func recordClick(clickUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordClickCalledWith = clickUrl
     }
 
-    func recordImpression(impressionUrl: String) throws {
+    func recordImpression(impressionUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordImpressionCalledWith = impressionUrl
     }
 
-    func reportAd(reportUrl: String, reason: MozAdsReportReason) throws {}
+    func reportAd(
+        reportUrl: String,
+        reason: MozillaAppServices.MozAdsReportReason,
+        options: MozillaAppServices.MozAdsCallbackOptions?
+    ) throws {
+        // no-op for tests for now
+    }
 
     func requestImageAds(
         mozAdRequests: [MozAdsPlacementRequest],
@@ -169,6 +175,22 @@ class UnifiedAdsProviderTests: XCTestCase {
             case let .success(tiles):
                 XCTAssertEqual(tiles[0].name, "Test1")
                 XCTAssertEqual(tiles[1].name, "Test2")
+            default:
+                XCTFail("Expected success, got \(result) instead")
+            }
+        }
+    }
+
+    func testFetchTiles_whenDataHasExtraField_thenReturnsProperTile() {
+        networking.data = getData(from: tilesWithExtraField)
+        networking.response = getResponse(from: 200)
+        let subject = createSubject()
+
+        subject.fetchTiles { result in
+            switch result {
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 1)
+                XCTAssertEqual(tiles[0].name, "Test1")
             default:
                 XCTFail("Expected success, got \(result) instead")
             }
@@ -391,6 +413,25 @@ class UnifiedAdsProviderTests: XCTestCase {
     ]
 }
 """
+
+    let tilesWithExtraField = """
+    {
+    "newtab_mobile_tile_1": [
+        {
+            "format": "tile",
+            "url": "https://www.test1.com",
+            "callbacks": {
+                "click": "https://www.test2.com",
+                "impression": "https://www.test3.com"
+            },
+            "image_url": "https://www.test4.com",
+            "name": "Test1",
+            "block_key": "12345",
+            "test": "test"
+        }
+    ]
+    }
+    """
 
     let invertedTiles = """
 {

@@ -86,7 +86,7 @@ typealias TabUUID = String
 @MainActor
 class Tab: NSObject,
            ThemeApplicable,
-           LegacyFeatureFlaggable,
+           FeatureFlaggable,
            ShareTab,
            ContentBlockerTab,
            TabWebViewDelegate,
@@ -518,6 +518,14 @@ class Tab: NSObject,
         // Ensures we inject scripts into a new content controller
         requiredConfiguration.userContentController = .init()
         self.configuration = requiredConfiguration
+
+        if #available(iOS 18.2, *),
+           featureFlagsProvider.isEnabled(.httpsUpgrade) {
+            let pagePrefs = requiredConfiguration.defaultWebpagePreferences ?? WKWebpagePreferences()
+            pagePrefs.preferredHTTPSNavigationPolicy = .automaticFallbackToHTTP
+            requiredConfiguration.defaultWebpagePreferences = pagePrefs
+        }
+
         let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
         webView.configure(delegate: self, navigationDelegate: navigationDelegate)
         webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -598,12 +606,17 @@ class Tab: NSObject,
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        close()
+
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        Task {
+            await close()
+        }
     }
 
-    func close() {
-        webView?.pauseAllMediaPlayback {}
-        webView?.closeAllMediaPresentations {}
+    func close() async {
+        await webView?.pauseAllMediaPlayback()
+        await webView?.closeAllMediaPresentations()
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -695,7 +708,7 @@ class Tab: NSObject,
             // FXIOS-14783: Experimentation on removing the isAboutHome check
             // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
             let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
-            let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
+            let experimentEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
 
             if experimentEnabled || !isAboutHome {
                 webView.reloadFromOrigin()

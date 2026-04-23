@@ -17,6 +17,25 @@ final class HeaderStateTests: XCTestCase {
     }
 
     @MainActor
+    func test_viewWillAppearAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = headerReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                showiPadSetup: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.viewWillAppear
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.isPrivate)
+        XCTAssertTrue(newState.showiPadSetup)
+    }
+
+    @MainActor
     func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
