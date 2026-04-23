@@ -171,6 +171,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .quickAnswers:
             return checkQuickAnswersFeature(from: nimbus)
+
+        case .worldCupWidget:
+            return checkWorldCupWidgetFeature(from: nimbus)
         }
     }
 
@@ -427,5 +430,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarksSearchFeature.value().enabled
+    }
+
+    private func checkWorldCupWidgetFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.worldCupWidgetFeature.value().enabled
     }
 }

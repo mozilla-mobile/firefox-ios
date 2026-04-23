@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 
+@CopyWithUpdates
 struct TermsOfUseState: ScreenState {
     let windowUUID: WindowUUID
     var hasAccepted: Bool
@@ -20,10 +22,7 @@ struct TermsOfUseState: ScreenState {
             return
         }
 
-        self.init(windowUUID: termsOfUseState.windowUUID,
-                  hasAccepted: termsOfUseState.hasAccepted,
-                  wasDismissed: termsOfUseState.wasDismissed
-        )
+        self = termsOfUseState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID) {
@@ -43,9 +42,7 @@ struct TermsOfUseState: ScreenState {
     }
 
     static func defaultState(from state: TermsOfUseState) -> TermsOfUseState {
-        return TermsOfUseState(windowUUID: state.windowUUID,
-                               hasAccepted: state.hasAccepted,
-                               wasDismissed: state.wasDismissed)
+        return state.copyWithUpdates()
     }
 
     static let reducer: Reducer<TermsOfUseState> = { state, action in
@@ -74,24 +71,21 @@ struct TermsOfUseState: ScreenState {
 
         switch type {
         case .termsShown:
-            return TermsOfUseState(windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                                    hasAccepted: false,
                                    wasDismissed: false)
         case .termsAccepted:
-            return TermsOfUseState(windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                                    hasAccepted: true,
                                    wasDismissed: false)
         case .gestureDismiss,
              .remindMeLaterTapped:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
+            return state.copyWithUpdates(
                                    wasDismissed: true)
         case .learnMoreLinkTapped,
              .privacyLinkTapped,
              .termsLinkTapped:
-            return TermsOfUseState(windowUUID: state.windowUUID,
-                                   hasAccepted: state.hasAccepted,
-                                   wasDismissed: state.wasDismissed)
+            return state.copyWithUpdates()
         }
     }
 }
