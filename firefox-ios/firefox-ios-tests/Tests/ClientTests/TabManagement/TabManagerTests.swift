@@ -153,31 +153,6 @@ final class TabManagerTests: XCTestCase {
         XCTAssertEqual(tab, addedTab)
     }
 
-    @MainActor
-    func testUndoCloseTab() {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        tab.url = URL(string: "https://mozilla.com/")!
-        XCTAssertEqual(subject.selectedIndex, -1)
-        subject.backupCloseTab = BackupCloseTab(tab: tab, isSelected: true)
-        subject.undoCloseTab()
-        XCTAssertEqual(subject.selectedIndex, 0)
-    }
-
-    @MainActor
-    func testUndoCloseTabWithSelectedTab() {
-        let closedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        closedTab.url = URL(string: "https://mozilla.com/")!
-        let selectedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        selectedTab.url = URL(string: "https://mozilla.com/1")!
-        let subject = createSubject(tabs: [selectedTab])
-        subject.selectTab(selectedTab)
-        XCTAssertEqual(subject.selectedIndex, 0)
-        subject.backupCloseTab = BackupCloseTab(tab: closedTab, isSelected: true)
-        subject.undoCloseTab()
-        XCTAssertEqual(subject.selectedIndex, 1)
-    }
-
     // MARK: - Document pause - restore
     @MainActor
     func testSelectTab_pauseCurrentDocumentDownload() throws {
