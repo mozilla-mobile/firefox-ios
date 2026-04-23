@@ -98,7 +98,7 @@ final class HomepageDiffableDataSource:
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
-        animatingDifferences: Bool,
+        animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
