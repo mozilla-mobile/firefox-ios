@@ -142,7 +142,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         registerViewModelUpdates()
     }
-    
+
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         backgroundRecordEffect.startAnimating()

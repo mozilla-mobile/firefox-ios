@@ -102,5 +102,4 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
         request?.endAudio()
         recognitionTask?.finish()
     }
-
 }
