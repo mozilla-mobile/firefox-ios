@@ -22,18 +22,18 @@ final class MockAuthorizer: AuthorizeProvider {
     }
 
     func isMicrophonePermissionAuthorized() async -> Bool {
-        micAuthorized
+        return micAuthorized
     }
 
     func isSpeechPermissionAuthorized() async -> Bool {
-        speechAuthorized
+        return speechAuthorized
     }
 
     func isMicrophonePermissionUndetermined() -> Bool {
-        micUndetermined
+        return micUndetermined
     }
 
     func isSpeechPermissionUndetermined() -> Bool {
-        speechUndetermined
+        return speechUndetermined
     }
 }
