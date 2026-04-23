@@ -135,16 +135,14 @@ final class TranslationLanguagePickerViewController: UIViewController,
 
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        if query.isEmpty {
-            filteredLanguages = allLanguages
-        } else {
-            filteredLanguages = allLanguages.filter { code in
-                let native = localeProvider.nativeLanguageName(for: code)
-                let localized = localeProvider.localizedLanguageName(for: code)
-                return native.localizedCaseInsensitiveContains(query)
-                    || localized.localizedCaseInsensitiveContains(query)
-            }
+        let newFiltered = query.isEmpty ? allLanguages : allLanguages.filter { code in
+            let native = localeProvider.nativeLanguageName(for: code)
+            let localized = localeProvider.localizedLanguageName(for: code)
+            return native.localizedCaseInsensitiveContains(query)
+                || localized.localizedCaseInsensitiveContains(query)
         }
+        guard newFiltered != filteredLanguages else { return }
+        filteredLanguages = newFiltered
         tableView.reloadData()
     }
 
