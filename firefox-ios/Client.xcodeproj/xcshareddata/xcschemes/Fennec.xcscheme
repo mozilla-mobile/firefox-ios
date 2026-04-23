@@ -225,20 +225,6 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "VoiceSearchKit"
-               BuildableName = "VoiceSearchKit"
-               BlueprintName = "VoiceSearchKit"
-               ReferencedContainer = "container:../BrowserKit">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "WebEngine"
                BuildableName = "WebEngine"
                BlueprintName = "WebEngine"
@@ -285,6 +271,20 @@
                BuildableName = "ClientTests.xctest"
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "QuickAnswersKitTests"
+               BuildableName = "QuickAnswersKitTests"
+               BlueprintName = "QuickAnswersKitTests"
+               ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -474,6 +474,13 @@
             BlueprintIdentifier = "OnboardingKit"
             BuildableName = "OnboardingKit"
             BlueprintName = "OnboardingKit"
+            ReferencedContainer = "container:../BrowserKit">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "QuickAnswersKit"
+            BuildableName = "QuickAnswersKit"
+            BlueprintName = "QuickAnswersKit"
             ReferencedContainer = "container:../BrowserKit">
          </BuildableReference>
          <BuildableReference
@@ -783,9 +790,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "VoiceSearchKitTests"
-               BuildableName = "VoiceSearchKitTests"
-               BlueprintName = "VoiceSearchKitTests"
+               BlueprintIdentifier = "QuickAnswersKitTests"
+               BuildableName = "QuickAnswersKitTests"
+               BlueprintName = "QuickAnswersKitTests"
                ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </TestableReference>

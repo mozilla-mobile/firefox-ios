@@ -18,9 +18,11 @@ final class TopSitesManagerTests: XCTestCase {
         profile = MockProfile()
         mockNotificationCenter = MockNotificationCenter()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile = nil
         mockNotificationCenter = nil
         try await super.tearDown()

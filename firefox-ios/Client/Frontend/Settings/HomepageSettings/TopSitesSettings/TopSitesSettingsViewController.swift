@@ -6,7 +6,7 @@ import Foundation
 import Common
 import Shared
 
-final class TopSitesSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+final class TopSitesSettingsViewController: SettingsTableViewController, UserFeaturePreferenceProvider {
     // MARK: - Initializers
     init(windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
@@ -51,7 +51,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, LegacyF
                     prefs: profile.prefs,
                     theme: themeManager.getCurrentTheme(for: windowUUID),
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
-                    defaultValue: featureFlags.isFeatureEnabled(.hntSponsoredShortcuts, checking: .userOnly),
+                    defaultValue: userPreferences.isSponsoredShortcutsEnabled,
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
                 ) { _ in
                     store.dispatch(

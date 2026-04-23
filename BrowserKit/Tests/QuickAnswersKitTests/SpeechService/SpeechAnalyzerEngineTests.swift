@@ -11,9 +11,10 @@ import TestKit
 @Suite
 @MainActor
 struct SpeechAnalyzerEngineTests {
-    let audioManager = MockAudioManager()
     let testHelper = SwiftTestingHelper()
+    let audioManager = MockAudioManager()
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsMicrophoneError() async {
         guard #available(iOS 26.0, *) else {
@@ -30,6 +31,7 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneDenied_firstTime_throwsMicrophoneFirstTimeError() async {
         guard #available(iOS 26.0, *) else {
@@ -62,12 +64,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneGranted_speechDenied_throwsError() async throws {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
@@ -76,12 +75,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneGranted_speechGranted_throwsError() async throws {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
@@ -90,12 +86,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_withPermissions_callsConfigureAudioSession() async throws {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
@@ -104,12 +97,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_withPermissions_throwsError() async throws {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
         audioManager.shouldThrowOnConfigure = true
@@ -121,11 +111,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 1)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_stop_callsStopEngine() async throws {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 

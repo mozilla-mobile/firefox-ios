@@ -15,7 +15,10 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-final class SearchSettingsTableViewController: ThemedTableViewController, LegacyFeatureFlaggable {
+final class SearchSettingsTableViewController: ThemedTableViewController,
+                                               LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                               FeatureFlaggable,
+                                               UserFeaturePreferenceProvider {
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5
@@ -411,7 +414,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
     }
 
     private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
                 defaultValue: model.shouldShowFirefoxSuggestions,
@@ -429,7 +432,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
     }
 
     private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
                 defaultValue: model.shouldShowSponsoredSuggestions,
@@ -488,7 +491,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Legacy
         case .searchEnginesSuggestions:
             return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
-            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            return featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
             ? FirefoxSuggestItem.allCases.count : 3
         }
     }

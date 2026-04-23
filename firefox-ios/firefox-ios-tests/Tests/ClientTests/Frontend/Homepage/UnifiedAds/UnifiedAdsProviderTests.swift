@@ -22,17 +22,23 @@ class MockMozAdsClient: MozAdsClientProtocol, @unchecked Sendable {
         return "test-context-id"
     }
 
-    func recordClick(clickUrl: String) throws {
+    func recordClick(clickUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordClickCalledWith = clickUrl
     }
 
-    func recordImpression(impressionUrl: String) throws {
+    func recordImpression(impressionUrl: String, options: MozillaAppServices.MozAdsCallbackOptions?) throws {
         if let error = mockError { throw error }
         recordImpressionCalledWith = impressionUrl
     }
 
-    func reportAd(reportUrl: String, reason: MozAdsReportReason) throws {}
+    func reportAd(
+        reportUrl: String,
+        reason: MozillaAppServices.MozAdsReportReason,
+        options: MozillaAppServices.MozAdsCallbackOptions?
+    ) throws {
+        // no-op for tests for now
+    }
 
     func requestImageAds(
         mozAdRequests: [MozAdsPlacementRequest],
