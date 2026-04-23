@@ -14,10 +14,7 @@ enum SwitchPrivacyModeResult {
     case usedExistingTab
 }
 
-final class TabManagerImplementation: NSObject,
-                                      TabManager,
-                                      LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-                                      FeatureFlaggable {
+final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     let windowUUID: WindowUUID
 
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
@@ -892,7 +889,7 @@ final class TabManagerImplementation: NSObject,
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        let isNativeErrorPage = featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        let isNativeErrorPage = featureFlagsProvider.isEnabled(.nativeErrorPage)
 
         // If app starts with error url, first homepage appears and
         // then error page is loaded. To directly load error page
