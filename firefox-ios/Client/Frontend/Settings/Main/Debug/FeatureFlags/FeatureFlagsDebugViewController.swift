@@ -235,6 +235,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .worldCupWidget,
+                titleText: format(string: "World Cup Widget"),
+                statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .hostedSummarizer,
                 titleText: format(string: "Hosted Summarizer Feature"),
                 statusText: format(string: "Toggle to enable the hosted summarizer feature")

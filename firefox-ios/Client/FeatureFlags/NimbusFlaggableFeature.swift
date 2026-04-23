@@ -76,7 +76,8 @@ struct NimbusFlaggableFeature {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .videoIntroOnboarding:
+                .videoIntroOnboarding,
+                .worldCupWidget:
             return nil
         }
     }
