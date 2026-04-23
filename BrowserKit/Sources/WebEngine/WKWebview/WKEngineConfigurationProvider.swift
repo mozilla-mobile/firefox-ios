@@ -3,7 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Network
 import WebKit
+
+public struct ProxyScope: OptionSet, Sendable {
+    public let rawValue: Int
+    public init(rawValue: Int) { self.rawValue = rawValue }
+    public static let normal   = ProxyScope(rawValue: 1 << 0)
+    public static let `private` = ProxyScope(rawValue: 1 << 1)
+    public static let all: ProxyScope = [.normal, .private]
+}
 
 @MainActor
 public struct WKWebViewParameters {
@@ -90,5 +99,14 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         }
 
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
+    }
+
+    @available(iOS 17.0, *)
+    public static func applyProxyConfigurations(
+        _ configs: [ProxyConfiguration],
+        scope: ProxyScope = .all
+    ) {
+        if scope.contains(.normal)  { defaultStore.proxyConfigurations = configs }
+        if scope.contains(.private) { nonPersistentStore.proxyConfigurations = configs }
     }
 }
