@@ -110,6 +110,8 @@ struct AddressCellView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             isLandscape = UIDevice.current.orientation.isLandscape
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityIdentifier(AccessibilityIdentifiers.Settings.Address.Addresses.addressCell)
         .accessibilityLabel(address.a11ySettingsRow)
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { onTap() }

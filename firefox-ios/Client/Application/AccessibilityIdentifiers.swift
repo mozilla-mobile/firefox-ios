@@ -649,6 +649,7 @@ struct AccessibilityIdentifiers {
             struct Addresses {
                 static let title = "Addresses"
                 static let addAddress = "Add address"
+                static let addressCell = "AddressCell"
             }
         }
 
