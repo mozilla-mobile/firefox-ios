@@ -41,7 +41,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 151
     }
 
     var shouldUseJapanConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseJapanConfiguration)
     }
 
     /// Determines the onboarding variant based on feature flags.
