@@ -308,7 +308,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                     // We ask for the session scope because the web content never
                     // got the session as the user never entered their email and
                     // password
-                    scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
+                    scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session, OAuthScope.vpn]
                 ) { [weak self] result in
                     guard self != nil else { return }
 
