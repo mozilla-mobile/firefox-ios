@@ -40,7 +40,6 @@ final class TranslationLanguagePickerResultsController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row < filteredLanguages.count else { return }
         onSelectLanguage?(filteredLanguages[indexPath.row])
     }
 }
@@ -165,7 +164,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard indexPath.row < allLanguages.count else { return }
         addLanguage(allLanguages[indexPath.row])
     }
 
@@ -177,11 +175,11 @@ final class TranslationLanguagePickerViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.addLanguage
         ))
-        (presentingViewController ?? self).dismiss(animated: true)
+        presentingViewController?.dismiss(animated: true)
     }
 
     @objc private func didTapCancel() {
-        (presentingViewController ?? self).dismiss(animated: true)
+        presentingViewController?.dismiss(animated: true)
     }
 
     // MARK: - UISearchResultsUpdating
@@ -204,7 +202,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
-        resultsController.view.backgroundColor = theme.colors.layer1
         resultsController.tableView.backgroundColor = theme.colors.layer1
         resultsController.theme = theme
         searchController.searchBar.tintColor = theme.colors.actionPrimary
