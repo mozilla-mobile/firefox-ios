@@ -4619,12 +4619,6 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
-        if selectedTab.isDownloadingDocument() {
-            navigationHandler?.showDocumentLoading()
-        } else {
-            navigationHandler?.removeDocumentLoading()
-        }
-
         // Remove the old accessibilityLabel only when the selected tab isn't the previous tab.
         // When the previous webview isn't visible anymore we ensure proper clean up for tests.
         if let previousWebView = previousTab?.webView, selectedTab != previousTab {
@@ -4635,6 +4629,81 @@ extension BrowserViewController: TabManagerDelegate {
             previousWebView.removeFromSuperview()
         }
 
+        var needsReload = false
+        if let webView = selectedTab.webView {
+            webView.accessibilityLabel = .WebViewAccessibilityLabel
+            webView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.contentView
+            webView.accessibilityElementsHidden = false
+
+            updateSelectedTabWebview(selectedTab: selectedTab, previousTab: previousTab, webView: webView)
+
+            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+            if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
+                if selectedTab.isFxHomeTab {
+                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
+                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
+                    needsReload = true
+                }
+            }
+
+            // Do not reload if it's an about:blank page [FXIOS-14782]
+            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
+                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
+                // The webView can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                needsReload = true
+            }
+        }
+
+        updateUIAfterTabSelection(selectedTab: selectedTab, previousTab: previousTab)
+
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        /// If the selectedTab is showing an error page trigger a reload
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor),
+           let url = selectedTab.url,
+           let internalUrl = InternalURL(url),
+           internalUrl.isErrorPage {
+            needsReload = true
+        }
+
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
+            // Do not reload when it's an about:blank page or has a temporary document
+            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
+                needsReload = false
+            }
+        }
+
+        if needsReload {
+            selectedTab.reload()
+        }
+    }
+
+    private func updateSelectedTabWebview(selectedTab: Tab, previousTab: Tab?, webView: TabWebView) {
+        if selectedTab.isFxHomeTab && previousTab != nil {
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                )
+            )
+        } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
+            updateInContentHomePanel(url)
+        }
+    }
+
+    // Selecting a new tab triggers a lot of UI updates, with some of them being to ensure the content
+    // shown is the right one for that particular tab content.
+    private func updateUIAfterTabSelection(selectedTab: Tab, previousTab: Tab?) {
+        // Ensure tab PDF content is up-to-date
+        if selectedTab.isDownloadingDocument() {
+            navigationHandler?.showDocumentLoading()
+        } else {
+            navigationHandler?.removeDocumentLoading()
+        }
+
+        // Update theme upon tab selection
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
@@ -4665,42 +4734,6 @@ extension BrowserViewController: TabManagerDelegate {
             scrollController.tab = selectedTab
         } else {
             scrollController.tabProvider = TabProviderAdapter(selectedTab)
-        }
-
-        var needsReload = false
-        if let webView = selectedTab.webView {
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
-
-            if selectedTab.isFxHomeTab && previousTab != nil {
-                store.dispatch(
-                    GeneralBrowserAction(
-                        windowUUID: windowUUID,
-                        actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-                    )
-                )
-            } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
-                updateInContentHomePanel(url)
-            }
-
-            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-                if selectedTab.isFxHomeTab {
-                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
-                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
-                    needsReload = true
-                }
-            }
-
-            // Do not reload if it's an about:blank page [FXIOS-14782]
-            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
-                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
-            }
         }
 
         updateTabCountUsingTabManager(tabManager)
@@ -4740,27 +4773,6 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         } else if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        /// If the selectedTab is showing an error page trigger a reload
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor),
-           let url = selectedTab.url,
-           let internalUrl = InternalURL(url),
-           internalUrl.isErrorPage {
-            needsReload = true
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-            // Do not reload when it's an about:blank page or has a temporary document
-            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
-                needsReload = false
-            }
-        }
-
-        if needsReload {
-            selectedTab.reload()
         }
     }
 
