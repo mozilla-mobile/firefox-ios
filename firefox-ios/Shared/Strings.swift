@@ -1104,7 +1104,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151",
                     tableName: "WorldCup",
                     value: "M",
-                    comment: "M is short for Minute. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                    comment: "M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
             }
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
