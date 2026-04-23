@@ -85,6 +85,14 @@ final class TabCell: UICollectionViewCell,
         contentView.addSubview(backgroundHolder)
 
         faviconBG.addSubview(smallFaviconView)
+
+        let isPad = traitCollection.verticalSizeClass == .regular && !(UIDevice.current.userInterfaceIdiom == .phone)
+        screenshotView.shouldUseCustomContentsRect = isPad
+        if !isPad {
+            screenshotView.contentMode = .scaleAspectFill
+            screenshotView.clipsToBounds = true
+        }
+
         backgroundHolder.addSubviews(screenshotView, faviconBG, headerView)
 
         accessibilityCustomActions = [

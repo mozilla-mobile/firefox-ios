@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 final class TabCellCustomImage: UIImageView {
+    var shouldUseCustomContentsRect = false
     private var lastBounds: CGRect = .zero
     private var lastImageSize: CGSize = .zero
 
@@ -10,6 +11,7 @@ final class TabCellCustomImage: UIImageView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        guard shouldUseCustomContentsRect else { return }
         guard let image = image else { return }
         guard bounds != lastBounds || image.size != lastImageSize else { return }
 
