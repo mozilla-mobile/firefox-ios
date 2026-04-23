@@ -1099,7 +1099,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.CountDown.HourLabel.v151",
                     tableName: "WorldCup",
                     value: "H",
-                    comment: "H is short for Hour. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                    comment: "H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
                 public static let MinuteLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151",
                     tableName: "WorldCup",
