@@ -281,10 +281,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                isLoading: false,
                                readerModeState: nil,
                                canSummarize: false,
-                               translationConfiguration: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
-                               alternativeSearchEngine: withSearchEngine)
+                               alternativeSearchEngine: withSearchEngine,
+                               translationConfiguration: nil)
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
