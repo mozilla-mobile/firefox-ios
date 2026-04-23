@@ -30,7 +30,7 @@ struct MainMenuConfigurationUtility: Equatable,
     }
 
     private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.reportSiteIssue)
     }
 
     private var isNewAppearanceMenuOn: Bool {
