@@ -29,7 +29,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 151
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var shouldShowVideoIntro: Bool {
