@@ -315,6 +315,9 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.4.x
 
   run_firefox_ui_tests:
     before_run:
@@ -330,6 +333,9 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_Smoketest_iphonesimulator26.2-arm64.xctestrun
     - deploy-to-bitrise-io@2.10.0: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.4.x
   firefox_scheme_build_for_test:
     description: Build Firefox scheme and shard XCUITests for parallel execution
     steps:
@@ -2050,6 +2056,9 @@ workflows:
             Branch | ${BITRISE_GIT_BRANCH}
             Xcode Version | ${XCODE_VERSION_INFO}
         - buttons: Test Results|${BITRISE_BUILD_URL}?tab=tests
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.4.x
 
   # Firefox_Unit_Tests runs the unit tests multiple times on weekdays to identify flaky tests on the latest iOS version.
   # The trends are reported on Bitrise Insights.
@@ -2071,6 +2080,9 @@ workflows:
         - maximum_test_repetitions: 3
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-parallel-testing-enabled" "NO" "-parallel-testing-worker-count" "2"'
     - deploy-to-bitrise-io@2.10.0: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.4.x
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
