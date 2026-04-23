@@ -72,7 +72,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
     }
 
     var isRecentSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     // Determines how to display the pre search settings based on the feature flags

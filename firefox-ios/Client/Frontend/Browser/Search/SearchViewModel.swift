@@ -191,7 +191,7 @@ class SearchViewModel: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
     // Show list of recent searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowRecentSearches: Bool {
-        let isFeatureOn = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isFeatureOn = featureFlagsProvider.isEnabled(.recentSearches)
         let isSettingsToggleOn = model.shouldShowRecentSearches
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
