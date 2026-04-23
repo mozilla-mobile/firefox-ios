@@ -276,6 +276,7 @@ extension BrowserViewController: WKUIDelegate {
             configuration.allowsInlineMediaPlayback = false
             configuration.allowsPictureInPictureMediaPlayback = false
             configuration.mediaTypesRequiringUserActionForPlayback = .all
+            configuration.allowsAirPlayForMediaPlayback = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: configuration)
 
             previewViewController.view.addSubview(clonedWebView)
