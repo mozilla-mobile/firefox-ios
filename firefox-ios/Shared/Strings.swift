@@ -1094,7 +1094,7 @@ extension String {
                     key: "WorldCup.HomepageWidget.CountDown.DayLabel.v151",
                     tableName: "WorldCup",
                     value: "D",
-                    comment: "D is short for Day. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                    comment: "D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
                 public static let HourLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.CountDown.HourLabel.v151",
                     tableName: "WorldCup",
