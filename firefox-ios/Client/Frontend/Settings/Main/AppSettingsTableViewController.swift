@@ -462,7 +462,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
-        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+        if featureFlagsProvider.isEnabled(.sentFromFirefox), let profile {
             supportSettings.append(
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
