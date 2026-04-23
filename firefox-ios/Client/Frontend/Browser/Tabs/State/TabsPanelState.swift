@@ -14,17 +14,12 @@ struct TabsPanelState: ScreenState, Equatable {
         let withAnimation: Bool
     }
 
+    var windowUUID: WindowUUID
     var isPrivateMode: Bool
     var tabs: [TabModel]
-    var windowUUID: WindowUUID
     var scrollState: ScrollState?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
-
-    var isPrivateTabsEmpty: Bool {
-        guard isPrivateMode else { return true }
-        return tabs.isEmpty
-    }
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let panelState = appState.componentState(
@@ -57,9 +52,9 @@ struct TabsPanelState: ScreenState, Equatable {
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
+        self.windowUUID = windowUUID
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
-        self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
         self.urlRequest = urlRequest
@@ -143,5 +138,12 @@ struct TabsPanelState: ScreenState, Equatable {
 
         // This can happen if the user changes tab panels and one of the panels is empty (nothing to scroll to)
         return nil
+    }
+}
+
+extension TabsPanelState {
+    var isPrivateTabsEmpty: Bool {
+        guard isPrivateMode else { return true }
+        return tabs.isEmpty
     }
 }
