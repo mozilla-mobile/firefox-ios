@@ -15,7 +15,9 @@ protocol IntroScreenManagerProtocol {
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
+struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                           FeatureFlaggable,
+                           IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {
@@ -35,7 +37,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseBrandRefreshConfiguration)
     }
 
     var shouldUseJapanConfiguration: Bool {
