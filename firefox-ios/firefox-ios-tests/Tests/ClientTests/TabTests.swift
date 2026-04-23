@@ -542,7 +542,7 @@ class TabTests: XCTestCase {
 
     // MARK: - HTTPS Navigation Policy
     @MainActor
-    func testCreateWebview_whenHTTPSUpgradeEnabled_setsUpgradePolicy() throws {
+    func testCreateWebview_whenHTTPSUpgradeEnabled_setsUpgradePolicy() async throws {
         guard #available(iOS 18.2, *) else {
             throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
         }
@@ -556,10 +556,11 @@ class TabTests: XCTestCase {
             .defaultWebpagePreferences?
             .preferredHTTPSNavigationPolicy
         XCTAssertEqual(policy, .automaticFallbackToHTTP)
+        await subject.close()
     }
 
     @MainActor
-    func testCreateWebview_whenHTTPSUpgradeDisabled_doesNotSetUpgradePolicy() throws {
+    func testCreateWebview_whenHTTPSUpgradeDisabled_doesNotSetUpgradePolicy() async throws {
         guard #available(iOS 18.2, *) else {
             throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
         }
@@ -571,6 +572,7 @@ class TabTests: XCTestCase {
             .defaultWebpagePreferences?
             .preferredHTTPSNavigationPolicy
         XCTAssertNotEqual(policy, .automaticFallbackToHTTP)
+        await subject.close()
     }
 
     // MARK: - Helpers
