@@ -29,10 +29,10 @@ struct AuthorizationHandler: AuthorizeProvider {
     }
 
     func isMicrophonePermissionUndetermined() -> Bool {
-        AVAudioSession.sharedInstance().recordPermission == .undetermined
+        return audioSession.recordPermission == .undetermined
     }
 
     func isSpeechPermissionUndetermined() -> Bool {
-        SFSpeechRecognizer.authorizationStatus() == .notDetermined
+        return SFSpeechRecognizer.authorizationStatus() == .notDetermined
     }
 }

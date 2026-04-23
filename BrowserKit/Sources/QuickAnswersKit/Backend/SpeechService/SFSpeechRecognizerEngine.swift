@@ -32,17 +32,17 @@ final class SFSpeechRecognizerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
-        let isMicFirstTime = authorizer.isMicrophonePermissionUndetermined()
-        let isSpeechFirstTime = authorizer.isSpeechPermissionUndetermined()
+        let isMicFirstTimeRequest = authorizer.isMicrophonePermissionUndetermined()
+        let isSpeechFirstTimeRequest = authorizer.isSpeechPermissionUndetermined()
 
         let micGranted = await authorizer.isMicrophonePermissionAuthorized()
         if !micGranted {
-            throw SpeechError.microphonePermissionDenied(isFirstTime: isMicFirstTime)
+            throw SpeechError.microphonePermissionDenied(isFirstTime: isMicFirstTimeRequest)
         }
 
         let speechGranted = await authorizer.isSpeechPermissionAuthorized()
         if !speechGranted {
-            throw SpeechError.speechRecognitionPermissionDenied(isFirstTime: isSpeechFirstTime)
+            throw SpeechError.speechRecognitionPermissionDenied(isFirstTime: isSpeechFirstTimeRequest)
         }
 
         try audioManager.configureAudioSession()

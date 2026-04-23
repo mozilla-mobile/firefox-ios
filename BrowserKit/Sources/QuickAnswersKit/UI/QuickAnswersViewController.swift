@@ -84,6 +84,10 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
+    private lazy var errorHandler = ErrorHandler(
+        presenter: self,
+        navigationHandler: navigationHandler
+    )
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
@@ -136,9 +140,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        registerViewModelUpdates()
+    }
+    
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
-        registerViewModelUpdates()
     }
 
     override public func viewDidLayoutSubviews() {
@@ -197,68 +205,22 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             switch state {
             case .recordVoice(let result, let error):
                 if let error {
-                    self?.handleSpeechError(error)
+                    self?.errorHandler.handleSpeechError(error)
                 } else {
                     self?.contentView.configureTranscript(result.text)
                 }
             case .loadingSearchResult:
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
-            case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.body)
+            case .showSearchResult(let result, let error):
+                if let error {
+                    self?.errorHandler.handleSearchError(error)
+                } else {
+                    self?.contentView.configureAnswer(result.body)
+                }
             }
         }
         viewModel.startRecordingVoice()
-    }
-
-    // MARK: - Speech Error
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
-    private func handleSpeechError(_ error: SpeechError) {
-        switch error {
-        case .microphonePermissionDenied(let isFirstTime):
-            if isFirstTime {
-                navigationHandler?.dismissQuickAnswers(with: nil)
-            } else {
-                showPermissionAlert(
-                    title: "Microphone Access Required",
-                    message: "Microphone access was denied. Please enable it in Settings to use Quick Answers."
-                )
-            }
-        case .speechRecognitionPermissionDenied(let isFirstTime):
-            if isFirstTime {
-                navigationHandler?.dismissQuickAnswers(with: nil)
-            } else {
-                showPermissionAlert(
-                    title: "Speech Recognition Required",
-                    message: "Speech recognition access was denied. Please enable it in Settings to use Quick Answers."
-                )
-            }
-        default:
-            break
-        }
-    }
-    
-    // TODO: - FXIOS-14720 Add Strings and accessibility ids
-    private func showPermissionAlert(title: String, message: String) {
-        let alertController = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        alertController.addAction(
-            UIAlertAction(title: "Open Settings", style: .default) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
-            }
-        )
-        alertController.addAction(
-            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-                self?.navigationHandler?.dismissQuickAnswers(with: nil)
-            }
-        )
-        present(alertController, animated: true)
     }
 
     // MARK: - Themeable
