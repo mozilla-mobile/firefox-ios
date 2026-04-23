@@ -64,7 +64,7 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
 
     // MARK: - Search filtering
 
-    func test_updateSearchResults_withEmptyQuery_showsAllLanguages() {
+    func test_updateSearchResults_withEmptyQuery_populatesResultsWithAllLanguages() {
         let subject = createSubject(
             preferredLanguages: [],
             supportedLanguages: ["en", "fr", "de"]
@@ -73,24 +73,28 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
 
         subject.updateSearchResults(for: UISearchController())
 
-        XCTAssertEqual(subject.tableView(UITableView(), numberOfRowsInSection: 0), 3)
+        XCTAssertEqual(subject.resultsController.filteredLanguages.count, 3)
     }
 
     // MARK: - Selection
 
-    func test_didSelectRow_dispatchesAddLanguageAction() throws {
+    func test_didSelectRowInResults_dispatchesAddLanguageAction() throws {
         let subject = createSubject(
             preferredLanguages: [],
             supportedLanguages: ["fr", "de"]
         )
         subject.loadViewIfNeeded()
+        subject.resultsController.filteredLanguages = ["fr", "de"]
 
-        subject.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
+        subject.resultsController.tableView(
+            subject.resultsController.tableView,
+            didSelectRowAt: IndexPath(row: 0, section: 0)
+        )
 
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsViewAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsViewActionType)
         XCTAssertEqual(dispatchedActionType, TranslationSettingsViewActionType.addLanguage)
-        XCTAssertNotNil(dispatchedAction.languageCode)
+        XCTAssertEqual(dispatchedAction.languageCode, "fr")
     }
 
     // MARK: - StoreTestUtility

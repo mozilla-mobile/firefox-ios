@@ -6,6 +6,47 @@ import Common
 import Redux
 import UIKit
 
+// MARK: - Results Table Controller
+
+final class TranslationLanguagePickerResultsController: UITableViewController {
+    var filteredLanguages: [String] = []
+    var onSelectLanguage: ((String) -> Void)?
+    var localeProvider: LocaleProvider = SystemLocaleProvider()
+    var theme: Theme?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.register(TranslationPickerLanguageCell.self,
+                           forCellReuseIdentifier: TranslationPickerLanguageCell.cellIdentifier)
+        tableView.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Translation.languagePickerList
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredLanguages.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: TranslationPickerLanguageCell.cellIdentifier,
+            for: indexPath
+        ) as? TranslationPickerLanguageCell ?? TranslationPickerLanguageCell()
+        let code = filteredLanguages[indexPath.row]
+        let native = localeProvider.nativeLanguageName(for: code)
+        let localized = localeProvider.localizedLanguageName(for: code)
+        cell.configure(native: native, localized: native == localized ? nil : localized)
+        if let theme { cell.applyTheme(theme: theme) }
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.row < filteredLanguages.count else { return }
+        onSelectLanguage?(filteredLanguages[indexPath.row])
+    }
+}
+
+// MARK: - Language Picker View Controller
+
 final class TranslationLanguagePickerViewController: UIViewController,
                                                      UITableViewDataSource,
                                                      UITableViewDelegate,
@@ -23,7 +64,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
     let windowUUID: WindowUUID
     private let localeProvider: LocaleProvider
     private let allLanguages: [String]
-    private var filteredLanguages: [String]
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -36,10 +76,18 @@ final class TranslationLanguagePickerViewController: UIViewController,
         return tableView
     }()
 
+    lazy var resultsController: TranslationLanguagePickerResultsController = {
+        let controller = TranslationLanguagePickerResultsController(style: .insetGrouped)
+        controller.localeProvider = localeProvider
+        controller.onSelectLanguage = { [weak self] code in
+            self?.addLanguage(code)
+        }
+        return controller
+    }()
+
     private lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
+        let searchController = UISearchController(searchResultsController: resultsController)
         searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = .Settings.Translation.LanguagePicker.SearchPlaceholder
         return searchController
     }()
@@ -56,7 +104,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.localeProvider = localeProvider
         self.allLanguages = languages
-        self.filteredLanguages = languages
         super.init(nibName: nil, bundle: nil)
         title = .Settings.Translation.LanguagePicker.NavTitle
     }
@@ -98,7 +145,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredLanguages.count
+        return allLanguages.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -106,7 +153,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
             withIdentifier: TranslationPickerLanguageCell.cellIdentifier,
             for: indexPath
         ) as? TranslationPickerLanguageCell ?? TranslationPickerLanguageCell()
-        let code = filteredLanguages[indexPath.row]
+        let code = allLanguages[indexPath.row]
         let native = localeProvider.nativeLanguageName(for: code)
         let localized = localeProvider.localizedLanguageName(for: code)
         cell.configure(native: native, localized: native == localized ? nil : localized)
@@ -118,34 +165,37 @@ final class TranslationLanguagePickerViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let languageCode = filteredLanguages[indexPath.row]
+        guard indexPath.row < allLanguages.count else { return }
+        addLanguage(allLanguages[indexPath.row])
+    }
+
+    // MARK: - Selection
+
+    private func addLanguage(_ languageCode: String) {
         store.dispatch(TranslationSettingsViewAction(
             languageCode: languageCode,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.addLanguage
         ))
-        dismiss(animated: true)
+        (presentingViewController ?? self).dismiss(animated: true)
     }
 
     @objc private func didTapCancel() {
-        dismiss(animated: true)
+        (presentingViewController ?? self).dismiss(animated: true)
     }
 
     // MARK: - UISearchResultsUpdating
 
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        if query.isEmpty {
-            filteredLanguages = allLanguages
-        } else {
-            filteredLanguages = allLanguages.filter { code in
-                let native = localeProvider.nativeLanguageName(for: code)
-                let localized = localeProvider.localizedLanguageName(for: code)
-                return native.localizedCaseInsensitiveContains(query)
-                    || localized.localizedCaseInsensitiveContains(query)
-            }
+        let newFiltered = query.isEmpty ? allLanguages : allLanguages.filter { code in
+            let native = localeProvider.nativeLanguageName(for: code)
+            let localized = localeProvider.localizedLanguageName(for: code)
+            return native.localizedCaseInsensitiveContains(query)
+                || localized.localizedCaseInsensitiveContains(query)
         }
-        tableView.reloadData()
+        resultsController.filteredLanguages = newFiltered
+        resultsController.tableView.reloadData()
     }
 
     // MARK: - Theming
@@ -154,6 +204,9 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
+        resultsController.view.backgroundColor = theme.colors.layer1
+        resultsController.tableView.backgroundColor = theme.colors.layer1
+        resultsController.theme = theme
         searchController.searchBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         tableView.visibleCells.compactMap { $0 as? TranslationPickerLanguageCell }.forEach {
