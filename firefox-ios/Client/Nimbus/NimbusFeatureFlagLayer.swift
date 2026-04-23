@@ -109,6 +109,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
+        case .httpsUpgrade:
+            return checkHttpsUpgradeFeature(from: nimbus)
+
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
 
@@ -390,6 +393,10 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkHostedSummarizerShakeGesture(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.hostedSummarizerFeature.value().shakeGesture
+    }
+
+    private func checkHttpsUpgradeFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.httpsUpgradeFeature.value().enabled
     }
 
     private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {

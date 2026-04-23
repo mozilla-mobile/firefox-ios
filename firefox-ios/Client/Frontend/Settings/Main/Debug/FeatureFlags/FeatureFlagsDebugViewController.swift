@@ -31,6 +31,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Legacy
         // For better code readability and parsability in-app, please keep in alphabetical order by title
         let children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .httpsUpgrade,
+                titleText: format(string: "Automatic HTTPS upgrade"),
+                statusText: format(string: "Toggle to enable automatic HTTPS upgrade.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")

@@ -448,7 +448,7 @@ class HistoryTests: BaseTestCase {
     }
 
     private func navigateToPage(isTabTrayOff: Bool = true) {
-        navigator.openURL("example.com")
+        navigator.openURL("https://example.com")
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)

@@ -518,6 +518,14 @@ class Tab: NSObject,
         // Ensures we inject scripts into a new content controller
         requiredConfiguration.userContentController = .init()
         self.configuration = requiredConfiguration
+
+        if #available(iOS 18.2, *),
+           featureFlagsProvider.isEnabled(.httpsUpgrade) {
+            let pagePrefs = requiredConfiguration.defaultWebpagePreferences ?? WKWebpagePreferences()
+            pagePrefs.preferredHTTPSNavigationPolicy = .automaticFallbackToHTTP
+            requiredConfiguration.defaultWebpagePreferences = pagePrefs
+        }
+
         let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
         webView.configure(delegate: self, navigationDelegate: navigationDelegate)
         webView.accessibilityLabel = .WebViewAccessibilityLabel
