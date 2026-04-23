@@ -2070,20 +2070,13 @@ class BrowserViewController: UIViewController,
 
     private func removeAutoTranslatePrompt() {
         guard let prompt = autoTranslatePrompt else { return }
-
-        if let parent = prompt.superview as? BaseAlphaStackView {
-            parent.removeArrangedView(prompt)
-        }
-
+        prompt.removeFromSuperview()
         autoTranslatePrompt = nil
     }
 
     private func updateAutoTranslatePromptConstraints() {
         guard let prompt = autoTranslatePrompt else { return }
-
-        if let parent = prompt.superview as? BaseAlphaStackView {
-            parent.removeArrangedView(prompt)
-        }
+        prompt.removeFromSuperview()
 
         if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
