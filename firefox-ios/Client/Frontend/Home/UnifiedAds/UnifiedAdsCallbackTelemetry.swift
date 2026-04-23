@@ -45,7 +45,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
 
         if isAdsClientEnabled {
             do {
-                try adsClient.recordImpression(impressionUrl: siteInfo.impressionURL)
+                try adsClient.recordImpression(impressionUrl: siteInfo.impressionURL, options: nil)
             } catch {
                 logger.log("Ads client recordImpression failed, falling back to legacy: \(error)",
                            level: .warning,
@@ -67,7 +67,7 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
 
         if isAdsClientEnabled {
             do {
-                try adsClient.recordClick(clickUrl: siteInfo.clickURL)
+                try adsClient.recordClick(clickUrl: siteInfo.clickURL, options: nil)
             } catch {
                 logger.log("Ads client recordClick failed, falling back to legacy: \(error)",
                            level: .warning,
