@@ -436,6 +436,12 @@ class CodeUsageDetector {
         "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/"
     ]
 
+    private struct Detection {
+        let keyword: Keywords
+        let file: String
+        let lineNumber: Int
+    }
+
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
@@ -447,28 +453,23 @@ class CodeUsageDetector {
         case task
         case notifiable
 
-        var message: String {
+        var bundledHeader: String {
             switch self {
             case .print:
-                return "Print() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `print()` usage detected\nPrint() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .nsLog:
-                return "NSLog() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `NSLog()` usage detected\nNSLog() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .osLog:
-                return "os_log() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `os_log()` usage detected\nos_log() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .deferred:
-                return "Deferred class is used in file %@ at line %d. Please replace with completion handler instead."
+                return "### ⚠️ `Deferred` usage detected\nDeferred class is used. Please replace with completion handler instead."
             case .swiftUIText:
-                return "SwiftUI 'Text(\"\"'  in file %@ at line %d needs to be avoided, use Strings.swift localization instead."
+                return "### ⚠️ SwiftUI `Text(\"\")` usage detected\nSwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
             case .task:
                 let contacts = "@Cramsden @ih-codes @lmarceau"
-                return """
-                ### 🧑‍💻 New `Task {}` detected
-                New `Task {}` added in file %@ at line %d.
-                Please add a concurrency reviewer on your PR: \(contacts)
-                """
+                return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
-                let usage = "Please prefer Notifiable over `NotificationCenter` unless specific circumstances."
-                return "`NotificationCenter.default.addObserver` detected in file %@ at line %d. \(usage)"
+                return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
             }
         }
 
@@ -520,6 +521,7 @@ class CodeUsageDetector {
     }
 
     func checkForCodeUsage() {
+        var detections: [Detection] = []
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
         // Iterate through each added and modified file, running the checks on swift files only
         for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
@@ -529,12 +531,11 @@ class CodeUsageDetector {
                 if file == BrowserViewControllerChecker.bvcPath {
                     BrowserViewControllerChecker().checkBrowserViewControllerSize(fileDiff: diff)
                 }
-
                 switch diff.changes {
                 case let .modified(hunks), let .renamed(_, hunks):
-                    detect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                    detections += collect(keywords: Keywords.allCases, inHunks: hunks, file: file)
                 case let .created(newLines):
-                    detect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                    detections += collect(keywords: Keywords.allCases, inLines: newLines, file: file)
                 case .deleted:
                     break // do not warn on deleted lines
                 }
@@ -542,16 +543,40 @@ class CodeUsageDetector {
                 break
             }
         }
-    }
 
-    private func detect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) {
-        for keyword in keywords {
-            detect(keyword: keyword, inHunks: hunks, file: file, message: keyword.message)
+        // Group by keyword and emit one bundled message per keyword
+        let grouped = Dictionary(grouping: detections, by: { $0.keyword })
+        for keyword in Keywords.allCases {
+            guard let items = grouped[keyword], !items.isEmpty else { continue }
+            emitBundled(keyword: keyword, detections: items)
         }
     }
 
-    private func detect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
-        guard !shouldSkip(keyword, for: file) else { return }
+    private func emitBundled(keyword: Keywords, detections: [Detection]) {
+        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) |" }.joined(separator: "\n")
+        let fullMessage = """
+        \(keyword.bundledHeader)
+
+        | File | Line |
+        |---|---|
+        \(rows)
+        """
+        if keyword.shouldComment {
+            markdown(fullMessage)
+        } else if keyword.shouldWarn {
+            warn(fullMessage)
+        } else {
+            failOrWarn(fullMessage)
+        }
+    }
+
+    private func collect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) -> [Detection] {
+        keywords.flatMap { collect(keyword: $0, inHunks: hunks, file: file) }
+    }
+
+    private func collect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String) -> [Detection] {
+        guard !shouldSkip(keyword, for: file) else { return [] }
+        var detections: [Detection] = []
         for hunk in hunks {
             var newLineCount = 0
             for line in hunk.lines {
@@ -560,39 +585,24 @@ class CodeUsageDetector {
                 // Make sure our newLineCount is proper to fail on correct line number
                 guard isAddedLine || !isRemovedLine else { continue }
                 newLineCount += 1
-
-                // Fail only on added line having the particular keyword
+                // Collect only added lines having the particular keyword
                 guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
-
                 let lineNumber = hunk.newLineStart + newLineCount - 1
-                if keyword.shouldComment {
-                    markdown(String(format: message, file, lineNumber))
-                } else if keyword.shouldWarn {
-                    warn(String(format: message, file, lineNumber))
-                } else {
-                    failOrWarn(String(format: message, file, lineNumber))
-                }
+                detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber))
             }
         }
+        return detections
     }
 
-    private func detect(keywords: [Keywords], inLines lines: [String], file: String) {
-        for keyword in keywords {
-            detect(keyword: keyword, inLines: lines, file: file, message: keyword.message)
-        }
+    private func collect(keywords: [Keywords], inLines lines: [String], file: String) -> [Detection] {
+        keywords.flatMap { collect(keyword: $0, inLines: lines, file: file) }
     }
 
-    private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
-        guard !shouldSkip(keyword, for: file) else { return }
-        for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
-            let lineNumber = index + 1
-            if keyword.shouldComment {
-                markdown(String(format: message, file, lineNumber))
-            } else if keyword.shouldWarn {
-                warn(String(format: message, file, lineNumber))
-            } else {
-                failOrWarn(String(format: message, file, lineNumber))
-            }
+    private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
+        guard !shouldSkip(keyword, for: file) else { return [] }
+        return lines.enumerated().compactMap { index, line in
+            guard line.contains(keyword.keyword) else { return nil }
+            return Detection(keyword: keyword, file: file, lineNumber: index + 1)
         }
     }
 }
