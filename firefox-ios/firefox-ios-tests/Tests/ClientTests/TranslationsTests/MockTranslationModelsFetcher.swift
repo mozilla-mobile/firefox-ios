@@ -34,7 +34,22 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
         return supportedTargetLanguages
     }
 
+    var resetStorageExpectation: XCTestExpectation?
+    var resetStorageStartedExpectation: XCTestExpectation?
+    var resetStorageCancelledExpectation: XCTestExpectation?
+    var shouldSuspendResetStorage = false
+    private let resetStorageLock = NSLock()
+    private var resetStorageContinuation: CheckedContinuation<Void, Never>?
+
     func resetStorage() async {
-        // no-op for now
+        resetStorageExpectation?.fulfill()
+    }
+
+    private func resumeResetStorageIfNeeded() {
+        resetStorageLock.lock()
+        let continuation = resetStorageContinuation
+        resetStorageContinuation = nil
+        resetStorageLock.unlock()
+        continuation?.resume()
     }
 }

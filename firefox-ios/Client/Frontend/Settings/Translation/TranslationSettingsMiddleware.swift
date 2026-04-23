@@ -12,6 +12,7 @@ final class TranslationSettingsMiddleware {
     private let manager: PreferredTranslationLanguagesManager
     private let modelsFetcher: TranslationModelsFetcherProtocol
     private let localeProvider: LocaleProvider
+    private var resetStorageTask: Task<Void, Never>?
 
     private var isAutoTranslateEnabled: Bool {
         prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
@@ -25,6 +26,10 @@ final class TranslationSettingsMiddleware {
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.modelsFetcher = modelsFetcher
         self.localeProvider = localeProvider
+    }
+
+    deinit {
+        resetStorageTask?.cancel()
     }
 
     lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
@@ -72,13 +77,9 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
             if !newValue {
-                Task {
+                resetStorageTask?.cancel()
+                resetStorageTask = Task { [modelsFetcher] in
                     await modelsFetcher.resetStorage()
-                    store.dispatch(TranslationSettingsMiddlewareAction(
-                        isTranslationsEnabled: newValue,
-                        windowUUID: action.windowUUID,
-                        actionType: TranslationSettingsMiddlewareActionType.didResetStorage
-                    ))
                 }
             }
         case TranslationSettingsViewActionType.toggleAutoTranslate:
