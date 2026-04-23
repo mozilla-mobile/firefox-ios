@@ -1326,6 +1326,7 @@
 		8C3B1A1F2F73C8F300E2C370 /* TranslationAddLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A1E2F73C8F300E2C370 /* TranslationAddLanguageCell.swift */; };
 		8C3B1A212F73C91000E2C370 /* TranslationPickerLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3B1A202F73C91000E2C370 /* TranslationPickerLanguageCell.swift */; };
 		8C3BF7052F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3BF7042F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift */; };
+		8CB1A0012F99000000E2C370 /* TranslationLanguagePickerResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB1A0022F99000000E2C370 /* TranslationLanguagePickerResultsController.swift */; };
 		8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */; };
 		8C50DD752F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */; };
 		8C51ED6C2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C51ED6B2DE0A49800B3E58A /* NimbusOnboardingKitFeatureLayer.swift */; };
@@ -9636,6 +9637,7 @@
 		8C3B1A1E2F73C8F300E2C370 /* TranslationAddLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationAddLanguageCell.swift; sourceTree = "<group>"; };
 		8C3B1A202F73C91000E2C370 /* TranslationPickerLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationPickerLanguageCell.swift; sourceTree = "<group>"; };
 		8C3BF7042F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationLanguagePickerViewController.swift; sourceTree = "<group>"; };
+		8CB1A0022F99000000E2C370 /* TranslationLanguagePickerResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationLanguagePickerResultsController.swift; sourceTree = "<group>"; };
 		8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UpdatableAddressFields+Decodable.swift"; sourceTree = "<group>"; };
 		8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredTranslationLanguagesManagerTests.swift; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -14645,6 +14647,7 @@
 				AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */,
 				F84988A6047D42DBB38FFAC1 /* TranslationPickerSettingsViewController.swift */,
 				8C3BF7042F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift */,
+				8CB1A0022F99000000E2C370 /* TranslationLanguagePickerResultsController.swift */,
 				E0865C80F73A49F08E2B17E2 /* TranslationSettingsDiffableDataSource.swift */,
 				AAD861AD2E9E75C000F6E0E0 /* TranslationSettingsAction.swift */,
 				AAD861AF2E9E75C000F6E0E0 /* TranslationSettingsState.swift */,
@@ -19333,6 +19336,7 @@
 				AAD861AB2E9E75AB00F6E0E0 /* TranslationSettingsViewController.swift in Sources */,
 				B326EA470451415F90D8F722 /* TranslationPickerSettingsViewController.swift in Sources */,
 				8C3BF7052F6BEB3D00E2C370 /* TranslationLanguagePickerViewController.swift in Sources */,
+				8CB1A0012F99000000E2C370 /* TranslationLanguagePickerResultsController.swift in Sources */,
 				74B8478AACB3429E827FE642 /* TranslationSettingsDiffableDataSource.swift in Sources */,
 				AAD861AC2E9E75C000F6E0E0 /* TranslationSettingsAction.swift in Sources */,
 				AAD861AE2E9E75C000F6E0E0 /* TranslationSettingsState.swift in Sources */,
