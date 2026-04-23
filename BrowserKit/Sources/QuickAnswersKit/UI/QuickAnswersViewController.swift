@@ -98,7 +98,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
             viewModel: QuickAnswersViewModel(service: DefaultQuickAnswersService()),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
