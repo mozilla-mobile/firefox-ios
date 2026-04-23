@@ -17,8 +17,6 @@ private let ErrorPageBadCertParam = "badcert"
 private let ErrorPageCertErrorParam = "certerror"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
-private let CertErrorExpired = "SEC_ERROR_EXPIRED_CERTIFICATE"
-private let CertErrorUnknownIssuer = "SEC_ERROR_UNKNOWN_ISSUER"
 
 // Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
 // Check the other cases in case this gets fixed in the future.
@@ -40,6 +38,23 @@ private let LegacyCertErrorCodes = [
     -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
     -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
 ]
+// `_kCFStreamErrorCodeKey` can be absent on iOS 26.4. In that case we only
+// have NSURLErrorDomain codes, so map them to the closest legacy cert code.
+private let LegacyCertErrorCodeByNetworkError: [Int: Int] = [
+    NSURLErrorServerCertificateUntrusted: -9813,
+    NSURLErrorServerCertificateHasUnknownRoot: -9813,
+    NSURLErrorServerCertificateHasBadDate: -9814,
+    NSURLErrorServerCertificateNotYetValid: -9814
+]
+
+private func certErrorFromNetworkErrorCode(_ networkErrorCode: Int) -> String {
+    guard let legacyCode = LegacyCertErrorCodeByNetworkError[networkErrorCode],
+          let certError = LegacyCertErrorCodes[legacyCode] else {
+        assertionFailure("Missing legacy cert mapping for NSURLErrorDomain code: \(networkErrorCode)")
+        return LegacyCertErrorCodes[-9813] ?? "SEC_ERROR_UNKNOWN_ISSUER"
+    }
+    return certError
+}
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
@@ -257,9 +272,7 @@ final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
             errDomain = ""
         } else if LegacyCertErrors.contains(errCode) {
             let certError = components.valueForQuery(ErrorPageCertErrorParam)
-                ?? (errCode == NSURLErrorServerCertificateHasBadDate
-                    ? CertErrorExpired
-                    : CertErrorUnknownIssuer)
+                ?? certErrorFromNetworkErrorCode(errCode)
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
             actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
@@ -335,9 +348,7 @@ class ErrorPageHelper {
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
             let certErrorCode = underlyingError?.userInfo[StreamErrorCodeKey] as? Int
             let certError = LegacyCertErrorCodes[certErrorCode ?? Int.min]
-                ?? (error.code == NSURLErrorServerCertificateHasBadDate
-                    ? CertErrorExpired
-                    : CertErrorUnknownIssuer)
+                ?? certErrorFromNetworkErrorCode(error.code)
             queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }
 
