@@ -1064,11 +1064,16 @@ extension String {
                 tableName: "WorldCup",
                 value: "Remove",
                 comment: "The label for the button that allows to remove the World Cup widget from the home screen in the more options panel.")
-            public static let FTLabel = MZLocalizedString(
+            public static let FullTimeLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
-                value: "FT",
-                comment: "The abbreviation for 'full time' used in the World Cup widget when showing the result of a match.")
+                value: "(Full Time)",
+                comment: "The label indicating that the displaying match as ended.")
+            public static let FullTimePenaltiesLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
+                tableName: "WorldCup",
+                value: "Full time • Penalties",
+                comment: "The label indicating the displaying match has ended after penalties.")
             public static let ErrorLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.ErrorLabel.v151",
                 tableName: "WorldCup",
@@ -1079,7 +1084,28 @@ extension String {
                 tableName: "WorldCup",
                 value: "Refresh",
                 comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
-
+            public struct CountDown {
+                public static let Title = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.Title.v151",
+                    tableName: "WorldCup",
+                    value: "Countdown to the World Cup",
+                    comment: "Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event.")
+                public static let DayLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.DayLabel.v151",
+                    tableName: "WorldCup",
+                    value: "D",
+                    comment: "D is short for Day. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                public static let HourLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.HourLabel.v151",
+                    tableName: "WorldCup",
+                    value: "H",
+                    comment: "H is short for Hour. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                public static let MinuteLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151",
+                    tableName: "WorldCup",
+                    value: "M",
+                    comment: "M is short for Minute. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+            }
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.FollowTeamCard.Title.v151",
@@ -1104,11 +1130,6 @@ extension String {
             }
 
             public struct TemporaryView {
-                public static let Title = MZLocalizedString(
-                    key: "WorldCup.HomepageWidget.TemporaryView.Title.v151",
-                    tableName: "WorldCup",
-                    value: "You are following",
-                    comment: "The title for the temporary view in the World Cup widget showing the team that has been previously selected. It's followed on a new line by the name of the team, displayed with a larger font.")
                 public static let Description = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.TemporaryView.Description.v151",
                     tableName: "WorldCup",
@@ -1225,21 +1246,6 @@ extension String {
                     tableName: "WorldCup",
                     value: "Upcoming",
                     comment: "The label for an upcoming match in the World Cup widget round phase.")
-                public static let MatchEndedLabel = MZLocalizedString(
-                    key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedLabel.v151",
-                    tableName: "WorldCup",
-                    value: "FINAL",
-                    comment: "FINAL stands for 'final result', it's not about the final match. The label shows that the match ended without any penalties in the World Cup widget.")
-                public static let MatchEndedPenaltiesLabel = MZLocalizedString(
-                    key: "WorldCup.HomepageWidget.RoundPhase.MatchEndedPenaltiesLabel.v151",
-                    tableName: "WorldCup",
-                    value: "FINAL %@ on penalties",
-                    comment: "FINAL stands for 'final result', it's not about the final match. The label for the match results when a match ends in a penalty shootout in the World Cup widget. The '%@' placeholder will be replaced with the number of penalties scored i.e 3-2.")
-                public static let WinThirdPlaceLabel = MZLocalizedString(
-                    key: "WorldCup.HomepageWidget.RoundPhase.WinThirdPlaceLabel.v151",
-                    tableName: "WorldCup",
-                    value: "wins third place.",
-                    comment: "The label for the 3rd place phase winner in the World Cup widget.")
                 public static let WinWorldCupLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151",
                     tableName: "WorldCup",
