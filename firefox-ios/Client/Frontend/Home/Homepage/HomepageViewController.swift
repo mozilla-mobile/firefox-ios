@@ -7,6 +7,7 @@ import Common
 import Redux
 import Shared
 import Storage
+import SwiftUI
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
@@ -569,10 +570,11 @@ final class HomepageViewController: UIViewController,
         case .header(let state):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
                 cell.configure(headerState: state) { [weak self] in
-                    self?.dispatchNavigationBrowserAction(
-                        with: NavigationDestination(.quickAnswers),
-                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
-                    )
+//                    self?.dispatchNavigationBrowserAction(
+//                        with: NavigationDestination(.quickAnswers),
+//                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+//                    )
+                    self?.presentWorldCupCountryPicker()
                 }
                 cell.applyTheme(theme: currentTheme)
             }
@@ -1335,5 +1337,16 @@ final class HomepageViewController: UIViewController,
 
         let location = touch.location(in: collectionView)
         return collectionView.indexPathForItem(at: location) == nil
+    }
+
+    // MARK: - World Cup Country Picker (Test)
+
+    private func presentWorldCupCountryPicker() {
+        let pickerView = WorldCupCountryPickerView(
+            windowUUID: windowUUID,
+            themeManager: themeManager
+        )
+        let hostingController = UIHostingController(rootView: pickerView)
+        present(hostingController, animated: true)
     }
 }
