@@ -2,23 +2,30 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Shared
 import Testing
+import TestKit
 
 @testable import QuickAnswersKit
 
 @MainActor
-struct DefaultQuickAnswersServiceTests {
-    let resultsService = MockResultsService()
-    // TODO: FXIOS-14891 Add more test to improve code coverage and check for memory leaks
+class DefaultQuickAnswersServiceTests {
+    let testHelper = SwiftTestingHelper()
+    let engine = MockTranscriptionEngine()
+    let resultsServiceFactory: MockResultsServiceFactory
+
+    init() {
+        resultsServiceFactory = MockResultsServiceFactory()
+    }
+
     @Test
     func test_record_returnsExpectCallsAndResults() async throws {
-        let engine = MockTranscriptionEngine()
         engine.resultsToYield = [
             SpeechResult(text: "What is the weather", isFinal: false),
             SpeechResult(text: "today?", isFinal: true)
         ]
 
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+        let subject = try createSubject()
 
         let stream = try await subject.record()
 
@@ -37,11 +44,10 @@ struct DefaultQuickAnswersServiceTests {
     }
 
     @Test
-    func test_record_throwsWhenPrepareFails() async {
-        let engine = MockTranscriptionEngine()
+    func test_record_throwsWhenPrepareFails() async throws {
         engine.prepareError = TestError.prepareFailed
 
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+        let subject = try createSubject()
 
         do {
             _ = try await subject.record()
@@ -56,10 +62,9 @@ struct DefaultQuickAnswersServiceTests {
 
     @Test
     func test_record_throwsWhenStartFails() async throws {
-        let engine = MockTranscriptionEngine()
         engine.startError = TestError.startFailed
 
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+        let subject = try createSubject()
 
         let stream = try await subject.record()
 
@@ -77,9 +82,7 @@ struct DefaultQuickAnswersServiceTests {
 
     @Test
     func test_stopRecording_callsExpectedMethods() async throws {
-        let engine = MockTranscriptionEngine()
-
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+        let subject = try createSubject()
 
         try await subject.stopRecording()
 
@@ -87,11 +90,10 @@ struct DefaultQuickAnswersServiceTests {
     }
 
     @Test
-    func test_stopRecording_throwsWhenError() async {
-        let engine = MockTranscriptionEngine()
+    func test_stopRecording_throwsWhenError() async throws {
         engine.stopError = TestError.stopFailed
 
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+        let subject = try createSubject()
 
         do {
             try await subject.stopRecording()
@@ -104,9 +106,8 @@ struct DefaultQuickAnswersServiceTests {
     }
 
     @Test
-    func test_search_returnsEmptySuccess() async {
-        let engine = MockTranscriptionEngine()
-        let subject = DefaultQuickAnswersService(engine: engine, resultsService: resultsService)
+    func test_search_returnsEmptySuccess() async throws {
+        let subject = try createSubject()
 
         let result = await subject.search(text: "hello")
 
@@ -116,5 +117,16 @@ struct DefaultQuickAnswersServiceTests {
         case .failure(let error):
             Issue.record("Expected success(.empty()), got failure: \(error)")
         }
+    }
+
+    // MARK: - Helper
+    private func createSubject() throws -> DefaultQuickAnswersService {
+        let subject = try DefaultQuickAnswersService(
+            engine: engine,
+            resultsServiceFactory: resultsServiceFactory,
+            prefs: MockProfilePrefs()
+        )
+        testHelper.trackForMemoryLeaks(subject)
+        return subject
     }
 }

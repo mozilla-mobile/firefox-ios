@@ -12,11 +12,10 @@ protocol ResultsService: Sendable {
 }
 
 final class DefaultResultsService: ResultsService {
-    // TODO: FXIOS-15196 - Remove optional when creating the appropriate client
-    private let client: LiteLLMClientProtocol?
-    private let config: QuickAnswersConfig
+    private let client: LiteLLMClientProtocol
+    private let config: LLMConfig
 
-    init(client: LiteLLMClientProtocol?, config: QuickAnswersConfig) {
+    init(client: LiteLLMClientProtocol, config: LLMConfig) {
         self.client = client
         self.config = config
     }
@@ -37,8 +36,8 @@ final class DefaultResultsService: ResultsService {
     }
 
     private func requestChatCompletion(for message: LiteLLMMessage) async throws -> AsyncThrowingStream<String, Error>? {
-        // TODO: FXIOS-15196 - Remove optional when creating the appropriate client
-        return try await client?.requestChatCompletionStreamed(
+        // TODO: FXIOS-15198 Handle errors appropriately
+        return try await client.requestChatCompletionStreamed(
             messages: [message],
             config: config
         )
