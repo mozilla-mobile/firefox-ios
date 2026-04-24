@@ -326,7 +326,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isTabScrollRefactoringEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabScrollRefactorFeature)
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
