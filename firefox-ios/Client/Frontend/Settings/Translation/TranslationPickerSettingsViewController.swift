@@ -303,6 +303,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     // MARK: - Toggle actions
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isTranslationsEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
@@ -310,6 +314,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     @objc private func didToggleAutoTranslate(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isAutoTranslateEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleAutoTranslate
