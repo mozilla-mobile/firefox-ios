@@ -58,7 +58,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     var isLanguageExpansionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizerLanguageExpansion, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerLanguageExpansion)
     }
 
     /// Takes into consideration that summarize feature is on,
