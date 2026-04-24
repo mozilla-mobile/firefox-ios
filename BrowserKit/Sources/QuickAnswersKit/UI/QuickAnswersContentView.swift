@@ -140,7 +140,7 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureSources(_ items: [QuickAnswersSourceCell.Item]) {
+    func configureSources(_ items: [SearchResult.Source]) {
         sourceView.configure(with: items)
         UIView.animate(withDuration: UX.animationDuration) { [self] in
             sourceView.alpha = 1.0

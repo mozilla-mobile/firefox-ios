@@ -216,7 +216,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 if let error {
                     self?.errorHandler.handleSearchError(error)
                 } else {
-                    self?.contentView.configureAnswer(result.body)
+                    self?.contentView.configureAnswer(result.resultText)
+                    self?.contentView.configureSources(result.sources)
                 }
             }
         }
