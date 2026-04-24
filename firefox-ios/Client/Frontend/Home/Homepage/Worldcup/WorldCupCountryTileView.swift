@@ -9,8 +9,7 @@ struct WorldCupCountryTileView: View {
     private struct UX {
         static let flagSize = CGSize(width: 60, height: 40)
         static let flagCornerRadius: CGFloat = 4
-        static let flagFontSize: CGFloat = 28
-        static let codeFontSize: CGFloat = 11
+        static let nameFontSize: CGFloat = 11
         static let tileWidth: CGFloat = 79
         static let tileHeight: CGFloat = 66
         static let flagToLabelSpacing: CGFloat = 10
@@ -22,26 +21,24 @@ struct WorldCupCountryTileView: View {
 
     var body: some View {
         VStack(spacing: UX.flagToLabelSpacing) {
-            ZStack {
-                RoundedRectangle(cornerRadius: UX.flagCornerRadius)
-                    .fill(Color(theme.colors.layer2))
-                    .frame(width: UX.flagSize.width, height: UX.flagSize.height)
+            Image(country.id.lowercased())
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: UX.flagSize.width, height: UX.flagSize.height)
+                .clipShape(RoundedRectangle(cornerRadius: UX.flagCornerRadius))
+                .overlay(
+                    RoundedRectangle(cornerRadius: UX.flagCornerRadius)
+                        .stroke(
+                            isSelected ? Color(theme.colors.actionPrimary) : Color.clear,
+                            lineWidth: 2
+                        )
+                )
 
-                Text(country.flagEmoji)
-                    .font(.system(size: UX.flagFontSize))
-            }
-            .overlay(
-                RoundedRectangle(cornerRadius: UX.flagCornerRadius)
-                    .stroke(
-                        isSelected ? Color(theme.colors.actionPrimary) : Color.clear,
-                        lineWidth: 2
-                    )
-            )
-
-            Text(country.code)
-                .font(.system(size: UX.codeFontSize, weight: .semibold))
+            Text(country.name)
+                .font(.system(size: UX.nameFontSize, weight: .semibold))
                 .foregroundColor(Color(theme.colors.textPrimary))
-                .lineLimit(1)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
         }
         .frame(width: UX.tileWidth, height: UX.tileHeight)
     }

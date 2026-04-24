@@ -7,13 +7,31 @@ import SwiftUI
 
 struct WorldCupCountryPickerView: View, ThemeableView {
     private struct UX {
-        static let horizontalPadding: CGFloat = 22
+        // Header
+        static let headerHeight: CGFloat = 56
+        static let headerHorizontalPadding: CGFloat = 16
+        static let titleFontSize: CGFloat = 17
+        static let closeButtonSize: CGFloat = 30
+        static let closeIconSize: CGFloat = 16
+        static let doneButtonFontSize: CGFloat = 15
+        static let doneButtonVerticalPadding: CGFloat = 8
+        static let doneButtonHorizontalPadding: CGFloat = 16
+        static let doneButtonCornerRadius: CGFloat = 18
+
+        // Content
+        static let contentHorizontalPadding: CGFloat = 22
+        static let contentBottomPadding: CGFloat = 24
+
+        // Sections
         static let sectionSpacing: CGFloat = 16
-        static let gridSpacing: CGFloat = 6
         static let sectionCornerRadius: CGFloat = 12
         static let sectionInnerPadding: CGFloat = 12
-        static let headerFontSize: CGFloat = 13
-        static let columns = 4
+        static let sectionHeaderFontSize: CGFloat = 13
+        static let sectionHeaderBottomPadding: CGFloat = 8
+
+        // Grid
+        static let gridColumns = 4
+        static let gridSpacing: CGFloat = 6
     }
 
     let windowUUID: WindowUUID
@@ -31,7 +49,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     }
 
     private var gridColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.columns)
+        Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.gridColumns)
     }
 
     var body: some View {
@@ -43,8 +61,8 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                         regionSection(region)
                     }
                 }
-                .padding(.horizontal, UX.horizontalPadding)
-                .padding(.bottom, 24)
+                .padding(.horizontal, UX.contentHorizontalPadding)
+                .padding(.bottom, UX.contentBottomPadding)
             }
         }
         .background(Color(theme.colors.layer1))
@@ -55,30 +73,45 @@ struct WorldCupCountryPickerView: View, ThemeableView {
 
     private var headerBar: some View {
         HStack {
-            Button(action: {}) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(Color(theme.colors.textPrimary))
-            }
-            .frame(width: 44, height: 44)
+            closeButton
 
             Spacer()
 
-            Text("Follow Your Team")
-                .font(.system(size: 17, weight: .semibold))
+            Text(String.WorldCup.CountryPicker.Title)
+                .font(FXFontStyles.Bold.headline.systemSwiftUIFont())
                 .foregroundColor(Color(theme.colors.textPrimary))
 
             Spacer()
 
-            Button(action: {}) {
-                Text("Done")
-                    .font(.system(size: 17))
-                    .foregroundColor(Color(theme.colors.textSecondary))
-            }
-            .frame(width: 44, height: 44)
+            doneButton
         }
-        .padding(.horizontal, 12)
-        .frame(height: 56)
+        .padding(.horizontal, UX.headerHorizontalPadding)
+        .frame(height: UX.headerHeight)
+    }
+
+    private var closeButton: some View {
+        Button(action: {}) {
+            Image(systemName: "xmark")
+                .font(.system(size: UX.closeIconSize, weight: .medium))
+                .foregroundColor(Color(theme.colors.iconSecondary))
+        }
+        .frame(width: UX.closeButtonSize, height: UX.closeButtonSize)
+        .background(Color(theme.colors.layer2))
+        .clipShape(Circle())
+        .accessibilityLabel(String.WorldCup.CountryPicker.CloseButtonAccessibilityLabel)
+    }
+
+    private var doneButton: some View {
+        Button(action: {}) {
+            Text(String.WorldCup.CountryPicker.DoneButtonTitle)
+                .font(.system(size: UX.doneButtonFontSize, weight: .semibold))
+                .foregroundColor(Color(theme.colors.textInverted))
+                .padding(.vertical, UX.doneButtonVerticalPadding)
+                .padding(.horizontal, UX.doneButtonHorizontalPadding)
+                .background(Color(theme.colors.actionPrimary))
+                .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Region Section
@@ -86,9 +119,9 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     private func regionSection(_ region: WorldCupRegion) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(region.name)
-                .font(.system(size: UX.headerFontSize, weight: .bold))
+                .font(.system(size: UX.sectionHeaderFontSize, weight: .bold))
                 .foregroundColor(Color(theme.colors.textPrimary))
-                .padding(.bottom, 8)
+                .padding(.bottom, UX.sectionHeaderBottomPadding)
 
             LazyVGrid(columns: gridColumns, spacing: UX.gridSpacing) {
                 ForEach(region.countries) { country in
