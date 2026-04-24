@@ -1086,7 +1086,8 @@ final class BrowserCoordinator: BaseCoordinator,
             parentCoordinatorDelegate: self,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            router: router
+            router: router,
+            profile: profile
         ) { [weak self] navigationType in
             switch navigationType {
             case .url(let url):

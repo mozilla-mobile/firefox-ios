@@ -15,18 +15,21 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     private var shouldAnimateTransition: Bool {
         return !UIAccessibility.isReduceMotionEnabled
     }
+    private let profile: Profile
 
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
+        profile: Profile,
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onNavigate = onNavigate
+        self.profile = profile
         super.init(router: router)
     }
 
@@ -34,8 +37,13 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         let controller = QuickAnswersViewController(
             navigationHandler: self,
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
+            prefs: profile.prefs
         )
+        guard let controller else {
+            parentCoordinatorDelegate?.didFinish(from: self)
+            return
+        }
         router.present(controller, animated: shouldAnimateTransition)
     }
 

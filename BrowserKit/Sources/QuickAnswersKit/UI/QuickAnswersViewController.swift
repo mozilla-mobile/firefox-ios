@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Shared
 
 public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
@@ -89,16 +90,18 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         navigationHandler: navigationHandler
     )
 
-    public convenience init(
+    public convenience init?(
         navigationHandler: QuickAnswersNavigationHandler?,
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
+        prefs: Prefs,
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
+        guard let answerService = try? DefaultQuickAnswersService(prefs: prefs) else { return nil }
         self.init(
             navigationHandler: navigationHandler,
-            viewModel: QuickAnswersViewModel(service: DefaultQuickAnswersService()),
+            viewModel: QuickAnswersViewModel(service: answerService),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
