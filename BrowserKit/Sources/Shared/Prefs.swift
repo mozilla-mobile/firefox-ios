@@ -112,6 +112,7 @@ public struct PrefsKeys {
     public struct HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
     }
 
     public struct SearchSettings {

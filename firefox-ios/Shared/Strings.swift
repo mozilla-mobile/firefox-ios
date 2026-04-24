@@ -957,11 +957,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Follow Your Team",
                 comment: "Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
-            public static let DoneButtonTitle = MZLocalizedString(
-                key: "WorldCup.CountryPicker.DoneButtonTitle.v151",
+            public static let SkipButtonTitle = MZLocalizedString(
+                key: "WorldCup.CountryPicker.SkipButton.Title.v151",
                 tableName: "WorldCup",
-                value: "Done",
-                comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
+                value: "Skip",
+                comment: "Title for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
                 tableName: "WorldCup",
@@ -1049,6 +1049,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Change team",
                 comment: "The label for the button that allows to change the team displayed in the World Cup widget more options panel.")
+            public static let FollowTeamLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FollowTeamLabel.v151",
+                tableName: "WorldCup",
+                value: "Follow team",
+                comment: "The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected.")
             public static let GetCustomWallpaperLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151",
                 tableName: "WorldCup",
@@ -1105,6 +1110,11 @@ extension String {
                     tableName: "WorldCup",
                     value: "M",
                     comment: "M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                public static let ViewScheduleButtonLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151",
+                    tableName: "WorldCup",
+                    value: "View Schedule",
+                    comment: "Label for the button that takes users to the World Cup schedule website on the countdown section.")
             }
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
@@ -1246,6 +1256,11 @@ extension String {
                     tableName: "WorldCup",
                     value: "Upcoming",
                     comment: "The label for an upcoming match in the World Cup widget round phase.")
+                public static let ThirdPlaceLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151",
+                    tableName: "WorldCup",
+                    value: "THIRD PLACE",
+                    comment: "The label for the 'Third place' winner in the World Cup widget.")
                 public static let WinWorldCupLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151",
                     tableName: "WorldCup",
@@ -9008,6 +9023,11 @@ extension String {
                 value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
                 comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
             )
+            public static let DoneButtonTitle = MZLocalizedString(
+                key: "WorldCup.CountryPicker.DoneButtonTitle.v151",
+                tableName: "WorldCup",
+                value: "Done",
+                comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
         }
     }
 }
