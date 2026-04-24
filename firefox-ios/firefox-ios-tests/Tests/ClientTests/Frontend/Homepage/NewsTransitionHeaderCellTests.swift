@@ -30,7 +30,7 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 1)
-        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 0)
+        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 0)
     }
 
     func test_configure_withTransitionEnabledAndFullProgress_showsSectionTitle() {
@@ -47,7 +47,7 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
-        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 1)
+        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
     }
 
     func test_configure_withTransitionDisabled_showsSectionTitleOnly() {
@@ -64,7 +64,7 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
-        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 1)
+        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
     }
 
     func test_updatePickerState_updatesCategorySelection() {
@@ -126,10 +126,6 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
 
     private func labelHeaderView(in view: UIView) -> LabelButtonHeaderView? {
         return allSubviews(in: view).compactMap { $0 as? LabelButtonHeaderView }.first
-    }
-
-    private func sectionTitleStackView(in view: UIView) -> UIStackView? {
-        return allSubviews(in: view).compactMap { $0 as? UIStackView }.first
     }
 
     private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {
