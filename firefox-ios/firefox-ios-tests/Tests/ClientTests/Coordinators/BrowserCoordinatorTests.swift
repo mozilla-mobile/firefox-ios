@@ -15,7 +15,10 @@ import Shared
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTestUtility {
+final class BrowserCoordinatorTests: XCTestCase,
+                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     FeatureFlaggable,
+                                     StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -78,7 +81,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         let subject = createSubject()
         subject.start(with: nil)
         // TODO: FXIOS-12947 - Add tests for ToU Feature implementation
-        if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.touFeature) {
             XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
             XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
             XCTAssertTrue(subject.childCoordinators.isEmpty)
