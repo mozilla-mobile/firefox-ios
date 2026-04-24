@@ -229,8 +229,8 @@ class TrackingProtectionModel {
 
     @MainActor
     func clearCookiesAndSiteData() {
+        guard let domain = url.baseDomain else { return }
         Task {
-            guard let domain = url.baseDomain else { return }
             await CookiesClearable().clear(forDomain: domain)
         }
     }
