@@ -16,7 +16,6 @@ protocol SearchEnginePickerDelegate: AnyObject {
 }
 
 final class SearchSettingsTableViewController: ThemedTableViewController,
-                                               LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                                                FeatureFlaggable,
                                                UserFeaturePreferenceProvider {
     private struct UX {
@@ -68,7 +67,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
 
     // MARK: - Pre Search Section
     var isTrendingSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.trendingSearches)
     }
 
     var isRecentSearchesEnabled: Bool {
