@@ -38,12 +38,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
             navigationHandler: self,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            prefs: profile.prefs
         )
-        guard let controller else {
-            parentCoordinatorDelegate?.didFinish(from: self)
-            return
-        }
         router.present(controller, animated: shouldAnimateTransition)
     }
 
