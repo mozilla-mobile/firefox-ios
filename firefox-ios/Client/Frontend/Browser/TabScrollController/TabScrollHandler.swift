@@ -366,8 +366,7 @@ final class TabScrollHandler: NSObject,
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
-            let shouldShowToolbars = !isTabScrollRefactoringEnabled || (tabProvider?.isFindInPageMode == false)
-            if shouldShowToolbars {
+            if !isTabScrollRefactoringEnabled || (tabProvider?.isFindInPageMode == false) {
                 showToolbars(animated: false)
             }
         }

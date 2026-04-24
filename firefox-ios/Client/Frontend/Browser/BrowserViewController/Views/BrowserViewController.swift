@@ -1559,8 +1559,7 @@ class BrowserViewController: UIViewController,
         displayedPopoverController?.dismiss(animated: true, completion: nil)
         coordinator.animate(alongsideTransition: { [weak self] context in
             guard let self else { return }
-            let shouldShowToolbars = !self.isTabScrollRefactoringEnabled || (self.tabManager.selectedTab?.isFindInPageMode == false)
-            if shouldShowToolbars {
+            if !self.isTabScrollRefactoringEnabled || (self.tabManager.selectedTab?.isFindInPageMode == false) {
                 self.scrollController.showToolbars(animated: false)
             }
         }, completion: nil)
