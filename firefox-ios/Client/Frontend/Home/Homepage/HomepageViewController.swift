@@ -7,7 +7,6 @@ import Common
 import Redux
 import Shared
 import Storage
-import SwiftUI
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
