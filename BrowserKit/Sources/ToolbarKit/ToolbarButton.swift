@@ -81,9 +81,10 @@ class ToolbarButton: UIButton,
 
         // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
         if let isLoading = element.loadingConfig?.isLoading, isLoading {
-            makeLoadingButton()
+            makeLoadingButton(startedA11yLabel: element.a11yLabel)
         } else {
-            hideLoadingIcon()
+            let completionA11yLabel = element.isSelected ? element.loadingConfig?.a11yLabel : nil
+            hideLoadingIcon(completionA11yLabel: completionA11yLabel)
         }
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.title ?? element.a11yLabel,
@@ -286,7 +287,7 @@ class ToolbarButton: UIButton,
     // TODO: FXIOS-13949 - To investigate if there's a better way to show loading spinner
     private var spinner: UIActivityIndicatorView?
 
-    private func makeLoadingButton(style: UIActivityIndicatorView.Style = .medium) {
+    private func makeLoadingButton(startedA11yLabel: String?, style: UIActivityIndicatorView.Style = .medium) {
         let isNewSpinner = spinner == nil
         if spinner == nil {
             let loadingView = UIActivityIndicatorView(style: style)
@@ -299,19 +300,21 @@ class ToolbarButton: UIButton,
             spinner = loadingView
         }
         spinner?.startAnimating()
-        if isNewSpinner && UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        if isNewSpinner && UIAccessibility.isVoiceOverRunning, let startedA11yLabel {
+            UIAccessibility.post(notification: .announcement, argument: startedA11yLabel)
         }
     }
 
-    private func hideLoadingIcon() {
+    private func hideLoadingIcon(completionA11yLabel: String? = nil) {
         let hadSpinner = spinner != nil
         spinner?.stopAnimating()
         spinner?.removeFromSuperview()
         spinner = nil
-        if hadSpinner && UIAccessibility.isVoiceOverRunning {
-            UIAccessibility.post(notification: .layoutChanged, argument: self)
+        guard hadSpinner && UIAccessibility.isVoiceOverRunning else { return }
+        if let completionA11yLabel {
+            UIAccessibility.post(notification: .announcement, argument: completionA11yLabel)
         }
+        UIAccessibility.post(notification: .layoutChanged, argument: self)
     }
 
     private func removeLongPressGestureRecognizer() {
