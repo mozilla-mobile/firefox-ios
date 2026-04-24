@@ -94,8 +94,13 @@ final class CoreBuildFlagsTests: XCTestCase {
 
 final class MockNimbusFeatureFlags: FeatureFlagProviding, @unchecked Sendable {
     var enabledFlags: Set<FeatureFlagID> = []
+    var debugOverrides: [FeatureFlagID: Bool] = [:]
 
     func isEnabled(_ flag: FeatureFlagID) -> Bool {
         enabledFlags.contains(flag)
+    }
+
+    func setDebugOverride(_ flag: FeatureFlagID, to value: Bool) {
+        debugOverrides[flag] = value
     }
 }
