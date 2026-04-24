@@ -19,7 +19,7 @@ brew install fxios
 
 Then run these steps in sequence from the root of the repository:
 
-1. `fxios bootstrap --version`
+1. `fxios --version`
 2. `fxios bootstrap --all`
 
 Stop and report if any step fails.
