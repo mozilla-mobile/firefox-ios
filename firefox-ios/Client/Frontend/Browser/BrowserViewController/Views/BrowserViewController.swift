@@ -296,8 +296,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarUpdateHint
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.toolbarUpdateHint)
     }
 
     var isNativeErrorPageEnabled: Bool {
