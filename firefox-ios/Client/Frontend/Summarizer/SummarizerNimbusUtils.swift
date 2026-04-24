@@ -35,10 +35,7 @@ extension SummarizerNimbusUtils {
 }
 
 /// Tiny utility to simplify checking for availability of the summarizers
-struct DefaultSummarizerNimbusUtils:
-    LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-    FeatureFlaggable,
-    SummarizerNimbusUtils {
+struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     private let prefs: Prefs
     private let localeProvider: LocaleProvider
     private let appleIntelligenceUtil: AppleIntelligenceUtil
@@ -58,7 +55,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     var isLanguageExpansionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizerLanguageExpansion, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerLanguageExpansion)
     }
 
     /// Takes into consideration that summarize feature is on,
@@ -108,11 +105,11 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     func isAppAttestAuthEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerAppAttestAuth)
     }
 
     func usesPermissiveGuardrails() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerPermissiveGuardrails, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerPermissiveGuardrails)
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
@@ -120,7 +117,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerToolbarEntrypoint, checking: .buildOnly)
+        let isFlagEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerToolbarEntrypoint)
         return isHostedSummarizerEnabled() && isFlagEnabled
     }
 
@@ -129,7 +126,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerShakeGesture, checking: .buildOnly)
+        let isShakeEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerShakeGesture)
         return isHostedSummarizerEnabled() && isShakeEnabled
     }
 

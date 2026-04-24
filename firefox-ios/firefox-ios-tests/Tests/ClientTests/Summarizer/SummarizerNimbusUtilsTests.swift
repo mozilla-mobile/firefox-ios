@@ -20,7 +20,6 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         setIsAppleIntelligenceAvailable()
         setLanguageExpansionFeature()
         setIsAppAttestAuthEnabled()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

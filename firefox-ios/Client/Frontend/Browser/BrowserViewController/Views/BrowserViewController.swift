@@ -345,7 +345,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isAppStoreReviewTriggerEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.improvedAppStoreReviewTriggerFeature)
     }
 
     // MARK: Computed vars
