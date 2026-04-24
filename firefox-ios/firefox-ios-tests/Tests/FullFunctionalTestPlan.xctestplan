@@ -111,7 +111,6 @@
         "BookmarksTests\/testDesktopFoldersArePresent()",
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOff()",
         "BookmarksTests\/testLongTapRecentlySavedLink_tabTrayExperimentOn()",
-        "BookmarksTests\/testRecentlyBookmarked()",
         "BookmarksTests\/testUndoDeleteBookmark()",
         "BrowsingPDFTests\/testBookmarkPDF()",
         "BrowsingPDFTests\/testBookmarkPDF_TAE()",
