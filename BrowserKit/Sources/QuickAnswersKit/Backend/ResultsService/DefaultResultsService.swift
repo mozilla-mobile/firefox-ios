@@ -22,22 +22,16 @@ final class DefaultResultsService: ResultsService {
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         let message = LiteLLMMessage(role: .user, content: transcription)
-        guard let stream = try await requestChatCompletion(for: message) else {
-            // TODO: FXIOS-15196 - Remove error once LLMCLient is not nil
-            throw SpeechError.unknown
-        }
-
-        var fullResponse = ""
-        for try await chunk in stream {
-            fullResponse += chunk
-        }
-
+        // TODO: FXIOS-15198 - Handle mapping errors from request
+        let fullResponse = try await requestChatCompletion(for: message)
         return try formatResult(from: fullResponse)
     }
 
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> AsyncThrowingStream<String, Error>? {
+    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> String {
         // TODO: FXIOS-15198 Handle errors appropriately
-        return try await client.requestChatCompletionStreamed(
+        // and may need to change type and not use String,
+        // but waiting for what we get on server side
+        return try await client.requestChatCompletion(
             messages: [message],
             config: config
         )
@@ -45,7 +39,13 @@ final class DefaultResultsService: ResultsService {
 
     private func formatResult(from response: String) throws -> SearchResult {
         // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-        // depending on UI to be a stream instead. For now, return the full response as the body.
-        return SearchResult(title: "Quick Answer", body: response, url: nil)
+        return SearchResult(
+            resultText: response,
+            sources: [SearchResult.Source(
+                title: "",
+                thumbnailURL: nil,
+                faviconURL: nil
+            )]
+        )
     }
 }

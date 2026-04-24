@@ -201,7 +201,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.body)
+                self?.contentView.configureAnswer(result.resultText)
+                self?.contentView.configureSources(result.sources)
             }
         }
         viewModel.startRecordingVoice()
