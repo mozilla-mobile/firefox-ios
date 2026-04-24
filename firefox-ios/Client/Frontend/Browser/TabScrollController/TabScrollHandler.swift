@@ -110,6 +110,10 @@ final class TabScrollHandler: NSObject,
         return windowUUID
     }
 
+    var isTabScrollRefactoringEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+    }
+
     /// Returns true when the scrollview contentSize height is bigger than device height plus delta
     /// and voice over is turned off
     var shouldUpdateUIWhenScrolling: Bool {
@@ -362,7 +366,10 @@ final class TabScrollHandler: NSObject,
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
-            showToolbars(animated: true)
+            let shouldShowToolbars = !isTabScrollRefactoringEnabled || (tabProvider?.isFindInPageMode == false)
+            if shouldShowToolbars {
+                showToolbars(animated: false)
+            }
         }
     }
 

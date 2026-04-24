@@ -891,14 +891,12 @@ class BrowserViewController: UIViewController,
         processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
 
-        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+        let shouldShowToolbars = tabManager.selectedTab?.isFindInPageMode == false
+        if shouldShowToolbars {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
             scrollController.showToolbars(animated: false)
-        }
-
-        // In some cases (see restoreFindInPageIfNeeded) is necessary to display manually find in page bar
-        if #available(iOS 16, *) {
-            restoreFindInPageIfNeeded()
+        } else if isTabScrollRefactoringEnabled {
+            scrollController.hideToolbars(animated: false)
         }
 
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
@@ -1559,8 +1557,12 @@ class BrowserViewController: UIViewController,
         }
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
-        coordinator.animate(alongsideTransition: { context in
-            self.scrollController.showToolbars(animated: false)
+        coordinator.animate(alongsideTransition: { [weak self] context in
+            guard let self else { return }
+            let shouldShowToolbars = !self.isTabScrollRefactoringEnabled || (self.tabManager.selectedTab?.isFindInPageMode == false)
+            if shouldShowToolbars {
+                self.scrollController.showToolbars(animated: false)
+            }
         }, completion: nil)
         webPagePreview.invalidateScreenshotData()
     }
@@ -5118,6 +5120,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
                                               doesFindInPageBarExist: findInPageBar != nil)
+
+        if isTabScrollRefactoringEnabled, let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            scrollController.showToolbars(animated: true)
+        }
+
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }

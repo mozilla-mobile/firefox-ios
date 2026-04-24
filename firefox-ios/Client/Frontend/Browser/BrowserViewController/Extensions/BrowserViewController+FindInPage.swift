@@ -14,6 +14,10 @@ extension BrowserViewController {
             useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
         tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
+
+        if isTabScrollRefactoringEnabled, tabManager.selectedTab?.isFindInPageMode == true {
+            scrollController.hideToolbars(animated: true)
+        }
     }
 
     @available(iOS 16, *)
@@ -29,16 +33,6 @@ extension BrowserViewController {
             webView.findInteraction?.dismissFindNavigator()
             webView.isFindInteractionEnabled = false
         }
-    }
-
-    @available(iOS 16, *)
-    func restoreFindInPageIfNeeded() {
-        guard let tab = tabManager.selectedTab,
-              tab.isPrivate,
-              tab.isFindInPageMode,
-              let webView = tab.webView else { return }
-
-        webView.findInteraction?.presentFindNavigator(showingReplace: false)
     }
 
     // Used only on iOS 15
