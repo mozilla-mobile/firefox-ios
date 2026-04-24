@@ -63,7 +63,26 @@ enum FeatureFlagID: String, CaseIterable {
     case worldCupWidget
     case quickAnswers
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
+    /// The user preferences key for features that support user-togglable settings.
+    /// Returns `nil` for features that are not user-configurable.
+    var userPrefsKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
+        typealias HomepageKeys = PrefsKeys.HomepageSettings
+
+        switch self {
+        case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
+        case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
+        case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .sentFromFirefox: return FlagKeys.SentFromFirefox
+        case .startAtHome: return FlagKeys.StartAtHome
+        default: return nil
+        }
+    }
+
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`.
+    // Add in alphabetical order.
     var debugKey: String? {
         switch self {
         case    .aiKillSwitch,

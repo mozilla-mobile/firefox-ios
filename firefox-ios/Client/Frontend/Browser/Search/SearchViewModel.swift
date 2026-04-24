@@ -303,7 +303,8 @@ class SearchViewModel: FeatureFlaggable,
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
 
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
                 && (includeNonSponsored || includeSponsored) else {
             if !firefoxSuggestions.isEmpty {
                 firefoxSuggestions = []
