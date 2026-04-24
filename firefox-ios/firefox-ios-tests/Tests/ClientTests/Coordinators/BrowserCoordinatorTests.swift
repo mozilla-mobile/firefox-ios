@@ -16,7 +16,6 @@ import Shared
 
 @MainActor
 final class BrowserCoordinatorTests: XCTestCase,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                                      FeatureFlaggable,
                                      StoreTestUtility {
     private var mockRouter: MockRouter!
@@ -261,7 +260,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
 
-        if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.trackingProtectionRefactor) {
             XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
         } else {
             XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
