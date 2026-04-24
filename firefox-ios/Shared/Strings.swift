@@ -961,7 +961,7 @@ extension String {
                 key: "WorldCup.CountryPicker.SkipButton.Title.v151",
                 tableName: "WorldCup",
                 value: "Skip",
-                comment: "Title for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow.")
+                comment: "Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
                 tableName: "WorldCup",
