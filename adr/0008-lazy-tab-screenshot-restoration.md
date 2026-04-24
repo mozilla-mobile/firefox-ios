@@ -37,3 +37,7 @@ Screenshots that are already held in memory should be used as-is and not reloade
 - Tabs in the tab tray may briefly display a placeholder before their screenshot loads, introducing a short visual delay on first scroll.
 - `selectTab` gains a side effect (triggering async loads), which must be accounted for in tests that assert on tab state immediately after selection.
 - Without an explicit eviction strategy, screenshots accumulate in memory as the user scrolls. A user who browses their full tab tray will end up with the same memory footprint as the current eager approach, just reached later rather than at startup.
+
+## References
+- [Investigate deeplink delay](https://mozilla-hub.atlassian.net/browse/FXIOS-15285)
+- [Improve tabs restoration process](https://mozilla-hub.atlassian.net/browse/FXIOS-11269)
