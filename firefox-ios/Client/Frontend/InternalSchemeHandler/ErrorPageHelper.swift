@@ -347,6 +347,8 @@ class ErrorPageHelper {
         // user to go back or continue. The certificate itself is encoded and added as
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
+        // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
+        // errors instead of private APIs.
         if legacyCertErrors.certErrors.contains(error.code) {
             if let certChain = error.userInfo[PeerCertificateChainKey] as? [SecCertificate],
                let cert = certChain.first {
