@@ -130,10 +130,6 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         layer.cornerRadius = UX.cornerRadius
         contentView.addSubview(backgroundHolder)
 
-        screenshotView.layer.cornerRadius = UX.cornerRadius
-        screenshotView.isAccessibilityElement = false
-        screenshotView.accessibilityElementsHidden = true
-
         backgroundHolder.addSubviews(screenshotView,
                                      smallFaviconView,
                                      closeButton,
