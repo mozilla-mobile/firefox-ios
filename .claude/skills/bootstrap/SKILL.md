@@ -17,7 +17,13 @@ brew tap mozilla-mobile/fxios
 brew install fxios
 ```
 
-Then run these steps in sequence from the root of the repository:
+If it is installed, upgrade to the latest version:
+
+```
+brew upgrade fxios
+```
+
+Then run these steps in sequence from the root of the firefox-ios repository:
 
 1. `fxios --version`
 2. `fxios bootstrap --all`
