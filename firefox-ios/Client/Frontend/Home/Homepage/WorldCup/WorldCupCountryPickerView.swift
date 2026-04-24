@@ -43,7 +43,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     private var gridColumns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.gridColumns)
     }
-    
+
     init(windowUUID: WindowUUID, themeManager: ThemeManager) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -94,7 +94,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                 .padding(.bottom, UX.sectionHeaderBottomPadding)
                 .padding(.leading, UX.sectionHeaderLeadingPadding)
                 .lineLimit(nil)
-            
+
             LazyVGrid(columns: gridColumns, spacing: UX.gridRowSpacing) {
                 ForEach(region.countries) { country in
                     countryTile(country)
