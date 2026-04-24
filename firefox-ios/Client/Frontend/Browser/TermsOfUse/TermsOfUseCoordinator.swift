@@ -22,7 +22,7 @@ protocol TermsOfUseCoordinatorDelegate: AnyObject {
 }
 
 @MainActor
-final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, LegacyFeatureFlaggable {
+final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegate, FeatureFlaggable {
     /// Prevents deep link route handling from dismissing the Terms of Use sheet
     override var isDismissible: Bool { false }
 
@@ -110,7 +110,7 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
 
     func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
         // 1. Feature must be enabled
-        guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
+        guard featureFlagsProvider.isEnabled(.touFeature) else { return false }
 
         // 2. If user has already accepted, never show again
         let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false

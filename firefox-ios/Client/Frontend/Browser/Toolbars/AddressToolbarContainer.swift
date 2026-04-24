@@ -56,7 +56,6 @@ final class AddressToolbarContainer: UIView,
                                      AddressToolbarDelegate,
                                      Autocompletable,
                                      URLBarViewProtocol,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                                      FeatureFlaggable,
                                      PrivateModeUI {
     private enum UX {
@@ -569,7 +568,7 @@ final class AddressToolbarContainer: UIView,
 
         // We want to show suggestions if we turn on the trending searches or recent searches
         // which displays the zero search state. Only if not in private mode.
-        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isTrendingSearchEnabled = featureFlagsProvider.isEnabled(.trendingSearches)
         let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         let isRecentOrTrendingSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
         let isPrivateMode = model?.isPrivateMode ?? false

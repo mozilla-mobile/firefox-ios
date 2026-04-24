@@ -7,9 +7,7 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-                                     FeatureFlaggable {
+struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private struct Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
@@ -414,7 +412,7 @@ struct MainMenuConfigurationUtility: Equatable,
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil

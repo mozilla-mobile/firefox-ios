@@ -15,7 +15,6 @@ import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,
-                   LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                    FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -174,7 +173,7 @@ class AppDelegate: UIResponder,
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }

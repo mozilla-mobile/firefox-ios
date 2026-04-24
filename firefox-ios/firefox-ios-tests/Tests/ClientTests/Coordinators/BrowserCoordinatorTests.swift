@@ -15,7 +15,9 @@ import Shared
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTestUtility {
+final class BrowserCoordinatorTests: XCTestCase,
+                                     FeatureFlaggable,
+                                     StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -78,7 +80,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         let subject = createSubject()
         subject.start(with: nil)
         // TODO: FXIOS-12947 - Add tests for ToU Feature implementation
-        if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.touFeature) {
             XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
             XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
             XCTAssertTrue(subject.childCoordinators.isEmpty)
@@ -258,7 +260,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
 
-        if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.trackingProtectionRefactor) {
             XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
         } else {
             XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)

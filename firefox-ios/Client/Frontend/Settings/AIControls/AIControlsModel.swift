@@ -6,7 +6,6 @@ import Shared
 import Common
 
 class AIControlsModel: ObservableObject,
-                       LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                        FeatureFlaggable,
                        UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
@@ -81,7 +80,7 @@ class AIControlsModel: ObservableObject,
         pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
 
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
-        translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        translationsVisible = featureFlagsProvider.isEnabled(.translation)
 
         killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.isAIKillSwitchEnabled
     }
