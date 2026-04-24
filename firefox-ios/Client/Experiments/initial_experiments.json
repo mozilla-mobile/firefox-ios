@@ -96,7 +96,7 @@
       "channel": "release",
       "userFacingName": "iOS - Japan Onboarding with Video - Release Prod",
       "userFacingDescription": "Japan Onboarding with Video",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -159,7 +159,7 @@
       ],
       "targeting": "(app_version|versionCompare('149.3.0') >= 0) && (language in ['ja'])",
       "startDate": "2026-04-03",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2026-04-24",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
