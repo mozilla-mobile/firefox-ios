@@ -341,7 +341,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isSnapKitRemovalEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.snapkitRemovalRefactor)
     }
 
     var isAppStoreReviewTriggerEnabled: Bool {
