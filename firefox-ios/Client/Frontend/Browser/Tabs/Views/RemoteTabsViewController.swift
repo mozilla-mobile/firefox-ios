@@ -41,6 +41,7 @@ class RemoteTabsViewController: UIViewController,
     weak var remoteTabsPanel: RemoteTabsPanel?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private let tabTrayUtils: TabTrayUtils
 
     var tableView: UITableView = .build()
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
@@ -71,13 +72,15 @@ class RemoteTabsViewController: UIViewController,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         logger: Logger = DefaultLogger.shared
+         logger: Logger = DefaultLogger.shared,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()
     ) {
         self.state = state
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.tabTrayUtils = tabTrayUtils
         super.init(nibName: nil, bundle: nil)
 
         tableView.dataSource = self
@@ -204,26 +207,6 @@ class RemoteTabsViewController: UIViewController,
         guard let emptyStateReason = state.showingEmptyState else { return }
         emptyView.configure(config: emptyStateReason, delegate: remoteTabsPanel, isSyncing: isSyncing)
         emptyView.applyTheme(theme: retrieveTheme())
-    }
-
-    private func show(toast: Toast,
-                      afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
-                      duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
-        guard !isTabTrayUIExperimentsEnabled else { return }
-
-        if let buttonToast = toast as? ButtonToast {
-            self.buttonToast = buttonToast
-        }
-
-        toast.showToast(viewController: self, delay: delay, duration: duration) { toast in
-            [
-                toast.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                                               constant: Toast.UX.toastSidePadding),
-                toast.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                                                constant: -Toast.UX.toastSidePadding),
-                toast.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-            ]
-        }
     }
 
     // MARK: - Refreshing TableView
@@ -483,9 +466,9 @@ class RemoteTabsViewController: UIViewController,
             emptyView.updateInsets(top: view.safeAreaInsets.top, bottom: 0)
         } else {
             let bottomInset = if emptyView.needsSafeArea {
-                DefaultTabTrayUtils().segmentedControlHeight + view.safeAreaInsets.bottom
+                tabTrayUtils.segmentedControlHeight + view.safeAreaInsets.bottom
             } else {
-                DefaultTabTrayUtils().segmentedControlHeight
+                tabTrayUtils.segmentedControlHeight
             }
 
             emptyView.updateInsets(top: 0, bottom: bottomInset)
