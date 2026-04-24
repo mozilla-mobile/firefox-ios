@@ -178,7 +178,7 @@ func registerSettingsNavigation(in map: MMScreenGraph<FxUserState>, app: XCUIApp
             let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
             let pasteAction = app.staticTexts["Paste"]
             UIPasteboard.general.string = searchEngineUrl
-            BaseTestCase().mozWaitForElementToExist(customengineurlTextView)
+            customengineurlTextView.mozWaitForElementToExist()
             customengineurlTextView.pressWithRetry(duration: 1.5, element: pasteAction)
             pasteAction.waitAndTap()
         }

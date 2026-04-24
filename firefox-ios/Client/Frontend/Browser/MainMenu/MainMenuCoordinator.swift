@@ -46,7 +46,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
 }
 
-class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
+class MainMenuCoordinator: BaseCoordinator, LegacyFeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
@@ -178,7 +178,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                if isSingleLanguageFlow, let language = languages.first, !isTranslated {
+                let pageLanguage = isTranslated
+                    ? translationConfig?.sourceLanguage
+                    : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
+                let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
+                if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: windowUUID,
                         targetLanguage: language,
@@ -186,7 +190,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     ))
                 } else {
                     store.dispatch(GeneralBrowserAction(
-                        translationLanguages: languages,
+                        translationLanguages: filteredLanguages,
                         isPageTranslated: isTranslated,
                         translatedToLanguage: translatedLanguage,
                         windowUUID: windowUUID,

@@ -67,7 +67,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
 
     func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.adsClient) {
             fetchTilesWithAdsClient(completion: completion)
         } else {
             guard let request = buildRequest() else {
@@ -184,7 +184,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, Feature
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI) {
+        if CoreBuildFlags.isUsingStagingUnifiedAdsAPI {
             return URL(string: UnifiedAdsProvider.stagingResourceEndpoint)
         }
         return URL(string: UnifiedAdsProvider.prodResourceEndpoint)

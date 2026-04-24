@@ -223,46 +223,45 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
-        if !iPad() {
-            let shouldSkipTest = true
-            try XCTSkipIf(shouldSkipTest, "Undo toast no longer available on iPhone")
-        }
-        navigator.nowAt(HomePanelsScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        for _ in 1...4 {
-            navigator.createNewTab()
-        }
-        waitForTabsButton()
-        navigator.goto(TabTray)
-        var numTab = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
-
-        // Validate Close All Tabs and Cancel options
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
-
-        // Tap on "Close All Tabs"
-        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].firstMatch.waitAndTap()
-        if #unavailable(iOS 16) {
-            // Wait for the screen to refresh first.
-            mozWaitForElementToExist(
-                app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
-        }
-        // The private tabs are closed
-        waitForElementsToExist(
-            [
-                app.staticTexts["Private Browsing"],
-                app.otherElements[tabsTray]
-            ]
-        )
-        numTab = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
-
-        app.buttons["Undo"].waitAndTap()
-
-        // All the private tabs are restored
-        numTab = app.otherElements[tabsTray].cells.count
-        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        throw XCTSkip("Undo toast no longer available")
+        /*
+         navigator.nowAt(HomePanelsScreen)
+         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+         for _ in 1...4 {
+         navigator.createNewTab()
+         }
+         waitForTabsButton()
+         navigator.goto(TabTray)
+         var numTab = app.otherElements[tabsTray].cells.count
+         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+         app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].waitAndTap()
+         
+         // Validate Close All Tabs and Cancel options
+         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
+         
+         // Tap on "Close All Tabs"
+         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].firstMatch.waitAndTap()
+         if #unavailable(iOS 16) {
+         // Wait for the screen to refresh first.
+         mozWaitForElementToExist(
+         app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
+         }
+         // The private tabs are closed
+         waitForElementsToExist(
+         [
+         app.staticTexts["Private Browsing"],
+         app.otherElements[tabsTray]
+         ]
+         )
+         numTab = app.otherElements[tabsTray].cells.count
+         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+         
+         app.buttons["Undo"].waitAndTap()
+         
+         // All the private tabs are restored
+         numTab = app.otherElements[tabsTray].cells.count
+         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+         */
     }
 
     // Smoketest

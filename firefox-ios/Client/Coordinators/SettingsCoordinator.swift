@@ -32,6 +32,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
+                                 LegacyFeatureFlaggable, // TODO: ROUX remove post Feature Flag Migration
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
@@ -202,7 +203,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+            return featureFlagsProvider.isEnabled(.addressBarMenu)
             ? UIHostingController(
                 rootView: AddressBarSettingsView(
                     windowUUID: windowUUID,
@@ -378,11 +379,10 @@ final class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
     func pressedAIControls() {
-        let model = AIControlsModel(prefs: profile.prefs)
+        let model = AIControlsModel(prefs: profile.prefs, windowUUID: windowUUID)
 
         let viewController = UIHostingController(
             rootView: AIControlsSettingsView(
-                windowUUID: windowUUID,
                 aiControlsModel: model
             )
         )
@@ -432,7 +432,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.addressBarMenu) {
             let viewController = UIHostingController(
                 rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,

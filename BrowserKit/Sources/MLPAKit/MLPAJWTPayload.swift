@@ -19,6 +19,9 @@ public enum MLPAConstants {
     static let assertionObjParam = "assertion_obj_b64"
 
     static let serviceTypeHeader = "service-type"
+
+    // TODO: FXIOS-15123 - need to create an enum service type here
+    // eventually to also account for quick-answers
     static let serviceTypeValue = "s2s"
     static let useAppAttestHeader = "use-app-attest"
 
@@ -26,11 +29,34 @@ public enum MLPAConstants {
     static let contentTypeJSON = "application/json"
     static let POST = "POST"
 
-    static let baseURL = URL(string: "https://mlpa-prod-prod-mozilla.global.ssl.fastly.net")
+    public static func completionsEndpoint(with env: MLPAEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("v1")
+    }
 
-    public static var completionsEndpoint: URL? { baseURL?.appendingPathComponent("v1") }
-    static var challengeEndpoint: URL? { baseURL?.appendingPathComponent("verify/challenge") }
-    static var attestEndpoint: URL? { baseURL?.appendingPathComponent("verify/attest") }
+    static func challengeEndpoint(with env: MLPAEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("verify/challenge")
+    }
+
+    static func attestEndpoint(with env: MLPAEnvironment) -> URL? {
+        env.baseURL?.appendingPathComponent("verify/attest")
+    }
+}
+
+public enum MLPAEnvironment: String, Sendable {
+    case dev
+    case stage
+    case prod
+
+    var baseURL: URL? {
+        switch self {
+        case .dev:
+            return URL(string: "https://mlpa-nonprod-dev-mozilla.global.ssl.fastly.net")
+        case .stage:
+            return URL(string: "https://mlpa-nonprod-stage-mozilla.global.ssl.fastly.net")
+        case .prod:
+            return URL(string: "https://mlpa-prod-prod-mozilla.global.ssl.fastly.net")
+        }
+    }
 }
 
 /// The shared fields that every MLPA JWT envelope carries.

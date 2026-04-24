@@ -135,6 +135,13 @@ private func skipOnboardingIfNeeded(app: XCUIApplication) {
 
 // swiftlint:disable:next type_body_length
 class TodayWidgetTests: BaseTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        if !isFennec {
+            throw XCTSkip("Skipping TodayWidgetTests on Firefox or FirefoxBeta schemas")
+        }
+    }
+
     private func removeFirefoxWidget() {
         let maxSwipes = 3
         var numberOfSwipes = 0

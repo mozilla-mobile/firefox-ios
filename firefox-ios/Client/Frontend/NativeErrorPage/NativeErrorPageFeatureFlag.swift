@@ -6,17 +6,17 @@ import Foundation
 
 struct NativeErrorPageFeatureFlag: FeatureFlaggable {
     var isNativeErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.nativeErrorPage)
     }
 
     /// Temporary flag for showing no internet connection native error page only.
     var isNICErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) &&
-            featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.nativeErrorPage) &&
+            featureFlagsProvider.isEnabled(.noInternetConnectionErrorPage)
     }
 
     /// Flag for showing bad certificate domain native error page
     var isBadCertDomainErrorPageEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.badCertDomainErrorPage, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.badCertDomainErrorPage)
     }
 }

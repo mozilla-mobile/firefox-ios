@@ -8,7 +8,7 @@ import Common
 import Shared
 
 @MainActor
-final class TranslationsMiddleware: FeatureFlaggable {
+final class TranslationsMiddleware: LegacyFeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -73,6 +73,16 @@ final class TranslationsMiddleware: FeatureFlaggable {
         case TranslationsActionType.didTapEnableAutoTranslate:
             self.profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
 
+        case ToolbarActionType.didTranslationSettingsChange:
+            guard let action = (action as? ToolbarAction) else { return }
+            // Clear stale per-window state so eligibility is re-evaluated from scratch
+            // rather than acting on cached flow data from before the settings change.
+            self.selectedTargetLanguages[windowUUID] = nil
+            self.translationFlowIds[windowUUID] = nil
+            self.restoringWindows.remove(windowUUID)
+            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+            self.checkTranslationsAreEligible(for: action)
+
         default:
            break
         }
@@ -81,7 +91,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
         guard let gestureType = action.gestureType,
               let type = action.buttonType,
-              gestureType == .tap,
               type == .translate
         else { return }
 
@@ -102,6 +111,20 @@ final class TranslationsMiddleware: FeatureFlaggable {
             return
         }
 
+        if gestureType == .longPress {
+            guard translationConfiguration.state == .active,
+                  featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly)
+            else { return }
+            showLanguagePickerForActiveTranslation(
+                for: action,
+                translatedToLanguage: translationConfiguration.translatedToLanguage,
+                sourceLanguage: translationConfiguration.sourceLanguage
+            )
+            return
+        }
+
+        guard gestureType == .tap else { return }
+
         if translationConfiguration.state == .inactive,
            featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
             let capturedButton = action.buttonTapped
@@ -109,12 +132,22 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
                 let supported = await translationsService.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
-                store.dispatch(GeneralBrowserAction(
-                    buttonTapped: capturedButton,
-                    translationLanguages: languages,
-                    windowUUID: action.windowUUID,
-                    actionType: GeneralBrowserActionType.showTranslationLanguagePicker
-                ))
+                let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+                let filteredLanguages = languages.filter { $0 != pageLanguage }
+                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = filteredLanguages.first {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: action.windowUUID,
+                        targetLanguage: singleLanguage,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        buttonTapped: capturedButton,
+                        translationLanguages: filteredLanguages,
+                        windowUUID: action.windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
             }
         } else if translationConfiguration.state == .inactive {
             guard let deviceLanguage = Locale.current.languageCode else { return }
@@ -137,6 +170,28 @@ final class TranslationsMiddleware: FeatureFlaggable {
             self.handleUpdatingTranslationIcon(for: action, with: .inactive)
             restoringWindows.insert(action.windowUUID)
             self.reloadPage(for: action)
+        }
+    }
+
+    private func showLanguagePickerForActiveTranslation(
+        for action: ToolbarMiddlewareAction,
+        translatedToLanguage: String?,
+        sourceLanguage: String?
+    ) {
+        let capturedButton = action.buttonTapped
+        Task {
+            let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+            let supported = await translationsService.fetchSupportedTargetLanguages()
+            let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+            let filteredLanguages = languages.filter { $0 != sourceLanguage && $0 != translatedToLanguage }
+            store.dispatch(GeneralBrowserAction(
+                buttonTapped: capturedButton,
+                translationLanguages: filteredLanguages,
+                isPageTranslated: true,
+                translatedToLanguage: translatedToLanguage,
+                windowUUID: action.windowUUID,
+                actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+            ))
         }
     }
 
@@ -200,7 +255,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
         let supported = await translationsService.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
-        guard let targetLanguage = preferred.first else { return false }
+        let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+        let filteredPreferred = preferred.filter { $0 != pageLanguage }
+        guard let targetLanguage = filteredPreferred.first else { return false }
         let isPrivate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
@@ -237,7 +294,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
                     for: action.windowUUID,
                     using: preferredLanguages
                 )
-                guard isEligible else { return }
+                guard isEligible else {
+                    self.dispatchClearTranslationIcon(windowUUID: action.windowUUID)
+                    return
+                }
 
                 // Auto-translate handled the page load — skip the manual offer.
                 if await self.tryAutoTranslate(for: action) { return }
@@ -267,6 +327,14 @@ final class TranslationsMiddleware: FeatureFlaggable {
         }
     }
 
+    private func dispatchClearTranslationIcon(windowUUID: WindowUUID) {
+        store.dispatch(ToolbarAction(
+            translationConfiguration: nil,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.receivedTranslationLanguage
+        ))
+    }
+
     private func retrieveTranslations(
         for action: Action,
         targetLanguage: String,
@@ -285,10 +353,12 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
     private func performTranslation(for action: Action, targetLanguage: String, isPrivate: Bool, autoTranslate: Bool) async {
         do {
+            var detectedSourceLanguage: String?
             try await translationsService.translateCurrentPage(
                 for: action.windowUUID,
                 to: targetLanguage,
                 onLanguageIdentified: { identifiedLanguage, deviceLanguage in
+                    detectedSourceLanguage = identifiedLanguage
                     self.translationsTelemetry.pageLanguageIdentified(
                         identifiedLanguage: identifiedLanguage,
                         deviceLanguage: deviceLanguage
@@ -307,6 +377,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 for: ToolbarActionType.translationCompleted,
                 with: .active,
                 translatedToLanguage: targetLanguage,
+                sourceLanguage: detectedSourceLanguage,
                 and: action.windowUUID
             )
             maybeShowAutoTranslatePrompt(windowUUID: action.windowUUID)
@@ -353,13 +424,15 @@ final class TranslationsMiddleware: FeatureFlaggable {
         for actionType: ToolbarActionType,
         with state: TranslationConfiguration.IconState,
         translatedToLanguage: String? = nil,
+        sourceLanguage: String? = nil,
         and windowUUID: WindowUUID
     ) {
         let toolbarAction = ToolbarAction(
             translationConfiguration: TranslationConfiguration(
                 prefs: profile.prefs,
                 state: state,
-                translatedToLanguage: translatedToLanguage
+                translatedToLanguage: translatedToLanguage,
+                sourceLanguage: sourceLanguage
             ),
             windowUUID: windowUUID,
             actionType: actionType

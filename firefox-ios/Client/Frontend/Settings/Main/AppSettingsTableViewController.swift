@@ -59,6 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
+                                      LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                                       FeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
@@ -271,12 +272,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        sendTechnicalDataSettings.settingDidChange = { [weak self] value in
-            guard let self else { return }
+        sendTechnicalDataSettings.settingDidChange = { value in
             DefaultGleanWrapper().setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
             studiesSetting.updateSetting(for: value)
-            self.tableView.reloadData()
         }
         sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -381,7 +380,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
-        if isSearchBarLocationFeatureEnabled, let profile {
+        if let profile {
             generalSettings.append(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
             )
@@ -405,7 +404,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        if featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.aiKillSwitch) {
             generalSettings.append(AIControlsSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
@@ -463,7 +462,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
-        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+        if featureFlagsProvider.isEnabled(.sentFromFirefox), let profile {
             supportSettings.append(
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
@@ -541,6 +540,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))

@@ -6,9 +6,10 @@ import Foundation
 import Common
 import Storage
 import UIKit
+
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
-final class HomepageSectionLayoutProvider: FeatureFlaggable {
+final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
@@ -32,7 +33,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct HeaderConstants {
-            static let estimatedHeight: CGFloat = 40
             static let bottomSpacing: CGFloat = 30
         }
 
@@ -47,8 +47,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct PocketConstants {
             static let preferredCellSize = CGSize(width: 361, height: 282)
             static let minimumCellWidth: CGFloat = 320
-            static let verticalStoriesCellEstimatedHeight: CGFloat = 282
-            static let verticalStoriesSpacing: CGFloat = 16
             static let minimumCellsPerRow = 1
             static let interItemSpacing: CGFloat = 16
             static let interGroupSpacing: CGFloat = 16
@@ -101,16 +99,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         struct BookmarksConstants {
             static let cellWidth: CGFloat = 134
         }
-    }
-
-    private enum StoriesHeaderHeightMode: Equatable {
-        case sectionTitle
-        case newsAffordance
-    }
-
-    private struct StoriesHeaderLayoutState: Equatable {
-        let headerHeightMode: StoriesHeaderHeightMode
-        let appliedPeekOffset: CGFloat
     }
 
     private var logger: Logger
@@ -203,22 +191,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     private func createHeaderSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(UX.standardSingleItemHeight))
 
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(UX.HeaderConstants.estimatedHeight),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(UX.standardSingleItemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
 
         let section = NSCollectionLayoutSection(group: group)
 
-        let containerWidth = environment.container.contentSize.width
-        let effectiveInsets = environment.container.effectiveContentInsets
-        let headerWidth = HomepageHeaderCell.UX.contentWidth()
-        let availableWidth = max(0, containerWidth - effectiveInsets.leading - effectiveInsets.trailing)
-        let horizontalInset = max(0, (availableWidth - headerWidth) / 2)
+        let horizontalInset = UX.leadingInset(traitCollection: environment.traitCollection)
 
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
@@ -279,11 +263,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(
-                getHeaderHeight(
-                    sectionHeaderConfiguration: sectionHeaderConfiguration,
-                    environment: environment
-                )
+            heightDimension: .absolute(getHeaderHeight(sectionHeaderConfiguration: sectionHeaderConfiguration,
+                                                       environment: environment)
             )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -299,7 +280,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             bottom: UX.standardInset,
             trailing: horizontalInset
         )
-        section.interGroupSpacing = UX.interGroupSpacing
+        section.interGroupSpacing = UX.PocketConstants.interGroupSpacing
 
         return section
     }
@@ -504,23 +485,30 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     // result in it having a different height (eg changes to top/bottom insets).
     private func createSpacerSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
-        let storiesHeaderLayoutState = getStoriesHeaderLayoutState(environment: environment)
+
+        let merinoHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
+        let headerHeight = getHeaderHeight(sectionHeaderConfiguration: merinoHeaderConfiguration,
+                                           environment: environment)
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         var spacerHeight = max(0.1, rawSpacerHeight)
 
-        // For vertically scrolling stories, apply the appropriate peek treatment only when there is spare vertical space.
-        // If there isn’t enough room, stories flow naturally after the preceding content with no peeking.
+        // Resolves how the vertical stories header should be presented from the amount of free space available at the
+        // bottom of the unscrolled homepage.
+        //
+        // When there is enough space for the full news affordance + stories peek, we show that.
+        // Otherwise, if there is at least enough space to show the news affordance itself,
+        // we show that and as much of the stories peek as we can.
+        // Otherwise, if there is less space than the news affordance height, we fall back to the section-title header
+        // + categories picker and remove the peek entirely.
         if rawSpacerHeight > 0 {
-            if storiesHeaderLayoutState.headerHeightMode == .sectionTitle {
-                spacerHeight = 0.1
-            } else {
-                let headerHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
-                                                                             width: environment.container.contentSize.width)
+            if merinoHeaderConfiguration.style == .newsAffordance && rawSpacerHeight >= headerHeight {
                 let headerWithSectionSpacing = headerHeight + UX.headerSectionSpacing
                 /// `totalPeek` is how much of the stories section (header + spacing + stories) we want above the fold
                 let totalPeek = headerWithSectionSpacing + UX.PocketConstants.getStoriesPeekOffset()
                 spacerHeight = max(0.1, rawSpacerHeight - totalPeek)
+            } else {
+                spacerHeight = 0.1
             }
         }
 
@@ -796,13 +784,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let headerHeight: CGFloat
 
         switch sectionHeaderConfiguration.style {
-        case .newsAffordance
-            where getStoriesHeaderLayoutState(environment: environment).headerHeightMode == .newsAffordance:
+        case .newsAffordance:
+            guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
+            else { fallthrough }
             let header = NewsTransitionHeaderCell(frame: CGRect(width: 200, height: 200))
             header.configure(sectionHeaderConfiguration: sectionHeaderConfiguration,
-                             textColor: .black,
+                             textColor: nil,
                              theme: LightTheme(),
-                             transitionEnabled: true)
+                             transitionEnabled: true,
+                             categories: state.merinoState.availableCategories)
             headerHeight = HomepageDimensionCalculator.fittingHeight(for: header, width: containerWidth)
 
         default:
@@ -814,46 +804,11 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         return headerHeight
     }
 
-    /// Resolves how the vertical stories header should be presented from the amount of free
-    /// space available at the bottom of the unscrolled homepage.
-    ///
-    /// When there is enough space for the full news affordance peek, we use the affordance-height
-    /// header and the full affordance peek offset. If there is only enough space to show the
-    /// affordance itself, we still use the affordance-height header but only peek by the available
-    /// space. If there is less space than the affordance needs, we fall back to the section-title
-    /// header and remove the spacer peek entirely.
-    private func getStoriesHeaderLayoutState(
-        environment: NSCollectionLayoutEnvironment
-    ) -> StoriesHeaderLayoutState {
-        let rawSpacerHeight = getRawSpacerHeight(environment: environment)
-
-        let newsAffordanceHeaderHeight = HomepageDimensionCalculator
-            .fittingHeight(for: NewsTransitionHeaderCell(), width: environment.container.contentSize.width)
-        let fullPeekOffset = newsAffordanceHeaderHeight + UX.PocketConstants.getStoriesPeekOffset()
-
-        if rawSpacerHeight >= fullPeekOffset {
-            // Enough free space to show the full affordance header and the full peek offset.
-            return StoriesHeaderLayoutState(
-                headerHeightMode: .newsAffordance,
-                appliedPeekOffset: fullPeekOffset
-            )
-        }
-
-        if rawSpacerHeight >= newsAffordanceHeaderHeight {
-            // Enough space to show the affordance itself, but not enough for the full peek offset.
-            return StoriesHeaderLayoutState(
-                headerHeightMode: .newsAffordance,
-                appliedPeekOffset: rawSpacerHeight
-            )
-        }
-
-        // Not enough space for the affordance, so fall back to the section-title header with no peek.
-        return StoriesHeaderLayoutState(
-            headerHeightMode: .sectionTitle,
-            appliedPeekOffset: 0
-        )
-    }
-
+    /// Returns the height that the spacer should be, before accounting for vertical stories peeking above the fold.
+    /// Baseline stories: gets the height available for the spacer to take up to force the stories section to be
+    /// right above the fold
+    /// Vertical stories: gets the height of the distance between the bottom of the last non-stories section, and the bottom
+    /// of the viewport
     private func getRawSpacerHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         let collectionViewHeight = environment.container.contentSize.height

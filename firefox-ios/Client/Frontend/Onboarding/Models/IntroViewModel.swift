@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
+class IntroViewModel: OnboardingViewModelProtocol, LegacyFeatureFlaggable {
     struct OnboardingOptions: OptionSet, CaseIterable {
         let rawValue: Int
 

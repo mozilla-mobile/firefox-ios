@@ -72,13 +72,8 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let merinoContentExists = if let stories = merinoResponse.stories {
-            !stories.isEmpty
-        } else if let categories = merinoResponse.categories {
-            !categories.isEmpty
-        } else {
-            false
-        }
+        let merinoContentExists = !(merinoResponse.stories?.isEmpty ?? true) ||
+                                  !(merinoResponse.categories?.isEmpty ?? true)
 
         return MerinoState(
             windowUUID: state.windowUUID,
@@ -110,5 +105,24 @@ struct MerinoState: StateType, Equatable {
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
             style: .newsAffordance
         )
+    }
+}
+
+/// `@CopyWithUpdates` currently treats computed properties declared inside the struct as
+/// initializer/copy fields, which breaks generation with "extra arguments" errors.
+/// Keep derived accessors in this extension as a workaround.
+extension MerinoState {
+    var availableCategories: [MerinoCategoryConfiguration] {
+        (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
+    }
+
+    func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
+        if !availableCategories.isEmpty {
+            if let selectedNewsfeedCategoryID {
+                return availableCategories.first(where: { $0.feedID == selectedNewsfeedCategoryID })?.recommendations ?? []
+            }
+            return availableCategories.flatMap(\.recommendations)
+        }
+        return merinoData.stories ?? []
     }
 }

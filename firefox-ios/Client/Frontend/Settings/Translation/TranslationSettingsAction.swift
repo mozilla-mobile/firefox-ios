@@ -11,15 +11,18 @@ struct TranslationSettingsViewAction: Action {
     let languageCode: String?
     let languages: [String]?
     let pendingLanguages: [PreferredLanguageDetails]?
+    let newSettingValue: Bool?
 
     init(languageCode: String? = nil,
          languages: [String]? = nil,
          pendingLanguages: [PreferredLanguageDetails]? = nil,
+         newSettingValue: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.languageCode = languageCode
         self.languages = languages
         self.pendingLanguages = pendingLanguages
+        self.newSettingValue = newSettingValue
         self.windowUUID = windowUUID
         self.actionType = actionType
     }
@@ -66,4 +69,5 @@ enum TranslationSettingsViewActionType: ActionType {
 enum TranslationSettingsMiddlewareActionType: ActionType {
     case didLoadSettings
     case didUpdateSettings
+    case didResetStorage
 }

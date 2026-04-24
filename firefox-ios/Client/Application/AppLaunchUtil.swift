@@ -9,7 +9,7 @@ import Account
 import Glean
 import MozillaAppServices
 
-final class AppLaunchUtil: Sendable {
+final class AppLaunchUtil: FeatureFlaggable, Sendable {
     private let logger: Logger
     private let profile: Profile
     private let introScreenManager: IntroScreenManager
@@ -198,8 +198,7 @@ final class AppLaunchUtil: Sendable {
     /// enabled from greater than two to 2. See FXIOS-12704
     @MainActor
     private func migrateTopSitesRowNumbers() {
-        if LegacyFeatureFlagsManager.shared
-            .isFeatureEnabled(.homepageSearchBar, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.homepageSearchBar) {
             let defaultNumber = TopSitesRowCountSettingsController.defaultNumberOfRows
             let userNumberOfTopSiteRows = profile.prefs.intForKey(
                 PrefsKeys.NumberOfTopSiteRows

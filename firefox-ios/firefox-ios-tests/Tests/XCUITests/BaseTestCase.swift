@@ -78,8 +78,15 @@ class BaseTestCase: XCTestCase {
 
     func removeApp() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
-        let iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        var icon: XCUIElement
+        var iPadIcon: XCUIElement
+        if isFennec {
+            icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Fennec").element(boundBy: 1)
+        } else {
+            icon = springboard.icons.containingText("Firefox").element(boundBy: 0)
+            iPadIcon = springboard.icons.containingText("Firefox").element(boundBy: 1)
+        }
         if icon.exists {
             if #available(iOS 26, *), iPad() {
                 iPadIcon.press(forDuration: 1.0)
@@ -723,12 +730,12 @@ extension XCUIElement {
     }
     /// Waits for the UI element and then taps if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.mozWaitForElementToExist(timeout: timeout)
         self.tap()
     }
     /// Waits for the UI element and then taps and types the provided text if it exists.
     func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.mozWaitForElementToExist(timeout: timeout)
         self.tap()
         self.typeText(text)
     }
@@ -746,7 +753,7 @@ extension XCUIElement {
     }
 
     func pressWithRetry(duration: TimeInterval, timeout: TimeInterval = TIMEOUT, element: XCUIElement) {
-        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.mozWaitForElementToExist(timeout: timeout)
         self.press(forDuration: duration)
         if element.waitForExistence(timeout: 1.0) {
             return
@@ -777,7 +784,7 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the top
+        // Start coordinate about from the center of the element, end coordinate at the top
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))
         let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
@@ -790,13 +797,34 @@ extension XCUIElement {
         let elementBounds = self.frame
         let centerX = elementBounds.width/2
         let centerY = elementBounds.height/2
-        // Start cooordinate about from the center of the element, end coordinate at the bottom
+        // Start coordinate about from the center of the element, end coordinate at the bottom
         // Done rather than top to middle to avoid pulling down the notification bar
         let startCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY))
         let endCoordinate = coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
             .withOffset(CGVector(dx: centerX, dy: centerY + (elementBounds.size.height/2) * distance))
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
+    }
+
+    func mozWaitForElementToExist(timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+        guard exists else {
+            while !exists {
+                if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                    XCTFail("Timed out waiting for element \(self) to exist in \(timeout) seconds")
+                    break
+                }
+                usleep(10000)
+            }
+            return
+        }
+    }
+
+    func mozWaitElementHittable(timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: self)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
 }
 

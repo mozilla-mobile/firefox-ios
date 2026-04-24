@@ -19,6 +19,7 @@ index_exclude:
 # Tests
 - "firefox-ios-tests/Tests/*"
 - "../BrowserKit/Tests/*"
+- "../MozillaRustComponents/Tests/MozillaRustComponentsTests/*.swift"
 
 report_exclude:
 - "../BrowserKit/Sources/Common/Theming/FxColors.swift"

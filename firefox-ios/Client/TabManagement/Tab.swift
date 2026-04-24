@@ -159,8 +159,6 @@ class Tab: NSObject,
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
     var isFindInPageMode = false
-    // Stores the vertical homepage offset for this tab when reusing the shared HomepageViewController.
-    var homepageScrollOffset: CGFloat?
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -520,6 +518,14 @@ class Tab: NSObject,
         // Ensures we inject scripts into a new content controller
         requiredConfiguration.userContentController = .init()
         self.configuration = requiredConfiguration
+
+        if #available(iOS 18.2, *),
+           featureFlagsProvider.isEnabled(.httpsUpgrade) {
+            let pagePrefs = requiredConfiguration.defaultWebpagePreferences ?? WKWebpagePreferences()
+            pagePrefs.preferredHTTPSNavigationPolicy = .automaticFallbackToHTTP
+            requiredConfiguration.defaultWebpagePreferences = pagePrefs
+        }
+
         let webView = TabWebView(frame: .zero, configuration: requiredConfiguration, windowUUID: windowUUID)
         webView.configure(delegate: self, navigationDelegate: navigationDelegate)
         webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -600,12 +606,17 @@ class Tab: NSObject,
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        close()
+
+        // We're closing the tab in the UI, and remove the tabs from the tabmanager.tabs array right away
+        // so everything is kept in sync. But the actual closure of the Tab object is asynchronous [FXIOS-15339].
+        Task {
+            await close()
+        }
     }
 
-    func close() {
-        webView?.pauseAllMediaPlayback {}
-        webView?.closeAllMediaPresentations {}
+    func close() async {
+        await webView?.pauseAllMediaPlayback()
+        await webView?.closeAllMediaPresentations()
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -697,7 +708,7 @@ class Tab: NSObject,
             // FXIOS-14783: Experimentation on removing the isAboutHome check
             // isAboutHome: Do not reload from origin for homepage internal URLs should not be needed anymore
             let isAboutHome = InternalURL(url)?.isAboutHomeURL ?? false
-            let experimentEnabled = featureFlags.isFeatureEnabled(.needsReloadRefactor, checking: .buildOnly)
+            let experimentEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
 
             if experimentEnabled || !isAboutHome {
                 webView.reloadFromOrigin()
@@ -820,7 +831,7 @@ class Tab: NSObject,
         /// Note: Background colors are only visible when `isOpaque` is false — setting them while it's true has no effect.
         webView?.backgroundColor =  theme.colors.layer1
         webView?.scrollView.backgroundColor = theme.colors.layer1
-        webView?.isOpaque = !(nightMode || theme.type == .dark || theme.type == .privateMode)
+        webView?.isOpaque = !nightMode
         webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 
@@ -917,7 +928,7 @@ class Tab: NSObject,
                     self?.webView?.loadFileURL(url, allowingReadAccessTo: url)
                 }
 
-                // Don't add a source URL if it is a local one. Thats happen when reloading the PDF content
+                // Don't add a source URL if it is a local one. That's happen when reloading the PDF content
                 guard let sourceURL, !isSourceFileURL else { return }
                 self?.temporaryDocumentsSession[url] = sourceURL
                 self?.documentLogger.registerDownloadFinish(url: sourceURL)

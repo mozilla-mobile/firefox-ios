@@ -32,6 +32,10 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
         button.isHidden = true
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        var updatedConfiguration = button.configuration
+        updatedConfiguration?.titleLineBreakMode = .byTruncatingTail
+        button.configuration = updatedConfiguration
     }
 
     // MARK: - Variables

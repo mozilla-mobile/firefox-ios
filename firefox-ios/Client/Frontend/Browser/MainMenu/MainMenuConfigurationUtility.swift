@@ -7,7 +7,9 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
+struct MainMenuConfigurationUtility: Equatable,
+                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     FeatureFlaggable {
     private struct Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
@@ -28,11 +30,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.reportSiteIssue)
     }
 
     private var isNewAppearanceMenuOn: Bool {
-        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.appearanceMenu)
     }
 
     private var isSummarizerOn: Bool {

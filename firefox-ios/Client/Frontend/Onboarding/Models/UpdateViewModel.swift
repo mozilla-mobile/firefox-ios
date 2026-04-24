@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 class UpdateViewModel: OnboardingViewModelProtocol,
-                       FeatureFlaggable,
+                       LegacyFeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
     // MARK: - Properties
     var profile: Profile

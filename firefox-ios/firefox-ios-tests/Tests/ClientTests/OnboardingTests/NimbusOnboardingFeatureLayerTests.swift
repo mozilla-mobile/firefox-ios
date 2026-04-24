@@ -168,7 +168,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     // independently and then in a truth table fashion, reflecting real world evaluation
     //    - (T, T) (T, F), (F, T), and (F, F)
     // Testing for defaults was implicit in the previous tests, as defaults are:
-    //    - prerequisities: true
+    //    - prerequisites: true
     //    - disqualifiers: empty
     func testLayer_conditionPrerequisiteAlways_returnsCard() {
         let expectedNumberOfCards = 1

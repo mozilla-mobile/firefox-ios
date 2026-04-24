@@ -20,7 +20,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+        DependencyHelperMock().bootstrapDependencies()
         setupNimbusAdsClientTesting(isEnabled: false)
         networking = MockUnifiedTileNetworking()
         logger = MockLogger()
@@ -33,6 +33,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         logger = nil
         gleanWrapper = nil
         mockAdsClient = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -159,7 +160,6 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testImpressionTelemetry_whenAdsClientDisabled_doesNotCallRecordImpression() {
-        setupNimbusAdsClientTesting(isEnabled: false)
         let subject = createSubject()
 
         subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
@@ -167,7 +167,6 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     }
 
     func testClickTelemetry_whenAdsClientDisabled_doesNotCallRecordClick() {
-        setupNimbusAdsClientTesting(isEnabled: false)
         let subject = createSubject()
 
         subject.sendClickTelemetry(tileSite: tileSite, position: 1)

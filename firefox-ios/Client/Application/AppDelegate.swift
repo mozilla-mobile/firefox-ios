@@ -13,7 +13,10 @@ import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
 import enum MozillaAppServices.MozAdsEnvironment
 
-class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
+class AppDelegate: UIResponder,
+                   UIApplicationDelegate,
+                   LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                   FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -29,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
+        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()

@@ -167,7 +167,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(merinoManager: merinoManager)
 
         let merinoItem = createMerinoItem()
-        guard case let .merino(state) = merinoItem else { return }
+        guard case let .merino(state, _) = merinoItem else { return }
         let action = ContextMenuAction(
             menuType: MenuType(homepageItem: merinoItem),
             site: Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title),
@@ -230,7 +230,8 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
                     tileId: 0,
                     receivedRank: 0
                 )
-            )
+            ),
+            nil
         )
     }
 

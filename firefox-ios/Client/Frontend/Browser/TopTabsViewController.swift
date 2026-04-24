@@ -18,11 +18,9 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
     @MainActor
     func topTabsDidPressPrivateMode()
-    @MainActor
-    func topTabsShowCloseTabsToast()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44
@@ -70,13 +68,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) {
-            let longPressRecognizer = UILongPressGestureRecognizer(
-                target: self,
-                action: #selector(TopTabsViewController.newTabLongPressed)
-            )
-            button.addGestureRecognizer(longPressRecognizer)
-        }
+
+        let longPressRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(TopTabsViewController.newTabLongPressed)
+        )
+        button.addGestureRecognizer(longPressRecognizer)
+
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
         button.showsLargeContentViewer = true
@@ -373,7 +371,6 @@ extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         topTabDisplayManager.closeActionPerformed(forCell: cell)
-        delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
 

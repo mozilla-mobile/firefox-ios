@@ -8,23 +8,17 @@ import Glean
 import MozillaAppServices
 import OnboardingKit
 
-protocol VersionProviding: Sendable {
-    func object(forInfoDictionaryKey key: String) -> Any?
-}
-
-extension Bundle: VersionProviding {}
-
-struct TermsOfServiceManager: FeatureFlaggable, Sendable {
+struct TermsOfServiceManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                              FeatureFlaggable,
+                              Sendable {
     var prefs: Prefs
-    private let bundle: VersionProviding
 
-    init(prefs: Prefs, bundle: VersionProviding = Bundle.main) {
+    init(prefs: Prefs) {
         self.prefs = prefs
-        self.bundle = bundle
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var isFeatureEnabled: Bool {

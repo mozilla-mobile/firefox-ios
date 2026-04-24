@@ -40,14 +40,6 @@ final class TabScrollHandler: NSObject,
         static let minimumScrollThreshold: CGFloat = 20
     }
 
-    private var isMinimalAddressBarEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildAndUser)
-    }
-
-    private var isTabScrollRefactoringEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
-    }
-
     enum ScrollDirection {
         case up
         case down
@@ -299,7 +291,7 @@ final class TabScrollHandler: NSObject,
 
     func createToolbarTapHandler() -> (() -> Void) {
         return { [unowned self] in
-            guard isMinimalAddressBarEnabled && toolbarDisplayState.isCollapsed  else { return }
+            guard toolbarDisplayState.isCollapsed  else { return }
             showToolbars(animated: true)
         }
     }
@@ -366,7 +358,7 @@ final class TabScrollHandler: NSObject,
         if scrollDirection == .down && !toolbarDisplayState.isCollapsed {
             hideToolbars(animated: true)
         } else if scrollDirection == .up && !toolbarDisplayState.isExpanded {
-            if !isTabScrollRefactoringEnabled || (tabProvider?.isFindInPageMode == false) {
+            if tabProvider?.isFindInPageMode == false {
                 showToolbars(animated: false)
             }
         }

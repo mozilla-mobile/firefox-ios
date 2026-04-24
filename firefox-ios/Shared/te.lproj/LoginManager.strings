@@ -10,11 +10,23 @@
 /* Copy password text selection menu item */
 "Copy" = "కాపీ";
 
-/* Label describing when the current login was created with the timestamp as the parameter. */
+/* Label describing when the current login was created. %@ is the timestamp. */
 "Created %@" = "సృష్టించబడింది %@";
 
 /* Label for the button used to delete the current login. */
 "Delete" = "తొలగించు";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "రద్దుచేయి";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "తీసివేయి";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "ఈ చర్యను మీరు రద్దు చేయలేరు.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "సంకేతపదం తొలగించాలా?";
 
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "అన్ని ఎంపికలను తీసివేయి";
@@ -25,17 +37,23 @@
 /* Hide password text selection menu item */
 "Hide" = "దాచు";
 
+/* This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed. */
+"LoginList.DeleteToast.v135" = "సంకేతపదం తొలగించబడింది";
+
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them */
 "Logins will be permanently removed." = "ప్రవేశాలు శాశ్వతంగా తొలగించబడతాయి.";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "Logins will be removed from all connected devices." = "అనుసంధానమైన పరికరాలన్నిటి నుండీ ప్రవేశాలు తొలగించబడతాయి.";
 
-/* Label describing when the current login was last modified with the timestamp as the parameter. */
+/* Label describing when the current login was last modified. %@ is the timestamp. */
 "Modified %@" = "సవరించబడింది %@";
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "ప్రవేశాలేమీ కనబడలేదు";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "సంకేతపదాలేమీ కనబడలేదు";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "తెరచి & పూరించుము";
@@ -51,6 +69,9 @@
 
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "శోధన ఇన్పుట్ ఫీల్డ్";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "వెతుకు";
 
 /* Label for the button used to select all logins. */
 "Select All" = "అన్నిటిని ఎంపికచేయుము";

@@ -8,7 +8,7 @@ import XCTest
 
 @testable import Client
 
-final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
+final class FeatureFlagManagerTests: XCTestCase, LegacyFeatureFlaggable {
     // MARK: - Test Lifecycle
     override func setUp() {
         super.setUp()
@@ -19,9 +19,9 @@ final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     // MARK: - Tests
     func testExpectedCoreFeatures() {
-        let adjustSetting = featureFlags.isCoreFeatureEnabled(.adjustEnvironmentProd)
-        let mockDataSetting = featureFlags.isCoreFeatureEnabled(.useMockData)
-        let unifiedAdsAPISetting = featureFlags.isCoreFeatureEnabled(.useStagingUnifiedAdsAPI)
+        let adjustSetting = CoreBuildFlags.isAdjustEnvironmentProd
+        let mockDataSetting = CoreBuildFlags.isUsingMockData
+        let unifiedAdsAPISetting = CoreBuildFlags.isUsingStagingUnifiedAdsAPI
 
         XCTAssertFalse(adjustSetting)
         XCTAssertTrue(mockDataSetting)
@@ -32,34 +32,7 @@ final class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
         // Tests for default settings should be performed on both build and user
         // prefs separately to ensure that we are getting the expected results on both.
         // Technically, at this stage, these should be the same.
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly))
-        XCTAssertTrue(featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .userOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly))
         XCTAssertTrue(featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .userOnly))
-    }
-
-    func testDefaultNimbusCustomFlags() {
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-    }
-
-    // Changing the prefs manually, to make sure settings are respected through
-    // the FFMs interface
-    func testManagerRespectsProfileChangesForCustomSettings() {
-        let mockProfile = MockProfile(databasePrefix: "FeatureFlagsManagerTests_")
-        mockProfile.prefs.clearAll()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
-
-        // Search Bar position
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-        mockProfile.prefs.setString(SearchBarPosition.bottom.rawValue,
-                                    forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
-    }
-
-    func testManagerInterfaceForUpdatingCustomFlags() {
-        // Search Bar
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.top)
-        featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
-        XCTAssertEqual(featureFlags.getCustomState(for: .searchBarPosition), SearchBarPosition.bottom)
     }
 }

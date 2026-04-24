@@ -24,27 +24,26 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        setIsSwipingTabsEnabled(false)
-        setIsHostedSummarizerEnabled(false)
         tabManager = MockTabManager()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
-
         profile = MockProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
+        setIsSwipingTabsEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         setupStore()
     }
 
     override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
         recordVisitManager = nil
         resetStore()
-        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -611,19 +610,19 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     private func setupNimbusToolbarRefactorTesting(isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(enabled: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsSwipingTabsEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.toolbarRefactorFeature.with { _, _ in
-            return ToolbarRefactorFeature(swipingTabs: isEnabled)
+            return ToolbarRefactorFeature()
         }
     }
 
     private func setIsHostedSummarizerEnabled(_ isEnabled: Bool) {
         FxNimbus.shared.features.hostedSummarizerFeature.with { _, _ in
-            return HostedSummarizerFeature(enabled: isEnabled)
+            return HostedSummarizerFeature()
         }
     }
 

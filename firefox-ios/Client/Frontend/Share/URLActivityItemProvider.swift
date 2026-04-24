@@ -5,6 +5,7 @@
 import Foundation
 import UniformTypeIdentifiers
 import Shared
+import Common
 
 class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     private struct ActivityIdentifiers {
@@ -12,7 +13,7 @@ class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     }
 
     private static var isSentFromFirefoxTreatmentA: Bool {
-        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.sentFromFirefoxTreatmentA, checking: .buildOnly)
+        return (AppContainer.shared.resolve() as FeatureFlagProviding).isEnabled(.sentFromFirefoxTreatmentA)
     }
 
     private let url: URL

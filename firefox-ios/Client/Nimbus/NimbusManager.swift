@@ -4,19 +4,11 @@
 
 import Foundation
 
-protocol HasNimbusFeatureFlags { }
+protocol HasNimbusFeatureFlagLayer { }
 
-extension HasNimbusFeatureFlags {
+extension HasNimbusFeatureFlagLayer {
     var nimbusFlags: NimbusFeatureFlagLayer {
         return NimbusManager.shared.featureFlagLayer
-    }
-}
-
-protocol HasNimbusSearchBar { }
-
-extension HasNimbusSearchBar {
-    var nimbusSearchBar: NimbusSearchBarLayer {
-        return NimbusManager.shared.bottomSearchBarLayer
     }
 }
 
@@ -29,12 +21,8 @@ final class NimbusManager: Sendable {
 
     // MARK: - Properties
     let featureFlagLayer: NimbusFeatureFlagLayer
-    let bottomSearchBarLayer: NimbusSearchBarLayer
 
-    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
-    ) {
+    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()) {
         self.featureFlagLayer = featureFlagLayer
-        self.bottomSearchBarLayer = bottomSearchBarLayer
     }
 }

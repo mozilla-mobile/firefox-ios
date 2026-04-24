@@ -108,7 +108,7 @@ final class MLPAAppAttestServerTests: XCTestCase {
         urlSession: MockURLSession = MockURLSession(),
         bundleIdentifier: String = AppAttestTestData.bundleID
     ) -> MLPAAppAttestServer {
-        return MLPAAppAttestServer(urlSession: urlSession, bundleIdentifier: bundleIdentifier)
+        return MLPAAppAttestServer(with: .dev, urlSession: urlSession, bundleIdentifier: bundleIdentifier)
     }
 
     private func httpResponse(statusCode: Int) -> HTTPURLResponse {

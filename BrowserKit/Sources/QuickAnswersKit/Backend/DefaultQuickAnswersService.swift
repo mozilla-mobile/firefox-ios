@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import LLMKit
+import Shared
 
 /// A concrete `QuickAnswersService` that records speech and emits transcription results
 /// using an underlying `TranscriptionEngine`. As well as request results from the transcription via `ResultsService` flow.
@@ -26,10 +28,18 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
-        resultsService: ResultsService? = nil
-    ) {
+        resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
+            config: QuickAnswersConfig(),
+            liteLLMCreator: LiteLLMCreator()
+        ),
+        prefs: Prefs
+    ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        self.resultsService = resultsService ?? Self.makeResultsService()
+        let config = QuickAnswersConfig()
+        guard let resultsService = resultsServiceFactory.make(prefs: prefs, config: config) else {
+            throw ResultsServiceError.unableToCreateService
+        }
+        self.resultsService = resultsService
     }
 
     // MARK: Speech Service
@@ -113,12 +123,5 @@ final class DefaultQuickAnswersService: QuickAnswersService {
                 authorizer: authorizer
             )
         }
-    }
-
-    private static func makeResultsService() -> ResultsService {
-        let factory = DefaultResultsServiceFactory(
-            config: QuickAnswersConfig()
-        )
-        return factory.make()
     }
 }

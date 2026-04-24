@@ -23,13 +23,14 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: true
+            transitionEnabled: true,
+            categories: []
         )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 1)
-        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 0)
+        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 0)
     }
 
     func test_configure_withTransitionEnabledAndFullProgress_showsSectionTitle() {
@@ -39,13 +40,14 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: true
+            transitionEnabled: true,
+            categories: []
         )
         view.setTransitionProgress(1)
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
-        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
+        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 1)
     }
 
     func test_configure_withTransitionDisabled_showsSectionTitleOnly() {
@@ -55,13 +57,61 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             textColor: nil,
             theme: theme,
-            transitionEnabled: false
+            transitionEnabled: false,
+            categories: []
         )
         view.setTransitionProgress(0)
         view.layoutIfNeeded()
 
         XCTAssertEqual(affordanceView(in: view)?.alpha, 0)
-        XCTAssertEqual(labelHeaderView(in: view)?.alpha, 1)
+        XCTAssertEqual(sectionTitleStackView(in: view)?.alpha, 1)
+    }
+
+    func test_updatePickerState_updatesCategorySelection() {
+        let view = createSubject()
+
+        view.configure(
+            sectionHeaderConfiguration: sectionHeaderConfiguration,
+            textColor: nil,
+            theme: theme,
+            transitionEnabled: false,
+            categories: testCategories,
+            selectedNewsfeedCategoryID: nil
+        )
+
+        view.updatePickerState(selectedNewsfeedCategoryID: "science", newsfeedCategoryPickerOffsetX: 0)
+
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory,
+                             in: view)?.isSelected == false)
+        XCTAssertTrue(button(withA11yID: AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory + ".science",
+                             in: view)?.isSelected == true)
+    }
+
+    private var testCategories: [MerinoCategoryConfiguration] {
+        [
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "technology",
+                    recommendations: [],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Technology",
+                    subtitle: nil,
+                    receivedFeedRank: 2
+                )
+            ),
+            MerinoCategoryConfiguration(
+                category: MerinoCategory(
+                    feedID: "science",
+                    recommendations: [],
+                    isBlocked: false,
+                    isFollowed: false,
+                    title: "Science",
+                    subtitle: nil,
+                    receivedFeedRank: 1
+                )
+            ),
+        ]
     }
 
     private func createSubject() -> NewsTransitionHeaderCell {
@@ -76,6 +126,16 @@ final class NewsTransitionHeaderCellTests: XCTestCase {
 
     private func labelHeaderView(in view: UIView) -> LabelButtonHeaderView? {
         return allSubviews(in: view).compactMap { $0 as? LabelButtonHeaderView }.first
+    }
+
+    private func sectionTitleStackView(in view: UIView) -> UIStackView? {
+        return allSubviews(in: view).compactMap { $0 as? UIStackView }.first
+    }
+
+    private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {
+        return allSubviews(in: view)
+            .compactMap { $0 as? UIButton }
+            .first(where: { $0.accessibilityIdentifier == a11yID })
     }
 
     private func allSubviews(in view: UIView) -> [UIView] {

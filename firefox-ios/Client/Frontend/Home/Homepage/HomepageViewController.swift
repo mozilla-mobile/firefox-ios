@@ -13,7 +13,7 @@ final class HomepageViewController: UIViewController,
                                     UIGestureRecognizerDelegate,
                                     UIPopoverPresentationControllerDelegate,
                                     UIAdaptivePresentationControllerDelegate,
-                                    FeatureFlaggable,
+                                    LegacyFeatureFlaggable,
                                     ContentContainable,
                                     Screenshotable,
                                     Themeable,
@@ -59,6 +59,11 @@ final class HomepageViewController: UIViewController,
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
 
+    private var currentHomepageTabState: HomepageTabState {
+        guard let activeTabUUID else { return HomepageTabState() }
+        return homepageTabStateStore.state(for: activeTabUUID)
+    }
+
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -69,6 +74,7 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Private constants
     private let tabManager: TabManager
+    private let homepageTabStateStore: HomepageTabStateStoring
     private let overlayManager: OverlayModeManager
     private let logger: Logger
     private let toastContainer: UIView
@@ -83,6 +89,7 @@ final class HomepageViewController: UIViewController,
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          tabManager: TabManager,
+         homepageTabStateStore: HomepageTabStateStoring = HomepageTabStateStore(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          toastContainer: UIView,
@@ -94,6 +101,7 @@ final class HomepageViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.tabManager = tabManager
+        self.homepageTabStateStore = homepageTabStateStore
         self.overlayManager = overlayManager
         self.statusBarScrollDelegate = statusBarScrollDelegate
         self.toastContainer = toastContainer
@@ -164,10 +172,15 @@ final class HomepageViewController: UIViewController,
         super.viewWillAppear(animated)
 
         activeTabUUID = tabManager.selectedTab?.tabUUID
+        refreshHomepageDataSourceSnapshot { [weak self] in
+            self?.updateNewsHeaderPickerState()
+        }
+
         /// Used as a trigger for showing a microsurvey based on viewing the homepage
         Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         store.dispatch(
             HomepageAction(
+                showiPadSetup: shouldUseiPadSetup(),
                 windowUUID: windowUUID,
                 actionType: HomepageActionType.viewWillAppear
             )
@@ -247,7 +260,7 @@ final class HomepageViewController: UIViewController,
     func restoreVerticalScrollOffset() {
         activeTabUUID = tabManager.selectedTab?.tabUUID
         guard let activeTabUUID,
-              let homepageScrollOffset = tabManager.getTabForUUID(uuid: activeTabUUID)?.homepageScrollOffset
+              let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
             scrollToTop()
             return
@@ -283,8 +296,10 @@ final class HomepageViewController: UIViewController,
     }
 
     private func saveVerticalScrollOffset() {
-        guard let activeTabUUID, let tab = tabManager.getTabForUUID(uuid: activeTabUUID) else { return }
-        tab.homepageScrollOffset = collectionView?.contentOffset.y
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.scrollOffsetY = collectionView?.contentOffset.y
+        }
     }
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
@@ -373,12 +388,9 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
-            dataSource?.updateSnapshot(
-                state: state,
-                jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
-            ) { [weak self] in
-                // Force the collection view to finish applying the latest layout before re-syncing the
-                // visible stories header, since transition progress depends on the resolved header frame.
+            self.homepageState = state
+
+            refreshHomepageDataSourceSnapshot { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -390,7 +402,6 @@ final class HomepageViewController: UIViewController,
             resetTrackedObjects()
             trackVisibleItemImpressions()
         }
-        self.homepageState = state
     }
 
     func unsubscribeFromRedux() {
@@ -557,7 +568,12 @@ final class HomepageViewController: UIViewController,
         switch item {
         case .header(let state):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state)
+                cell.configure(headerState: state) { [weak self] in
+                    self?.dispatchNavigationBrowserAction(
+                        with: NavigationDestination(.quickAnswers),
+                        actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
+                    )
+                }
                 cell.applyTheme(theme: currentTheme)
             }
         case .privacyNotice:
@@ -590,7 +606,7 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
             }
-        case .merino(let story):
+        case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -650,7 +666,7 @@ final class HomepageViewController: UIViewController,
         let currentSection = dataSource?.snapshot().sectionIdentifiers[indexPath.section] ?? .pocket(.clear)
         let totalCount = dataSource?.snapshot().numberOfItems(inSection: currentSection)
 
-        return configuredCell(cellType: StoryCellLarge.self, at: indexPath) { cell in
+        return configuredCell(cellType: StoryCell.self, at: indexPath) { cell in
             cell.configure(story: story, theme: currentTheme, position: position, totalCount: totalCount)
         }
     }
@@ -711,7 +727,12 @@ final class HomepageViewController: UIViewController,
             sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
             theme: currentTheme,
-            transitionEnabled: transitionEnabled
+            transitionEnabled: transitionEnabled,
+            categories: homepageState.merinoState.availableCategories,
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
+            onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
         return newsTransitionHeaderCell
@@ -765,34 +786,26 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    /// Reapplies scroll-based fade progress to the visible pocket header after scrolling or relayout.
-    /// This is a no-op unless the pocket section is present and the `newsTransitionHeaderCell` is able to transition
-    /// (the section label fallback header used when there is no room for the header to transition does not participate
-    /// in the transition)
+    /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               let collectionView,
-              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
-                  if case .pocket = $0 {
+              let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .spacer = $0 {
                       return true
                   }
                   return false
               }),
-              let headerAttributes = collectionView.layoutAttributesForSupplementaryElement(
-                  ofKind: UICollectionView.elementKindSectionHeader,
-                  at: IndexPath(item: 0, section: pocketSectionIndex)
-              ),
-              let headerView = collectionView.supplementaryView(
-                  forElementKind: UICollectionView.elementKindSectionHeader,
-                  at: IndexPath(item: 0, section: pocketSectionIndex)
-              ) as? NewsTransitionHeaderCell
+              let spacerAttributes = collectionView.layoutAttributesForItem(at: IndexPath(item: 0,
+                                                                                          section: spacerSectionIndex)),
+              let headerView = getNewsTransitionHeader()
         else {
             return
         }
 
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
-                                                                             width: collectionView.bounds.width)
-        let transitionEnabled = headerAttributes.size.height >= expectedHeaderHeight
+        // We only want the stories header to transition if there is enough empty space on the homepage,
+        // which is denoted by the existence of the spacer
+        let transitionEnabled = spacerAttributes.size.height > 0.1
         headerView.setTransitionEnabled(transitionEnabled)
         headerView.setTransitionProgress(newsTransitionProgress())
     }
@@ -1039,6 +1052,57 @@ final class HomepageViewController: UIViewController,
         )
     }
 
+    private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
+        }
+        refreshHomepageDataSourceSnapshot()
+    }
+
+    private func updateNewsfeedCategoryPickerOffsetX(_ newsfeedCategoryPickerOffsetX: CGFloat) {
+        guard let activeTabUUID else { return }
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.newsfeedCategoryPickerOffsetX = newsfeedCategoryPickerOffsetX
+        }
+    }
+
+    private func refreshHomepageDataSourceSnapshot(completion: (() -> Void)? = nil) {
+        dataSource?.updateSnapshot(
+            state: homepageState,
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+        ) {
+            completion?()
+        }
+    }
+
+    /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
+    /// This keeps the category picker selection and horizontal offset in sync across tab switches
+    private func updateNewsHeaderPickerState() {
+        guard let headerView = getNewsTransitionHeader() else { return }
+        headerView.updatePickerState(
+            selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
+            newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX
+        )
+    }
+
+    private func getNewsTransitionHeader() -> NewsTransitionHeaderCell? {
+        guard let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 { return true }
+                  return false
+              })
+        else {
+            return nil
+        }
+
+        return collectionView.supplementaryView(
+            forElementKind: UICollectionView.elementKindSectionHeader,
+            at: IndexPath(item: 0, section: pocketSectionIndex)
+        ) as? NewsTransitionHeaderCell
+    }
+
     private func getSiteForContextMenu(for item: HomepageItem) -> Site? {
         switch item {
         case .topSite(let state, _):
@@ -1049,7 +1113,7 @@ final class HomepageViewController: UIViewController,
             return Site.createBasicSite(url: config.url.absoluteString, title: config.titleText)
         case .bookmark(let state):
             return Site.createBasicSite(url: state.site.url, title: state.site.title)
-        case .merino(let state):
+        case .merino(let state, _):
             return Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title)
         default:
             return nil
@@ -1102,7 +1166,7 @@ final class HomepageViewController: UIViewController,
                 visitType: .bookmark
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
-        case .merino(let story):
+        case .merino(let story, _):
             let destination = NavigationDestination(
                 .link,
                 url: story.url,

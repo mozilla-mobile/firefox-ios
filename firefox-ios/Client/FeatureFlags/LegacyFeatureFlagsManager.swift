@@ -5,9 +5,9 @@
 import Common
 
 // MARK: - Protocol
-protocol FeatureFlaggable {}
+protocol LegacyFeatureFlaggable {}
 
-extension FeatureFlaggable {
+extension LegacyFeatureFlaggable {
     var featureFlags: LegacyFeatureFlagsManager {
         return LegacyFeatureFlagsManager.shared
     }
@@ -27,9 +27,9 @@ enum FlaggableFeatureCheckOptions {
 }
 
 // FIXME: FXIOS-13986 Make truly thread safe
-class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
+class LegacyFeatureFlagsManager: HasNimbusFeatureFlagLayer, @unchecked Sendable {
     /// This Singleton should only be accessed directly in places where the
-    /// `FeatureFlaggable` is not available. Otherwise, access to the feature
+    /// `LegacyFeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
     /// `featureFlags` variable.
     static let shared = LegacyFeatureFlagsManager()
@@ -48,7 +48,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
     /// Used as the main way to find out whether a feature is active or not, checking
     /// either just for the build, the build and user preferences, or just user
     /// preferences (supported by Nimbus defaults).
-    public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
+    public func isFeatureEnabled(_ featureID: FeatureFlagID,
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
         guard let profile else { return false }
@@ -79,7 +79,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
     /// Retrieves a custom state for any type of feature that has more than just a
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
-    public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
+    public func getCustomState<T>(for featureID: FeatureFlagIDWithCustomOptions) -> T? {
         guard let profile else { return nil }
 
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
@@ -87,14 +87,12 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
         switch featureID {
-        case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
         case .startAtHome: return StartAtHome(rawValue: userSetting) as? T
         }
     }
 
-    private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
+    private func convertCustomIDToStandard(_ featureID: FeatureFlagIDWithCustomOptions) -> FeatureFlagID {
         switch featureID {
-        case .searchBarPosition: return .bottomSearchBar
         case .startAtHome: return .startAtHome
         }
     }
@@ -106,7 +104,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
     }
 
     /// Set a feature that has a binary state to on or off
-    public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
+    public func set(feature featureID: FeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
         guard let profile else { return }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
@@ -124,7 +122,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
     /// Set a feature that has a custom state to that custom state. More information
     /// on custom states can be found in `FlaggableFeatureOptions`
     public func set<T: FlaggableFeatureOptions>(
-        feature featureID: NimbusFeatureFlagWithCustomOptionsID,
+        feature featureID: FeatureFlagIDWithCustomOptions,
         to desiredState: T
     ) {
         guard let profile else { return }
@@ -132,10 +130,6 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags, @unchecked Sendable {
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {
-        case .searchBarPosition:
-            if let option = desiredState as? SearchBarPosition {
-                feature.setUserPreference(to: option.rawValue)
-            }
         case .startAtHome:
             if let option = desiredState as? StartAtHome {
                 feature.setUserPreference(to: option.rawValue)

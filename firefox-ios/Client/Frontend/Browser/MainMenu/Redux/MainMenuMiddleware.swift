@@ -8,7 +8,7 @@ import Account
 import Shared
 
 @MainActor
-final class MainMenuMiddleware: FeatureFlaggable {
+final class MainMenuMiddleware: LegacyFeatureFlaggable {
     private enum TelemetryAction {
         static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"

@@ -162,14 +162,15 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.tables["Add Credential"].cells.element(boundBy: 2).waitAndTap(timeout: 5)
         tapKeyboardKey(key)
         app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).waitAndTap(timeout: 5)
+
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
-        if app.sheets.firstMatch.exists {
-            app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
-            mozWaitForElementToNotExist(app.sheets.firstMatch)
-        }
+        mozWaitForElementToExist(app.sheets.firstMatch)
+        mozWaitForElementToExist(app.sheets.firstMatch.buttons.element(boundBy: 1))
+        app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
+        mozWaitForElementToNotExist(app.sheets.firstMatch)
         snapshot("CreatedLoginView")
 
-        app.tables["Login List"].cells.element(boundBy: 2).waitAndTap()
+        app.tables["Login List"].cells.staticTexts["p"].waitAndTap()
         snapshot("CreatedLoginDetailedView")
 
         app.tables["Login Detail List"].cells.element(boundBy: 4).waitAndTap()

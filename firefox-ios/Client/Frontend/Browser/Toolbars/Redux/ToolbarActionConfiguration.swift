@@ -5,7 +5,7 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
     enum ActionType {
         case back
         case forward
@@ -58,6 +58,7 @@ struct ToolbarActionConfiguration: Equatable, FeatureFlaggable {
                actionType == .readerMode ||
                actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
+               (actionType == .translate && isSelected) ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

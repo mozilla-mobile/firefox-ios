@@ -27,7 +27,6 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         static let shadowRadius: CGFloat = 4
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 1
-        static let thumbnailScreenshotHeight: CGFloat = 200
         static let borderLayerName = "externalBorder"
     }
     // MARK: - Properties
@@ -87,16 +86,25 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
 
         closeButtonBlurView.addBlurEffectWithClearBackgroundAndClipping(using: .systemUltraThinMaterialDark)
         closeButtonBlurView.layer.cornerRadius = closeButtonBlurView.frame.height / 2
+
+        // Handles initial draw and non-rotation layout changes (e.g. multitasking resize).
+        guard isSelectedTab, backgroundHolder.bounds != borderLayer.frame else { return }
+        redrawExternalBorder()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        guard isSelectedTab else { return }
+        // Defers redraw via Task so the border updates after the rotation animation completes.
+        guard isSelectedTab,
+              previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+              || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass
+        else { return }
+
         Task {
             await MainActor.run { [weak self] in
                 guard let self else { return }
-                redrawExternalBorder()
+                self.redrawExternalBorder()
             }
         }
     }
@@ -309,6 +317,8 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
     override func prepareForReuse() {
         // Reset any close animations.
         super.prepareForReuse()
+        tabModel = nil
+        accessibilityLabel = nil
         screenshotView.image = nil
         smallFaviconView.isHidden = true
         removeExternalBorder(from: backgroundHolder)
@@ -326,7 +336,6 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
             backgroundHolder.topAnchor.constraint(equalTo: contentView.topAnchor),
             backgroundHolder.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundHolder.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundHolder.heightAnchor.constraint(equalToConstant: UX.thumbnailScreenshotHeight),
             backgroundHolder.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonHitTarget),

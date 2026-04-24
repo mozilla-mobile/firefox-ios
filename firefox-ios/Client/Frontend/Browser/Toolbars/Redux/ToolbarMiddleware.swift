@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware: LegacyFeatureFlaggable {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -95,7 +95,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
                 isTranslucent: toolbarHelper.shouldBlur(),
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
-                isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
                 middleButton: middleButton,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
@@ -370,6 +369,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
+        case .translate:
+            // Long-press on translate is handled in TranslationsMiddleware.
+            break
         default:
             break
         }

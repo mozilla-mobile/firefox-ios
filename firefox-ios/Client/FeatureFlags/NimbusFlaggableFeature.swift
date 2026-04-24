@@ -7,128 +7,10 @@ import Foundation
 import Shared
 import UIKit
 
-/// An enum describing the featureID of all features found in Nimbus.
-/// Please add new features alphabetically.
-enum NimbusFeatureFlagID: String, CaseIterable {
-    case addressAutofillEdit
-    case addressBarMenu
-    case adsClient
-    case aiKillSwitch
-    case appearanceMenu
-    case appIconSelection
-    case bookmarksSearchFeature
-    case bottomSearchBar
-    case deeplinkOptimizationRefactor
-    case downloadLiveActivities
-    case firefoxJpGuideDefaultSite
-    case firefoxSuggestFeature
-    case hntSponsoredShortcuts
-    case homepageBookmarksSectionDefault
-    case homepageJumpBackinSectionDefault
-    case homepageSearchBar
-    case homepageStoryCategories
-    case needsReloadRefactor
-    case shouldUseBrandRefreshConfiguration
-    case shouldUseJapanConfiguration
-    case microsurvey
-    case modernOnboardingUI
-    case nativeErrorPage
-    case noInternetConnectionErrorPage
-    case badCertDomainErrorPage
-    case recentSearches
-    case reportSiteIssue
-    case relayIntegration
-    case sentFromFirefox
-    case sentFromFirefoxTreatmentA
-    case snapkitRemovalRefactor
-    case splashScreen
-    case startAtHome
-    case hostedSummarizer
-    case hostedSummarizerToolbarEntrypoint
-    case hostedSummarizerShakeGesture
-    case improvedAppStoreReviewTriggerFeature
-    case summarizerAppAttestAuth
-    case summarizerLanguageExpansion
-    case summarizerPermissiveGuardrails
-    case tabScrollRefactorFeature
-    case tabTrayiPadUIExperiments
-    case tabTrayUIExperiments
-    case tabTrayTranslucency
-    case toolbarNavigationHint
-    case toolbarUpdateHint
-    case toolbarOneTapNewTab
-    case toolbarRefactor
-    case toolbarSwipingTabs
-    case toolbarTranslucency
-    case toolbarTranslucencyRefactor
-    case toolbarMinimalAddressBar
-    case toolbarMiddleButtonCustomization
-    case tosFeature
-    case touFeature
-    case trackingProtectionRefactor
-    case translation
-    case translationLanguagePicker
-    case trendingSearches
-    case unifiedSearch
-    case videoIntroOnboarding
-    case quickAnswers
-
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
-    var debugKey: String? {
-        switch self {
-        case    .aiKillSwitch,
-                .appearanceMenu,
-                .appIconSelection,
-                .addressBarMenu,
-                .adsClient,
-                .bookmarksSearchFeature,
-                .deeplinkOptimizationRefactor,
-                .downloadLiveActivities,
-                .homepageSearchBar,
-                .homepageStoryCategories,
-                .hostedSummarizer,
-                .improvedAppStoreReviewTriggerFeature,
-                .microsurvey,
-                .nativeErrorPage,
-                .needsReloadRefactor,
-                .noInternetConnectionErrorPage,
-                .badCertDomainErrorPage,
-                .quickAnswers,
-                .recentSearches,
-                .relayIntegration,
-                .sentFromFirefox,
-                .snapkitRemovalRefactor,
-                .summarizerAppAttestAuth,
-                .summarizerLanguageExpansion,
-                .summarizerPermissiveGuardrails,
-                .tabScrollRefactorFeature,
-                .tabTrayUIExperiments,
-                .toolbarRefactor,
-                .toolbarTranslucencyRefactor,
-                .touFeature,
-                .trackingProtectionRefactor,
-                .translation,
-                .translationLanguagePicker,
-                .trendingSearches,
-                .unifiedSearch:
-            return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
-        default:
-            return nil
-        }
-    }
-}
-
-/// This enum is a constraint for any feature flag options that have more than
-/// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
-enum NimbusFeatureFlagWithCustomOptionsID {
-    case searchBarPosition
-    case startAtHome
-}
-
-struct NimbusFlaggableFeature: HasNimbusSearchBar {
+struct NimbusFlaggableFeature {
     // MARK: - Variables
     private let profile: Profile
-    private var featureID: NimbusFeatureFlagID
+    private var featureID: FeatureFlagID
 
     private var featureKey: String? {
         typealias FlagKeys = PrefsKeys.FeatureFlags
@@ -136,8 +18,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .aiKillSwitch:
             return PrefsKeys.Settings.aiKillSwitchFeature
-        case .bottomSearchBar:
-            return FlagKeys.SearchBarPosition
         case .firefoxSuggestFeature:
             return FlagKeys.FirefoxSuggest
         case .homepageBookmarksSectionDefault:
@@ -179,6 +59,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .hostedSummarizer,
                 .hostedSummarizerToolbarEntrypoint,
                 .hostedSummarizerShakeGesture,
+                .httpsUpgrade,
                 .quickAnswers,
                 .relayIntegration,
                 .summarizerAppAttestAuth,
@@ -188,15 +69,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .tabTrayiPadUIExperiments,
                 .tabTrayUIExperiments,
                 .tabTrayTranslucency,
-                .toolbarNavigationHint,
                 .toolbarUpdateHint,
-                .toolbarOneTapNewTab,
-                .toolbarRefactor,
-                .toolbarSwipingTabs,
-                .toolbarTranslucency,
-                .toolbarTranslucencyRefactor,
-                .toolbarMinimalAddressBar,
-                .toolbarMiddleButtonCustomization,
                 .tosFeature,
                 .touFeature,
                 .trackingProtectionRefactor,
@@ -204,13 +77,14 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .translationLanguagePicker,
                 .trendingSearches,
                 .unifiedSearch,
-                .videoIntroOnboarding:
+                .videoIntroOnboarding,
+                .worldCupWidget:
             return nil
         }
     }
 
     // MARK: - Initializers
-    init(withID featureID: NimbusFeatureFlagID, and profile: Profile) {
+    init(withID featureID: FeatureFlagID, and profile: Profile) {
         self.featureID = featureID
         self.profile = profile
     }
@@ -260,10 +134,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         }
 
         switch featureID {
-        case .bottomSearchBar:
-            return nimbusSearchBar.getDefaultPosition().rawValue
         case .splashScreen:
-            return nimbusSearchBar.getDefaultPosition().rawValue
+            return SearchBarPosition.bottom.rawValue
         case .startAtHome:
             return FxNimbus.shared.features.startAtHomeFeature.value().setting.rawValue
         default: return nil
@@ -294,15 +166,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// in the `featureKey()` function - with which to write to UserDefaults, then the
     /// feature cannot be turned on/off.
     public func setUserPreference(to option: String) {
-        guard !option.isEmpty,
-              let optionsKey = featureKey
-        else { return }
-
-        switch featureID {
-        case .bottomSearchBar:
-            profile.prefs.setString(option, forKey: optionsKey)
-
-        default: break
-        }
+        guard !option.isEmpty else { return }
+        // TODO: to be removed with 15192
+        // no-op for now
     }
 }

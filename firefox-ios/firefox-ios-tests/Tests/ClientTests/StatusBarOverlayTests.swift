@@ -20,22 +20,24 @@ final class StatusBarOverlayTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         self.profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
     override func tearDown() async throws {
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
     // MARK: Translucency enabled
 
     func testInitialState_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
 
         XCTAssertFalse(subject.hasTopTabs)
@@ -45,7 +47,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnHomepage_withoutWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -56,7 +58,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnHomepage_withoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -68,7 +70,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnHomepage_withWallpaperWithBottomURLBar_translucencyOn_notOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -83,7 +85,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnHomepage_withWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -99,7 +101,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnWebpage_withoutWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -111,7 +113,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnWebpage_withoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -123,7 +125,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnWebpage_withWallpaperWithBottomURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -139,7 +141,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testOnWebpage_withWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -155,7 +157,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testHasTopTabs_onHomepageWithoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -167,7 +169,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testHasTopTabs_onHomepageWithWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -183,7 +185,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testHasTopTabs_onWebpageWithoutWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
 
@@ -195,7 +197,7 @@ final class StatusBarOverlayTests: XCTestCase {
     }
 
     func testHasTopTabs_onWebpageWithWallpaperWithTopURLBar_translucencyOn_isTranslucent() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: true)
+        let toolbarHelper = createToolbarMock()
         let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
         profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
         wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
@@ -208,173 +210,6 @@ final class StatusBarOverlayTests: XCTestCase {
         let backgroundColor = try XCTUnwrap(subject.backgroundColor)
         XCTAssertEqual(backgroundColor.cgColor,
                        LightTheme().colors.layerSurfaceLow.withAlphaComponent(expectedAlpha).cgColor)
-    }
-
-    // MARK: Translucency enabled
-
-    func testInitialState_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-
-        XCTAssertFalse(subject.hasTopTabs)
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnHomepage_withoutWallpaperWithBottomURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.withAlphaComponent(1).cgColor)
-    }
-
-    func testOnHomepage_withoutWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnHomepage_withWallpaperWithBottomURLBar_translucencyOff_notOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.withAlphaComponent(0).cgColor)
-    }
-
-    func testOnHomepage_withWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnWebpage_withoutWallpaperWithBottomURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnWebpage_withoutWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnWebpage_withWallpaperWithBottomURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("bottom", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testOnWebpage_withWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testHasTopTabs_onHomepageWithoutWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testHasTopTabs_onHomepageWithWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: true)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testHasTopTabs_onWebpageWithoutWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
-    }
-
-    func testHasTopTabs_onWebpageWithWallpaperWithTopURLBar_translucencyOff_isOpaque() throws {
-        let toolbarHelper = createToolbarMock(isTranslucencyEnabled: false)
-        let subject = createSubject(hasTopTabs: true, toolbarHelper: toolbarHelper)
-        profile.prefs.setString("top", forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
-        wallpaperManager.currentWallpaper = Wallpaper(id: "A Custom Wallpaper",
-                                                      textColor: nil,
-                                                      cardColor: nil,
-                                                      logoTextColor: nil)
-
-        subject.resetState(isHomepage: false)
-
-        let backgroundColor = try XCTUnwrap(subject.backgroundColor)
-        XCTAssertEqual(backgroundColor.cgColor, LightTheme().colors.layerSurfaceLow.cgColor)
     }
 
     // MARK: Reduce Transparency
@@ -558,11 +393,8 @@ final class StatusBarOverlayTests: XCTestCase {
         return subject
     }
 
-    private func createToolbarMock(
-        isTranslucencyEnabled: Bool = true,
-        isReduceTransparencyEnabled: Bool = false) -> ToolbarHelperInterface {
+    private func createToolbarMock(isReduceTransparencyEnabled: Bool = false) -> ToolbarHelperInterface {
         let toolbarHelper = MockToolbarHelper()
-        toolbarHelper.isToolbarTranslucencyEnabled = isTranslucencyEnabled
         toolbarHelper.isReduceTransparencyEnabled = isReduceTransparencyEnabled
         return toolbarHelper
     }

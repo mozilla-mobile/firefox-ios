@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class RelayMaskSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class RelayMaskSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     private lazy var linkButton: LinkButton = .build()
     private let relayController: RelayControllerProtocol
 

@@ -6,7 +6,7 @@ import Shared
 
 // Holds the configuration / state of the translation button on the toolbar
 // Whether we should show translate button and which mode (inactive, loading, active)
-struct TranslationConfiguration: Equatable, FeatureFlaggable {
+struct TranslationConfiguration: Equatable, LegacyFeatureFlaggable {
     /// This is used to configure the translation icon state.
     /// States:
     /// inactive - page has not been translated yet
@@ -55,14 +55,17 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     let state: IconState?
     /// The language code the page was translated to, if in the active state (e.g. "en", "fr").
     let translatedToLanguage: String?
+    /// The original language of the page before translation (e.g. "de", "fr").
+    let sourceLanguage: String?
 
     // We initially set icon state as nil until we can detect the
     // web page and determine if we should show the translation icon
     // and set the icon to .inactive state.
-    init(prefs: Prefs, state: IconState? = nil, translatedToLanguage: String? = nil) {
+    init(prefs: Prefs, state: IconState? = nil, translatedToLanguage: String? = nil, sourceLanguage: String? = nil) {
         self.prefs = prefs
         self.state = state
         self.translatedToLanguage = translatedToLanguage
+        self.sourceLanguage = sourceLanguage
     }
 
     var isMultiLanguageFlow: Bool {
@@ -85,5 +88,6 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         return lhs.isTranslationFeatureEnabled == rhs.isTranslationFeatureEnabled
             && lhs.state == rhs.state
             && lhs.translatedToLanguage == rhs.translatedToLanguage
+            && lhs.sourceLanguage == rhs.sourceLanguage
     }
 }
