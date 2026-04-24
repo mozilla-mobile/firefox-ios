@@ -77,7 +77,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                     .accessibilityLabel(Text(String.WorldCup.CountryPicker.CloseButtonAccessibilityLabel))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Skip") {}
+                    Button(String.WorldCup.CountryPicker.SkipButtonTitle) {}
                     .skipButtonStyle(theme: theme)
                 }
             }
@@ -120,7 +120,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UX.flagSize.width, height: UX.flagSize.height)
                 .shadow(
-                    color: shadow.colorProvider(theme).color,
+                    color: Color.red,
                     radius: shadow.blurRadius,
                     x: shadow.offset.width,
                     y: shadow.offset.height

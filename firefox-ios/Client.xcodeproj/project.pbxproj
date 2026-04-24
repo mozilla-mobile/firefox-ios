@@ -1577,6 +1577,8 @@
 		C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */; };
 		C27484E22F558DDD00920313 /* MockSummarizerConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */; };
 		C27484E42F55C4B600920313 /* MockSummarizerConfigFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */; };
+		C27AB7082F9B85A50085439A /* WorldCupCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27AB7062F9B85A50085439A /* WorldCupCountry.swift */; };
+		C27AB7092F9B85A50085439A /* WorldCupCountryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27AB7072F9B85A50085439A /* WorldCupCountryPickerView.swift */; };
 		C27EF6132EBA28E100BED719 /* LanguageDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */; };
 		C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */; };
 		C27EF61A2EBA364E00BED719 /* LanguageSampleSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */; };
@@ -1635,7 +1637,6 @@
 		C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */; };
 		C2F336ED2ECE45E20071588A /* TranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F336EC2ECE45DB0071588A /* TranslationsService.swift */; };
 		C2F55C642F9A441B00BE73E7 /* WorldCupCountryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F55C622F9A441B00BE73E7 /* WorldCupCountryPickerView.swift */; };
-
 		C2F55C662F9A441B00BE73E7 /* WorldCupCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F55C612F9A441B00BE73E7 /* WorldCupCountry.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -10282,6 +10283,8 @@
 		C27484DF2F558C2800920313 /* MockSummarizerLanguageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerLanguageProvider.swift; sourceTree = "<group>"; };
 		C27484E12F558DDD00920313 /* MockSummarizerConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigProvider.swift; sourceTree = "<group>"; };
 		C27484E32F55C4B600920313 /* MockSummarizerConfigFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSummarizerConfigFactory.swift; sourceTree = "<group>"; };
+		C27AB7062F9B85A50085439A /* WorldCupCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountry.swift; sourceTree = "<group>"; };
+		C27AB7072F9B85A50085439A /* WorldCupCountryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountryPickerView.swift; sourceTree = "<group>"; };
 		C27EF6122EBA28DB00BED719 /* LanguageDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetector.swift; sourceTree = "<group>"; };
 		C27EF6142EBA2EDD00BED719 /* LanguageDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageDetectorTests.swift; sourceTree = "<group>"; };
 		C27EF6192EBA364C00BED719 /* LanguageSampleSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSampleSource.swift; sourceTree = "<group>"; };
@@ -10348,7 +10351,6 @@
 		C2F336EC2ECE45DB0071588A /* TranslationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsService.swift; sourceTree = "<group>"; };
 		C2F55C612F9A441B00BE73E7 /* WorldCupCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountry.swift; sourceTree = "<group>"; };
 		C2F55C622F9A441B00BE73E7 /* WorldCupCountryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountryPickerView.swift; sourceTree = "<group>"; };
-
 		C326435B8F6E47257506096B /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Search.strings; sourceTree = "<group>"; };
 		C3334FC58A76876D8E9F00F3 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		C34D464780B65FD5A9F3118B /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Search.strings; sourceTree = "<group>"; };
@@ -14896,6 +14898,15 @@
 			path = Summarizer;
 			sourceTree = "<group>";
 		};
+		C27AB5D12F9B81710085439A /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				C2F55C622F9A441B00BE73E7 /* WorldCupCountryPickerView.swift */,
+				C2F55C612F9A441B00BE73E7 /* WorldCupCountry.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		C27EF6182EBA363800BED719 /* LanguageDetector */ = {
 			isa = PBXGroup;
 			children = (
@@ -14980,6 +14991,8 @@
 			isa = PBXGroup;
 			children = (
 				C2D7AC3C2F9B5DC30090EC28 /* WorldCupAction.swift */,
+				C27AB7062F9B85A50085439A /* WorldCupCountry.swift */,
+				C27AB7072F9B85A50085439A /* WorldCupCountryPickerView.swift */,
 			);
 			path = WorldCup;
 			sourceTree = "<group>";
@@ -14992,16 +15005,6 @@
 				C2F336EA2ECE447A0071588A /* TranslationsServiceProtocol.swift */,
 			);
 			path = Service;
-			sourceTree = "<group>";
-		};
-		C2F55C602F9A423200BE73E7 /* WorldCup */ = {
-			isa = PBXGroup;
-			children = (
-				C2F55C612F9A441B00BE73E7 /* WorldCupCountry.swift */,
-				C2F55C622F9A441B00BE73E7 /* WorldCupCountryPickerView.swift */,
-
-			);
-			path = WorldCup;
 			sourceTree = "<group>";
 		};
 		C71158CB2EEA0ADF009766B8 /* PrivacyNotice */ = {
@@ -16612,6 +16615,7 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
+				C27AB5D12F9B81710085439A /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -19118,7 +19122,6 @@
 				0B7B957D2DCA3099007DC749 /* DocumentLogger.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabCell.swift in Sources */,
 				C2F55C642F9A441B00BE73E7 /* WorldCupCountryPickerView.swift in Sources */,
-
 				C2F55C662F9A441B00BE73E7 /* WorldCupCountry.swift in Sources */,
 				814B60F52C90C0A0000997BE /* MainMenuConfigurationUtility.swift in Sources */,
 				210E0EBA298D9D6400BB4F33 /* OpenSearchEngine.swift in Sources */,
@@ -19506,6 +19509,8 @@
 				E1442FD0294782D9003680B0 /* UIAlertController+Extension.swift in Sources */,
 				ED390D222CF4DEDB00A775F9 /* TitleSubtitleActivityItemProvider.swift in Sources */,
 				3933D4F42EF3358300C0C4E3 /* DefaultBrowserUtilityTelemetry.swift in Sources */,
+				C27AB7082F9B85A50085439A /* WorldCupCountry.swift in Sources */,
+				C27AB7092F9B85A50085439A /* WorldCupCountryPickerView.swift in Sources */,
 				E1A6AB4828CA833000EBEBDD /* WallpaperBaseViewController.swift in Sources */,
 				8A1CBB972BE0182C008BE4D4 /* MicrosurveyPromptMiddleware.swift in Sources */,
 				4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */,
