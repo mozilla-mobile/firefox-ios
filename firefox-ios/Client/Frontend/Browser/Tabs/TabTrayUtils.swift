@@ -25,10 +25,7 @@ protocol TabTrayUtils {
 
 /// Tiny utility to simplify checking for availability of the tab tray features
 @MainActor
-struct DefaultTabTrayUtils:
-    LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-    FeatureFlaggable,
-    TabTrayUtils {
+struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
         static let segmentedControlHeight: CGFloat = 53
@@ -44,7 +41,7 @@ struct DefaultTabTrayUtils:
     }
 
     var isTabTrayTranslucencyEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayTranslucency, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayTranslucency)
     }
 
     var isReduceTransparencyEnabled: Bool {
