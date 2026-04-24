@@ -57,7 +57,9 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
             ))
             loadSettingsTask?.cancel()
-            loadSettingsTask = Task { await self.loadSettings(windowUUID: action.windowUUID) }
+            loadSettingsTask = Task { [weak self] in
+                await self?.loadSettings(windowUUID: action.windowUUID)
+            }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true

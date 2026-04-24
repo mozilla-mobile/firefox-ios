@@ -46,7 +46,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
     // MARK: - Bool preferences
 
     var isAIKillSwitchEnabled: Bool {
-        // Even when this feature is on the default value should be false
+        // Even when this feature is on in Nimbus, the user preference default value should be false
         prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) ?? false
     }
 
