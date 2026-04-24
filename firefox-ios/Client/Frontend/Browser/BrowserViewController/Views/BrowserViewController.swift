@@ -282,8 +282,7 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        let flagToCheck = FeatureFlagID.tabTrayUIExperiments
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 

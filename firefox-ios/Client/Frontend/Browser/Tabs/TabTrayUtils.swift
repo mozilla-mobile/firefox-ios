@@ -36,7 +36,7 @@ struct DefaultTabTrayUtils:
     }
 
     var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
     }
 
     var isTabTrayIpadUIExperimentsEnabled: Bool {
