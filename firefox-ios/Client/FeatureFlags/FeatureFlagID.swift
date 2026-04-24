@@ -42,6 +42,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -59,6 +60,7 @@ enum FeatureFlagID: String, CaseIterable {
     case trendingSearches
     case unifiedSearch
     case videoIntroOnboarding
+    case worldCupWidget
     case quickAnswers
 
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
@@ -76,6 +78,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .homepageSearchBar,
                 .homepageStoryCategories,
                 .hostedSummarizer,
+                .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,
@@ -96,7 +99,8 @@ enum FeatureFlagID: String, CaseIterable {
                 .translation,
                 .translationLanguagePicker,
                 .trendingSearches,
-                .unifiedSearch:
+                .unifiedSearch,
+                .worldCupWidget:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

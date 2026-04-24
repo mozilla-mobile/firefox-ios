@@ -331,7 +331,7 @@ class BrowserViewController: UIViewController,
 
     private var isRecentOrTrendingSearchEnabled: Bool {
         let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
@@ -564,6 +564,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
         updateMicrosurveyConstraints()
+        updateAutoTranslatePromptConstraints()
         updateToolbarDisplay()
         addOrUpdateMaskViewIfNeeded()
 
@@ -1987,7 +1988,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
-        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
+        guard featureFlagsProvider.isEnabled(.microsurvey), microsurvey == nil else { return }
 
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
@@ -2069,14 +2070,21 @@ class BrowserViewController: UIViewController,
 
     private func removeAutoTranslatePrompt() {
         guard let prompt = autoTranslatePrompt else { return }
+        prompt.removeFromSuperview()
+        autoTranslatePrompt = nil
+    }
+
+    private func updateAutoTranslatePromptConstraints() {
+        guard let prompt = autoTranslatePrompt else { return }
+        prompt.removeFromSuperview()
 
         if isBottomSearchBar {
-            overKeyboardContainer.removeArrangedView(prompt)
+            overKeyboardContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         } else {
-            bottomContainer.removeArrangedView(prompt)
+            bottomContainer.addArrangedViewToTop(prompt, animated: false, completion: nil)
         }
 
-        autoTranslatePrompt = nil
+        prompt.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - Native Error Page
@@ -5084,10 +5092,6 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidPressPrivateMode() {
         updateZoomPageBarVisibility(visible: false)
-    }
-
-    func topTabsShowCloseTabsToast() {
-        showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
     }
 }
 

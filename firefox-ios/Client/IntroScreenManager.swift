@@ -15,7 +15,9 @@ protocol IntroScreenManagerProtocol {
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
+struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                           FeatureFlaggable,
+                           IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {
@@ -27,7 +29,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var shouldShowVideoIntro: Bool {
@@ -35,11 +37,11 @@ struct IntroScreenManager: LegacyFeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseBrandRefreshConfiguration)
     }
 
     var shouldUseJapanConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseJapanConfiguration)
     }
 
     /// Determines the onboarding variant based on feature flags.

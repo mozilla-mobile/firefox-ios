@@ -109,6 +109,9 @@ final class NimbusFeatureFlagLayer: Sendable {
         case .hostedSummarizer:
             return checkHostedSummarizerFeature(from: nimbus)
 
+        case .httpsUpgrade:
+            return checkHttpsUpgradeFeature(from: nimbus)
+
         case .improvedAppStoreReviewTriggerFeature:
             return checkImprovedAppStoreReviewTriggerFeature(from: nimbus)
 
@@ -171,6 +174,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
         case .quickAnswers:
             return checkQuickAnswersFeature(from: nimbus)
+
+        case .worldCupWidget:
+            return checkWorldCupWidgetFeature(from: nimbus)
         }
     }
 
@@ -389,6 +395,10 @@ final class NimbusFeatureFlagLayer: Sendable {
         return nimbus.features.hostedSummarizerFeature.value().shakeGesture
     }
 
+    private func checkHttpsUpgradeFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.httpsUpgradeFeature.value().enabled
+    }
+
     private func checkSummarizerAppAttestAuthFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.summarizerAppAttestAuthFeature.value().enabled
     }
@@ -427,5 +437,9 @@ final class NimbusFeatureFlagLayer: Sendable {
 
     private func checkBookmarksSearchFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarksSearchFeature.value().enabled
+    }
+
+    private func checkWorldCupWidgetFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.worldCupWidgetFeature.value().enabled
     }
 }

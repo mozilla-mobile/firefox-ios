@@ -28,6 +28,7 @@ include:
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
+  - nimbus-features/httpsUpgradeFeature.yaml
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
@@ -56,3 +57,4 @@ include:
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
+  - nimbus-features/worldCupWidgetFeature.yaml
