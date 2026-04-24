@@ -43,7 +43,8 @@ public struct CopyWithUpdatesMacro: MemberMacro {
 
         // Based on the each property's name and type, construct the copyWith function arguments and internal assignments
         var arguments: [String] = []
-        var assignments: [String] = []
+        var resolvedAssignments: [String] = []
+        var initializerAssignments: [String] = []
 
         for binding in bindings {
             guard let propertyName = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
@@ -58,6 +59,7 @@ public struct CopyWithUpdatesMacro: MemberMacro {
 
             // Strip comments after the property definition
             let propertyTypeString = stripCommentsFromTypeDefinition(ofProperty: propertyType.description)
+            let resolvedVariableName = "_new_\(propertyName)"
 
             if propertyType.is(OptionalTypeSyntax.self) {
                 /// Optionals are treated as double optionals (`??`)
@@ -65,18 +67,22 @@ public struct CopyWithUpdatesMacro: MemberMacro {
 
                 /// We treat a top-level `nil` argument semantically as setting the property to `nil`, instead of passing
                 /// `.some(nil)`, which would feel odd at call sites.
-                assignments.append("\(propertyName): \(propertyName).map { $0 ?? self.\(propertyName) } ?? nil")
+                resolvedAssignments.append("let \(resolvedVariableName) = \(propertyName).map { $0 ?? self.\(propertyName) } ?? nil")
             } else {
                 arguments.append("\(propertyName): \(propertyTypeString)? = nil")
-                assignments.append("\(propertyName): \(propertyName) ?? self.\(propertyName)")
+                resolvedAssignments.append("let \(resolvedVariableName) = \(propertyName) ?? self.\(propertyName)")
             }
+
+            initializerAssignments.append("\(propertyName): \(resolvedVariableName)")
         }
 
         // Construct the return statement with proper syntax
         let copyWithFunction = try FunctionDeclSyntax("public func copyWithUpdates(\(raw: arguments.joined(separator: ", "))) -> Self") {
             return """
+                \(raw: resolvedAssignments.joined(separator: "\n"))
+
                 return Self(
-                \(raw: assignments.joined(separator: ",\n"))
+                \(raw: initializerAssignments.joined(separator: ",\n"))
                 )
             """
         }
@@ -152,3 +158,4 @@ struct CopyWithUpdatesPlugin: CompilerPlugin {
         CopyWithUpdatesMacro.self,
     ]
 }
+
