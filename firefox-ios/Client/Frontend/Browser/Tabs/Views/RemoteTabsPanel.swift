@@ -26,7 +26,7 @@ class RemoteTabsPanel: UIViewController,
                        RemoteTabsClientAndTabsDataSourceDelegate,
                        RemoteTabsEmptyViewDelegate,
                        StoreSubscriber,
-                       LegacyFeatureFlaggable,
+                       FeatureFlaggable,
                        TabTrayThemeable,
                        Notifiable {
     typealias SubscriberStateType = RemoteTabsPanelState
@@ -42,7 +42,7 @@ class RemoteTabsPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 

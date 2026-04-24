@@ -282,8 +282,7 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        let flagToCheck = FeatureFlagID.tabTrayUIExperiments
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
@@ -297,8 +296,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isToolbarUpdateHintEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarUpdateHint
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.toolbarUpdateHint)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -326,7 +324,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isTabScrollRefactoringEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabScrollRefactorFeature)
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
