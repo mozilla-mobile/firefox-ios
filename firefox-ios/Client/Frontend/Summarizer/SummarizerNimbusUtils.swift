@@ -129,7 +129,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerShakeGesture, checking: .buildOnly)
+        let isShakeEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerShakeGesture)
         return isHostedSummarizerEnabled() && isShakeEnabled
     }
 
