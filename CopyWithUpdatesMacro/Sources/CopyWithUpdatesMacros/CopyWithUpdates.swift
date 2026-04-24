@@ -158,4 +158,3 @@ struct CopyWithUpdatesPlugin: CompilerPlugin {
         CopyWithUpdatesMacro.self,
     ]
 }
-
