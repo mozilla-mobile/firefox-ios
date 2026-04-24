@@ -120,7 +120,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerToolbarEntrypoint, checking: .buildOnly)
+        let isFlagEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerToolbarEntrypoint)
         return isHostedSummarizerEnabled() && isFlagEnabled
     }
 
