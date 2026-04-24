@@ -18,42 +18,51 @@ private let ErrorPageCertErrorParam = "certerror"
 private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
 private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
-// Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
-// Check the other cases in case this gets fixed in the future.
-// TODO: This legacy constant should eventually be removed in favor of CertErrors
-// similar to LegacyCertErrorCodes 
-private let LegacyCertErrors = [
-    NSURLErrorServerCertificateUntrusted,
-    NSURLErrorServerCertificateHasBadDate,
-    NSURLErrorServerCertificateHasUnknownRoot,
-    NSURLErrorServerCertificateNotYetValid
-]
+private struct LegacyCertErrors {
+    // Error codes copied from Gecko. The ints corresponding to these codes were determined
+    // by inspecting the NSError in each of these cases.
+    // TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
+    // in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+    enum GeckoCode: Int {
+        case unknownIssuer = -9813
+        case expiredCertificate = -9814
+        case badCertDomain = -9843
 
-// Error codes copied from Gecko. The ints corresponding to these codes were determined
-// by inspecting the NSError in each of these cases.
-// TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
-// in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
-private let LegacyCertErrorCodes = [
-    -9813: "SEC_ERROR_UNKNOWN_ISSUER",
-    -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
-    -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
-]
-// `_kCFStreamErrorCodeKey` can be absent on iOS 26.4. In that case we only
-// have NSURLErrorDomain codes, so map them to the closest legacy cert code.
-private let LegacyCertErrorCodeByNetworkError: [Int: Int] = [
-    NSURLErrorServerCertificateUntrusted: -9813,
-    NSURLErrorServerCertificateHasUnknownRoot: -9813,
-    NSURLErrorServerCertificateHasBadDate: -9814,
-    NSURLErrorServerCertificateNotYetValid: -9814
-]
+        var description: String {
+            switch self {
+            case .unknownIssuer: return "SEC_ERROR_UNKNOWN_ISSUER"
+            case .expiredCertificate: return "SEC_ERROR_EXPIRED_CERTIFICATE"
+            case .badCertDomain: return "SSL_ERROR_BAD_CERT_DOMAIN"
+            }
+        }
+    }
+
+    // Cert errors may be reported inconsistently across iOS versions.
+    // `_kCFStreamErrorCodeKey` can be absent on iOS 26.4. In that case we only
+    // have NSURLErrorDomain codes, so map them to the closest legacy cert code.
+    let certErrors = [
+        NSURLErrorServerCertificateUntrusted,
+        NSURLErrorServerCertificateHasBadDate,
+        NSURLErrorServerCertificateHasUnknownRoot,
+        NSURLErrorServerCertificateNotYetValid
+    ]
+
+    let errorMapping: [Int: GeckoCode] = [
+        NSURLErrorServerCertificateUntrusted: .unknownIssuer,
+        NSURLErrorServerCertificateHasUnknownRoot: .unknownIssuer,
+        NSURLErrorServerCertificateHasBadDate: .expiredCertificate,
+        NSURLErrorServerCertificateNotYetValid: .expiredCertificate
+    ]
+}
+
+private let legacyCertErrors = LegacyCertErrors()
 
 private func certErrorFromNetworkErrorCode(_ networkErrorCode: Int) -> String {
-    guard let legacyCode = LegacyCertErrorCodeByNetworkError[networkErrorCode],
-          let certError = LegacyCertErrorCodes[legacyCode] else {
+    guard let geckoCode = legacyCertErrors.errorMapping[networkErrorCode] else {
         assertionFailure("Missing legacy cert mapping for NSURLErrorDomain code: \(networkErrorCode)")
-        return LegacyCertErrorCodes[-9813] ?? "SEC_ERROR_UNKNOWN_ISSUER"
+        return LegacyCertErrors.GeckoCode.unknownIssuer.description
     }
-    return certError
+    return geckoCode.description
 }
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
@@ -270,7 +279,7 @@ final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
             }
             errDomain = ""
-        } else if LegacyCertErrors.contains(errCode) {
+        } else if legacyCertErrors.certErrors.contains(errCode) {
             let certError = components.valueForQuery(ErrorPageCertErrorParam)
                 ?? certErrorFromNetworkErrorCode(errCode)
 
@@ -338,7 +347,7 @@ class ErrorPageHelper {
         // user to go back or continue. The certificate itself is encoded and added as
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
-        if LegacyCertErrors.contains(error.code) {
+        if legacyCertErrors.certErrors.contains(error.code) {
             if let certChain = error.userInfo[PeerCertificateChainKey] as? [SecCertificate],
                let cert = certChain.first {
                 let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
@@ -347,7 +356,7 @@ class ErrorPageHelper {
 
             let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
             let certErrorCode = underlyingError?.userInfo[StreamErrorCodeKey] as? Int
-            let certError = LegacyCertErrorCodes[certErrorCode ?? Int.min]
+            let certError = LegacyCertErrors.GeckoCode(rawValue: certErrorCode ?? Int.min)?.description
                 ?? certErrorFromNetworkErrorCode(error.code)
             queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }
