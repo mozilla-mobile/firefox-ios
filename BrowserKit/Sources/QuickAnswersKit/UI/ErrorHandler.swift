@@ -21,6 +21,8 @@ final class ErrorHandler {
     // TODO: - FXIOS-14720 Add Strings and accessibility ids
     func handleSpeechError(_ error: SpeechError) {
         switch error {
+        // if it is the first time the permission was viewed it means the OS alert was shown
+        // in this case dismiss the view directly and don't show the custom alert.
         case .microphonePermissionDenied(let isFirstTime):
             if isFirstTime {
                 navigationHandler?.dismissQuickAnswers(with: nil)
