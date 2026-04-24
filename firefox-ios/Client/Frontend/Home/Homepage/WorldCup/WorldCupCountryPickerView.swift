@@ -39,17 +39,15 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     @State var theme: Theme
-
     private let regions = WorldCupCountryData.regions
-
+    private var gridColumns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.gridColumns)
+    }
+    
     init(windowUUID: WindowUUID, themeManager: ThemeManager) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
-    }
-
-    private var gridColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.gridColumns)
     }
 
     var body: some View {
@@ -120,7 +118,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UX.flagSize.width, height: UX.flagSize.height)
                 .shadow(
-                    color: Color.red,
+                    color: shadow.colorProvider(theme).color,
                     radius: shadow.blurRadius,
                     x: shadow.offset.width,
                     y: shadow.offset.height
