@@ -39,11 +39,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     }
 
     func prepare() async throws {
-        let isMicFirstTimeRequest = authorizer.isMicrophonePermissionUndetermined()
-
-        guard await isPermissionGranted() else {
-            throw SpeechError.microphonePermissionDenied(isFirstTime: isMicFirstTimeRequest)
-        }
+        try await authorizer.requestMicrophonePermission()
         try audioManager.configureAudioSession()
     }
 
@@ -136,7 +132,7 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
     // We only care about microphone permissions for the newer speech APIs, since
     // we are able to build successfully without the check.
     private func isPermissionGranted() async -> Bool {
-        let isMicAuthorized = await authorizer.isMicrophonePermissionAuthorized()
+        let isMicAuthorized = await authorizer.requestMicrophonePermission()
         return isMicAuthorized
     }
 

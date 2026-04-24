@@ -75,8 +75,12 @@ protocol SpeechRecognizerProvider: Sendable {
 }
 
 protocol AuthorizeProvider: Sendable {
-    func isMicrophonePermissionAuthorized() async -> Bool
-    func isSpeechPermissionAuthorized() async -> Bool
-    func isMicrophonePermissionUndetermined() -> Bool
-    func isSpeechPermissionUndetermined() -> Bool
+    /// Asks the OS for microphone permission access.
+    /// Throws `SpeechError.microphonePermissionDenied(isFirstTime)` where `isFirstTime` is `true` when
+    /// the system prompt was shown, or `false` when it wasn't.
+    func requestMicrophonePermission() async throws
+    /// Asks the OS for speech permission access.
+    /// Throws `SpeechError.speechRecognitionPermissionDenied(isFirstTime)` where `isFirstTime` is `true` when
+    /// the system prompt was shown, or `false` when it wasn't.
+    func requestSpeechPermission() async throws
 }
