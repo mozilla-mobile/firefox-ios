@@ -35,7 +35,10 @@ extension SummarizerNimbusUtils {
 }
 
 /// Tiny utility to simplify checking for availability of the summarizers
-struct DefaultSummarizerNimbusUtils: LegacyFeatureFlaggable, SummarizerNimbusUtils {
+struct DefaultSummarizerNimbusUtils:
+    LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+    FeatureFlaggable,
+    SummarizerNimbusUtils {
     private let prefs: Prefs
     private let localeProvider: LocaleProvider
     private let appleIntelligenceUtil: AppleIntelligenceUtil
@@ -101,7 +104,7 @@ struct DefaultSummarizerNimbusUtils: LegacyFeatureFlaggable, SummarizerNimbusUti
     }
 
     func isHostedSummarizerEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.hostedSummarizer)
     }
 
     func isAppAttestAuthEnabled() -> Bool {

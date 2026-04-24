@@ -5,7 +5,7 @@
 import Shared
 import Common
 
-class StartAtHomeHelper: LegacyFeatureFlaggable {
+class StartAtHomeHelper: UserFeaturePreferenceProvider {
     private struct Constants {
         static let hoursToTriggerStartAtHome = 4
         static let secondsToTriggerStartAtHome = 5
@@ -38,7 +38,7 @@ class StartAtHomeHelper: LegacyFeatureFlaggable {
 
     var startAtHomeSetting: StartAtHomeSetting {
         get {
-            let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+            let pref = userPreferences.startAtHomeSetting
             return StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
         }
         set { prefs.setString(newValue.rawValue, forKey: PrefsKeys.FeatureFlags.StartAtHome) }
