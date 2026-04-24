@@ -25,7 +25,9 @@ enum ContextualHintType: String {
 }
 
 @MainActor
-class ContextualHintViewProvider: ContextualHintPrefsKeysProvider, SearchBarLocationProvider {
+class ContextualHintViewProvider: ContextualHintPrefsKeysProvider,
+                                  SearchBarLocationProvider,
+                                  LegacyFeatureFlaggable {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
     typealias CFRStrings = String.ContextualHints
 

@@ -41,6 +41,8 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
         button.accessibilityLabel = .Translations.AutoTranslatePrompt.EnableButton
         button.accessibilityIdentifier = AccessibilityIdentifiers.Translations.AutoTranslatePrompt.enableButton
         button.addTarget(self, action: #selector(self.didTapEnable), for: .touchUpInside)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -97,8 +99,14 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
 
             contentRow.topAnchor.constraint(equalTo: topBorderView.bottomAnchor, constant: UX.contentPadding.top),
             contentRow.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.contentPadding.bottom),
-            contentRow.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentPadding.leading),
-            contentRow.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UX.contentPadding.trailing),
+            contentRow.leadingAnchor.constraint(
+                equalTo: safeAreaLayoutGuide.leadingAnchor,
+                constant: UX.contentPadding.leading
+            ),
+            contentRow.trailingAnchor.constraint(
+                equalTo: safeAreaLayoutGuide.trailingAnchor,
+                constant: UX.contentPadding.trailing
+            ),
         ])
 
         adjustLayout()

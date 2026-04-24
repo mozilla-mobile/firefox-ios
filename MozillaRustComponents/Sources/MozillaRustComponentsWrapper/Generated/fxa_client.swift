@@ -3758,6 +3758,14 @@ public enum FxaError: Swift.Error, Equatable, Hashable, Foundation.LocalizedErro
     case Authentication(message: String)
     
     /**
+     * Thrown when an authenticated account isn't allowed to perform some operation. Unlike
+     * `Authentication`, there's no problem with the account status. In some cases it
+     * might be possible to request additional scopes, and once granted, the operation
+     * may succeed.
+     */
+    case Forbidden(message: String)
+    
+    /**
      * Thrown if an operation fails due to network access problems.
      * The application may retry at a later time once connectivity is restored.
      */
@@ -3838,31 +3846,35 @@ public struct FfiConverterTypeFxaError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 2: return .Network(
+        case 2: return .Forbidden(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .NoExistingAuthFlow(
+        case 3: return .Network(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 4: return .WrongAuthFlow(
+        case 4: return .NoExistingAuthFlow(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 5: return .OriginMismatch(
+        case 5: return .WrongAuthFlow(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 6: return .SyncScopedKeyMissingInServerResponse(
+        case 6: return .OriginMismatch(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 7: return .Panic(
+        case 7: return .SyncScopedKeyMissingInServerResponse(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 8: return .Other(
+        case 8: return .Panic(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 9: return .Other(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -3879,20 +3891,22 @@ public struct FfiConverterTypeFxaError: FfiConverterRustBuffer {
         
         case .Authentication(_ /* message is ignored*/):
             writeInt(&buf, Int32(1))
-        case .Network(_ /* message is ignored*/):
+        case .Forbidden(_ /* message is ignored*/):
             writeInt(&buf, Int32(2))
-        case .NoExistingAuthFlow(_ /* message is ignored*/):
+        case .Network(_ /* message is ignored*/):
             writeInt(&buf, Int32(3))
-        case .WrongAuthFlow(_ /* message is ignored*/):
+        case .NoExistingAuthFlow(_ /* message is ignored*/):
             writeInt(&buf, Int32(4))
-        case .OriginMismatch(_ /* message is ignored*/):
+        case .WrongAuthFlow(_ /* message is ignored*/):
             writeInt(&buf, Int32(5))
-        case .SyncScopedKeyMissingInServerResponse(_ /* message is ignored*/):
+        case .OriginMismatch(_ /* message is ignored*/):
             writeInt(&buf, Int32(6))
-        case .Panic(_ /* message is ignored*/):
+        case .SyncScopedKeyMissingInServerResponse(_ /* message is ignored*/):
             writeInt(&buf, Int32(7))
-        case .Other(_ /* message is ignored*/):
+        case .Panic(_ /* message is ignored*/):
             writeInt(&buf, Int32(8))
+        case .Other(_ /* message is ignored*/):
+            writeInt(&buf, Int32(9))
 
         
         }

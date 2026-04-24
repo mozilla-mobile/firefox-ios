@@ -14,10 +14,13 @@ struct HeaderState: StateType, Equatable, Hashable {
     var isPrivate: Bool
     var showiPadSetup: Bool
 
-    init(windowUUID: WindowUUID) {
+    init(
+        windowUUID: WindowUUID,
+        isPrivate: Bool = false,
+    ) {
         self.init(
             windowUUID: windowUUID,
-            isPrivate: false,
+            isPrivate: isPrivate,
             showiPadSetup: false
         )
     }
@@ -41,7 +44,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         switch action.actionType {
         case HomepageActionType.initialize:
             return handleInitializeAction(for: state, with: action)
-        case HomepageActionType.traitCollectionDidChange:
+        case HomepageActionType.traitCollectionDidChange,
+             HomepageActionType.viewWillAppear:
             return handleTraitCollectionDidChangeAction(for: state, with: action)
         default:
             return defaultState(from: state)

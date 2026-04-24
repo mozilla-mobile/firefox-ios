@@ -10,7 +10,11 @@ enum AccessoryType {
     case standard, creditCard, address, login, passwordGenerator, relayEmailMask
 }
 
-final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable, LegacyFeatureFlaggable, Notifiable {
+final class AccessoryViewProvider: UIView,
+                                   Themeable,
+                                   InjectedThemeUUIDIdentifiable,
+                                   UserFeaturePreferenceProvider,
+                                   Notifiable {
     // MARK: - Constants
     private struct UX {
         static let accessoryViewHeight: CGFloat = 56
@@ -42,7 +46,7 @@ final class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifia
     var useRelayMaskClosure: (() -> Void)?
 
     private var searchBarPosition: SearchBarPosition {
-        return featureFlags.getCustomState(for: .searchBarPosition) ?? .bottom
+        return userPreferences.searchBarPosition
     }
 
     var toolbarItems: [UIBarButtonItem] {

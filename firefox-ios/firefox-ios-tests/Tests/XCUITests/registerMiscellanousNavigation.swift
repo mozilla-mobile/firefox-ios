@@ -77,7 +77,7 @@ func registerMiscellanousNavigation(in map: MMScreenGraph<FxUserState>, app: XCU
     map.addScreenState(EnhancedTrackingProtection) { screenState in
         screenState.gesture(forAction: Action.SelectTrackersBlocked) { userState in
             let trackersLabel = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.trackersLabel
-            app.staticTexts[trackersLabel].tap(force: true)
+            app.staticTexts[trackersLabel].waitAndTap()
         }
     }
 }

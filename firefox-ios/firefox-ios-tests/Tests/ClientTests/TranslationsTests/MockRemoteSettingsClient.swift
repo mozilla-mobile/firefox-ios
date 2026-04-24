@@ -47,6 +47,11 @@ final class MockRemoteSettingsClient: RemoteSettingsClientProtocol, @unchecked S
         // no-op for tests for now
     }
 
+    func getLastModifiedTimestamp() -> UInt64? {
+        // This is currently not being used in tests
+        return 0
+    }
+
     func resetStorage() throws {
         resetStorageWasCalled = true
     }

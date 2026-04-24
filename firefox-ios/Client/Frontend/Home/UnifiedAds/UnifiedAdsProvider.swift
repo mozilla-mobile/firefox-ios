@@ -25,7 +25,7 @@ extension UnifiedAdsProviderInterface {
     }
 }
 
-final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, LegacyFeatureFlaggable, Sendable {
+final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable, Sendable {
     private let adsClient: MozAdsClientProtocol
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
@@ -67,7 +67,7 @@ final class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, LegacyF
 
     func fetchTiles(timestamp: Shared.Timestamp = Date.now(),
                     completion: @escaping @Sendable (UnifiedTileResult) -> Void) {
-        if featureFlags.isFeatureEnabled(.adsClient, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.adsClient) {
             fetchTilesWithAdsClient(completion: completion)
         } else {
             guard let request = buildRequest() else {

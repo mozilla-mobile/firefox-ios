@@ -14,7 +14,7 @@ protocol MerinoFeedFetching: Sendable {
     ) async -> CuratedRecommendationsResponse?
 }
 
-struct MerinoFeedFetcher: MerinoFeedFetching, LegacyFeatureFlaggable {
+struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
     let baseURL: String
     let logger: Logger
 
@@ -31,7 +31,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching, LegacyFeatureFlaggable {
                     userAgentHeader: userAgent
                 )
             )
-            if featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly) {
+            if featureFlagsProvider.isEnabled(.homepageStoryCategories) {
                 return try client.getCuratedRecommendations(
                     request:
                         CuratedRecommendationsRequest(

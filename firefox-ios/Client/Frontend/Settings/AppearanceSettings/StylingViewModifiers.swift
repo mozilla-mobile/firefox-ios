@@ -50,7 +50,8 @@ struct ColoredListStyle: ViewModifier {
                 .scrollContentBackground(.hidden)
                 .background(backgroundColor)
         } else {
-            content.listStyle(.plain)
+            content
+                .listStyle(.plain)
         }
     }
 }

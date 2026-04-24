@@ -94,7 +94,7 @@ final class ThemeManagerMiddleware: ThemeManagerProvider {
     func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState {
         ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
-                           isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
+                           isAutomaticBrightnessEnabled: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.getUserManualTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())

@@ -28,16 +28,14 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
 
     init(
         profile: Profile = AppContainer.shared.resolve(),
+        userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
         windowUUID: WindowUUID
     ) {
-        // TODO: FXIOS-11412 - Move profile dependency
-        let shouldShowSection = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.homepageJumpBackinSectionDefault,
-                                                                                  checking: .userOnly)
         self.init(
             windowUUID: windowUUID,
             jumpBackInTabs: [],
             mostRecentSyncedTab: nil,
-            shouldShowSection: shouldShowSection
+            shouldShowSection: userPreferences.isHomepageJumpBackInSectionEnabled
         )
     }
 

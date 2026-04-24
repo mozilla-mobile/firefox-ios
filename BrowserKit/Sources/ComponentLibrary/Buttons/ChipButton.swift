@@ -28,6 +28,7 @@ public final class ChipButton: UIButton, ThemeApplicable {
         configuration?.cornerStyle = .capsule
         configuration?.background.backgroundColorTransformer = nil
         configuration?.titleLineBreakMode = .byTruncatingTail
+        layer.masksToBounds = false
 
         addTarget(self, action: #selector(tapped), for: .touchUpInside)
     }
@@ -54,6 +55,11 @@ public final class ChipButton: UIButton, ThemeApplicable {
             width: reservedTextWidth + UX.horizontalInset * 2,
             height: reservedTextHeight + UX.verticalInset * 2
         )
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.height / 2).cgPath
     }
 
     override public func updateConfiguration() {
@@ -83,6 +89,7 @@ public final class ChipButton: UIButton, ThemeApplicable {
         }
 
         configuration = updatedConfiguration
+        layer.shadowOpacity = isEnabled ? FxShadow.shadow200.opacity : 0
 
         if !isEnabled {
             accessibilityTraits = [.button, .notEnabled]
@@ -116,6 +123,7 @@ public final class ChipButton: UIButton, ThemeApplicable {
         selectedForegroundColor = theme.colors.textInverted
         disabledBackgroundColor = theme.colors.layer2
         disabledForegroundColor = theme.colors.textDisabled
+        applyShadow(FxShadow.shadow200, theme: theme)
         setNeedsUpdateConfiguration()
     }
 
