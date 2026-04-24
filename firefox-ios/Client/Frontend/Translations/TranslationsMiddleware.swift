@@ -8,7 +8,7 @@ import Common
 import Shared
 
 @MainActor
-final class TranslationsMiddleware: LegacyFeatureFlaggable {
+final class TranslationsMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -113,7 +113,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
 
         if gestureType == .longPress {
             guard translationConfiguration.state == .active,
-                  featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly)
+                  featureFlagsProvider.isEnabled(.translationLanguagePicker)
             else { return }
             showLanguagePickerForActiveTranslation(
                 for: action,
@@ -126,7 +126,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         guard gestureType == .tap else { return }
 
         if translationConfiguration.state == .inactive,
-           featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+           featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let capturedButton = action.buttonTapped
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
@@ -275,7 +275,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
     /// When the language picker flag is ON, returns the user's full preferred list.
     /// When OFF, returns only the primary device language (preserving legacy behavior).
     private func targetLanguagesForEligibilityCheck() async -> [String] {
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let supported = await translationsService.fetchSupportedTargetLanguages()
             return manager.preferredLanguages(supportedTargetLanguages: supported)
         }

@@ -943,7 +943,7 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             handleAutoTranslatePrompt(state: state)
         }
 
