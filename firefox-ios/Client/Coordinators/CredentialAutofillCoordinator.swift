@@ -15,6 +15,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
     typealias BottomSheetCardParentCoordinator = BrowserNavigationHandler & ParentCoordinatorDelegate
     private let profile: Profile
+    private let creditCardProvider: CreditCardProvider
     private let themeManager: ThemeManager
     private let tabManager: TabManager
     private weak var parentCoordinator: BottomSheetCardParentCoordinator?
@@ -26,10 +27,12 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         profile: Profile,
         router: Router,
         parentCoordinator: BottomSheetCardParentCoordinator?,
+        creditCardProvider: CreditCardProvider? = nil,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         tabManager: TabManager
     ) {
         self.profile = profile
+        self.creditCardProvider = creditCardProvider ?? profile.autofill
         self.themeManager = themeManager
         self.tabManager = tabManager
         self.parentCoordinator = parentCoordinator
@@ -48,9 +51,55 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                 frame: WKFrameInfo?,
                                 viewController: UIViewController,
                                 alertContainer: UIView) {
-        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: profile.autofill,
+        if state == .selectSavedCard {
+            creditCardProvider.listCreditCards { [weak self] cards, error in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    guard let cards, !cards.isEmpty, error == nil else {
+                        self.logger.log("Error fetching credit cards",
+                                        level: .warning,
+                                        category: .autofill,
+                                        description: "Error fetching saved credit cards for autofill")
+                        self.parentCoordinator?.didFinish(from: self)
+                        return
+                    }
+
+                    self.presentCreditCardAutofill(
+                        creditCard: creditCard,
+                        decryptedCard: decryptedCard,
+                        preloadedCreditCards: cards,
+                        viewType: state,
+                        frame: frame,
+                        viewController: viewController,
+                        alertContainer: alertContainer
+                    )
+                }
+            }
+            return
+        }
+
+        presentCreditCardAutofill(
+            creditCard: creditCard,
+            decryptedCard: decryptedCard,
+            preloadedCreditCards: nil,
+            viewType: state,
+            frame: frame,
+            viewController: viewController,
+            alertContainer: alertContainer
+        )
+    }
+
+    private func presentCreditCardAutofill(creditCard: CreditCard?,
+                                           decryptedCard: UnencryptedCreditCardFields?,
+                                           preloadedCreditCards: [CreditCard]?,
+                                           viewType state: CreditCardBottomSheetState,
+                                           frame: WKFrameInfo?,
+                                           viewController: UIViewController,
+                                           alertContainer: UIView) {
+        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: creditCardProvider,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
+                                                                           preloadedCreditCards: preloadedCreditCards,
                                                                            state: state)
         let bottomSheetViewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel,
                                                                             windowUUID: windowUUID)
@@ -106,6 +155,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
 
         let bottomSheetViewModel = BottomSheetViewModel(
+            animatesPresentation: state != .selectSavedCard,
             shouldDismissForTapOutside: false,
             closeButtonA11yLabel: .CloseButtonTitle,
             closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton

@@ -111,16 +111,23 @@ public class BottomSheetViewController: UIViewController,
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
 
-        contentViewBottomConstraint?.constant = childViewController.view.frame.height
+        if viewModel.animatesPresentation {
+            contentViewBottomConstraint?.constant = childViewController.view.frame.height
+        }
         view.layoutIfNeeded()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        contentViewBottomConstraint?.constant = 0
-        UIView.animate(withDuration: viewModel.animationTransitionDuration) {
-            self.view.backgroundColor = self.viewModel.backgroundColor
-            self.view.layoutIfNeeded()
+        if viewModel.animatesPresentation {
+            contentViewBottomConstraint?.constant = 0
+            UIView.animate(withDuration: viewModel.animationTransitionDuration) {
+                self.view.backgroundColor = self.viewModel.backgroundColor
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            view.backgroundColor = viewModel.backgroundColor
+            view.layoutIfNeeded()
         }
     }
 

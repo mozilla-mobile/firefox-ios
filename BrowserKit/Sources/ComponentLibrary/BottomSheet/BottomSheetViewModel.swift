@@ -22,6 +22,7 @@ public struct BottomSheetViewModel {
     let cornerRadius: CGFloat
     let backgroundColor: UIColor
     let animationTransitionDuration: TimeInterval
+    let animatesPresentation: Bool
     let shouldDismissForTapOutside: Bool
     let shadowOpacity: Float
     let closeButtonA11yLabel: String
@@ -30,6 +31,7 @@ public struct BottomSheetViewModel {
     public init(
         cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
         animationTransitionDuration: TimeInterval = BottomSheetViewModel.UX.animationTransitionDuration,
+        animatesPresentation: Bool = true,
         backgroundColor: UIColor = .clear,
         shouldDismissForTapOutside: Bool = true,
         shadowOpacity: Float = BottomSheetViewModel.UX.shadowOpacity,
@@ -38,6 +40,7 @@ public struct BottomSheetViewModel {
     ) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
+        self.animatesPresentation = animatesPresentation
         self.backgroundColor = backgroundColor
         self.shouldDismissForTapOutside = shouldDismissForTapOutside
         self.shadowOpacity = shadowOpacity
