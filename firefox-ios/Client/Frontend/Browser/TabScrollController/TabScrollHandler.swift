@@ -44,6 +44,10 @@ final class TabScrollHandler: NSObject,
         return featureFlags.isFeatureEnabled(.toolbarMinimalAddressBar, checking: .buildAndUser)
     }
 
+    private var isTabScrollRefactoringEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+    }
+
     enum ScrollDirection {
         case up
         case down
@@ -108,10 +112,6 @@ final class TabScrollHandler: NSObject,
 
     var currentWindowUUID: WindowUUID? {
         return windowUUID
-    }
-
-    var isTabScrollRefactoringEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
     }
 
     /// Returns true when the scrollview contentSize height is bigger than device height plus delta
