@@ -129,13 +129,6 @@ final class SpeechAnalyzerEngine: TranscriptionEngine {
         analyzer = nil
     }
 
-    // We only care about microphone permissions for the newer speech APIs, since
-    // we are able to build successfully without the check.
-    private func isPermissionGranted() async -> Bool {
-        let isMicAuthorized = await authorizer.requestMicrophonePermission()
-        return isMicAuthorized
-    }
-
     private func resolveLocale(with currentLocale: Locale) async throws -> Locale {
         if let supported = await SpeechTranscriber.supportedLocale(equivalentTo: currentLocale) {
             return supported

@@ -21,19 +21,15 @@ final class MockAuthorizer: AuthorizeProvider {
         self.speechUndetermined = speechUndetermined
     }
 
-    func isMicrophonePermissionAuthorized() async -> Bool {
-        return micAuthorized
+    func requestMicrophonePermission() async throws {
+        if !micAuthorized {
+            throw SpeechError.microphonePermissionDenied(isFirstTime: micUndetermined)
+        }
     }
 
-    func isSpeechPermissionAuthorized() async -> Bool {
-        return speechAuthorized
-    }
-
-    func isMicrophonePermissionUndetermined() -> Bool {
-        return micUndetermined
-    }
-
-    func isSpeechPermissionUndetermined() -> Bool {
-        return speechUndetermined
+    func requestSpeechPermission() async throws {
+        if !speechAuthorized {
+            throw SpeechError.speechRecognitionPermissionDenied(isFirstTime: speechUndetermined)
+        }
     }
 }
