@@ -14,7 +14,7 @@
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
     "darkreader": "^4.9.89",
-    "dompurify": "^3.3.2",
+    "dompurify": "^3.4.0",
     "page-metadata-parser": "1.1.4"
   },
   "devDependencies": {
