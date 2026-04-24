@@ -18,8 +18,6 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
     @MainActor
     func topTabsDidPressPrivateMode()
-    @MainActor
-    func topTabsShowCloseTabsToast()
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
@@ -373,7 +371,6 @@ extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         topTabDisplayManager.closeActionPerformed(forCell: cell)
-        delegate?.topTabsShowCloseTabsToast()
         NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
         store.dispatch(TopTabsAction(windowUUID: windowUUID, actionType: TopTabsActionType.didTapCloseTab))
 

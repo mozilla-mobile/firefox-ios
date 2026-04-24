@@ -19,6 +19,9 @@ public enum MLPAConstants {
     static let assertionObjParam = "assertion_obj_b64"
 
     static let serviceTypeHeader = "service-type"
+
+    // TODO: FXIOS-15123 - need to create an enum service type here
+    // eventually to also account for quick-answers
     static let serviceTypeValue = "s2s"
     static let useAppAttestHeader = "use-app-attest"
 

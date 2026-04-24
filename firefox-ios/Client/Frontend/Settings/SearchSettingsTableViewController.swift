@@ -72,7 +72,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
     }
 
     var isRecentSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     // Determines how to display the pre search settings based on the feature flags
@@ -507,7 +507,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
-            searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
+            searchEnginePicker.selectedSearchEngineID = model.defaultEngine?.engineID
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count

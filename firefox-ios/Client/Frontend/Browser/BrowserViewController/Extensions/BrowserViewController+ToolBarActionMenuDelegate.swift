@@ -239,28 +239,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
                     )
                 )
                 self.updateTabCountUsingTabManager(self.tabManager)
-
-                if !self.featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-                    || UIDevice.current.userInterfaceIdiom == .pad {
-                    self.showLegacyCloseTabToast(message: .TabsTray.CloseTabsToast.SingleTabTitle)
-                }
             }
         }.items
-    }
-
-    /// This toast was tied into the legacy main menu, moved it to it's own function.
-    /// New toasts should be piped through Redux.
-    func showLegacyCloseTabToast(message: String) {
-        let viewModel = ButtonToastViewModel(labelText: message,
-                                             buttonText: .UndoString)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: currentTheme()) { [weak self] isButtonTapped in
-            guard let self,
-                  tabManager.backupCloseTab != nil,
-                  isButtonTapped
-            else { return }
-            self.tabManager.undoCloseTab()
-        }
-        show(toast: toast)
     }
 }

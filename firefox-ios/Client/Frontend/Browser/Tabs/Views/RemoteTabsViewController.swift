@@ -56,8 +56,6 @@ class RemoteTabsViewController: UIViewController,
         }
     }()
 
-    private var closeTabRemoteDeviceId: String?
-    private var closeTab: RemoteTab?
     private var tabCommandsFlushTimer: Timer?
     private let tabCommandsFlushDelay = 6.0
 
@@ -382,24 +380,6 @@ class RemoteTabsViewController: UIViewController,
             }
             let tab = clientAndTabs.tabs[indexPath.item]
 
-            // Setting the two private variables below so that the toast button action function has access to them
-            // since that function cannot have any parameters.
-            self.closeTabRemoteDeviceId = fxaDeviceId
-            self.closeTab = tab
-
-            // Creating a modal with an undo button that will allow the user to undo closing the last remote tab
-            // they attempted to close
-            let viewModel = ButtonToastViewModel(labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
-                                                 buttonText: .UndoString)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: retrieveTheme(),
-                                    completion: { didTapUndoButton in
-                                        if didTapUndoButton {
-                                            self.undo()
-                                        }
-                                    })
-            show(toast: toast)
-
             self.remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: fxaDeviceId, url: tab.URL)
 
             // Initiating the process of sending (i.e. executing) any unsent commands
@@ -467,18 +447,6 @@ class RemoteTabsViewController: UIViewController,
         * This will be the real time that the other client uploaded tabs.
         */
         return headerView
-    }
-
-    private func undo() {
-        guard let tabUrl = self.closeTab?.URL, let deviceId = self.closeTabRemoteDeviceId else {
-            return
-        }
-
-        // Removing the close tab command from the command queue
-        remoteTabsPanel?.remoteTabsClientAndTabsDataSourceDidUndo(deviceId: deviceId, url: tabUrl)
-
-        // Initiating the process of sending any unsent commands
-        self.flushTabCommands(deviceId: deviceId)
     }
 
     private func flushTabCommands(deviceId: String) {

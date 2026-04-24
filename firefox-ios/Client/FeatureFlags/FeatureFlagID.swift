@@ -42,6 +42,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hostedSummarizer
     case hostedSummarizerToolbarEntrypoint
     case hostedSummarizerShakeGesture
+    case httpsUpgrade
     case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
@@ -77,6 +78,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .homepageSearchBar,
                 .homepageStoryCategories,
                 .hostedSummarizer,
+                .httpsUpgrade,
                 .improvedAppStoreReviewTriggerFeature,
                 .microsurvey,
                 .nativeErrorPage,

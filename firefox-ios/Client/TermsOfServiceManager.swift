@@ -8,7 +8,9 @@ import Glean
 import MozillaAppServices
 import OnboardingKit
 
-struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
+struct TermsOfServiceManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                              FeatureFlaggable,
+                              Sendable {
     var prefs: Prefs
 
     init(prefs: Prefs) {
@@ -16,7 +18,7 @@ struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var isFeatureEnabled: Bool {

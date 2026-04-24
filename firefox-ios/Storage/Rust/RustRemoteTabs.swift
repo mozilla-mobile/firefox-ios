@@ -202,21 +202,6 @@ public class RustRemoteTabs: @unchecked Sendable {
         }
     }
 
-    public func removeRemoteCommand(deviceId: String, url: URL) {
-        queue.async { [unowned self] in
-            guard let tabsCommandQueue = self.tabsCommandQueue else {
-                let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
-                self.logger.log(err.description,
-                                level: .warning,
-                                category: .tabs)
-                return
-            }
-
-            tabsCommandQueue
-                .removeRemoteCommand(deviceId: deviceId, command: RemoteCommand.closeTab(url: url.absoluteString))
-        }
-    }
-
     public func getUnsentCommandUrlsByDeviceId(deviceId: String, completion: @Sendable @escaping ([String]) -> Void) {
         self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
             let urls = commands.map { item in

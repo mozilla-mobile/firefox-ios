@@ -16,8 +16,6 @@ class MockTabManager: TabManager {
     var selectedIndex = 0
     var selectedTab: Tab?
     var selectedTabUUID: UUID?
-    var backupCloseTab: BackupCloseTab?
-    var backupCloseTabs = [Tab]()
     // Use to return in getTabForUUID()
     var tabForUUID: Tab?
 
@@ -95,8 +93,6 @@ class MockTabManager: TabManager {
     }
 
     func removeNormalTabsOlderThan(period: TabsDeletionPeriod, currentDate: Date) {}
-
-    func undoCloseTab() {}
 
     func clearAllTabsHistory() {}
 

@@ -12,16 +12,18 @@ import OnboardingKit
 final class IntroScreenManagerTests: XCTestCase {
     var prefs: MockProfilePrefs!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         prefs = MockProfilePrefs()
         let mockProfile = MockProfile(databasePrefix: "IntroScreenManagerTests_")
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         prefs = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - shouldShowIntroScreen Tests
@@ -122,6 +124,7 @@ final class IntroScreenManagerTests: XCTestCase {
     // MARK: - Helper Methods
 
     private func setupNimbusFeatureFlags(enableModernUi: Bool,
+                                         shouldUseBrandRefreshConfiguration: Bool = true,
                                          shouldUseJapanConfiguration: Bool,
                                          enableVideoIntro: Bool = false) {
         FxNimbus.shared.features.onboardingFrameworkFeature.with { appContext, _ in
@@ -133,6 +136,7 @@ final class IntroScreenManagerTests: XCTestCase {
                 dismissable: false,
                 enableModernUi: enableModernUi,
                 enableVideoIntro: enableVideoIntro,
+                shouldUseBrandRefreshConfiguration: shouldUseBrandRefreshConfiguration,
                 shouldUseJapanConfiguration: shouldUseJapanConfiguration
             )
         }
