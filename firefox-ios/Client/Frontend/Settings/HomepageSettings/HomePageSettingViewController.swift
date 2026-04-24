@@ -163,7 +163,7 @@ class HomePageSettingViewController: SettingsTableViewController,
                 )
             }
             sectionItems.append(bookmarksSetting)
-            
+
             if featureFlags.isFeatureEnabled(.worldCupWidget, checking: .buildOnly) {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(

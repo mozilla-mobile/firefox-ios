@@ -103,11 +103,11 @@ final class HomePageSettingViewControllerTests: XCTestCase {
 
     // MARK: - Helper
     private func setIsWorldCupFeatureFlagEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.worldCupWidgetFeature.with { _,_ in
+        FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
             return WorldCupWidgetFeature(enabled: isEnabled)
         }
     }
-    
+
     private func createSubject() -> HomePageSettingViewController {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
