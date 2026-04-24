@@ -108,7 +108,7 @@ struct DefaultSummarizerNimbusUtils:
     }
 
     func isAppAttestAuthEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerAppAttestAuth)
     }
 
     func usesPermissiveGuardrails() -> Bool {
