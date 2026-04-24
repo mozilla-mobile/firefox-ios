@@ -11,9 +11,10 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
     private let itTestLocale = Locale(identifier: "it")
     private let userDefaults = UserDefaults.standard
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         profile = MockProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         // Set features to default values
         setHostedSummarizerFeature()
         setIsAppleIntelligenceAvailable()
@@ -22,9 +23,10 @@ final class SummarizerNimbusUtilsTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         profile = nil
-        super.tearDown()
+        DependencyHelperMock().reset()
+        try await super.tearDown()
     }
 
     // MARK: - isSummarizeFeatureToggledOn
