@@ -287,8 +287,7 @@ class BrowserViewController: UIViewController,
     }
 
     var isUnifiedSearchEnabled: Bool {
-        let flagToCheck = FeatureFlagID.unifiedSearch
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.unifiedSearch)
     }
 
     var isSwipingTabsEnabled: Bool {
