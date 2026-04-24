@@ -17,6 +17,7 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        setIsWorldCupFeatureFlagEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         self.delegate = MockSettingsDelegate()
@@ -78,8 +79,35 @@ final class HomePageSettingViewControllerTests: XCTestCase {
         XCTAssertFalse(bookmarksSectionSettingValue)
     }
 
-    // MARK: - Helper
+    func testHomepageSettings_generateSettings_worldCupSectionDefaultValue_whenFFEnabled_isTrue() throws {
+        let subject = createSubject()
+        subject.profile = profile
+        setIsWorldCupFeatureFlagEnabled(true)
 
+        let settingsList = subject.generateSettings()
+
+        let customizeFirefoxHomeSettingsList = settingsList.first(
+            where: {
+                $0.title?.string == .Settings.Homepage.CustomizeFirefoxHome.Title
+            })
+
+        let worldCupSectionSetting = customizeFirefoxHomeSettingsList?.children.first(
+            where: {
+                ($0 as? BoolSetting)?.prefKey == PrefsKeys.HomepageSettings.WorldCupSection
+            }) as? BoolSetting
+
+        let worldCupSectionSettingValue = try XCTUnwrap(worldCupSectionSetting?.getDefaultValue())
+
+        XCTAssertTrue(worldCupSectionSettingValue)
+    }
+
+    // MARK: - Helper
+    private func setIsWorldCupFeatureFlagEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.worldCupWidgetFeature.with { _,_ in
+            return WorldCupWidgetFeature(enabled: isEnabled)
+        }
+    }
+    
     private func createSubject() -> HomePageSettingViewController {
         let subject = HomePageSettingViewController(prefs: profile.prefs,
                                                     wallpaperManager: wallpaperManager,
