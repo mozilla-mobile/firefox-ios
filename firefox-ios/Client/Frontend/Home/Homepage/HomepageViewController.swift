@@ -420,7 +420,7 @@ final class HomepageViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
     }
-    
+
     private func reconfigureHeaderCell() {
         guard let headerCell = collectionView?
             .visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader)
