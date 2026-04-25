@@ -14,7 +14,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
     private var shouldTriggerSplashScreenExperiment: Bool {
-        return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.splashScreen)
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 

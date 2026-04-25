@@ -15,7 +15,7 @@ class ResetTermsOfServiceAcceptancePage: HiddenSetting, FeatureFlaggable {
 
     // Only show this debug setting when Terms Of Service feature is enabled
     override var hidden: Bool {
-        return !featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
+        return !featureFlagsProvider.isEnabled(.tosFeature)
     }
 
     override var title: NSAttributedString? {

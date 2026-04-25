@@ -52,10 +52,11 @@ final class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let touExperimentsTracking: ToUExperimentsTracking
+    private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private var isSummarizerOn: Bool {
         return summarizerNimbusUtils.isSummarizeFeatureToggledOn
@@ -66,6 +67,7 @@ final class BrowserCoordinator: BaseCoordinator,
     init(router: Router,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
+         homepageTabStateStore: HomepageTabStateStore = HomepageTabStateStore(),
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -79,6 +81,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.themeManager = themeManager
         self.windowManager = windowManager
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
+        self.homepageTabStateStore = homepageTabStateStore
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
@@ -143,6 +146,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
             tabManager: tabManager,
+            homepageTabStateStore: homepageTabStateStore,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate,
             toastContainer: toastContainer
@@ -953,7 +957,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) {
             modalPresentationStyle = .fullScreen
         } else {
             modalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -982,7 +986,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
 
         // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)
@@ -1035,7 +1039,7 @@ final class BrowserCoordinator: BaseCoordinator,
         browserViewController.removeDocumentLoadingView()
     }
 
-  func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
+    func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?) {
         guard isSummarizerOn,
               tabManager.selectedTab?.isFxHomeTab == false,
               let webView = tabManager.selectedTab?.webView else { return }
@@ -1075,14 +1079,34 @@ final class BrowserCoordinator: BaseCoordinator,
         router.push(shortcutsLibraryViewController)
     }
 
+    func showQuickAnswers() {
+        guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
+        let coordinator = QuickAnswersCoordinator(
+            parentCoordinatorDelegate: self,
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            router: router
+        ) { [weak self] navigationType in
+            switch navigationType {
+            case .url(let url):
+                self?.openURLinNewTab(url)
+            case .searchResult(let query):
+                self?.browserViewController.openSearchNewTab(query)
+            }
+        }
+        add(child: coordinator)
+        coordinator.start()
+    }
+
     func showPrivacyNoticeLink(url: URL) {
         let linkVC = TermsOfUseLinkViewController(
             url: url,
             windowUUID: windowUUID,
             themeManager: themeManager
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        router.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        router.present(navController, animated: true)
     }
 
     func showCertificatesFromErrorPage(errorPageURL: URL, originalURL: URL, title: String) {
@@ -1246,6 +1270,10 @@ final class BrowserCoordinator: BaseCoordinator,
                        category: .coordinator)
             findAndHandle(route: savedRoute)
         }
+    }
+
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        homepageTabStateStore.removeState(for: tab.tabUUID)
     }
 
     // MARK: - TabTrayCoordinatorDelegate

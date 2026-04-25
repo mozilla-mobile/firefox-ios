@@ -17,7 +17,7 @@ final class TabDisplayPanelViewController: UIViewController,
                                      Themeable,
                                      EmptyPrivateTabsViewDelegate,
                                      StoreSubscriber,
-                                     FeatureFlaggable,
+                                     LegacyFeatureFlaggable,
                                      TabTrayThemeable {
     typealias SubscriberStateType = TabsPanelState
 
@@ -29,11 +29,7 @@ final class TabDisplayPanelViewController: UIViewController,
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var viewHasAppeared = false
-
-    private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
-    }
+    private var tabTrayUtils: TabTrayUtils
 
     private lazy var layout: TabTrayLayoutType = {
         return shouldUseiPadSetup() ? .regular : .compact
@@ -41,6 +37,10 @@ final class TabDisplayPanelViewController: UIViewController,
 
     var isCompactLayout: Bool {
         return layout == .compact
+    }
+
+    var isTabTrayUIExperimentsEnabled: Bool {
+        return tabTrayUtils.shouldDisplayExperimentUI()
     }
 
     // MARK: UI elements
@@ -75,12 +75,14 @@ final class TabDisplayPanelViewController: UIViewController,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction) {
+         dragAndDropDelegate: TabDisplayViewDragAndDropInteraction,
+         tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.panelType = isPrivateMode ? .privateTabs : .tabs
         self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.tabTrayUtils = tabTrayUtils
         super.init(nibName: nil, bundle: nil)
         tabDisplayView.dragAndDropDelegate = dragAndDropDelegate
     }
@@ -206,7 +208,7 @@ final class TabDisplayPanelViewController: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {

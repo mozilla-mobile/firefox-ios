@@ -48,37 +48,25 @@ protocol SearchBarPreferenceDelegate: AnyObject {
 }
 
 /// This protocol provides access to search bar location properties related to `FeatureFlagsManager`.
-protocol SearchBarLocationProvider: FeatureFlaggable {
-    var isSearchBarLocationFeatureEnabled: Bool { get }
+protocol SearchBarLocationProvider: UserFeaturePreferenceProvider {
     var searchBarPosition: SearchBarPosition { get }
     @MainActor
     var isBottomSearchBar: Bool { get }
 }
 
 extension SearchBarLocationProvider {
-    var isSearchBarLocationFeatureEnabled: Bool {
-        let isiPad = UIDeviceDetails.userInterfaceIdiom == .pad
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-
-        return isFeatureEnabled && !isiPad
-    }
-
     var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
+        userPreferences.searchBarPosition
     }
 
     var isBottomSearchBar: Bool {
-        guard isSearchBarLocationFeatureEnabled else { return false }
+        guard UIDeviceDetails.userInterfaceIdiom != .pad else { return false }
 
         return searchBarPosition == .bottom
     }
 }
 
-final class SearchBarSettingsViewModel: FeatureFlaggable {
+final class SearchBarSettingsViewModel: FeatureFlaggable, UserFeaturePreferenceProvider {
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
@@ -89,7 +77,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     }
 
     var isNewAddressBarOn: Bool {
-        featureFlags.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.addressBarMenu)
     }
 
     var title: String {
@@ -101,11 +89,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     }
 
     var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
+        userPreferences.searchBarPosition
     }
 
     // TODO: FXIOS-12830 view models should not contain Views that require main actor isolation
@@ -133,9 +117,9 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 extension SearchBarSettingsViewModel {
     @MainActor
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
-        let previousPosition: SearchBarPosition? = featureFlags.getCustomState(for: .searchBarPosition)
+        let previousPosition = userPreferences.searchBarPosition
 
-        featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
+        userPreferences.setSearchBarPosition(searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
         recordPreferenceChange(searchBarPosition, previousPosition: previousPosition)
 

@@ -64,6 +64,57 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "ਸਿਰਨਾਵੇਂ";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "ਮੌਜੂਦ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**ਮੌਜੂਦ**: ਤੁਸੀਂ ਫੀਚਰ ਵੇਖੋਗੇ ਅਤੇ ਇਸ ਨੂੰ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ।";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "ਪਾਬੰਦੀ ਲਗਾਈ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**ਪਾਬੰਦੀ ਲਾਈ**: ਤੁਸੀਂ ਫ਼ੀਚਰ ਨੂੰ ਨਹੀਂ ਵੇਖੋਗੇ ਅਤੇ ਨਾ ਹੀ ਵਰਤ ਸਕੋਗੇ। ਡਿਵਾਈਸ ਉੱਤੇ ਮੌਜੂਦ AI ਲਈ ਕੋਈ ਵੀ ਡਾਊਨਲੋਡ ਕੀਤੇ ਮਾਡਲਾਂ ਨੂੰ ਹਟਾਇਆ ਜਾਵੇਗਾ।";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "ਸਫ਼ਿਆਂ ਅਤੇ ਸਾਰਾਂ ਨੂੰ ਕਦੇ ਵੀ ਨਹੀਂ ਸਭਾਲਿਆ ਜਾਂਦਾ ਹੈ।";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "ਸਫ਼ਿਆਂ ਦਾ ਸਾਰ";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI-ਸਹਿਯੋਗੀ ਫ਼ੀਚਰ";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "ਅਨੁਵਾਦ ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਉੱਤੇ ਪ੍ਰਾਈਵੇਟ ਰਹਿੰਦੇ ਹਨ।";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "ਅਨੁਵਾਦ";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "ਪਾਬੰਦੀ ਲਾਉਣ ਦਾ ਅਰਥ ਹੈ ਕਿ ਤੁਸੀਂ %@ ਵਿੱਚ ਨਵੇਂ ਜਾਂ ਮੌਜੂਦ AI ਸੁਧਾਰਾਂ ਨੂੰ ਜਾਂ ਉਹਨਾਂ ਬਾਰੇ ਪੌਪ-ਅੱਪ ਨਹੀਂ ਵੇਖੋਗੇ।";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "ਵੇਖੋ ਕਿ ਕੀ ਸ਼ਾਮਲ ਹੈ ਅਤੇ ਕੀ ਨਹੀਂ";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "AI ਸੁਧਾਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਓ";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "ਨਵੇਂ ਜਾਂ ਮੌਜੂਦਾ AI ਸੁਧਾਰਾਂ ਉੱਤੇ ਮੂਲ ਰੂਪ ਵਿੱਚ ਪਾਬੰਦੀ ਲਾਈ ਗਈ ਹੈ। ਹੇਠਾਂ ਖਾਸ ਫ਼ੀਚਰਾਂ ਤੋਂ ਪਾਬੰਦੀ ਹਟਾਓ।";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "ਹੋਰ ਜਾਣੋ";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "ਉਸ ਵਿੱਚ AI ਨਾਲ ਸੁਧਾਰ ਕੀਤੇ ਫ਼ੀਚਰਾਂ ਨੂੰ ਵਰਤਣਾ ਵੀ ਸ਼ਾਮਲ ਹੈ।";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "%@ ਨਾਲ ਤੁਹਾਡੇ ਕੋਲ ਹਮੇਸ਼ਾ ਚੋਣ ਕਰਨ ਦਾ ਮੌਕਾ ਹੁੰਦਾ ਹੈ";
+
+/* In the settings menu, in the General section, this is the title for the AI Controls settings section */
+"Settings.AIControls.Title.v150" = "AI ਕੰਟਰੋਲ";
+
 /* Section description in Appearance settings for middle button configuration of the bottom toolbar. */
 "Settings.Appearance.NavigationToolbar.Description.v145" = "ਬਟਨ ਨੂੰ ਟੂਲਬਾਰ ਦੇ ਕੇਂਦਰ ਵਿੱਚ ਰੱਖਦਾ ਹੈ।";
 
@@ -307,6 +358,30 @@
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "ਨਵੀਂ ਟੈਬ";
 
+/* Footer text below the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Footer.v151" = "ਸਫ਼ਿਆਂ ਨੂੰ ਆਪਣੇ-ਆਪ ਤੁਹਾਡੀ ਸਭ ਤੋਂ ਵੱਧ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਨੂੰ ਅਨੁਵਾਦ ਕਰਦਾ ਹੈ।";
+
+/* Title for the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Title.v151" = "ਆਪਣੇ-ਆਪ ਅਨੁਵਾਦ";
+
+/* Navigation bar title of the language picker shown when adding a preferred translation language. */
+"Settings.Translation.LanguagePicker.NavTitle.v151" = "ਭਾਸ਼ਾ ਚੁਣੋ";
+
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "ਖੋਜ";
+
+/* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
+"Settings.Translation.PreferredLanguages.AddLanguage.v151" = "ਭਾਸ਼ਾ ਨੂੰ ਜੋੜੋ…";
+
+/* Subtitle on the device language row in the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.DeviceLanguage.v151" = "ਡਿਵਾਈਸ ਦੀ ਭਾਸ਼ਾ";
+
+/* Footer text below the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.Footer.v151" = "ਅਨੁਵਾਦ ਕਰਨ ਲਈ ਇਹਨਾਂ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚੋਂ ਚੋਣ ਕਰੋ।";
+
+/* Section header for the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.SectionTitle.v151" = "ਪਸੰਦੀਦਾ ਭਾਸ਼ਾਵਾਂ";
+
 /* This is the section title text for the the Translation feature under the Translation settings section. */
 "Settings.Translation.SectionTitle.v145" = "ਅਨੁਵਾਦ ਲਈ ਪਸੰਦਾਂ";
 
@@ -318,6 +393,9 @@
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "ਉਲੱਥਾ";
+
+/* Footer text below the enable toggle in the Translation settings screen. */
+"Settings.Translation.ToggleFooter.v151" = "ਟੂਲਬਾਰ ਅਤੇ ਮੇਨੂ ਤੋਂ ਅਨੁਵਾਦ ਨੂੰ ਹਟਾਉਣ ਲਈ ਇਸ ਨੂੰ ਬੰਦ ਕਰੋ।";
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "ਅਨੁਵਾਦ ਨੂੰ ਸਮਰੱਥ ਕਰੋ";

@@ -20,7 +20,7 @@
 "TabLocation.LockButton.LargeContentTitle.v122" = "Ochrana proti sledování";
 
 /* Accessibility label for the share button in url bar */
-"TabLocation.Share.A11y.Label.v119" = "Sdílí tuto stránku";
+"TabLocation.Share.A11y.Label.v119" = "Sdílet tuto stránku";
 
 /* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
 "TabLocation.ShareButton.AccessibilityLabel.v122" = "Sdílet";

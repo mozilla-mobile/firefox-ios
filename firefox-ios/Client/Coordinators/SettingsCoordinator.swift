@@ -202,7 +202,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+            return featureFlagsProvider.isEnabled(.addressBarMenu)
             ? UIHostingController(
                 rootView: AddressBarSettingsView(
                     windowUUID: windowUUID,
@@ -378,11 +378,10 @@ final class SettingsCoordinator: BaseCoordinator,
 
     // MARK: GeneralSettingsDelegate
     func pressedAIControls() {
-        let model = AIControlsModel(prefs: profile.prefs)
+        let model = AIControlsModel(prefs: profile.prefs, windowUUID: windowUUID)
 
         let viewController = UIHostingController(
             rootView: AIControlsSettingsView(
-                windowUUID: windowUUID,
                 aiControlsModel: model
             )
         )
@@ -432,7 +431,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.addressBarMenu) {
             let viewController = UIHostingController(
                 rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,
@@ -482,7 +481,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     private func translationSettingsViewController() -> UIViewController {
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
             viewController.coordinator = self
             return viewController

@@ -19,11 +19,11 @@ struct AccessibilityIdentifiers {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let readerModeButton = "TabLocationView.readerModeButton"
+        static let readerModeWithSummarizerButton = "TabLocationView.readerModeWithSummarizerButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
         static let summarizeButton = "TabLocationView.summarizeButton"
         static let backButton = "TabToolbar.backButton"
-        static let fireButton = "TabToolbar.fireButton"
         static let forwardButton = "TabToolbar.forwardButton"
         static let tabsButton = "TabToolbar.tabsButton"
         static let addNewTabButton = "TabToolbar.addNewTabButton"
@@ -66,6 +66,7 @@ struct AccessibilityIdentifiers {
         struct WebView {
             static let documentLoadingLabel = "WebView.documentLoadingLabel"
             static let automationTestLeakIndicator = "WebView.LeakIndicatorElement"
+            static let contentView = "contentView"
         }
 
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
@@ -74,6 +75,8 @@ struct AccessibilityIdentifiers {
         static let bottomContentStackView = "Browser.bottomContentStackView"
         static let contentContainer = "Browser.contentContainer"
         static let statusBarOverlay = "Browser.statusBarOverlay"
+        static let topBlurView = "Browser.topBlurView"
+        static let bottomBlurView = "Browser.bottomBlurView"
     }
 
     struct ContextualHints {
@@ -244,6 +247,7 @@ struct AccessibilityIdentifiers {
         struct OtherButtons {
             static let logoID = "FxHomeLogoID"
             static let closeButton = "FirefoxHomepage.closeButton"
+            static let quickAnswersButton = "FirefoxHomepage.quickAnswersButton"
         }
 
         struct MoreButtons {
@@ -268,6 +272,8 @@ struct AccessibilityIdentifiers {
         }
 
         struct Pocket {
+            static let allCategory = "Category.All"
+            static let category = "Category"
             static let itemCell = "PocketCell"
             static let footerLearnMoreLabel = "Pocket.footerLearnMoreLabel"
         }
@@ -313,6 +319,14 @@ struct AccessibilityIdentifiers {
             static let privacyPolicyLink = "Microsurvey.Prompt.PrivacyPolicyLink"
             static let submitButton = "Microsurvey.Survey.SubmitButton"
             static let radioButton = "Microsurvey.Survey.RadioButton"
+        }
+    }
+
+    struct Translations {
+        struct AutoTranslatePrompt {
+            static let messageLabel = "Translations.AutoTranslatePrompt.MessageLabel"
+            static let enableButton = "Translations.AutoTranslatePrompt.EnableButton"
+            static let closeButton = "Translations.AutoTranslatePrompt.CloseButton"
         }
     }
 
@@ -637,6 +651,7 @@ struct AccessibilityIdentifiers {
             struct Addresses {
                 static let title = "Addresses"
                 static let addAddress = "Add address"
+                static let addressCell = "AddressCell"
             }
         }
 
@@ -924,6 +939,13 @@ struct AccessibilityIdentifiers {
         static let lighterBrightnessButton = "ReaderMode.lighterBrightnessButton"
         static let darkerBrightnessButton = "ReaderMode.darkerBrightnessButton"
         static let brightnessSlider = "ReaderMode.brightnessSlider"
+
+        struct BarView {
+            static let readStatusButton = "ReaderModeBarView.readStatusButton"
+            static let settingsButton = "ReaderModeBarView.settingsButton"
+            static let listStatusButton = "ReaderModeBarView.listStatusButton"
+            static let summarizerButton = "ReaderModeBarView.summarizerButton"
+        }
     }
 }
 // swiftlint:enable line_length

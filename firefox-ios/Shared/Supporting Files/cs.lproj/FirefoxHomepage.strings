@@ -1,5 +1,5 @@
 /* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
-"FirefoxHome.PrivacyNotice.Body.v148" = "Aktualizovali jsme náš dokument %1$@ , aby reflektoval nejnovější funkce v aplikaci %2$@. %3$@";
+"FirefoxHome.PrivacyNotice.Body.v148" = "Aktualizovali jsme náš dokument %1$@, aby reflektoval nejnovější funkce v aplikaci %2$@. %3$@";
 
 /* Label for the “Learn More” link inserted into the second placeholder of the Privacy Notice body label. This text will appear as a tappable link directing users to detailed information about what has changed in the updated Privacy Notice. */
 "FirefoxHome.PrivacyNotice.LearnMoreLink.v148" = "Zjistit více";
@@ -54,6 +54,9 @@
 
 /* This is the section title for the Shortcuts section on Firefox Homepage. */
 "FirefoxHomepage.Shortcuts.SectionTitle.v142" = "Zkratky";
+
+/* On the homepage, in the category selection bar, in the stories section, this will be the title of the button indicating that all story categories are currently selected. */
+"FirefoxHomepage.Stories.AllStoryCategories.v151" = "Vše";
 
 /* On the homepage, in the Stories section, this is the accessibility hint for the position of the current story in the stories stack. The first placeholder, %1$@, is the current position; the second placeholder, %2$@, is the total story count. Example: '1 of 5' */
 "FirefoxHomepage.Stories.PositionAccessibilityHint.v143" = "%1$@ z %2$@";

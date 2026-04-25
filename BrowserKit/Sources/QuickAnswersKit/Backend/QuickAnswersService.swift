@@ -14,12 +14,17 @@ struct SpeechResult: Equatable {
 }
 
 struct SearchResult: Equatable {
-    let title: String
-    let body: String
-    let url: URL?
+    struct Source: Equatable {
+        let title: String
+        let thumbnailURL: URL?
+        let faviconURL: URL?
+    }
+
+    let resultText: String
+    let sources: [SearchResult.Source]
 
     static func empty() -> Self {
-        return SearchResult(title: "", body: "", url: nil)
+        return SearchResult(resultText: "", sources: [])
     }
 }
 

@@ -82,10 +82,10 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "ਪਾਬੰਦੀ ਲਾਏ ਟਰੈਕਰ: %@";
 
-/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "ਸਟੈਂਡਰਡ ਸਫ਼ਾ ਲੋਡ ਹੋਣਾ ਸ਼ੁਰੂ ਹੋਣ ਦੇ ਬਾਅਦ ਆਮ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ, ਇਸਕਰਕੇ ਤੁਸੀਂ ਵੱਧ ਟਰੈਕਰਾਂ ਦੀ ਗਿਣਤੀ ਵੇਖ ਸਕਦੇ ਹੋ। %@";
 
-/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "ਸਖ਼ਤ ਨਾਲ ਸਫ਼ਾ ਲੋਡ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ ਕੀ ਬਹੁਤ ਟਰੈਕਰਾਂ ਉੱਤੇ ਰੋਕ ਲਾਈ ਜਾਂਦੀ ਹੈ, ਇਸਕਰਕੇ ਤੁਸੀਂ ਘੱਟ ਟਰੈਕਰ ਗਿਣਤੀ ਵੇਖੋਗੇ। %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */

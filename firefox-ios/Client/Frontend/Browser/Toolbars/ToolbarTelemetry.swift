@@ -79,11 +79,6 @@ struct ToolbarTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.appMenuButtonTapped, extras: isPrivateExtra)
     }
 
-    func dataClearanceButtonTapped(isPrivate: Bool) {
-        let isPrivateExtra = GleanMetrics.Toolbar.DataClearanceButtonTappedExtra(isPrivate: isPrivate)
-        gleanWrapper.recordEvent(for: GleanMetrics.Toolbar.dataClearanceButtonTapped, extras: isPrivateExtra)
-    }
-
     // Long Press
     func backButtonLongPressed(isPrivate: Bool) {
         let isPrivateExtra = GleanMetrics.Toolbar.BackLongPressExtra(isPrivate: isPrivate)

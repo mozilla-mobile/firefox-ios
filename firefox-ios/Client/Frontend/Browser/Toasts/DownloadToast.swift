@@ -34,11 +34,13 @@ class DownloadToast: Toast, DownloadProgressDelegate {
 
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 

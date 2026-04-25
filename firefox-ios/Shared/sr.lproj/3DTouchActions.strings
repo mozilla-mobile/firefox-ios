@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Додај у обележиваче";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Затвори језичак";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Копирај URL";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "Пошаљи везу на уређај";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Отвори последњи обележивач";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Пошаљи на уређај";
+
+/* Label for preview action on Tab Tray Tab to remove current tab from Bookmarks */
+"TabPeek.RemoveBookmark.v146" = "Уклони обележивач";
+

@@ -193,23 +193,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
             )
         }
 
-        let languageReg = UICollectionView.CellRegistration<
-            TranslationLanguageCell, TranslationSettingsItem
-        > { [weak self] cell, _, item in
-            guard let self, case let .language(details) = item else { return }
-            cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
-            cell.accessories = [
-                .delete(displayed: .whenEditing, actionHandler: { [weak self] in
-                    guard let self else { return }
-                    store.dispatch(TranslationSettingsViewAction(
-                        languageCode: details.code,
-                        windowUUID: windowUUID,
-                        actionType: TranslationSettingsViewActionType.removeLanguage
-                    ))
-                }),
-                .reorder(displayed: .whenEditing)
-            ]
-        }
+        let languageReg = makeLanguageCellRegistration()
 
         let addLanguageReg = UICollectionView.CellRegistration<
             TranslationAddLanguageCell, TranslationSettingsItem
@@ -253,7 +237,7 @@ final class TranslationPickerSettingsViewController: UIViewController,
         }
 
         dataSource.reorderingHandlers.canReorderItem = { [weak self] item in
-            guard let self, state.isEditing else { return false }
+            guard let self, state.isTranslationsEnabled else { return false }
             if case .language = item { return true }
             return false
         }
@@ -265,19 +249,64 @@ final class TranslationPickerSettingsViewController: UIViewController,
                 if case .language(let details) = item { return details }
                 return nil
             }
-            store.dispatch(TranslationSettingsViewAction(
-                pendingLanguages: reorderedLanguages,
-                windowUUID: windowUUID,
-                actionType: TranslationSettingsViewActionType.reorderLanguages
-            ))
+            if state.isEditing {
+                store.dispatch(TranslationSettingsViewAction(
+                    pendingLanguages: reorderedLanguages,
+                    windowUUID: windowUUID,
+                    actionType: TranslationSettingsViewActionType.reorderLanguages
+                ))
+            } else {
+                store.dispatch(TranslationSettingsViewAction(
+                    languages: reorderedLanguages.map { $0.code },
+                    windowUUID: windowUUID,
+                    actionType: TranslationSettingsViewActionType.saveLanguages
+                ))
+            }
         }
 
         return dataSource
     }
 
+    private func makeLanguageCellRegistration(
+    ) -> UICollectionView.CellRegistration<TranslationLanguageCell, TranslationSettingsItem> {
+        UICollectionView.CellRegistration { [weak self] cell, _, item in
+            guard let self, case let .language(details) = item else { return }
+            cell.configure(with: details, theme: themeManager.getCurrentTheme(for: windowUUID))
+            if details.isDeviceLanguage {
+                cell.accessories = [.reorder(displayed: .always)]
+            } else {
+                let deleteActionHandler = { [weak self] in
+                    guard let self else { return }
+                    store.dispatch(TranslationSettingsViewAction(
+                        languageCode: details.code,
+                        windowUUID: windowUUID,
+                        actionType: TranslationSettingsViewActionType.removeLanguage
+                    ))
+                }
+                cell.accessories = [
+                    .delete(displayed: .whenEditing, actionHandler: deleteActionHandler),
+                    .reorder(displayed: .always)
+                ]
+                cell.accessibilityCustomActions = [
+                    UIAccessibilityCustomAction(
+                        name: .Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction,
+                        actionHandler: { _ in
+                            deleteActionHandler()
+                            return true
+                        }
+                    )
+                ]
+            }
+        }
+    }
+
     // MARK: - Toggle actions
 
     @objc private func didToggleTranslations(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isTranslationsEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
@@ -285,6 +314,10 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     @objc private func didToggleAutoTranslate(_ sender: UISwitch) {
+        guard !state.isEditing else {
+            sender.setOn(state.isAutoTranslateEnabled, animated: false)
+            return
+        }
         store.dispatch(TranslationSettingsViewAction(
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleAutoTranslate
@@ -349,6 +382,18 @@ final class TranslationPickerSettingsViewController: UIViewController,
     }
 
     // MARK: - UICollectionViewDelegate
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath,
+        toProposedIndexPath proposedIndexPath: IndexPath
+    ) -> IndexPath {
+        guard proposedIndexPath.section == originalIndexPath.section,
+              dataSource.itemIdentifier(for: proposedIndexPath) != .addLanguage else {
+            return originalIndexPath
+        }
+        return proposedIndexPath
+    }
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return dataSource.itemIdentifier(for: indexPath) == .addLanguage

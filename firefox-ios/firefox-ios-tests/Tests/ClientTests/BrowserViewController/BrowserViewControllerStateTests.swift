@@ -47,18 +47,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
 
-    func testClearDataAction() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertNil(initialState.displayView)
-
-        let action = getAction(for: .clearData)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.displayView, .dataClearance)
-    }
-
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -98,12 +86,58 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
+        let summarizerConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
+        let action = GeneralBrowserAction(
+            summarizerConfig: summarizerConfig,
+            summarizerTrigger: .toolbarIcon,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: GeneralBrowserActionType.showSummarizer
+        )
+        let newState = reducer(initialState, action)
+
+        guard case .summarizer(let config, let trigger) = newState.navigationDestination?.destination else {
+            return XCTFail("Expected .summarizer")
+        }
+        XCTAssertEqual(config, summarizerConfig)
+        XCTAssertEqual(trigger, .toolbarIcon)
+    }
+
+    func test_showSummarizerAction_withNilConfig_doesNotNavigate() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
         let action = getAction(for: .showSummarizer)
         let newState = reducer(initialState, action)
 
-        guard case .summarizer = newState.displayView else {
-            return XCTFail("Expected .summarizer")
-        }
+        XCTAssertNil(newState.navigationDestination)
+    }
+
+    // MARK: - Summarizer middleware actions
+    func test_showReaderModeBarSummarizerButton_setsReaderModeBarSummarizerButtonVisible() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.showReaderModeBarSummarizerButton,
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertTrue(newState.shouldShowReaderModeBarSummarizerButton)
+    }
+
+    func test_summarizerNotAvailable_setsReaderModeBarSummarizerButtonHidden() {
+        var initialState = createSubject()
+        initialState.shouldShowReaderModeBarSummarizerButton = true
+        let reducer = browserViewControllerReducer()
+
+        let action = SummarizeAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: SummarizeMiddlewareActionType.summaryNotAvailable,
+        )
+        let newState = reducer(initialState, action)
+
+        XCTAssertFalse(newState.shouldShowReaderModeBarSummarizerButton)
     }
 
     // MARK: - Navigation Browser Action
@@ -314,29 +348,6 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.shouldStartAtHome)
     }
 
-    // MARK: - Summarizer
-    func test_configuredSummarizer_summarizerAction_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        let action = SummarizeAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: SummarizeMiddlewareActionType.configuredSummarizer,
-            summarizerConfig: SummarizerConfig(instructions: "Test instructions", options: [:])
-        )
-        let newState = reducer(initialState, action)
-        let expectedConfig = SummarizerConfig(instructions: "Test instructions", options: [:])
-        let destination = newState.navigationDestination?.destination
-        switch destination {
-        case .summarizer(let config):
-            XCTAssertEqual(config, expectedConfig)
-        default:
-            XCTFail("destination is not the right type")
-        }
-
-        XCTAssertEqual(newState.navigationDestination?.url, nil)
-    }
-
     // MARK: - Zero Search State
 
     func test_tapOnHomepageSearchBar_navigationBrowserAction_returnsExpectedState() {
@@ -471,6 +482,34 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    // MARK: - Quick Answers
+    func test_tapOnQuickAnswersButton_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let action = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .quickAnswers)
+    }
+
+    func test_navigationDestinationHandled_clearsNavigationDestination() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        let navigateAction = getNavigationBrowserAction(for: .tapOnQuickAnswersButton, destination: .quickAnswers)
+        let navigatedState = reducer(initialState, navigateAction)
+
+        let handledAction = getNavigationBrowserAction(
+            for: .navigationDestinationHandled,
+            destination: .quickAnswers
+        )
+        let handledState = reducer(navigatedState, handledAction)
+
+        XCTAssertNotNil(navigatedState.navigationDestination)
+        XCTAssertNil(handledState.navigationDestination)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
@@ -481,7 +520,7 @@ final class BrowserViewControllerStateTests: XCTestCase, StoreTestUtility {
     }
 
     private func getAction(for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
-        return  GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+        return GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 
     private func getNavigationBrowserAction(

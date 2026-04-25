@@ -12,6 +12,8 @@ final class TranslationSettingsMiddleware {
     private let manager: PreferredTranslationLanguagesManager
     private let modelsFetcher: TranslationModelsFetcherProtocol
     private let localeProvider: LocaleProvider
+    private var resetStorageTask: Task<Void, Never>?
+    private var loadSettingsTask: Task<Void, Never>?
 
     private var isAutoTranslateEnabled: Bool {
         prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
@@ -25,6 +27,11 @@ final class TranslationSettingsMiddleware {
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.modelsFetcher = modelsFetcher
         self.localeProvider = localeProvider
+    }
+
+    deinit {
+        resetStorageTask?.cancel()
+        loadSettingsTask?.cancel()
     }
 
     lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
@@ -49,11 +56,15 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
             ))
-            Task { await self.loadSettings(windowUUID: action.windowUUID) }
+            loadSettingsTask?.cancel()
+            loadSettingsTask = Task { [weak self] in
+                await self?.loadSettings(windowUUID: action.windowUUID)
+            }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-            let newValue = !current
+            // TODO: FXIOS-15421 Always configure new setting value instead of toggling pref
+            let newValue = action.newSettingValue ?? !current
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
             SettingsTelemetry().changedSetting(
                 PrefsKeys.Settings.translationsFeature,
@@ -61,7 +72,7 @@ final class TranslationSettingsMiddleware {
                 from: "\(current)"
             )
             store.dispatch(ToolbarAction(
-                translationConfiguration: TranslationConfiguration(prefs: prefs, state: .inactive),
+                translationConfiguration: TranslationConfiguration(prefs: prefs),
                 windowUUID: action.windowUUID,
                 actionType: ToolbarActionType.didTranslationSettingsChange
             ))
@@ -70,7 +81,12 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
-
+            if !newValue {
+                resetStorageTask?.cancel()
+                resetStorageTask = Task { [modelsFetcher] in
+                    await modelsFetcher.resetStorage()
+                }
+            }
         case TranslationSettingsViewActionType.toggleAutoTranslate:
             let newValue = !isAutoTranslateEnabled
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationAutoTranslate)
@@ -118,6 +134,7 @@ final class TranslationSettingsMiddleware {
         let supported = await modelsFetcher.fetchSupportedTargetLanguages()
         let codes = manager.preferredLanguages(supportedTargetLanguages: supported)
         let isEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+        let isAutoTranslateEnabled = prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
         let preferred = buildLanguageDetails(from: codes)
         let available = buildAvailableLanguages(preferred: codes, supported: supported)
         store.dispatch(TranslationSettingsMiddlewareAction(
@@ -147,11 +164,13 @@ final class TranslationSettingsMiddleware {
         return codes.map { code in
             let native = localeProvider.nativeLanguageName(for: code)
             let localized = localeProvider.localizedLanguageName(for: code)
-            let isDeviceLanguage = code == deviceCode && code == codes.first
+            let isDeviceLanguage = code == deviceCode
             let subtitle: String? = isDeviceLanguage
                 ? .Settings.Translation.PreferredLanguages.DeviceLanguage
                 : (native == localized ? nil : localized)
-            return PreferredLanguageDetails(code: code, mainText: native, subtitleText: subtitle)
+            return PreferredLanguageDetails(
+                code: code, mainText: native, subtitleText: subtitle, isDeviceLanguage: isDeviceLanguage
+            )
         }
     }
 }

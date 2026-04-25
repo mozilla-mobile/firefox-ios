@@ -41,7 +41,7 @@ enum SearchLocation: String {
 
 // FIXME: FXIOS-13987 Make truly thread safe
 class TelemetryWrapper: TelemetryWrapperProtocol,
-                        FeatureFlaggable,
+                        UserFeaturePreferenceProvider,
                         Notifiable,
                         @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
@@ -323,7 +323,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
 
-        let startAtHomeOption: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let startAtHomeOption = userPreferences.startAtHomeSetting
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)
 
         // Record summarizer user preferences

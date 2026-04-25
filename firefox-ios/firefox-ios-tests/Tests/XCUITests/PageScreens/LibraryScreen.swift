@@ -21,6 +21,7 @@ final class LibraryScreen {
     private var saveButton: XCUIElement { sel.SAVE_BUTTON.element(in: app) }
     private var bookmarkFolderCell: XCUIElement { sel.BOOKMARKS_FOLDER.element(in: app) }
     private var deleteButton: XCUIElement { sel.DELETE_BUTTON.element(in: app) }
+    private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
 
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
@@ -73,6 +74,11 @@ final class LibraryScreen {
         }
     }
 
+    func assertIdenticalFoldersNamesCreated(identifier: String, nrOfFolders: Int) {
+        let elements = app.staticTexts.matching(identifier: identifier)
+        XCTAssertEqual(elements.count, nrOfFolders, "Expected \(nrOfFolders) identical folder names")
+    }
+
     func tapEditButton() {
         editButton.firstMatch.waitAndTap()
     }
@@ -121,5 +127,16 @@ final class LibraryScreen {
     func deleteFolder(folderName: String) {
         app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
         deleteButton.waitAndTap()
+    }
+
+    func tapBackButton() {
+        backButton.waitAndTap()
+    }
+
+    func longPressAndSelectContextMenuOption(option: String) {
+        let tableContextMenu = app.tables["Context Menu"]
+        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        BaseTestCase().mozWaitForElementToExist(tableContextMenu)
+        tableContextMenu.cells.buttons[option].waitAndTap()
     }
 }

@@ -20,15 +20,17 @@ class TopSitesHelperTests: XCTestCase {
         } catch {}
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         self.deleteDatabases()
+        DependencyHelperMock().reset()
         self.profile = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         self.profile = MockProfile(databasePrefix: "TopSitesHelperTests")
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         // Just in case tearDown didn't run or succeed last time!
         self.deleteDatabases()
     }

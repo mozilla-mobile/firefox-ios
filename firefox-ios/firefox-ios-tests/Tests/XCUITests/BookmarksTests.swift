@@ -17,6 +17,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
     private var libraryScreen: LibraryScreen!
     private var homepageSettingsScreen: HomepageSettingsScreen!
     private var firefoxHomeScreen: FirefoxHomePageScreen!
+    private var settingsScreen: SettingScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -26,6 +27,7 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen = LibraryScreen(app: app)
         homepageSettingsScreen = HomepageSettingsScreen(app: app)
         firefoxHomeScreen = FirefoxHomePageScreen(app: app)
+        settingsScreen = SettingScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -137,36 +139,36 @@ class BookmarksTests: FeatureFlaggedTestBase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         app.launch()
-        XCTExpectFailure("The app was not launched", strict: false) {
-            topSitesScreen.assertVisible()
-        }
+        topSitesScreen.assertVisible()
+
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "www.google")
         browserScreen.assertTypeSuggestText(text: "www.google")
         browserScreen.typeOnSearchBar(text: ".com")
         browserScreen.typeOnSearchBar(text: "\r")
-        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
 
         // Enter new url
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        toolbarScreen.openNewTabFromTabTray()
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
         browserScreen.assertNumberOfSuggestedLines(expectedLines: 0)
         browserScreen.typeOnSearchBar(text: "\r")
-        waitUntilPageLoad()
         toolbarScreen.assertTabsButtonExists()
 
         // Add page to bookmarks
         bookmark(isLockIconOff: false)
 
-        // Now the site should be suggested
+        // Clear history so only bookmark suggestions appear
         toolbarScreen.assertSettingsButtonExists()
         navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(BrowserTab)
+        settingsScreen.tapBackToSettings()
+        settingsScreen.closeSettingsWithDoneButton()
+
+        // Now the site should be suggested via bookmark
         browserScreen.tapOnAddressBar()
         browserScreen.typeOnSearchBar(text: "mozilla.org")
         browserScreen.assertTypeSuggestText(text: "mozilla.org")
@@ -209,15 +211,14 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertNewFolderButtonExists(shouldExists: false)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306917
+    // https://mozilla.testrail.io/index.php?/cases/view/3168649
     func testDeleteBookmarkContextMenu() {
         app.launch()
         navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         navigator.goto(LibraryPanel_Bookmarks)
         // There is only one row in the bookmarks panel, which is the desktop folder
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
 
         // Add a bookmark
         navigator.nowAt(LibraryPanel_Bookmarks)
@@ -225,24 +226,19 @@ class BookmarksTests: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
 
         navigator.openURL(url_3)
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         navigator.nowAt(BrowserTab)
         bookmark()
 
         // Check that it appears in Bookmarks panel
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
+        libraryScreen.assertBookmarkList()
         // Remove by long press and select option from context menu
-        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells.buttons["Remove Bookmark"].waitAndTap()
-        // Verify that there are only 1 cell (desktop bookmark folder)
-        mozWaitForElementToExist(app.staticTexts["No bookmarks yet"])
+        libraryScreen.longPressAndSelectContextMenuOption(option: "Remove Bookmark")
         // Check that the bookmark was deleted by ensuring an element of the empty state is visible
-        let emptyStateSignInButtonIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.emptyStateSignInButton
-        let bookmarkList = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
-        mozWaitForElementToExist(app.buttons[emptyStateSignInButtonIdentifier])
-        XCTAssertEqual(app.tables[bookmarkList].label, "Empty list")
+        libraryScreen.assertBookmarkList()
+        libraryScreen.assertEmptyStateSignInButtonExists()
+        libraryScreen.assertBookmarkListLabel(label: "Empty list")
     }
 
     private func typeOnSearchBar(text: String) {
@@ -407,6 +403,56 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.assertBookmarkEmptyStateTextExists()
         navigator.goto(HomePanelsScreen)
         libraryScreen.assertBookmarkEmptyStateTextExists(shouldExist: false)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168589
+    func testEditModeRemainsActive() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.assertBookmarkEmptyStateTextExists()
+        libraryScreen.tapEditButton()
+        // Close the Bookmark panel without tapping "Done" (using swipe)
+        app.swipeDown()
+        // The Bookmark panel closes
+        topSitesScreen.assertVisible()
+        // Navigate to Hamburger menu → Bookmarks, check the screen
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // Edit mode remains active
+        libraryScreen.assertNewFolderButtonExists()
+        // Tap to add a new folder
+        libraryScreen.tapBottomLeftButton()
+        // Tap back and lose the Bookmark panel without tapping "Done" (using swipe)
+        libraryScreen.tapBackButton()
+        app.swipeDown()
+        // The Bookmark panel closes
+        topSitesScreen.assertVisible()
+        // Navigate to Hamburger menu → Bookmarks, check the screen
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // Edit mode remains active
+        libraryScreen.assertNewFolderButtonExists()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168628
+    func testVerifyFolderSpecialCharacters() {
+        app.launch()
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.addFreshNewFolder(text: "!@#$%^&*()_+")
+        libraryScreen.assertNewFreshFolderCreated(folderName: "!@#$%^&*()_+")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168629
+    func testDuplicateFoldersNames() {
+        app.launch()
+        let folderName = "Sample Folder."
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.assertNewFreshFolderCreated(folderName: folderName)
+        libraryScreen.tapDoneButton()
+        libraryScreen.addFreshNewFolder(text: folderName)
+        libraryScreen.assertNewFreshFolderCreated(folderName: folderName)
+        libraryScreen.assertIdenticalFoldersNamesCreated(identifier: folderName, nrOfFolders: 2)
     }
 
     private func validateLongTapOptionsFromBookmarkLink() {

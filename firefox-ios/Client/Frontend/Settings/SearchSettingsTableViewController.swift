@@ -15,7 +15,9 @@ protocol SearchEnginePickerDelegate: AnyObject {
     )
 }
 
-final class SearchSettingsTableViewController: ThemedTableViewController, FeatureFlaggable {
+final class SearchSettingsTableViewController: ThemedTableViewController,
+                                               FeatureFlaggable,
+                                               UserFeaturePreferenceProvider {
     private struct UX {
         static let imageViewCornerRadius: CGFloat = 4
         static let textLabelMinimumScaleFactor: CGFloat = 0.5
@@ -65,11 +67,11 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     // MARK: - Pre Search Section
     var isTrendingSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.trendingSearches)
     }
 
     var isRecentSearchesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     // Determines how to display the pre search settings based on the feature flags
@@ -332,21 +334,19 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private func configureCellForPrivateSuggestionsAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-            buildSettingWith(
-                prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                titleText: String.localizedStringWithFormat(
-                    .Settings.Search.PrivateSessionSetting
-                ),
-                statusText: String.localizedStringWithFormat(
-                    .Settings.Search.PrivateSessionDescription
-                ),
-                cell: cell,
-                selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-            )
-            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
-        }
+        buildSettingWith(
+            prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+            defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+            titleText: String.localizedStringWithFormat(
+                .Settings.Search.PrivateSessionSetting
+            ),
+            statusText: String.localizedStringWithFormat(
+                .Settings.Search.PrivateSessionDescription
+            ),
+            cell: cell,
+            selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+        )
+        cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.showPrivateSuggestions
     }
 
     // MARK: Pre Search Cells
@@ -413,7 +413,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private func configureCellForNonSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
                 defaultValue: model.shouldShowFirefoxSuggestions,
@@ -431,7 +431,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private func configureCellForSponsoredAction(cell: ThemedSubtitleTableViewCell) {
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+        if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
             buildSettingWith(
                 prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
                 defaultValue: model.shouldShowSponsoredSuggestions,
@@ -488,10 +488,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .preSearch:
             return visiblePreSearchItems.count
         case .searchEnginesSuggestions:
-            return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-            ? SearchSuggestItem.allCases.count : 1
+            return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
-            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            return featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
             ? FirefoxSuggestItem.allCases.count : 3
         }
     }
@@ -507,7 +506,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
-            searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
+            searchEnginePicker.selectedSearchEngineID = model.defaultEngine?.engineID
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         case .alternateEngines:
             let isLastItem = indexPath.item + 1 == model.orderedEngines.count

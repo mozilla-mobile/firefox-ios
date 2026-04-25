@@ -64,6 +64,54 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "주소";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned on. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatus.v151" = "사용 가능";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the available status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription.v151" = "**사용 가능**: 기능을 보고 사용할 수 있습니다.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that indicates the feature is turned off. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatus.v151" = "차단됨";
+
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**차단됨**: 해당 기능을 볼 수 없으며 사용할 수 없습니다. 온디바이스 AI의 경우 다운로드 된 모델이 제거됩니다.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "페이지와 요약은 저장되지 않습니다.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "페이지 요약";
+
+/* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
+"Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI 기반 기능";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "번역은 사용자의 기기에서 비공개로 유지됩니다.";
+
+/* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "번역";
+
+/* This is the description for the setting that toggles whether to block AI enhancements under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.BlockAIEnhancementsDescription.v151" = "차단은 %@에서 신규 또는 현재 AI 향상이나 이에 대한 팝업을 볼 수 없음을 의미합니다.";
+
+/* In the AI Controls settings, this is the text for the link that takes the user more information on AI features. */
+"Settings.AIControls.BlockAIEnhancementsLink.v151" = "포함된 항목과 없는 항목 확인";
+
+/* This is the title for the setting that toggles whether to block AI enhancements under the AI Controls settings section. */
+"Settings.AIControls.BlockAIEnhancementsTitle.v151" = "AI 향상 차단";
+
+/* In the AI Controls settings, this is the text that appears when you have turned on the Block AI Enhancements toggle */
+"Settings.AIControls.BlockedInformation.v151" = "신규 및 현재 AI 향상 기능은 기본적으로 차단됩니다. 아래에서 특정 기능 차단을 해제하세요.";
+
+/* This is the text for the link in the Header Card under the AI Controls settings section that links to more information. */
+"Settings.AIControls.HeaderCard.Link.v151" = "더 알아보기";
+
+/* This is the message for the Header Card under the AI Controls settings section. */
+"Settings.AIControls.HeaderCard.Message.v151" = "여기에는 AI로 향상된 기능을 사용할지 여부가 포함됩니다.";
+
+/* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
+"Settings.AIControls.HeaderCard.Title.v151" = "%@에서는 항상 선택권이 있습니다.";
+
 /* In the settings menu, in the General section, this is the title for the AI Controls settings section */
 "Settings.AIControls.Title.v150" = "AI 제어";
 
@@ -310,6 +358,33 @@
 /* In the Appearance settings menu, in the Toolbar Button section, this label indicates that selecting this will make the New Tab button appear in the middle of the navigation toolbar. */
 "Settings.Toolbar.Navigation.MiddleButton.NewTab.v145" = "새 탭";
 
+/* Footer text below the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Footer.v151" = "사용자가 가장 선호하는 언어로 페이지를 자동으로 번역합니다.";
+
+/* Title for the auto-translate toggle in the Translation settings screen. */
+"Settings.Translation.AutoTranslate.Title.v151" = "자동 번역";
+
+/* Navigation bar title of the language picker shown when adding a preferred translation language. */
+"Settings.Translation.LanguagePicker.NavTitle.v151" = "언어 선택";
+
+/* Placeholder text for the search bar in the translation language picker. */
+"Settings.Translation.LanguagePicker.SearchPlaceholder.v151" = "검색";
+
+/* Row label in the preferred languages list that opens the language picker to add a new preferred language for translation. */
+"Settings.Translation.PreferredLanguages.AddLanguage.v151" = "언어 추가…";
+
+/* Subtitle on the device language row in the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.DeviceLanguage.v151" = "기기 언어";
+
+/* Footer text below the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.Footer.v151" = "번역할 때 다음 언어 중에서 선택하세요.";
+
+/* VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list. */
+"Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151" = "삭제";
+
+/* Section header for the preferred languages list in the Translation settings screen. */
+"Settings.Translation.PreferredLanguages.SectionTitle.v151" = "선호 언어";
+
 /* This is the section title text for the the Translation feature under the Translation settings section. */
 "Settings.Translation.SectionTitle.v145" = "번역 설정";
 
@@ -321,6 +396,9 @@
 
 /* In the settings menu, in the General section, this is the title for the Translation settings section. */
 "Settings.Translation.Title.v145" = "번역";
+
+/* Footer text below the enable toggle in the Translation settings screen. */
+"Settings.Translation.ToggleFooter.v151" = "도구 모음과 메뉴에서 번역을 제거하려면 이것을 끄십시오.";
 
 /* This is the title for the setting that toggles the Translation feature that allows users to translate web pages under the Translation settings section. */
 "Settings.Translation.ToggleTitle.v145" = "번역 활성화";

@@ -24,7 +24,6 @@ public extension LoginsStoreError {
         case .NoSuchRecord: return "NoSuchRecord"
         case .InvalidKey: return "InvalidKey"
         case .Interrupted: return "Interrupted"
-        case .SyncAuthInvalid: return "SyncAuthInvalid"
         case .UnexpectedLoginsApiError: return "UnexpectedLoginsApiError"
         case .MissingKey: return "MissingKey"
         case .EncryptionFailed(reason: let reason): return "EncryptionFailed reason:\(reason)"

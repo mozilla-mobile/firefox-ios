@@ -21,15 +21,14 @@ include:
   - nimbus-features/appIconSelectionFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
-  - nimbus-features/defaultZoomFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
-  - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/hntSponsoredShortcutsFeature.yaml
   - nimbus-features/homepageRedesignFeature.yaml
   - nimbus-features/hostedSummarizerFeature.yaml
+  - nimbus-features/httpsUpgradeFeature.yaml
   - nimbus-features/improvedAppStoreReviewTriggerFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
@@ -58,3 +57,4 @@ include:
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/translationsFeature.yaml
   - nimbus-features/trendingSearchesFeature.yaml
+  - nimbus-features/worldCupWidgetFeature.yaml

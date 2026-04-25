@@ -20,6 +20,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
+        setIsSummarizerLanguageExpansionEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())
     }
 
@@ -203,6 +204,35 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
+    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeLanguaeExpansionOn() {
+        setIsSummarizerLanguageExpansionEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(
+            state: initialState,
+            reducer: reducer
+        )
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canSummarize: true,
+                readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.trailingPageActions.count, 2)
+        XCTAssertEqual(newState.trailingPageActions[0].actionType, .readerModeWithSummarizer)
+        XCTAssertEqual(newState.trailingPageActions[0].iconName, StandardImageIdentifiers.Medium.readerView)
+        XCTAssertNotNil(newState.trailingPageActions[0].bottomBadgeImage)
+        XCTAssertEqual(newState.trailingPageActions[1].actionType, .reload)
+        XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState_whenSummarizeFeatureOn_readerModeActive() {
         setIsHostedSummarizerFeatureEnabled(enabled: true)
         setupStore()
@@ -236,16 +266,21 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
-
-        let urlDidChangeState = loadWebsiteAction(
-            state: initialState,
-            reducer: reducer
-        )
-        let newState = reducer(
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        // we need this state change in order to populate the AddressBarState
+        // with the reader mode state from the Toolbar action
+        let readerModeStateChange = reducer(
             urlDidChangeState,
             ToolbarAction(
-                canSummarize: true,
                 readerModeState: .available,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+        let newState = reducer(
+            readerModeStateChange,
+            ToolbarAction(
+                canSummarize: true,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didSummarizeSettingsChange
             )
@@ -527,6 +562,36 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.leadingPageActions.count, 1)
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
+    }
+
+    func test_urlDidChangeAction_withNilIconState_preservesExistingTranslationConfig() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(newState.leadingPageActions.count, 2)
+        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
     }
 
     func test_traitCollectionDidChangedAction_returnsExpectedState() {
@@ -995,6 +1060,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         }
     }
 
+    private func setIsSummarizerLanguageExpansionEnabled(enabled: Bool) {
+        FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
+            return SummarizerLanguageExpansionFeature(enabled: enabled)
+        }
+    }
+
     private func setTranslationsFeatureEnabled(enabled: Bool) {
         FxNimbus.shared.features.translationsFeature.with { _, _ in
             return TranslationsFeature(enabled: enabled)
@@ -1041,8 +1112,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             numberOfTabs: toolbarState.numberOfTabs,
             scrollAlpha: toolbarState.scrollAlpha,
             showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-            isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
             canShowNavigationHint: toolbarState.canShowNavigationHint,
             shouldAnimate: toolbarState.shouldAnimate,
             isTranslucent: toolbarState.isTranslucent,

@@ -152,7 +152,7 @@ workflows:
     steps:
     - activate-ssh-key@4.1.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - restore-spm-cache@2.1.1:
+    - restore-spm-cache@3:
         is_always_run: true
     - activate-build-cache-for-xcode@0: {}
     - xcode-build-for-test@3:
@@ -216,7 +216,7 @@ workflows:
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: $BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator26.2-arm64.xctestrun
         - maximum_test_repetitions: 2
-    - xcode-test-shard-calculation@0:
+    - xcode-test-shard-calculation@0.2:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
@@ -253,7 +253,7 @@ workflows:
 
             echo "Removing .bcsymbolmap files from test bundle"
             find "$BITRISE_TEST_BUNDLE_PATH" -name "*.bcsymbolmap" -delete 2>/dev/null || true
-    - deploy-to-bitrise-io@2.10.0:
+    - deploy-to-bitrise-io@2.23:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - pipeline_intermediate_files: |-
@@ -1128,7 +1128,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
@@ -1271,7 +1271,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
@@ -1385,7 +1385,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
@@ -1501,7 +1501,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
@@ -2766,7 +2766,7 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: firefox-ios/sticker/Info.plist
+        - plist_path: firefox-ios/Sticker/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"

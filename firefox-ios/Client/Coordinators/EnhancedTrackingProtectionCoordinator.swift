@@ -32,7 +32,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     private var enhancedTrackingProtectionMenuVC: TrackingProtectionViewController?
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
     private var trackingProtectionRefactorStatus: Bool {
-        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.trackingProtectionRefactor)
     }
     private var trackingProtectionNavController: UINavigationController?
 

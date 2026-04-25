@@ -1,8 +1,8 @@
 /* Displayed in a CFR help message to inform users about the availability of Relay email masking features now being available on mobile. %@ is the name of the app (e.g. 'Firefox') */
-"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novo! As máscaras de e-mail Relay %@ estão agora disponíveis para dispositivos móveis.";
+"RelayMask.RelayEmailMaskAvailableCFR.v146" = "Novo! As máscaras de e-mail relay do %@ estão agora disponíveis para dispositivos móveis.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Utilizou as suas 5 máscaras de correio eletrónico gratuitas, por isso escolhemos uma para si reutilizar.";
+"RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Já utilizou as suas 5 máscaras de e-mail gratuitas, por isso selecionámos uma para ser reutilizada.";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
 "RelayMask.RelayEmailMaskGenericErrorMessage.v146" = "As máscaras de e-mail ainda não estão disponíveis. Tente novamente dentro de alguns minutos.";
@@ -17,7 +17,7 @@
 "RelayMask.RelayEmailMaskSettingsLearnMore.v146" = "Saber mais";
 
 /* Button title which takes users to a webpage to manage their Relay email masks and related settings. */
-"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "Gerir Máscaras de E-mail";
+"RelayMask.RelayEmailMaskSettingsManageEmailMasks.v146" = "Gerir máscaras de e-mail";
 
 /* Title for settings related to Relay email masking, which provides options for enabling or disabling the suggestion of anonymous email masks services via Relay. */
 "RelayMask.RelayEmailMaskSettingsTitle.v146" = "Máscaras de e-mail";

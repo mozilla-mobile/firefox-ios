@@ -72,7 +72,6 @@ final class AddressToolbarContainer: UIView,
 
     typealias SubscriberStateType = ToolbarState
 
-    private let isMinimalAddressBarEnabled: Bool
     private let toolbarHelper: ToolbarHelperInterface
     private var windowUUID: WindowUUID?
     private var profile: Profile?
@@ -151,8 +150,7 @@ final class AddressToolbarContainer: UIView,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
     var inOverlayMode = false
 
-    init(isMinimalAddressBarEnabled: Bool, toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
-        self.isMinimalAddressBarEnabled = isMinimalAddressBarEnabled
+    init(toolbarHelper: ToolbarHelperInterface = ToolbarHelper()) {
         self.toolbarHelper = toolbarHelper
         super.init(frame: .zero)
     }
@@ -208,9 +206,7 @@ final class AddressToolbarContainer: UIView,
     }
 
     func hideSkeletonBars() {
-        let needsConfiguration = !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden
-
-        if toolbarHelper.isToolbarTranslucencyRefactorEnabled && needsConfiguration {
+        if !leftSkeletonAddressBar.isHidden || !rightSkeletonAddressBar.isHidden {
             configureSkeletonAddressBars(previousTab: nil, forwardTab: nil)
         }
 
@@ -322,7 +318,7 @@ final class AddressToolbarContainer: UIView,
     // MARK: - AlphaDimmable
     func updateAlphaForSubviews(_ alpha: CGFloat) {
         let isReaderModeActive = state?.addressToolbar.readerModeState == .active
-        if !isMinimalAddressBarEnabled || isReaderModeActive {
+        if isReaderModeActive {
             // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
             regularToolbar.alpha = alpha
         }
@@ -572,8 +568,8 @@ final class AddressToolbarContainer: UIView,
 
         // We want to show suggestions if we turn on the trending searches or recent searches
         // which displays the zero search state. Only if not in private mode.
-        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
-        let isRecentSearchEnabled = featureFlags.isFeatureEnabled(.recentSearches, checking: .buildOnly)
+        let isTrendingSearchEnabled = featureFlagsProvider.isEnabled(.trendingSearches)
+        let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         let isRecentOrTrendingSearchEnabled = isTrendingSearchEnabled || isRecentSearchEnabled
         let isPrivateMode = model?.isPrivateMode ?? false
         let isZeroSearchEnabled = isRecentOrTrendingSearchEnabled && !isPrivateMode

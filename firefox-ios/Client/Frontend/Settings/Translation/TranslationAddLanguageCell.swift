@@ -20,6 +20,6 @@ final class TranslationAddLanguageCell: UICollectionViewListCell, ThemeApplicabl
         content.textProperties.color = theme.colors.actionPrimary
         contentConfiguration = content
         backgroundConfiguration = .listGroupedCell()
-        backgroundConfiguration?.backgroundColor = theme.colors.layer2
+        backgroundConfiguration?.backgroundColor = theme.colors.layer5
     }
 }

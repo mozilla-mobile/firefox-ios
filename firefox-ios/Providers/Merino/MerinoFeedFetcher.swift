@@ -31,7 +31,7 @@ struct MerinoFeedFetcher: MerinoFeedFetching, FeatureFlaggable {
                     userAgentHeader: userAgent
                 )
             )
-            if featureFlags.isFeatureEnabled(.homepageStoryCategories, checking: .buildOnly) {
+            if featureFlagsProvider.isEnabled(.homepageStoryCategories) {
                 return try client.getCuratedRecommendations(
                     request:
                         CuratedRecommendationsRequest(

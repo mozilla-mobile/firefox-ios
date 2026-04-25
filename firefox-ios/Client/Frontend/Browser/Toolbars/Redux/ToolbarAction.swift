@@ -32,8 +32,6 @@ struct ToolbarAction: Action {
     let lockIconNeedsTheming: Bool?
     let safeListedURLImageName: String?
     let isLoading: Bool?
-    let isNewTabFeatureEnabled: Bool?
-    let canShowDataClearanceAction: Bool?
     let shouldShowKeyboard: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
@@ -64,8 +62,6 @@ struct ToolbarAction: Action {
          lockIconNeedsTheming: Bool? = nil,
          safeListedURLImageName: String? = nil,
          isLoading: Bool? = nil,
-         isNewTabFeatureEnabled: Bool? = nil,
-         canShowDataClearanceAction: Bool? = nil,
          shouldShowKeyboard: Bool? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
@@ -98,8 +94,6 @@ struct ToolbarAction: Action {
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
         self.isLoading = isLoading
-        self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
-        self.canShowDataClearanceAction = canShowDataClearanceAction
         self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize

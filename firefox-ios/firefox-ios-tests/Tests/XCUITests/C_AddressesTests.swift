@@ -12,6 +12,7 @@ class O_AddressesTests: BaseTestCase {
     private var toolbar: ToolbarScreen!
     private var settingsScreen: SettingScreen!
     private var browserScreen: BrowserScreen!
+    private var mainMenuScreen: MainMenuScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -33,6 +34,7 @@ class O_AddressesTests: BaseTestCase {
         toolbar = ToolbarScreen(app: app)
         settingsScreen = SettingScreen(app: app)
         browserScreen = BrowserScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
     override func tearDown() async throws {
@@ -416,34 +418,27 @@ class O_AddressesTests: BaseTestCase {
         }
         // While in Portrait mode check for the options
         toolbar.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        toolbar.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
         settingsScreen.validatePrivacyOptions()
-        navigator.goto(AutofillPasswordSettings)
+        settingsScreen.navigateToAutofillPasswordSettings()
         settingsScreen.validateAutofillPasswordOptions()
         // While in landscape mode check for the options
         settingsScreen.rotateDevice(to: .landscapeLeft)
         settingsScreen.validateAutofillPasswordOptions()
         settingsScreen.rotateDevice(to: .portrait)
-        // While in dark mode check for the options
-        exitAutofillSettingsToNewTab()
-        // Adding sleep to avoid loading screen on bitrise
-        toolbar.assertSettingsButtonExists()
-        switchThemeToDarkOrLight(theme: "Dark")
-        navigateToAutofillPasswordSettingsScreen()
+        // While in dark mode check for the options (navigate within Settings, no exit/re-entry)
+        settingsScreen.tapBackToSettings()
+        settingsScreen.navigateToDisplaySettings()
+        settingsScreen.selectDarkTheme()
+        settingsScreen.tapBackToSettings()
+        settingsScreen.navigateToAutofillPasswordSettings()
         settingsScreen.validateAutofillPasswordOptions()
-        // While in light mode check for the options
-        exitAutofillSettingsToNewTab()
-        // Adding sleep to avoid loading screen on bitrise
-        toolbar.assertSettingsButtonExists()
-        switchThemeToDarkOrLight(theme: "Light")
-        navigateToAutofillPasswordSettingsScreen()
-        settingsScreen.validateAutofillPasswordOptions()
-        navigateFromAutofillPasswordSettingsToNewTabScreen()
-        // Go to a webpage, and select night mode on and off, check options
-        navigator.openURL(path(forTestPage: "test-example.html"))
-        waitUntilPageLoad()
-        toggleThemeViaDisplaySettings()
+        // Reset to light mode
+        settingsScreen.tapBackToSettings()
+        settingsScreen.navigateToDisplaySettings()
+        settingsScreen.selectLightTheme()
+        settingsScreen.tapBackToSettings()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2549853
@@ -459,7 +454,7 @@ class O_AddressesTests: BaseTestCase {
         app.switches.element(boundBy: 1).waitAndTap()
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
-        // Using indexes to tap on text fields to comodate with iOS 16 OS
+        // Using indexes to tap on text fields to accommodate with iOS 16 OS
         // https://github.com/mozilla-mobile/firefox-ios/issues/31076
         if #unavailable(iOS 26) {
             let addressAutofillButton = AccessibilityIdentifiers.Browser.KeyboardAccessory.addressAutofillButton
@@ -489,48 +484,13 @@ class O_AddressesTests: BaseTestCase {
         }
     }
 
-    private func validateNightModeOnOff() {
-        navigator.performAction(Action.ToggleNightMode)
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(SettingsScreen)
-        validatePrivacyOptions()
-    }
-
-    private func validatePrivacyOptions() {
-        let table = app.tables.element(boundBy: 0)
-        let settingsQuery = AccessibilityIdentifiers.Settings.self
-        waitForElementsToExist(
-            [
-                table.cells[settingsQuery.AutofillsPasswords.title],
-                table.cells[settingsQuery.ClearData.title],
-                app.switches[settingsQuery.ClosePrivateTabs.title],
-                table.cells[settingsQuery.ContentBlocker.title],
-                table.cells[settingsQuery.Notifications.title],
-                table.cells[settingsQuery.PrivacyPolicy.title]
-            ]
-        )
-    }
-
-    private func validateAutofillPasswordOptions() {
-        let table = app.tables.element(boundBy: 0)
-        let settingsQuery = AccessibilityIdentifiers.Settings.self
-        waitForElementsToExist(
-            [
-                table.cells[settingsQuery.Logins.title],
-                table.cells[settingsQuery.CreditCards.title],
-                table.cells[settingsQuery.Address.title]
-            ]
-        )
-    }
-
     private func addAddressAndReachAutofillForm(indexField: Int) {
         reachAddNewAddressScreen()
         addNewAddress()
         tapSave()
         navigator.goto(NewTabScreen)
         navigator.openURL("https://mozilla.github.io/form-fill-examples/basic.html")
-        // Using indexes to tap on text fields to comodate with iOS 16 OS
+        // Using indexes to tap on text fields to accommodate with iOS 16 OS
         app.webViews.textFields.element(boundBy: indexField).waitAndTap()
         if iPad() {
             app.buttons["_previousTapped"].waitAndTap()
@@ -789,36 +749,5 @@ class O_AddressesTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(AddressesSettings)
-    }
-
-    private func navigateToAutofillPasswordSettingsScreen() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        navigator.goto(AutofillPasswordSettings)
-    }
-
-    private func exitAutofillSettingsToNewTab() {
-        navigator.nowAt(AutofillPasswordSettings)
-        navigator.goto(SettingsScreen)
-        settingsScreen.closeSettingsWithDoneButton()
-    }
-
-    private func navigateFromAutofillPasswordSettingsToNewTabScreen() {
-        navigator.nowAt(AutofillPasswordSettings)
-        navigator.goto(SettingsScreen)
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(NewTabScreen)
-    }
-
-    private func toggleThemeViaDisplaySettings() {
-        navigator.goto(SettingsScreen)
-        navigator.goto(DisplaySettings)
-        navigator.performAction(Action.SelectDarkTheme)
-        navigator.goto(BrowserTab)
-        navigator.goto(SettingsScreen)
-        navigator.goto(DisplaySettings)
-        navigator.performAction(Action.SelectLightTheme)
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(BrowserTab)
     }
 }

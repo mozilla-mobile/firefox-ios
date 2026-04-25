@@ -21,6 +21,15 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         static let contentViewTopPadding: CGFloat = 32.0
         static let contentViewBottomPadding: CGFloat = 12.0
         static let contentViewHorizontalPadding: CGFloat = 24.0
+        static let privacyButtonContentInset = NSDirectionalEdgeInsets(
+            top: 8.0,
+            leading: 8.0,
+            bottom: 8.0,
+            trailing: 12.0
+        )
+        static let privacyButtonImagePadding: CGFloat = 4.0
+        static let privacyButtonCornerRadius: CGFloat = 16.0
+        static let privacyButtonImageName = "shield"
     }
 
     // MARK: - Properties
@@ -29,7 +38,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     }
     private let backgroundRecordEffect: GradientCircleView = .build()
     private let audioWaveform: AudioWaveformView = .build()
-    private let closeButton: UIButton = .build {
+    private lazy var closeButton: UIButton = .build {
         if #available(iOS 26, *) {
             $0.configuration = .prominentGlass()
         } else {
@@ -38,6 +47,33 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         $0.configuration?.cornerStyle = .capsule
         $0.configuration?.image = UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate)
         $0.configuration?.contentInsets = UX.closeButtonContentInset
+        $0.addAction(
+            UIAction(handler: { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }),
+            for: .touchUpInside
+        )
+    }
+    private let privacyButton: UIButton = .build {
+        if #available(iOS 26, *) {
+            $0.configuration = .prominentGlass()
+        } else {
+            $0.configuration = .filled()
+        }
+        $0.configuration?.image = UIImage(
+            named: UX.privacyButtonImageName,
+            in: .module,
+            with: nil
+        )
+        // TODO: - FXIOS-14720 Add Strings and accessibility ids
+        $0.configuration?.attributedTitle = AttributedString(
+            "Protected by Firefox",
+            attributes: AttributeContainer([.font: FXFontStyles.Regular.body.scaledFont()])
+        )
+        $0.configuration?.imagePadding = UX.privacyButtonImagePadding
+        $0.configuration?.contentInsets = UX.privacyButtonContentInset
+        $0.configuration?.cornerStyle = .fixed
+        $0.configuration?.background.cornerRadius = UX.privacyButtonCornerRadius
     }
     private let contentView: QuickAnswersContentView = .build()
     private let transitionAnimator: TransitionAnimator
@@ -105,8 +141,20 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         registerViewModelUpdates()
     }
 
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        contentView.adjustBottomInsets(for: privacyButton.frame.height)
+    }
+
     private func setupSubviews() {
-        view.addSubviews(backgroundRecordEffect, backgroundBlur, audioWaveform, contentView, closeButton)
+        view.addSubviews(
+            backgroundRecordEffect,
+            backgroundBlur,
+            audioWaveform,
+            contentView,
+            closeButton,
+            privacyButton
+        )
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -121,11 +169,11 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
 
             contentView.topAnchor.constraint(equalTo: audioWaveform.bottomAnchor,
                                              constant: UX.contentViewTopPadding),
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+            contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                  constant: UX.contentViewHorizontalPadding),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+            contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                   constant: -UX.contentViewHorizontalPadding),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                                                 constant: -UX.contentViewBottomPadding),
 
             backgroundRecordEffect.widthAnchor.constraint(equalToConstant: UX.recordWaveEffectSize),
@@ -133,6 +181,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             backgroundRecordEffect.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             backgroundRecordEffect.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                            constant: UX.recordWaveEffectBottomPadding),
+
+            privacyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            privacyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            privacyButton.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor,
+                                                   constant: UX.closeButtonSidePadding),
+            privacyButton.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                    constant: -UX.closeButtonSidePadding),
         ])
         backgroundBlur.pinToSuperview()
     }
@@ -146,7 +201,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
             case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.body)
+                self?.contentView.configureAnswer(result.resultText)
+                self?.contentView.configureSources(result.sources)
             }
         }
         viewModel.startRecordingVoice()
@@ -158,6 +214,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         view.backgroundColor = theme.colors.layer2
         closeButton.configuration?.baseBackgroundColor = theme.colors.layer2
         closeButton.configuration?.baseForegroundColor = theme.colors.iconPrimary
+        privacyButton.configuration?.baseBackgroundColor = theme.colors.layerAccentPrivateNonOpaque
+        privacyButton.configuration?.baseForegroundColor = theme.colors.textPrimary
         backgroundRecordEffect.applyTheme(theme: theme)
         audioWaveform.applyTheme(theme: theme)
         contentView.applyTheme(theme: theme)

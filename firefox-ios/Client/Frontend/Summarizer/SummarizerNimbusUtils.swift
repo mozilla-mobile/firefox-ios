@@ -55,7 +55,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     var isLanguageExpansionEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.summarizerLanguageExpansion, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerLanguageExpansion)
     }
 
     /// Takes into consideration that summarize feature is on,
@@ -101,15 +101,15 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     func isHostedSummarizerEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.hostedSummarizer, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.hostedSummarizer)
     }
 
     func isAppAttestAuthEnabled() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerAppAttestAuth, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerAppAttestAuth)
     }
 
     func usesPermissiveGuardrails() -> Bool {
-        return featureFlags.isFeatureEnabled(.summarizerPermissiveGuardrails, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.summarizerPermissiveGuardrails)
     }
 
     private func isAppleSummarizerToolbarEndpointEnabled() -> Bool {
@@ -117,7 +117,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isHostedSummarizerToolbarEndpointEnabled() -> Bool {
-        let isFlagEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerToolbarEntrypoint, checking: .buildOnly)
+        let isFlagEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerToolbarEntrypoint)
         return isHostedSummarizerEnabled() && isFlagEnabled
     }
 
@@ -126,7 +126,7 @@ struct DefaultSummarizerNimbusUtils: FeatureFlaggable, SummarizerNimbusUtils {
     }
 
     private func isHostedSummarizerShakeGestureEnabled() -> Bool {
-        let isShakeEnabled = featureFlags.isFeatureEnabled(.hostedSummarizerShakeGesture, checking: .buildOnly)
+        let isShakeEnabled = featureFlagsProvider.isEnabled(.hostedSummarizerShakeGesture)
         return isHostedSummarizerEnabled() && isShakeEnabled
     }
 

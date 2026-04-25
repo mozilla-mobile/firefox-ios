@@ -28,11 +28,11 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.reportSiteIssue)
     }
 
     private var isNewAppearanceMenuOn: Bool {
-        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.appearanceMenu)
     }
 
     private var isSummarizerOn: Bool {
@@ -41,10 +41,6 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     private var isSummarizerLanguageExpansionEnabled: Bool {
         return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
-    }
-
-    private var isDefaultZoomEnabled: Bool {
-        featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
     }
 
     @MainActor
@@ -416,12 +412,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil
         else { return nil }
-
+        let isMultiLanguageFlow = translationConfig.isMultiLanguageFlow
         let isActive = translationConfig.state == .active
         let infoTitle: String
         if isActive, let langCode = translationConfig.translatedToLanguage {
@@ -437,10 +433,17 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
               )
             : .MainMenu.ToolsSection.Translation.TranslatePageTitle
 
+        let title: String
+        if isActive {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatedPageTitle
+        } else {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatePageTitle
+        }
+
         return MenuElement(
-            title: isActive
-                ? .MainMenu.ToolsSection.Translation.TranslatedPageTitle
-                : .MainMenu.ToolsSection.Translation.TranslatePageTitle,
+            title: title,
             iconName: Icons.translate,
             isEnabled: true,
             isActive: isActive,

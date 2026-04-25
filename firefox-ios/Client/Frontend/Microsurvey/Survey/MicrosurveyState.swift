@@ -4,7 +4,9 @@
 
 import Redux
 import Common
+import CopyWithUpdates
 
+@CopyWithUpdates
 struct MicrosurveyState: ScreenState {
     var windowUUID: WindowUUID
     var shouldDismiss: Bool
@@ -20,11 +22,7 @@ struct MicrosurveyState: ScreenState {
             return
         }
 
-        self.init(
-            windowUUID: microsurveyState.windowUUID,
-            shouldDismiss: microsurveyState.shouldDismiss,
-            showPrivacy: microsurveyState.showPrivacy
-        )
+        self = microsurveyState.copyWithUpdates()
     }
 
     init(
@@ -51,14 +49,12 @@ struct MicrosurveyState: ScreenState {
 
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
-            return MicrosurveyState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 shouldDismiss: true,
                 showPrivacy: false
             )
         case MicrosurveyActionType.tapPrivacyNotice:
-            return MicrosurveyState(
-                windowUUID: state.windowUUID,
+            return state.copyWithUpdates(
                 shouldDismiss: false,
                 showPrivacy: true
             )
@@ -68,8 +64,7 @@ struct MicrosurveyState: ScreenState {
     }
 
     static func defaultState(from state: MicrosurveyState) -> MicrosurveyState {
-        return MicrosurveyState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             shouldDismiss: false,
             showPrivacy: false
         )

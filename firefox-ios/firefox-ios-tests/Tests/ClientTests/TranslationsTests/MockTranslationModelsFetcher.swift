@@ -4,20 +4,23 @@
 
 import Foundation
 @testable import Client
+import XCTest
 
 /// Minimal mock  for TranslationModelsFetcherProtocol tests. This avoids going through remote settings.
 final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unchecked Sendable {
+    var resetStorageExpectation: XCTestExpectation?
     var translatorWASMResult: Data?
     var modelsResult: Data?
     var modelBufferResult: Data?
     var supportedTargetLanguages: [String] = []
+    var fetchModelsHandler: ((String, String) -> Data?)?
 
     func fetchTranslatorWASM() -> Data? {
         return translatorWASMResult
     }
 
     func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        return modelsResult
+        return fetchModelsHandler?(sourceLang, targetLang) ?? modelsResult
     }
 
     func fetchModelBuffer(recordId: String) -> Data? {
@@ -30,5 +33,9 @@ final class MockTranslationModelsFetcher: TranslationModelsFetcherProtocol, @unc
 
     func fetchSupportedTargetLanguages() async -> [String] {
         return supportedTargetLanguages
+    }
+
+    func resetStorage() async {
+        resetStorageExpectation?.fulfill()
     }
 }

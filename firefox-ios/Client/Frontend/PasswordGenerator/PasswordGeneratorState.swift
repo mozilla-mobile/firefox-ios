@@ -5,7 +5,9 @@
 import Foundation
 import Redux
 import Common
+import CopyWithUpdates
 
+@CopyWithUpdates
 struct PasswordGeneratorState: ScreenState {
     var windowUUID: WindowUUID
     var password: String
@@ -21,11 +23,7 @@ struct PasswordGeneratorState: ScreenState {
             return
         }
 
-        self.init(
-            windowUUID: passwordGeneratorState.windowUUID,
-            password: passwordGeneratorState.password,
-            passwordHidden: passwordGeneratorState.passwordHidden
-        )
+        self = passwordGeneratorState.copyWithUpdates()
     }
 
     init(
@@ -48,22 +46,19 @@ struct PasswordGeneratorState: ScreenState {
             else {
                 return defaultState(from: state)
             }
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: password,
-                passwordHidden: state.passwordHidden)
+            return state.copyWithUpdates(
+                password: password
+            )
 
         case PasswordGeneratorActionType.hidePassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: true)
+            return state.copyWithUpdates(
+                passwordHidden: true
+            )
 
         case PasswordGeneratorActionType.showPassword:
-            return PasswordGeneratorState(
-                windowUUID: action.windowUUID,
-                password: state.password,
-                passwordHidden: false)
+            return state.copyWithUpdates(
+                passwordHidden: false
+            )
 
         default:
             return defaultState(from: state)
@@ -71,10 +66,6 @@ struct PasswordGeneratorState: ScreenState {
     }
 
     static func defaultState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
-        return PasswordGeneratorState(
-            windowUUID: state.windowUUID,
-            password: state.password,
-            passwordHidden: state.passwordHidden
-        )
+        return state.copyWithUpdates()
     }
 }

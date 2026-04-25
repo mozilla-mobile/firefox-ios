@@ -199,6 +199,7 @@ class SearchTests: FeatureFlaggedTestBase {
             navigator.goto(BrowserTabMenu)
             app.swipeUp()
         }
+        navigator.goto(SettingsScreen)
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).waitAndTap()
@@ -207,10 +208,8 @@ class SearchTests: FeatureFlaggedTestBase {
 
         searchSettingsScreen.waitForSearchEngineSelectionComplete()
 
-        navigator.goto(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
-        mozWaitForElementToExist(app.webViews.firstMatch)
         browserScreen.addressToolbarContainValue(value: searchEngine.lowercased())
     }
 
@@ -291,7 +290,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
-    func testSearchStartAfterTypingTwoWords() {
+    func testSearchAfterTypingTwoWords() {
         let browserScreen = BrowserScreen(app: app)
         let fooText = "foo bar"
         app.launch()
@@ -548,9 +547,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2753105
-    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
+    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)
         navigator.nowAt(SearchSettings)
@@ -592,8 +589,7 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3374353
-    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff_feltPrivacySimplifiedUIExperimentOn() {
-        addLaunchArgument(jsonFileName: "feltPrivacySimplifiedUIOn", featureName: "felt-privacy-feature")
+    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOff() {
         app.launch()
         // Disable general search suggests
         navigator.goto(SearchSettings)
@@ -640,7 +636,11 @@ class SearchTests: FeatureFlaggedTestBase {
 
     // MARK: - Pre Search (Trending Searches + Recent Searches)
     // https://mozilla.testrail.io/index.php?/cases/view/3296489
-    func testTrendingSearches_trendingSearchesExperimentOn() {
+    func testTrendingSearches_trendingSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because trending search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
         app.launch()
@@ -663,7 +663,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296488
-    func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() {
+    func testTrendingSearchesSettingsToggleOn_trendingSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because trending search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
         app.launch()
@@ -686,7 +690,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296487
-    func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() {
+    func testTrendingSearchesSettingsToggleOff_trendingSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because trending search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         app.launch()
 
@@ -709,7 +717,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296486
-    func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() {
+    func testTrendingSearches_afterClearingURL_trendingSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because trending search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
 
         app.launch()
@@ -734,7 +746,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296485
-    func testRecentSearches_recentSearchesExperimentOn() {
+    func testRecentSearches_recentSearchesExperimentOn()  throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because recent search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
         app.launch()
@@ -756,7 +772,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296482
-    func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() {
+    func testRecentSearchesWithNoRecentSearches_recentSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because recent search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
         app.launch()
@@ -770,7 +790,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296480
-    func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() {
+    func testRecentSearchesSettingsToggleOn_recentSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because recent search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 
         app.launch()
@@ -795,7 +819,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296479
-    func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() {
+    func testRecentSearchesSettingsToggleOff_recentSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because recent search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
         app.launch()
 
@@ -819,7 +847,11 @@ class SearchTests: FeatureFlaggedTestBase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/3296478
-    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() {
+    func testTrendingSearchesAndRecentSearchesSettingsToggleOn_trendingSearchesAndRecentSearchesExperimentOn() throws {
+        if !isFennec {
+            throw XCTSkip("Skipping test because trending search is off on Firefox")
+        }
+
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "trending-searches-feature")
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "recent-searches-feature")
 

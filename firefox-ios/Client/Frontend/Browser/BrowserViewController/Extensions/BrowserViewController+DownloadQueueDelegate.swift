@@ -26,7 +26,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         self.downloadProgressManager = downloadProgressManager
 
         if #available(iOS 17, *),
-            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+            featureFlagsProvider.isEnabled(.downloadLiveActivities),
             tabManager.selectedTab?.isPrivate == false {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(
                 downloadProgressManager: downloadProgressManager,
@@ -43,7 +43,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     private func dismissDownloadLiveActivity() {
         if #available(iOS 17, *),
-           featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+           featureFlagsProvider.isEnabled(.downloadLiveActivities),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
             self.downloadLiveActivityWrapper = nil

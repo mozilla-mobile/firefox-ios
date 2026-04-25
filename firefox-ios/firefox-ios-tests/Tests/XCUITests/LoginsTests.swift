@@ -559,7 +559,7 @@ class LoginTest: BaseTestCase {
         // Tap on the cancel button
         if #available(iOS 26, *) {
             if iPad() {
-                // Tapping on app on iPad to dimiss the keyboard
+                // Tapping on app on iPad to dismiss the keyboard
                 app.waitAndTap()
             } else {
                 app.buttons["close"].waitAndTap()

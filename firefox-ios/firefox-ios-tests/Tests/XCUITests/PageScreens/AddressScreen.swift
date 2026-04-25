@@ -57,7 +57,7 @@ final class AddressScreen {
     }
 
     func reachEditAndRemoveAddress() {
-        app.collectionViews.cells.buttons.staticTexts.firstMatch.tapWithRetry()
+        app.collectionViews.cells.buttons[AccessibilityIdentifiers.Settings.Address.Addresses.addressCell].tapWithRetry()
         // Update the all addresses fields
         let buttonEdit = sel.BUTTON_EDIT.element(in: app)
         buttonEdit.waitAndTap()

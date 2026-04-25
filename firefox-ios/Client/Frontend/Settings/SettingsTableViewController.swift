@@ -223,7 +223,7 @@ class PaddedSwitch: UIView {
 
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
-class BoolSetting: Setting, FeatureFlaggable {
+class BoolSetting: Setting, LegacyFeatureFlaggable {
     // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
     let prefKey: String?
     let prefs: Prefs?
@@ -231,7 +231,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     var settingDidChange: ((Bool) -> Void)?
     private let defaultValue: Bool?
     private let statusText: NSAttributedString?
-    private let featureFlagName: NimbusFeatureFlagID?
+    private let featureFlagName: FeatureFlagID?
 
     init(
         prefs: Prefs?,
@@ -239,7 +239,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         defaultValue: Bool?,
         attributedTitleText: NSAttributedString,
         attributedStatusText: NSAttributedString? = nil,
-        featureFlagName: NimbusFeatureFlagID? = nil,
+        featureFlagName: FeatureFlagID? = nil,
         settingDidChange: ((Bool) -> Void)? = nil
     ) {
         self.prefs = prefs
@@ -283,7 +283,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         prefs: Prefs?,
         prefKey: String? = nil,
         defaultValue: Bool = false,
-        featureFlagName: NimbusFeatureFlagID? = nil,
+        featureFlagName: FeatureFlagID? = nil,
         enabled: Bool = true,
         settingDidChange: @escaping (Bool) -> Void
     ) {
@@ -297,7 +297,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     }
 
     convenience init(
-        with featureFlagID: NimbusFeatureFlagID,
+        with featureFlagID: FeatureFlagID,
         titleText: NSAttributedString,
         statusText: NSAttributedString? = nil,
         settingDidChange: ((Bool) -> Void)? = nil
@@ -364,7 +364,7 @@ class BoolSetting: Setting, FeatureFlaggable {
         }
     }
 
-    func getFeatureFlagName() -> NimbusFeatureFlagID? {
+    func getFeatureFlagName() -> FeatureFlagID? {
         return featureFlagName
     }
 

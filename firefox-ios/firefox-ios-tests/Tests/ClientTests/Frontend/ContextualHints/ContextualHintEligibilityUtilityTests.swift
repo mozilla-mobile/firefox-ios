@@ -44,11 +44,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
-    func test_shouldPresentDataClearanceHint() {
-        let result = subject.canPresent(.dataClearance)
-        XCTAssertTrue(result)
-    }
-
     // MARK: Jump Back in and Synced tabs
     func test_shouldPresentJumpBackHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
@@ -85,13 +80,6 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     // MARK: - Test should NOT Present cases
-
-    func test_shouldNotPresentDataClearanceHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.dataClearanceKey.rawValue)
-
-        let result = subject.canPresent(.dataClearance)
-        XCTAssertFalse(result)
-    }
 
     func test_shouldNotPresentJumpBackInHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackinKey.rawValue)

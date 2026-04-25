@@ -9,7 +9,7 @@ protocol SearchBarLocationSaverProtocol {
     func saveUserSearchBarLocation(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom)
 }
 
-struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, SearchBarLocationSaverProtocol {
+struct SearchBarLocationSaver: SearchBarLocationProvider, UserFeaturePreferenceProvider, SearchBarLocationSaverProtocol {
     /// Saves the search bar location position to user preferences for existing users
     /// that didn't have the position saved yet. For users on iPhone with version1 or version2 as layout the
     /// search bar location position is set to bottom, otherwise the default is used.
@@ -17,8 +17,10 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, Sear
     ///   - profile: the user's profile
     ///   - userInterfaceIdiom: the interface type for the device
     @MainActor
-    func saveUserSearchBarLocation(profile: Profile,
-                                   userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+    func saveUserSearchBarLocation(
+        profile: Profile,
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) {
         let isFreshInstall = profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil
         let hasSearchBarPosition = profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition) != nil
 
@@ -26,13 +28,10 @@ struct SearchBarLocationSaver: SearchBarLocationProvider, FeatureFlaggable, Sear
         guard !isFreshInstall && !hasSearchBarPosition else { return }
 
         guard userInterfaceIdiom != .pad else {
-            let isAtBottom = isBottomSearchBar
-            let searchBarPosition: SearchBarPosition = isAtBottom ? .bottom : .top
-            featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
+            userPreferences.setSearchBarPosition(.top)
             return
         }
 
-        // Set the address bar to the bottom for new users enrolled in `version1` or `version2` toolbar experiment.
-        featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+        userPreferences.setSearchBarPosition(.bottom)
     }
 }

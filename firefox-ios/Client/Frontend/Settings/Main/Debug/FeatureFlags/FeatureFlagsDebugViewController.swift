@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
-final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
+final class FeatureFlagsDebugViewController: SettingsTableViewController, LegacyFeatureFlaggable {
     init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
@@ -29,7 +29,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     // swiftlint:disable:next function_body_length
     private func generateFeatureFlagToggleSettings() -> SettingSection {
         // For better code readability and parsability in-app, please keep in alphabetical order by title
-        var children: [Setting] =  [
+        let children: [Setting] =  [
+            FeatureFlagsBoolSetting(
+                with: .httpsUpgrade,
+                titleText: format(string: "Automatic HTTPS upgrade"),
+                statusText: format(string: "Toggle to enable automatic HTTPS upgrade.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
             FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
@@ -47,7 +54,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             FeatureFlagsBoolSetting(
                 with: .appearanceMenu,
                 titleText: format(string: "Appearance Menu"),
-                statusText: format(string: "Toggle to show the new apperance menu")
+                statusText: format(string: "Toggle to show the new appearance menu")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -66,13 +73,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .defaultZoomFeature,
-                titleText: format(string: "Default zoom"),
-                statusText: format(string: "Toggle to enable default zoom feature")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
                 with: .downloadLiveActivities,
                 titleText: format(string: "Download Live Activities"),
                 statusText: format(string: "Toggle to enable download live activities")
@@ -83,20 +83,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .trackingProtectionRefactor,
                 titleText: format(string: "Enhanced Tracking Protection"),
                 statusText: format(string: "Toggle to use enhanced tracking protection")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .feltPrivacyFeltDeletion,
-                titleText: format(string: "Felt Privacy Deletion"),
-                statusText: format(string: "Toggle to enable felt privacy deletion")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .feltPrivacySimplifiedUI,
-                titleText: format(string: "Felt Privacy UI"),
-                statusText: format(string: "Toggle to enable felt privacy UI")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -151,9 +137,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .otherErrorPages,
-                titleText: format(string: "Wrong Host Certificate Native Error Page"),
-                statusText: format(string: "Toggle to display the natively created wrong host error page")
+                with: .badCertDomainErrorPage,
+                titleText: format(string: "Bad Cert Domain Native Error Page"),
+                statusText: format(string: "Toggle to display the natively created bad cert domain error page")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -214,16 +200,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
-                with: .toolbarRefactor,
-                titleText: format(string: "Toolbar Redesign"),
-                statusText: format(string: "Toggle to enable the toolbar redesign")
-            ) { [weak self] _ in
-                self?.reloadView()
-            },
-            FeatureFlagsBoolSetting(
-                with: .toolbarTranslucencyRefactor,
-                titleText: format(string: "Toolbar Translucency Refactor"),
-                statusText: format(string: "Toggle to enable the toolbar translucency refactor")
+                with: .tabTrayiPadUIExperiments,
+                titleText: format(string: "Tab Tray iPad UI Experiment"),
+                statusText: format(string: "Toggle to use the new tab tray UI on iPad")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -259,6 +238,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 with: .quickAnswers,
                 titleText: format(string: "Quick Answers"),
                 statusText: format(string: "Toggle to enable the Quick Answers feature")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
+                with: .worldCupWidget,
+                titleText: format(string: "World Cup Widget"),
+                statusText: format(string: "Toggle to enable the World Cup widget feature on the Homepage")
             ) { [weak self] _ in
                 self?.reloadView()
             },
@@ -308,7 +294,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagList() -> SettingSection {
-        let flags = NimbusFeatureFlagID.allCases
+        let flags = FeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
             return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }

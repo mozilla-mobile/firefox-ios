@@ -168,7 +168,7 @@ final class ToolbarAnimator {
         guard let view else { return }
 
         let isShowing = alpha == 1
-        let bottomOffset = isShowing ? 0 :  context.bottomContainerHeight
+        let bottomOffset = isShowing ? 0 : context.bottomContainerHeight
         let overkeyboardOffset = isShowing ? 0 : context.overKeyboardContainerHeight
         UIView.animate(withDuration: UX.bottomToolbarDuration,
                        delay: 0,

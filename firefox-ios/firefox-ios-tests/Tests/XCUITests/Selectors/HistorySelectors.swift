@@ -13,7 +13,7 @@ protocol HistorySelectorsSet {
 
 struct HistorySelectors: HistorySelectorsSet {
     private enum IDs {
-        static let exampleEntry = "http://example.com/"
+        static let exampleEntry = "https://example.com/"
         static let deleteButton = "Delete"
         static let emptyMsg     = emptyRecentlyClosedMesg
         static let tableViewId  = AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView

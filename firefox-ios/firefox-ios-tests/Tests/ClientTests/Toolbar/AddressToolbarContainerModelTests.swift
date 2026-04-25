@@ -281,10 +281,10 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                                isLoading: false,
                                readerModeState: nil,
                                canSummarize: false,
-                               translationConfiguration: nil,
                                didStartTyping: false,
                                isEmptySearch: true,
-                               alternativeSearchEngine: withSearchEngine)
+                               alternativeSearchEngine: withSearchEngine,
+                               translationConfiguration: nil)
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
@@ -311,8 +311,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             numberOfTabs: 1,
                             scrollAlpha: 1,
                             showMenuWarningBadge: false,
-                            isNewTabFeatureEnabled: false,
-                            canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,
@@ -335,8 +333,6 @@ final class AddressToolbarContainerModelTests: XCTestCase {
                             numberOfTabs: 1,
                             scrollAlpha: 1,
                             showMenuWarningBadge: false,
-                            isNewTabFeatureEnabled: false,
-                            canShowDataClearanceAction: false,
                             canShowNavigationHint: false,
                             shouldAnimate: false,
                             isTranslucent: false,

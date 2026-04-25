@@ -168,15 +168,15 @@ class EditBookmarkViewController: UIViewController,
     }
 
     private func setTheme(_ theme: any Theme) {
-        let appearence = UINavigationBarAppearance()
-        appearence.backgroundColor = theme.colors.layer1
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = theme.colors.layer1
         // remove divider from navigation bar
-        appearence.shadowColor = .clear
-        appearence.titleTextAttributes = [
+        appearance.shadowColor = .clear
+        appearance.titleTextAttributes = [
             .foregroundColor: theme.colors.textPrimary
         ]
-        navigationController?.navigationBar.standardAppearance = appearence
-        navigationController?.navigationBar.scrollEdgeAppearance = appearence
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1

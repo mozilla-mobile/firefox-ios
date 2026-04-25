@@ -14,7 +14,7 @@ class SceneCoordinator: BaseCoordinator,
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer

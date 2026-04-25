@@ -1,5 +1,5 @@
 {
-  "originHash" : "296a236f920c1e9d03078eb62076c82dbe012a6626942c71b98dfa691f0b8f3a",
+  "originHash" : "7652867bf935281c038ad52d72ad40eec39f02d67b07ecfa159f26830b9f3f3f",
   "pins" : [
     {
       "identity" : "dip",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "3db26ab625d194c38e68c1a40e43d1bc12743fe0",
-        "version" : "8.2.0"
+        "revision" : "c152c1915f60c51e4afa0752656993ee5b3c63db",
+        "version" : "8.8.1"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
-        "version" : "8.36.0"
+        "revision" : "3a22ecd00ad1398747bfd587e44df82716908dd3",
+        "version" : "9.10.0"
       }
     },
     {

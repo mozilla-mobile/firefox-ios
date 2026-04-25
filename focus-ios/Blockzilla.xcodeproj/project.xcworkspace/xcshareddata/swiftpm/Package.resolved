@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
         "state": {
           "branch": "master",
-          "revision": "7674c93e79ee5aac17681acace324761325e7346",
+          "revision": "0039b4d377874784258154c2c551d146320a8985",
           "version": null
         }
       },
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "3db26ab625d194c38e68c1a40e43d1bc12743fe0",
-          "version": "8.2.0"
+          "revision": "c152c1915f60c51e4afa0752656993ee5b3c63db",
+          "version": "8.8.1"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "5575af93efb776414f243e93d6af9f6258dc539a",
-          "version": "8.36.0"
+          "revision": "3a22ecd00ad1398747bfd587e44df82716908dd3",
+          "version": "9.10.0"
         }
       },
       {

@@ -459,4 +459,14 @@ final class OnboardingScreen {
         BaseTestCase().mozWaitForElementToExist(button)
         button.tap()
     }
+
+    /// Returns the legacy ToS "Agree and Continue" button.
+    func agreeAndContinueButton() -> XCUIElement {
+        return sel.AGREE_AND_CONTINUE_BUTTON.element(in: app)
+    }
+
+    /// Returns the modern onboarding primary button (used by modern flows).
+    func onboardingPrimaryButton() -> XCUIElement {
+        return sel.ONBOARDING_PRIMARY_BUTTON.element(in: app)
+    }
 }

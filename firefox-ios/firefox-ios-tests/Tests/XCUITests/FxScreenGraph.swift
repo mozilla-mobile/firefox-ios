@@ -141,6 +141,8 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 @MainActor
 func navigationControllerBackAction(for app: XCUIApplication) -> () -> Void {
     return {
+        let backButton = app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0)
+        backButton.mozWaitElementHittable(timeout: TIMEOUT)
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).waitAndTap()
     }
 }
@@ -211,7 +213,7 @@ class Action {
     static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
     static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
 
-    static let TogglePocketInNewTab = "TogglePocketInNewTab"
+    static let ToggleStoriesInNewTab = "ToggleStoriesInNewTab"
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
     static let ToggleJumpBackIn = "ToggleJumpBackIn"

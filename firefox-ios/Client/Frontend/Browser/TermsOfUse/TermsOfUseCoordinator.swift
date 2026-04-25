@@ -102,14 +102,15 @@ final class TermsOfUseCoordinator: BaseCoordinator, TermsOfUseCoordinatorDelegat
             themeManager: themeManager,
             notificationCenter: notificationCenter
         )
-        linkVC.modalPresentationStyle = .pageSheet
-        linkVC.modalTransitionStyle = .coverVertical
-        presentedVC?.present(linkVC, animated: true)
+        let navController = UINavigationController(rootViewController: linkVC)
+        navController.modalPresentationStyle = .pageSheet
+        navController.modalTransitionStyle = .coverVertical
+        presentedVC?.present(navController, animated: true)
     }
 
     func shouldShowTermsOfUse(context: TriggerContext = .appLaunch) -> Bool {
         // 1. Feature must be enabled
-        guard featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) else { return false }
+        guard featureFlagsProvider.isEnabled(.touFeature) else { return false }
 
         // 2. If user has already accepted, never show again
         let hasAcceptedTermsOfUse = prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false

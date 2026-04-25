@@ -63,7 +63,7 @@ final class ASSearchEngineSelector: ASSearchEngineSelectorProtocol {
 
             var searchResultsConfig = try engineSelector.filterEngineConfiguration(userEnvironment: env)
 
-            let serverName = remoteSettingsEnv == .stage ? "STAGE" : "PROD"
+            let serverName: String = remoteSettingsEnv.rawValue.uppercased()
             let engineLogList = searchResultsConfig.engines.map {
                 let isOptional = $0.optional ? " (OPTIONAL)" : ""
                 return $0.name + isOptional

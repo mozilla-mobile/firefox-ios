@@ -44,7 +44,7 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Vymazat";
 
 /* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. %@ is the currently visited website. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Smazání cookies a dat stránek %@ může vést k odhlášení ze stránek a vymazání nákupního košíku.";
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Smazání cookies a dat stránek pro %@ vás může odhlásit z webů a vyprázdnit vám nákupní košíky.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Vymazat cookies a uložená data";
@@ -82,10 +82,10 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Zablokované sledovací prvky: %@";
 
-/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standardní úroveň blokuje běžné sledovací prvky poté, co se stránka začne načítat. Může proto zaznamenat vyšší počet sledovacích prvků. %@";
 
-/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Přísná úroveň blokuje více sledovacích prvků před načtením stránky. Může tedy zaznamenat nižší počet sledovacích prvků. %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
@@ -107,7 +107,7 @@
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Jste chráněni. Pokud něco zpozorujeme, dáme vám vědět.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Vaše připojení není zabezpečené.";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Vaše spojení není zabezpečené.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Buďte na této stránce opatrní";

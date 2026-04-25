@@ -168,7 +168,7 @@ class UITestAppDelegate: AppDelegate {
             fatalError("Could not copy items from \(input) to \(output): \(error)")
         }
 
-        // Tests currently load a browserdb history, we make sure we migrate it everytime
+        // Tests currently load a browserdb history, we make sure we migrate it every time
         UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
     }
 

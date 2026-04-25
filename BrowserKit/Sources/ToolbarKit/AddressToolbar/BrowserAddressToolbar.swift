@@ -485,10 +485,6 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
-    func locationViewDidBeginDragInteraction() {
-        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
-    }
-
     func locationTextFieldNeedsSearchReset() {
         toolbarDelegate?.addressToolbarNeedsSearchReset()
     }

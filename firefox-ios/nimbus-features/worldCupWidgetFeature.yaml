@@ -1,0 +1,18 @@
+# The configuration for the worldCupWidgetFeature feature
+features:
+  world-cup-widget-feature:
+    description: >
+      The feature flag to manage the roll out of the world cup widget feature
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
