@@ -414,7 +414,13 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
 
 
 // Public interface members begin here.
-
+// Magic number for the Rust proxy to call using the same mechanism as every other method,
+// to free the callback once it's dropped by Rust.
+private let IDX_CALLBACK_FREE: Int32 = 0
+// Callback return codes
+private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
+private let UNIFFI_CALLBACK_ERROR: Int32 = 1
+private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -820,6 +826,13 @@ public protocol RemoteSettingsServiceProtocol: AnyObject, Sendable {
     func makeClient(collectionName: String)  -> RemoteSettingsClient
     
     /**
+     * Set the telemetry implementation used to record Glean metrics.
+     * This should be set to a real implementation (eg. Kotlin, Swift).
+     * If not set, all metric recording is a no-op.
+     */
+    func setTelemetry(telemetry: RemoteSettingsTelemetry) 
+    
+    /**
      * Sync collections for all active clients
      *
      * The returned list is the list of collections for which updates were seen
@@ -942,6 +955,19 @@ open func makeClient(collectionName: String) -> RemoteSettingsClient  {
 }
     
     /**
+     * Set the telemetry implementation used to record Glean metrics.
+     * This should be set to a real implementation (eg. Kotlin, Swift).
+     * If not set, all metric recording is a no-op.
+     */
+open func setTelemetry(telemetry: RemoteSettingsTelemetry)  {try! rustCall() {
+    uniffi_remote_settings_fn_method_remotesettingsservice_set_telemetry(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeRemoteSettingsTelemetry_lower(telemetry),$0
+    )
+}
+}
+    
+    /**
      * Sync collections for all active clients
      *
      * The returned list is the list of collections for which updates were seen
@@ -1015,6 +1041,244 @@ public func FfiConverterTypeRemoteSettingsService_lift(_ handle: UInt64) throws 
 #endif
 public func FfiConverterTypeRemoteSettingsService_lower(_ value: RemoteSettingsService) -> UInt64 {
     return FfiConverterTypeRemoteSettingsService.lower(value)
+}
+
+
+
+
+
+
+/**
+ * Trait implemented by consumers to record Remote Settings metrics with Glean.
+ *
+ * Consumers should implement this trait and pass it to
+ * [crate::RemoteSettingsService::set_telemetry].
+ *
+ * Consumers implement the trait like this (Kotlin example):
+ * ```kotlin
+ * /* Import the UniFFI-generated bindings */
+ * import mozilla.appservices.remote_settings.RemoteSettingsTelemetry
+ * import mozilla.appservices.remote_settings.UptakeEventExtras
+ * /* Import the Glean-generated bindings */
+ * import org.mozilla.appservices.remote_settings.GleanMetrics.RemoteSettings as RSMetrics
+ *
+ * class GleanTelemetry : RemoteSettingsTelemetry {
+ * override fun report_uptake(eventExtras: UptakeEventExtras) {
+ * RSMetrics.uptakeRemotesettings.record(eventExtras)
+ * }
+ * }
+ *
+ * service.setTelemetry(GleanTelemetry())
+ * ```
+ */
+public protocol RemoteSettingsTelemetry: AnyObject, Sendable {
+    
+    /**
+     * Report uptake event.
+     */
+    func reportUptake(extras: UptakeEventExtras) 
+    
+}
+/**
+ * Trait implemented by consumers to record Remote Settings metrics with Glean.
+ *
+ * Consumers should implement this trait and pass it to
+ * [crate::RemoteSettingsService::set_telemetry].
+ *
+ * Consumers implement the trait like this (Kotlin example):
+ * ```kotlin
+ * /* Import the UniFFI-generated bindings */
+ * import mozilla.appservices.remote_settings.RemoteSettingsTelemetry
+ * import mozilla.appservices.remote_settings.UptakeEventExtras
+ * /* Import the Glean-generated bindings */
+ * import org.mozilla.appservices.remote_settings.GleanMetrics.RemoteSettings as RSMetrics
+ *
+ * class GleanTelemetry : RemoteSettingsTelemetry {
+ * override fun report_uptake(eventExtras: UptakeEventExtras) {
+ * RSMetrics.uptakeRemotesettings.record(eventExtras)
+ * }
+ * }
+ *
+ * service.setTelemetry(GleanTelemetry())
+ * ```
+ */
+open class RemoteSettingsTelemetryImpl: RemoteSettingsTelemetry, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_remote_settings_fn_clone_remotesettingstelemetry(self.handle, $0) }
+    }
+    // No primary constructor declared for this class.
+
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
+        }
+
+        try! rustCall { uniffi_remote_settings_fn_free_remotesettingstelemetry(handle, $0) }
+    }
+
+    
+
+    
+    /**
+     * Report uptake event.
+     */
+open func reportUptake(extras: UptakeEventExtras)  {try! rustCall() {
+    uniffi_remote_settings_fn_method_remotesettingstelemetry_report_uptake(
+            self.uniffiCloneHandle(),
+        FfiConverterTypeUptakeEventExtras_lower(extras),$0
+    )
+}
+}
+    
+
+    
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+fileprivate struct UniffiCallbackInterfaceRemoteSettingsTelemetry {
+
+    // Create the VTable using a series of closures.
+    // Swift automatically converts these into C callback functions.
+    //
+    // This creates 1-element array, since this seems to be the only way to construct a const
+    // pointer that we can pass to the Rust code.
+    static let vtable: [UniffiVTableCallbackInterfaceRemoteSettingsTelemetry] = [UniffiVTableCallbackInterfaceRemoteSettingsTelemetry(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeRemoteSettingsTelemetry.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface RemoteSettingsTelemetry: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeRemoteSettingsTelemetry.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface RemoteSettingsTelemetry: handle missing in uniffiClone")
+            }
+        },
+        reportUptake: { (
+            uniffiHandle: UInt64,
+            extras: RustBuffer,
+            uniffiOutReturn: UnsafeMutableRawPointer,
+            uniffiCallStatus: UnsafeMutablePointer<RustCallStatus>
+        ) in
+            let makeCall = {
+                () throws -> () in
+                guard let uniffiObj = try? FfiConverterTypeRemoteSettingsTelemetry.handleMap.get(handle: uniffiHandle) else {
+                    throw UniffiInternalError.unexpectedStaleHandle
+                }
+                return uniffiObj.reportUptake(
+                     extras: try FfiConverterTypeUptakeEventExtras_lift(extras)
+                )
+            }
+
+            
+            let writeReturn = { () }
+            uniffiTraitInterfaceCall(
+                callStatus: uniffiCallStatus,
+                makeCall: makeCall,
+                writeReturn: writeReturn
+            )
+        }
+    )]
+}
+
+private func uniffiCallbackInitRemoteSettingsTelemetry() {
+    uniffi_remote_settings_fn_init_callback_vtable_remotesettingstelemetry(UniffiCallbackInterfaceRemoteSettingsTelemetry.vtable)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeRemoteSettingsTelemetry: FfiConverter {
+    fileprivate static let handleMap = UniffiHandleMap<RemoteSettingsTelemetry>()
+
+    typealias FfiType = UInt64
+    typealias SwiftType = RemoteSettingsTelemetry
+
+    public static func lift(_ handle: UInt64) throws -> RemoteSettingsTelemetry {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return RemoteSettingsTelemetryImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
+    }
+
+    public static func lower(_ value: RemoteSettingsTelemetry) -> UInt64 {
+         if let rustImpl = value as? RemoteSettingsTelemetryImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteSettingsTelemetry {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: RemoteSettingsTelemetry, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRemoteSettingsTelemetry_lift(_ handle: UInt64) throws -> RemoteSettingsTelemetry {
+    return try FfiConverterTypeRemoteSettingsTelemetry.lift(handle)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeRemoteSettingsTelemetry_lower(_ value: RemoteSettingsTelemetry) -> UInt64 {
+    return FfiConverterTypeRemoteSettingsTelemetry.lower(value)
 }
 
 
@@ -1409,6 +1673,122 @@ public func FfiConverterTypeRemoteSettingsRecord_lower(_ value: RemoteSettingsRe
 }
 
 
+public struct UptakeEventExtras: Equatable, Hashable {
+    /**
+     * Main sync status.
+     */
+    public var value: String?
+    /**
+     * Source of the sync (eg. "settings-changes-monitoring", "main/{collection}", ...)
+     */
+    public var source: String?
+    /**
+     * Age of the data in milliseconds, if available.
+     */
+    public var age: String?
+    /**
+     * Trigger that caused the sync (eg. "manual", "startup", "scheduled", ...) if available.
+     */
+    public var trigger: String?
+    /**
+     * Timestamp received from the server, if available.
+     */
+    public var timestamp: String?
+    /**
+     * Duration of the sync operation in milliseconds, if available.
+     */
+    public var duration: String?
+    /**
+     * The name of the error that occurred, if available.
+     */
+    public var errorName: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Main sync status.
+         */value: String?, 
+        /**
+         * Source of the sync (eg. "settings-changes-monitoring", "main/{collection}", ...)
+         */source: String?, 
+        /**
+         * Age of the data in milliseconds, if available.
+         */age: String?, 
+        /**
+         * Trigger that caused the sync (eg. "manual", "startup", "scheduled", ...) if available.
+         */trigger: String?, 
+        /**
+         * Timestamp received from the server, if available.
+         */timestamp: String?, 
+        /**
+         * Duration of the sync operation in milliseconds, if available.
+         */duration: String?, 
+        /**
+         * The name of the error that occurred, if available.
+         */errorName: String?) {
+        self.value = value
+        self.source = source
+        self.age = age
+        self.trigger = trigger
+        self.timestamp = timestamp
+        self.duration = duration
+        self.errorName = errorName
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UptakeEventExtras: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUptakeEventExtras: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UptakeEventExtras {
+        return
+            try UptakeEventExtras(
+                value: FfiConverterOptionString.read(from: &buf), 
+                source: FfiConverterOptionString.read(from: &buf), 
+                age: FfiConverterOptionString.read(from: &buf), 
+                trigger: FfiConverterOptionString.read(from: &buf), 
+                timestamp: FfiConverterOptionString.read(from: &buf), 
+                duration: FfiConverterOptionString.read(from: &buf), 
+                errorName: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UptakeEventExtras, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.value, into: &buf)
+        FfiConverterOptionString.write(value.source, into: &buf)
+        FfiConverterOptionString.write(value.age, into: &buf)
+        FfiConverterOptionString.write(value.trigger, into: &buf)
+        FfiConverterOptionString.write(value.timestamp, into: &buf)
+        FfiConverterOptionString.write(value.duration, into: &buf)
+        FfiConverterOptionString.write(value.errorName, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUptakeEventExtras_lift(_ buf: RustBuffer) throws -> UptakeEventExtras {
+    return try FfiConverterTypeUptakeEventExtras.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUptakeEventExtras_lower(_ value: UptakeEventExtras) -> RustBuffer {
+    return FfiConverterTypeUptakeEventExtras.lower(value)
+}
+
+
 /**
  * Public error class, this is what we return to consumers
  */
@@ -1595,6 +1975,132 @@ public func FfiConverterTypeRemoteSettingsServer_lift(_ buf: RustBuffer) throws 
 #endif
 public func FfiConverterTypeRemoteSettingsServer_lower(_ value: RemoteSettingsServer) -> RustBuffer {
     return FfiConverterTypeRemoteSettingsServer.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Remote Settings sync status.
+ */
+
+public enum SyncStatus: Equatable, Hashable {
+    
+    /**
+     * Sync completed and new data was stored.
+     */
+    case success
+    /**
+     * Local data is already up to date, no new data was stored.
+     */
+    case upToDate
+    /**
+     * A network-level error occurred (connection refused, timeout, bad HTTP status, ...)
+     */
+    case networkError
+    /**
+     * The server asked the client to back off.
+     */
+    case backoffError
+    /**
+     * Content signature verification failed.
+     */
+    case signatureError
+    /**
+     * Server error (5xx status)
+     */
+    case serverError
+    /**
+     * An unknown error occurred.
+     */
+    case unknownError
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SyncStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
+    typealias SwiftType = SyncStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SyncStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success
+        
+        case 2: return .upToDate
+        
+        case 3: return .networkError
+        
+        case 4: return .backoffError
+        
+        case 5: return .signatureError
+        
+        case 6: return .serverError
+        
+        case 7: return .unknownError
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SyncStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .success:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .upToDate:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .networkError:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .backoffError:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .signatureError:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .serverError:
+            writeInt(&buf, Int32(6))
+        
+        
+        case .unknownError:
+            writeInt(&buf, Int32(7))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSyncStatus_lift(_ buf: RustBuffer) throws -> SyncStatus {
+    return try FfiConverterTypeSyncStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSyncStatus_lower(_ value: SyncStatus) -> RustBuffer {
+    return FfiConverterTypeSyncStatus.lower(value)
 }
 
 
@@ -1981,16 +2487,23 @@ private let initializationResult: InitializationResult = {
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_make_client() != 46337) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_remote_settings_checksum_method_remotesettingsservice_set_telemetry() != 40156) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_sync() != 41684) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_remote_settings_checksum_method_remotesettingsservice_update_config() != 23848) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_remote_settings_checksum_method_remotesettingstelemetry_report_uptake() != 32578) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_remote_settings_checksum_constructor_remotesettingsservice_new() != 24841) {
         return InitializationResult.apiChecksumMismatch
     }
 
+    uniffiCallbackInitRemoteSettingsTelemetry()
     return InitializationResult.ok
 }()
 
