@@ -91,7 +91,7 @@ struct WallpaperMigrationUtility {
             return Wallpaper(id: matchingID,
                              textColor: UIColor(colorString: "FBFBFE"),
                              cardColor: nil,
-                             logoTextColor: nil )
+                             logoTextColor: UIColor(colorString: "FBFBFE"))
         } else {
             guard let metadata = try storageUtility.fetchMetadata(),
                   let matchingWallpaper = metadata.collections
