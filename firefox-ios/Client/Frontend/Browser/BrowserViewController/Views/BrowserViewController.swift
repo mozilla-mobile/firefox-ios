@@ -2554,7 +2554,11 @@ class BrowserViewController: UIViewController,
 
         guard let selectedTabURL = tabManager.selectedTab?.url,
               let webViewURL = webView.url,
-              selectedTabURL == webViewURL else { return }
+              selectedTabURL == webViewURL,
+              let selectedTab = tabManager.selectedTab
+        else { return }
+
+        updateURLBarDisplayURL(selectedTab)
     }
 
     // MARK: - Update UI
