@@ -124,6 +124,9 @@ final class TranslationLanguagePickerViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.addLanguage
         ))
+        UIView.performWithoutAnimation {
+            searchController.isActive = false
+        }
         dismiss(animated: true)
     }
 

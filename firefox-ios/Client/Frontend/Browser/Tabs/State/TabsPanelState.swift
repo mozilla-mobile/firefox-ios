@@ -141,6 +141,9 @@ struct TabsPanelState: ScreenState, Equatable {
     }
 }
 
+/// `@CopyWithUpdates` currently treats computed properties declared inside the struct as
+/// initializer/copy fields, which breaks generation with "extra arguments" errors.
+/// Keep derived accessors in this extension as a workaround.
 extension TabsPanelState {
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return true }
