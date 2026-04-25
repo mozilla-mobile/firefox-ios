@@ -384,6 +384,8 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         wallpaperView.wallpaperState = state.wallpaperState
+        // Re-trigger applyTheme on header so logoTextColor updates with new wallpaper
+        reconfigureHeaderCell()
 
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
@@ -417,6 +419,14 @@ final class HomepageViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+    }
+    
+    private func reconfigureHeaderCell() {
+        guard let headerCell = collectionView?
+            .visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader)
+            .compactMap({ $0 as? HomepageHeaderCell })
+            .first else { return }
+        headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - Layout
