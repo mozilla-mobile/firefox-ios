@@ -43,6 +43,10 @@ class TabConfigurationProvider {
         privateConfiguration.webViewConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
     }
 
+    func endPrivateBrowsingSession() {
+        configurationProvider.endPrivateBrowsingSession()
+    }
+
     private func configuration(from prefs: Prefs, isPrivate: Bool) -> WKEngineConfiguration {
         let blockPopups = prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         let autoPlay = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(prefs)

@@ -282,6 +282,10 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         TabEvent.post(.didClose, for: tab)
 
+        if tab.isPrivate, privateTabs.isEmpty {
+            tabConfigurationProvider.endPrivateBrowsingSession()
+        }
+
         if flushToDisk {
             // Only preserve tabs if restore has finished
             if tabRestoreHasFinished {
@@ -881,6 +885,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
 
         tabs = normalTabs
+        tabConfigurationProvider.endPrivateBrowsingSession()
     }
 
     private func willSelectTab(_ url: URL?) {
