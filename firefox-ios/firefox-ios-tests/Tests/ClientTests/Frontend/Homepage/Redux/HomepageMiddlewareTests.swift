@@ -18,7 +18,6 @@ final class HomepageMiddlewareTests: XCTestCase, StoreTestUtility {
         mockGleanWrapper = MockGleanWrapper()
         mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         setupStore()
     }
 

@@ -14,15 +14,15 @@ protocol FeatureFlagProviding: Sendable {
 /// Wraps NimbusFeatureFlagLayer with debug override support for beta/dev builds.
 /// Registered in AppContainer; accessed via `FeatureFlagProviding` protocol.
 final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
-    private let layer: NimbusFeatureFlagLayerProviding
     private let prefs: Prefs
+    private let backendLayer: NimbusFeatureFlagLayerProviding
 
     init(
-        layer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer,
-        prefs: Prefs
+        prefs: Prefs,
+        backendLayer: NimbusFeatureFlagLayerProviding
     ) {
-        self.layer = layer
         self.prefs = prefs
+        self.backendLayer = backendLayer
     }
 
     /// Used for checking the status of a feature flag from the feature flag backend
@@ -33,7 +33,7 @@ final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
             return override
         }
         #endif
-        return layer.checkNimbusConfigFor(flag)
+        return backendLayer.checkNimbusConfigFor(flag)
     }
 
     /// Used specifically for overriding the status of a feature flag from the backend.

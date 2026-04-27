@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-enum SearchBarPosition: String, FlaggableFeatureOptions, CaseIterable {
+enum SearchBarPosition: String, CaseIterable {
     case top
     case bottom
 

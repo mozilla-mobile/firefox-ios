@@ -151,7 +151,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-final class ErrorPageHandler: InternalSchemeResponse, LegacyFeatureFlaggable {
+final class ErrorPageHandler: InternalSchemeResponse {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.

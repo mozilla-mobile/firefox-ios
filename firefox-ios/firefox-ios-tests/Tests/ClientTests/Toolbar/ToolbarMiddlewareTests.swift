@@ -37,7 +37,6 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         // We must reset the global mock store prior to each test
         setupStore()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

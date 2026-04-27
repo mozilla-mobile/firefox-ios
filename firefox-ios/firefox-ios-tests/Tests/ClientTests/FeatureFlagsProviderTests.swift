@@ -17,7 +17,7 @@ final class FeatureFlagsProviderTests: XCTestCase {
         super.setUp()
         prefs = MockProfilePrefs()
         mockLayer = MockNimbusFeatureFlagLayer()
-        subject = FeatureFlagsProvider(layer: mockLayer, prefs: prefs)
+        subject = FeatureFlagsProvider(prefs: prefs, backendLayer: mockLayer)
     }
 
     override func tearDown() {
@@ -129,6 +129,10 @@ final class MockNimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, @unchec
 
     func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
         enabledFlags.contains(featureID)
+    }
+
+    func checkStartAtHomeConfiguration() -> StartAtHome {
+        return .afterFourHours
     }
 }
 

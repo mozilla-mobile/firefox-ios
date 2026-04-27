@@ -33,7 +33,6 @@ final class TabManagerMiddlewareTests: XCTestCase, StoreTestUtility {
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
         setupStore()
         appState = setupAppState()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
 
     override func tearDown() async throws {

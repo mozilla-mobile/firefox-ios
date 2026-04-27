@@ -20,7 +20,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressPrivateMode()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable, LegacyFeatureFlaggable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
         static let topTabsViewHeight: CGFloat = 44

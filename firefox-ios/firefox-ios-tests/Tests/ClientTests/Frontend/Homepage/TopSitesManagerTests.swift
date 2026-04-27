@@ -17,7 +17,6 @@ final class TopSitesManagerTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         mockNotificationCenter = MockNotificationCenter()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 

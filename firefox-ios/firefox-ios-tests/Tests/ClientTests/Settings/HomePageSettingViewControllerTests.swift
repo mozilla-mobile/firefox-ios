@@ -16,7 +16,6 @@ final class HomePageSettingViewControllerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsWorldCupFeatureFlagEnabled(false)
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()

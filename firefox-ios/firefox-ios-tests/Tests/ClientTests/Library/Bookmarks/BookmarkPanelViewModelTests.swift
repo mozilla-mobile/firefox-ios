@@ -10,13 +10,12 @@ import XCTest
 @testable import Client
 
 @MainActor
-final class BookmarksPanelViewModelTests: XCTestCase, LegacyFeatureFlaggable {
+final class BookmarksPanelViewModelTests: XCTestCase {
     private var profile: MockProfile!
 
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 

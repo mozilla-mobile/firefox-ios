@@ -23,14 +23,14 @@ protocol UserFeaturePreferring: Sendable {
 
 final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Sendable {
     private let prefs: Prefs
-    private let nimbusLayer: NimbusFeatureFlagLayer
+    private let backendLayer: NimbusFeatureFlagLayerProviding
 
     init(
         prefs: Prefs,
-        nimbusLayer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer
+        backendLayer: NimbusFeatureFlagLayerProviding
     ) {
         self.prefs = prefs
-        self.nimbusLayer = nimbusLayer
+        self.backendLayer = backendLayer
     }
 
     // MARK: - Generic bool preferences
@@ -42,13 +42,14 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         return prefs.boolForKey(key) ?? checkDefaultValue(for: flag)
     }
 
-    // Some features might have a differnt default value than what's provided by
+    // Some features might have a different default value than what's provided by
     // the backend. Here, we can set our own default values.
     private func checkDefaultValue(for flag: FeatureFlagID) -> Bool {
+        // Even when this feature is on in Nimbus, the user preference default value should be false
         if flag == .aiKillSwitch {
             return false
         } else {
-            return nimbusLayer.checkNimbusConfigFor(flag)
+            return backendLayer.checkNimbusConfigFor(flag)
         }
     }
 
@@ -72,7 +73,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
            let setting = StartAtHome(rawValue: raw) {
             return setting
         }
-        return FxNimbus.shared.features.startAtHomeFeature.value().setting
+        return backendLayer.checkStartAtHomeConfiguration()
     }
 
     // MARK: - Typed setters

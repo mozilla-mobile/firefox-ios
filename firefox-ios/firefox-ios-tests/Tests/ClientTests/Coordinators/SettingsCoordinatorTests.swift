@@ -17,7 +17,6 @@ final class SettingsCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.wallpaperManager = WallpaperManagerMock()
         self.delegate = MockSettingsCoordinatorDelegate()
