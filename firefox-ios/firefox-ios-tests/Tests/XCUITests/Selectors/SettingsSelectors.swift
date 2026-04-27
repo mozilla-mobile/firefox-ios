@@ -42,6 +42,7 @@ protocol SettingsSelectorsSet {
     var BLOCK_POPUPS_SWITCH: Selector { get }
     var TOOLBAR_CELL: Selector { get }
     var DEFAULT_BROWSER_CELL: Selector { get }
+    var SEARCH_CELL: Selector { get }
     var BROWSING_CELL_TITLE: Selector { get }
     var BLOCK_IMAGES_SWITCH_TITLE: Selector { get }
 
@@ -78,6 +79,7 @@ struct SettingsSelectors: SettingsSelectorsSet {
         static let settingTitle = "Settings"
         static let toolbarCellSettings = AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting
         static let defaultBrowserSettings = AccessibilityIdentifiers.Settings.DefaultBrowser.defaultBrowser
+        static let searchCellTitle = AccessibilityIdentifiers.Settings.Search.title
         static let browsingCellTitle = AccessibilityIdentifiers.Settings.Browsing.title
         static let blockImages = AccessibilityIdentifiers.Settings.BlockImages.title
         static let noImageModeStatus = "NoImageModeStatus"
@@ -250,6 +252,12 @@ struct SettingsSelectors: SettingsSelectorsSet {
         groups: ["settings"]
     )
 
+    let SEARCH_CELL = Selector.tableCellById(
+        IDs.searchCellTitle,
+        description: "Search settings cell",
+        groups: ["settings"]
+    )
+
     let BROWSING_CELL_TITLE = Selector.tableCellById(
         IDs.browsingCellTitle,
         description: "Browsing settings cell",
@@ -371,12 +379,13 @@ struct SettingsSelectors: SettingsSelectorsSet {
     }
 
     var all: [Selector] {
-        [SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
-         CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
-         PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
-         CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE, BROWSING_LINKS_SECTION,
-         NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH, TOOLBAR_CELL, DEFAULT_BROWSER_CELL,
-         BROWSING_CELL_TITLE, BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE,
-         SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL]
-    }
+            [SETTINGS_TABLE, DONE_BUTTON, SETTINGS_TITLE, AUTOFILLS_PASSWORDS_CELL, CLEAR_DATA_CELL,
+             CLOSE_PRIVATE_TABS_SWITCH, CONTENT_BLOCKER_CELL, NOTIFICATIONS_CELL,
+             PRIVACY_POLICY_CELL, LOGINS_CELL, CREDIT_CARDS_CELL, ADDRESS_CELL,
+             CLEAR_PRIVATE_DATA_CELL, ALERT_OK_BUTTON, NEW_TAB_CELL, TITLE, TABLE,
+             BROWSING_LINKS_SECTION, NAVIGATIONBAR, CONNECT_SETTING, BLOCK_POPUPS_SWITCH,
+             TOOLBAR_CELL, DEFAULT_BROWSER_CELL, SEARCH_CELL, BROWSING_CELL_TITLE,
+             BLOCK_IMAGES_SWITCH_TITLE, NO_IMAGE_MODE_STATUS_SWITCH, TRANSLATION_CELL_TITLE,
+             SEND_DATA_CELL, SEND_CRASH_REPORTS_CELL]
+        }
 }
