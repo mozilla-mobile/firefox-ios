@@ -281,7 +281,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
             leadingPageActions: leadingPageActions(action: toolbarAction,
                                                    addressBarState: state,
                                                    isEditing: state.isEditing),
-            translationConfiguration: toolbarAction.translationConfiguration
+            translationConfiguration: toolbarAction.translationConfiguration == nil
+                ? (nil as TranslationConfiguration??)
+                : .some(toolbarAction.translationConfiguration),
         )
     }
 
@@ -304,7 +306,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
+        let lockIconImageName = toolbarAction.readerModeState == .active ? (nil as String??) : state.lockIconImageName
         let trailingPageActions = trailingPageActions(action: toolbarAction,
                                                       addressBarState: state,
                                                       isEditing: state.isEditing,
@@ -312,7 +314,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return state.copyWithUpdates(
             trailingPageActions: trailingPageActions,
             lockIconImageName: lockIconImageName,
-            readerModeState: toolbarAction.readerModeState,
+            readerModeState: toolbarAction.readerModeState == nil
+                ? (nil as ReaderModeState??)
+                : .some(toolbarAction.readerModeState),
             canSummarize: toolbarAction.canSummarize
         )
     }
@@ -356,11 +360,13 @@ struct AddressBarState: StateType, Sendable, Equatable {
             url: toolbarAction.url == nil
                 ? (nil as URL??)
                 : .some(toolbarAction.url),
-            searchTerm: nil,
+            searchTerm: (nil as String??),
             lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId.map { Optional($0) } ?? .some(nil),
             lockIconImageName: toolbarAction.lockIconImageName.map { Optional($0) } ?? .some(nil),
             lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
-            safeListedURLImageName: toolbarAction.safeListedURLImageName,
+            safeListedURLImageName: toolbarAction.safeListedURLImageName == nil
+                ? (nil as String??)
+                : .some(toolbarAction.safeListedURLImageName),
             isEmptySearch: isEmptySearch,
             translationConfiguration: resolveTranslationConfig(
                 from: toolbarAction,
@@ -394,7 +400,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
             trailingPageActions: trailingPageActions(action: toolbarAction,
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
-            searchTerm: nil
+            searchTerm: (nil as String??)
         )
     }
 
@@ -467,7 +473,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            searchTerm: toolbarAction.searchTerm,
+            searchTerm: toolbarAction.searchTerm == nil
+                ? (nil as String??)
+                : .some(toolbarAction.searchTerm),
             isEditing: true,
             shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
@@ -526,7 +534,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: false),
             url: url,
-            searchTerm: nil,
+            searchTerm: (nil as String??),
             isEditing: false,
             shouldShowKeyboard: false,
             shouldSelectSearchTerm: false,
@@ -549,7 +557,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: true,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: true),
-            searchTerm: toolbarAction.searchTerm,
+            searchTerm: toolbarAction.searchTerm == nil
+                ? (nil as String??)
+                : .some(toolbarAction.searchTerm),
             isEditing: true,
             shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
@@ -578,7 +588,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      addressBarState: state,
                                                      isEditing: true,
                                                      isEmptySearch: true),
-            searchTerm: nil,
+            searchTerm: (nil as String??),
             isEditing: true,
             isEmptySearch: true
         )
@@ -620,7 +630,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return state.copyWithUpdates(
-            searchTerm: toolbarAction.searchTerm,
+            searchTerm: toolbarAction.searchTerm == nil
+                ? (nil as String??)
+                : .some(toolbarAction.searchTerm),
+
             didStartTyping: false
         )
     }
@@ -648,7 +661,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
         guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
 
         return state.copyWithUpdates(
-            alternativeSearchEngine: nil
+            alternativeSearchEngine: (nil as SearchEngineModel??)
         )
     }
 
