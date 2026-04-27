@@ -44,6 +44,7 @@
 		0A3F57F92CEDD4CA0051B001 /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F57F82CEDD4CA0051B001 /* TermsOfServiceViewController.swift */; };
 		0A44ABAC2D6DC2520034FA86 /* ThemedLearnMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A44ABAB2D6DC2410034FA86 /* ThemedLearnMoreTableViewCell.swift */; };
 		0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */; };
+		0A5A3A142F9B776E0040C7B8 /* TabCellCustomImageViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5A3A132F9B77670040C7B8 /* TabCellCustomImageViewTests.swift */; };
 		0A5E6F402CF88A7900C1DFC9 /* SwitchDetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E6F3F2CF88A7900C1DFC9 /* SwitchDetailedView.swift */; };
 		0A686B3C2CDB70DC0090E146 /* MainMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */; };
 		0A686B3E2CE253AB0090E146 /* PDFDocument+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A686B3D2CE253AB0090E146 /* PDFDocument+Extension.swift */; };
@@ -65,6 +66,7 @@
 		0AC0F9482E3CA17900E826D8 /* MainMenuConfigurationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */; };
 		0AC659272BF35854005C614A /* FxAWebViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */; };
 		0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */; };
+		0AD315DC2F8FBECB00DAD6D1 /* TabCellCustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD315DB2F8FBEBA00DAD6D1 /* TabCellCustomImageView.swift */; };
 		0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */; };
 		0AEA26D42F506C1900B512EB /* BlockedTrackersLearnMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEA26D32F506BDA00B512EB /* BlockedTrackersLearnMoreViewController.swift */; };
 		0AEA29362F518B8F00B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEA29352F518B7100B512EB /* BlockedTrackersLearnMoreViewControllerTests.swift */; };
@@ -2692,6 +2694,7 @@
 		0A44ABAB2D6DC2410034FA86 /* ThemedLearnMoreTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedLearnMoreTableViewCell.swift; sourceTree = "<group>"; };
 		0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		0A574D09BF8D9E37D6C9C654 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		0A5A3A132F9B77670040C7B8 /* TabCellCustomImageViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCellCustomImageViewTests.swift; sourceTree = "<group>"; };
 		0A5B4CE9B0996AE804491134 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Shared.strings; sourceTree = "<group>"; };
 		0A5E6F3F2CF88A7900C1DFC9 /* SwitchDetailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchDetailedView.swift; sourceTree = "<group>"; };
 		0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuTelemetryTests.swift; sourceTree = "<group>"; };
@@ -2715,6 +2718,7 @@
 		0AC0F9472E3CA17500E826D8 /* MainMenuConfigurationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuConfigurationUtilityTests.swift; sourceTree = "<group>"; };
 		0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModelTests.swift; sourceTree = "<group>"; };
 		0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxAWebViewModel.swift; sourceTree = "<group>"; };
+		0AD315DB2F8FBEBA00DAD6D1 /* TabCellCustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCellCustomImageView.swift; sourceTree = "<group>"; };
 		0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		0AE9462E8A8E05CE07D4973D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AEA26D32F506BDA00B512EB /* BlockedTrackersLearnMoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersLearnMoreViewController.swift; sourceTree = "<group>"; };
@@ -12395,6 +12399,7 @@
 		21C5B3582AF2A7130093F366 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0AD315DB2F8FBEBA00DAD6D1 /* TabCellCustomImageView.swift */,
 				C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */,
 				8A8D12122DD671BE00E0B8BB /* Animation */,
 				5A96FB602D97073C00917B12 /* CustomSelectorView */,
@@ -12431,6 +12436,7 @@
 		21D8EA942ABE0511003FF16E /* TabTray */ = {
 			isa = PBXGroup;
 			children = (
+				0A5A3A132F9B77670040C7B8 /* TabCellCustomImageViewTests.swift */,
 				8A7AF0C42C9A1135009691B5 /* Redux */,
 				1D3C90872ACE1AF400304C87 /* RemoteTabPanelTests.swift */,
 				8ABB15C82D5A4E3900A4635C /* RemoteTabsMiddlewareTests.swift */,
@@ -19652,6 +19658,7 @@
 				742BD99E2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift in Sources */,
 				9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */,
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
+				0AD315DC2F8FBECB00DAD6D1 /* TabCellCustomImageView.swift in Sources */,
 				8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */,
 				612194E82CE50A9B001664BB /* WallpaperState.swift in Sources */,
 				DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */,
@@ -20267,6 +20274,7 @@
 				8AF6D4DF2A856A9000B0474B /* MockUnifiedTileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				21FB441A2E7B3AE500A8818D /* MockRecordVisitObservationManager.swift in Sources */,
+				0A5A3A142F9B776E0040C7B8 /* TabCellCustomImageViewTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
 				8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */,
 				401F68A52D84726700786D0C /* RemoteTabsPanelTests.swift in Sources */,
