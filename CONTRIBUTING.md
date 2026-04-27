@@ -69,6 +69,7 @@ To help reviewers give useful feedback and keep the project maintainable, pull r
 Pull requests that do not meet this baseline may be closed until they meet our code quality expectations.
 
 ## Pull Requests
+* Please avoid having more than 3 open PRs at a time. Keeping the number of active PRs small helps ensure each one receives proper attention, makes feedback easier to manage, and reduces pressure on the team.
 * All pull requests must be associated with a specific issue. If an issue doesn't exist, please create it first.
 * Before you submit your pull request, search the repository for open or closed PRs that relate to your submission. We don't want to duplicate effort. 
 * PRs should be made from a branch on your personal fork to the `mozilla-mobile:main` branch. Please see the [Pull Request Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs.
