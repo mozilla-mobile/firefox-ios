@@ -83,6 +83,7 @@ struct OpenTabsView: View {
     var emptyView: some View {
         VStack {
             Text(String.NoOpenTabsLabel)
+                .foregroundStyle(Color("openTabsContentColor"))
             HStack {
                 Spacer()
                 Image(decorative: StandardImageIdentifiers.Small.externalLink)
