@@ -14,11 +14,11 @@ protocol FeatureFlagProviding: Sendable {
 /// Wraps NimbusFeatureFlagLayer with debug override support for beta/dev builds.
 /// Registered in AppContainer; accessed via `FeatureFlagProviding` protocol.
 final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
-    private let layer: NimbusFeatureFlagLayer
+    private let layer: NimbusFeatureFlagLayerProviding
     private let prefs: Prefs
 
     init(
-        layer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer,
+        layer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer,
         prefs: Prefs
     ) {
         self.layer = layer
