@@ -524,6 +524,8 @@
 		401F68F62D94966D00786D0C /* RemoteTabsPanelDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401F68F52D94966600786D0C /* RemoteTabsPanelDelegateMock.swift */; };
 		407468182F9A839800301FD6 /* VPNControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407468172F9A839800301FD6 /* VPNControllerProtocol.swift */; };
 		407468192F9A839800301FD6 /* VPNController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407468162F9A839800301FD6 /* VPNController.swift */; };
+		40746CEB2F9FC05B00301FD6 /* VPNGuardian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40746CEA2F9FC05400301FD6 /* VPNGuardian.swift */; };
+		878C659CFC3280C45A920578 /* VPNServerlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7017266EE45BABE0311D26 /* VPNServerlist.swift */; };
 		43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		430234162E3B862E00FF85CA /* Summarizer.strings in Resources */ = {isa = PBXBuildFile; fileRef = 430234142E3B862E00FF85CA /* Summarizer.strings */; };
 		43079D1F2C85D3BB0047C28D /* Bookmarks.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43079D1D2C85D3BB0047C28D /* Bookmarks.strings */; };
@@ -3536,6 +3538,8 @@
 		406E4E6094EB97EBD3574628 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/Search.strings; sourceTree = "<group>"; };
 		407468162F9A839800301FD6 /* VPNController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNController.swift; sourceTree = "<group>"; };
 		407468172F9A839800301FD6 /* VPNControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNControllerProtocol.swift; sourceTree = "<group>"; };
+		40746CEA2F9FC05400301FD6 /* VPNGuardian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNGuardian.swift; sourceTree = "<group>"; };
+		CF7017266EE45BABE0311D26 /* VPNServerlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNServerlist.swift; sourceTree = "<group>"; };
 		40A64D0FB8B16BBEA2A423A1 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		40C446CF9007C978AF889496 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/Intro.strings; sourceTree = "<group>"; };
 		40FD4BA2A53836F727F13D58 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = "vi.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -15922,6 +15926,8 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				40746CEA2F9FC05400301FD6 /* VPNGuardian.swift */,
+				CF7017266EE45BABE0311D26 /* VPNServerlist.swift */,
 				407468162F9A839800301FD6 /* VPNController.swift */,
 				407468172F9A839800301FD6 /* VPNControllerProtocol.swift */,
 				2140E4622E71FC240054173A /* RecordVisitObservationManager.swift */,
@@ -19046,6 +19052,8 @@
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
+				40746CEB2F9FC05B00301FD6 /* VPNGuardian.swift in Sources */,
+				878C659CFC3280C45A920578 /* VPNServerlist.swift in Sources */,
 				8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */,
 				8A855C032D1EE9EF00C1A2F3 /* ContextMenuCoordinator.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* PrivateModeUI.swift in Sources */,
