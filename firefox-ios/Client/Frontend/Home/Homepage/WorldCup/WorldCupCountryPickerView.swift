@@ -29,7 +29,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
         static let sectionInnerPadding: CGFloat = 16
         static let sectionHeaderLeadingPadding: CGFloat = 16
         static let sectionHeaderBottomPadding: CGFloat = 8
-        static let gridColumns = 4
+        static let gridMinTileWidth: CGFloat = 70
         static let gridSpacing: CGFloat = 6
         static let gridRowSpacing: CGFloat = 16
         static let flagSize = CGSize(width: 60, height: 40)
@@ -41,7 +41,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     @State var theme: Theme
     private let regions = WorldCupCountryData.regions
     private var gridColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: UX.gridSpacing), count: UX.gridColumns)
+        [GridItem(.adaptive(minimum: UX.gridMinTileWidth), spacing: UX.gridSpacing)]
     }
 
     init(windowUUID: WindowUUID, themeManager: ThemeManager) {
@@ -80,6 +80,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
                 }
             }
         }
+        .navigationViewStyle(.stack)
         .background(Color(theme.colors.layer3))
         .listenToThemeChanges(theme: $theme, manager: themeManager, windowUUID: windowUUID)
     }
