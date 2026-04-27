@@ -33,7 +33,6 @@ final class BrowserCoordinator: BaseCoordinator,
                           SearchEngineSelectionCoordinatorDelegate,
                           TermsOfUseDelegate,
                           ShareSheetCoordinatorDelegate,
-                          LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                           FeatureFlaggable {
     private struct UX {
         static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
@@ -958,7 +957,7 @@ final class BrowserCoordinator: BaseCoordinator,
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) {
             modalPresentationStyle = .fullScreen
         } else {
             modalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -987,7 +986,7 @@ final class BrowserCoordinator: BaseCoordinator,
         }
 
         // FXIOS-13305: We don't handle animations properly for synced tabs, so we will use default presentation
-        if featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly) &&
+        if featureFlagsProvider.isEnabled(.tabTrayUIExperiments) &&
             UIDevice.current.userInterfaceIdiom != .pad && selectedPanel != .syncedTabs {
             guard let tabTrayVC = tabTrayCoordinator.tabTrayViewController else { return }
             present(navigationController, customTransition: tabTrayVC, style: modalPresentationStyle)

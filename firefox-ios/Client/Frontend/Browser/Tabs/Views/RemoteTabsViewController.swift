@@ -17,7 +17,7 @@ class RemoteTabsViewController: UIViewController,
                                 Themeable,
                                 CollapsibleTableViewSection,
                                 LibraryPanelContextMenu,
-                                LegacyFeatureFlaggable,
+                                FeatureFlaggable,
                                 UITableViewDelegate,
                                 UITableViewDataSource {
     struct UX {
@@ -31,7 +31,7 @@ class RemoteTabsViewController: UIViewController,
     private let logger: Logger
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 

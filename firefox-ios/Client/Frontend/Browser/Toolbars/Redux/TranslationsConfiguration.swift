@@ -6,7 +6,7 @@ import Shared
 
 // Holds the configuration / state of the translation button on the toolbar
 // Whether we should show translate button and which mode (inactive, loading, active)
-struct TranslationConfiguration: Equatable, LegacyFeatureFlaggable {
+struct TranslationConfiguration: Equatable, FeatureFlaggable {
     /// This is used to configure the translation icon state.
     /// States:
     /// inactive - page has not been translated yet
@@ -69,7 +69,7 @@ struct TranslationConfiguration: Equatable, LegacyFeatureFlaggable {
     }
 
     var isMultiLanguageFlow: Bool {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) else { return false }
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker) else { return false }
         guard let stored = prefs.stringForKey(PrefsKeys.Settings.translationPreferredLanguages),
               !stored.isEmpty else { return false }
         return stored.components(separatedBy: ",").count != 1
@@ -79,7 +79,7 @@ struct TranslationConfiguration: Equatable, LegacyFeatureFlaggable {
     /// The experiment needs to be turned on and the user settings needs to be enabled
     /// If user has not toggled the settings, then we enable the feature by default
     var isTranslationFeatureEnabled: Bool {
-        let isExperimentOn = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        let isExperimentOn = featureFlagsProvider.isEnabled(.translation)
         let isSettingsEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
         return isExperimentOn && isSettingsEnabled
     }
