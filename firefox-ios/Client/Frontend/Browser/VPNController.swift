@@ -15,6 +15,7 @@ final class VPNController: VPNControllerProtocol {
     private let logger: Logger
     private let accountManagerProvider: () -> FxAccountManager?
     private let guardian: VPNGuardian
+    private let serverlist: VPNServerlist
 
     private(set) var isRunning = false
 
@@ -23,6 +24,7 @@ final class VPNController: VPNControllerProtocol {
         accountManager: @escaping () -> FxAccountManager? = {
             RustFirefoxAccounts.shared.accountManager
         },
+        rsService: RemoteSettingsService = (AppContainer.shared.resolve() as Profile).remoteSettingsService,
         clientConfig: VPNGuardian.Configuration = .prod
     ) {
         self.logger = logger
@@ -42,13 +44,17 @@ final class VPNController: VPNControllerProtocol {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let pass = try await self.getPass()
-                let server = Server(
-                    hostname: "muc139.m1.fastly-masque.net",
-                    port: 2499,
-                    city: "MUC",
-                    countryCode: "DE"
-                )
+                let pass = try await self.guardian.getPass()
+                // TODO: If that fails with a 403, we must enroll the account into ff-vpn first.
+                // let entitlement = try await self.guardian.activate()
+                // self.logger.log("Entitlement: \(String(describing: entitlement))",
+                //                level: .info,
+                //                category: .sync)
+                
+                guard let server = self.serverlist.selectServer() else {
+                    throw VPNError.noServerFound
+                }
+
                 self.logger.log(
                     "Got Guardian proxy pass — expires \(pass.expiresAt), usage \(String(describing: pass.usage)); server \(server.hostname):\(server.port) (\(server.city), \(server.countryCode))",
                     level: .info,
