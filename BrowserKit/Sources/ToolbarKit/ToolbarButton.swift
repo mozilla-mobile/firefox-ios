@@ -83,8 +83,7 @@ class ToolbarButton: UIButton,
         if let isLoading = element.loadingConfig?.isLoading, isLoading {
             makeLoadingButton()
         } else {
-            let completionA11yLabel = element.isSelected ? element.loadingConfig?.a11yLabel : nil
-            hideLoadingIcon(completionA11yLabel: completionA11yLabel)
+            hideLoadingIcon()
         }
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.title ?? element.a11yLabel,
@@ -292,6 +291,7 @@ class ToolbarButton: UIButton,
         if spinner == nil {
             let loadingView = UIActivityIndicatorView(style: style)
             loadingView.translatesAutoresizingMaskIntoConstraints = false
+            loadingView.isAccessibilityElement = false
             addSubview(loadingView)
             NSLayoutConstraint.activate([
                 loadingView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -305,16 +305,14 @@ class ToolbarButton: UIButton,
         }
     }
 
-    private func hideLoadingIcon(completionA11yLabel: String? = nil) {
+    private func hideLoadingIcon() {
         let hadSpinner = spinner != nil
         spinner?.stopAnimating()
         spinner?.removeFromSuperview()
         spinner = nil
-        guard hadSpinner && UIAccessibility.isVoiceOverRunning else { return }
-        if let completionA11yLabel {
-            UIAccessibility.post(notification: .announcement, argument: completionA11yLabel)
+        if hadSpinner && UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: self)
         }
-        UIAccessibility.post(notification: .layoutChanged, argument: self)
     }
 
     private func removeLongPressGestureRecognizer() {

@@ -286,6 +286,7 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
+                cacheId: action.cacheId,
                 a11yCustomActionName: action.a11yCustomActionName,
                 a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
