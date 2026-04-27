@@ -15,6 +15,7 @@ protocol UserFeaturePreferring: Sendable {
     var isSponsoredShortcutsEnabled: Bool { get }
     var isHomepageBookmarksSectionEnabled: Bool { get }
     var isHomepageJumpBackInSectionEnabled: Bool { get }
+    var isHomepageWorldCupSectionEnabled: Bool { get }
 
     // Typed preferences (read)
     var searchBarPosition: SearchBarPosition { get }
@@ -27,6 +28,7 @@ protocol UserFeaturePreferring: Sendable {
     func setSponsoredShortcutsEnabled(_ enabled: Bool)
     func setHomepageBookmarksSectionEnabled(_ enabled: Bool)
     func setHomepageJumpBackInSectionEnabled(_ enabled: Bool)
+    func setHomepageWorldCupSectionEnabled(_ enabled: Bool)
     func setSearchBarPosition(_ position: SearchBarPosition)
     func setStartAtHomeSetting(_ setting: StartAtHome)
 }
@@ -75,6 +77,11 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         ?? nimbusLayer.checkNimbusConfigFor(.homepageJumpBackinSectionDefault)
     }
 
+    var isHomepageWorldCupSectionEnabled: Bool {
+        prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection)
+        ?? nimbusLayer.checkNimbusConfigFor(.worldCupWidget)
+    }
+
     // MARK: - Typed preferences
 
     var searchBarPosition: SearchBarPosition {
@@ -117,6 +124,10 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
 
     func setHomepageJumpBackInSectionEnabled(_ enabled: Bool) {
         prefs.setBool(enabled, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
+    }
+
+    func setHomepageWorldCupSectionEnabled(_ enabled: Bool) {
+        prefs.setBool(enabled, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
     }
 
     func setSearchBarPosition(_ position: SearchBarPosition) {

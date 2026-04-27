@@ -606,6 +606,18 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: BookmarksCell.self, at: indexPath) { cell in
                 cell.configure(config: item, theme: currentTheme)
             }
+        case .worldCup:
+            return configuredCell(cellType: WorldCupScrollableCell.self, at: indexPath) { cell in
+                let redView = UIView()
+                redView.backgroundColor = .systemRed
+                redView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+
+                let blueView = UIView()
+                blueView.backgroundColor = .systemBlue
+                blueView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+
+                cell.configure(with: [redView, blueView], theme: currentTheme)
+            }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
         case .spacer:

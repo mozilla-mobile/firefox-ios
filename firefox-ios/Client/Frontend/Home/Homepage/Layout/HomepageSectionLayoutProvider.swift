@@ -155,6 +155,8 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
             return createBookmarksSectionLayout(for: environment)
+        case .worldCup:
+            return createWorldCupSectionLayout(for: environment)
         case .spacer:
             return createSpacerSectionLayout(for: environment)
         }
@@ -478,6 +480,34 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         return section
     }
 
+    private func createWorldCupSectionLayout(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.standardSingleItemHeight)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.standardSingleItemHeight)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = UX.leadingInset(traitCollection: environment.traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.headerSectionSpacing,
+            leading: leadingInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: leadingInset
+        )
+
+        return section
+    }
+
     // Creates the spacer section used to achieve a full-screen layout without having a full screen of content.
     // The spacer section's height is manually calculated by summing up every other visible sections height, including it's
     // content, headers/footers, vertical item/group/section spacing, and vertical item/group/section insets.
@@ -734,6 +764,21 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         return bookmarksMeasurement.totalHeight
     }
 
+    /// Returns the height of the World Cup section if it should be shown
+    private func getWorldCupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.worldCupState.shouldShowSection else { return 0 }
+
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let cell = WorldCupScrollableCell()
+        let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: CGFloat(containerWidth))
+
+        var totalHeight = cellHeight
+        totalHeight += UX.headerSectionSpacing
+        totalHeight += UX.spacingBetweenSections
+        return totalHeight
+    }
+
     /// Creates a "dummy" search bar section and returns its height
     private func getSearchBarSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID) else {
@@ -821,6 +866,7 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
+        let worldCupHeight = getWorldCupSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         return height
@@ -830,6 +876,7 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
             - topSitesHeight
             - jumpBackInHeight
             - bookmarksHeight
+            - worldCupHeight
             - searchBarHeight
     }
 

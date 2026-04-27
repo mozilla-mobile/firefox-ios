@@ -30,6 +30,7 @@ final class HomepageDiffableDataSource:
         case searchBar
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
+        case worldCup
         case pocket(TextColor?)
         case spacer
 
@@ -53,6 +54,7 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(JumpBackInTabConfiguration)
         case jumpBackInSyncedTab(JumpBackInSyncedTabConfiguration)
         case bookmark(BookmarkConfiguration)
+        case worldCup
         /// FXIOS-15423: Include the selected category in the item's identity so category transitions are treated as
         /// a presentation-context change. Without the category context, diffable treats the same story in
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
@@ -71,6 +73,7 @@ final class HomepageDiffableDataSource:
                 JumpBackInCell.self,
                 SyncedTabCell.self,
                 BookmarksCell.self,
+                WorldCupScrollableCell.self,
                 StoryCell.self,
                 HomepageSpacerCell.self
             ]
@@ -135,6 +138,11 @@ final class HomepageDiffableDataSource:
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
             snapshot.appendSections([.bookmarks(textColor)])
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
+        }
+
+        if state.worldCupState.shouldShowSection {
+            snapshot.appendSections([.worldCup])
+            snapshot.appendItems([.worldCup], toSection: .worldCup)
         }
 
         snapshot.appendSections([.spacer])

@@ -1629,6 +1629,8 @@
 		C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */; };
 		C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */; };
 		C2EBB68F2E8181F20029E82C /* DismissableNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */; };
+		C2F190FF2F9BC483002E9EC0 /* WorldCupScrollableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F190FE2F9BC483002E9EC0 /* WorldCupScrollableCell.swift */; };
+		C2F191012F9BC5B1002E9EC0 /* WorldCupSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F191002F9BC5B1002E9EC0 /* WorldCupSectionState.swift */; };
 		C2F335342ECE33720071588A /* translations-engine.worker.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335322ECE33720071588A /* translations-engine.worker.js */; };
 		C2F335352ECE33720071588A /* TranslationsEngine.js in Resources */ = {isa = PBXBuildFile; fileRef = C2F335332ECE33720071588A /* TranslationsEngine.js */; };
 		C2F335372ECE339F0071588A /* TranslationsEngine.html in Resources */ = {isa = PBXBuildFile; fileRef = C2F335362ECE339F0071588A /* TranslationsEngine.html */; };
@@ -10338,6 +10340,8 @@
 		C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMainMenuCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C2EBB68E2E8181EF0029E82C /* DismissableNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableNavigationViewController.swift; sourceTree = "<group>"; };
+		C2F190FE2F9BC483002E9EC0 /* WorldCupScrollableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupScrollableCell.swift; sourceTree = "<group>"; };
+		C2F191002F9BC5B1002E9EC0 /* WorldCupSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupSectionState.swift; sourceTree = "<group>"; };
 		C2F335322ECE33720071588A /* translations-engine.worker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "translations-engine.worker.js"; sourceTree = "<group>"; };
 		C2F335332ECE33720071588A /* TranslationsEngine.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TranslationsEngine.js; sourceTree = "<group>"; };
 		C2F335362ECE339F0071588A /* TranslationsEngine.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = TranslationsEngine.html; path = Client/Frontend/UserContent/UserScripts/TranslationsEngine/TranslationsEngine.html; sourceTree = "<group>"; };
@@ -14974,6 +14978,8 @@
 			isa = PBXGroup;
 			children = (
 				C2D7AC3C2F9B5DC30090EC28 /* WorldCupAction.swift */,
+				C2F190FE2F9BC483002E9EC0 /* WorldCupScrollableCell.swift */,
+				C2F191002F9BC5B1002E9EC0 /* WorldCupSectionState.swift */,
 			);
 			path = WorldCup;
 			sourceTree = "<group>";
@@ -19191,6 +19197,7 @@
 				0BDDB33D2CA6B1DA00D501DF /* EditFolderViewController.swift in Sources */,
 				AB8EE2D32C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift in Sources */,
 				C234BFC02EBB8321004BF5A8 /* SettingsNavigationController.swift in Sources */,
+				C2F191012F9BC5B1002E9EC0 /* WorldCupSectionState.swift in Sources */,
 				8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */,
 				C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */,
 				21A7C45028353D0E0071D996 /* OnboardingBasicCardViewController.swift in Sources */,
@@ -19681,6 +19688,7 @@
 				8A6E63C72D4946B90040D355 /* JumpBackInSectionState.swift in Sources */,
 				BDE2DB332DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift in Sources */,
 				8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */,
+				C2F190FF2F9BC483002E9EC0 /* WorldCupScrollableCell.swift in Sources */,
 				8A9F4F0B2DC8F5D1004644B9 /* MockPlaces.swift in Sources */,
 				8AAC7C452D52C18A0011F87A /* SaveLoginAlert.swift in Sources */,
 				E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */,

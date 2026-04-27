@@ -293,6 +293,10 @@ struct AccessibilityIdentifiers {
             static let favIconImage = "SyncedTabFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
+
+        struct WorldCup {
+            static let scrollableCell = "WorldCupScrollableCell"
+        }
     }
 
     struct GeneralizedIdentifiers {
