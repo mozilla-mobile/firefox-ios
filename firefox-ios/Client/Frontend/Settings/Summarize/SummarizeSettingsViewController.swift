@@ -5,7 +5,7 @@
 import Common
 import Shared
 
-final class SummarizeSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+final class SummarizeSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     private let nimbusUtils: SummarizerNimbusUtils
 

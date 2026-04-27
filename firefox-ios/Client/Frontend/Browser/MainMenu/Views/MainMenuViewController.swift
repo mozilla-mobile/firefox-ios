@@ -15,8 +15,7 @@ class MainMenuViewController: UIViewController,
                               UIScrollViewDelegate,
                               Themeable,
                               Notifiable,
-                              StoreSubscriber,
-                              LegacyFeatureFlaggable {
+                              StoreSubscriber {
     private struct UX {
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 140

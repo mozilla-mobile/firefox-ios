@@ -86,11 +86,6 @@ class AppDelegate: UIResponder,
             .browserIsReady
         ])
 
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 

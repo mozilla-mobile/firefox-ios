@@ -292,7 +292,7 @@ class HomePageSettingViewController: SettingsTableViewController,
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, LegacyFeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -326,7 +326,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, LegacyFeatureFlaggable {
+    class WallpaperSettings: Setting {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

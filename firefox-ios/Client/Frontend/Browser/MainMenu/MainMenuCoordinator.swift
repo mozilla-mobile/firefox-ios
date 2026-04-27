@@ -46,7 +46,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
 }
 
-class MainMenuCoordinator: BaseCoordinator, LegacyFeatureFlaggable {
+class MainMenuCoordinator: BaseCoordinator {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 

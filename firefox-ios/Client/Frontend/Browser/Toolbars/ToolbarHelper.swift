@@ -22,7 +22,7 @@ protocol ToolbarHelperInterface {
     func shouldBlur() -> Bool
 }
 
-final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
+final class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
