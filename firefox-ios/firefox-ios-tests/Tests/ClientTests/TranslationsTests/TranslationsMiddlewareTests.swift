@@ -32,7 +32,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
         )
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupStore()
     }
 

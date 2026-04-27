@@ -21,7 +21,6 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 

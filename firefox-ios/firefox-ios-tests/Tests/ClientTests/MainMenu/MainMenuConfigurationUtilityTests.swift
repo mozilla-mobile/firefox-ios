@@ -17,7 +17,6 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         setIsSummarizerLanguageExpansionEnabled(false)
         configUtility = MainMenuConfigurationUtility()
     }

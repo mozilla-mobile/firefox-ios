@@ -15,7 +15,6 @@ class SearchBarLocationSaverTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

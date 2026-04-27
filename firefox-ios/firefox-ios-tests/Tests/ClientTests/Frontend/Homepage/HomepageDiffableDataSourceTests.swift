@@ -23,7 +23,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {

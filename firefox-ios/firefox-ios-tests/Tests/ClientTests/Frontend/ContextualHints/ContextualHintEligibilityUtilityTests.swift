@@ -23,9 +23,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         urlBar = MockURLBarView()
         overlayState = MockOverlayModeManager()
         overlayState.setURLBar(urlBarView: urlBar)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: nil)
+        subject = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
     }
 
     override func tearDown() async throws {

@@ -14,7 +14,6 @@ final class RouteBuilderTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         handoffUserActivity.webpageURL = testURL
         universalLinkUserActivity.webpageURL = testURL
         randomActivity.webpageURL = testURL

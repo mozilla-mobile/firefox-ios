@@ -25,7 +25,6 @@ class TabTests: XCTestCase {
         mockTabWebView.loadedURL = url
         mockFileManager = MockFileManager()
         mockDispatchQueue = MockDispatchQueue()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
     }
 

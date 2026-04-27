@@ -11,16 +11,19 @@ import XCTest
 final class UserFeaturePreferenceManagerTests: XCTestCase {
     private var prefs: MockProfilePrefs!
     private var subject: UserFeaturePreferenceManager!
+    private var mockLayer: MockNimbusFeatureFlagLayer!
 
     override func setUp() {
         super.setUp()
         prefs = MockProfilePrefs()
-        subject = UserFeaturePreferenceManager(prefs: prefs)
+        mockLayer = MockNimbusFeatureFlagLayer()
+        subject = UserFeaturePreferenceManager(prefs: prefs, backendLayer: mockLayer)
     }
 
     override func tearDown() {
         prefs = nil
         subject = nil
+        mockLayer = nil
         super.tearDown()
     }
 

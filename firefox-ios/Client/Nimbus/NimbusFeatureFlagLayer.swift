@@ -6,6 +6,7 @@ import Foundation
 
 protocol NimbusFeatureFlagLayerProviding: Sendable {
     func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool
+    func checkStartAtHomeConfiguration() -> StartAtHome
 }
 
 final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
@@ -443,5 +444,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWorldCupWidgetFeature() -> Bool {
         return nimbus.features.worldCupWidgetFeature.value().enabled
+    }
+
+    func checkStartAtHomeConfiguration() -> StartAtHome {
+        return nimbus.features.startAtHomeFeature.value().setting
     }
 }

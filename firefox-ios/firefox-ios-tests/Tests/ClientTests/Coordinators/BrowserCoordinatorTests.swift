@@ -37,7 +37,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         self.tabManager = mockTabManager
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())

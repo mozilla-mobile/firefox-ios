@@ -26,7 +26,6 @@ final class TabScrollHandlerTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         delegate = MockTabScrollHandlerDelegate()
     }
@@ -37,6 +36,7 @@ final class TabScrollHandlerTests: XCTestCase {
         tab = nil
         delegate = nil
         tabProvider = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

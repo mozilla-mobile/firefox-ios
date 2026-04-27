@@ -28,13 +28,12 @@ final class TabManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
         let uuid: WindowUUID = .XCTestDefaultUUID
         tabWindowUUID = uuid
 
         mockProfile = MockProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
@@ -46,6 +45,7 @@ final class TabManagerTests: XCTestCase {
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -56,12 +56,8 @@ final class TabManagerTests: XCTestCase {
         tabs.append(contentsOf: generateTabs(ofType: .normalOlderLastMonth, count: 2))
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
         let subject = createSubject(tabs: tabs)
-        var normalTabs = subject.recentlyAccessedNormalTabs
+        let normalTabs = subject.recentlyAccessedNormalTabs
         XCTAssertEqual(normalTabs.count, 7)
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
-        normalTabs = subject.recentlyAccessedNormalTabs
-        XCTAssertEqual(normalTabs.count, 7)
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
     @MainActor
