@@ -10,3 +10,19 @@ protocol VPNControllerProtocol {
     func start(privateOnly: Bool, completion: @escaping (Result<Void, Error>) -> Void)
     func stop()
 }
+
+enum VPNError: Error {
+    case unsupportedOS
+    case notSignedIn
+    case guardianHTTP(status: Int)
+    case guardianBodyInvalid
+}
+
+@MainActor
+final class StubVPNController: VPNControllerProtocol {
+    var isRunning: Bool { false }
+    func start(privateOnly: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        completion(.failure(VPNError.unsupportedOS))
+    }
+    func stop() {}
+}

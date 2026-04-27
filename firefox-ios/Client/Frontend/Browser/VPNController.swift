@@ -9,6 +9,7 @@ import Network
 import WebEngine
 import Foundation
 
+@available(iOS 17.0, *)
 @MainActor
 final class VPNController: VPNControllerProtocol {
     enum VPNClientConfiguration {
@@ -17,16 +18,9 @@ final class VPNController: VPNControllerProtocol {
 
         var guardianBaseURL: URL {
             switch self {
-            case .prod, .staging: return URL(string: "https://vpn.mozilla.com")!
+            case .prod, .staging: return URL(string: "https://vpn.mozilla.org")!
             }
         }
-    }
-
-    enum VPNError: Error {
-        case unsupportedOS
-        case notSignedIn
-        case guardianHTTP(status: Int)
-        case guardianBodyInvalid
     }
 
     struct ProxyPass {
@@ -72,10 +66,6 @@ final class VPNController: VPNControllerProtocol {
     }
 
     func start(privateOnly: Bool = false, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard #available(iOS 17.0, *) else {
-            completion(.failure(VPNError.unsupportedOS))
-            return
-        }
         Task { [weak self] in
             guard let self else { return }
             do {
@@ -91,6 +81,9 @@ final class VPNController: VPNControllerProtocol {
                     level: .info,
                     category: .sync
                 )
+                let config = self.toProxyConf(server: server, pass: pass)
+                let scope: ProxyScope = privateOnly ? .private : .all
+                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: scope)
                 self.isRunning = true
                 // TODO: Start a watcher to re-fetch and rotate the token before the lifetime ends.
                 completion(.success(()))
@@ -102,11 +95,28 @@ final class VPNController: VPNControllerProtocol {
     }
 
     func stop() {
-        if #available(iOS 17.0, *) {
-            DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], scope: .all)
-        }
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], scope: .all)
         cachedToken = nil
         isRunning = false
+    }
+
+    // MARK: - Proxy configuration
+
+    private func toProxyConf(server: Server, pass: ProxyPass) -> ProxyConfiguration {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = server.hostname
+        components.port = Int(server.port)
+        let endpoint = NWEndpoint.url(components.url!)
+        let hop = ProxyConfiguration.RelayHop(
+            http2RelayEndpoint: endpoint,
+            // TODO: http3RelayEndpoint bricks it, we get quic errors, need to reach out to fstly
+            tlsOptions: NWProtocolTLS.Options(),
+            additionalHTTPHeaderFields: [
+                "Proxy-Authorization": "Bearer \(pass.bearerToken)"
+            ]
+        )
+        return ProxyConfiguration(relayHops: [hop])
     }
 
     // MARK: - Guardian proxy pass
