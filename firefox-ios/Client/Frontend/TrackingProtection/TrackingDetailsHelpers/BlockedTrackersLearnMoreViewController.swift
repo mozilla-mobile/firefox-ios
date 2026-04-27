@@ -8,6 +8,10 @@ import Shared
 import Common
 
 final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable {
+    private struct UX {
+        static let closeButtonSize: CGFloat = 20
+    }
+
     private let url: URL
 
     public let themeManager: any ThemeManager
@@ -20,17 +24,6 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     private let containerView: UIView = .build { view in
         typealias A11yIds = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
         view.accessibilityIdentifier = A11yIds.containerView
-    }
-
-    private lazy var closeButton: UIButton = .build {
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        $0.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismissVC()
-        }), for: .touchUpInside)
-        $0.showsLargeContentViewer = true
     }
 
     init(windowUUID: WindowUUID,
@@ -61,7 +54,6 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     private func setupLayout() {
         setupContainerView()
         embedChild()
-        setupAccessibilityIdentifiers()
     }
 
     private func setNavigationViewDetails() {
@@ -70,7 +62,7 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
 
     // MARK: Container View Setup
     private func setupContainerView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        setupCloseButton()
 
         view.addSubview(containerView)
         NSLayoutConstraint.activate([
@@ -87,6 +79,29 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
                 equalTo: view.bottomAnchor
             )
         ])
+    }
+
+    private func setupCloseButton() {
+        let closeButtonSize = CGSize(width: UX.closeButtonSize, height: UX.closeButtonSize)
+
+        let rawImage = UIImage(named: StandardImageIdentifiers.Large.cross)
+        let resizedImage = UIGraphicsImageRenderer(size: closeButtonSize).image { _ in
+            rawImage?.draw(in: CGRect(origin: .zero, size: closeButtonSize))
+        }.withRenderingMode(.alwaysTemplate)
+
+        let closeBarButtonItem = UIBarButtonItem(
+            image: resizedImage,
+            style: .plain,
+            target: self,
+            action: #selector(dismissVC)
+        )
+
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
+        closeBarButtonItem.accessibilityIdentifier = A11y.closeButton
+        closeBarButtonItem.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
+
+        closeBarButtonItem.tintColor = currentTheme().colors.iconPrimary
+        navigationItem.rightBarButtonItem = closeBarButtonItem
     }
 
     private func embedChild() {
@@ -115,15 +130,9 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
     }
 
     // MARK: Header Actions
+    @objc
     private func dismissVC() {
         navigationController?.dismissVC()
-    }
-
-    // MARK: Accessibility
-    private func setupAccessibilityIdentifiers() {
-        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackersLearnMore
-        closeButton.accessibilityIdentifier = A11y.closeButton
-        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
     }
 
     // MARK: - Themable
@@ -133,7 +142,6 @@ final class BlockedTrackersLearnMoreViewController: UIViewController, Themeable 
 
     func applyTheme() {
         let theme = currentTheme()
-        closeButton.tintColor = theme.colors.iconPrimary
         view.backgroundColor = theme.colors.layer3
     }
 }

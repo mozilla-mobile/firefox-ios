@@ -25,6 +25,7 @@ class BlockedTrackersTableViewController: UIViewController,
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
         static let headerDistance: CGFloat = 8
+        static let closeButtonSize: CGFloat = 20
     }
 
     private lazy var trackersTable: BlockedTrackersTableView = .build { tableView in
@@ -32,17 +33,6 @@ class BlockedTrackersTableViewController: UIViewController,
         tableView.delegate = self
         tableView.isScrollEnabled = true
         tableView.accessibilityIdentifier = A11y.trackersTable
-    }
-
-    private lazy var closeButton: UIButton = .build {
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        $0.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismissVC()
-        }), for: .touchUpInside)
-        $0.showsLargeContentViewer = true
     }
 
     var model: BlockedTrackersTableModel
@@ -95,10 +85,8 @@ class BlockedTrackersTableViewController: UIViewController,
 
     // MARK: View Setup
     private func setupView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
-
+        setupCloseButton()
         setupTableView()
-        setupAccessibilityIdentifiers()
     }
 
     // MARK: TableView Setup
@@ -120,6 +108,29 @@ class BlockedTrackersTableViewController: UIViewController,
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
             )
         ])
+    }
+
+    private func setupCloseButton() {
+        let closeButtonSize = CGSize(width: UX.closeButtonSize, height: UX.closeButtonSize)
+
+        let rawImage = UIImage(named: StandardImageIdentifiers.Large.cross)
+        let resizedImage = UIGraphicsImageRenderer(size: closeButtonSize).image { _ in
+            rawImage?.draw(in: CGRect(origin: .zero, size: closeButtonSize))
+        }.withRenderingMode(.alwaysTemplate)
+
+        let closeBarButtonItem = UIBarButtonItem(
+            image: resizedImage,
+            style: .plain,
+            target: self,
+            action: #selector(dismissVC)
+        )
+
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        closeBarButtonItem.accessibilityIdentifier = A11y.closeButton
+        closeBarButtonItem.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
+
+        closeBarButtonItem.tintColor = currentTheme().colors.iconPrimary
+        navigationItem.rightBarButtonItem = closeBarButtonItem
     }
 
     private func setupDataSource() {
@@ -210,14 +221,9 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     // MARK: Header Actions
+    @objc
     private func dismissVC() {
         navigationController?.dismissVC()
-    }
-
-    // MARK: Accessibility
-    private func setupAccessibilityIdentifiers() {
-        closeButton.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.closeButton
-        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
     }
 
     // MARK: Notifications
@@ -261,7 +267,6 @@ class BlockedTrackersTableViewController: UIViewController,
     func applyTheme() {
         let theme = currentTheme()
         trackersTable.applyTheme(theme: theme)
-        closeButton.tintColor = theme.colors.iconPrimary
         view.backgroundColor = theme.colors.layer3
     }
 }

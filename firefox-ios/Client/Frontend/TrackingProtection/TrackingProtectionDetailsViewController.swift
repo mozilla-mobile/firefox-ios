@@ -34,6 +34,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
+        static let closeButtonSize: CGFloat = 20
     }
     private let telemetryWrapper = TrackingProtectionTelemetry()
 
@@ -53,17 +54,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     }
     private let verifiedByView: TrackingProtectionVerifiedByView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.verifiedByView
-    }
-
-    private lazy var closeButton: UIButton = .build {
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        $0.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismissVC()
-        }), for: .touchUpInside)
-        $0.showsLargeContentViewer = true
     }
 
     // MARK: See Certificates View
@@ -124,7 +114,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: Content View Setup
     private func setupContentView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        setupCloseButton()
 
         view.addSubview(scrollView)
         scrollView.addSubview(baseView)
@@ -170,7 +160,32 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         baseView.addArrangedSubview(viewCertificatesButton)
     }
 
+    // MARK: Close Button
+    private func setupCloseButton() {
+        let closeButtonSize = CGSize(width: UX.closeButtonSize, height: UX.closeButtonSize)
+
+        let rawImage = UIImage(named: StandardImageIdentifiers.Large.cross)
+        let resizedImage = UIGraphicsImageRenderer(size: closeButtonSize).image { _ in
+            rawImage?.draw(in: CGRect(origin: .zero, size: closeButtonSize))
+        }.withRenderingMode(.alwaysTemplate)
+
+        let closeBarButtonItem = UIBarButtonItem(
+            image: resizedImage,
+            style: .plain,
+            target: self,
+            action: #selector(dismissVC)
+        )
+
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        closeBarButtonItem.accessibilityIdentifier = A11y.closeButton
+        closeBarButtonItem.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
+
+        closeBarButtonItem.tintColor = currentTheme().colors.iconPrimary
+        navigationItem.rightBarButtonItem = closeBarButtonItem
+    }
+
     // MARK: Header Actions
+    @objc
     private func dismissVC() {
         navigationController?.dismissVC()
     }
@@ -179,8 +194,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func setupAccessibilityIdentifiers() {
         typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
-        closeButton.accessibilityIdentifier = A11y.closeButton
-        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
         connectionView.setupAccessibilityIdentifiers(
             connectionImageA11yId: A11y.connectionImage,
             connectionStatusLabelA11yId: A11y.connectionStatusLabel,
@@ -249,7 +262,6 @@ extension TrackingProtectionDetailsViewController {
         verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)
         connectionView.applyTheme(theme: theme)
-        closeButton.tintColor = theme.colors.iconPrimary
 
         setNeedsStatusBarAppearanceUpdate()
     }

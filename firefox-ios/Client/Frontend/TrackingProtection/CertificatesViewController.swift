@@ -38,6 +38,7 @@ class CertificatesViewController: UIViewController,
         static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
+        static let closeButtonSize = 20.0
     }
 
     private let titleLabel: UILabel = .build { label in
@@ -54,17 +55,6 @@ class CertificatesViewController: UIViewController,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
         tableView.sectionHeaderTopPadding = 0
         tableView.separatorInset = .zero
-    }
-
-    private lazy var closeButton: UIButton = .build {
-        $0.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.cross)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        $0.addAction(UIAction(handler: { [weak self] _ in
-            self?.dismissVC()
-        }), for: .touchUpInside)
-        $0.showsLargeContentViewer = true
     }
 
     // MARK: - Variables
@@ -112,7 +102,7 @@ class CertificatesViewController: UIViewController,
 
     // MARK: View Setup
     private func setupView() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeButton)
+        setupCloseButton()
 
         setupTitleConstraints()
         setupCertificatesTableView()
@@ -120,6 +110,7 @@ class CertificatesViewController: UIViewController,
     }
 
     // MARK: Header Actions
+    @objc
     private func dismissVC() {
         navigationController?.dismissVC()
     }
@@ -162,6 +153,30 @@ class CertificatesViewController: UIViewController,
             ),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    // MARK: Close Button
+    private func setupCloseButton() {
+        let closeButtonSize = CGSize(width: UX.closeButtonSize, height: UX.closeButtonSize)
+
+        let rawImage = UIImage(named: StandardImageIdentifiers.Large.cross)
+        let resizedImage = UIGraphicsImageRenderer(size: closeButtonSize).image { _ in
+            rawImage?.draw(in: CGRect(origin: .zero, size: closeButtonSize))
+        }.withRenderingMode(.alwaysTemplate)
+
+        let closeBarButtonItem = UIBarButtonItem(
+            image: resizedImage,
+            style: .plain,
+            target: self,
+            action: #selector(dismissVC)
+        )
+
+        typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
+        closeBarButtonItem.accessibilityIdentifier = A11y.closeButton
+        closeBarButtonItem.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
+
+        closeBarButtonItem.tintColor = currentTheme().colors.iconPrimary
+        navigationItem.rightBarButtonItem = closeBarButtonItem
     }
 
     // MARK: - UITableViewDataSource
@@ -254,8 +269,6 @@ class CertificatesViewController: UIViewController,
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
         typealias A11y = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen
-        closeButton.accessibilityIdentifier = A11y.closeButton
-        closeButton.accessibilityLabel = .Menu.EnhancedTrackingProtection.AccessibilityLabels.CloseButton
         titleLabel.accessibilityIdentifier = A11y.certificatesTitleLabel
         certificatesTableView.accessibilityIdentifier = A11y.tableView
     }
@@ -278,6 +291,5 @@ extension CertificatesViewController {
         view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
-        closeButton.tintColor = theme.colors.iconPrimary
     }
 }
