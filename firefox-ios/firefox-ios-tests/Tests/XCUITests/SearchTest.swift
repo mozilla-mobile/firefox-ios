@@ -32,6 +32,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     private func typeOnSearchBar(text: String) {
         browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
         browserScreen.getAddressBarElement().tapAndTypeText(text)
     }
 
