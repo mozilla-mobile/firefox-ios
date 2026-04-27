@@ -18,6 +18,7 @@ final class BrowserScreen {
     private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
     private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
+    private var clearButton: XCUIElement { sel.CLEAR_TEXT_BUTTON.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -91,9 +92,12 @@ final class BrowserScreen {
     }
 
     func clearURL() {
-        let clearButton = sel.CLEAR_TEXT_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(clearButton)
         clearButton.waitAndTap()
+    }
+
+    func tapClearButtonIfExists() {
+        clearButton.tapIfExists()
     }
 
     func assertFirefoxHomepageElementsCached() {
