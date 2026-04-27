@@ -15,9 +15,7 @@ protocol IntroScreenManagerProtocol {
     func didSeeIntroScreen()
 }
 
-struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-                           FeatureFlaggable,
-                           IntroScreenManagerProtocol {
+struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     var prefs: Prefs
 
     var shouldShowIntroScreen: Bool {
@@ -33,7 +31,7 @@ struct IntroScreenManager: LegacyFeatureFlaggable, // TODO: ROUX remove with 151
     }
 
     var shouldShowVideoIntro: Bool {
-        featureFlags.isFeatureEnabled(.videoIntroOnboarding, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.videoIntroOnboarding)
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {

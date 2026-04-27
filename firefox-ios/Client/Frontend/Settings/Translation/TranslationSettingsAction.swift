@@ -69,5 +69,4 @@ enum TranslationSettingsViewActionType: ActionType {
 enum TranslationSettingsMiddlewareActionType: ActionType {
     case didLoadSettings
     case didUpdateSettings
-    case didResetStorage
 }

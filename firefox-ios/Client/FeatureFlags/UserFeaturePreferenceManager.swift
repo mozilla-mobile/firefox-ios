@@ -46,8 +46,8 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
     // MARK: - Bool preferences
 
     var isAIKillSwitchEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature)
-        ?? nimbusLayer.checkNimbusConfigFor(.aiKillSwitch)
+        // Even when this feature is on in Nimbus, the user preference default value should be false
+        prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) ?? false
     }
 
     var isFirefoxSuggestEnabled: Bool {

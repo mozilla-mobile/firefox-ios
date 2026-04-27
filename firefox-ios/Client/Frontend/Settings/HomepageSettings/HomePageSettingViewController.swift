@@ -163,6 +163,26 @@ class HomePageSettingViewController: SettingsTableViewController,
                 )
             }
             sectionItems.append(bookmarksSetting)
+
+            if featureFlags.isFeatureEnabled(.worldCupWidget, checking: .buildOnly) {
+                let windowUUID = self.windowUUID
+                let worldCupSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
+                ) { value in
+                    store.dispatch(
+                        WorldCupAction(
+                            windowUUID: windowUUID,
+                            actionType: WorldCupActionType.didChangeHomepageSettings,
+                            shouldShowHomepageWorldCupSection: value
+                        )
+                    )
+                }
+                sectionItems.append(worldCupSetting)
+            }
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
@@ -205,7 +225,7 @@ class HomePageSettingViewController: SettingsTableViewController,
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let pref = userPreferences.startAtHomeSetting
         currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome

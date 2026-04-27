@@ -14,7 +14,7 @@ protocol ContextualHintEligibilityUtilityProtocol {
 struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol,
                                          ContextualHintPrefsKeysProvider,
                                          SearchBarLocationProvider,
-                                         LegacyFeatureFlaggable {
+                                         FeatureFlaggable {
     var profile: Profile
     // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
     private var overlayState: OverlayStateProtocol?
@@ -74,7 +74,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     private var canTranslationCFRBePresented: Bool {
-        return featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) ? true : false
+        return featureFlagsProvider.isEnabled(.translation)
     }
 
     @MainActor

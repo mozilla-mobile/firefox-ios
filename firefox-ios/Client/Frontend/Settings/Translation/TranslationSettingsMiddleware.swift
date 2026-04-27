@@ -12,6 +12,8 @@ final class TranslationSettingsMiddleware {
     private let manager: PreferredTranslationLanguagesManager
     private let modelsFetcher: TranslationModelsFetcherProtocol
     private let localeProvider: LocaleProvider
+    private var resetStorageTask: Task<Void, Never>?
+    private var loadSettingsTask: Task<Void, Never>?
 
     private var isAutoTranslateEnabled: Bool {
         prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false
@@ -25,6 +27,11 @@ final class TranslationSettingsMiddleware {
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.modelsFetcher = modelsFetcher
         self.localeProvider = localeProvider
+    }
+
+    deinit {
+        resetStorageTask?.cancel()
+        loadSettingsTask?.cancel()
     }
 
     lazy var translationSettingsProvider: Middleware<AppState> = { state, action in
@@ -49,7 +56,10 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didLoadSettings
             ))
-            Task { await self.loadSettings(windowUUID: action.windowUUID) }
+            loadSettingsTask?.cancel()
+            loadSettingsTask = Task { [weak self] in
+                await self?.loadSettings(windowUUID: action.windowUUID)
+            }
 
         case TranslationSettingsViewActionType.toggleTranslationsEnabled:
             let current = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
@@ -72,13 +82,9 @@ final class TranslationSettingsMiddleware {
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
             if !newValue {
-                Task {
+                resetStorageTask?.cancel()
+                resetStorageTask = Task { [modelsFetcher] in
                     await modelsFetcher.resetStorage()
-                    store.dispatch(TranslationSettingsMiddlewareAction(
-                        isTranslationsEnabled: newValue,
-                        windowUUID: action.windowUUID,
-                        actionType: TranslationSettingsMiddlewareActionType.didResetStorage
-                    ))
                 }
             }
         case TranslationSettingsViewActionType.toggleAutoTranslate:

@@ -19,12 +19,6 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
         static let faviconCornerRadius: CGFloat = faviconSize / 2.0
     }
 
-    struct Item {
-        let title: String
-        let thumbnailURL: URL?
-        let faviconURL: URL?
-    }
-
     private let thumbnailImageView: HeroImageView = .build()
     private let faviconImageView: FaviconImageView = .build {
         $0.contentMode = .scaleAspectFill
@@ -75,7 +69,7 @@ final class QuickAnswersSourceCell: UICollectionViewCell, ReusableCell, ThemeApp
     }
 
     // MARK: - Configuration
-    func configure(with item: Item) {
+    func configure(with item: SearchResult.Source) {
         if let thumbnailURLString = item.thumbnailURL?.absoluteString {
             let heroImageViewModel = DefaultHeroImageViewModel(
                 urlStringRequest: thumbnailURLString,
@@ -148,7 +142,7 @@ final class QuickAnswersSourceView: UIView,
         return collectionView
     }()
 
-    private var items: [QuickAnswersSourceCell.Item] = []
+    private var items: [SearchResult.Source] = []
     private var theme: Theme?
     private var contentSizeObservation: NSKeyValueObservation?
 
@@ -199,7 +193,7 @@ final class QuickAnswersSourceView: UIView,
     }
 
     // MARK: - Configuration
-    func configure(with items: [QuickAnswersSourceCell.Item]) {
+    func configure(with items: [SearchResult.Source]) {
         self.items = items
         collectionView.reloadData()
     }

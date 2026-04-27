@@ -32,7 +32,6 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
-                                 LegacyFeatureFlaggable, // TODO: ROUX remove post Feature Flag Migration
                                  FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
@@ -482,7 +481,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     private func translationSettingsViewController() -> UIViewController {
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
             viewController.coordinator = self
             return viewController

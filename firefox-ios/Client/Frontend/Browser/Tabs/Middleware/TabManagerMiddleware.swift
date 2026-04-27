@@ -13,8 +13,7 @@ import SummarizeKit
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-final class TabManagerMiddleware: LegacyFeatureFlaggable,
-                                  CanRemoveQuickActionBookmark {
+final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -25,7 +24,7 @@ final class TabManagerMiddleware: LegacyFeatureFlaggable,
     var bookmarksHandler: BookmarksHandler
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
     private var isSummarizerEnabled: Bool {

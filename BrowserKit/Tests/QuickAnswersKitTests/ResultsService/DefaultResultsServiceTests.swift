@@ -12,33 +12,18 @@ struct DefaultResultsServiceTests {
     let testHelper = SwiftTestingHelper()
 
     @Test
-    func test_fetchResults_returnsResultFromSingleChunk() async throws {
+    func test_fetchResults_returnsResult() async throws {
         let client = MockLiteLLMClient()
         client.respondWith = ["This is a quick answer"]
         let subject = createSubject(client: client)
 
         let result = try await subject.fetchResults(for: "What is the weather?")
 
-        #expect(result.body == "This is a quick answer")
-        #expect(result.title == "Quick Answer")
-        #expect(client.requestChatCompletionStreamedCallCount == 1)
+        #expect(result.resultText == "This is a quick answer")
+        #expect(result.sources.count == 1)
+        #expect(client.requestChatCompletionCallCount == 1)
         #expect(client.lastMessages?.count == 1)
         #expect(client.lastMessages?.first?.content == "What is the weather?")
-        #expect(client.lastMessages?.first?.role == .user)
-    }
-
-    @Test
-    func test_fetchResults_accumulatesMultipleChunks() async throws {
-        let client = MockLiteLLMClient()
-        client.respondWith = ["The ", "weather ", "is ", "sunny"]
-        let subject = createSubject(client: client)
-
-        let result = try await subject.fetchResults(for: "weather today")
-
-        #expect(result.body == "The weather is sunny")
-        #expect(client.requestChatCompletionStreamedCallCount == 1)
-        #expect(client.lastMessages?.count == 1)
-        #expect(client.lastMessages?.first?.content == "weather today")
         #expect(client.lastMessages?.first?.role == .user)
     }
 
