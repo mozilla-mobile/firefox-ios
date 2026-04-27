@@ -17,10 +17,6 @@ struct SpeechAnalyzerEngineTests {
     @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneDenied_speechDenied_throwsMicrophoneError() async {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
@@ -34,10 +30,6 @@ struct SpeechAnalyzerEngineTests {
     @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneDenied_firstTime_throwsMicrophoneFirstTimeError() async {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false, micUndetermined: true)
         let subject = createSubject(authorizer: authorizer)
 
@@ -48,12 +40,9 @@ struct SpeechAnalyzerEngineTests {
         #expect(audioManager.configureAudioSessionCallCount == 0)
     }
 
+    @available(iOS 26.0, *)
     @Test
     func test_prepare_microphoneDenied_speechGranted_throwsMicrophoneError() async {
-        guard #available(iOS 26.0, *) else {
-            return
-        }
-
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
