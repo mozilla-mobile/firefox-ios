@@ -12,10 +12,9 @@ protocol VPNControllerProtocol {
 }
 
 enum VPNError: Error {
-    case unsupportedOS
-    case notSignedIn
-    case guardianHTTP(status: Int)
-    case guardianBodyInvalid
+    case unsupportedOS    // used by StubVPNController on iOS < 17
+    case notSignedIn      // used by VPNController's FxA mint strategy
+    case noServerFound    // Thrown when the Selected Server was not dound
 }
 
 @MainActor
