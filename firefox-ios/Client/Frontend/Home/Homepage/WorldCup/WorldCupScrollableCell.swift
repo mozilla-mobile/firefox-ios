@@ -32,7 +32,10 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
         scrollView.clipsToBounds = true
     }
 
-    private let pagesContainer: UIView = .build { _ in }
+    private let pagesStack: UIStackView = .build { stack in
+        stack.axis = .horizontal
+        stack.spacing = 0
+    }
 
     private let pageControl: UIPageControl = .build { control in
         control.currentPage = 0
@@ -91,40 +94,14 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
         currentPage = 0
 
         pageViews = subviews
-        let count = subviews.count
-        pageControl.numberOfPages = count
-        scrollView.isScrollEnabled = count > 1
+        pageControl.numberOfPages = subviews.count
+        scrollView.isScrollEnabled = subviews.count > 1
 
         var constraints: [NSLayoutConstraint] = []
-        var previousAnchor = pagesContainer.leadingAnchor
-
-        for (index, view) in subviews.enumerated() {
-            view.translatesAutoresizingMaskIntoConstraints = false
-            pagesContainer.addSubview(view)
-
-            let widthConstraint = view.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-
-            constraints.append(contentsOf: [
-                view.topAnchor.constraint(equalTo: pagesContainer.topAnchor),
-                view.leadingAnchor.constraint(equalTo: previousAnchor),
-                widthConstraint,
-            ])
-
-            previousAnchor = view.trailingAnchor
-
-            if index == subviews.count - 1 {
-                constraints.append(
-                    view.trailingAnchor.constraint(equalTo: pagesContainer.trailingAnchor)
-                )
-            }
+        for view in subviews {
+            pagesStack.addArrangedSubview(view)
+            constraints.append(view.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor))
         }
-
-        // Pin the pagesContainer height to the scroll view's frame so the content
-        // never exceeds the visible area vertically, preventing vertical scrolling.
-        constraints.append(
-            pagesContainer.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
-        )
-
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
 
@@ -138,7 +115,7 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
 
     private func setupLayout() {
         contentView.backgroundColor = .clear
-        scrollView.addSubview(pagesContainer)
+        scrollView.addSubview(pagesStack)
         rootContainer.addSubviews(scrollView, pageControl)
         contentView.addSubview(rootContainer)
 
@@ -166,10 +143,13 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
                                                 constant: -UX.contentInsets.bottom),
             pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight),
 
-            pagesContainer.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            pagesContainer.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            pagesContainer.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            pagesContainer.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            pagesStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            pagesStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            pagesStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            pagesStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+
+            // Pin stack height to the scroll view's visible frame to prevent vertical scrolling.
+            pagesStack.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
         ])
     }
 
@@ -200,7 +180,7 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
     private func removePageViews() {
         NSLayoutConstraint.deactivate(pageConstraints)
         pageConstraints.removeAll()
-        pageViews.forEach { $0.removeFromSuperview() }
+        pagesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         pageViews.removeAll()
     }
 
