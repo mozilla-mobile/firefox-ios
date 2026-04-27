@@ -353,9 +353,7 @@ struct AddressBarState: StateType, Sendable, Equatable {
                                                      isEditing: state.isEditing,
                                                      isEmptySearch: isEmptySearch),
             browserActions: browserActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-            url: toolbarAction.url == nil
-                ? (nil as URL??)
-                : .some(toolbarAction.url),
+            url: toolbarAction.url,
             searchTerm: nil,
             lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId.map { Optional($0) } ?? .some(nil),
             lockIconImageName: toolbarAction.lockIconImageName.map { Optional($0) } ?? .some(nil),
