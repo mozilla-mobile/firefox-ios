@@ -937,22 +937,32 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func setupAppStateWithTranslationConfig(
-        for translationIconState: TranslationConfiguration.IconState = .inactive,
-        translatedToLanguage: String? = nil,
-        sourceLanguage: String? = nil
+        for translationIconState: TranslationConfiguration.IconState = .inactive
     ) -> AppState {
         let initialAction = ToolbarAction(
             url: URL(string: "https://www.example.com"),
-            translationConfiguration: TranslationConfiguration(
-                prefs: mockProfile.prefs,
-                state: translationIconState,
-                translatedToLanguage: translatedToLanguage,
-                sourceLanguage: sourceLanguage
-            ),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: translationIconState),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
         )
         return AppState.reducer(mockStore.state, initialAction)
+    }
+
+    private func setupAppStateWithTranslationLanguage(
+        translatedToLanguage: String,
+        sourceLanguage: String? = nil
+    ) -> AppState {
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(
+                prefs: mockProfile.prefs,
+                state: .active,
+                translatedToLanguage: translatedToLanguage,
+                sourceLanguage: sourceLanguage
+            ),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.translationCompleted
+        )
+        return AppState.reducer(mockStore.state, action)
     }
 
     // MARK: - Helpers
@@ -1053,7 +1063,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(
-            setupAppStateWithTranslationConfig(for: .active, translatedToLanguage: "da"),
+            setupAppStateWithTranslationLanguage(translatedToLanguage: "da"),
             action
         )
 
@@ -1101,7 +1111,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(
-            setupAppStateWithTranslationConfig(for: .active, translatedToLanguage: "da", sourceLanguage: "de"),
+            setupAppStateWithTranslationLanguage(translatedToLanguage: "da", sourceLanguage: "de"),
             action
         )
 
@@ -1121,7 +1131,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: TranslationsActionType.didSelectTargetLanguage
         )
 
-        let expectation = XCTestExpectation(description: "translationCompleted carries sourceLanguage")
+        // didSelectTargetLanguage triggers two dispatches:
+        // 1. didStartTranslatingPage (loading icon)
+        // 2. translationCompleted (active icon, with detected source language)
+        let expectation = XCTestExpectation(description: "didStartTranslatingPage and translationCompleted dispatched")
         expectation.expectedFulfillmentCount = 2
         mockStore.dispatchCalled = { expectation.fulfill() }
 
@@ -1129,9 +1142,15 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         wait(for: [expectation], timeout: 1.0)
 
+        let startAction = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let startActionType = try XCTUnwrap(startAction.actionType as? ToolbarActionType)
+        XCTAssertEqual(startActionType, ToolbarActionType.didStartTranslatingPage)
+        XCTAssertEqual(startAction.translationConfiguration?.state, .loading)
+
         let completedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarAction)
         let completedActionType = try XCTUnwrap(completedAction.actionType as? ToolbarActionType)
         XCTAssertEqual(completedActionType, ToolbarActionType.translationCompleted)
+        XCTAssertEqual(completedAction.translationConfiguration?.state, .active)
         XCTAssertEqual(completedAction.translationConfiguration?.sourceLanguage, "en")
     }
 }
