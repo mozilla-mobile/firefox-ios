@@ -24,33 +24,34 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
     case homepageStoryCategories
-    case needsReloadRefactor
-    case shouldUseBrandRefreshConfiguration
-    case shouldUseJapanConfiguration
+    case hostedSummarizer
+    case hostedSummarizerShakeGesture
+    case hostedSummarizerToolbarEntrypoint
+    case httpsUpgrade
+    case improvedAppStoreReviewTriggerFeature
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
+    case needsReloadRefactor
     case noInternetConnectionErrorPage
+    case quickAnswers
     case recentSearches
-    case reportSiteIssue
     case relayIntegration
+    case reportSiteIssue
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
+    case shouldUseBrandRefreshConfiguration
+    case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
-    case hostedSummarizer
-    case hostedSummarizerToolbarEntrypoint
-    case hostedSummarizerShakeGesture
-    case httpsUpgrade
-    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
-    case tabTrayUIExperiments
     case tabTrayTranslucency
+    case tabTrayUIExperiments
     case toolbarUpdateHint
     case tosFeature
     case touFeature
@@ -61,7 +62,6 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case worldCupWidget
-    case quickAnswers
 
     /// The user preferences key for features that support user-togglable settings.
     /// Returns `nil` for features that are not user-configurable.
@@ -85,11 +85,11 @@ enum FeatureFlagID: String, CaseIterable {
     // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .aiKillSwitch,
+        case    .addressBarMenu,
+                .adsClient,
+                .aiKillSwitch,
                 .appearanceMenu,
                 .appIconSelection,
-                .addressBarMenu,
-                .adsClient,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,

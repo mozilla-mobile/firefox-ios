@@ -24,6 +24,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
+        case .addressBarMenu:
+            return checkAddressBarMenuFeature()
+
         case .adsClient:
             return checkAdsClientFeature()
 
@@ -36,8 +39,8 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .appIconSelection:
             return checkAppIconSelectionSetting()
 
-        case .addressBarMenu:
-            return checkAddressBarMenuFeature()
+        case .badCertDomainErrorPage:
+            return checkBadCertDomainErrorPageFeature()
 
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
@@ -69,14 +72,20 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepageStoryCategories:
             return checkHomepageStoriesCaterogiesFeature()
 
-        case .needsReloadRefactor:
-            return checkNeedsReloadRefactorFeature()
+        case .hostedSummarizer:
+            return checkHostedSummarizerFeature()
 
-        case .shouldUseBrandRefreshConfiguration:
-            return checkShouldUseBrandRefreshConfigurationFeature()
+        case .hostedSummarizerShakeGesture:
+           return checkHostedSummarizerShakeGesture()
 
-        case .shouldUseJapanConfiguration:
-            return checkShouldUseJapanConfigurationFeature()
+        case .hostedSummarizerToolbarEntrypoint:
+           return checkHostedSummarizerToolbarEntrypoint()
+
+        case .httpsUpgrade:
+            return checkHttpsUpgradeFeature()
+
+        case .improvedAppStoreReviewTriggerFeature:
+            return checkImprovedAppStoreReviewTriggerFeature()
 
         case .microsurvey:
             return checkMicrosurveyFeature()
@@ -87,14 +96,20 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature()
 
+        case .needsReloadRefactor:
+            return checkNeedsReloadRefactorFeature()
+
         case .noInternetConnectionErrorPage:
             return checkNICErrorPageFeature()
 
-        case .badCertDomainErrorPage:
-            return checkBadCertDomainErrorPageFeature()
+        case .quickAnswers:
+            return checkQuickAnswersFeature()
 
         case .recentSearches:
             return checkRecentSearchesFeature()
+
+        case .relayIntegration:
+            return checkRelayIntegration()
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID)
@@ -105,6 +120,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .sentFromFirefoxTreatmentA:
             return checkSentFromFirefoxFeatureTreatmentA()
 
+        case .shouldUseBrandRefreshConfiguration:
+            return checkShouldUseBrandRefreshConfigurationFeature()
+
+        case .shouldUseJapanConfiguration:
+            return checkShouldUseJapanConfigurationFeature()
+
         case .snapkitRemovalRefactor:
             return checkSnapKitRemovalRefactor()
 
@@ -114,24 +135,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .startAtHome:
             return checkStartAtHomeFeature(for: featureID) != .disabled
 
-        case .hostedSummarizer:
-            return checkHostedSummarizerFeature()
-
-        case .httpsUpgrade:
-            return checkHttpsUpgradeFeature()
-
-        case .improvedAppStoreReviewTriggerFeature:
-            return checkImprovedAppStoreReviewTriggerFeature()
-
-        case .relayIntegration:
-            return checkRelayIntegration()
-
-        case .hostedSummarizerToolbarEntrypoint:
-           return checkHostedSummarizerToolbarEntrypoint()
-
-        case .hostedSummarizerShakeGesture:
-           return checkHostedSummarizerShakeGesture()
-
         case .summarizerAppAttestAuth:
             return checkSummarizerAppAttestAuthFeature()
 
@@ -140,9 +143,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .summarizerPermissiveGuardrails:
             return checkSummarizerPermissiveGuardrailsFeature()
-
-        case .unifiedSearch:
-            return checkUnifiedSearchFeature()
 
         case .tabScrollRefactorFeature:
             return checkTabScrollRefactorFeature()
@@ -177,11 +177,11 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .trendingSearches:
             return checkTrendingSearches()
 
+        case .unifiedSearch:
+            return checkUnifiedSearchFeature()
+
         case .videoIntroOnboarding:
             return checkVideoIntroOnboardingFeature()
-
-        case .quickAnswers:
-            return checkQuickAnswersFeature()
 
         case .worldCupWidget:
             return checkWorldCupWidgetFeature()
