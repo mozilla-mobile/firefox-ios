@@ -937,11 +937,18 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     }
 
     private func setupAppStateWithTranslationConfig(
-        for translationIconState: TranslationConfiguration.IconState = .inactive
+        for translationIconState: TranslationConfiguration.IconState = .inactive,
+        translatedToLanguage: String? = nil,
+        sourceLanguage: String? = nil
     ) -> AppState {
         let initialAction = ToolbarAction(
             url: URL(string: "https://www.example.com"),
-            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: translationIconState),
+            translationConfiguration: TranslationConfiguration(
+                prefs: mockProfile.prefs,
+                state: translationIconState,
+                translatedToLanguage: translatedToLanguage,
+                sourceLanguage: sourceLanguage
+            ),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.urlDidChange
         )
@@ -1028,5 +1035,103 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     // similar to production
     func resetStore() {
         StoreTestUtilityHelper.resetStore()
+    }
+
+    // MARK: - Long-press tests
+
+    func test_longPress_withActiveState_andFeatureEnabled_dispatchesShowPickerAction() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarMiddlewareAction(
+            buttonType: .translate,
+            gestureType: .longPress,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+
+        let expectation = XCTestExpectation(description: "showTranslationLanguagePicker dispatched on long press")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(
+            setupAppStateWithTranslationConfig(for: .active, translatedToLanguage: "da"),
+            action
+        )
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.showTranslationLanguagePicker)
+        XCTAssertEqual(dispatchedAction.isPageTranslated, true)
+        XCTAssertEqual(dispatchedAction.translatedToLanguage, "da")
+    }
+
+    func test_longPress_withInactiveState_doesNotDispatch() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
+        let subject = createSubject()
+        let action = ToolbarMiddlewareAction(
+            buttonType: .translate,
+            gestureType: .longPress,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+
+        let expectation = XCTestExpectation(description: "no action dispatched on long press inactive")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(setupAppStateWithTranslationConfig(for: .inactive), action)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
+    func test_longPress_filtersSourceAndTranslatedLanguageFromPicker() throws {
+        setTranslationsFeatureEnabled(enabled: true, languagePickerEnabled: true)
+        mockProfile.prefs.setString("de,da,en", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        let subject = createSubject()
+        let action = ToolbarMiddlewareAction(
+            buttonType: .translate,
+            gestureType: .longPress,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        )
+
+        let expectation = XCTestExpectation(description: "picker dispatched with source and translated languages filtered")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(
+            setupAppStateWithTranslationConfig(for: .active, translatedToLanguage: "da", sourceLanguage: "de"),
+            action
+        )
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        XCTAssertEqual(dispatchedAction.translationLanguages, ["en"])
+    }
+
+    func test_translationCompleted_storesSourceLanguageInConfiguration() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        let subject = createSubject()
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "da",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let expectation = XCTestExpectation(description: "translationCompleted carries sourceLanguage")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let completedAction = try XCTUnwrap(mockStore.dispatchedActions.last as? ToolbarAction)
+        let completedActionType = try XCTUnwrap(completedAction.actionType as? ToolbarActionType)
+        XCTAssertEqual(completedActionType, ToolbarActionType.translationCompleted)
+        XCTAssertEqual(completedAction.translationConfiguration?.sourceLanguage, "en")
     }
 }
