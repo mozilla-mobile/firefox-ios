@@ -1173,7 +1173,15 @@ extension BrowserViewController: WKNavigationDelegate {
 
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
+        let previousURL = tab.url
         tab.url = webView.url
+        // A real navigation replaces the DOM, dropping any prior in-page translation. Clearing
+        // here lets the eligibility check re-run for the new URL. Only clear on actual URL change
+        // — same-URL reloads from the restore-original flow (FXIOS-15227) need to keep their
+        // already-dispatched `.inactive` state to avoid a translate-icon flash.
+        if previousURL != webView.url {
+            tab.translationConfiguration = nil
+        }
 
         if !tab.adsTelemetryRedirectUrlList.isEmpty,
            !tab.adsProviderName.isEmpty,

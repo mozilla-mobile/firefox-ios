@@ -371,11 +371,10 @@ struct AddressBarState: StateType, Sendable, Equatable {
         from action: ToolbarAction,
         existingConfig: TranslationConfiguration?
     ) -> TranslationConfiguration? {
-        guard let actionConfig = action.translationConfiguration else { return nil }
-        if actionConfig.state == nil, let existingIconState = existingConfig?.state {
-            return TranslationConfiguration(prefs: actionConfig.prefs, state: existingIconState)
-        }
-        return actionConfig
+        // The action's config is authoritative — it carries the originating tab's persisted state
+        // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
+        // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
+        return action.translationConfiguration ?? existingConfig
     }
 
     @MainActor
