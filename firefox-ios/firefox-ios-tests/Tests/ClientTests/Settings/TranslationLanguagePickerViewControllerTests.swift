@@ -84,7 +84,7 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
             supportedLanguages: ["fr", "de"]
         )
         subject.loadViewIfNeeded()
-        subject.resultsController.filteredLanguages = ["fr", "de"]
+        subject.resultsController.configure(filteredLanguages: ["fr", "de"])
 
         subject.resultsController.tableView(
             subject.resultsController.tableView,

@@ -36,12 +36,13 @@ final class TranslationLanguagePickerViewController: UIViewController,
     }()
 
     lazy var resultsController: TranslationLanguagePickerResultsController = {
-        let controller = TranslationLanguagePickerResultsController(style: .insetGrouped)
-        controller.localeProvider = localeProvider
-        controller.onSelectLanguage = { [weak self] code in
-            self?.addLanguage(code)
-        }
-        return controller
+        return TranslationLanguagePickerResultsController(
+            windowUUID: windowUUID,
+            localeProvider: localeProvider,
+            themeManager: themeManager,
+            notificationCenter: notificationCenter,
+            onSelectLanguage: { [weak self] code in self?.addLanguage(code) }
+        )
     }()
 
     private lazy var searchController: UISearchController = {
@@ -152,8 +153,7 @@ final class TranslationLanguagePickerViewController: UIViewController,
             return native.localizedCaseInsensitiveContains(query)
                 || localized.localizedCaseInsensitiveContains(query)
         }
-        resultsController.filteredLanguages = newFiltered
-        resultsController.tableView.reloadData()
+        resultsController.configure(filteredLanguages: newFiltered)
     }
 
     // MARK: - Theming
@@ -162,8 +162,6 @@ final class TranslationLanguagePickerViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
-        resultsController.tableView.backgroundColor = theme.colors.layer1
-        resultsController.theme = theme
         searchController.searchBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         tableView.visibleCells.compactMap { $0 as? TranslationPickerLanguageCell }.forEach {
