@@ -50,6 +50,7 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
             static let minimumCellsPerRow = 1
             static let interItemSpacing: CGFloat = 16
             static let interGroupSpacing: CGFloat = 16
+            static let newsHeaderZIndex = -1
 
             /// `storiesPeekOffset` is how much we want the stories (cards only, not including section header/spacing)
             /// to peek in vertically from the bottom of the homepage viewport (above the fold)
@@ -213,11 +214,7 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
         return section
     }
 
-    private func createStoriesSectionLayout(for environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        return createVerticalStoriesSectionLayout(for: environment)
-    }
-
-    private func createVerticalStoriesSectionLayout(
+    private func createStoriesSectionLayout(
         for environment: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
         let itemSize: NSCollectionLayoutSize
@@ -272,6 +269,7 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
+        header.zIndex = UX.PocketConstants.newsHeaderZIndex
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(
