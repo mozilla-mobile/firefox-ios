@@ -27,53 +27,53 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     // MARK: - Bool preferences: defaults from Nimbus
 
     func testBoolDefaults_returnNimbusValues_whenNoUserPrefSet() {
-        // With no prefs set, each property should return the Nimbus default.
+        // With no prefs set, each flag should return the Nimbus default.
         // We just verify they return without crashing — the actual Nimbus defaults
         // may vary by config, so we check the type is correct.
-        _ = subject.isAIKillSwitchEnabled
-        _ = subject.isFirefoxSuggestEnabled
-        _ = subject.isSentFromFirefoxEnabled
-        _ = subject.isSponsoredShortcutsEnabled
-        _ = subject.isHomepageBookmarksSectionEnabled
-        _ = subject.isHomepageJumpBackInSectionEnabled
+        _ = subject.getPreferenceFor(.aiKillSwitch)
+        _ = subject.getPreferenceFor(.firefoxSuggestFeature)
+        _ = subject.getPreferenceFor(.sentFromFirefox)
+        _ = subject.getPreferenceFor(.hntSponsoredShortcuts)
+        _ = subject.getPreferenceFor(.homepageBookmarksSectionDefault)
+        _ = subject.getPreferenceFor(.homepageJumpBackinSectionDefault)
     }
 
     // MARK: - Bool preferences: user overrides
 
     func testFirefoxSuggest_readsUserPref() {
         prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.FirefoxSuggest)
-        XCTAssertFalse(subject.isFirefoxSuggestEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.firefoxSuggestFeature))
 
         prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.FirefoxSuggest)
-        XCTAssertTrue(subject.isFirefoxSuggestEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.firefoxSuggestFeature))
     }
 
     func testSentFromFirefox_readsUserPref() {
         prefs.setBool(true, forKey: PrefsKeys.FeatureFlags.SentFromFirefox)
-        XCTAssertTrue(subject.isSentFromFirefoxEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.sentFromFirefox))
     }
 
     func testSponsoredShortcuts_readsUserPref() {
         prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        XCTAssertFalse(subject.isSponsoredShortcutsEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.hntSponsoredShortcuts))
     }
 
     func testHomepageBookmarksSection_readsUserPref() {
         prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
-        XCTAssertFalse(subject.isHomepageBookmarksSectionEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.homepageBookmarksSectionDefault))
     }
 
     func testHomepageJumpBackInSection_readsUserPref() {
         prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
-        XCTAssertFalse(subject.isHomepageJumpBackInSectionEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.homepageJumpBackinSectionDefault))
     }
 
     func testAIKillSwitch_readsUserPref() {
         prefs.setBool(true, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        XCTAssertTrue(subject.isAIKillSwitchEnabled)
+        XCTAssertTrue(subject.getPreferenceFor(.aiKillSwitch))
 
         prefs.setBool(false, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        XCTAssertFalse(subject.isAIKillSwitchEnabled)
+        XCTAssertFalse(subject.getPreferenceFor(.aiKillSwitch))
     }
 
     // MARK: - Typed preferences
@@ -113,35 +113,35 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     // MARK: - Setters
 
     func testSetFirefoxSuggestEnabled_writesPref() {
-        subject.setFirefoxSuggestEnabled(true)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.FirefoxSuggest), true)
 
-        subject.setFirefoxSuggestEnabled(false)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.FirefoxSuggest), false)
     }
 
     func testSetSentFromFirefoxEnabled_writesPref() {
-        subject.setSentFromFirefoxEnabled(true)
+        subject.setPreferenceFor(.sentFromFirefox, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.SentFromFirefox), true)
     }
 
     func testSetSponsoredShortcutsEnabled_writesPref() {
-        subject.setSponsoredShortcutsEnabled(false)
+        subject.setPreferenceFor(.hntSponsoredShortcuts, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts), false)
     }
 
     func testSetHomepageBookmarksSectionEnabled_writesPref() {
-        subject.setHomepageBookmarksSectionEnabled(true)
+        subject.setPreferenceFor(.homepageBookmarksSectionDefault, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection), true)
     }
 
     func testSetHomepageJumpBackInSectionEnabled_writesPref() {
-        subject.setHomepageJumpBackInSectionEnabled(false)
+        subject.setPreferenceFor(.homepageJumpBackinSectionDefault, to: false)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection), false)
     }
 
     func testSetAIKillSwitchEnabled_writesPref() {
-        subject.setAIKillSwitchEnabled(true)
+        subject.setPreferenceFor(.aiKillSwitch, to: true)
         XCTAssertEqual(prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature), true)
     }
 
@@ -164,11 +164,11 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
     // MARK: - Roundtrip: set then read
 
     func testRoundtrip_boolPreferences() {
-        subject.setFirefoxSuggestEnabled(false)
-        XCTAssertFalse(subject.isFirefoxSuggestEnabled)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: false)
+        XCTAssertFalse(subject.getPreferenceFor(.firefoxSuggestFeature))
 
-        subject.setFirefoxSuggestEnabled(true)
-        XCTAssertTrue(subject.isFirefoxSuggestEnabled)
+        subject.setPreferenceFor(.firefoxSuggestFeature, to: true)
+        XCTAssertTrue(subject.getPreferenceFor(.firefoxSuggestFeature))
     }
 
     func testRoundtrip_searchBarPosition() {
@@ -187,12 +187,25 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
         XCTAssertEqual(subject.startAtHomeSetting, .disabled)
     }
 
+    // MARK: - Generic API: flag with no userPrefsKey falls back to Nimbus
+
+    func testGetPreference_flagWithNoUserPrefsKey_fallsBackToNimbus() {
+        // .microsurvey has no userPrefsKey, so should return the Nimbus value
+        _ = subject.getPreferenceFor(.microsurvey)
+    }
+
+    func testSetPreference_flagWithNoUserPrefsKey_isNoOp() {
+        // .microsurvey has no userPrefsKey, so set should be a no-op
+        subject.setPreferenceFor(.microsurvey, to: true)
+        // No crash, no pref written
+    }
+
     // MARK: - Mock protocol conformance
 
     func testMockConformance() {
         let mock = MockUserFeaturePreferences()
-        mock.isFirefoxSuggestEnabled = false
-        XCTAssertFalse(mock.isFirefoxSuggestEnabled)
+        mock.setPreferenceFor(.firefoxSuggestFeature, to: false)
+        XCTAssertFalse(mock.getPreferenceFor(.firefoxSuggestFeature))
 
         mock.searchBarPosition = .bottom
         XCTAssertEqual(mock.searchBarPosition, .bottom)
@@ -205,21 +218,18 @@ final class UserFeaturePreferenceManagerTests: XCTestCase {
 // MARK: - Test Helpers
 
 final class MockUserFeaturePreferences: UserFeaturePreferring, @unchecked Sendable {
-    var isAIKillSwitchEnabled = true
-    var isFirefoxSuggestEnabled = true
-    var isSentFromFirefoxEnabled = false
-    var isSponsoredShortcutsEnabled = true
-    var isHomepageBookmarksSectionEnabled = true
-    var isHomepageJumpBackInSectionEnabled = true
+    var boolPreferences: [FeatureFlagID: Bool] = [:]
     var searchBarPosition = SearchBarPosition.bottom
     var startAtHomeSetting = StartAtHome.afterFourHours
 
-    func setAIKillSwitchEnabled(_ enabled: Bool) { isAIKillSwitchEnabled = enabled }
-    func setFirefoxSuggestEnabled(_ enabled: Bool) { isFirefoxSuggestEnabled = enabled }
-    func setSentFromFirefoxEnabled(_ enabled: Bool) { isSentFromFirefoxEnabled = enabled }
-    func setSponsoredShortcutsEnabled(_ enabled: Bool) { isSponsoredShortcutsEnabled = enabled }
-    func setHomepageBookmarksSectionEnabled(_ enabled: Bool) { isHomepageBookmarksSectionEnabled = enabled }
-    func setHomepageJumpBackInSectionEnabled(_ enabled: Bool) { isHomepageJumpBackInSectionEnabled = enabled }
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool {
+        return boolPreferences[flag] ?? false
+    }
+
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool) {
+        boolPreferences[flag] = value
+    }
+
     func setSearchBarPosition(_ position: SearchBarPosition) { searchBarPosition = position }
     func setStartAtHomeSetting(_ setting: StartAtHome) { startAtHomeSetting = setting }
 }
