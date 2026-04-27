@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class HomePageSettingViewController: SettingsTableViewController,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     FeatureFlaggable,
                                      UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
@@ -164,7 +164,7 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(bookmarksSetting)
 
-            if featureFlags.isFeatureEnabled(.worldCupWidget, checking: .buildOnly) {
+            if featureFlagsProvider.isEnabled(.worldCupWidget) {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(
                     prefs: profile.prefs,

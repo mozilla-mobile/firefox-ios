@@ -39,103 +39,103 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlagLayer, @unchecked Sendable 
     private var coreFeatures: [CoreFeatureFlagID: CoreFlaggableFeature] = [:]
 
     // MARK: - Public methods
-    /// Used to find out whether a core feature is active or not.
-    public func isCoreFeatureEnabled(_ featureID: CoreFeatureFlagID) -> Bool {
-        guard let feature = coreFeatures[featureID] else { return false }
-        return feature.isActiveForBuild()
-    }
-
-    /// Used as the main way to find out whether a feature is active or not, checking
-    /// either just for the build, the build and user preferences, or just user
-    /// preferences (supported by Nimbus defaults).
-    public func isFeatureEnabled(_ featureID: FeatureFlagID,
-                                 checking channelsToCheck: FlaggableFeatureCheckOptions
-    ) -> Bool {
-        guard let profile else { return false }
-
-        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        let nimbusSetting = getNimbusOrDebugSetting(with: feature)
-        let userSetting = feature.isUserEnabled(using: nimbusFlags)
-
-        switch channelsToCheck {
-        case .buildOnly:
-            return nimbusSetting
-        case .buildAndUser:
-            return nimbusSetting && userSetting
-        case .userOnly:
-            return userSetting
-        }
-    }
-
-    /// Allows us to override nimbus feature flags for a specific build using the debug menu
-    private func getNimbusOrDebugSetting(with feature: NimbusFlaggableFeature) -> Bool {
-        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-        return feature.isDebugEnabled(using: nimbusFlags)
-        #else
-        return feature.isNimbusEnabled(using: nimbusFlags)
-        #endif
-    }
-
-    /// Retrieves a custom state for any type of feature that has more than just a
-    /// binary state. Further information on return types can be found in
-    /// `FlaggableFeatureOptions`
-    public func getCustomState<T>(for featureID: FeatureFlagIDWithCustomOptions) -> T? {
-        guard let profile else { return nil }
-
-        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
-                                             and: profile)
-        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
-
-        switch featureID {
-        case .startAtHome: return StartAtHome(rawValue: userSetting) as? T
-        }
-    }
-
-    private func convertCustomIDToStandard(_ featureID: FeatureFlagIDWithCustomOptions) -> FeatureFlagID {
-        switch featureID {
-        case .startAtHome: return .startAtHome
-        }
-    }
-
-    /// Set different app build channels to a core feature
-    public func set(feature featureID: CoreFeatureFlagID, toChannels desiredChannels: [AppBuildChannel]) {
-        let desiredFeature = CoreFlaggableFeature(withID: featureID, enabledFor: desiredChannels)
-        coreFeatures[featureID] = desiredFeature
-    }
-
-    /// Set a feature that has a binary state to on or off
-    public func set(feature featureID: FeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
-        guard let profile else { return }
-
-        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-        if isDebug {
-            feature.setDebugPreference(to: desiredState)
-        } else {
-            feature.setUserPreference(to: desiredState)
-        }
-        #else
-        feature.setUserPreference(to: desiredState)
-        #endif
-    }
-
-    /// Set a feature that has a custom state to that custom state. More information
-    /// on custom states can be found in `FlaggableFeatureOptions`
-    public func set<T: FlaggableFeatureOptions>(
-        feature featureID: FeatureFlagIDWithCustomOptions,
-        to desiredState: T
-    ) {
-        guard let profile else { return }
-
-        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
-                                             and: profile)
-        switch featureID {
-        case .startAtHome:
-            if let option = desiredState as? StartAtHome {
-                feature.setUserPreference(to: option.rawValue)
-            }
-        }
-    }
+//    /// Used to find out whether a core feature is active or not.
+//    public func isCoreFeatureEnabled(_ featureID: CoreFeatureFlagID) -> Bool {
+//        guard let feature = coreFeatures[featureID] else { return false }
+//        return feature.isActiveForBuild()
+//    }
+//
+//    /// Used as the main way to find out whether a feature is active or not, checking
+//    /// either just for the build, the build and user preferences, or just user
+//    /// preferences (supported by Nimbus defaults).
+//    public func isFeatureEnabled(_ featureID: FeatureFlagID,
+//                                 checking channelsToCheck: FlaggableFeatureCheckOptions
+//    ) -> Bool {
+//        guard let profile else { return false }
+//
+//        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
+//        let nimbusSetting = getNimbusOrDebugSetting(with: feature)
+//        let userSetting = feature.isUserEnabled(using: nimbusFlags)
+//
+//        switch channelsToCheck {
+//        case .buildOnly:
+//            return nimbusSetting
+//        case .buildAndUser:
+//            return nimbusSetting && userSetting
+//        case .userOnly:
+//            return userSetting
+//        }
+//    }
+//
+//    /// Allows us to override nimbus feature flags for a specific build using the debug menu
+//    private func getNimbusOrDebugSetting(with feature: NimbusFlaggableFeature) -> Bool {
+//        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+//        return feature.isDebugEnabled(using: nimbusFlags)
+//        #else
+//        return feature.isNimbusEnabled(using: nimbusFlags)
+//        #endif
+//    }
+//
+//    /// Retrieves a custom state for any type of feature that has more than just a
+//    /// binary state. Further information on return types can be found in
+//    /// `FlaggableFeatureOptions`
+//    public func getCustomState<T>(for featureID: FeatureFlagIDWithCustomOptions) -> T? {
+//        guard let profile else { return nil }
+//
+//        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+//                                             and: profile)
+//        guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
+//
+//        switch featureID {
+//        case .startAtHome: return StartAtHome(rawValue: userSetting) as? T
+//        }
+//    }
+//
+//    private func convertCustomIDToStandard(_ featureID: FeatureFlagIDWithCustomOptions) -> FeatureFlagID {
+//        switch featureID {
+//        case .startAtHome: return .startAtHome
+//        }
+//    }
+//
+//    /// Set different app build channels to a core feature
+//    public func set(feature featureID: CoreFeatureFlagID, toChannels desiredChannels: [AppBuildChannel]) {
+//        let desiredFeature = CoreFlaggableFeature(withID: featureID, enabledFor: desiredChannels)
+//        coreFeatures[featureID] = desiredFeature
+//    }
+//
+//    /// Set a feature that has a binary state to on or off
+//    public func set(feature featureID: FeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
+//        guard let profile else { return }
+//
+//        let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
+//        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+//        if isDebug {
+//            feature.setDebugPreference(to: desiredState)
+//        } else {
+//            feature.setUserPreference(to: desiredState)
+//        }
+//        #else
+//        feature.setUserPreference(to: desiredState)
+//        #endif
+//    }
+//
+//    /// Set a feature that has a custom state to that custom state. More information
+//    /// on custom states can be found in `FlaggableFeatureOptions`
+//    public func set<T: FlaggableFeatureOptions>(
+//        feature featureID: FeatureFlagIDWithCustomOptions,
+//        to desiredState: T
+//    ) {
+//        guard let profile else { return }
+//
+//        let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
+//                                             and: profile)
+//        switch featureID {
+//        case .startAtHome:
+//            if let option = desiredState as? StartAtHome {
+//                feature.setUserPreference(to: option.rawValue)
+//            }
+//        }
+//    }
 
     /// Sets up features with default channel availability. For ease of use, please add
     /// new features alphabetically. These features are only core features in the

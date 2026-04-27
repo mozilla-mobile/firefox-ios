@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
@@ -333,8 +332,7 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentSearchEnabled: Bool {
-        let flagToCheck = FeatureFlagID.recentSearches
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     var isSnapKitRemovalEnabled: Bool {
