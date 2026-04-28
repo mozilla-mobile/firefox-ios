@@ -64,38 +64,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    func configureToolbarUpdateContextualHint(addressToolbarView: UIView, navigationToolbarView: UIView) {
-        guard let state = store.state.componentState(ToolbarState.self,
-                                                     for: .toolbar,
-                                                     window: windowUUID),
-              isToolbarUpdateHintEnabled
-        else { return }
-
-        let showNavToolbar = toolbarHelper.shouldShowNavigationToolbar(for: traitCollection)
-        let view = state.toolbarPosition == .top && showNavToolbar ? navigationToolbarView : addressToolbarView
-        let arrowDirection: UIPopoverArrowDirection = state.toolbarPosition == .top && !showNavToolbar ? .up : .down
-
-        toolbarUpdateContextHintVC.configure(
-            anchor: view,
-            withArrowDirection: arrowDirection,
-            andDelegate: self,
-            presentedUsing: { [weak self] in
-                self?.presentContextualHint(for: .toolbarUpdate)
-            },
-            andActionForButton: { },
-            overlayState: overlayManager)
-    }
-
-    private func presentToolbarUpdateContextualHint() {
-        guard !IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen,
-              let selectedTab = tabManager.selectedTab,
-              selectedTab.isFxHomeTab || selectedTab.isCustomHomeTab
-        else { return }
-
-        present(toolbarUpdateContextHintVC, animated: true)
-        UIAccessibility.post(notification: .layoutChanged, argument: toolbarUpdateContextHintVC)
-    }
-
     // MARK: - Summarize CFR / Contextual Hint
     func configureSummarizeToolbarEntryContextualHint(for view: UIView) {
         guard let state = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
@@ -154,7 +122,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
         case .translation: presentTranslationContextualHint()
         case .navigation: presentNavigationContextualHint()
-        case .toolbarUpdate: presentToolbarUpdateContextualHint()
         default: break
         }
     }
