@@ -101,15 +101,14 @@ public final class WKEngine: Engine {
     }
 
     public func clearOfflineWebsiteData() {
-        let dataTypes: Set<String> = [
-            WKWebsiteDataTypeCookies,
-            WKWebsiteDataTypeDiskCache,
-            WKWebsiteDataTypeMemoryCache,
-            WKWebsiteDataTypeLocalStorage,
-            WKWebsiteDataTypeSessionStorage,
-            WKWebsiteDataTypeIndexedDBDatabases,
-            WKWebsiteDataTypeWebSQLDatabases
-        ]
+        let excluded: Set<String> = {
+            if #available(iOS 26.0, *) {
+                return [WKWebsiteDataTypeScreenTime]
+            }
+            return []
+        }()
+
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes().subtracting(excluded)
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
 
