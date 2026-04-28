@@ -24,26 +24,31 @@ final class ErrorHandler {
         // if it is the first time the permission was viewed it means the OS alert was shown
         // in this case dismiss the view directly and don't show the custom alert.
         case .microphonePermissionDenied(let isFirstTime):
-            if isFirstTime {
-                navigationHandler?.dismissQuickAnswers(with: nil)
-            } else {
-                showPermissionAlert(
-                    title: "Change Settings to Use Quick Answers",
-                    message: "Allow Firefox to access the Microphone."
-                )
-            }
+            handlePermissionDenied(
+                isFirstTime: isFirstTime,
+                title: "Change Settings to Use Quick Answers",
+                message: "Allow Firefox to access the Microphone."
+            )
         case .speechRecognitionPermissionDenied(let isFirstTime):
-            if isFirstTime {
-                navigationHandler?.dismissQuickAnswers(with: nil)
-            } else {
-                showPermissionAlert(
-                    title: "Change Settings to Use Quick Answers",
-                    message: "Allow Firefox to access Speech Recognition."
-                )
-            }
+            handlePermissionDenied(
+                isFirstTime: isFirstTime,
+                title: "Change Settings to Use Quick Answers",
+                message: "Allow Firefox to access Speech Recognition."
+            )
         // TODO: - FXIOS-15572 Handle Speech errors that are not related to permissions
         default:
             break
+        }
+    }
+    
+    private func handlePermissionDenied(isFirstTime: Bool, title: String, message: String) {
+        if isFirstTime {
+            navigationHandler?.dismissQuickAnswers(with: nil)
+        } else {
+            showPermissionAlert(
+                title: title,
+                message: message
+            )
         }
     }
 

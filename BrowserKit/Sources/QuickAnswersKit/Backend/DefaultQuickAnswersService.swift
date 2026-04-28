@@ -70,14 +70,13 @@ final class DefaultQuickAnswersService: QuickAnswersService {
 
     /// Performs a search for the given transcription using the ResultsService.
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        return .success(.empty())
-//        do {
-//            let result = try await resultsService.fetchResults(for: text)
-//            return .success(result)
-//        } catch {
-//            // TODO: FXIOS-15198 Handle errors appropriately
-//            return .failure(.unknown)
-//        }
+        do {
+            let result = try await resultsService.fetchResults(for: text)
+            return .success(result)
+        } catch {
+            // TODO: FXIOS-15198 Handle errors appropriately
+            return .failure(.unknown)
+        }
     }
 
     // MARK: Private Methods
