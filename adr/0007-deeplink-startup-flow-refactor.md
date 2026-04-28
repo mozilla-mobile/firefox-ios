@@ -20,7 +20,7 @@ We will make the tab manager agnostic of deeplinks, meaning it will not care whe
 
 We will remove the `deeplinkOptimizationRefactor` old feature flag code path. Deeplinks are handled immediately when `BrowserViewController` loads, without waiting for restoration.
 
-We will also replace the destructive restore assignment with a snapshot-and-merge model. `restoreTabs()` snapshots any pre-existing tabs (`preRestoreTabs`) before clearing the store. After restoration completes, `applyRestorationResult` merges those tabs back at the end of the array. This will ensure any deeplink tabs always lands at the last position.
+We will also replace the destructive restore assignment with a snapshot-and-merge model. `restoreTabs()` snapshots any pre-existing tabs (`preRestoreTabs`) before clearing the store. After restoration completes, `applyRestorationResult` merges those tabs back at the end of the array. This will ensure any deeplink tabs always lands at the last position. We'll also add a protection mechanism in place to ensure the restore tabs function is called only one time per session, to avoid any misuage of the restore functionality.
 
 Third, we will introduce `TabRestorer`, a dedicated class that owns the full restoration lifecycle: fetching persisted data, filtering private tabs, building tab objects through a narrow delegate protocol (`TabRestorerDelegate`) and restoring screenshots. `TabManagerImplementation` knows nothing about how tabs are fetched or filtered; it only applies the returned `TabRestorationResult` to its own state. This aims at reducing the responsibilities of the tab manager.
 
@@ -34,8 +34,6 @@ Third, we will introduce `TabRestorer`, a dedicated class that owns the full res
 
 ### Negative
 
-- The snapshot-and-merge model assumes that pre-restore tabs are always worth keeping. If a future caller invokes restoreTabs() in a context where the existing
-   tabs should be discarded, the merge will produce unexpected results.
 - The telemetry still needs to be defined and evaluated namely with `recordStartupTimeOpenDeeplinkComplete` and `recordStartupTimeOpenDeeplinkCancelled`.
 
 ## Referencess
