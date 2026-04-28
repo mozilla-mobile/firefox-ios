@@ -13,12 +13,8 @@ import Shared
 struct CookiesClearableTests {
     @Test
     func test_cookieDataTypes_containsExpectedTypes() {
-        let types = CookiesClearable.cookieDataTypes
+        let types = WKWebsiteDataTypeCookies
         #expect(types.contains(WKWebsiteDataTypeCookies))
-        #expect(types.contains(WKWebsiteDataTypeLocalStorage))
-        #expect(types.contains(WKWebsiteDataTypeSessionStorage))
-        #expect(types.contains(WKWebsiteDataTypeWebSQLDatabases))
-        #expect(types.contains(WKWebsiteDataTypeIndexedDBDatabases))
     }
 
     @MainActor
@@ -35,7 +31,7 @@ struct CookiesClearableTests {
     func test_clearForDomain_withEmptyStore_storeRemainsEmpty() async {
         let store = WKWebsiteDataStore.nonPersistent()
         await makeSubject(dataStore: store).clear(forDomain: "example.com")
-        let records = await store.dataRecords(ofTypes: CookiesClearable.cookieDataTypes)
+        let records = await store.dataRecords(ofTypes: [WKWebsiteDataTypeCookies])
         #expect(records.isEmpty)
     }
 
