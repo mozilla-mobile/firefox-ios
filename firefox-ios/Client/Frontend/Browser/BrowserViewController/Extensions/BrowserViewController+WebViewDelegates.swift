@@ -1180,7 +1180,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // — same-URL reloads from the restore-original flow (FXIOS-15227) need to keep their
         // already-dispatched `.inactive` state to avoid a translate-icon flash.
         if previousURL != webView.url {
-            tab.translationConfiguration = nil
+            translationsTabStateStore.removeState(for: tab.tabUUID)
         }
 
         if !tab.adsTelemetryRedirectUrlList.isEmpty,

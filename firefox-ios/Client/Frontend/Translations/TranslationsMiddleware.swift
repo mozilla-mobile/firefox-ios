@@ -31,6 +31,14 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
     /// page load for that window, then the entry is removed. On iPhone only one window exists.
     private var restoringWindows: Set<WindowUUID> = []
 
+    /// Per-window registry of coordinator-owned `TranslationsTabStateStore` instances. Each
+    /// `BrowserCoordinator` registers its store at startup; weak refs let the coordinator's
+    /// lifecycle drive ownership without the middleware needing to track teardown.
+    private struct WeakStoreRef {
+        weak var store: TranslationsTabStateStoring?
+    }
+    private var translationsTabStateStores: [WindowUUID: WeakStoreRef] = [:]
+
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -48,6 +56,24 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         self.localeProvider = localeProvider
     }
 
+    /// Registers a coordinator-owned `TranslationsTabStateStore` for the window. Called by
+    /// `BrowserCoordinator` at startup so the middleware can mirror dispatched translation
+    /// state onto the tab without the store having to live on shared infrastructure types.
+    func register(store: TranslationsTabStateStoring, for windowUUID: WindowUUID) {
+        translationsTabStateStores[windowUUID] = WeakStoreRef(store: store)
+    }
+
+    /// Removes the registered store for the window. Optional — the weak ref drops on its own
+    /// when the owning `BrowserCoordinator` deallocates — but explicit teardown keeps the
+    /// dictionary tidy.
+    func unregister(windowUUID: WindowUUID) {
+        translationsTabStateStores[windowUUID] = nil
+    }
+
+    private func translationsTabStateStore(for windowUUID: WindowUUID) -> TranslationsTabStateStoring? {
+        return translationsTabStateStores[windowUUID]?.store
+    }
+
     lazy var translationsProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
@@ -55,12 +81,14 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
             guard let action = (action as? ToolbarAction) else { return }
 
             guard action.url?.isWebPage() == true else { return }
-            // Tab-tray return to a translated tab: the action carries `.active` from the tab's
-            // persisted state, and the WKWebView's translated DOM is still on screen. Skipping
-            // eligibility here keeps Redux in sync with the DOM — re-running would dispatch
-            // `.inactive`/`nil` and clobber the active state. `.inactive`/restore-flow paths
-            // still run so `restoringWindows` is consumed and auto-translate behaves correctly.
-            if action.translationConfiguration?.state == .active { return }
+            // Tab-tray round-trip OR mid-translation tab switch: the action carries the tab's
+            // persisted state. Skipping eligibility keeps Redux in sync with the WKWebView —
+            // re-running would dispatch `.inactive`/`nil` and clobber `.active` (translated DOM
+            // still on screen) or `.loading` (in-flight translation we'd otherwise race against).
+            // `.inactive`/restore-flow paths still run so `restoringWindows` is consumed and
+            // auto-translate behaves correctly.
+            let persistedState = action.translationConfiguration?.state
+            if persistedState == .active || persistedState == .loading { return }
             self.clearFlowId(for: action)
             self.checkTranslationsAreEligible(for: action)
 
@@ -267,12 +295,18 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
-    /// Mirrors the dispatched translation config onto the originating tab so it survives tab-tray
-    /// round-trips — the WKWebView's translated DOM persists across tab switches and the toolbar
-    /// state must stay coherent with it. Async paths must pre-capture the tab so a tab switch
-    /// mid-flight does not stomp the new active tab's state.
+    /// Mirrors the dispatched translation config onto the originating tab via the
+    /// `BrowserCoordinator`-owned `TranslationsTabStateStore` (registered with the middleware
+    /// at coordinator startup). The tab parameter is captured at sync entry to async paths so
+    /// a tab switch mid-flight does not redirect the write to the new active tab.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
-        tab?.translationConfiguration = config
+        guard let tab,
+              let store = translationsTabStateStore(for: tab.windowUUID) else { return }
+        if let config {
+            store.updateState(for: tab.tabUUID) { $0.translationConfiguration = config }
+        } else {
+            store.removeState(for: tab.tabUUID)
+        }
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {

@@ -564,7 +564,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
-    func test_urlDidChangeAction_withNilIconState_preservesExistingTranslationConfig() {
+    /// Per FXIOS-15606, the urlDidChange action's `translationConfiguration` is the source of
+    /// truth — it carries the originating tab's persisted state. When the action carries an
+    /// explicit `.active`, it must win over whatever the previous Redux state was.
+    func test_urlDidChangeAction_withActiveState_overridesExisting() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()
         let initialState = createSubject()
@@ -583,15 +586,81 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             stateWithInactiveIcon,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .active)
+    }
+
+    /// When the action genuinely carries no translation configuration (`nil`), the reducer
+    /// preserves the existing Redux state. This guards against unrelated dispatchers that don't
+    /// touch translation state from accidentally clearing the icon.
+    func test_urlDidChangeAction_withNilActionConfig_preservesExistingTranslationConfig() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
         )
 
         XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+    }
+
+    /// Per FXIOS-15606, when the action carries a *default* config (non-nil but `state == nil`)
+    /// — the case for a tab whose `translationConfiguration` is `nil` — the action must win,
+    /// resetting the Redux state so the previous tab's icon doesn't leak onto the fresh tab.
+    func test_urlDidChangeAction_withDefaultActionConfig_clearsPreviousTabState() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        // Simulate the previous tab's `.active` state still in Redux at the moment of switch.
+        let stateWithActiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .active,
+                    translatedToLanguage: "fr"
+                ),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.translationCompleted
+            )
+        )
+
+        // Switching to a fresh tab dispatches urlDidChange with a default config (no state).
+        let newState = reducer(
+            stateWithActiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertNil(newState.translationConfiguration?.state)
+        XCTAssertNil(newState.translationConfiguration?.translatedToLanguage)
     }
 
     func test_traitCollectionDidChangedAction_returnsExpectedState() {

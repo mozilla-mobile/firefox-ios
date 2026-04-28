@@ -365,6 +365,7 @@ class BrowserViewController: UIViewController,
     private(set) var browserViewControllerState: BrowserViewControllerState?
     var appAuthenticator: AppAuthenticationProtocol
     let searchEnginesManager: SearchEnginesManager
+    let translationsTabStateStore: TranslationsTabStateStoring
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private var keyboardState: KeyboardState?
 
@@ -420,6 +421,7 @@ class BrowserViewController: UIViewController,
     init(
         profile: Profile,
         tabManager: TabManager,
+        translationsTabStateStore: TranslationsTabStateStoring = TranslationsTabStateStore(),
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
@@ -436,6 +438,7 @@ class BrowserViewController: UIViewController,
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.profile = profile
         self.tabManager = tabManager
+        self.translationsTabStateStore = translationsTabStateStore
         self.windowUUID = tabManager.windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -2625,7 +2628,8 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
+                ?? TranslationConfiguration(prefs: profile.prefs),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
