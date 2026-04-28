@@ -85,7 +85,7 @@ struct AddressCellView: View {
         }
         .onTapGesture {
             isHighlighted = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            DispatchQueue.main.async {
                 withAnimation(.easeOut(duration: 0.2)) {
                     isHighlighted = false
                 }
