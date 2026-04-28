@@ -37,6 +37,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     Link(destination: url) {
                         Text(aiControlsModel.blockAIEnhancementsLinkInfo.label)
                             .underline()
+                            .multilineTextAlignment(.leading)
                             .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
                             .foregroundStyle(themeColors.layerSelectedText.color)
                     }
@@ -92,6 +93,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                         Link(destination: url) {
                             Text(aiControlsModel.headerLinkInfo.label)
                                 .underline()
+                                .multilineTextAlignment(.leading)
                                 .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                                 .foregroundStyle(themeColors.layerSelectedText.color)
                         }
