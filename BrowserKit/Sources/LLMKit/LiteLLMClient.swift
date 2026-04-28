@@ -63,6 +63,27 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         return handleStreamingRequest(request: request)
     }
 
+    // TODO: FXIOS-15123 - Temporarily added for testing until we get actual endpoint
+    public func requestSearch(
+        transcription: String,
+        config: LLMConfig
+    ) async throws -> SearchResponse {
+        let request: URLRequest
+        do {
+            request = try await makeSearchRequest(query: transcription, config: config, path: "search")
+        } catch {
+            throw LiteLLMClientError.requestCreationFailed
+        }
+        return try await handleNonStreamingSearchRequest(request: request)
+    }
+
+    private func handleNonStreamingSearchRequest(request: URLRequest) async throws -> SearchResponse {
+        let (data, response) = try await session.data(for: request)
+        try validate(response: response)
+        let decodedResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
+        return decodedResponse
+    }
+
     private func handleNonStreamingRequest(request: URLRequest) async throws -> String {
         let (data, response) = try await session.data(for: request)
         try validate(response: response)
@@ -103,9 +124,10 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
     func makeRequest(
         messages: [LiteLLMMessage],
-        config: LLMConfig
+        config: LLMConfig,
+        path: String = "chat/completions"
     ) async throws -> URLRequest {
-        let endpoint = baseURL.appendingPathComponent("chat/completions")
+        let endpoint = baseURL.appendingPathComponent(path)
         var request = URLRequest(url: endpoint)
         request.httpMethod = Self.postMethod
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -122,6 +144,41 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 
         /// NOTE: Dictionaries in Swift are unordered, so using `.sortedKeys` ensures a deterministic key order and 
         /// identical JSON bytes each time. This is needed because the server computes a hash for each request (an ETag) and 
+        /// responds with a cached response if the hash matches a previous request.
+        /// For more context, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+        request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
+
+        /// Authenticate last since some strategies (e.g. App Attest) need to read
+        /// request.httpBody to compute a signature over the payload.
+        try await authenticator.authenticate(request: &request)
+
+        return request
+    }
+
+    // TODO: FXIOS-15123 - Temporarily added for testing until we get actual endpoint
+    func makeSearchRequest(
+        query: String,
+        config: LLMConfig,
+        path: String = "search"
+    ) async throws -> URLRequest {
+        let endpoint = baseURL.appendingPathComponent(path)
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = Self.postMethod
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // config.options is the base value for the payload
+        var payload = config.options.compactMapValues { $0 }
+        payload["query"] = query
+        payload["max_results"] = "2"
+
+        if let stream = config.options["stream"] as? Bool, stream {
+            request.addValue("text/event-stream", forHTTPHeaderField: "Accept")
+            request.addValue("keep-alive", forHTTPHeaderField: "Connection")
+            payload["stream"] = true
+        }
+
+        /// NOTE: Dictionaries in Swift are unordered, so using `.sortedKeys` ensures a deterministic key order and
+        /// identical JSON bytes each time. This is needed because the server computes a hash for each request (an ETag) and
         /// responds with a cached response if the hash matches a previous request.
         /// For more context, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
         request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])

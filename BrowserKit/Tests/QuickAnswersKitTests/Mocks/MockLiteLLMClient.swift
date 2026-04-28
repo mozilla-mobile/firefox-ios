@@ -13,6 +13,7 @@ final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWithError: Error?
     var requestChatCompletionCallCount = 0
     var requestChatCompletionStreamedCallCount = 0
+    var requestSearchCount = 0
     var lastMessages: [LiteLLMMessage]?
     var lastConfig: LLMConfig?
 
@@ -26,6 +27,17 @@ final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
 
         if let error = respondWithError { throw error }
         return respondWith.joined(separator: " ")
+    }
+
+    func requestSearch(
+        transcription: String,
+        config: LLMConfig
+    ) async throws -> SearchResponse {
+        requestChatCompletionCallCount += 1
+        lastConfig = config
+
+        if let error = respondWithError { throw error }
+        return SearchResponse(results: [])
     }
 
     func requestChatCompletionStreamed(

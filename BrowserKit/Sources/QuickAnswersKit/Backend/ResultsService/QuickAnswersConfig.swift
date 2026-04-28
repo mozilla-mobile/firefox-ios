@@ -15,8 +15,7 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     /// Default initializer with production configuration
     public init(instructions: String = "", options: [String: AnyHashable] = [
         "max_tokens": LiteLLMConfig.maxTokens,
-        "model": LiteLLMConfig.apiModel,
-        "stream": true
+        "model": LiteLLMConfig.apiModel
     ]) {
         self.instructions = instructions
         self.options = options

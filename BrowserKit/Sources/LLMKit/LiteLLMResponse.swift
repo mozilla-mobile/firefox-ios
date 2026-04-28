@@ -15,3 +15,14 @@ struct LiteLLMChoice: Codable {
     let delta: LiteLLMMessage?
     let finishReason: String?
 }
+
+// TODO: FXIOS-15123 - Temporarily added until we get actual endpoint
+public struct SearchResponse: Codable {
+    public let results: [SearchSource]
+}
+
+public struct SearchSource: Codable {
+    public let title: String?
+    public let url: String?
+    public let snippet: String?
+}

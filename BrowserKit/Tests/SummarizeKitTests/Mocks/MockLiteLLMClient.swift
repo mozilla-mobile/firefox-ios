@@ -34,4 +34,12 @@ public final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable
             }
         }
     }
+
+    public func requestSearch(
+        transcription: String,
+        config: LLMConfig
+    ) async throws -> SearchResponse {
+        if let error = respondWithError { throw error }
+        return SearchResponse(results: [])
+    }
 }

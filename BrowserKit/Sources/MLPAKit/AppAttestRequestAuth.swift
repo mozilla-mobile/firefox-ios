@@ -14,13 +14,21 @@ import Common
 public struct AppAttestRequestAuth: RequestAuthProtocol {
     private let appAttestClient: AppAttestClient
     private let bundleIdentifier: String
+    private let serviceType: MLPAServiceType
 
-    public init(appAttestClient: AppAttestClient, bundleIdentifier: String = AppInfo.bundleIdentifier) {
+    public init(
+        appAttestClient: AppAttestClient,
+        bundleIdentifier: String = AppInfo.bundleIdentifier,
+        serviceType: MLPAServiceType = .s2s
+    ) {
         self.appAttestClient = appAttestClient
         self.bundleIdentifier = bundleIdentifier
+        self.serviceType = serviceType
     }
 
-    public func authenticate(request: inout URLRequest) async throws {
+    public func authenticate(
+        request: inout URLRequest
+    ) async throws {
         // Make sure the server trust is established before sending any requests.
         // This should only be needed for the first request, subsequent requests will reuse the same attestation.
         _ = try await appAttestClient.performAttestation()
@@ -39,7 +47,7 @@ public struct AppAttestRequestAuth: RequestAuthProtocol {
         ).encode()
 
         request.setValue(MLPAConstants.bearerPrefix + jwt, forHTTPHeaderField: MLPAConstants.authorizationHeader)
-        request.setValue(MLPAConstants.serviceTypeValue, forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
+        request.setValue(serviceType.rawValue, forHTTPHeaderField: MLPAConstants.serviceTypeHeader)
         request.setValue("true", forHTTPHeaderField: MLPAConstants.useAppAttestHeader)
         request.httpBody = result.payload
     }

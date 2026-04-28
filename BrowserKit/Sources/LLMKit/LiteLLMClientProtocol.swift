@@ -18,4 +18,10 @@ public protocol LiteLLMClientProtocol: Sendable {
         messages: [LiteLLMMessage],
         config: LLMConfig
     ) async throws -> AsyncThrowingStream<String, Error>
+
+    /// Sends a non-streaming chat completion request.
+    func requestSearch(
+        transcription: String,
+        config: LLMConfig
+    ) async throws -> SearchResponse
 }
