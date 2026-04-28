@@ -184,7 +184,7 @@ class CookiesClearable: Clearable {
         let records = await dataStore.dataRecords(ofTypes: [WKWebsiteDataTypeCookies])
         let targets = records.filter { $0.displayName == domain.lowercased() }
         guard !targets.isEmpty else { return }
-        await dataStore.removeData(ofTypes: Self.cookieDataTypes, for: targets)
+        await dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies], for: targets)
         logger.log(
             "CookiesClearable removed domain-scoped data for \(domain).",
             level: .debug,
