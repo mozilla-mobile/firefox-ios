@@ -31,6 +31,7 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
+        case worldcup(TextColor?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -58,6 +59,7 @@ final class HomepageDiffableDataSource:
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
+        case worldcupCard(WorldcupCardConfiguration)
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -72,6 +74,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
+                WorldcupCardCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -135,6 +138,11 @@ final class HomepageDiffableDataSource:
         if let bookmarks = getBookmarks(with: state.bookmarkState) {
             snapshot.appendSections([.bookmarks(textColor)])
             snapshot.appendItems(bookmarks, toSection: .bookmarks(textColor))
+        }
+
+        if let config = state.worldcupState.cardConfiguration {
+            snapshot.appendSections([.worldcup(textColor)])
+            snapshot.appendItems([.worldcupCard(config)], toSection: .worldcup(textColor))
         }
 
         snapshot.appendSections([.spacer])

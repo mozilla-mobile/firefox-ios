@@ -608,6 +608,10 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
+        case .worldcupCard(let config):
+            return configuredCell(cellType: WorldcupCardCell.self, at: indexPath) { cell in
+                cell.configure(with: config, theme: currentTheme)
+            }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
         }

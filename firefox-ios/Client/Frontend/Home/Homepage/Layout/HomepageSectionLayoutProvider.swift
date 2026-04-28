@@ -155,6 +155,12 @@ final class HomepageSectionLayoutProvider: LegacyFeatureFlaggable {
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
             return createBookmarksSectionLayout(for: environment)
+        case .worldcup:
+            return createSingleItemSectionLayout(
+                for: traitCollection,
+                itemHeight: UX.MessageCardConstants.height,
+                bottomInsets: UX.spacingBetweenSections
+            )
         case .spacer:
             return createSpacerSectionLayout(for: environment)
         }
