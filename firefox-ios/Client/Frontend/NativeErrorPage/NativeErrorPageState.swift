@@ -2,11 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import CopyWithUpdates
 import Redux
 import Common
 
-@CopyWithUpdates
 struct NativeErrorPageState: ScreenState {
     var windowUUID: WindowUUID
     var title: String
@@ -65,7 +63,8 @@ struct NativeErrorPageState: ScreenState {
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
                 return defaultState(from: state)
             }
-            return state.copyWithUpdates(
+            return NativeErrorPageState(
+                windowUUID: state.windowUUID,
                 title: model.errorTitle,
                 description: model.errorDescription,
                 foxImage: model.foxImageName,
@@ -79,6 +78,14 @@ struct NativeErrorPageState: ScreenState {
     }
 
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
-        return state.copyWithUpdates()
+        return NativeErrorPageState(
+            windowUUID: state.windowUUID,
+            title: state.title,
+            description: state.description,
+            foxImage: state.foxImage,
+            url: state.url,
+            advancedSection: state.advancedSection,
+            showGoBackButton: state.showGoBackButton
+        )
     }
 }

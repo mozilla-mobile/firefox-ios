@@ -5,9 +5,7 @@
 import Foundation
 import Redux
 import Common
-import CopyWithUpdates
 
-@CopyWithUpdates
 struct PasswordGeneratorState: ScreenState {
     var windowUUID: WindowUUID
     var password: String
@@ -23,7 +21,11 @@ struct PasswordGeneratorState: ScreenState {
             return
         }
 
-        self = passwordGeneratorState.copyWithUpdates()
+        self.init(
+            windowUUID: passwordGeneratorState.windowUUID,
+            password: passwordGeneratorState.password,
+            passwordHidden: passwordGeneratorState.passwordHidden
+        )
     }
 
     init(
@@ -46,19 +48,22 @@ struct PasswordGeneratorState: ScreenState {
             else {
                 return defaultState(from: state)
             }
-            return state.copyWithUpdates(
-                password: password
-            )
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: password,
+                passwordHidden: state.passwordHidden)
 
         case PasswordGeneratorActionType.hidePassword:
-            return state.copyWithUpdates(
-                passwordHidden: true
-            )
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: true)
 
         case PasswordGeneratorActionType.showPassword:
-            return state.copyWithUpdates(
-                passwordHidden: false
-            )
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: false)
 
         default:
             return defaultState(from: state)
@@ -66,6 +71,10 @@ struct PasswordGeneratorState: ScreenState {
     }
 
     static func defaultState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
-        return state.copyWithUpdates()
+        return PasswordGeneratorState(
+            windowUUID: state.windowUUID,
+            password: state.password,
+            passwordHidden: state.passwordHidden
+        )
     }
 }
