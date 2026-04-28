@@ -5,9 +5,7 @@
 import Foundation
 import Redux
 import Common
-import CopyWithUpdates
 
-@CopyWithUpdates
 struct MicrosurveyPromptState: StateType, Equatable {
     var windowUUID: WindowUUID
     var showPrompt: Bool
@@ -50,14 +48,18 @@ struct MicrosurveyPromptState: StateType, Equatable {
     }
 
     static func defaultState(from state: MicrosurveyPromptState) -> MicrosurveyPromptState {
-        return state.copyWithUpdates(
-            showSurvey: false
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: state.showPrompt,
+            showSurvey: false,
+            model: state.model
         )
     }
 
     private static func handleInitializeAction(state: Self, action: Action) -> Self {
         let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
-        return state.copyWithUpdates(
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
             showPrompt: true,
             showSurvey: false,
             model: model
@@ -65,16 +67,20 @@ struct MicrosurveyPromptState: StateType, Equatable {
     }
 
     private static func handleClosePromptAction(state: Self) -> Self {
-        return state.copyWithUpdates(
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
             showPrompt: false,
-            showSurvey: false
+            showSurvey: false,
+            model: state.model
         )
     }
 
     private static func handleContinueToSurveyAction(state: Self) -> Self {
-        return state.copyWithUpdates(
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
             showPrompt: true,
-            showSurvey: true
+            showSurvey: true,
+            model: state.model
         )
     }
 }
