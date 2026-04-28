@@ -124,7 +124,15 @@ class SiteDataClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
+        let dataTypes: Set<String> = [
+            WKWebsiteDataTypeCookies,
+            WKWebsiteDataTypeDiskCache,
+            WKWebsiteDataTypeMemoryCache,
+            WKWebsiteDataTypeLocalStorage,
+            WKWebsiteDataTypeSessionStorage,
+            WKWebsiteDataTypeIndexedDBDatabases,
+            WKWebsiteDataTypeWebSQLDatabases
+        ]
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("SiteDataClearable succeeded.",

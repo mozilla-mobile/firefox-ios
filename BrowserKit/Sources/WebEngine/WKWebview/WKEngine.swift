@@ -101,7 +101,15 @@ public final class WKEngine: Engine {
     }
 
     public func clearOfflineWebsiteData() {
-        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
+        let dataTypes: Set<String> = [
+            WKWebsiteDataTypeCookies,
+            WKWebsiteDataTypeDiskCache,
+            WKWebsiteDataTypeMemoryCache,
+            WKWebsiteDataTypeLocalStorage,
+            WKWebsiteDataTypeSessionStorage,
+            WKWebsiteDataTypeIndexedDBDatabases,
+            WKWebsiteDataTypeWebSQLDatabases
+        ]
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
 
