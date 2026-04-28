@@ -564,9 +564,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
-    /// Per FXIOS-15606, the urlDidChange action's `translationConfiguration` is the source of
-    /// truth — it carries the originating tab's persisted state. When the action carries an
-    /// explicit `.active`, it must win over whatever the previous Redux state was.
+    /// urlDidChange with `.active` config overrides existing Redux state.
     func test_urlDidChangeAction_withActiveState_overridesExisting() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()
@@ -595,9 +593,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.translationConfiguration?.state, .active)
     }
 
-    /// When the action genuinely carries no translation configuration (`nil`), the reducer
-    /// preserves the existing Redux state. This guards against unrelated dispatchers that don't
-    /// touch translation state from accidentally clearing the icon.
+    /// urlDidChange with nil config preserves existing Redux state.
     func test_urlDidChangeAction_withNilActionConfig_preservesExistingTranslationConfig() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()
@@ -625,9 +621,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
     }
 
-    /// Per FXIOS-15606, when the action carries a *default* config (non-nil but `state == nil`)
-    /// — the case for a tab whose `translationConfiguration` is `nil` — the action must win,
-    /// resetting the Redux state so the previous tab's icon doesn't leak onto the fresh tab.
+    /// urlDidChange with default config (non-nil, state=nil) clears previous tab's Redux state.
     func test_urlDidChangeAction_withDefaultActionConfig_clearsPreviousTabState() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()

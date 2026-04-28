@@ -210,8 +210,18 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
             )
             self.handleUpdatingTranslationIcon(for: action, with: .inactive, on: originatingTab)
             restoringWindows.insert(action.windowUUID)
+            // Mark the next same-URL reload as a restore-flow reload so `webView(_:didCommit:)`
+            // keeps the just-dispatched `.inactive` (FXIOS-15227). Manual reloads, with this
+            // flag unset, will clear the cache and re-run eligibility.
+            markPendingRestoreReload(on: originatingTab)
             self.reloadPage(for: action)
         }
+    }
+
+    private func markPendingRestoreReload(on tab: Tab?) {
+        guard let tab,
+              let store = translationsTabStateStore(for: tab.windowUUID) else { return }
+        store.updateState(for: tab.tabUUID) { $0.pendingRestoreReload = true }
     }
 
     private func showLanguagePickerForActiveTranslation(

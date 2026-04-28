@@ -1175,11 +1175,16 @@ extension BrowserViewController: WKNavigationDelegate {
         webviewTelemetry.start()
         let previousURL = tab.url
         tab.url = webView.url
-        // A real navigation replaces the DOM, dropping any prior in-page translation. Clearing
-        // here lets the eligibility check re-run for the new URL. Only clear on actual URL change
-        // — same-URL reloads from the restore-original flow (FXIOS-15227) need to keep their
-        // already-dispatched `.inactive` state to avoid a translate-icon flash.
-        if previousURL != webView.url {
+        // A real navigation (URL change) or a manual reload (same URL, no pending restore)
+        // replaces the DOM and drops any prior in-page translation, so the cache must be
+        // cleared so eligibility can re-run. The restore-original flow (FXIOS-15227) marks
+        // its same-URL reload via `pendingRestoreReload`; in that case we keep the
+        // already-dispatched `.inactive` and just consume the flag, avoiding an icon flash.
+        let isSameURLReload = previousURL == webView.url
+        let isPendingRestore = translationsTabStateStore.state(for: tab.tabUUID).pendingRestoreReload
+        if isSameURLReload && isPendingRestore {
+            translationsTabStateStore.updateState(for: tab.tabUUID) { $0.pendingRestoreReload = false }
+        } else {
             translationsTabStateStore.removeState(for: tab.tabUUID)
         }
 

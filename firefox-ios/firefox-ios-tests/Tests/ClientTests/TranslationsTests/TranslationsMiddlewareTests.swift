@@ -246,9 +246,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
-    /// Returning to a translated tab from the tab tray dispatches `urlDidChange` with the tab's
-    /// persisted `.active` state. The middleware must skip the eligibility re-check that would
-    /// otherwise dispatch `.inactive`/`nil` and clobber the saved state (FXIOS-15606).
+    /// urlDidChange with `.active` skips eligibility re-check.
     func test_urlDidChangeAction_withActiveState_skipsEligibilityRecheck() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -276,9 +274,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
-    /// Returning to a tab whose translation is still in flight dispatches `urlDidChange` with
-    /// `.loading`. The middleware must skip the eligibility re-check that would otherwise race
-    /// the in-flight translation Task and clobber `.loading` with `.inactive`/`nil` (FXIOS-15606).
+    /// urlDidChange with `.loading` skips eligibility re-check.
     func test_urlDidChangeAction_withLoadingState_skipsEligibilityRecheck() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -305,10 +301,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
-    /// `.inactive` (manual offer was previously shown) is intentionally *not* short-circuited.
-    /// The restore-original flow depends on `urlDidChange` reaching `checkTranslationsAreEligible`
-    /// — that's the only path that consumes `restoringWindows` via `tryAutoTranslate`. Pin this
-    /// contract so we don't accidentally widen the guard further and break the restore flow.
+    /// urlDidChange with `.inactive` falls through and runs eligibility (restore-flow contract).
     func test_urlDidChangeAction_withInactiveState_runsEligibility() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -336,8 +329,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(dispatched.actionType as? ToolbarActionType, .receivedTranslationLanguage)
     }
 
-    /// Eligibility result must be mirrored to the per-window `TranslationsTabStateStore` so the
-    /// state survives a later tab-tray round-trip (FXIOS-15606).
+    /// Eligible page persists `.inactive` to the tab's store entry.
     func test_urlDidChangeAction_withEligiblePage_persistsInactiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -365,8 +357,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(stored?.state, .inactive)
     }
 
-    /// Ineligibility must clear the tab's stored translation config so a stale state from a
-    /// prior page can't leak forward into a fresh, ineligible page (FXIOS-15606).
+    /// Ineligible page clears the tab's stored translation config.
     func test_urlDidChangeAction_withIneligiblePage_clearsTabState() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -398,10 +389,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNil(stored)
     }
 
-    /// Mid-eligibility tab switch (FXIOS-15606): `urlDidChange` fires for Tab A, then the user
-    /// opens the tab tray and switches to Tab B before the async eligibility check completes.
-    /// The result must land on Tab A (the originating tab pre-captured in
-    /// `checkTranslationsAreEligible`), not the now-active Tab B.
+    /// Mid-eligibility tab switch: result lands on the originating tab, not the new active tab.
     func test_urlDidChangeAction_tabSwitchMidEligibility_persistsOnOriginatingTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let mockTranslationService = MockTranslationsService(
@@ -438,8 +426,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNil(store.state(for: tabB.tabUUID).translationConfiguration)
     }
 
-    /// Translation completion should mirror the new `.active` state onto the active tab so it
-    /// survives a later tab-tray round-trip (FXIOS-15606).
+    /// Translation completion persists `.active` to the tab's store entry.
     func test_didSelectTargetLanguage_persistsActiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
@@ -469,10 +456,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(stored?.translatedToLanguage, "de")
     }
 
-    /// Mid-translation tab switch (FXIOS-15606): the user starts a translation on Tab A, opens
-    /// the tab tray, and switches to Tab B before the translation completes. The completion
-    /// must land on Tab A (the originating tab pre-captured in `handleLanguageSelected`), not
-    /// stomp Tab B's state.
+    /// Mid-translation tab switch: completion lands on the originating tab, not the new active tab.
     func test_didSelectTargetLanguage_tabSwitchMidTranslation_persistsOnOriginatingTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
@@ -507,8 +491,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNil(store.state(for: tabB.tabUUID).translationConfiguration)
     }
 
-    /// Translation error must persist `.inactive` to the originating tab (FXIOS-15606), so a
-    /// subsequent tab-tray round-trip surfaces the error-recovered state, not stale `.loading`.
+    /// Translation error persists `.inactive` to the originating tab.
     func test_didSelectTargetLanguage_onError_persistsInactiveStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         enum TestError: Error { case example }
@@ -781,11 +764,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.webpageRestoredCalledCount, 1)
     }
 
-    /// Tapping the active translation button to restore the original page must persist
-    /// `.inactive` onto the tab. Without this, a subsequent tab-tray round-trip would replay
-    /// the stale `.active` state and re-show the translated icon over the now-original DOM
-    /// (FXIOS-15606).
-    func test_didTapButton_whenActive_persistsInactiveStateOnTab() throws {
+    /// Restore-active tap persists `.inactive` and sets `pendingRestoreReload` on the tab.
+    func test_didTapButton_whenActive_persistsRestoreStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
@@ -813,8 +793,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(setupAppStateWithTranslationConfig(for: .active), action)
 
         wait(for: [expectation], timeout: 1.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
-        XCTAssertEqual(stored?.state, .inactive)
+        let stored = translationsTabStateStore.state(for: tab.tabUUID)
+        XCTAssertEqual(stored.translationConfiguration?.state, .inactive)
+        XCTAssertTrue(stored.pendingRestoreReload)
     }
 
     // MARK: - didTranslationSettingsChange tests
