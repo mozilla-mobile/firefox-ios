@@ -20,12 +20,12 @@ extension LocaleProvider {
 
     /// Returns the language name localized in the current locale (e.g. "French" for "fr" when current locale is "en").
     func localizedLanguageName(for code: String) -> String {
-        return current.localizedString(forLanguageCode: code) ?? code
+        return (current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
     }
 
-    /// Returns the language name in its own language (e.g. "français" for "fr").
+    /// Returns the language name in its own language (e.g. "Français" for "fr").
     func nativeLanguageName(for code: String) -> String {
-        return Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
+        return (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
     }
 }
 
