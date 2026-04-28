@@ -93,6 +93,23 @@ class NativeErrorPageHelper {
         return isOtherErrorPagesEnabled && isBadCertDomainError(error)
     }
 
+    /// Determines the native error page type for a given error, respecting feature flags
+    /// Returns nil if no native error page should be shown for this error
+    static func networkErrorType(
+        for error: NSError,
+        isNICEnabled: Bool,
+        isBadCertEnabled: Bool
+    ) -> NetworkErrorType? {
+        let noInternetCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
+        if isNICEnabled && error.code == noInternetCode {
+            return .noInternetConnection
+        }
+        if shouldShowNativeBadCertDomainErrorPage(for: error, isOtherErrorPagesEnabled: isBadCertEnabled) {
+            return .badCertDomain
+        }
+        return nil
+    }
+
     /// Builds the full set of URL query items for an error page, including
     /// certificate-specific items when the error is a certificate error.
     static func buildErrorPageQueryItems(for error: NSError, url: URL) -> [URLQueryItem] {
