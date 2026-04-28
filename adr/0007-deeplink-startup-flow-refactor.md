@@ -37,3 +37,7 @@ Third, we will introduce `TabRestorer`, a dedicated class that owns the full res
 - The snapshot-and-merge model assumes that pre-restore tabs are always worth keeping. If a future caller invokes restoreTabs() in a context where the existing
    tabs should be discarded, the merge will produce unexpected results.
 - The telemetry still needs to be defined and evaluated namely with `recordStartupTimeOpenDeeplinkComplete` and `recordStartupTimeOpenDeeplinkCancelled`.
+
+## Referencess
+- [Investigate deeplink delay](https://mozilla-hub.atlassian.net/browse/FXIOS-15285)
+- [Improve tabs restoration process](https://mozilla-hub.atlassian.net/browse/FXIOS-11269)
