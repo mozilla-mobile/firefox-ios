@@ -964,32 +964,25 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-        let noInternetErrorCode = Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue)
-        let isNoInternetError = isNICErrorPageEnabled && nsError.code == noInternetErrorCode
-        let isBadCertDomainError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
-            for: nsError,
-            isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
-        )
 
-        if isNativeErrorPageEnabled && (isNoInternetError || isBadCertDomainError) {
-            let errorType: NativeErrorPageHelper.NetworkErrorType? = if isNoInternetError {
-                .noInternetConnection
-            } else if isBadCertDomainError {
-                .badCertDomain
-            } else {
-                nil
-            }
-            let action = NativeErrorPageAction(networkError: nsError,
-                                               errorType: errorType,
-                                               windowUUID: windowUUID,
-                                               actionType: NativeErrorPageActionType.receivedError
+        let errorType = isNativeErrorPageEnabled
+            ? NativeErrorPageHelper.networkErrorType(
+                for: nsError,
+                isNICEnabled: isNICErrorPageEnabled,
+                isBadCertEnabled: isBadCertDomainErrorPageEnabled
             )
-            store.dispatch(action)
+            : nil
+        switch errorType {
+        case .noInternetConnection, .badCertDomain:
+            store.dispatch(NativeErrorPageAction(
+                networkError: nsError,
+                errorType: errorType,
+                windowUUID: windowUUID,
+                actionType: NativeErrorPageActionType.receivedError
+            ))
             webView.load(PrivilegedRequest(url: url) as URLRequest)
-        } else {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(nsError,
-                                                                   forUrl: url,
-                                                                   inWebView: webView)
+        case nil:
+            ErrorPageHelper(certStore: profile.certStore).loadPage(nsError, forUrl: url, inWebView: webView)
         }
     }
 
