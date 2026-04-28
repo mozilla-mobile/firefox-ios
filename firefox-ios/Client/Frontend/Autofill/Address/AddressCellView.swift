@@ -83,17 +83,15 @@ struct AddressCellView: View {
                 }
             }
         }
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .updating($isPressing) { _, state, _ in state = true }
-                .onEnded { value in
-                    let isWithinTapBounds = abs(value.translation.width) < 20
-                        && abs(value.translation.height) < 20
-                    if isWithinTapBounds {
-                        onTap()
-                    }
+        .onTapGesture {
+            isHighlighted = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isHighlighted = false
                 }
-        )
+            }
+            onTap()
+        }
         .listRowInsets(EdgeInsets())
         .listRowBackground(
             (isHighlighted ? highlightColor : backgroundColor)
