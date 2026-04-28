@@ -137,7 +137,13 @@ class SiteDataClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
+        let dataTypes = Set([
+            WKWebsiteDataTypeLocalStorage,
+            WKWebsiteDataTypeSessionStorage,
+            WKWebsiteDataTypeWebSQLDatabases,
+            WKWebsiteDataTypeIndexedDBDatabases,
+            WKWebsiteDataTypeFetchCache,
+        ])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         logger.log("SiteDataClearable succeeded.",
@@ -153,14 +159,6 @@ class CookiesClearable: Clearable {
     private let logger: Logger
     private let dataStore: WKWebsiteDataStore
 
-    static let cookieDataTypes: Set<String> = [
-        WKWebsiteDataTypeCookies,
-        WKWebsiteDataTypeLocalStorage,
-        WKWebsiteDataTypeSessionStorage,
-        WKWebsiteDataTypeWebSQLDatabases,
-        WKWebsiteDataTypeIndexedDBDatabases
-    ]
-
     @MainActor
     init(logger: Logger = DefaultLogger.shared,
          dataStore: WKWebsiteDataStore = .default()) {
@@ -170,7 +168,7 @@ class CookiesClearable: Clearable {
 
     func clear() -> Success {
         dataStore.removeData(
-            ofTypes: Self.cookieDataTypes,
+            ofTypes: WKWebsiteDataTypeCookies,
             modifiedSince: .distantPast,
             completionHandler: {}
         )
@@ -183,7 +181,7 @@ class CookiesClearable: Clearable {
 
     @MainActor
     func clear(forDomain domain: String) async {
-        let records = await dataStore.dataRecords(ofTypes: Self.cookieDataTypes)
+        let records = await dataStore.dataRecords(ofTypes: WKWebsiteDataTypeCookies)
         let targets = records.filter { $0.displayName == domain.lowercased() }
         guard !targets.isEmpty else { return }
         await dataStore.removeData(ofTypes: Self.cookieDataTypes, for: targets)
