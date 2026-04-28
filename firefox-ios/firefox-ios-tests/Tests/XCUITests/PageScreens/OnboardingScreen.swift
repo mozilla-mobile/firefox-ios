@@ -177,9 +177,9 @@ final class OnboardingScreen {
 
         // The "System Auto" / "Automatic" label is different between the flows
         switch flowType {
-        case .legacy, .modernOrangeAndBlue:
+        case .legacy:
             themes.append("System Auto")
-        case .modernKit:
+        case .modernKit, .modernOrangeAndBlue:
             themes.append("Automatic")
         }
 
@@ -393,13 +393,8 @@ final class OnboardingScreen {
         XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
 
         // The "System Auto" / "Automatic" label is different between the two modern flows
-        var systemButton: XCUIElement?
-        if case .modernOrangeAndBlue = flowType {
-            systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
-        } else if case .modernKit = flowType {
-            systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
-        }
-        XCTAssertEqual(systemButton?.exists, true, "System Auto theme option should exist")
+        let systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
+        XCTAssertEqual(systemButton.exists, true, "System Auto theme option should exist")
     }
 
     func assertSyncScreen() {
@@ -417,10 +412,7 @@ final class OnboardingScreen {
             let expectedDescription: String
             let expectedSecondary: String
             switch flowType {
-            case .modernOrangeAndBlue:
-                expectedDescription = "Get your bookmarks, history, and passwords on any device."
-                expectedSecondary = "Not now"
-            case .modernKit:
+            case .modernKit, .modernOrangeAndBlue:
                 // swiftlint:disable line_length
                 expectedDescription = "Grab bookmarks, passwords, and more on any device in a snap. Your personal data stays safe and secure with encryption."
                 expectedSecondary = "Not Now"
