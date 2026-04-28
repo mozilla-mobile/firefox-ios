@@ -19,7 +19,7 @@ final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
 
     init(
         prefs: Prefs,
-        backendLayer: NimbusFeatureFlagLayerProviding
+        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer
     ) {
         self.prefs = prefs
         self.backendLayer = backendLayer
