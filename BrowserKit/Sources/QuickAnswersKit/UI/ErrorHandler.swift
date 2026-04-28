@@ -40,7 +40,7 @@ final class ErrorHandler {
             break
         }
     }
-    
+
     private func handlePermissionDenied(isFirstTime: Bool, title: String, message: String) {
         if isFirstTime {
             navigationHandler?.dismissQuickAnswers(with: nil)
