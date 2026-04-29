@@ -1633,7 +1633,6 @@ class BrowserViewController: UIViewController,
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    
 
     // MARK: - Snapkit related
 
