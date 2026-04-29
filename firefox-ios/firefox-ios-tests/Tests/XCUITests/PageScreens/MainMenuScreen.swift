@@ -29,6 +29,26 @@ final class MainMenuScreen {
         BaseTestCase().waitForElementsToExist(elements)
     }
 
+	func assertMenuOptionsExist() {
+		let elements = [
+			sel.SETTINGS_CELL.element(in: app),
+			sel.BOOKMARKS_BUTTON.element(in: app),
+			sel.HISTORY_BUTTON.element(in: app),
+			sel.DOWNLOADS_BUTTON.element(in: app),
+			sel.SIGN_IN_CELL.element(in: app)
+		]
+		BaseTestCase().waitForElementsToExist(elements)
+	}
+
+	func dismissMenu() {
+		app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+	}
+
+	func assertMenuIsDismissed(timeout: TimeInterval = TIMEOUT) {
+		let settings = sel.SETTINGS_CELL.element(in: app)
+		BaseTestCase().mozWaitForElementToNotExist(settings, timeout: timeout)
+	}
+
     func assertMainMenuSettingsExist() {
         let settings = sel.SETTINGS_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(settings)
