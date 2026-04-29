@@ -88,20 +88,18 @@ public final class WKEngine: Engine {
     }
 
     public func clearCookies() {
-        let dataTypes = Set(
-            [
-                WKWebsiteDataTypeCookies,
-                WKWebsiteDataTypeLocalStorage,
-                WKWebsiteDataTypeSessionStorage,
-                WKWebsiteDataTypeWebSQLDatabases,
-                WKWebsiteDataTypeIndexedDBDatabases
-            ]
-        )
+        let dataTypes = Set([WKWebsiteDataTypeCookies])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
 
     public func clearOfflineWebsiteData() {
-        let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
+        let dataTypes = Set([
+            WKWebsiteDataTypeLocalStorage,
+            WKWebsiteDataTypeSessionStorage,
+            WKWebsiteDataTypeWebSQLDatabases,
+            WKWebsiteDataTypeIndexedDBDatabases,
+            WKWebsiteDataTypeFetchCache,
+        ])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
 
