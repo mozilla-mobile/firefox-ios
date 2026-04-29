@@ -38,13 +38,19 @@ final class StartAtHomeMiddleware {
         }
     }
 
-    private func fetchTabManager(for uuid: WindowUUID) -> TabManager {
+    private func fetchTabManager(for uuid: WindowUUID) -> TabManager? {
         guard uuid != .unavailable else {
             assertionFailure()
-            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
-            return windowManager.allWindowTabManagers().first!
+            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .warning, category: .tabs)
+            return windowManager.allWindowTabManagers().first
         }
-        return windowManager.tabManager(for: uuid)
+
+        guard let tabManager = windowManager.windows[uuid]?.tabManager else {
+            logger.log("TabManager not ready for UUID, skipping start-at-home check.", level: .warning, category: .tabs)
+            return nil
+        }
+
+        return tabManager
     }
 
     /// Checks whether the app should start at the homepage and initiates the process if applicable.
@@ -54,7 +60,7 @@ final class StartAtHomeMiddleware {
     /// - Returns: `true` if a homepage tab was selected and displayed, `false` otherwise.
     @MainActor
     private func startAtHomeCheck(windowUUID: WindowUUID) -> Bool {
-        let tabManager = fetchTabManager(for: windowUUID)
+        guard let tabManager = fetchTabManager(for: windowUUID) else { return false }
         let startAtHomeManager = StartAtHomeHelper(
             prefs: prefs,
             isRestoringTabs: !tabManager.tabRestoreHasFinished
