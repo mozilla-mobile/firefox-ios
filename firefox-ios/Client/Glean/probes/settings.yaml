@@ -267,9 +267,9 @@ settings.ai_controls:
         description: |
           The new value of the AI controls toggle.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15588
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4342506569
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
