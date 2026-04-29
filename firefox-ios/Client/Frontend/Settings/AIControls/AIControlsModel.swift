@@ -82,7 +82,7 @@ class AIControlsModel: ObservableObject,
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
         translationsVisible = featureFlagsProvider.isEnabled(.translation)
 
-        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.isAIKillSwitchEnabled
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.getPreferenceFor(.aiKillSwitch)
     }
 
     @MainActor

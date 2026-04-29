@@ -12,7 +12,6 @@ class NativeErrorPageFeatureFlagTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         let profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
         subject = NativeErrorPageFeatureFlag()
     }

@@ -21,7 +21,6 @@ final class TemporaryDocumentTests: XCTestCase, @unchecked Sendable {
         configuration.protocolClasses = [MockURLProtocol.self]
 
         mockURLSession = URLSession(configuration: configuration, delegate: nil, delegateQueue: .main)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {

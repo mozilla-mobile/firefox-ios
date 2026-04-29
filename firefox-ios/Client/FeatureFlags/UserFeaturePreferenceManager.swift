@@ -6,73 +6,56 @@ import Common
 import Shared
 
 /// Protocol for reading/writing user feature preferences.
-/// Each property reads from Prefs, falling back to the Nimbus default.
+/// Bool preferences use the generic get/set keyed by FeatureFlagID.
+/// Typed (non-bool) preferences have named properties.
 protocol UserFeaturePreferring: Sendable {
-    // Bool preferences (read)
-    var isAIKillSwitchEnabled: Bool { get }
-    var isFirefoxSuggestEnabled: Bool { get }
-    var isSentFromFirefoxEnabled: Bool { get }
-    var isSponsoredShortcutsEnabled: Bool { get }
-    var isHomepageBookmarksSectionEnabled: Bool { get }
-    var isHomepageJumpBackInSectionEnabled: Bool { get }
+    // Generic bool preference
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool)
 
-    // Typed preferences (read)
+    // Typed preferences
     var searchBarPosition: SearchBarPosition { get }
     var startAtHomeSetting: StartAtHome { get }
 
-    // Setters
-    func setAIKillSwitchEnabled(_ enabled: Bool)
-    func setFirefoxSuggestEnabled(_ enabled: Bool)
-    func setSentFromFirefoxEnabled(_ enabled: Bool)
-    func setSponsoredShortcutsEnabled(_ enabled: Bool)
-    func setHomepageBookmarksSectionEnabled(_ enabled: Bool)
-    func setHomepageJumpBackInSectionEnabled(_ enabled: Bool)
     func setSearchBarPosition(_ position: SearchBarPosition)
     func setStartAtHomeSetting(_ setting: StartAtHome)
 }
 
 final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Sendable {
     private let prefs: Prefs
-    private let nimbusLayer: NimbusFeatureFlagLayer
+    private let backendLayer: NimbusFeatureFlagLayerProviding
 
     init(
         prefs: Prefs,
-        nimbusLayer: NimbusFeatureFlagLayer = NimbusManager.shared.featureFlagLayer
+        backendLayer: NimbusFeatureFlagLayerProviding
     ) {
         self.prefs = prefs
-        self.nimbusLayer = nimbusLayer
+        self.backendLayer = backendLayer
     }
 
-    // MARK: - Bool preferences
+    // MARK: - Generic bool preferences
 
-    var isAIKillSwitchEnabled: Bool {
+    func getPreferenceFor(_ flag: FeatureFlagID) -> Bool {
+        guard let key = flag.userPrefsKey else {
+            return checkDefaultValue(for: flag)
+        }
+        return prefs.boolForKey(key) ?? checkDefaultValue(for: flag)
+    }
+
+    // Some features might have a different default value than what's provided by
+    // the backend. Here, we can set our own default values.
+    private func checkDefaultValue(for flag: FeatureFlagID) -> Bool {
         // Even when this feature is on in Nimbus, the user preference default value should be false
-        prefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) ?? false
+        if flag == .aiKillSwitch {
+            return false
+        } else {
+            return backendLayer.checkNimbusConfigFor(flag)
+        }
     }
 
-    var isFirefoxSuggestEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.FeatureFlags.FirefoxSuggest)
-        ?? nimbusLayer.checkNimbusConfigFor(.firefoxSuggestFeature)
-    }
-
-    var isSentFromFirefoxEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.FeatureFlags.SentFromFirefox)
-        ?? nimbusLayer.checkNimbusConfigFor(.sentFromFirefox)
-    }
-
-    var isSponsoredShortcutsEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.FeatureFlags.SponsoredShortcuts)
-        ?? nimbusLayer.checkNimbusConfigFor(.hntSponsoredShortcuts)
-    }
-
-    var isHomepageBookmarksSectionEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.HomepageSettings.BookmarksSection)
-        ?? nimbusLayer.checkNimbusConfigFor(.homepageBookmarksSectionDefault)
-    }
-
-    var isHomepageJumpBackInSectionEnabled: Bool {
-        prefs.boolForKey(PrefsKeys.HomepageSettings.JumpBackInSection)
-        ?? nimbusLayer.checkNimbusConfigFor(.homepageJumpBackinSectionDefault)
+    func setPreferenceFor(_ flag: FeatureFlagID, to value: Bool) {
+        guard let key = flag.userPrefsKey else { return }
+        prefs.setBool(value, forKey: key)
     }
 
     // MARK: - Typed preferences
@@ -90,34 +73,10 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
            let setting = StartAtHome(rawValue: raw) {
             return setting
         }
-        return FxNimbus.shared.features.startAtHomeFeature.value().setting
+        return backendLayer.checkStartAtHomeConfiguration()
     }
 
-    // MARK: - Setters
-
-    func setAIKillSwitchEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-    }
-
-    func setFirefoxSuggestEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.FeatureFlags.FirefoxSuggest)
-    }
-
-    func setSentFromFirefoxEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.FeatureFlags.SentFromFirefox)
-    }
-
-    func setSponsoredShortcutsEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.FeatureFlags.SponsoredShortcuts)
-    }
-
-    func setHomepageBookmarksSectionEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.HomepageSettings.BookmarksSection)
-    }
-
-    func setHomepageJumpBackInSectionEnabled(_ enabled: Bool) {
-        prefs.setBool(enabled, forKey: PrefsKeys.HomepageSettings.JumpBackInSection)
-    }
+    // MARK: - Typed setters
 
     func setSearchBarPosition(_ position: SearchBarPosition) {
         prefs.setString(position.rawValue, forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
@@ -131,7 +90,6 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
 // MARK: - DI Access Protocol
 
 /// Adopt this protocol to access user feature preferences via AppContainer.
-/// Replaces FeatureFlaggable for user preference checks.
 protocol UserFeaturePreferenceProvider {
     var userPreferences: UserFeaturePreferring { get }
 }

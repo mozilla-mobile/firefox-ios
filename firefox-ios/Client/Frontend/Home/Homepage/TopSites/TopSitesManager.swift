@@ -122,7 +122,7 @@ final class TopSitesManager: TopSitesManagerInterface, UserFeaturePreferenceProv
     }
 
     private var shouldLoadSponsoredTiles: Bool {
-        return userPreferences.isSponsoredShortcutsEnabled
+        return userPreferences.getPreferenceFor(.hntSponsoredShortcuts)
     }
 
     @MainActor

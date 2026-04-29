@@ -31,7 +31,6 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        clipsToBounds = false
         setupLayout()
     }
 

@@ -31,7 +31,6 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             injectedProfile: mockProfile,
             injectedWindowManager: mockWindowManager,
         )
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupStore()
         appState = setupAppState()
     }

@@ -24,33 +24,34 @@ enum FeatureFlagID: String, CaseIterable {
     case homepageJumpBackinSectionDefault
     case homepageSearchBar
     case homepageStoryCategories
-    case needsReloadRefactor
-    case shouldUseBrandRefreshConfiguration
-    case shouldUseJapanConfiguration
+    case hostedSummarizer
+    case hostedSummarizerShakeGesture
+    case hostedSummarizerToolbarEntrypoint
+    case httpsUpgrade
+    case improvedAppStoreReviewTriggerFeature
     case microsurvey
     case modernOnboardingUI
     case nativeErrorPage
+    case needsReloadRefactor
     case noInternetConnectionErrorPage
+    case quickAnswers
     case recentSearches
-    case reportSiteIssue
     case relayIntegration
+    case reportSiteIssue
     case sentFromFirefox
     case sentFromFirefoxTreatmentA
+    case shouldUseBrandRefreshConfiguration
+    case shouldUseJapanConfiguration
     case snapkitRemovalRefactor
     case splashScreen
     case startAtHome
-    case hostedSummarizer
-    case hostedSummarizerToolbarEntrypoint
-    case hostedSummarizerShakeGesture
-    case httpsUpgrade
-    case improvedAppStoreReviewTriggerFeature
     case summarizerAppAttestAuth
     case summarizerLanguageExpansion
     case summarizerPermissiveGuardrails
     case tabScrollRefactorFeature
     case tabTrayiPadUIExperiments
-    case tabTrayUIExperiments
     case tabTrayTranslucency
+    case tabTrayUIExperiments
     case toolbarUpdateHint
     case tosFeature
     case touFeature
@@ -61,16 +62,34 @@ enum FeatureFlagID: String, CaseIterable {
     case unifiedSearch
     case videoIntroOnboarding
     case worldCupWidget
-    case quickAnswers
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
+    /// The user preferences key for features that support user-togglable settings.
+    /// Returns `nil` for features that are not user-configurable.
+    var userPrefsKey: String? {
+        typealias FlagKeys = PrefsKeys.FeatureFlags
+        typealias HomepageKeys = PrefsKeys.HomepageSettings
+
+        switch self {
+        case .aiKillSwitch: return PrefsKeys.Settings.aiKillSwitchFeature
+        case .firefoxSuggestFeature: return FlagKeys.FirefoxSuggest
+        case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
+        case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
+        case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
+        case .sentFromFirefox: return FlagKeys.SentFromFirefox
+        case .startAtHome: return FlagKeys.StartAtHome
+        default: return nil
+        }
+    }
+
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`.
+    // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .aiKillSwitch,
+        case    .addressBarMenu,
+                .adsClient,
+                .aiKillSwitch,
                 .appearanceMenu,
                 .appIconSelection,
-                .addressBarMenu,
-                .adsClient,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
@@ -106,10 +125,4 @@ enum FeatureFlagID: String, CaseIterable {
             return nil
         }
     }
-}
-
-/// This enum is a constraint for any feature flag options that have more than
-/// just an ON or OFF setting. These option must also be added to `FeatureFlagID`
-enum FeatureFlagIDWithCustomOptions {
-    case startAtHome
 }

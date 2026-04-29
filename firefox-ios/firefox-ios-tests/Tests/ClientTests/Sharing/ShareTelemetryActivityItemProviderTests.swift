@@ -21,7 +21,6 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
@@ -88,7 +87,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
 
         // Opt in the user preference
         let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
-        userPreferences.setSentFromFirefoxEnabled(testUserOptIn)
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -120,7 +119,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
 
         // Opt in the user preference
         let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
-        userPreferences.setSentFromFirefoxEnabled(testUserOptIn)
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -152,7 +151,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
 
         // Opt in the user preference
         let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
-        userPreferences.setSentFromFirefoxEnabled(testUserOptIn)
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -184,7 +183,7 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
 
         // Opt in the user preference
         let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
-        userPreferences.setSentFromFirefoxEnabled(testUserOptIn)
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,

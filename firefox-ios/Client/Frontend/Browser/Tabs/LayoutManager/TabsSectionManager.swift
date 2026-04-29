@@ -5,7 +5,7 @@
 import Foundation
 
 @MainActor
-final class TabsSectionManager: LegacyFeatureFlaggable {
+final class TabsSectionManager {
     struct UX {
         // On iPad we can set to have bigger tabs, on iPhone we need smaller ones
         @MainActor

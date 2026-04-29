@@ -35,7 +35,7 @@ struct JumpBackInSectionState: StateType, Equatable, Hashable {
             windowUUID: windowUUID,
             jumpBackInTabs: [],
             mostRecentSyncedTab: nil,
-            shouldShowSection: userPreferences.isHomepageJumpBackInSectionEnabled
+            shouldShowSection: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault)
         )
     }
 

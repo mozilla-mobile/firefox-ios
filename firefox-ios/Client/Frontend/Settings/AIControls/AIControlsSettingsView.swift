@@ -34,12 +34,13 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                     .foregroundStyle(themeColors.textSecondary.color)
                     .padding(.leading, UX.padding)
                 if let url = aiControlsModel.headerLinkInfo.url {
-                    Link(
-                        aiControlsModel.blockAIEnhancementsLinkInfo.label,
-                        destination: url
-                    )
-                    .tint(themeColors.actionPrimary.color)
-                    .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                    Link(destination: url) {
+                        Text(aiControlsModel.blockAIEnhancementsLinkInfo.label)
+                            .underline()
+                            .multilineTextAlignment(.leading)
+                            .font(FXFontStyles.Regular.caption1.scaledSwiftUIFont())
+                            .foregroundStyle(themeColors.layerSelectedText.color)
+                    }
                     .padding(.leading, UX.padding)
                 }
                 Spacer(minLength: UX.cardSpacing)
@@ -89,9 +90,13 @@ struct AIControlsSettingsView: View, ThemeApplicable {
                         .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                         .foregroundStyle(themeColors.textSecondary.color)
                     if let url = aiControlsModel.headerLinkInfo.url {
-                        Link(aiControlsModel.headerLinkInfo.label, destination: url)
-                            .tint(themeColors.actionPrimary.color)
-                            .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                        Link(destination: url) {
+                            Text(aiControlsModel.headerLinkInfo.label)
+                                .underline()
+                                .multilineTextAlignment(.leading)
+                                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                                .foregroundStyle(themeColors.layerSelectedText.color)
+                        }
                     }
                 }
                 Spacer()

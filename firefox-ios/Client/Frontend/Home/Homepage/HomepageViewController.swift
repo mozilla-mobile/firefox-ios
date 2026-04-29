@@ -13,7 +13,6 @@ final class HomepageViewController: UIViewController,
                                     UIGestureRecognizerDelegate,
                                     UIPopoverPresentationControllerDelegate,
                                     UIAdaptivePresentationControllerDelegate,
-                                    LegacyFeatureFlaggable,
                                     ContentContainable,
                                     Screenshotable,
                                     Themeable,
@@ -388,9 +387,10 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
+            let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
             self.homepageState = state
 
-            refreshHomepageDataSourceSnapshot { [weak self] in
+            refreshHomepageDataSourceSnapshot(animatingDifferences: animatingDifferences) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -722,7 +722,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath,
         with newsTransitionHeaderCell: NewsTransitionHeaderCell
     ) -> NewsTransitionHeaderCell {
-        let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
+        let transitionEnabled = isNewsTransitionEnabled()
         newsTransitionHeaderCell.configure(
             sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
@@ -788,6 +788,18 @@ final class HomepageViewController: UIViewController,
 
     /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
+        guard let headerView = getNewsTransitionHeader()  else { return }
+
+        // We only want the stories header to transition if there is enough empty space on the homepage,
+        // which is denoted by the existence of the spacer
+        let transitionEnabled = isNewsTransitionEnabled()
+        headerView.setTransitionEnabled(transitionEnabled)
+        headerView.setTransitionProgress(newsTransitionProgress())
+    }
+
+    /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
+    /// This is determined by the existence of the spacer with a meaningful height
+    private func isNewsTransitionEnabled() -> Bool {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               let collectionView,
               let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
@@ -797,30 +809,12 @@ final class HomepageViewController: UIViewController,
                   return false
               }),
               let spacerAttributes = collectionView.layoutAttributesForItem(at: IndexPath(item: 0,
-                                                                                          section: spacerSectionIndex)),
-              let headerView = getNewsTransitionHeader()
+                                                                                          section: spacerSectionIndex))
         else {
-            return
+            return true
         }
 
-        // We only want the stories header to transition if there is enough empty space on the homepage,
-        // which is denoted by the existence of the spacer
-        let transitionEnabled = spacerAttributes.size.height > 0.1
-        headerView.setTransitionEnabled(transitionEnabled)
-        headerView.setTransitionProgress(newsTransitionProgress())
-    }
-
-    /// Returns whether the pocket header is currently in the affordance-height layout state.
-    /// We use the header height as the source of truth for whether the news affordance transition should be active
-    /// since it is only active when there is room for the affordance at the bottom of the unscrolled homepage
-    private func isNewsTransitionEnabled(for collectionView: UICollectionView, at indexPath: IndexPath) -> Bool {
-        let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )?.size.height ?? 0
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
-                                                                             width: collectionView.bounds.width)
-        return headerHeight >= expectedHeaderHeight
+        return spacerAttributes.size.height > 0.1
     }
 
     /// Converts the homepage's vertical scroll offset into normalized transition progress for the
@@ -1067,11 +1061,12 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(completion: (() -> Void)? = nil) {
+    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
-            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
+            animatingDifferences: animatingDifferences
         ) {
             completion?()
         }

@@ -16,7 +16,6 @@ final class AppLaunchUtilTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.clearUserDefaults()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

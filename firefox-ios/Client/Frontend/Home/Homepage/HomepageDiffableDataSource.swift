@@ -9,9 +9,7 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource:
-    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
-    LegacyFeatureFlaggable {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -98,6 +96,7 @@ final class HomepageDiffableDataSource:
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
@@ -151,7 +150,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: pocketSection)
         }
 
-        apply(snapshot, animatingDifferences: true, completion: completion)
+        apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// Gets the proper amount of top sites based on layout configuration

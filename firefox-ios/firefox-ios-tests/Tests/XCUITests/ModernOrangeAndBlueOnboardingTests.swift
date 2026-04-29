@@ -180,8 +180,6 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernThemeCustomizationScreen()
 
         onboardingScreen.selectThemeButtons()
-
-        onboardingScreen.selectTheme("System Auto")
         onboardingScreen.goToNextScreenViaPrimary()
     }
 
@@ -210,7 +208,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
         // Screen 3: Choose theme - Continue (primary button)
         onboardingScreen.assertTitle()
-        onboardingScreen.selectTheme("System Auto")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         // Screen 4: Sign in to sync - Not now (secondary button)
@@ -238,7 +236,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
             onboardingScreen.currentScreen += 1
         }
 
-        onboardingScreen.selectTheme("System Auto")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         onboardingScreen.assertSyncScreen()

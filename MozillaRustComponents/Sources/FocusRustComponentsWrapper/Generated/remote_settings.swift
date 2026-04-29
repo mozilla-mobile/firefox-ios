@@ -1900,8 +1900,11 @@ public func FfiConverterTypeRemoteSettingsError_lower(_ value: RemoteSettingsErr
 public enum RemoteSettingsServer: Equatable, Hashable {
     
     case prod
+    case prodV2
     case stage
+    case stageV2
     case dev
+    case devV2
     case custom(url: String
     )
 
@@ -1927,11 +1930,17 @@ public struct FfiConverterTypeRemoteSettingsServer: FfiConverterRustBuffer {
         
         case 1: return .prod
         
-        case 2: return .stage
+        case 2: return .prodV2
         
-        case 3: return .dev
+        case 3: return .stage
         
-        case 4: return .custom(url: try FfiConverterString.read(from: &buf)
+        case 4: return .stageV2
+        
+        case 5: return .dev
+        
+        case 6: return .devV2
+        
+        case 7: return .custom(url: try FfiConverterString.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -1946,16 +1955,28 @@ public struct FfiConverterTypeRemoteSettingsServer: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         
         
-        case .stage:
+        case .prodV2:
             writeInt(&buf, Int32(2))
         
         
-        case .dev:
+        case .stage:
             writeInt(&buf, Int32(3))
         
         
-        case let .custom(url):
+        case .stageV2:
             writeInt(&buf, Int32(4))
+        
+        
+        case .dev:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .devV2:
+            writeInt(&buf, Int32(6))
+        
+        
+        case let .custom(url):
+            writeInt(&buf, Int32(7))
             FfiConverterString.write(url, into: &buf)
             
         }

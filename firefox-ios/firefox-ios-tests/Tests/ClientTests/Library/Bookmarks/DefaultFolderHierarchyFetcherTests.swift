@@ -15,7 +15,6 @@ final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testFolderGuid = await addFolder(title: testFolderTitle)
     }
 
