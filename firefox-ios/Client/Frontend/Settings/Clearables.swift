@@ -168,7 +168,7 @@ class CookiesClearable: Clearable {
 
     func clear() -> Success {
         dataStore.removeData(
-            ofTypes: [WKWebsiteDataTypeCookies],
+            ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage],
             modifiedSince: .distantPast,
             completionHandler: {}
         )
@@ -181,10 +181,10 @@ class CookiesClearable: Clearable {
 
     @MainActor
     func clear(forDomain domain: String) async {
-        let records = await dataStore.dataRecords(ofTypes: [WKWebsiteDataTypeCookies])
+        let records = await dataStore.dataRecords(ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
         let targets = records.filter { $0.displayName == domain.lowercased() }
         guard !targets.isEmpty else { return }
-        await dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies], for: targets)
+        await dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage], for: targets)
         logger.log(
             "CookiesClearable removed domain-scoped data for \(domain).",
             level: .debug,

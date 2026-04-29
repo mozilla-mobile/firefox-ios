@@ -13,8 +13,9 @@ import Shared
 struct CookiesClearableTests {
     @Test
     func test_cookieDataTypes_containsExpectedTypes() {
-        let types = WKWebsiteDataTypeCookies
+        let types = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
         #expect(types.contains(WKWebsiteDataTypeCookies))
+        #expect(types.contains(WKWebsiteDataTypeLocalStorage))
     }
 
     @MainActor

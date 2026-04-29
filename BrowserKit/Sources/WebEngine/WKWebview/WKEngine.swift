@@ -88,7 +88,7 @@ public final class WKEngine: Engine {
     }
 
     public func clearCookies() {
-        let dataTypes = Set([WKWebsiteDataTypeCookies])
+        let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
 
