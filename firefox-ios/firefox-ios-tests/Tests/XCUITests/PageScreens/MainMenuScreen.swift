@@ -35,6 +35,7 @@ final class MainMenuScreen {
 			sel.BOOKMARKS_BUTTON.element(in: app),
 			sel.HISTORY_BUTTON.element(in: app),
 			sel.DOWNLOADS_BUTTON.element(in: app),
+			sel.PASSWORDS_BUTTON.element(in: app),
 			sel.SIGN_IN_CELL.element(in: app)
 		]
 		BaseTestCase().waitForElementsToExist(elements)
