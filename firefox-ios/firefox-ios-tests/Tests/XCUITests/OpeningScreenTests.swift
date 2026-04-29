@@ -4,19 +4,24 @@
 
 import Foundation
 class OpeningScreenTests: BaseTestCase {
-    // https://mozilla.testrail.io/index.php?/cases/view/2307039
+    private var browserScreen: BrowserScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        browserScreen = BrowserScreen(app: app)
+    }
+
     func testLastOpenedTab() {
         // Open a web page
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
+        browserScreen.navigateToURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         // Close the app from app switcher. Relaunch the app
         closeFromAppSwitcherAndRelaunch()
         // After re-launching the app, the last visited page is displayed
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        mozWaitForValueContains(url, value: "localhost")
+        browserScreen.assertAddressBarContains(value: "localhost")
         // Background and restore Firefox
         restartInBackground()
         // After re-launching the app, the last visited page is displayed
-        mozWaitForValueContains(url, value: "localhost")
+        browserScreen.assertAddressBarContains(value: "localhost")
     }
 }
