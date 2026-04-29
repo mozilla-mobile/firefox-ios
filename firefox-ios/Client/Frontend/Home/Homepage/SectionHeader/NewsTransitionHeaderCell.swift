@@ -20,7 +20,10 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     private lazy var newsAffordanceHeaderView: NewsAffordanceHeaderView = .build()
     private lazy var sectionTitleHeaderView: LabelButtonHeaderView = .build()
     private lazy var storyCategoryPickerView: StoryCategoryPickerView = .build()
-    private lazy var headerContainerView: UIView = .build()
+    private lazy var headerContainerView: UIView = .build { view in
+        view.isAccessibilityElement = true
+        view.accessibilityTraits = .header
+    }
 
     private var headerContainerHeightConstraint: NSLayoutConstraint?
     private var hasCategories = false
@@ -29,8 +32,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        isAccessibilityElement = true
-        accessibilityTraits = .header
+        isAccessibilityElement = false
         setupLayout()
         updateViewState()
     }
@@ -90,6 +92,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
             textColor: textColor,
             theme: theme
         )
+        headerContainerView.accessibilityIdentifier = sectionHeaderConfiguration.a11yIdentifier
         sectionTitleHeaderView.moreButton.isHidden = true
         storyCategoryPickerView.configure(
             categories: categories,
@@ -183,9 +186,6 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
                 translationX: 0,
                 y: pickerTranslationOffset() * (1 - pickerProgress)
             )
-            accessibilityLabel = progress < 0.5
-                ? newsAffordanceHeaderView.accessibilityLabel
-                : sectionTitleHeaderView.title
 
         // Static section title header + category picker
         } else {
@@ -197,8 +197,13 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
             )
             storyCategoryPickerView.alpha = hasCategories ? 1 : 0
             storyCategoryPickerView.transform = .identity
-            accessibilityLabel = sectionTitleHeaderView.title
         }
+
+        headerContainerView.accessibilityLabel = transitionEnabled && progress < 0.5
+            ? newsAffordanceHeaderView.accessibilityLabel
+            : sectionTitleHeaderView.title
+        storyCategoryPickerView.accessibilityElementsHidden = !hasCategories
+        accessibilityElements = hasCategories ? [headerContainerView, storyCategoryPickerView] : [headerContainerView]
     }
 
     /// Map the overall scroll progress onto a delayed 0...1 range so the category
