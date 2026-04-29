@@ -1633,6 +1633,7 @@ class BrowserViewController: UIViewController,
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    
 
     // MARK: - Snapkit related
 
@@ -2981,22 +2982,6 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
-        }
-
-        if let title = alert.title {
-            let attributedTitleKey = "attributedTitle"
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
         }
 
         if let popover = alert.popoverPresentationController {
