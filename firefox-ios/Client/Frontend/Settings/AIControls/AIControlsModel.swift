@@ -59,6 +59,8 @@ class AIControlsModel: ObservableObject,
     private let translationConfiguration: TranslationConfiguration
     private let summarizerConfiguration: SummarizerNimbusUtils
     private let prefs: Prefs
+    private let settingsTelemetry: SettingsTelemetry
+    private let logger: Logger
 
     struct LinkInfo {
         let label: String
@@ -69,12 +71,16 @@ class AIControlsModel: ObservableObject,
         prefs: Prefs,
         windowUUID: WindowUUID,
         translationConfiguration: TranslationConfiguration? = nil,
-        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils()
+        summarizerConfiguration: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
+        settingsTelemetry: SettingsTelemetry = SettingsTelemetry(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.prefs = prefs
         self.windowUUID = windowUUID
         self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
         self.summarizerConfiguration = summarizerConfiguration
+        self.settingsTelemetry = settingsTelemetry
+        self.logger = logger
 
         translationEnabled = self.translationConfiguration.isTranslationFeatureEnabled
         pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
@@ -87,13 +93,46 @@ class AIControlsModel: ObservableObject,
 
     @MainActor
     func toggleKillSwitch(to newValue: Bool) {
+        guard killSwitchIsOn != newValue else {
+            logger.log(
+                "Not toggling ai control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        killSwitchIsOn = newValue
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
-        pageSummariesEnabled = !newValue
-        translationEnabled = !newValue
+        updatePageSummariesFeature(to: !newValue)
+        updateTranslationsFeature(to: !newValue)
+        settingsTelemetry.aiControlToggled(newValue)
     }
 
     @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
+        updateTranslationsFeature(to: newValue)
+        settingsTelemetry.translationSettingToggled(newValue)
+    }
+
+    @MainActor
+    func togglePageSummariesFeature(to newValue: Bool) {
+        updatePageSummariesFeature(to: newValue)
+        settingsTelemetry.pageSummariesToggled(newValue)
+    }
+
+    @MainActor
+    private func updateTranslationsFeature(to newValue: Bool) {
+        guard translationEnabled != newValue else {
+            logger.log(
+                "Not toggling translations feature control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        translationEnabled = newValue
         store.dispatch(TranslationSettingsViewAction(
             newSettingValue: newValue,
             windowUUID: windowUUID,
@@ -101,7 +140,18 @@ class AIControlsModel: ObservableObject,
         ))
     }
 
-    func togglePageSummariesFeature(to newValue: Bool) {
+    @MainActor
+    private func updatePageSummariesFeature(to newValue: Bool) {
+        guard pageSummariesEnabled != newValue else {
+            logger.log(
+                "Not toggling page summaries feature control, toggle value is unchanged",
+                level: .warning,
+                category: .settings
+            )
+            return
+        }
+
+        pageSummariesEnabled = newValue
         prefs.setBool(newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
     }
 }

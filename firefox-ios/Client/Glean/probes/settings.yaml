@@ -254,6 +254,57 @@ settings.app_icon:
     metadata:
       tags:
         - AppIconSelection
+
+# AI Controls Settings
+settings.ai_controls:
+  ai_control_toggled:
+    type: event
+    description: |
+      Recorded when the user toggles the AI controls kill switch in settings.
+    extra_keys:
+      toggle_value:
+        type: boolean
+        description: |
+          The new value of the AI controls toggle.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  translation_setting_toggled:
+    type: event
+    description: |
+      Recorded when the user toggles AI-powered translations in settings.
+    extra_keys:
+      toggle_value:
+        type: boolean
+        description: |
+          The new value of the translations toggle.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  page_summaries_toggled:
+    type: event
+    description: |
+      Recorded when the user toggles page summaries in settings.
+    extra_keys:
+      toggle_value:
+        type: boolean
+        description: |
+          The new value of the page summaries toggle.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
         
 # Default Zoom Settings
 settings.zoom_bar:

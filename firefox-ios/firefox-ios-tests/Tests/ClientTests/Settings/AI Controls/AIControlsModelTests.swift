@@ -10,16 +10,19 @@ import Shared
 class AIControlsModelTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     var mockPrefs: MockProfilePrefs!
+    var mockProfile: MockProfile!
+    var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
         setupStore()
-        let mockProfile = MockProfile(databasePrefix: "test")
+        mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
+        mockGleanWrapper = MockGleanWrapper()
         mockProfile.prefs = mockPrefs
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
@@ -89,14 +92,14 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testToggleKillSwitchOn() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
-            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.translationsFeature: true,
             PrefsKeys.Settings.aiKillSwitchFeature: false
         ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: true)
 
@@ -108,14 +111,12 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for ai kill switch feature")
         }
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
     }
 
     @MainActor
     func testToggleKillSwitchOff() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
-
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
 
@@ -124,6 +125,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for ai kill switch feature")
         }
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
     }
 
     @MainActor
@@ -137,6 +140,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
         let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
         XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
     }
 
     @MainActor
@@ -149,6 +153,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
     }
 
     @MainActor
@@ -161,6 +167,8 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
     }
 
     private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
@@ -175,7 +183,11 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
+        let subject = AIControlsModel(
+            prefs: prefs,
+            windowUUID: .XCTestDefaultUUID,
+            settingsTelemetry: SettingsTelemetry(gleanWrapper: mockGleanWrapper)
+        )
         trackForMemoryLeaks(subject)
         return subject
     }
