@@ -130,9 +130,9 @@ open class FxAccountManager: @unchecked Sendable {
         FxALog.info("beginAuthentication")
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
-            self.processEvent(.beginOAuthFlow(scopes: actualScopes, entrypoint: entrypoint))
+            self.processEvent(.beginOAuthFlow(service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
-            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+            if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
                 result = .success(url)
             } else {
                 result = .failure(FxaError.Other(message: "beginAuthentication: unexpected state \(self.state)"))
@@ -158,9 +158,9 @@ open class FxAccountManager: @unchecked Sendable {
     ) {
         fxaFsmQueue.async {
             let actualScopes = scopes.isEmpty ? self.applicationScopes : scopes
-            self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, scopes: actualScopes, entrypoint: entrypoint))
+            self.processEvent(.beginPairingFlow(pairingUrl: pairingUrl, service: "", scopes: actualScopes, entrypoint: entrypoint))
             let result: Result<URL, Error>
-            if case let .authenticating(oauthUrl) = self.state, let url = URL(string: oauthUrl) {
+            if case let .authenticating(oauthUrl, _) = self.state, let url = URL(string: oauthUrl) {
                 result = .success(url)
             } else {
                 result = .failure(FxaError.Other(message: "beginPairingAuthentication: unexpected state \(self.state)"))
