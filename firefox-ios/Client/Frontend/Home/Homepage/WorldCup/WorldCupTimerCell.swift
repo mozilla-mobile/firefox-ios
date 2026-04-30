@@ -19,7 +19,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let dismissButtonSize = CGSize(width: 16, height: 16)
-        static let heroImageWidth: CGFloat = 160
+        static let heroImageWidth: CGFloat = 120
         static let heroImageTrailingPadding: CGFloat = 24.0
         static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
@@ -99,7 +99,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
     private lazy var ctaButton: PrimaryRoundedGlassButton = .build { [weak self] button in
         let buttonViewModel = PrimaryRoundedButtonViewModel(
             title: String.WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel,
-            a11yIdentifier: "worldcupCTA"
+            a11yIdentifier: ""
         )
         button.configure(viewModel: buttonViewModel)
         button.configuration?.titleLineBreakMode = .byWordWrapping
