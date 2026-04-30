@@ -292,6 +292,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         ) else { return }
 
         let originatingTab = selectedTab(for: action.windowUUID)
+        let isCurrentlyTranslated = toolbarState.addressToolbar.translationConfiguration?.state == .active
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = action.targetLanguage
@@ -305,6 +306,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
             for: action,
             targetLanguage: action.targetLanguage,
             isPrivate: toolbarState.isPrivateMode,
+            discardFirst: isCurrentlyTranslated,
             on: originatingTab
         )
     }
@@ -431,6 +433,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool = false,
+        discardFirst: Bool = false,
         on tab: Tab? = nil
     ) {
         Task {
@@ -439,6 +442,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 targetLanguage: targetLanguage,
                 isPrivate: isPrivate,
                 autoTranslate: autoTranslate,
+                discardFirst: discardFirst,
                 on: tab
             )
         }
@@ -449,9 +453,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool,
+        discardFirst: Bool = false,
         on tab: Tab?
     ) async {
         do {
+            if discardFirst {
+                try await translationsService.discardTranslations(for: action.windowUUID)
+            }
             var detectedSourceLanguage: String?
             try await translationsService.translateCurrentPage(
                 for: action.windowUUID,
