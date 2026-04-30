@@ -369,8 +369,8 @@ final class TabManagerTests: TabManagerTestsBase {
     func testOffloadBackgroundWebViews_tabCountUnchanged() async throws {
         let subject = createSubject()
         let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
-        subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
-        subject.addTab(URLRequest(url: URL(string: "https://firefox.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://firefox.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab1)
 
         subject.offloadBackgroundWebViews()
@@ -401,7 +401,7 @@ final class TabManagerTests: TabManagerTestsBase {
     func testOffloadBackgroundWebViews_selectedTabWebViewPreserved() async throws {
         let subject = createSubject()
         let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
-        subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab1)
 
         XCTAssertNotNil(tab1.webView)
