@@ -856,12 +856,12 @@ class BrowserViewController: UIViewController,
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
         let allWindowUUIDs = (AppContainer.shared.resolve() as WindowManager).windows.keys.map { $0.uuidString.prefix(4) }
-        logger.log("BrowserDidBecomeActive. UUID = \(windowUUID.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
+        logger.log("BrowserDidBecomeActive. UUID = \(uuid.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
                    level: .info,
                    category: .lifecycle)
 
         NightModeHelper.cleanNightModeDefaults()
-        dispatchStartAtHomeAction()
+        dispatchStartAtHomeAction(windowUUID: uuid)
     }
 
     // MARK: - Summarize
@@ -877,7 +877,7 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Start At Home
-    private func dispatchStartAtHomeAction() {
+    private func dispatchStartAtHomeAction(windowUUID: WindowUUID) {
         let startAtHomeAction = StartAtHomeAction(
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
