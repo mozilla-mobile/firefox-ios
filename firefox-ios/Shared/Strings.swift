@@ -1063,7 +1063,12 @@ extension String {
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
                 value: "(Full Time)",
-                comment: "The label indicating that the displaying match as ended.")
+                comment: "The label indicating that the displaying match has ended.")
+            public static let FullTimeNoParenthesisLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151",
+                tableName: "WorldCup",
+                value: "Full Time",
+                comment: "The label indicating that the displaying match has ended.")
             public static let FullTimePenaltiesLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
                 tableName: "WorldCup",
@@ -1079,6 +1084,21 @@ extension String {
                 tableName: "WorldCup",
                 value: "Refresh",
                 comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
+            public static let MatchUnavailableLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableLabel.v151",
+                tableName: "WorldCup",
+                value: "Match info is not available right now. Try refreshing in a few minutes.",
+                comment: "Message shown in the World Cup widget when match data is temporarily unavailable.")
+            public static let MatchUnavailableRefreshButtonLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151",
+                tableName: "WorldCup",
+                value: "Refresh",
+                comment: "Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data.")
+            public static let OfflineLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.OfflineLabel.v151",
+                tableName: "WorldCup",
+                value: "Looks like you’re offline. Check your internet connection and try again.",
+                comment: "Message shown in the World Cup widget when the device has no internet connection.")
             public struct CountDown {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.CountDown.Title.v151",
