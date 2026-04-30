@@ -63,9 +63,10 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         translationsTabStateStores[windowUUID] = WeakStoreRef(store: store)
     }
 
-    /// Removes the registered store for the window. Optional — the weak ref drops on its own
-    /// when the owning `BrowserCoordinator` deallocates — but explicit teardown keeps the
-    /// dictionary tidy.
+    /// Removes the registered store entry for the window. Called during UIScene teardown to
+    /// keep the dictionary free of zombie entries (the weak ref inside the struct goes nil
+    /// when the coordinator deallocates, but the struct value itself stays in the dictionary
+    /// until explicitly removed).
     func unregister(windowUUID: WindowUUID) {
         translationsTabStateStores[windowUUID] = nil
     }

@@ -1306,6 +1306,8 @@ final class BrowserCoordinator: BaseCoordinator,
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.
 
+            translationsMiddleware.unregister(windowUUID: uuid)
+
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
 
