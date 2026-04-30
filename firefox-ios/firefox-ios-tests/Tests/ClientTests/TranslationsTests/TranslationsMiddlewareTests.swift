@@ -1430,7 +1430,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
         XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.showTranslationLanguagePicker)
-        XCTAssertNil(dispatchedAction.isPageTranslated)
+        XCTAssertEqual(dispatchedAction.isPageTranslated, false)
     }
 
     func test_longPress_filtersSourceAndTranslatedLanguageFromPicker() throws {
