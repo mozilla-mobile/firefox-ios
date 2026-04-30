@@ -9,6 +9,7 @@
     }
   ],
   "defaultOptions" : {
+    "testRepetitionMode" : "retryOnFailure",
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [

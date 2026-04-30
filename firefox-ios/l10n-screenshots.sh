@@ -35,7 +35,7 @@ for lang in $LOCALES; do
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project firefox-ios/Client.xcodeproj --scheme L10nSnapshotTests \
         --testPlan L10nSnapshotTests \
-        --number_of_retries 3 \
+        --number_of_retries 0 \
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
         --derived_data_path l10n-screenshots-dd \
