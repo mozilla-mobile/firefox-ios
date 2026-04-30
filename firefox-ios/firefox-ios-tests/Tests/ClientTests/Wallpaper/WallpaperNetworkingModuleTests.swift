@@ -6,7 +6,6 @@ import Foundation
 import SharedTests
 import XCTest
 
-
 @testable import Client
 
 class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider, @unchecked Sendable {
