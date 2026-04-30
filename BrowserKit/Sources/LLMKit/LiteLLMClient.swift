@@ -68,6 +68,7 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         try validate(response: response)
         let decodedResponse = try JSONDecoder().decode(LiteLLMResponse.self, from: data)
         guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
+        let citations = decodedResponse.choices.first?.message?.
         return content
     }
 
