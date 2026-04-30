@@ -6,6 +6,7 @@ import XCTest
 import Shared
 @testable import Client
 
+@MainActor
 final class WorldCupCountdownModelTests: XCTestCase {
     private let mockPrefs = MockProfilePrefs()
 
