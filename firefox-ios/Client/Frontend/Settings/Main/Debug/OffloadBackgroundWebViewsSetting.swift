@@ -5,7 +5,9 @@
 import Foundation
 
 class OffloadBackgroundWebViewsSetting: HiddenSetting {
-    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Settings.Debug.offloadBackgroundWebViews }
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Debug.offloadBackgroundWebViews
+    }
     private weak var settingsDelegate: DebugSettingsDelegate?
 
     init(settings: SettingsTableViewController, settingsDelegate: DebugSettingsDelegate) {

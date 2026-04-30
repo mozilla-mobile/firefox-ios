@@ -585,7 +585,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     func pressedOffloadBackgroundWebViews() {
-        tabManager.offloadBackgroundWebViews()
+        tabManager?.offloadBackgroundWebViews()
     }
 
     /// Adds 20 random shortcuts to the top sites / shortcuts library
