@@ -200,9 +200,7 @@ class SearchTests: FeatureFlaggedTestBase {
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).waitAndTap()
         let tablesQuery2 = app.tables
-        let engineText = tablesQuery2.staticTexts.elementContainingText(searchEngine)
-        scrollToElement(engineText, swipeableElement: tablesQuery2.firstMatch, isHittable: true)
-        engineText.waitAndTap()
+        tablesQuery2.staticTexts.elementContainingText(searchEngine).waitAndTap()
 
         searchSettingsScreen.waitForSearchEngineSelectionComplete()
 
