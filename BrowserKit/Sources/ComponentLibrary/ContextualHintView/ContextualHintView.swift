@@ -10,6 +10,8 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
     private var viewModel: ContextualHintViewModel?
     private var closeButtonHeightConstraint: NSLayoutConstraint?
     private var closeButtonWidthConstraint: NSLayoutConstraint?
+    private var stackViewTopConstraint: NSLayoutConstraint?
+    private var closeButtonTopConstraint: NSLayoutConstraint?
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
@@ -27,6 +29,7 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        setupLayout()
         startObservingNotifications(
             withNotificationCenter: NotificationCenter.default,
             forObserver: self,
@@ -95,6 +98,20 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
         closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
         descriptionLabel.text = viewModel.description
 
+        let isArrowUp = viewModel.arrowDirection == .up
+        stackViewTopConstraint?.constant = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
+        closeButtonTopConstraint?.constant = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
+
+        if !viewModel.title.isEmpty && !stackView.arrangedSubviews.contains(titleLabel) {
+            titleLabel.text = viewModel.title
+            stackView.insertArrangedSubview(titleLabel, at: 0)
+        }
+
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+
+    private func setupLayout() {
         layer.addSublayer(gradient)
 
         addSubview(scrollView)
@@ -102,28 +119,22 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
 
         scrollView.addSubview(contentContainer)
         contentContainer.addSubview(stackView)
-
-        if !viewModel.title.isEmpty {
-            titleLabel.text = viewModel.title
-            stackView.addArrangedSubview(titleLabel)
-        }
         stackView.addArrangedSubview(descriptionLabel)
-
-        setupConstraints()
-    }
-
-    private func setupConstraints() {
-        guard let viewModel else { return }
-
-        let isArrowUp = viewModel.arrowDirection == .up
-        let topPadding = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
-        let closeButtonPadding = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
 
         let heightConstraint = closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
         closeButtonHeightConstraint = heightConstraint
         let widthConstraint = closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
         closeButtonWidthConstraint = widthConstraint
         updateButtonSizeForDynamicFont()
+
+        let stackViewTop = stackView.topAnchor.constraint(
+            equalTo: contentContainer.topAnchor,
+            constant: UX.stackViewTopArrowTopConstraint
+        )
+        stackViewTopConstraint = stackViewTop
+
+        let closeButtonTop = closeButton.topAnchor.constraint(equalTo: topAnchor, constant: UX.closeButtonTop)
+        closeButtonTopConstraint = closeButtonTop
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalTo: stackView.heightAnchor, constant: UX.heightSpacing),
@@ -140,21 +151,18 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor),
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor),
 
-            closeButton.topAnchor.constraint(equalTo: topAnchor, constant: closeButtonPadding),
+            closeButtonTop,
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.closeButtonTrailing),
             heightConstraint,
             widthConstraint,
 
-            stackView.topAnchor.constraint(equalTo: contentContainer.topAnchor, constant: topPadding),
+            stackViewTop,
             stackView.leadingAnchor.constraint(equalTo: contentContainer.leadingAnchor,
                                                constant: UX.stackViewLeading),
             stackView.trailingAnchor.constraint(equalTo: contentContainer.trailingAnchor,
                                                 constant: -UX.closeButtonSize.width - UX.stackViewTrailing),
             stackView.bottomAnchor.constraint(equalTo: contentContainer.bottomAnchor)
         ])
-
-        setNeedsLayout()
-        layoutIfNeeded()
     }
 
     @objc
