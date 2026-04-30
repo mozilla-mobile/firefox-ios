@@ -27,7 +27,7 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
 
     init(
         prefs: Prefs,
-        backendLayer: NimbusFeatureFlagLayerProviding
+        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer
     ) {
         self.prefs = prefs
         self.backendLayer = backendLayer

@@ -583,11 +583,9 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *       - This parameter is used for metrics purposes, to identify the
      *         UX entrypoint from which the user triggered the signin request.
      *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
+     *   - `service` - The service being signed up for.
      */
-    func beginOauthFlow(scopes: [String], entrypoint: String) throws  -> String
+    func beginOauthFlow(scopes: [String], entrypoint: String, service: String) throws  -> String
     
     /**
      * Initiate a device-pairing sign-in flow.
@@ -611,11 +609,9 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *       - This parameter is used for metrics purposes, to identify the
      *         UX entrypoint from which the user triggered the signin request.
      *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
+     *   - `service` - The service being signed up for.
      */
-    func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String) throws  -> String
+    func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String, service: String) throws  -> String
     
     /**
      * Check authorization status for this application.
@@ -1296,16 +1292,15 @@ open func authorizeCodeUsingSessionToken(params: AuthorizationParameters)throws 
      *       - This parameter is used for metrics purposes, to identify the
      *         UX entrypoint from which the user triggered the signin request.
      *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
+     *   - `service` - The service being signed up for.
      */
-open func beginOauthFlow(scopes: [String], entrypoint: String)throws  -> String  {
+open func beginOauthFlow(scopes: [String], entrypoint: String, service: String = "")throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
     uniffi_fxa_client_fn_method_firefoxaccount_begin_oauth_flow(
             self.uniffiCloneHandle(),
         FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),$0
+        FfiConverterString.lower(entrypoint),
+        FfiConverterString.lower(service),$0
     )
 })
 }
@@ -1332,17 +1327,16 @@ open func beginOauthFlow(scopes: [String], entrypoint: String)throws  -> String 
      *       - This parameter is used for metrics purposes, to identify the
      *         UX entrypoint from which the user triggered the signin request.
      *         For example, the application toolbar, on the onboarding flow.
-     *   - `metrics` - optionally, additional metrics tracking parameters.
-     *       - These will be included as query parameters in the resulting URL.
-
+     *   - `service` - The service being signed up for.
      */
-open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String)throws  -> String  {
+open func beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String, service: String = "")throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
     uniffi_fxa_client_fn_method_firefoxaccount_begin_pairing_flow(
             self.uniffiCloneHandle(),
         FfiConverterString.lower(pairingUrl),
         FfiConverterSequenceString.lower(scopes),
-        FfiConverterString.lower(entrypoint),$0
+        FfiConverterString.lower(entrypoint),
+        FfiConverterString.lower(service),$0
     )
 })
 }
@@ -3935,9 +3929,9 @@ public enum FxaEvent: Equatable, Hashable {
     
     case initialize(deviceConfig: DeviceConfig
     )
-    case beginOAuthFlow(scopes: [String], entrypoint: String
+    case beginOAuthFlow(service: String, scopes: [String], entrypoint: String
     )
-    case beginPairingFlow(pairingUrl: String, scopes: [String], entrypoint: String
+    case beginPairingFlow(pairingUrl: String, service: String, scopes: [String], entrypoint: String
     )
     case completeOAuthFlow(code: String, state: String
     )
@@ -3969,10 +3963,10 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
         case 1: return .initialize(deviceConfig: try FfiConverterTypeDeviceConfig.read(from: &buf)
         )
         
-        case 2: return .beginOAuthFlow(scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
+        case 2: return .beginOAuthFlow(service: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .beginPairingFlow(pairingUrl: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
+        case 3: return .beginPairingFlow(pairingUrl: try FfiConverterString.read(from: &buf), service: try FfiConverterString.read(from: &buf), scopes: try FfiConverterSequenceString.read(from: &buf), entrypoint: try FfiConverterString.read(from: &buf)
         )
         
         case 4: return .completeOAuthFlow(code: try FfiConverterString.read(from: &buf), state: try FfiConverterString.read(from: &buf)
@@ -3999,15 +3993,17 @@ public struct FfiConverterTypeFxaEvent: FfiConverterRustBuffer {
             FfiConverterTypeDeviceConfig.write(deviceConfig, into: &buf)
             
         
-        case let .beginOAuthFlow(scopes,entrypoint):
+        case let .beginOAuthFlow(service,scopes,entrypoint):
             writeInt(&buf, Int32(2))
+            FfiConverterString.write(service, into: &buf)
             FfiConverterSequenceString.write(scopes, into: &buf)
             FfiConverterString.write(entrypoint, into: &buf)
             
         
-        case let .beginPairingFlow(pairingUrl,scopes,entrypoint):
+        case let .beginPairingFlow(pairingUrl,service,scopes,entrypoint):
             writeInt(&buf, Int32(3))
             FfiConverterString.write(pairingUrl, into: &buf)
+            FfiConverterString.write(service, into: &buf)
             FfiConverterSequenceString.write(scopes, into: &buf)
             FfiConverterString.write(entrypoint, into: &buf)
             
@@ -4235,7 +4231,7 @@ public enum FxaState: Equatable, Hashable {
     
     case uninitialized
     case disconnected
-    case authenticating(oauthUrl: String
+    case authenticating(oauthUrl: String, initialState: FxaRustAuthState
     )
     case connected
     case authIssues
@@ -4264,7 +4260,7 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
         
         case 2: return .disconnected
         
-        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf)
+        case 3: return .authenticating(oauthUrl: try FfiConverterString.read(from: &buf), initialState: try FfiConverterTypeFxaRustAuthState.read(from: &buf)
         )
         
         case 4: return .connected
@@ -4287,9 +4283,10 @@ public struct FfiConverterTypeFxaState: FfiConverterRustBuffer {
             writeInt(&buf, Int32(2))
         
         
-        case let .authenticating(oauthUrl):
+        case let .authenticating(oauthUrl,initialState):
             writeInt(&buf, Int32(3))
             FfiConverterString.write(oauthUrl, into: &buf)
+            FfiConverterTypeFxaRustAuthState.write(initialState, into: &buf)
             
         
         case .connected:
@@ -4720,10 +4717,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_authorize_code_using_session_token() != 48815) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 16472) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_oauth_flow() != 26724) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 53426) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_begin_pairing_flow() != 62325) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_check_authorization_status() != 26020) {

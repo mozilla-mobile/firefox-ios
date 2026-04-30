@@ -249,8 +249,15 @@ class HistoryPanel: UIViewController,
 
         let spacerHeight = keyboardHeight - UIConstants.BottomToolbarHeight
         bottomStackView.addKeyboardSpacer(spacerHeight: spacerHeight)
-        bottomStackView.isHidden = false
     }
+
+	func updateBottomSearchBarLayout(isHidden: Bool) {
+		bottomStackView.isHidden = isHidden
+
+		let bottomInset = isHidden ? 0 : searchbar.bounds.height
+		tableView.contentInset.bottom = bottomInset
+		tableView.verticalScrollIndicatorInsets.bottom = bottomInset
+	}
 
     func shouldDismissOnDone() -> Bool {
         guard state != .history(state: .search) else { return false }
@@ -811,7 +818,6 @@ extension HistoryPanel {
     func handleRightTopButton() {
         if state == .history(state: .search) {
             exitSearchState()
-            updatePanelState(newState: .history(state: .mainView))
         }
     }
 

@@ -15,7 +15,8 @@ final class DependencyHelperMock {
         injectedTabManager: TabManager? = nil,
         injectedMicrosurveyManager: MicrosurveyManager? = nil,
         injectedMerinoManager: MerinoManagerProvider? = nil,
-        injectedNimbusLayer: NimbusFeatureFlagLayerProviding? = nil
+        injectedFeatureFlagProvider: FeatureFlagProviding? = nil,
+        injectedUserFeaturePreferences: UserFeaturePreferring? = nil
     ) {
         AppContainer.shared.reset()
 
@@ -69,18 +70,13 @@ final class DependencyHelperMock {
         MockGleanUsageReportingMetricsService(profile: profile)
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
-        let nimbusLayer = injectedNimbusLayer ?? NimbusManager.shared.featureFlagLayer
-        let nimbusFeatureFlags = FeatureFlagsProvider(
-            prefs: profile.prefs,
-            backendLayer: nimbusLayer
-        )
-        AppContainer.shared.register(service: nimbusFeatureFlags as FeatureFlagProviding)
+        let featureFlagProvider = injectedFeatureFlagProvider ?? FeatureFlagsProvider(prefs: profile.prefs)
+        AppContainer.shared.register(service: featureFlagProvider as FeatureFlagProviding)
 
-        let userFeaturePreferenceManager = UserFeaturePreferenceManager(
-            prefs: profile.prefs,
-            backendLayer: nimbusLayer
+        let userFeatureProvider = injectedUserFeaturePreferences ?? UserFeaturePreferenceManager(
+            prefs: profile.prefs
         )
-        AppContainer.shared.register(service: userFeaturePreferenceManager as UserFeaturePreferring)
+        AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
