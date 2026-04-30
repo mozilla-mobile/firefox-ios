@@ -529,6 +529,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             TermsOfUseTimeout(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
+            OffloadBackgroundWebViewsSetting(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
             ScreenshotSetting(settings: self),
             DeleteLoginsKeysSetting(settings: self),
@@ -581,6 +582,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedOpenFiftyTabs() {
         parentCoordinator?.openDebugTestTabs(count: 50)
+    }
+
+    func pressedOffloadBackgroundWebViews() {
+        tabManager.offloadBackgroundWebViews()
     }
 
     /// Adds 20 random shortcuts to the top sites / shortcuts library
