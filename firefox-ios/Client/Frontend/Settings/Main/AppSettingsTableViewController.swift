@@ -379,7 +379,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
-        if let profile {
+        // Toolbar position cannot be changed on iPad
+        if let profile, UIDevice.current.userInterfaceIdiom != .pad {
             generalSettings.append(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
             )
