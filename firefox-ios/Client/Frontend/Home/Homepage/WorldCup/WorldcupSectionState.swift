@@ -8,7 +8,7 @@ import Shared
 import UIKit
 
 /// State for the World Cup promo card displayed on the homepage.
-struct WorldcupSectionState: StateType, Equatable, Hashable, FeatureFlaggable {
+struct WorldcupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
 

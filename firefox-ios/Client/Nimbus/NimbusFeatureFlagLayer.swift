@@ -156,9 +156,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .tabTrayUIExperiments:
             return checkTabTrayUIExperiments()
 
-        case .toolbarUpdateHint:
-            return checkToolbarUpdateHintFeature()
-
         case .tosFeature:
             return checkTosFeature()
 
@@ -259,11 +256,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkRelayIntegration() -> Bool {
         return nimbus.features.relayIntegrationFeature.value().enabled
-    }
-
-    private func checkToolbarUpdateHintFeature() -> Bool {
-        let config = nimbus.features.toolbarRefactorFeature.value()
-        return config.toolbarUpdateHint
     }
 
     private func checkTosFeature() -> Bool {
