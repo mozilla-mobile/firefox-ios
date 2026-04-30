@@ -11,7 +11,6 @@ import Foundation
 final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
     var respondWithError: Error?
-    var respondSearchWith = SearchResponse(results: [])
     var requestChatCompletionCallCount = 0
     var requestChatCompletionStreamedCallCount = 0
     var lastMessages: [LiteLLMMessage]?

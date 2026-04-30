@@ -7,7 +7,6 @@ import Testing
 import TestKit
 
 @testable import QuickAnswersKit
-import Foundation
 
 struct DefaultResultsServiceTests {
     let testHelper = SwiftTestingHelper()
@@ -15,30 +14,17 @@ struct DefaultResultsServiceTests {
     @Test
     func test_fetchResults_returnsResult() async throws {
         let client = MockLiteLLMClient()
-        let json = """
-        {
-            "results": [
-                {
-                    "title": "Test Title",
-                    "url": "https://example.com",
-                    "snippet": "This is a test for quick answer"
-                },
-                {
-                    "title": "Test Title 2",
-                    "url": "https://example.com",
-                    "snippet": "This is the second snippet"
-                },
-            ]
-        }
-        """
-        client.respondSearchWith = try JSONDecoder().decode(SearchResponse.self, from: json.data(using: .utf8)!)
+        client.respondWith = ["This is a quick answer"]
         let subject = createSubject(client: client)
 
         let result = try await subject.fetchResults(for: "What is the weather?")
 
-        #expect(result.resultText == "Result shown here: This is a test for quick answer")
-        #expect(result.sources.count == 2)
+        #expect(result.resultText == "This is a quick answer")
+        #expect(result.sources.count == 1)
         #expect(client.requestChatCompletionCallCount == 1)
+        #expect(client.lastMessages?.count == 1)
+        #expect(client.lastMessages?.first?.content == "What is the weather?")
+        #expect(client.lastMessages?.first?.role == .user)
     }
 
     // MARK: - Helper
