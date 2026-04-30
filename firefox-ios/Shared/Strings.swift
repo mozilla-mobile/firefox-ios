@@ -1107,7 +1107,7 @@ extension String {
             public static let OfflineLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.OfflineLabel.v151",
                 tableName: "WorldCup",
-                value: "Looks like you're offline. Check your internet connection and try again.",
+                value: "Looks like you’re offline. Check your internet connection and try again.",
                 comment: "Message shown in the World Cup widget when the device has no internet connection.")
             public struct CountDown {
                 public static let Title = MZLocalizedString(
