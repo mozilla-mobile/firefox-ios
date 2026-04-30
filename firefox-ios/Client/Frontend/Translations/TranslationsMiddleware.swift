@@ -120,13 +120,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
         }
 
         if gestureType == .longPress {
-            guard translationConfiguration.state == .active,
-                  featureFlagsProvider.isEnabled(.translationLanguagePicker)
-            else { return }
-            showLanguagePickerForActiveTranslation(
+            handleLongPressOnTranslateButton(
                 for: action,
-                translatedToLanguage: translationConfiguration.translatedToLanguage,
-                sourceLanguage: translationConfiguration.sourceLanguage
+                toolbarState: toolbarState,
+                translationConfiguration: translationConfiguration
             )
             return
         }
@@ -215,6 +212,56 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 windowUUID: action.windowUUID,
                 actionType: GeneralBrowserActionType.showTranslationLanguagePicker
             ))
+        }
+    }
+
+    private func handleLongPressOnTranslateButton(
+        for action: ToolbarMiddlewareAction,
+        toolbarState: ToolbarState,
+        translationConfiguration: TranslationConfiguration
+    ) {
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker) else { return }
+
+        if translationConfiguration.state == .inactive {
+            let capturedButton = action.buttonTapped
+            Task {
+                let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
+                let supported = await translationsService.fetchSupportedTargetLanguages()
+                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+                let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+                let filteredLanguages = languages.filter { $0 != pageLanguage }
+                if !translationConfiguration.isMultiLanguageFlow, let singleLanguage = filteredLanguages.first {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: action.windowUUID,
+                        targetLanguage: singleLanguage,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        buttonTapped: capturedButton,
+                        translationLanguages: filteredLanguages,
+                        windowUUID: action.windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
+            }
+        } else if translationConfiguration.state == .active {
+            if translationConfiguration.isMultiLanguageFlow {
+                showLanguagePickerForActiveTranslation(
+                    for: action,
+                    translatedToLanguage: translationConfiguration.translatedToLanguage,
+                    sourceLanguage: translationConfiguration.sourceLanguage
+                )
+            } else {
+                translationsTelemetry.translateButtonTapped(
+                    isPrivate: toolbarState.isPrivateMode,
+                    actionType: .willRestore,
+                    translationFlowId: flowId(for: action.windowUUID)
+                )
+                handleUpdatingTranslationIcon(for: action, with: .inactive)
+                restoringWindows.insert(action.windowUUID)
+                reloadPage(for: action)
+            }
         }
     }
 

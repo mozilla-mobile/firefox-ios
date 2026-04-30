@@ -175,6 +175,15 @@ class MainMenuCoordinator: BaseCoordinator {
             }
             let prefs = profile.prefs
             Task {
+                if isSingleLanguageFlow && isTranslated {
+                    store.dispatch(ToolbarMiddlewareAction(
+                        buttonType: .translate,
+                        gestureType: .tap,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarMiddlewareActionType.didTapButton
+                    ))
+                    return
+                }
                 let manager = PreferredTranslationLanguagesManager(prefs: prefs)
                 let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
                 let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
@@ -182,7 +191,7 @@ class MainMenuCoordinator: BaseCoordinator {
                     ? translationConfig?.sourceLanguage
                     : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
                 let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
-                if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
+                if isSingleLanguageFlow, let language = filteredLanguages.first {
                     store.dispatch(TranslationLanguageSelectedAction(
                         windowUUID: windowUUID,
                         targetLanguage: language,
