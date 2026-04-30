@@ -26,7 +26,7 @@ final class AppAttestRequestAuthTests: XCTestCase {
 
         XCTAssertEqual(
             request.value(forHTTPHeaderField: MLPAConstants.serviceTypeHeader),
-            MLPAServiceType.s2s.rawValue
+            MLPAConstants.serviceTypeValue
         )
     }
 
@@ -102,8 +102,7 @@ final class AppAttestRequestAuthTests: XCTestCase {
 
         return AppAttestRequestAuth(
             appAttestClient: client,
-            bundleIdentifier: bundleIdentifier,
-            serviceType: .s2s
+            bundleIdentifier: bundleIdentifier
         )
     }
 

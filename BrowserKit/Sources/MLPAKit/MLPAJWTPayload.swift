@@ -5,11 +5,6 @@
 import Foundation
 import JWTKit
 
-public enum MLPAServiceType: String, Sendable {
-    case s2s = "s2s"
-    case quickAnswers = "search"
-}
-
 /// Constants used for MLPA (Mozilla LLM Proxy Auth)
 /// request construction and server contract fields.
 public enum MLPAConstants {
@@ -27,6 +22,7 @@ public enum MLPAConstants {
 
     // TODO: FXIOS-15123 - need to create an enum service type here
     // eventually to also account for quick-answers
+    static let serviceTypeValue = "s2s"
     static let useAppAttestHeader = "use-app-attest"
 
     static let contentTypeHeader = "Content-Type"

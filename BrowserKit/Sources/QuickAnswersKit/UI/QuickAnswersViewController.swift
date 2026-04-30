@@ -4,7 +4,6 @@
 
 import UIKit
 import Common
-import Shared
 
 public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
@@ -91,7 +90,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        prefs: Prefs,
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.init(
@@ -141,14 +139,6 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
         registerViewModelUpdates()
-    }
-
-    override public func viewDidDisappear(_ animated: Bool) {
-        // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
-        Task {
-            try await viewModel.stopRecordingVoice()
-        }
-        super.viewDidDisappear(animated)
     }
 
     override public func viewDidLayoutSubviews() {

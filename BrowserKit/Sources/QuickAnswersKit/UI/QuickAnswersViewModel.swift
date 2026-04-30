@@ -53,6 +53,15 @@ final class QuickAnswersViewModel {
         recordVoiceTask?.cancel()
         recordVoiceTask = nil
         try await service.stopRecording()
+        guard let recentSpeechResult, searchResultTask == nil else { return }
+        searchResultTask = Task { [weak self] in
+            do {
+                try Task.checkCancellation()
+                await self?.searchVoiceResult(recentSpeechResult)
+            } catch {
+                return
+            }
+        }
     }
 
     private func searchVoiceResult(_ result: SpeechResult) async {
