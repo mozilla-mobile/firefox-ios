@@ -18,4 +18,9 @@ public protocol LiteLLMClientProtocol: Sendable {
         messages: [LiteLLMMessage],
         config: LLMConfig
     ) async throws -> AsyncThrowingStream<String, Error>
+    
+    func requestChatCompletionForPrivate(
+        messages: [LiteLLMMessage],
+        config: LLMConfig
+    ) async throws -> (String, [Citation])
 }

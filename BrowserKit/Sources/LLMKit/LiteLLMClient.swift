@@ -45,6 +45,19 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         }
         return try await handleNonStreamingRequest(request: request)
     }
+    
+    public func requestChatCompletionForPrivate(
+        messages: [LiteLLMMessage],
+        config: LLMConfig
+    ) async throws -> (String, [Citation]) {
+        let request: URLRequest
+        do {
+            request = try await makeRequest(messages: messages, config: config)
+        } catch {
+            throw LiteLLMClientError.requestCreationFailed
+        }
+        return try await handleNonStreamingRequestForPrivate(request: request)
+    }
 
     /// Sends a chat completion request in streaming mode.
     /// - Parameters:
@@ -70,6 +83,15 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
 //        let citations = decodedResponse.choices.first?.message?.
         return content
+    }
+    
+    private func handleNonStreamingRequestForPrivate(request: URLRequest) async throws -> (String, [Citation]) {
+        let (data, response) = try await session.data(for: request)
+        try validate(response: response)
+        let decodedResponse = try JSONDecoder().decode(LiteLLMResponse.self, from: data)
+        guard let content = decodedResponse.choices.first?.message?.content else { throw LiteLLMClientError.noContent }
+        print("Cyn \(decodedResponse.choices.first?.message?.providerSpecificFields?.citations?.count)")
+        return (content, decodedResponse.choices.first?.message?.providerSpecificFields?.citations ?? [])
     }
 
     /// TODO(FXIOS-12994): Add tests for streaming requests.

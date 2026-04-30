@@ -23,29 +23,34 @@ final class DefaultResultsService: ResultsService {
     func fetchResults(for transcription: String) async throws -> SearchResult {
         let message = LiteLLMMessage(role: .user, content: transcription)
         // TODO: FXIOS-15198 - Handle mapping errors from request
-        let fullResponse = try await requestChatCompletion(for: message)
-        return try formatResult(from: fullResponse)
+        let (fullResponse, citations) = try await requestChatCompletionForPrivate(for: message)
+        return try formatResult(from: fullResponse, and: citations)
     }
 
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> String {
+    private func requestChatCompletionForPrivate(for message: LiteLLMMessage) async throws -> (String, [Citation]) {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
-        return try await client.requestChatCompletion(
+        return try await client.requestChatCompletionForPrivate(
             messages: [message],
             config: config
         )
     }
 
-    private func formatResult(from response: String) throws -> SearchResult {
+    private func formatResult(from response: String, and citations: [Citation]) throws -> SearchResult {
         // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
+        var sources: [SearchResult.Source] = []
+        for citation in citations {
+            sources.append(SearchResult.Source(
+                title: citation.title ?? "",
+                thumbnailURL: URL(string: citation.url ?? ""),
+                faviconURL: URL(string: citation.favicon ?? "")
+            ))
+            
+        }
         return SearchResult(
             resultText: response,
-            sources: [SearchResult.Source(
-                title: "",
-                thumbnailURL: nil,
-                faviconURL: nil
-            )]
+            sources: sources
         )
     }
 }
