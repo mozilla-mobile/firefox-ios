@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Shared
 
 public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
@@ -88,6 +89,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
+        prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -95,7 +97,7 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         self.init(
             navigationHandler: navigationHandler,
             // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
-            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            viewModel: QuickAnswersViewModel(prefs: prefs),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -203,6 +205,8 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
             case .showSearchResult(let result, _):
                 self?.contentView.configureAnswer(result.resultText)
                 self?.contentView.configureSources(result.sources)
+            case .initializationFailed:
+                break
             }
         }
         viewModel.startRecordingVoice()
