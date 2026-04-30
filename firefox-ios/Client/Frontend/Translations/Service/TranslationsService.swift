@@ -60,7 +60,12 @@ final class TranslationsService: TranslationsServiceProtocol {
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        let pageLanguage = try sourceLanguage ?? (await detectPageLanguage(for: windowUUID))
+        let pageLanguage: String
+        if let sourceLanguage {
+            pageLanguage = sourceLanguage
+        } else {
+            pageLanguage = try await detectPageLanguage(for: windowUUID)
+        }
         onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
         // Prewarm resources prior to calling the JS translation API.

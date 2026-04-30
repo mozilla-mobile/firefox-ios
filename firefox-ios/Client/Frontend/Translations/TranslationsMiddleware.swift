@@ -30,6 +30,10 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Each entry is a one-shot flag: auto-translate is skipped for the immediately following
     /// page load for that window, then the entry is removed. On iPhone only one window exists.
     private var restoringWindows: Set<WindowUUID> = []
+    /// Stores a target language for windows mid language-switch. When the page reloads after
+    /// the active translation is discarded, tryAutoTranslate picks this up and translates to the
+    /// requested language instead of the user's top preferred language.
+    private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -268,9 +272,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         ) else { return }
 
         let originatingTab = selectedTab(for: action.windowUUID)
-        let storedSourceLanguage = toolbarState.addressToolbar.translationConfiguration?.state == .active
-            ? toolbarState.addressToolbar.translationConfiguration?.sourceLanguage
-            : nil
+        let isCurrentlyTranslated = toolbarState.addressToolbar.translationConfiguration?.state == .active
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = action.targetLanguage
@@ -279,14 +281,22 @@ final class TranslationsMiddleware: FeatureFlaggable {
             actionType: .willTranslate,
             translationFlowId: newFlowId
         )
-        self.handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
-        self.retrieveTranslations(
-            for: action,
-            targetLanguage: action.targetLanguage,
-            isPrivate: toolbarState.isPrivateMode,
-            sourceLanguage: storedSourceLanguage,
-            on: originatingTab
-        )
+        if isCurrentlyTranslated {
+            pendingLanguageSwitchTargets[action.windowUUID] = action.targetLanguage
+            handleUpdatingTranslationIcon(for: action, with: .inactive, on: originatingTab)
+            store.dispatch(GeneralBrowserAction(
+                windowUUID: action.windowUUID,
+                actionType: GeneralBrowserActionType.reloadWebsite
+            ))
+        } else {
+            handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
+            retrieveTranslations(
+                for: action,
+                targetLanguage: action.targetLanguage,
+                isPrivate: toolbarState.isPrivateMode,
+                on: originatingTab
+            )
+        }
     }
 
     private func handleUpdatingTranslationIcon(
@@ -320,6 +330,21 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
     private func tryAutoTranslate(for action: ToolbarAction, on tab: Tab?) async -> Bool {
         if restoringWindows.remove(action.windowUUID) != nil { return false }
+
+        if let pendingLanguage = pendingLanguageSwitchTargets.removeValue(forKey: action.windowUUID) {
+            let isPrivate = store.state.componentState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: action.windowUUID
+            )?.isPrivateMode ?? false
+            let newFlowId = UUID()
+            translationFlowIds[action.windowUUID] = newFlowId
+            selectedTargetLanguages[action.windowUUID] = pendingLanguage
+            handleUpdatingTranslationIcon(for: action, with: .loading, on: tab)
+            retrieveTranslations(for: action, targetLanguage: pendingLanguage, isPrivate: isPrivate, on: tab)
+            return true
+        }
+
         guard profile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate) ?? false else { return false }
         let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
         let supported = await translationsService.fetchSupportedTargetLanguages()
@@ -411,7 +436,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool = false,
-        sourceLanguage: String? = nil,
         on tab: Tab? = nil
     ) {
         Task {
@@ -420,7 +444,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 targetLanguage: targetLanguage,
                 isPrivate: isPrivate,
                 autoTranslate: autoTranslate,
-                sourceLanguage: sourceLanguage,
                 on: tab
             )
         }
@@ -431,14 +454,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool,
-        sourceLanguage: String? = nil,
         on tab: Tab?
     ) async {
         do {
             var detectedSourceLanguage: String?
             try await translationsService.translateCurrentPage(
                 for: action.windowUUID,
-                from: sourceLanguage,
+                from: nil,
                 to: targetLanguage,
                 onLanguageIdentified: { identifiedLanguage, deviceLanguage in
                     detectedSourceLanguage = identifiedLanguage
