@@ -34,11 +34,10 @@ class WorldCupNowOverrideSetting: HiddenSetting {
         )
     }
 
-    // swiftlint: disable all
     override func onClick(_ navigationController: UINavigationController?) {
         let alert = UIAlertController(
             title: "Override 'Now'",
-            message: "Set a fixed date/time for the World Cup countdown. The countdown will treat this as the current time.\n\n\n\n\n\n\n\n\n\n",
+            message: "Set a fixed date/time for the World Cup countdown.",
             preferredStyle: .alert
         )
 
@@ -65,5 +64,4 @@ class WorldCupNowOverrideSetting: HiddenSetting {
 
         settings.present(alert, animated: true)
     }
-    // swiftlint: enable all
 }
