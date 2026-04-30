@@ -14,4 +14,5 @@ struct WorldCupAction: Action {
 
 enum WorldCupActionType: ActionType {
     case didChangeHomepageSettings
+    case closedCard
 }

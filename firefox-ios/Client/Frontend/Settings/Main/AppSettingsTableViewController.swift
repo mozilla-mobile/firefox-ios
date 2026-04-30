@@ -535,7 +535,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
-            MerinoTestDataSetting(settings: self, settingsDelegate: self)
+            MerinoTestDataSetting(settings: self, settingsDelegate: self),
+            WorldCupNowOverrideSetting(settings: self),
+            WorldCupResetDismissedSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

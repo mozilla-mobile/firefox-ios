@@ -113,6 +113,7 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
     }
 
     public struct SearchSettings {
