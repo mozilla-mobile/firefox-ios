@@ -1073,12 +1073,12 @@ extension String {
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
                 value: "(Full Time)",
-                comment: "The label indicating that the displaying match as ended.")
+                comment: "The label indicating that the displaying match has ended.")
             public static let FullTimeNoParenthesisLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151",
                 tableName: "WorldCup",
                 value: "Full Time",
-                comment: "The label indicating that the displaying match as ended.")
+                comment: "The label indicating that the displaying match has ended.")
             public static let FullTimePenaltiesLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
                 tableName: "WorldCup",
