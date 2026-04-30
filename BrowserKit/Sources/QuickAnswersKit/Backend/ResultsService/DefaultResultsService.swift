@@ -22,15 +22,16 @@ final class DefaultResultsService: ResultsService {
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         // TODO: FXIOS-15198 - Handle mapping errors from request
-        let fullResponse = try await requestSearch(for: transcription)
+        let fullResponse = try await request(for: transcription)
         return try formatResult(from: fullResponse.results)
     }
 
-    private func requestSearch(for transcription: String) async throws -> SearchResponse {
+    private func request(for transcription: String) async throws -> SearchResponse {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
-        return try await client.requestSearch(
+        let messages: [LiteLLMMes]
+        return try await client.requestChatCompletion(messages: , config: <#T##any LLMConfig#>)(
             transcription: transcription,
             config: config,
         )
