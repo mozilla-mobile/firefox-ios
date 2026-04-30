@@ -268,7 +268,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
         ) else { return }
 
         let originatingTab = selectedTab(for: action.windowUUID)
-        let isCurrentlyTranslated = toolbarState.addressToolbar.translationConfiguration?.state == .active
+        let storedSourceLanguage = toolbarState.addressToolbar.translationConfiguration?.state == .active
+            ? toolbarState.addressToolbar.translationConfiguration?.sourceLanguage
+            : nil
         let newFlowId = UUID()
         translationFlowIds[action.windowUUID] = newFlowId
         selectedTargetLanguages[action.windowUUID] = action.targetLanguage
@@ -282,7 +284,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
             for: action,
             targetLanguage: action.targetLanguage,
             isPrivate: toolbarState.isPrivateMode,
-            discardFirst: isCurrentlyTranslated,
+            sourceLanguage: storedSourceLanguage,
             on: originatingTab
         )
     }
@@ -409,7 +411,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool = false,
-        discardFirst: Bool = false,
+        sourceLanguage: String? = nil,
         on tab: Tab? = nil
     ) {
         Task {
@@ -418,7 +420,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 targetLanguage: targetLanguage,
                 isPrivate: isPrivate,
                 autoTranslate: autoTranslate,
-                discardFirst: discardFirst,
+                sourceLanguage: sourceLanguage,
                 on: tab
             )
         }
@@ -429,16 +431,14 @@ final class TranslationsMiddleware: FeatureFlaggable {
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool,
-        discardFirst: Bool = false,
+        sourceLanguage: String? = nil,
         on tab: Tab?
     ) async {
         do {
-            if discardFirst {
-                try await translationsService.discardTranslations(for: action.windowUUID)
-            }
             var detectedSourceLanguage: String?
             try await translationsService.translateCurrentPage(
                 for: action.windowUUID,
+                from: sourceLanguage,
                 to: targetLanguage,
                 onLanguageIdentified: { identifiedLanguage, deviceLanguage in
                     detectedSourceLanguage = identifiedLanguage

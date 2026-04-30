@@ -56,10 +56,11 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Initiates translation of the current page to the specified target language.
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        from sourceLanguage: String? = nil,
         to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
-        let pageLanguage = try await detectPageLanguage(for: windowUUID)
+        let pageLanguage = try sourceLanguage ?? (await detectPageLanguage(for: windowUUID))
         onLanguageIdentified?(pageLanguage, targetLanguage)
         let webView = try currentWebView(for: windowUUID)
         // Prewarm resources prior to calling the JS translation API.
