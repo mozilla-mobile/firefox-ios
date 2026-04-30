@@ -1013,6 +1013,16 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
+    func offloadBackgroundWebViews() {
+        let backgroundTabsWithWebViews = tabs.filter { $0.webView != nil && $0 !== selectedTab }
+        logger.log("Offloading WebViews for \(backgroundTabsWithWebViews.count) background tabs", level: .info, category: .tabs)
+        for tab in backgroundTabsWithWebViews {
+            Task {
+                await tab.offloadWebView()
+            }
+        }
+    }
+
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         assert(Thread.isMainThread)
         var result = SwitchPrivacyModeResult.usedExistingTab

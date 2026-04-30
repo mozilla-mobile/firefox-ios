@@ -646,6 +646,11 @@ class Tab: NSObject,
         deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
     }
 
+    func offloadWebView() async {
+        guard webView != nil else { return }
+        await close()
+    }
+
     func goBack() {
         // if the file was cancelled then return and avoid calling webView.goBack
         // since the previous page is already there

@@ -15,6 +15,7 @@ final class TabContentScriptManager: NSObject, WKScriptMessageHandler {
             }
             helper.value.prepareForDeinit()
         }
+        helpers.removeAll()
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
