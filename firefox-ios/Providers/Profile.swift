@@ -329,8 +329,6 @@ open class BrowserProfile: Profile,
             )
         }
         AppEventQueue.signal(event: .profileInitialized)
-
-        print(self.placesDbPath)
     }
 
     func reopen() {
