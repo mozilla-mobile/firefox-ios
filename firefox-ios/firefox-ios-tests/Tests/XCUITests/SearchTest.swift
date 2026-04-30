@@ -206,7 +206,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
-        browserScreen.assertAddressBarContains(value: searchEngine.lowercased(), timeout: TIMEOUT_LONG)
+        browserScreen.assertAddressBarContains(value: searchEngine.lowercased())
         waitUntilPageLoad()
     }
 
