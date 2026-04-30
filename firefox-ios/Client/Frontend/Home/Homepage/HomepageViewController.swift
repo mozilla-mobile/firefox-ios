@@ -970,7 +970,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func openWorldCupLink() {
-        guard let url = URL(string: "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures") else { return }
+        guard let url = URL(string: "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures") else { return }
         navigateToNewTab(with: url)
     }
 
