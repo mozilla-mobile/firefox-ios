@@ -678,7 +678,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(dispatchedActionType, ToolbarActionType.receivedTranslationLanguage)
     }
 
-    func test_urlDidChangeAction_withAutoTranslateEnabled_andPageLanguageMatchesPreferredLanguage_skipsAutoTranslate() throws {
+    func test_urlDidChangeAction_withAutoTranslateEnabled_andPageInPreferredLanguages_skipsAutoTranslate() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
         // Two preferred languages: "en" first, "de" second.
