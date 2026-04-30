@@ -13855,6 +13855,7 @@
 			children = (
 				614987AD2F6B37B900BC5ACA /* AI Controls */,
 				61497F3D2F68856000BC5ACA /* MockGeneralSettingsDelegate.swift */,
+				C2A853E32F9BA3DE005D4C7E /* ClearablesTests.swift */,
 				21304C8B2F217A59007ECEDA /* ThemeSettingsStateTests.swift */,
 				B5BD90815183467AA5B28FDA /* TranslationSettingsStateTests.swift */,
 				B5BD90825183467AA5B28FDB /* TranslationSettingsMiddlewareTests.swift */,
@@ -16718,7 +16719,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				C2A853E32F9BA3DE005D4C7E /* ClearablesTests.swift */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
 				2151EF582F2AB962007B67A6 /* BrowserViewController */,
 				218457C42F22A3FA00B4FF23 /* Downloads */,
