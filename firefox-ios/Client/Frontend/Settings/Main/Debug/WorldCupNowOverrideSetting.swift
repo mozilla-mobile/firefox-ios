@@ -37,7 +37,7 @@ class WorldCupNowOverrideSetting: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let alert = UIAlertController(
             title: "Override 'Now'",
-            message: "Set a fixed date/time for the World Cup countdown.",
+            message: "Set a fixed date/time for the World Cup countdown.\n\n\n\n\n\n\n\n\n\n\n",
             preferredStyle: .alert
         )
 

@@ -19,8 +19,8 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let dismissButtonSize = CGSize(width: 16, height: 16)
-        static let heroImageWidth: CGFloat = 120
-        static let heroImageTrailingPadding: CGFloat = 24.0
+        static let heroImageWidth: CGFloat = 160
+        static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
         static let heroFrameDuration = 0.04
