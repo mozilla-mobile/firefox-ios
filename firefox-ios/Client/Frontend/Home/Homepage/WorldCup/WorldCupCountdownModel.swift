@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import class MozillaAppServices.FeatureHolder
 import Shared
 
@@ -14,7 +15,7 @@ struct WorldCupCountdown {
 }
 
 @MainActor
-final class WorldCupCountdownModel {
+final class WorldCupCountdownModel: NSObject, Notifiable {
     static let nowOverrideDidChange = Notification.Name("worldCupNowOverrideDidChange")
 
     private static let iso8601Formatter: ISO8601DateFormatter = {
@@ -25,6 +26,7 @@ final class WorldCupCountdownModel {
 
     private let prefs: Prefs
     private let nimbusFeature: FeatureHolder<WorldCupWidgetFeature>
+    var notificationCenter: NotificationProtocol
 
     var targetDate: Date {
         let dateString = nimbusFeature.value().countdownTargetDate
@@ -58,23 +60,24 @@ final class WorldCupCountdownModel {
             } else {
                 prefs.removeObjectForKey(PrefsKeys.HomepageSettings.WorldCupNowOverride)
             }
-            NotificationCenter.default.post(name: Self.nowOverrideDidChange, object: nil)
+            notificationCenter.post(name: Self.nowOverrideDidChange, withObject: nil)
         }
     }
 
     var onCountdownUpdated: ((WorldCupCountdown) -> Void)?
 
     private var timer: Timer?
-    private var overrideObserver: Any?
     private let now: () -> Date
 
     init(
         prefs: Prefs,
         nimbusFeature: FeatureHolder<WorldCupWidgetFeature> = FxNimbus.shared.features.worldCupWidgetFeature,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         now: (() -> Date)? = nil
     ) {
         self.prefs = prefs
         self.nimbusFeature = nimbusFeature
+        self.notificationCenter = notificationCenter
         self.now = now ?? {
             guard let interval: TimeInterval = prefs.objectForKey(
                 PrefsKeys.HomepageSettings.WorldCupNowOverride
@@ -91,24 +94,21 @@ final class WorldCupCountdownModel {
                 self?.fire()
             }
         }
-        overrideObserver = NotificationCenter.default.addObserver(
-            forName: WorldCupCountdownModel.nowOverrideDidChange,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.fire()
-            }
-        }
+        startObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [Self.nowOverrideDidChange]
+        )
     }
 
     func stop() {
         timer?.invalidate()
         timer = nil
-        if let observer = overrideObserver {
-            NotificationCenter.default.removeObserver(observer)
-            overrideObserver = nil
-        }
+        stopObservingNotifications(
+            withNotificationCenter: notificationCenter,
+            forObserver: self,
+            observing: [Self.nowOverrideDidChange]
+        )
     }
 
     var currentCountdown: WorldCupCountdown {
@@ -119,6 +119,12 @@ final class WorldCupCountdownModel {
             minutes: max(diff.minute ?? 0, 0),
             components: diff
         )
+    }
+
+    nonisolated func handleNotifications(_ notification: Notification) {
+        ensureMainThread { [weak self] in
+            self?.fire()
+        }
     }
 
     private func fire() {

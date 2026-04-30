@@ -9,6 +9,7 @@ import Shared
 @MainActor
 final class WorldCupCountdownModelTests: XCTestCase {
     private let mockPrefs = MockProfilePrefs()
+    private let mockNotificationCenter = MockNotificationCenter()
 
     override func setUp() {
         super.setUp()
@@ -29,7 +30,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
     func testCountdownBeforeKickoff() {
         // 2026-06-01T19:00:00Z — exactly 10 days before kickoff
         let now = utcDate(year: 2026, month: 6, day: 1, hour: 19)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         let cd = model.currentCountdown
         XCTAssertEqual(cd.days, 10)
         XCTAssertEqual(cd.hours, 0)
@@ -39,7 +40,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
     func testCountdownSameDayBeforeKickoff() {
         // 2026-06-11T09:30:00Z — same day, 9h30m before the 19:00 kickoff
         let now = utcDate(year: 2026, month: 6, day: 11, hour: 9, minute: 30)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         let cd = model.currentCountdown
         XCTAssertEqual(cd.days, 0)
         XCTAssertEqual(cd.hours, 9)
@@ -49,7 +50,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
     func testCountdownAfterKickoffClampsToZero() {
         // 2026-06-11T20:00:00Z — one hour after kickoff
         let now = utcDate(year: 2026, month: 6, day: 11, hour: 20)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         let cd = model.currentCountdown
         XCTAssertEqual(cd.days, 0)
         XCTAssertEqual(cd.hours, 0)
@@ -62,7 +63,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
             return WorldCupWidgetFeature(countdownTargetDate: "2026-07-01T12:00:00Z")
         }
         let now = utcDate(year: 2026, month: 6, day: 30, hour: 12)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         let cd = model.currentCountdown
         XCTAssertEqual(cd.days, 1)
         XCTAssertEqual(cd.hours, 0)
@@ -71,7 +72,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
 
     func testCallbackFiredOnStart() {
         let now = utcDate(year: 2026, month: 5, day: 1)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         var received: WorldCupCountdown?
         model.onCountdownUpdated = { received = $0 }
         model.start()
@@ -82,7 +83,7 @@ final class WorldCupCountdownModelTests: XCTestCase {
 
     func testStopPreventsSubsequentFires() {
         let now = utcDate(year: 2026, month: 5, day: 1)
-        let model = WorldCupCountdownModel(prefs: mockPrefs, now: { now })
+        let model = WorldCupCountdownModel(prefs: mockPrefs, notificationCenter: mockNotificationCenter, now: { now })
         var fireCount = 0
         model.onCountdownUpdated = { _ in fireCount += 1 }
         model.start()   // fires immediately → fireCount == 1

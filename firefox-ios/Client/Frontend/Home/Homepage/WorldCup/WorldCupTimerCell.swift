@@ -19,7 +19,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let dismissButtonSize = CGSize(width: 16, height: 16)
-        static let heroImageHeight: CGFloat = 160
+        static let heroImageWidth: CGFloat = 160
         static let heroImageTrailingPadding: CGFloat = 24.0
         static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
@@ -43,7 +43,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
     }
 
     private lazy var heroImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = false
 
         guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
@@ -65,6 +65,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         label.font = FXFontStyles.Bold.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.text = String.WorldCup.HomepageWidget.CountDown.Title
+        label.textAlignment = .natural
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
@@ -91,6 +92,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
     private lazy var timerStack: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.distribution = .equalSpacing
         stack.spacing = UX.timerSegmentSpacing
     }
 
@@ -173,7 +175,10 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
                 equalTo: dismissButton.leadingAnchor,
                 constant: -UX.heroImageTrailingPadding
             ),
-            heroImageView.heightAnchor.constraint(equalToConstant: UX.heroImageHeight),
+            heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.topAnchor.constraint(equalTo: cardView.topAnchor).priority(.defaultLow),
+            heroImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor).priority(.defaultLow),
 
             dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.cardPaddingTop),
             dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.cardPaddingTrailing),
@@ -218,7 +223,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
             ),
         ]
 
-        updateHeroVisibility()
+        updateA11yLayout()
     }
 
     private func makeValueLabel() -> UILabel {
@@ -312,13 +317,12 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         super.traitCollectionDidChange(previousTraitCollection)
         guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
         else { return }
-        updateHeroVisibility()
+        updateA11yLayout()
     }
 
-    private func updateHeroVisibility() {
+    private func updateA11yLayout() {
         let isA11y = traitCollection.preferredContentSizeCategory.isAccessibilityCategory
         heroImageView.isHidden = isA11y
-        titleLabel.textAlignment = .natural
         leftContentStack.alignment = isA11y ? .fill : .leading
 
         NSLayoutConstraint.deactivate(isA11y ? heroVisibleConstraints : heroHiddenConstraints)
