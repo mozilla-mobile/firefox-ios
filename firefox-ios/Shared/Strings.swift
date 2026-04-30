@@ -1135,11 +1135,6 @@ extension String {
                     tableName: "WorldCup",
                     value: "View Schedule",
                     comment: "Label for the button that takes users to the World Cup schedule website on the countdown section.")
-                public static let TimerAccessibilityLabel = MZLocalizedString(
-                    key: "WorldCup.HomepageWidget.CountDown.TimerAccessibilityLabel.v151",
-                    tableName: "WorldCup",
-                    value: "%d days, %d hours, %d minutes remaining",
-                    comment: "Accessibility label for the countdown timer in the World Cup widget. The first parameter is the number of days, the second is hours, and the third is minutes remaining until the World Cup starts.")
             }
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
