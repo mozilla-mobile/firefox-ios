@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import Shared
 
 /// Middleware to handle generic homepage related actions
 /// If this gets too big, can split out notifications and feature flags
@@ -52,6 +53,9 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
                 return
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
+
+        case WorldCupActionType.closedCard:
+            self.profile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
 
         case HomepageActionType.sectionSeen:
             self.handleSectionSeenAction(action: action)
