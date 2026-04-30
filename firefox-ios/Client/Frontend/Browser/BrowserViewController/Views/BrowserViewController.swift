@@ -1542,11 +1542,6 @@ class BrowserViewController: UIViewController,
                 translationContextHintVC.dismiss(animated: true)
             }
         }
-
-        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
-        // as this also could change if the navigation bar is shown or not
-        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
-        previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
     }
 
     // MARK: - Constraints
