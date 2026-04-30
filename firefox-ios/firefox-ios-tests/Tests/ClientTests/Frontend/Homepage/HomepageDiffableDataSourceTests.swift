@@ -23,6 +23,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
+        setIsWorldCupWidgetFeatureEnabled(true)
     }
 
     override func tearDown() async throws {
@@ -394,6 +395,12 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    private func setIsWorldCupWidgetFeatureEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
+            return WorldCupWidgetFeature(enabled: isEnabled)
+        }
     }
 
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {

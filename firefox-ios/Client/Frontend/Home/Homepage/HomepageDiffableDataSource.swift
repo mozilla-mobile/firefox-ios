@@ -9,7 +9,7 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,                                          FeatureFlaggable {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -129,7 +129,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
         }
 
-        if state.worldcupState.shouldShowSection {
+        if state.worldcupState.shouldShowSection, featureFlagsProvider.isEnabled(.worldCupWidget) {
             snapshot.appendSections([.worldcup(textColor)])
             snapshot.appendItems([.worldcupCard], toSection: .worldcup(textColor))
         }
