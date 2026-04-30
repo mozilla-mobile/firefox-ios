@@ -964,24 +964,14 @@ extension BrowserViewController: WKNavigationDelegate {
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
         let nsError = error as NSError
-
-        let errorType = isNativeErrorPageEnabled
-            ? NativeErrorPageHelper.networkErrorType(
-                for: nsError,
-                isNICEnabled: isNICErrorPageEnabled,
-                isBadCertEnabled: isBadCertDomainErrorPageEnabled
-            )
-            : nil
-        switch errorType {
-        case .noInternetConnection, .badCertDomain:
+        if isNativeErrorPageEnabled {
             store.dispatch(NativeErrorPageAction(
                 networkError: nsError,
-                errorType: errorType,
                 windowUUID: windowUUID,
                 actionType: NativeErrorPageActionType.receivedError
             ))
             webView.load(PrivilegedRequest(url: url) as URLRequest)
-        case nil:
+        } else {
             ErrorPageHelper(certStore: profile.certStore).loadPage(nsError, forUrl: url, inWebView: webView)
         }
     }
@@ -1100,16 +1090,9 @@ extension BrowserViewController: WKNavigationDelegate {
                             logger: logger
                         )
                     }
-                    let errorType: NativeErrorPageHelper.NetworkErrorType? = if isNoInternetError {
-                        .noInternetConnection
-                    } else if isCertificateError {
-                        .badCertDomain
-                    } else {
-                        nil
-                    }
+                    // TODO: Move error type determination to NativeErrorPageMiddleware
                     let action = NativeErrorPageAction(
                         networkError: error,
-                        errorType: errorType,
                         windowUUID: windowUUID,
                         actionType: NativeErrorPageActionType.receivedError
                     )
