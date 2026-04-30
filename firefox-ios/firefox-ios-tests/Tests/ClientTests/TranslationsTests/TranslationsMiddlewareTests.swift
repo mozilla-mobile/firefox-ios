@@ -678,6 +678,41 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(dispatchedActionType, ToolbarActionType.receivedTranslationLanguage)
     }
 
+    func test_urlDidChangeAction_withAutoTranslateEnabled_andPageLanguageMatchesPreferredLanguage_skipsAutoTranslate() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
+        // Two preferred languages: "en" first, "de" second.
+        mockProfile.prefs.setString("en,de", forKey: PrefsKeys.Settings.translationPreferredLanguages)
+        // Page is already in "en" — the first preferred language.
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true),
+            detectPageLanguageResult: .success("en")
+        )
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "expect receivedTranslationLanguage to be fired")
+        expectation.expectedFulfillmentCount = 1
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(dispatchedAction.translationConfiguration?.state, .inactive)
+        XCTAssertEqual(dispatchedActionType, ToolbarActionType.receivedTranslationLanguage)
+    }
+
     // MARK: - maybeShowAutoTranslatePrompt tests
 
     func test_translationCompleted_whenPromptNotShownAndAutoTranslateOff_dispatchesShowAutoTranslatePrompt() throws {
