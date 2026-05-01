@@ -736,12 +736,16 @@ final class BrowserViewController: UIViewController {
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
 
             if isIPadRegularDimensions {
-                make.leading.trailing.equalToSuperview()
                 make.centerX.equalToSuperview()
                 make.bottom.equalTo(urlBarContainer)
             } else {
                 make.bottom.equalTo(urlBarContainer)
-                make.leading.trailing.equalToSuperview()
+            }
+            
+            if #available(iOS 26.0, *) {
+                make.leading.trailing.equalTo(mainContainerView.layoutGuide(for: .safeArea(cornerAdaptation: .horizontal)))
+            } else {
+                make.leading.trailing.equalTo(mainContainerView.safeAreaLayoutGuide)
             }
         }
     }
