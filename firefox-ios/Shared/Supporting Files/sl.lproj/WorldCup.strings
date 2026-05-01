@@ -1,0 +1,126 @@
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "Afrika";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Azija";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Srednja Amerika";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "Evropa";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "Severna Amerika";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Oceanija";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "Južna Amerika";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "Anglija";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Škotska";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Končano";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Preskoči";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "Sledite svoji ekipi";
+
+/* The title of the Group A group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupA.Title.v151" = "Skupina A";
+
+/* The title of the Group B group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupB.Title.v151" = "Skupina B";
+
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "Skupina C";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "Skupina D";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "Skupina E";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "Skupina F";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "Skupina G";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "Skupina H";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "Skupina I";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "Skupina J";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "Skupina K";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "Skupina L";
+
+/* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Zamenjaj ekipo";
+
+/* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "Odštevanje do svetovnega prvenstva";
+
+/* The accessibility labels for the button that allow to disable World Cup notifications. */
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Onemogoči obvestila";
+
+/* The label for the button in the eliminated section that takes the user back to the team selection screen. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Izberi ekipo";
+
+/* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Izberite še kakšno ekipo, katere napredek na svetovnem prvenstvu želite spremljati.";
+
+/* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Odstrani";
+
+/* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Vas še zanima?";
+
+/* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Sledite svoji ekipi";
+
+/* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "V živo prejemajte obvestila o dogajanju na tekmah in še več.";
+
+/* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Spremljajte svetovno prvenstvo";
+
+/* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Pridobite ozadje po meri";
+
+/* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Povezane tekme";
+
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "V ŽIVO";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "Odstrani";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Osveži";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Več možnosti";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Deli";
+

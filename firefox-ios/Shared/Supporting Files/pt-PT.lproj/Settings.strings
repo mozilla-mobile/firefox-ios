@@ -77,7 +77,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Bloqueada**: não poderá ver e não poderá utilizar a funcionalidade. Para a IA no dispositivo, quaisquer modelos transferidos são removidos.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "%Bloqueado**: Não poderá ver e não poderá utilizar a funcionalidade. Para IA no dispositivo, quaisquer modelos transferidos são removidos.";
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Bloqueada**: não poderá ver e não poderá utilizar a funcionalidade. Para a IA no dispositivo, quaisquer modelos transferidos são removidos.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "As páginas e resumos nunca são guardados.";
@@ -383,7 +383,7 @@
 "Settings.Translation.PreferredLanguages.Footer.v151" = "Escolher um destes idiomas ao traduzir.";
 
 /* VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list. */
-"Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151" = "Apagar";
+"Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151" = "Eliminar";
 
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Idiomas preferenciais";

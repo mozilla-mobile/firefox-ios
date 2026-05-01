@@ -379,6 +379,9 @@
 /* Footer text below the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.Footer.v151" = "Při překladu si vyberte z těchto jazyků.";
 
+/* VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list. */
+"Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151" = "Smazat";
+
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "Preferované jazyky";
 
