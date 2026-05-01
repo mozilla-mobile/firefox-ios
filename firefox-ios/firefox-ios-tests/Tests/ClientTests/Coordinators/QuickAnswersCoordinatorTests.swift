@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import Shared
 import QuickAnswersKit
 @testable import Client
 
@@ -94,6 +95,7 @@ final class QuickAnswersCoordinatorTests: XCTestCase {
     ) -> QuickAnswersCoordinator {
         let subject = QuickAnswersCoordinator(
             parentCoordinatorDelegate: parentCoordinator,
+            prefs: MockProfilePrefs(),
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             router: router,

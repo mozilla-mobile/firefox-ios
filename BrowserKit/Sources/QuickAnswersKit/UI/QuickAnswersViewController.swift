@@ -148,6 +148,14 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         contentView.adjustBottomInsets(for: privacyButton.frame.height)
     }
 
+    override public func viewDidDisappear(_ animated: Bool) {
+        // TODO: FXIOS-14880 - Possibly investigate a better way to call this via view model
+        Task {
+            try await viewModel.stopRecordingVoice()
+        }
+        super.viewDidDisappear(animated)
+    }
+
     private func setupSubviews() {
         view.addSubviews(
             backgroundRecordEffect,
