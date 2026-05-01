@@ -95,7 +95,7 @@ class AIControlsModel: ObservableObject,
     func toggleKillSwitch(to newValue: Bool) {
         guard killSwitchIsOn != newValue else {
             logger.log(
-                "Not toggling ai control, toggle value is unchanged",
+                "Not toggling AI control, toggle value is unchanged",
                 level: .warning,
                 category: .settings
             )

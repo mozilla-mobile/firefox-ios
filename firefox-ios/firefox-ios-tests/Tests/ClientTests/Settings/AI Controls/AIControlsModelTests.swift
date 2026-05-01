@@ -109,7 +109,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertTrue(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
@@ -123,7 +123,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertFalse(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
 
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)

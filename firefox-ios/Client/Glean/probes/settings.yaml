@@ -269,7 +269,7 @@ settings.ai_controls:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-15588
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4342506569
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -283,9 +283,9 @@ settings.ai_controls:
         description: |
           The new value of the translations toggle.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/issues/FXIOS-15588
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -299,9 +299,9 @@ settings.ai_controls:
         description: |
           The new value of the page summaries toggle.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/issues/FXIOS-15588
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
