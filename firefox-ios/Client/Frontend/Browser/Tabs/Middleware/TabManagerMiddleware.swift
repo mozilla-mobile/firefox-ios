@@ -497,7 +497,9 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         store.dispatch(refreshAction)
     }
 
-    /// Add a new tab normal when privateMode is selected and all or last normal tabs/tab are/is going to be closed
+    /// Adds a new non-private tab if the currently selected tab is private.
+    /// Used to ensure a normal tab exists when exiting or exhausting private tabs.
+    /// - Parameter uuid: The window identifier.
     private func addNewNormalTabIfSelectedIsPrivate(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
