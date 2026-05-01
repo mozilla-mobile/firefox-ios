@@ -3606,8 +3606,8 @@ class BrowserViewController: UIViewController,
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
 
         // Closure to handle found field values for credit card and address fields
-        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-            guard let self, let tabWebView = tab.webView else { return }
+        formAutofillHelper.foundFieldValues = { [weak self, weak tab, weak webView] fieldValues, type, frame in
+            guard let self, let tabWebView = tab?.webView else { return }
 
             // Handle different field types
             switch fieldValues.fieldValue {
@@ -3628,7 +3628,7 @@ class BrowserViewController: UIViewController,
 
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
-                                              webView: WKWebView,
+                                              webView: WKWebView?,
                                               frame: WKFrameInfo?,
                                               localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
@@ -3649,7 +3649,7 @@ class BrowserViewController: UIViewController,
 
         tabWebView.accessoryView.savedAddressesClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
         }
@@ -3658,7 +3658,7 @@ class BrowserViewController: UIViewController,
     private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
                                                  type: FormAutofillPayloadType?,
                                                  tabWebView: TabWebView,
-                                                 webView: WKWebView,
+                                                 webView: WKWebView?,
                                                  frame: WKFrameInfo?) {
         guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
               let type = type,
@@ -3714,10 +3714,10 @@ class BrowserViewController: UIViewController,
     }
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
-    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView, frame: WKFrameInfo?) {
+    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
         tabWebView.accessoryView.savedCardsClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
         }
