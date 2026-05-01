@@ -2931,8 +2931,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -2959,22 +2959,6 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
-        }
-
-        if let title = alert.title {
-            let attributedTitleKey = "attributedTitle"
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
         }
 
         if let popover = alert.popoverPresentationController {
