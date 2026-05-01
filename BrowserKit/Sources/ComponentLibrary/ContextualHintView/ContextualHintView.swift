@@ -103,8 +103,8 @@ public final class ContextualHintView: UIView, ThemeApplicable, Notifiable {
                                                      : UX.stackViewBottomArrowTopConstraint
         closeButtonTopConstraint?.constant = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
 
+        titleLabel.text = viewModel.title
         if !viewModel.title.isEmpty && !stackView.arrangedSubviews.contains(titleLabel) {
-            titleLabel.text = viewModel.title
             stackView.insertArrangedSubview(titleLabel, at: 0)
         }
 
