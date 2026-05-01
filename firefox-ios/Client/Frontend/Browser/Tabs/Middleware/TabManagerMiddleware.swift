@@ -437,7 +437,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
 
-            addNewTabIfPrivate(uuid: uuid)
+            addNewNormalTabIfSelectedIsPrivate(uuid: uuid)
         }
     }
 
@@ -477,10 +477,7 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
         if !tabsState.isPrivateMode {
-            addNewTabIfPrivate(uuid: uuid)
-        }
-
-        if !tabsState.isPrivateMode {
+            addNewNormalTabIfSelectedIsPrivate(uuid: uuid)
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
@@ -500,8 +497,8 @@ final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark
         store.dispatch(refreshAction)
     }
 
-    /// Add a new tab when privateMode is selected and all or last normal tabs/tab are/is going to be closed
-    private func addNewTabIfPrivate(uuid: WindowUUID) {
+    /// Add a new tab normal when privateMode is selected and all or last normal tabs/tab are/is going to be closed
+    private func addNewNormalTabIfSelectedIsPrivate(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             tabManager.addTab(nil, isPrivate: false)
