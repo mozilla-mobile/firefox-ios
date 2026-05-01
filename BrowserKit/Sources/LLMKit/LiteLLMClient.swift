@@ -45,7 +45,7 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
         }
         return try await handleNonStreamingRequest(request: request)
     }
-    
+
     public func requestChatCompletionForPrivate(
         messages: [LiteLLMMessage],
         config: LLMConfig
@@ -84,7 +84,7 @@ public final class LiteLLMClient: LiteLLMClientProtocol, Sendable {
 //        let citations = decodedResponse.choices.first?.message?.
         return content
     }
-    
+
     private func handleNonStreamingRequestForPrivate(request: URLRequest) async throws -> (String, [Citation]) {
         let (data, response) = try await session.data(for: request)
         try validate(response: response)

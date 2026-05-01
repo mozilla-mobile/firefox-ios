@@ -46,7 +46,6 @@ final class DefaultResultsService: ResultsService {
                 thumbnailURL: URL(string: citation.url ?? ""),
                 faviconURL: URL(string: citation.favicon ?? "")
             ))
-            
         }
         return SearchResult(
             resultText: response,
