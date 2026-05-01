@@ -2931,8 +2931,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
