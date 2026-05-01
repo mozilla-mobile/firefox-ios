@@ -145,7 +145,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         passcodeInput.waitAndTap(timeout: 30)
         passcodeInput.typeText("foo\n")
         mozWaitForElementToNotExist(passcodeInput)
-        // here
+ 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
         mozWaitForElementToExist(app.buttons["addCredentialButton"], timeout: 20)
         snapshot("CreateLogin")
