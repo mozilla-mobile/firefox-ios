@@ -9,7 +9,7 @@ import UIKit
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
-final class HomepageSectionLayoutProvider {
+final class HomepageSectionLayoutProvider: FeatureFlaggable {
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
@@ -844,7 +844,8 @@ final class HomepageSectionLayoutProvider {
     /// Returns the estimated height of the World Cup section when it is visible, or 0 when hidden.
     private func getWorldcupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.worldcupState.shouldShowSection else { return 0 }
+              state.worldcupState.shouldShowSection,
+              featureFlagsProvider.isEnabled(.worldCupWidget) else { return 0 }
 
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let cell = WorldCupTimerCell()
