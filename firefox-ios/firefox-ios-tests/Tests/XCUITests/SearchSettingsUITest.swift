@@ -9,7 +9,6 @@ let defaultSearchEngine2 = "Bing"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
-
     // https://mozilla.testrail.io/index.php?/cases/view/2435664
     func testDefaultSearchEngine() {
         let settingScreen = SettingScreen(app: app)
