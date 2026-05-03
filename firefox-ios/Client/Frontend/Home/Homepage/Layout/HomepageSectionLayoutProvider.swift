@@ -54,7 +54,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             static let minimumCellsPerRow = 1
             static let interItemSpacing: CGFloat = 16
             static let interGroupSpacing: CGFloat = 16
-            static let newsHeaderZIndex = -1
+            static let newsHeaderTopSpacing: CGFloat = 16
+            static let newsHeaderZIndex = 1
 
             /// `storiesPeekOffset` is how much we want the stories (cards only, not including section header/spacing)
             /// to peek in vertically from the bottom of the homepage viewport (above the fold)
@@ -244,8 +245,10 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let horizontalInset = UX.leadingInset(traitCollection: environment.traitCollection)
 
+        // The normal homepage top spacing belongs to the logo header section, not the collection view inset.
+        // status bar overlay space is handled separately as a scroll inset by the homepage.
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: UX.topSpacing,
             leading: horizontalInset,
             bottom: UX.spacingBetweenSections,
             trailing: horizontalInset)
@@ -299,16 +302,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerFooterSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(getHeaderHeight(sectionHeaderConfiguration: sectionHeaderConfiguration,
-                                                       environment: environment)
-            )
+            heightDimension: .absolute(getStoriesHeaderHeight(sectionHeaderConfiguration: sectionHeaderConfiguration,
+                                                              environment: environment))
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-        header.zIndex = UX.PocketConstants.newsHeaderZIndex
+        header.pinToVisibleBounds = true
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(
@@ -524,8 +526,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let rawSpacerHeight = getRawSpacerHeight(environment: environment)
 
         let merinoHeaderConfiguration = MerinoState.Constants.sectionHeaderConfiguration
-        let headerHeight = getHeaderHeight(sectionHeaderConfiguration: merinoHeaderConfiguration,
-                                           environment: environment)
+        let headerHeight = getStoriesHeaderHeight(sectionHeaderConfiguration: merinoHeaderConfiguration,
+                                                  environment: environment)
 
         // Dimensions of <= 0.0 cause runtime warnings, so use a minimum height of 0.1
         var spacerHeight = max(0.1, rawSpacerHeight)
@@ -581,6 +583,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let headerLogoCell = HomepageHeaderCell()
         headerLogoCell.configure(headerState: state.headerState)
+        // Match createHeaderSectionLayout so spacer calculations include the logo header's top spacing.
+        totalHeight += UX.topSpacing
         totalHeight += HomepageDimensionCalculator.fittingHeight(for: headerLogoCell, width: containerWidth)
         totalHeight += UX.spacingBetweenSections
         return totalHeight
@@ -813,6 +817,15 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Creates a "dummy" header and returns its height
+    private func getStoriesHeaderHeight(
+        sectionHeaderConfiguration: SectionHeaderConfiguration,
+        environment: NSCollectionLayoutEnvironment
+    ) -> CGFloat {
+        return getHeaderHeight(sectionHeaderConfiguration: sectionHeaderConfiguration, environment: environment)
+            + UX.PocketConstants.newsHeaderTopSpacing
+    }
+
+    /// Creates a "dummy" header and returns its height
     private func getHeaderHeight(
         sectionHeaderConfiguration: SectionHeaderConfiguration,
         environment: NSCollectionLayoutEnvironment
@@ -875,7 +888,6 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
 
         return height
-            - UX.topSpacing
             - headerLogoHeight
             - privacyNoticeHeight
             - topSitesHeight

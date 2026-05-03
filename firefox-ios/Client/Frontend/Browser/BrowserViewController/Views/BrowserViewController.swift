@@ -155,6 +155,7 @@ class BrowserViewController: UIViewController,
     }
 
     // Constraints used to show/hide toolbars
+    private var contentContainerTopConstraint: NSLayoutConstraint?
     var headerTopConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
@@ -546,6 +547,7 @@ class BrowserViewController: UIViewController,
             readerModeBar.addToParent(parent: newParent, addToTop: isBottomSearchBar)
         }
 
+        updateContentContainerTopConstraint()
         updateViewConstraints()
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
@@ -741,6 +743,7 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
+        updateContentContainerTopConstraint()
     }
 
     func dismissVisibleMenus() {
@@ -1074,6 +1077,7 @@ class BrowserViewController: UIViewController,
         header.addArrangedViewToTop(topTabsViewController.view)
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
+        updateContentContainerTopConstraint()
     }
 
     private func setupAccessibleActions() {
@@ -1429,6 +1433,7 @@ class BrowserViewController: UIViewController,
         // toolbar translucency needs to be updated
         // This also required for iPad rotation
         addOrUpdateMaskViewIfNeeded()
+        updateContentContainerTopConstraint()
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1546,9 +1551,34 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
+
+    func updateContentContainerTopConstraint() {
+        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
+        let pinToScreenTop = shouldPinContentContainerToScreenTop
+        contentContainerTopConstraint?.isActive = false
+        contentContainerTopConstraint = contentContainer.topAnchor.constraint(
+            equalTo: pinToScreenTop ? view.topAnchor : header.bottomAnchor
+        )
+        contentContainerTopConstraint?.isActive = true
+
+        let frontViews = pinToScreenTop
+            ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+            : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
+               bottomContentStackView, bottomContainer, overKeyboardContainer]
+        frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+
+        guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
+
+        // When the homepage is pinned to the screen top, BVC owns the status bar overlay space.
+        // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
+        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        homepageViewController.updateTopContentInset(homepageTopContentInset)
+    }
+
     private func setupConstraints() {
+        updateContentContainerTopConstraint()
+
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
@@ -1589,6 +1619,7 @@ class BrowserViewController: UIViewController,
             updateHeaderConstraints()
         }
         setupBlurViews()
+        updateContentContainerTopConstraint()
     }
 
     private func setupBlurViews() {
@@ -1858,6 +1889,7 @@ class BrowserViewController: UIViewController,
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         // FXIOS-11036 - Investigate improvement to JavaScript alert dequeueing
@@ -1875,6 +1907,7 @@ class BrowserViewController: UIViewController,
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than a web view
@@ -3160,7 +3193,11 @@ class BrowserViewController: UIViewController,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
-        let availableContentHeight = getAvailableHomepageContentHeight()
+        // Keep this in sync with the top inset passed to HomepageViewController so spacer layout
+        // and scroll-view geometry describe the same visible viewport.
+        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
+        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        let availableContentHeight = getAvailableHomepageContentHeight(topContentInset: homepageTopContentInset)
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
         guard homepageState.availableContentHeight != availableContentHeight
@@ -3181,7 +3218,7 @@ class BrowserViewController: UIViewController,
     // This is accomplished by taking BVC's height and subtracting the height of all of it's immediate subviews
     // This is used to keep the homepage layout constant, such that it doesn't shift when the homepage's view size changes
     // eg when the address bar is tapped and the keyboard is presented
-    private func getAvailableHomepageContentHeight() -> CGFloat {
+    private func getAvailableHomepageContentHeight(topContentInset: CGFloat) -> CGFloat {
         // We only have to worry about the bottom address bar when it is part of the homepage layout (can be presented
         // without the keyboard)
         var addressBarHeight = isHomepageSearchBarEnabled ? 0 : overKeyboardContainer.frame.height
@@ -3194,8 +3231,13 @@ class BrowserViewController: UIViewController,
             addressBarHeight -= keyboardSpacerHeight
         }
 
-        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
-        return view.frame.height - statusBarOverlay.frame.height
+        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
+        let topChromeHeight = shouldPinContentContainerToScreenTop ? topContentInset : statusBarOverlay.frame.height
+
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage.
+        // When the homepage is pinned to the screen top, the status bar overlay is instead represented by
+        // the homepage collection view's top content inset, so use that same inset in the layout height.
+        return view.frame.height - topChromeHeight
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
                                  - addressBarHeight

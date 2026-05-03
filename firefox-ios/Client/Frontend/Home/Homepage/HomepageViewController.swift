@@ -57,6 +57,7 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
+    private var collectionViewTopContentInset: CGFloat = 0
 
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
@@ -271,6 +272,19 @@ final class HomepageViewController: UIViewController,
     func scrollToTop(animated: Bool = false) {
         if let collectionView = collectionView {
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
+            handleScroll(collectionView, isUserInteraction: false)
+        }
+    }
+
+    func updateTopContentInset(_ topInset: CGFloat) {
+        guard collectionViewTopContentInset != topInset else { return }
+        let previousAdjustedTopInset = collectionView?.adjustedContentInset.top ?? collectionViewTopContentInset
+        collectionViewTopContentInset = topInset
+        updateCollectionViewContentInset()
+        if let collectionView {
+            // Preserve the visible content when BVC chrome changes the collection view's top inset.
+            let adjustedTopInsetDelta = collectionView.adjustedContentInset.top - previousAdjustedTopInset
+            collectionView.contentOffset.y -= adjustedTopInsetDelta
             handleScroll(collectionView, isUserInteraction: false)
         }
     }
@@ -500,17 +514,22 @@ final class HomepageViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.delegate = self
-        // Per design requirement, set spacing on top. We may want to revisit this spacing when implement liquid glass.
+        self.collectionView = collectionView
+        updateCollectionViewContentInset()
+
+        view.addSubview(collectionView)
+    }
+
+    private func updateCollectionViewContentInset() {
+        guard let collectionView else { return }
+
         collectionView.contentInset = UIEdgeInsets(
-            top: HomepageSectionLayoutProvider.UX.topSpacing,
+            top: collectionViewTopContentInset,
             left: 0,
             bottom: 0,
             right: 0
         )
         collectionView.scrollIndicatorInsets = collectionView.contentInset
-        self.collectionView = collectionView
-
-        view.addSubview(collectionView)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -532,10 +551,11 @@ final class HomepageViewController: UIViewController,
                 return sectionProvider.makeEmptyLayoutSection()
             }
 
-            return sectionProvider.createLayoutSection(
+            let layoutSection = sectionProvider.createLayoutSection(
                 for: section,
                 with: environment
             )
+            return layoutSection
         }
         return layout
     }
@@ -796,13 +816,14 @@ final class HomepageViewController: UIViewController,
 
     /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
-        guard let headerView = getNewsTransitionHeader()  else { return }
-
         // We only want the stories header to transition if there is enough empty space on the homepage,
         // which is denoted by the existence of the spacer
         let transitionEnabled = isNewsTransitionEnabled()
+        let transitionProgress = newsTransitionProgress()
+
+        guard let headerView = getNewsTransitionHeader()  else { return }
         headerView.setTransitionEnabled(transitionEnabled)
-        headerView.setTransitionProgress(newsTransitionProgress())
+        headerView.setTransitionProgress(transitionProgress)
     }
 
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
