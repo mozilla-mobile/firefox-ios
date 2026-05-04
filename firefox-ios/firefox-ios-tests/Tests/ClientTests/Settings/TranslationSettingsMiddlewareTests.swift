@@ -314,12 +314,15 @@ final class TranslationSettingsMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.translationSettingsProvider(mockStore.state, action)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsMiddlewareAction)
-        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? TranslationSettingsMiddlewareActionType)
-        XCTAssertEqual(dispatchedActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
-        XCTAssertEqual(dispatchedAction.isAutoTranslateEnabled, true)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+        let firstAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? TranslationSettingsMiddlewareAction)
+        let firstActionType = try XCTUnwrap(firstAction.actionType as? TranslationSettingsMiddlewareActionType)
+        XCTAssertEqual(firstActionType, TranslationSettingsMiddlewareActionType.didUpdateSettings)
+        XCTAssertEqual(firstAction.isAutoTranslateEnabled, true)
         XCTAssertEqual(mockProfile.prefs.boolForKey(PrefsKeys.Settings.translationAutoTranslate), true)
+        let secondAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? ToolbarAction)
+        let secondActionType = try XCTUnwrap(secondAction.actionType as? ToolbarActionType)
+        XCTAssertEqual(secondActionType, ToolbarActionType.didTranslationSettingsChange)
         subject.translationSettingsProvider = { _, _ in }
     }
 

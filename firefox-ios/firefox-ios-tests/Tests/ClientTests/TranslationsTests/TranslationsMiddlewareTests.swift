@@ -830,6 +830,33 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func test_didTranslationSettingsChange_withFeatureDisabled_andActivePage_reloadsPage() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+
+        let expectation = XCTestExpectation(description: "reloadWebsite dispatched when disabling translations on active page")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 0.5)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.reloadWebsite)
+    }
+
     func test_didTranslationSettingsChange_clearsStoredTargetLanguageForRetry() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
