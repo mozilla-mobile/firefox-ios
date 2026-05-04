@@ -15,20 +15,21 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        setupStore()
         mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
-        mockGleanWrapper = MockGleanWrapper()
         mockProfile.prefs = mockPrefs
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        mockGleanWrapper = MockGleanWrapper()
+        setupStore()
     }
 
     override func tearDown() async throws {
         resetStore()
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -117,6 +118,14 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testToggleKillSwitchOff() throws {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: true,
+            PrefsKeys.Settings.translationsFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
 
