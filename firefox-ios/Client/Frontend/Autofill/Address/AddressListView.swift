@@ -19,6 +19,7 @@ struct AddressListView: View {
         static let titleFontSize: CGFloat = 22
         static let subtitleFontSize: CGFloat = 16
         static let contentUnavailableViewTopPadding: CGFloat = 125
+        static let listPadding: CGFloat = -8
     }
 
     // MARK: - Properties
@@ -34,13 +35,17 @@ struct AddressListView: View {
     @State var imageColor: Color = .clear
     @State var listColor: Color = .clear
 
+    @State private var isLandscape = false
+
     // MARK: - Body
 
     var body: some View {
         Group {
             if viewModel.showSection {
                 List {
-                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
+                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)
+                        .modifier(ListHeaderPadding(isLandscape: isLandscape,
+                                                    paddingSize: UX.listPadding))) {
                         ForEach(viewModel.addresses, id: \.self) { address in
                             AddressCellView(
                                 windowUUID: windowUUID,
@@ -85,6 +90,9 @@ struct AddressListView: View {
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            isLandscape = UIDevice.current.orientation.isLandscape
         }
         .onDisappear {
             viewModel.editAddressWebViewManager.teardownWebView()

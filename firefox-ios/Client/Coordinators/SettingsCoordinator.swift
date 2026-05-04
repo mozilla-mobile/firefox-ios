@@ -32,7 +32,7 @@ final class SettingsCoordinator: BaseCoordinator,
                                  BrowsingSettingsDelegate,
                                  AppearanceSettingsDelegate,
                                  TranslationPickerSettingsDelegate,
-                                 LegacyFeatureFlaggable {
+                                 FeatureFlaggable {
     var settingsViewController: AppSettingsScreen?
     private let wallpaperManager: WallpaperManagerInterface
     private let profile: Profile
@@ -202,7 +202,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly)
+            return featureFlagsProvider.isEnabled(.addressBarMenu)
             ? UIHostingController(
                 rootView: AddressBarSettingsView(
                     windowUUID: windowUUID,
@@ -431,7 +431,7 @@ final class SettingsCoordinator: BaseCoordinator,
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.addressBarMenu, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.addressBarMenu) {
             let viewController = UIHostingController(
                 rootView: AddressBarSettingsView(
                 windowUUID: windowUUID,
@@ -481,7 +481,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     private func translationSettingsViewController() -> UIViewController {
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
             viewController.coordinator = self
             return viewController

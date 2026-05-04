@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Zablokowany**: Njebudźeće funkciju widźeć a njemóžeće ju wužiwać. Za KI na graće so sćehnjene modele wotstronjeja.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Zablokowany**: Njebudźeće funkciju widźeć a njemóžeće ju wužiwać. Za KI na graće so sćehnjene modele wotstronjeja.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Strony a zjeća so ženje njeskładuja.";
 

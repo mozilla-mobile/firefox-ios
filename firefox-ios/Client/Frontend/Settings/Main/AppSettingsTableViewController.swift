@@ -59,7 +59,7 @@ protocol AppSettingsScreen: UIViewController {
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController,
                                       AppSettingsScreen,
-                                      LegacyFeatureFlaggable,
+                                      FeatureFlaggable,
                                       DebugSettingsDelegate,
                                       SearchBarLocationProvider,
                                       SharedSettingsDelegate {
@@ -379,7 +379,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator)
         ]
 
-        if isSearchBarLocationFeatureEnabled, let profile {
+        // Toolbar position cannot be changed on iPad
+        if let profile, UIDevice.current.userInterfaceIdiom != .pad {
             generalSettings.append(
                 SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator)
             )
@@ -399,11 +400,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        if featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.aiKillSwitch) {
             generalSettings.append(AIControlsSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
@@ -461,7 +462,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
-        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
+        if featureFlagsProvider.isEnabled(.sentFromFirefox), let profile {
             supportSettings.append(
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
@@ -535,7 +536,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ChangeRSServerSetting(settings: self),
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
-            MerinoTestDataSetting(settings: self, settingsDelegate: self)
+            MerinoTestDataSetting(settings: self, settingsDelegate: self),
+            WorldCupNowOverrideSetting(settings: self),
+            WorldCupResetDismissedSetting(settings: self)
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer

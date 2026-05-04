@@ -8,12 +8,13 @@ import Common
 import Shared
 
 // Header for the homepage in both normal and private mode
-// Contains the firefox logo and the private browsing shortcut button
-class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
+// Contains the firefox logo, and optionally the Quick Answers button
+class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, FeatureFlaggable {
     enum UX {
         static let firefoxLogoImageSize = CGSize(width: 40, height: 40)
         static let firefoxTextImageSize = CGSize(width: 90, height: 40)
         static let interImageSpacing: CGFloat = 10
+        static let quickAnswersButtonSize: CGFloat = 44
 
         static func contentWidth() -> CGFloat {
             return UX.firefoxLogoImageSize.width + UX.interImageSpacing + UX.firefoxTextImageSize.width
@@ -22,6 +23,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
+    private var onQuickAnswersTapped: (() -> Void)?
     private var headerState: HeaderState?
     private var hasConfiguredView = false
     private var headerConstraints = [NSLayoutConstraint]()
@@ -35,6 +37,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private lazy var logoStackView: UIStackView = .build { view in
         view.backgroundColor = .clear
+        view.alignment = .center
         view.accessibilityIdentifier = a11y.logoID
         view.accessibilityLabel = AppName.shortName.rawValue
         view.isAccessibilityElement = true
@@ -50,6 +53,22 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
 
+    private lazy var quickAnswersButton: UIButton = .build { button in
+        button.configuration = .filled()
+        // TODO: - FXIOS-15477 Add correct acorn icon
+        button.configuration?.image = UIImage(systemName: "waveform")
+        button.configuration?.cornerStyle = .capsule
+        // TODO: - FXIOS-14720 Add Strings for accessibility label
+        button.accessibilityIdentifier = a11y.quickAnswersButton
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = false
+        button.addAction(
+            UIAction(handler: { [weak self] _ in
+                self?.onQuickAnswersTapped?()
+            }),
+            for: .touchUpInside
+        )
+    }
+
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,7 +80,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     // MARK: - UI Setup
 
-    private func setupView(with showiPadSetup: Bool) {
+    private func setupView(headerState: HeaderState) {
         if !hasConfiguredView {
             contentView.backgroundColor = .clear
             logoStackView.addArrangedSubview(logoImage)
@@ -69,12 +88,18 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
+            if featureFlagsProvider.isEnabled(.quickAnswers), !headerState.isPrivate {
+                if headerState.showiPadSetup {
+                    // On iPad, add button directly to contentView so logo remains centered
+                    contentView.addSubview(quickAnswersButton)
+                } else {
+                    // On iPhone, add spacer view to stretch the logo and the button to leading and trailing
+                    stackContainer.addArrangedSubview(UIView())
+                    stackContainer.addArrangedSubview(quickAnswersButton)
+                }
+            }
             contentView.addSubview(stackContainer)
-
-            NSLayoutConstraint.activate([
-                logoStackView.topAnchor.constraint(equalTo: logoContainerView.topAnchor),
-                logoStackView.bottomAnchor.constraint(equalTo: logoContainerView.bottomAnchor)
-            ])
+            logoStackView.pinToSuperview()
 
             hasConfiguredView = true
         }
@@ -87,14 +112,26 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
 
     private func setupConstraints() {
         NSLayoutConstraint.deactivate(headerConstraints)
+
         headerConstraints = [
             stackContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).priority(.defaultLow),
+            stackContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            stackContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).priority(.defaultLow),
+            stackContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).priority(.defaultLow),
 
-            logoContainerView.centerYAnchor.constraint(equalTo: stackContainer.centerYAnchor)
+            quickAnswersButton.widthAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
+            quickAnswersButton.heightAnchor.constraint(equalToConstant: UX.quickAnswersButtonSize),
         ]
+        // Instead of checking on the state check if the quickAnswer button was added to the superview in order to avoid
+        // potential crashes.
+        // When the button is added to the contentView it is the iPad layout.
+        if quickAnswersButton.superview == contentView {
+            headerConstraints.append(contentsOf: [
+                quickAnswersButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                quickAnswersButton.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor)
+            ])
+        }
 
         NSLayoutConstraint.activate(headerConstraints)
     }
@@ -105,15 +142,17 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
             logoImage.widthAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.width),
             logoImage.heightAnchor.constraint(equalToConstant: UX.firefoxLogoImageSize.height),
             logoTextImage.widthAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.width),
-            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height)
+            logoTextImage.heightAnchor.constraint(equalToConstant: UX.firefoxTextImageSize.height),
+            logoContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.firefoxLogoImageSize.height)
         ]
 
         NSLayoutConstraint.activate(logoConstraints)
     }
 
-    func configure(headerState: HeaderState) {
+    func configure(headerState: HeaderState, onQuickAnswersTapped: (() -> Void)? = nil) {
         self.headerState = headerState
-        setupView(with: headerState.showiPadSetup)
+        self.onQuickAnswersTapped = onQuickAnswersTapped
+        setupView(headerState: headerState)
     }
 
     // MARK: - ThemeApplicable
@@ -135,5 +174,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
                 .withRenderingMode(.alwaysTemplate)
             logoTextImage.tintColor = theme.colors.textPrimary
         }
+
+        quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
+        quickAnswersButton.configuration?.baseForegroundColor = theme.colors.actionPrimary
     }
 }

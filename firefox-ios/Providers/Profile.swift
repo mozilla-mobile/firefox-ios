@@ -28,7 +28,7 @@ import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
 import struct MozillaAppServices.PendingCommand
-import struct MozillaAppServices.RemoteSettingsConfig2
+import struct MozillaAppServices.RemoteSettingsConfig
 
 // TODO: FXIOS-14225 - SyncManager shouldn't be Sendable
 public protocol SyncManager: Sendable {
@@ -141,7 +141,6 @@ protocol Profile: AnyObject, Sendable {
     func storeAndSyncTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func addTabToCommandQueue(_ deviceId: String, url: URL)
-    func removeTabFromCommandQueue(_ deviceId: String, url: URL)
     func flushTabCommands(toDeviceId: String?)
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
@@ -544,10 +543,6 @@ open class BrowserProfile: Profile,
         tabs.addRemoteCommand(deviceId: deviceId, url: url)
     }
 
-    func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
-        tabs.removeRemoteCommand(deviceId: deviceId, url: url)
-    }
-
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
         if let accountManager = RustFirefoxAccounts.shared.accountManager {
@@ -659,9 +654,11 @@ open class BrowserProfile: Profile,
         let remoteSettingsEnvironment = RemoteSettingsEnvironment(rawValue: remoteSettingsEnvironmentKey) ?? .prod
         let remoteSettingsServer = remoteSettingsEnvironment.toRemoteSettingsServer()
         let bucketName = (remoteSettingsServer == .prod ? "main" : "main-preview")
-        let config = RemoteSettingsConfig2(server: remoteSettingsServer,
-                                           bucketName: bucketName,
-                                           appContext: remoteSettingsAppContext())
+        let config = RemoteSettingsConfig(
+            server: remoteSettingsServer,
+            bucketName: bucketName,
+            appContext: remoteSettingsAppContext()
+        )
 
         let url = URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("remote-settings")
         let path = url.path

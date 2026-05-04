@@ -13,7 +13,9 @@ import class MozillaAppServices.Viaduct
 import struct MozillaAppServices.RustAdsClient
 import enum MozillaAppServices.MozAdsEnvironment
 
-class AppDelegate: UIResponder, UIApplicationDelegate, LegacyFeatureFlaggable {
+class AppDelegate: UIResponder,
+                   UIApplicationDelegate,
+                   FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -29,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LegacyFeatureFlaggable {
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
+        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
@@ -83,11 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LegacyFeatureFlaggable {
             .accountManagerInitialized,
             .browserIsReady
         ])
-
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
@@ -171,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, LegacyFeatureFlaggable {
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }

@@ -25,7 +25,6 @@ final class LegacyTabScrollControllerTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         mockGesture = MockUIPanGestureRecognizer()
     }
@@ -34,6 +33,7 @@ final class LegacyTabScrollControllerTests: XCTestCase {
         mockProfile?.shutdown()
         mockProfile = nil
         tab = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 

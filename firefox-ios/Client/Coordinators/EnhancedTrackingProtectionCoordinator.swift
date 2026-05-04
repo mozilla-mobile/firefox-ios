@@ -21,7 +21,7 @@ protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              EnhancedTrackingProtectionMenuDelegate,
-                                             LegacyFeatureFlaggable {
+                                             FeatureFlaggable {
     private struct UX {
         static let popoverPreferredSize = CGSize(width: 480, height: 540)
     }
@@ -32,7 +32,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     private var enhancedTrackingProtectionMenuVC: TrackingProtectionViewController?
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
     private var trackingProtectionRefactorStatus: Bool {
-        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.trackingProtectionRefactor)
     }
     private var trackingProtectionNavController: UINavigationController?
 

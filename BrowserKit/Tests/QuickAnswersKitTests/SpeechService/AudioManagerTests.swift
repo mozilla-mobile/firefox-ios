@@ -10,9 +10,9 @@ import TestKit
 
 @Suite
 struct AudioManagerTests {
+    let testHelper = SwiftTestingHelper()
     let session = MockAudioSession()
     let engine = MockAudioEngine()
-    let testHelper = SwiftTestingHelper()
 
     // MARK: - Audio Session Configuration Tests
     @Test

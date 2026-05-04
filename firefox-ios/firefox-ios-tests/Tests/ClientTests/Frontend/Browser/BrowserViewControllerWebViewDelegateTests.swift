@@ -22,7 +22,6 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = MockTabManager()
         fileManager = MockFileManager()
     }

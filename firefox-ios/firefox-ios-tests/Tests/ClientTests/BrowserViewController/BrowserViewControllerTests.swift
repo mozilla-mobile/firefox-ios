@@ -24,27 +24,25 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        setIsSwipingTabsEnabled(false)
-        setIsHostedSummarizerEnabled(false)
         tabManager = MockTabManager()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
-
         profile = MockProfile()
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
+        setIsSwipingTabsEnabled(false)
+        setIsHostedSummarizerEnabled(false)
         setupStore()
     }
 
     override func tearDown() async throws {
+        DependencyHelperMock().reset()
         profile.shutdown()
         profile = nil
         tabManager = nil
         appStartupTelemetry = nil
         recordVisitManager = nil
         resetStore()
-        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -136,7 +134,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: testTab, isRestoring: false)
         wait(for: [expectation])
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[2] as? GeneralBrowserAction)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[0] as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 5)

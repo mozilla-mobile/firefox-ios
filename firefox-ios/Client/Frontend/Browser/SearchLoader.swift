@@ -15,7 +15,7 @@ private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
 /// FIXME: FXIOS-14129 SearchLoader is not thread safe
-final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, LegacyFeatureFlaggable, @unchecked Sendable {
+final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, @unchecked Sendable {
     fileprivate let profile: Profile
     fileprivate let autocompleteView: Autocompletable
     private let logger: Logger

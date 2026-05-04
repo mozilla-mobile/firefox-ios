@@ -5,7 +5,9 @@
 import Shared
 import Common
 
-class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
+class AIControlsModel: ObservableObject,
+                       FeatureFlaggable,
+                       UserFeaturePreferenceProvider {
     let windowUUID: WindowUUID
     @Published var killSwitchIsOn = false
     @Published var translationEnabled: Bool
@@ -27,6 +29,18 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         String(
             format: .Settings.AIControls.HeaderCard.Title,
             AppName.shortName.rawValue
+        )
+    }()
+
+    let blockedStatusDescription = {
+        try? AttributedString(
+            markdown: .Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription
+        )
+    }()
+
+    let availableStatusDescription = {
+        try? AttributedString(
+            markdown: .Settings.AIControls.AIPoweredFeaturesSection.AvailableStatusDescription
         )
     }()
 
@@ -66,9 +80,9 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         pageSummariesEnabled = self.summarizerConfiguration.isSummarizeFeatureToggledOn
 
         pageSummariesVisible = self.summarizerConfiguration.isSummarizeFeatureEnabled
-        translationsVisible = featureFlags.isFeatureEnabled(.translation, checking: .buildOnly)
+        translationsVisible = featureFlagsProvider.isEnabled(.translation)
 
-        killSwitchIsOn = featureFlags.isFeatureEnabled(.aiKillSwitch, checking: .buildAndUser)
+        killSwitchIsOn = featureFlagsProvider.isEnabled(.aiKillSwitch) && userPreferences.getPreferenceFor(.aiKillSwitch)
     }
 
     @MainActor
@@ -76,12 +90,6 @@ class AIControlsModel: ObservableObject, LegacyFeatureFlaggable {
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
         pageSummariesEnabled = !newValue
         translationEnabled = !newValue
-        prefs.setBool(!newValue, forKey: PrefsKeys.Summarizer.summarizeContentFeature)
-        store.dispatch(TranslationSettingsViewAction(
-            newSettingValue: !newValue,
-            windowUUID: windowUUID,
-            actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
-        ))
     }
 
     @MainActor

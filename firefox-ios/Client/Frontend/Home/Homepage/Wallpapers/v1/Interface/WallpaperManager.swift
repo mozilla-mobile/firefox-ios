@@ -85,9 +85,8 @@ final class WallpaperManager: WallpaperManagerInterface, @unchecked Sendable {
     @MainActor
     func canOnboardingBeShown(using profile: Profile) -> Bool {
         let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
-        let toolbarUpdateCFRShown = !cfrHintUtility.canPresent(.toolbarUpdate)
         let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
-        let cfrsHaveBeenShown = toolbarUpdateCFRShown && jumpBackInCFRShown
+        let cfrsHaveBeenShown = jumpBackInCFRShown
 
         guard cfrsHaveBeenShown,
               hasEnoughThumbnailsToShow,

@@ -31,7 +31,6 @@ final class TabTrayViewController: UIViewController,
                                    UIPageViewControllerDelegate,
                                    UIScrollViewDelegate,
                                    StoreSubscriber,
-                                   LegacyFeatureFlaggable,
                                    TabTraySelectorDelegate,
                                    TabTrayAnimationDelegate,
                                    TabDisplayViewDragAndDropInteraction,
@@ -40,6 +39,7 @@ final class TabTrayViewController: UIViewController,
     private struct UX {
         struct NavigationMenu {
             static let width: CGFloat = 343
+            static let iPadWidth: CGFloat = 500
         }
 
         static let fixedSpaceWidth: CGFloat = 32
@@ -345,7 +345,7 @@ final class TabTrayViewController: UIViewController,
                 navigationItem.rightBarButtonItems = [doneButton]
             }
         case .regular:
-            navigationItem.titleView = segmentedControl
+            navigationItem.titleView = tabTrayUtils.shouldDisplayExperimentUI() ? experimentSegmentControl : segmentedControl
         }
         updateToolbarItems()
     }
@@ -620,6 +620,11 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupForiPad() {
+        guard !tabTrayUtils.shouldDisplayExperimentUI() else {
+            setupForiPadExperiment()
+            return
+        }
+
         navigationItem.titleView = segmentedControl
         view.addSubviews(containerView)
         setupBlurView()
@@ -637,6 +642,30 @@ final class TabTrayViewController: UIViewController,
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func setupForiPadExperiment() {
+        navigationItem.titleView = experimentSegmentControl
+        view.addSubviews(containerView)
+        containerView.addSubview(panelContainer)
+        setupBlurView()
+
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: view.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+            // Because experimentSegmentControl doesn't inherit from UISegmentControl
+            // we need to set height and width constraints
+            experimentSegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.iPadWidth),
+            experimentSegmentControl.heightAnchor.constraint(equalToConstant: tabTrayUtils.segmentedControlHeight)
         ])
     }
 

@@ -28,13 +28,12 @@ final class TabManagerTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        await DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
         let uuid: WindowUUID = .XCTestDefaultUUID
         tabWindowUUID = uuid
 
         mockProfile = MockProfile()
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()
         mockSessionStore = MockTabSessionStore()
@@ -46,6 +45,7 @@ final class TabManagerTests: XCTestCase {
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -56,12 +56,8 @@ final class TabManagerTests: XCTestCase {
         tabs.append(contentsOf: generateTabs(ofType: .normalOlderLastMonth, count: 2))
         tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
         let subject = createSubject(tabs: tabs)
-        var normalTabs = subject.recentlyAccessedNormalTabs
+        let normalTabs = subject.recentlyAccessedNormalTabs
         XCTAssertEqual(normalTabs.count, 7)
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
-        normalTabs = subject.recentlyAccessedNormalTabs
-        XCTAssertEqual(normalTabs.count, 7)
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
     @MainActor
@@ -151,31 +147,6 @@ final class TabManagerTests: XCTestCase {
         let addedTab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
         let tab = subject.getTabForURL(URL(string: "https://mozilla.com/")!)
         XCTAssertEqual(tab, addedTab)
-    }
-
-    @MainActor
-    func testUndoCloseTab() {
-        let subject = createSubject()
-        let tab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        tab.url = URL(string: "https://mozilla.com/")!
-        XCTAssertEqual(subject.selectedIndex, -1)
-        subject.backupCloseTab = BackupCloseTab(tab: tab, isSelected: true)
-        subject.undoCloseTab()
-        XCTAssertEqual(subject.selectedIndex, 0)
-    }
-
-    @MainActor
-    func testUndoCloseTabWithSelectedTab() {
-        let closedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        closedTab.url = URL(string: "https://mozilla.com/")!
-        let selectedTab = Tab(profile: mockProfile, windowUUID: tabWindowUUID)
-        selectedTab.url = URL(string: "https://mozilla.com/1")!
-        let subject = createSubject(tabs: [selectedTab])
-        subject.selectTab(selectedTab)
-        XCTAssertEqual(subject.selectedIndex, 0)
-        subject.backupCloseTab = BackupCloseTab(tab: closedTab, isSelected: true)
-        subject.undoCloseTab()
-        XCTAssertEqual(subject.selectedIndex, 1)
     }
 
     // MARK: - Document pause - restore

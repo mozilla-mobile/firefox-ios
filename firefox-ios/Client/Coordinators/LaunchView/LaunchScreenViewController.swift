@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, LegacyFeatureFlaggable {
+class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
@@ -14,7 +14,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
     private var shouldTriggerSplashScreenExperiment: Bool {
-        return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.splashScreen)
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 

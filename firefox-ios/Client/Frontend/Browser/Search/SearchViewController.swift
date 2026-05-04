@@ -37,7 +37,8 @@ protocol SearchViewControllerDelegate: AnyObject {
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             SearchViewDelegate,
-                            LegacyFeatureFlaggable,
+                            FeatureFlaggable,
+                            UserFeaturePreferenceProvider,
                             Notifiable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
 
@@ -628,7 +629,8 @@ class SearchViewController: SiteTableViewController,
                     }
                 }
             case .firefoxSuggestions:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                    && userPreferences.getPreferenceFor(.firefoxSuggestFeature) {
                     let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
                     if searchTelemetry?.visibleFirefoxSuggestions
                         .contains(where: { $0.url == firefoxSuggestion.url }) == false {

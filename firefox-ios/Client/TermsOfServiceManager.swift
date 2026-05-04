@@ -8,7 +8,7 @@ import Glean
 import MozillaAppServices
 import OnboardingKit
 
-struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
+struct TermsOfServiceManager: FeatureFlaggable, Sendable {
     var prefs: Prefs
 
     init(prefs: Prefs) {
@@ -16,11 +16,11 @@ struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
     }
 
     var isFeatureEnabled: Bool {
-        featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.tosFeature)
     }
 
     var isAccepted: Bool {
@@ -28,7 +28,7 @@ struct TermsOfServiceManager: LegacyFeatureFlaggable, Sendable {
     }
 
     var shouldShowScreen: Bool {
-        guard featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser) else { return false }
+        guard featureFlagsProvider.isEnabled(.tosFeature) else { return false }
         return prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) == nil
     }
 

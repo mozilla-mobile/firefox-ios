@@ -23,6 +23,10 @@ class WebsiteDataManagementViewController: UIViewController,
             guard #available(iOS 26.0, *) else { return .grouped }
             return .insetGrouped
         }
+        static var shouldShowSectionBorders: Bool {
+            guard #available(iOS 26.0, *) else { return true }
+            return false
+        }
         static var sectionTopMarginForCurrentOS: CGFloat {
             guard #available(iOS 26.0, *) else { return 0 }
             return UX.sectionTopMargin
@@ -104,7 +108,7 @@ class WebsiteDataManagementViewController: UIViewController,
                           height: SettingsUX.TableViewHeaderFooterHeight)
         )
         footer.applyTheme(theme: currentTheme())
-        footer.showBorder(for: .top, true)
+        footer.showBorder(for: .top, UX.shouldShowSectionBorders)
         tableView.tableFooterView = footer
 
         view.addSubview(tableView)
@@ -305,8 +309,8 @@ class WebsiteDataManagementViewController: UIViewController,
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
-        headerView.showBorder(for: .top, true)
-        headerView.showBorder(for: .bottom, true)
+        headerView.showBorder(for: .top, UX.shouldShowSectionBorders)
+        headerView.showBorder(for: .bottom, UX.shouldShowSectionBorders)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
@@ -321,7 +325,7 @@ class WebsiteDataManagementViewController: UIViewController,
             }
         } else if section == .clearButton {
             headerView.showBorder(for: .top, false)
-            headerView.showBorder(for: .bottom, true)
+            headerView.showBorder(for: .bottom, UX.shouldShowSectionBorders)
         }
 
         return headerView
@@ -344,8 +348,8 @@ class WebsiteDataManagementViewController: UIViewController,
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        footerView.showBorder(for: .top, true)
-        footerView.showBorder(for: .bottom, true)
+        footerView.showBorder(for: .top, UX.shouldShowSectionBorders)
+        footerView.showBorder(for: .bottom, UX.shouldShowSectionBorders)
         return footerView
     }
 

@@ -82,10 +82,10 @@
 /* Text to let users know how many trackers were blocked on the current website. %@ is the number of trackers blocked. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Pelacak diblokir: %@";
 
-/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how standard mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStandardModeFooterText.v150" = "Standar memblokir pelacak umum setelah laman mulai dimuat, sehingga Anda mungkin melihat cacah pelacak yang lebih tinggi. %@";
 
-/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more informations about current Tracking Protection mode. e.g Learn more */
+/* Text to let users know how strict mode for Tracking Protection work. %@ is a tappable text which contains a link with more information about current Tracking Protection mode. e.g Learn more */
 "Menu.EnhancedTrackingProtection.Details.TrackersStrictModeFooterText.v150" = "Ketat memblokir lebih banyak pelacak dengan menghentikannya sebelum laman dimuat, sehingga Anda mungkin melihat cacah pelacak yang lebih rendah. %@";
 
 /* Text to let users know the site verifier, where %@ represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */

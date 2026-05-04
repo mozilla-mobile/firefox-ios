@@ -21,8 +21,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
         mockProfile.prefs = mockPrefs
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
     override func tearDown() async throws {
@@ -109,22 +108,6 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for ai kill switch feature")
         }
-
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.translationsFeature) {
-            XCTAssertFalse(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
-
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) {
-            XCTAssertFalse(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
-
-        wait(for: [expectation], timeout: 1.0)
-        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
-        XCTAssertFalse(try XCTUnwrap(action.newSettingValue))
     }
 
     @MainActor
@@ -141,19 +124,6 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for ai kill switch feature")
         }
-
-        if let prefVal = mockPrefs.boolForKey(PrefsKeys.Summarizer.summarizeContentFeature) {
-            XCTAssertTrue(prefVal)
-        } else {
-            XCTFail("No pref value for translations feature")
-        }
-
-        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
-
-        wait(for: [expectation], timeout: 1.0)
-        let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
-        XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
-        XCTAssertTrue(aiControlsModel.translationEnabled)
     }
 
     @MainActor

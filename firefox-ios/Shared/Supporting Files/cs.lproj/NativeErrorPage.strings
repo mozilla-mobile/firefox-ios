@@ -26,7 +26,7 @@
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Zjistit více";
 
 /* On certificate error page, this is the text on a button that will proceed to the site despite the certificate error. %@ is the site URL. This is a risky action. */
-"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Pokračovat na %@ (rizikové)";
+"NativeErrorPage.BadCertDomain.ProceedButton.v149" = "Pokračovat na %@ (riskantní)";
 
 /* On certificate error page, this is the title warning the user about a potential security issue. */
 "NativeErrorPage.BadCertDomain.TitleLabel.v149" = "Buďte opatrní. Něco není v pořádku.";

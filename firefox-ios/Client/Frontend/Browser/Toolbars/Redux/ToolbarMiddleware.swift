@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: LegacyFeatureFlaggable {
+final class ToolbarMiddleware {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -369,6 +369,9 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                                                   actionType: GeneralBrowserActionType.showSummarizer)
                 store.dispatch(action)
             }
+        case .translate:
+            // Long-press on translate is handled in TranslationsMiddleware.
+            break
         default:
             break
         }

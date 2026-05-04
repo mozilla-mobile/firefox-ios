@@ -23,9 +23,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         urlBar = MockURLBarView()
         overlayState = MockOverlayModeManager()
         overlayState.setURLBar(urlBarView: urlBar)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: nil)
+        subject = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
     }
 
     override func tearDown() async throws {
@@ -47,34 +45,28 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     // MARK: Jump Back in and Synced tabs
     func test_shouldPresentJumpBackHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: true)
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarUpdateKey.rawValue)
+                                                   overlayState: overlayState)
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
 
     func test_shouldPresentJumpBackHint_withToolbarUpdateFeatureDisabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: false)
+                                                   overlayState: overlayState)
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
     }
 
     func test_shouldPresentSyncedTabHint() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: true)
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarUpdateKey.rawValue)
+                                                   overlayState: overlayState)
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }
 
     func test_shouldPresentSyncedHint_withToolbarUpdateFeatureDisabled() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: false)
+                                                   overlayState: overlayState)
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }
@@ -90,8 +82,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     func test_shouldNotPresentJumpBackHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: false)
+                                                   overlayState: overlayState)
         overlayState.openNewTab(url: nil, newTabSettings: .topSites)
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertFalse(result)
@@ -113,8 +104,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     func test_shouldNotPresentSyncedHint_WithOverlayMode() {
         subject = ContextualHintEligibilityUtility(with: profile,
-                                                   overlayState: overlayState,
-                                                   isToolbarUpdateCFRFeatureEnabled: false)
+                                                   overlayState: overlayState)
         overlayState.openNewTab(url: nil, newTabSettings: .topSites)
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)

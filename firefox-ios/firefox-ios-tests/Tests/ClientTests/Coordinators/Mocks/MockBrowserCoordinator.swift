@@ -52,6 +52,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
     var shouldShowNewTabToastCalled = 0
     var popToBVCCalled = 0
     var openLearnMoreFromNativeErrorPageCalled = 0
+    var showQuickAnswersCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -173,6 +174,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler,
 
     func openLearnMoreFromNativeErrorPage(url: URL) {
         openLearnMoreFromNativeErrorPageCalled += 1
+    }
+
+    func showQuickAnswers() {
+        showQuickAnswersCalled += 1
     }
 
     // MARK: - BrowserDelegate

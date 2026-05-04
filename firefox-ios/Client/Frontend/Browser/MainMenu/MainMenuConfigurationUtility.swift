@@ -7,7 +7,7 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable, LegacyFeatureFlaggable {
+struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private struct Icons {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let bookmarksTray = StandardImageIdentifiers.Large.bookmarkTray
@@ -28,11 +28,11 @@ struct MainMenuConfigurationUtility: Equatable, LegacyFeatureFlaggable {
     }
 
     private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.reportSiteIssue)
     }
 
     private var isNewAppearanceMenuOn: Bool {
-        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.appearanceMenu)
     }
 
     private var isSummarizerOn: Bool {
@@ -412,7 +412,7 @@ struct MainMenuConfigurationUtility: Equatable, LegacyFeatureFlaggable {
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly),
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker),
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil

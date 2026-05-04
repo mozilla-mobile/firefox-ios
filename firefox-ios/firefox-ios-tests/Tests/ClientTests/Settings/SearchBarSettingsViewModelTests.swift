@@ -16,23 +16,24 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         let profile = MockProfile(databasePrefix: "SearchBarSettingsTests")
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         prefs = profile.prefs
         prefs.clearAll()
         mockNotificationCenter = MockNotificationCenter()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
         prefs.clearAll()
         prefs = nil
         mockNotificationCenter = nil
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
     // MARK: Default
     func testDefaultSearchPosition() {
         let viewModel = createViewModel()
-        XCTAssertEqual(viewModel.searchBarPosition, .top)
+        XCTAssertEqual(viewModel.searchBarPosition, .bottom)
     }
 
     // MARK: Saved
@@ -99,7 +100,7 @@ class SearchBarSettingsViewModelTests: XCTestCase {
         let viewModel = createViewModel()
         let searchBarPosition = viewModel.searchBarPosition
 
-        XCTAssertEqual(searchBarPosition, .top)
+        XCTAssertEqual(searchBarPosition, .bottom)
         XCTAssertEqual(mockNotificationCenter.postCallCount, 0)
     }
 

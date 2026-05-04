@@ -18,7 +18,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setIsHostedSummarizerFeatureEnabled(enabled: false)
         setIsSummarizerLanguageExpansionEnabled(enabled: false)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: MockTabManager())

@@ -112,6 +112,8 @@ public struct PrefsKeys {
     public struct HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
     }
 
     public struct SearchSettings {
@@ -159,7 +161,6 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case relayMaskKey = "ContextualHintRelayMaskKey"
-        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
@@ -219,9 +220,6 @@ public struct PrefsKeys {
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"
-
-    // Only used in unit tests to override the user's setting for nimbus features
-    public static let NimbusUserEnabledFeatureTestsOverride = "NimbusUserEnabledFeatureTestsOverride"
 
     // Only used to force faster Terms of Use timeout for debugging purposes
     public static let FasterTermsOfUseTimeoutOverride = "FasterTermsOfUseTimeoutOverride"

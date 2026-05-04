@@ -146,6 +146,10 @@ final class AddCreditCardScreen {
         }
 
         creditCard_SaveButton.waitAndTap()
+        // We need to dismiss the number pad first on iPad()
+        if BaseTestCase().iPad() {
+            creditCard_SaveButton.tapIfExists()
+        }
     }
 
     func interactWithCreditCardForm() {
