@@ -672,16 +672,16 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task { [weak tab] in
+        Task { [weak tab, self] in
             guard let tab else { return }
             do {
-                let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
+                let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
             } catch {
-                logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
+                self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            await MainActor.run { dispatchDidSetScreenshotAction(for: tab) }
+            await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
         }
     }
 
@@ -956,8 +956,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func cleanUpTabSessionData() {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
-        Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+        Task { [weak self] in
+            await self?.tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
     }
 
