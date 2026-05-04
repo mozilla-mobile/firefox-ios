@@ -949,8 +949,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
-        Task {
-            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+        Task { [weak self] in
+            try? await self?.imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
     }
 
@@ -979,8 +979,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
-        Task {
-            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
+        Task { [weak self] in
+            await self?.tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
     }
 
