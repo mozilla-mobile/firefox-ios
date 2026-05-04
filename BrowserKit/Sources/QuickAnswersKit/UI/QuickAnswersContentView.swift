@@ -147,10 +147,6 @@ final class QuickAnswersContentView: UIView, ThemeApplicable {
         }
     }
 
-    func configureErrorAlert() {
-        // TODO: FXIOS-14686 - Add alert UI when error occurs
-    }
-
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Theme) {
         self.theme = theme
