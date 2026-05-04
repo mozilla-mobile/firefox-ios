@@ -147,7 +147,7 @@ class TabManagerTestsBase: XCTestCase {
         let tabs6to7 = generateTabs(ofType: .normal, count: 2)
         let tabs8 = generateTabs(ofType: .privateAny, count: 1)
 
-        let tabManager = createSubject(tabs: tabs1 + tabs2 + tabs3to5 + tabs6to7 + tabs8)
+        let tabManager = createSubject(tabs: tabs1 + tabs2 + tabs3to5 + tabs6to7 + tabs8, file: file, line: line)
         XCTAssertEqual(tabManager.tabs.count, 9, file: file, line: line)
         XCTAssertEqual(tabManager.normalTabs.count, 5, file: file, line: line)
         XCTAssertEqual(tabManager.privateTabs.count, 4, file: file, line: line)
