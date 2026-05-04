@@ -256,8 +256,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
         let supported = await translationsService.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
         let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
-        let filteredPreferred = preferred.filter { $0 != pageLanguage }
-        guard let targetLanguage = filteredPreferred.first else { return false }
+        if let pageLanguage, preferred.contains(pageLanguage) { return false }
+        guard let targetLanguage = preferred.first else { return false }
         let isPrivate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
