@@ -29,70 +29,7 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertNotNil(tab)
     }
 
-    @MainActor
-    func testRemoveTabs() {
-        let subject = createSubject(tabs: generateTabs(count: 5))
-        let tabs = subject.tabs
-        subject.removeTabs(tabs)
-        XCTAssertEqual(subject.tabs.count, 0)
-    }
-
-    @MainActor
-    func testRemoveTabsByURLs() {
-        let subject = createSubject(tabs: generateTabs(count: 5))
-        subject.removeTabs(by: [URL(string: "https://mozilla.com?item=4")!, URL(string: "https://mozilla.com?item=1")!])
-        let remainingURLs = subject.tabs.compactMap { $0.url?.absoluteString }
-        XCTAssertEqual(remainingURLs, ["https://mozilla.com?item=0", "https://mozilla.com?item=2", "https://mozilla.com?item=3"])
-    }
-
-    @MainActor
-    func testRemoveAllTabsForPrivateMode() {
-        var tabs = generateTabs(count: 5)
-        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
-        let subject = createSubject(tabs: tabs)
-        XCTAssertEqual(subject.tabs.count, 9)
-        subject.removeAllTabs(isPrivateMode: true)
-        XCTAssertEqual(subject.tabs.count, 5)
-    }
-
-    // This test has to be run on the main thread since we are messing with the WebView.
-    @MainActor
-    func testRemoveAllTabsCallsSaveTabSession() {
-        let subject = createSubject()
-        let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
-        subject.selectTab(tab)
-        subject.removeAllTabs(isPrivateMode: false)
-
-        // Save tab session is actually called 3 times for one remove all call
-        // 1. Save tab session for currently selected tab before delete to preserve scroll position
-        // 1. AddTab for the new created homepage tab calls commitChanges
-        // 2. selectTab persists changes for currently selected tab before moving to new Tab
-        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 3)
-    }
-
-    @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
-        var tabs = generateTabs(count: 5)
-        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
-        let subject = createSubject(tabs: tabs)
-        XCTAssertEqual(subject.tabs.count, 9)
-        subject.removeAllTabs(isPrivateMode: false)
-        // 5, private mode tabs (4) plus one new normal tab (1)
-        XCTAssertEqual(subject.tabs.count, 5)
-    }
-
-    @MainActor
-    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
-        var tabs = generateTabs(count: 5)
-        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
-        let subject = createSubject(tabs: tabs)
-        XCTAssertEqual(subject.tabs.count, 9)
-        subject.removeAllTabs(isPrivateMode: false)
-        // One new normal tab (1)
-        XCTAssertEqual(subject.tabs.count, 1)
-    }
+    // MARK: - Get tabs
 
     @MainActor
     func testGetTabForUUID() {
@@ -132,6 +69,8 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.normalTabs.count, totalTabCount, "The total tab count should not have changed")
     }
 
+    // MARK: Add tabs
+
     @MainActor
     func test_addTabsForURLs() {
         let subject = createSubject()
@@ -152,6 +91,89 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertEqual(subject.tabs.count, 1)
         XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
         XCTAssertEqual(subject.tabs.first?.isPrivate, true)
+    }
+
+    // MARK: - normalTabs / privateTabs cache tests
+
+    @MainActor
+    func testNormalAndPrivateTabs_sumEqualsAllTabs() {
+        var tabs = generateTabs(ofType: .normal, count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 3))
+        let subject = createSubject(tabs: tabs)
+
+        XCTAssertEqual(subject.normalTabs.count + subject.privateTabs.count, subject.tabs.count)
+        XCTAssertEqual(subject.normalTabs.count, 5)
+        XCTAssertEqual(subject.privateTabs.count, 3)
+    }
+
+    @MainActor
+    func testNormalTabs_cacheInvalidatedAfterTabAdded() {
+        // Cache must be cleared when `tabs` grows, otherwise the new tab is invisible.
+        let subject = createSubject(tabs: generateTabs(count: 3))
+        XCTAssertEqual(subject.normalTabs.count, 3)
+
+        subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false)
+        XCTAssertEqual(
+            subject.normalTabs.count,
+            4,
+            "normalTabs should reflect the newly added tab after cache invalidation."
+        )
+    }
+
+    @MainActor
+    func testPrivateTabs_cacheInvalidatedAfterTabAdded() {
+        let subject = createSubject(tabs: generateTabs(ofType: .privateAny, count: 2))
+        XCTAssertEqual(subject.privateTabs.count, 2)
+
+        subject.addTabsForURLs([URL(string: "https://example.com")!], zombie: false, isPrivate: true)
+        XCTAssertEqual(
+            subject.privateTabs.count,
+            3,
+            "privateTabs should reflect the newly added tab after cache invalidation."
+        )
+    }
+
+    @MainActor
+    func testNormalTabs_cacheInvalidatedAfterTabRemoved() {
+        let tabs = generateTabs(count: 3)
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.normalTabs.count, 3)
+
+        subject.removeTab(tabs[0].tabUUID)
+        XCTAssertEqual(
+            subject.normalTabs.count,
+            2,
+            "normalTabs should reflect the removal after cache invalidation."
+        )
+    }
+
+    @MainActor
+    func testNormalAndPrivateTabs_consistentAfterMutation() {
+        // Both computed properties read from the same cached split.
+        // They must agree on the total after a mutation.
+        var tabs = generateTabs(count: 4)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 2))
+        let subject = createSubject(tabs: tabs)
+
+        _ = subject.normalTabs
+        _ = subject.privateTabs // Should hit the same cache, does not recompute.
+
+        subject.removeTab(tabs[0].tabUUID) // Invalidates the internal cache.
+
+        let normalTabs = subject.normalTabs
+        let privateTabs = subject.privateTabs
+        XCTAssertEqual(
+            normalTabs.count + privateTabs.count,
+            subject.tabs.count,
+            "normalTabs and privateTabs must be consistent with each other after mutation."
+        )
+    }
+
+    @MainActor
+    func testNormalAndPrivateTabs_emptyWhenNoTabs() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.normalTabs.isEmpty)
+        XCTAssertTrue(subject.privateTabs.isEmpty)
     }
 
     // MARK: - Document pause - restore

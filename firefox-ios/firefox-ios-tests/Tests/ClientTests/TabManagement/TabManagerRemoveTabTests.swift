@@ -11,6 +11,71 @@ import Common
 @testable import Client
 
 final class TabManagerRemoveTabTests: TabManagerTestsBase {
+    @MainActor
+    func testRemoveTabs() {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        let tabs = subject.tabs
+        subject.removeTabs(tabs)
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
+
+    @MainActor
+    func testRemoveTabsByURLs() {
+        let subject = createSubject(tabs: generateTabs(count: 5))
+        subject.removeTabs(by: [URL(string: "https://mozilla.com?item=4")!, URL(string: "https://mozilla.com?item=1")!])
+        let remainingURLs = subject.tabs.compactMap { $0.url?.absoluteString }
+        XCTAssertEqual(remainingURLs, ["https://mozilla.com?item=0", "https://mozilla.com?item=2", "https://mozilla.com?item=3"])
+    }
+
+    @MainActor
+    func testRemoveAllTabsForPrivateMode() {
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        subject.removeAllTabs(isPrivateMode: true)
+        XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    // This test has to be run on the main thread since we are messing with the WebView.
+    @MainActor
+    func testRemoveAllTabsCallsSaveTabSession() {
+        let subject = createSubject()
+        let tab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab)
+        subject.removeAllTabs(isPrivateMode: false)
+
+        // Save tab session is actually called 3 times for one remove all call
+        // 1. Save tab session for currently selected tab before delete to preserve scroll position
+        // 1. AddTab for the new created homepage tab calls commitChanges
+        // 2. selectTab persists changes for currently selected tab before moving to new Tab
+        XCTAssertEqual(mockSessionStore.saveTabSessionCallCount, 3)
+    }
+
+    @MainActor
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsFalse() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        subject.removeAllTabs(isPrivateMode: false)
+        // 5, private mode tabs (4) plus one new normal tab (1)
+        XCTAssertEqual(subject.tabs.count, 5)
+    }
+
+    @MainActor
+    func testRemoveAllTabsForNotPrivateModeWhenClosePrivateTabsSettingIsTrue() {
+        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        var tabs = generateTabs(count: 5)
+        tabs.append(contentsOf: generateTabs(ofType: .privateAny, count: 4))
+        let subject = createSubject(tabs: tabs)
+        XCTAssertEqual(subject.tabs.count, 9)
+        subject.removeAllTabs(isPrivateMode: false)
+        // One new normal tab (1)
+        XCTAssertEqual(subject.tabs.count, 1)
+    }
+
     // MARK: - Remove Tab (removing selected normal tab)
 
     @MainActor
