@@ -110,7 +110,6 @@ let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allSettingsScreens = [
     SearchSettings,
-    AddCustomSearchSettings,
     NewTabSettings,
     MailAppSettings,
     DisplaySettings,
@@ -123,7 +122,8 @@ let allSettingsScreens = [
     AutofillPasswordSettings,
     AppIconSettings,
     ToolbarSettings,
-    HomeSettings
+    HomeSettings,
+    AddCustomSearchSettings,
 ]
 
 let allHomePanels = [
