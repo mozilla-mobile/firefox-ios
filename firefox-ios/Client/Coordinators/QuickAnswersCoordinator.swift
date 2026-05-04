@@ -34,7 +34,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
         let controller = QuickAnswersViewController(
             navigationHandler: self,
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
         )
         router.present(controller, animated: shouldAnimateTransition)
     }

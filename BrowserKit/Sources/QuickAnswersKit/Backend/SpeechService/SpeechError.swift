@@ -5,10 +5,11 @@
 enum SpeechError: Error, Equatable {
     case alreadyRecording
     case failedToAllocateBuffer
+    case microphonePermissionDenied(isFirstTime: Bool)
     case noAudioFormat
     case noInputContinuation
-    case permissionDenied
     case recognizerNotAvailable
+    case speechRecognitionPermissionDenied(isFirstTime: Bool)
     case unableToSupportLocale
     case unknown
 }
