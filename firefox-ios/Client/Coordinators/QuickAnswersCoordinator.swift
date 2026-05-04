@@ -5,10 +5,12 @@
 import Foundation
 import QuickAnswersKit
 import Common
+import Shared
 import UIKit
 
 final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHandler {
     private weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
+    private let prefs: Prefs
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
     private let onNavigate: (QuickAnswersNavigationType) -> Void
@@ -18,12 +20,14 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
 
     init(
         parentCoordinatorDelegate: ParentCoordinatorDelegate?,
+        prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
         router: Router,
         onNavigate: @escaping (QuickAnswersNavigationType) -> Void,
     ) {
         self.parentCoordinatorDelegate = parentCoordinatorDelegate
+        self.prefs = prefs
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.onNavigate = onNavigate
@@ -33,6 +37,7 @@ final class QuickAnswersCoordinator: BaseCoordinator, QuickAnswersNavigationHand
     func start() {
         let controller = QuickAnswersViewController(
             navigationHandler: self,
+            prefs: prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
         )

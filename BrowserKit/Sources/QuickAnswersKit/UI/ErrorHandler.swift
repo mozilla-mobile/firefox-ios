@@ -57,6 +57,11 @@ final class ErrorHandler {
         // TODO: - FXIOS-15573 Handle Search errors
     }
 
+    // MARK: - Other Errors
+    func handleInitializationError() {
+        // TODO: - FXIOS-15573 Handle errors
+    }
+
     // MARK: - Private
 
     // TODO: - FXIOS-14720 Add Strings and accessibility ids

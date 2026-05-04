@@ -28,18 +28,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
+        config: QuickAnswersConfig = QuickAnswersConfig(),
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
-            config: QuickAnswersConfig(),
             liteLLMCreator: LiteLLMCreator()
         ),
         prefs: Prefs
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        let config = QuickAnswersConfig()
-        guard let resultsService = resultsServiceFactory.make(prefs: prefs, config: config) else {
-            throw ResultsServiceError.unableToCreateService
-        }
-        self.resultsService = resultsService
+        self.resultsService = try resultsServiceFactory.make(prefs: prefs, config: config)
     }
 
     // MARK: Speech Service
@@ -70,13 +66,15 @@ final class DefaultQuickAnswersService: QuickAnswersService {
 
     /// Performs a search for the given transcription using the ResultsService.
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        do {
-            let result = try await resultsService.fetchResults(for: text)
-            return .success(result)
-        } catch {
-            // TODO: FXIOS-15198 Handle errors appropriately
-            return .failure(.unknown)
-        }
+        // TODO: FXIOS-15123 Add back call when integration with backend
+//        do {
+//            let result = try await resultsService.fetchResults(for: text)
+//            return .success(result)
+//        } catch {
+//            // TODO: FXIOS-15198 Handle errors appropriately
+//            return .failure(.unknown)
+//        }
+        return .success(SearchResult.empty())
     }
 
     // MARK: Private Methods

@@ -4,6 +4,7 @@
 
 @testable import QuickAnswersKit
 import XCTest
+import Shared
 import TestKit
 
 @MainActor
@@ -131,7 +132,9 @@ final class QuickAnswersViewModelTests: XCTestCase {
 
     // MARK: - Helper
     private func createSubject() -> QuickAnswersViewModel {
-        let model = QuickAnswersViewModel(service: mockService)
+        let model = QuickAnswersViewModel(prefs: MockProfilePrefs(), makeService: { _ in
+            return self.mockService
+        })
         trackForMemoryLeaks(model)
         return model
     }
