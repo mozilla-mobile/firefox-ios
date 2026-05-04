@@ -1181,11 +1181,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // its same-URL reload via `pendingRestoreReload`; in that case we keep the
         // already-dispatched `.inactive` and just consume the flag, avoiding an icon flash.
         let isSameURLReload = previousURL == webView.url
-        let isPendingRestore = translationsTabStateStore.state(for: tab.tabUUID).pendingRestoreReload
-        if isSameURLReload && isPendingRestore {
-            translationsTabStateStore.updateState(for: tab.tabUUID) { $0.pendingRestoreReload = false }
+        if isSameURLReload && tab.pendingRestoreReload {
+            tab.pendingRestoreReload = false
         } else {
-            translationsTabStateStore.removeState(for: tab.tabUUID)
+            tab.translationConfiguration = nil
         }
 
         if !tab.adsTelemetryRedirectUrlList.isEmpty,

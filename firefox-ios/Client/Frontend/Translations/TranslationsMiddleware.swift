@@ -31,14 +31,6 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
     /// page load for that window, then the entry is removed. On iPhone only one window exists.
     private var restoringWindows: Set<WindowUUID> = []
 
-    /// Per-window registry of coordinator-owned `TranslationsTabStateStore` instances. Each
-    /// `BrowserCoordinator` registers its store at startup; weak refs let the coordinator's
-    /// lifecycle drive ownership without the middleware needing to track teardown.
-    private struct WeakStoreRef {
-        weak var store: TranslationsTabStateStoring?
-    }
-    private var translationsTabStateStores: [WindowUUID: WeakStoreRef] = [:]
-
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -54,25 +46,6 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         self.translationsTelemetry = translationsTelemetry
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
-    }
-
-    /// Registers a coordinator-owned `TranslationsTabStateStore` for the window. Called by
-    /// `BrowserCoordinator` at startup so the middleware can mirror dispatched translation
-    /// state onto the tab without the store having to live on shared infrastructure types.
-    func register(store: TranslationsTabStateStoring, for windowUUID: WindowUUID) {
-        translationsTabStateStores[windowUUID] = WeakStoreRef(store: store)
-    }
-
-    /// Removes the registered store entry for the window. Called during UIScene teardown to
-    /// keep the dictionary free of zombie entries (the weak ref inside the struct goes nil
-    /// when the coordinator deallocates, but the struct value itself stays in the dictionary
-    /// until explicitly removed).
-    func unregister(windowUUID: WindowUUID) {
-        translationsTabStateStores[windowUUID] = nil
-    }
-
-    private func translationsTabStateStore(for windowUUID: WindowUUID) -> TranslationsTabStateStoring? {
-        return translationsTabStateStores[windowUUID]?.store
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -220,9 +193,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
     }
 
     private func markPendingRestoreReload(on tab: Tab?) {
-        guard let tab,
-              let store = translationsTabStateStore(for: tab.windowUUID) else { return }
-        store.updateState(for: tab.tabUUID) { $0.pendingRestoreReload = true }
+        tab?.pendingRestoreReload = true
     }
 
     private func showLanguagePickerForActiveTranslation(
@@ -306,18 +277,12 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
-    /// Mirrors the dispatched translation config onto the originating tab via the
-    /// `BrowserCoordinator`-owned `TranslationsTabStateStore` (registered with the middleware
-    /// at coordinator startup). The tab parameter is captured at sync entry to async paths so
-    /// a tab switch mid-flight does not redirect the write to the new active tab.
+    /// Mirrors the dispatched translation config onto the originating tab so it survives tab-tray
+    /// round-trips — the WKWebView's translated DOM persists across tab switches and the toolbar
+    /// state must stay coherent with it. Async paths must pre-capture the tab so a tab switch
+    /// mid-flight does not stomp the new active tab's state.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
-        guard let tab,
-              let store = translationsTabStateStore(for: tab.windowUUID) else { return }
-        if let config {
-            store.updateState(for: tab.tabUUID) { $0.translationConfiguration = config }
-        } else {
-            store.removeState(for: tab.tabUUID)
-        }
+        tab?.translationConfiguration = config
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {

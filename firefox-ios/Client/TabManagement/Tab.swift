@@ -405,6 +405,17 @@ class Tab: NSObject,
 
     var contentBlocker: FirefoxTabContentBlocker?
 
+    /// Per-tab translation state. Mirrors the Redux `AddressBarState.translationConfiguration` so the
+    /// toolbar/menu can be re-synced with the WKWebView's translated DOM after a tab switch.
+    /// Cleared on real navigation in `webView(_:didCommit:)`.
+    var translationConfiguration: TranslationConfiguration?
+
+    /// One-shot flag set by the middleware before the restore-original-page reload (FXIOS-15227).
+    /// `webView(_:didCommit:)` consumes it to distinguish a restore-flow same-URL reload (where
+    /// the just-dispatched `.inactive` must be kept) from a manual reload (where the cache must
+    /// be cleared so eligibility can re-run against the fresh DOM).
+    var pendingRestoreReload = false
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 

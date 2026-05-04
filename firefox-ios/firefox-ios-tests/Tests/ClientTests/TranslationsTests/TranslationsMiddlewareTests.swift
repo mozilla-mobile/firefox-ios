@@ -17,7 +17,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
     private var mockTranslationsTelemetry: MockTranslationsTelemetry!
-    private var translationsTabStateStore: TranslationsTabStateStore!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -29,7 +28,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             tabManager: mockTabManager
         )
         mockTranslationsTelemetry = MockTranslationsTelemetry()
-        translationsTabStateStore = TranslationsTabStateStore()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -44,7 +42,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager = nil
         mockWindowManager = nil
         mockTranslationsTelemetry = nil
-        translationsTabStateStore = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -353,8 +350,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
-        XCTAssertEqual(stored?.state, .inactive)
+        XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
     }
 
     /// Ineligible page clears the tab's stored translation config.
@@ -366,9 +362,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         // Pre-seed a stale state to verify the middleware actively clears it.
-        translationsTabStateStore.updateState(for: tab.tabUUID) {
-            $0.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
-        }
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
         mockTabManager.selectedTab = tab
 
         let subject = createSubject(translationsService: mockTranslationService)
@@ -385,8 +379,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [expectation], timeout: 1.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
-        XCTAssertNil(stored)
+        XCTAssertNil(tab.translationConfiguration)
     }
 
     /// Mid-eligibility tab switch: result lands on the originating tab, not the new active tab.
@@ -421,9 +414,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager.selectedTab = tabB
 
         wait(for: [expectation], timeout: 1.0)
-        let store = translationsTabStateStore!
-        XCTAssertEqual(store.state(for: tabA.tabUUID).translationConfiguration?.state, .inactive)
-        XCTAssertNil(store.state(for: tabB.tabUUID).translationConfiguration)
+        XCTAssertEqual(tabA.translationConfiguration?.state, .inactive)
+        XCTAssertNil(tabB.translationConfiguration)
     }
 
     /// Translation completion persists `.active` to the tab's store entry.
@@ -451,9 +443,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [completedExpectation], timeout: 3.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
-        XCTAssertEqual(stored?.state, .active)
-        XCTAssertEqual(stored?.translatedToLanguage, "de")
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        XCTAssertEqual(tab.translationConfiguration?.translatedToLanguage, "de")
     }
 
     /// Mid-translation tab switch: completion lands on the originating tab, not the new active tab.
@@ -485,10 +476,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager.selectedTab = tabB
 
         wait(for: [completedExpectation], timeout: 3.0)
-        let store = translationsTabStateStore!
-        XCTAssertEqual(store.state(for: tabA.tabUUID).translationConfiguration?.state, .active)
-        XCTAssertEqual(store.state(for: tabA.tabUUID).translationConfiguration?.translatedToLanguage, "de")
-        XCTAssertNil(store.state(for: tabB.tabUUID).translationConfiguration)
+        XCTAssertEqual(tabA.translationConfiguration?.state, .active)
+        XCTAssertEqual(tabA.translationConfiguration?.translatedToLanguage, "de")
+        XCTAssertNil(tabB.translationConfiguration)
     }
 
     /// Translation error persists `.inactive` to the originating tab.
@@ -519,8 +509,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(mockStore.state, action)
 
         wait(for: [errorExpectation], timeout: 1.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID).translationConfiguration
-        XCTAssertEqual(stored?.state, .inactive)
+        XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
     }
 
     // MARK: - didTapButton tests
@@ -769,13 +758,11 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
-        translationsTabStateStore.updateState(for: tab.tabUUID) {
-            $0.translationConfiguration = TranslationConfiguration(
-                prefs: mockProfile.prefs,
-                state: .active,
-                translatedToLanguage: "fr"
-            )
-        }
+        tab.translationConfiguration = TranslationConfiguration(
+            prefs: mockProfile.prefs,
+            state: .active,
+            translatedToLanguage: "fr"
+        )
         mockTabManager.selectedTab = tab
 
         let subject = createSubject()
@@ -793,9 +780,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         subject.translationsProvider(setupAppStateWithTranslationConfig(for: .active), action)
 
         wait(for: [expectation], timeout: 1.0)
-        let stored = translationsTabStateStore.state(for: tab.tabUUID)
-        XCTAssertEqual(stored.translationConfiguration?.state, .inactive)
-        XCTAssertTrue(stored.pendingRestoreReload)
+        XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
+        XCTAssertTrue(tab.pendingRestoreReload)
     }
 
     // MARK: - didTranslationSettingsChange tests
@@ -1290,7 +1276,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         manager: PreferredTranslationLanguagesManager? = nil,
         localeProvider: LocaleProvider = MockLocaleProvider()
     ) -> TranslationsMiddleware {
-        let middleware = TranslationsMiddleware(
+        return TranslationsMiddleware(
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
@@ -1299,8 +1285,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             manager: manager,
             localeProvider: localeProvider
         )
-        middleware.register(store: translationsTabStateStore, for: .XCTestDefaultUUID)
-        return middleware
     }
 
     private func setupWebViewForTabManager() {

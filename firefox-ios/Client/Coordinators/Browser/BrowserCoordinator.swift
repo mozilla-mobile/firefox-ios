@@ -53,7 +53,6 @@ final class BrowserCoordinator: BaseCoordinator,
     private let summarizerNimbusUtils: SummarizerNimbusUtils
     private let touExperimentsTracking: ToUExperimentsTracking
     private let homepageTabStateStore: HomepageTabStateStore
-    let translationsTabStateStore: TranslationsTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private var isDeeplinkOptimiziationRefactorEnabled: Bool {
@@ -69,7 +68,6 @@ final class BrowserCoordinator: BaseCoordinator,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
          homepageTabStateStore: HomepageTabStateStore = HomepageTabStateStore(),
-         translationsTabStateStore: TranslationsTabStateStore = TranslationsTabStateStore(),
          profile: Profile = AppContainer.shared.resolve(),
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowManager: WindowManager = AppContainer.shared.resolve(),
@@ -84,19 +82,10 @@ final class BrowserCoordinator: BaseCoordinator,
         self.windowManager = windowManager
         self.touExperimentsTracking = ToUExperimentsTracking(prefs: profile.prefs)
         self.homepageTabStateStore = homepageTabStateStore
-        self.translationsTabStateStore = translationsTabStateStore
-        self.browserViewController = BrowserViewController(
-            profile: profile,
-            tabManager: tabManager,
-            translationsTabStateStore: translationsTabStateStore
-        )
+        self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
-        // Make the coordinator's store reachable to the translations middleware (a static
-        // singleton). The middleware holds a weak ref keyed by windowUUID and writes per-tab
-        // state into it during dispatches.
-        translationsMiddleware.register(store: translationsTabStateStore, for: tabManager.windowUUID)
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
@@ -1285,7 +1274,6 @@ final class BrowserCoordinator: BaseCoordinator,
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         homepageTabStateStore.removeState(for: tab.tabUUID)
-        translationsTabStateStore.removeState(for: tab.tabUUID)
     }
 
     // MARK: - TabTrayCoordinatorDelegate
@@ -1305,8 +1293,6 @@ final class BrowserCoordinator: BaseCoordinator,
             guard uuid == windowUUID else { return }
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.
-
-            translationsMiddleware.unregister(windowUUID: uuid)
 
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)

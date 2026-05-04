@@ -64,11 +64,6 @@ extension AppState {
     }
 }
 
-/// Held as a top-level reference so each `BrowserCoordinator` can register its
-/// per-window `TranslationsTabStateStore` with the middleware on startup.
-@MainActor
-let translationsMiddleware = TranslationsMiddleware()
-
 @MainActor
 let middlewares = [
     FeltPrivacyMiddleware().privacyManagerProvider,
@@ -93,7 +88,7 @@ let middlewares = [
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,
     TermsOfUseMiddleware().termsOfUseProvider,
-    translationsMiddleware.translationsProvider,
+    TranslationsMiddleware().translationsProvider,
     TranslationSettingsMiddleware().translationSettingsProvider
 ]
 
