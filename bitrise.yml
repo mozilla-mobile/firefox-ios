@@ -283,6 +283,7 @@ workflows:
             }
             # Register it to run on script exit
             trap cleanup_coverage EXIT
+            
             echo "Running Danger"
             swift run danger-swift ci
     - slack@4.2.1:
