@@ -39,6 +39,7 @@ final class StoryCategoryPickerView: UIView, ThemeApplicable {
             items: items,
             selectedID: selectedPickerID,
             contentOffsetX: newsfeedCategoryPickerOffsetX ?? 0,
+            titleRendering: .coreAnimationLayer,
             onScroll: onScroll,
             onSelection: { selectedID in
                 onSelection?(selectedID == Self.allCategoryID ? nil : selectedID)
