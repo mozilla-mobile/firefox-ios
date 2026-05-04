@@ -10,20 +10,20 @@ protocol TabTraySelectorDelegate: AnyObject {
     func didSelectSection(panelType: TabTrayPanelType)
 }
 
-// MARK: - UX Constants
-struct TabTraySelectorUX {
-    static let horizontalSpacing: CGFloat = 12
-    static let cornerRadius: CGFloat = 12
-    static let verticalInsets: CGFloat = 8
-    static let horizontalInsets: CGFloat = 10
-    static let fontScaleDelta: CGFloat = 0.055
-    static let stackViewLeadingTrailingPadding: CGFloat = 8
-    static let containerHorizontalSpacing: CGFloat = 16
-    static let topSpacing: CGFloat = 8
-    static let bottomSpacingIOS26: CGFloat = 16
-}
-
 class TabTraySelectorView: UIView, ThemeApplicable {
+    // MARK: - UX Constants
+    struct UX {
+        static let horizontalSpacing: CGFloat = 12
+        static let cornerRadius: CGFloat = 12
+        static let verticalInsets: CGFloat = 8
+        static let horizontalInsets: CGFloat = 10
+        static let fontScaleDelta: CGFloat = 0.055
+        static let stackViewLeadingTrailingPadding: CGFloat = 8
+        static let containerHorizontalSpacing: CGFloat = 16
+        static let topSpacing: CGFloat = 8
+        static let bottomSpacingIOS26: CGFloat = 16
+    }
+    
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme
@@ -44,13 +44,13 @@ class TabTraySelectorView: UIView, ThemeApplicable {
 
     private lazy var selectionBackgroundView: UIView = .build { view in
         if #unavailable(iOS 26) {
-            view.layer.cornerRadius = TabTraySelectorUX.cornerRadius
+            view.layer.cornerRadius = UX.cornerRadius
         }
     }
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
-        stackView.spacing = TabTraySelectorUX.horizontalSpacing
+        stackView.spacing = UX.horizontalSpacing
         stackView.distribution = .fill
         stackView.alignment = .center
     }
@@ -120,19 +120,19 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         }
 
         let bottomSpacing: CGFloat = if #available(iOS 26.0, *) {
-            -TabTraySelectorUX.bottomSpacingIOS26
+            -UX.bottomSpacingIOS26
         } else {
             0
         }
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor,
-                                               constant: TabTraySelectorUX.topSpacing),
+                                               constant: UX.topSpacing),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: bottomSpacing),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                   constant: TabTraySelectorUX.containerHorizontalSpacing),
+                                                   constant: UX.containerHorizontalSpacing),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
-                                                    constant: -TabTraySelectorUX.containerHorizontalSpacing),
+                                                    constant: -UX.containerHorizontalSpacing),
 
             stackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             selectionBackgroundView.heightAnchor.constraint(equalTo: stackView.heightAnchor),
@@ -164,10 +164,10 @@ class TabTraySelectorView: UIView, ThemeApplicable {
             ? FXFontStyles.Bold.body.systemFont()
             : FXFontStyles.Regular.body.systemFont()
         let contentInsets = NSDirectionalEdgeInsets(
-            top: TabTraySelectorUX.verticalInsets,
-            leading: TabTraySelectorUX.horizontalInsets,
-            bottom: TabTraySelectorUX.verticalInsets,
-            trailing: TabTraySelectorUX.horizontalInsets
+            top: UX.verticalInsets,
+            leading: UX.horizontalInsets,
+            bottom: UX.verticalInsets,
+            trailing: UX.horizontalInsets
         )
         let viewModel = TabTraySelectorButtonModel(
             title: title,
@@ -175,7 +175,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
             a11yHint: hint,
             font: font,
             contentInsets: contentInsets,
-            cornerRadius: TabTraySelectorUX.cornerRadius
+            cornerRadius: UX.cornerRadius
         )
         button.configure(viewModel: viewModel)
         button.applyTheme(theme: theme)
@@ -218,7 +218,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
 
         let boldFont = FXFontStyles.Bold.body.systemFont()
         let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
-        let horizontalInsets = TabTraySelectorUX.horizontalInsets * 2
+        let horizontalInsets = UX.horizontalInsets * 2
         button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
     }
 
@@ -307,11 +307,11 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         for (index, button) in buttons.enumerated() {
             if index == fromIndex {
                 // Scale down as we move away
-                let scale = 1.0 - TabTraySelectorUX.fontScaleDelta * easedProgress
+                let scale = 1.0 - UX.fontScaleDelta * easedProgress
                 button.transform = CGAffineTransform(scaleX: scale, y: scale)
             } else if index == toIndex {
                 // Scale up as we approach
-                let scale = 1.0 + TabTraySelectorUX.fontScaleDelta * easedProgress
+                let scale = 1.0 + UX.fontScaleDelta * easedProgress
                 button.transform = CGAffineTransform(scaleX: scale, y: scale)
             } else {
                 // Reset others
