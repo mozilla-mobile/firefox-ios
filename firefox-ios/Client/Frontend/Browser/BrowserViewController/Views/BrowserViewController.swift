@@ -1552,31 +1552,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Constraints
 
-    func updateContentContainerTopConstraint() {
-        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
-        let pinToScreenTop = shouldPinContentContainerToScreenTop
-        contentContainerTopConstraint?.isActive = false
-        contentContainerTopConstraint = contentContainer.topAnchor.constraint(
-            equalTo: pinToScreenTop ? view.topAnchor : header.bottomAnchor
-        )
-        contentContainerTopConstraint?.isActive = true
-
-        let frontViews = pinToScreenTop
-            ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
-            : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
-               bottomContentStackView, bottomContainer, overKeyboardContainer]
-        frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
-
-        guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
-
-        // When the homepage is pinned to the screen top, BVC owns the status bar overlay space.
-        // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
-        // For example, an empty BVC header with a 54pt status bar overlay gives the homepage a 54pt top inset;
-        // when BVC has header content, the homepage starts below the header and this inset is 0.
-        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
-        homepageViewController.updateTopContentInset(homepageTopContentInset)
-    }
-
     private func setupConstraints() {
         updateContentContainerTopConstraint()
 
@@ -1647,6 +1622,33 @@ class BrowserViewController: UIViewController,
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+
+    func updateContentContainerTopConstraint() {
+        guard isViewLoaded else { return }
+
+        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
+        let pinToScreenTop = shouldPinContentContainerToScreenTop
+        contentContainerTopConstraint?.isActive = false
+        contentContainerTopConstraint = contentContainer.topAnchor.constraint(
+            equalTo: pinToScreenTop ? view.topAnchor : header.bottomAnchor
+        )
+        contentContainerTopConstraint?.isActive = true
+
+        let frontViews = pinToScreenTop
+            ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+            : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
+               bottomContentStackView, bottomContainer, overKeyboardContainer]
+        frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+
+        guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
+
+        // When the homepage is pinned to the screen top, BVC owns the status bar overlay space.
+        // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
+        // For example, an empty BVC header with a 54pt status bar overlay gives the homepage a 54pt top inset;
+        // when BVC has header content, the homepage starts below the header and this inset is 0.
+        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        homepageViewController.updateTopContentInset(homepageTopContentInset)
     }
 
     // MARK: - Snapkit related
