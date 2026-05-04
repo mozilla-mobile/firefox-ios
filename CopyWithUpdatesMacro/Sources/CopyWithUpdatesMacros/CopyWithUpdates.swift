@@ -25,18 +25,25 @@ public struct CopyWithUpdatesMacro: MemberMacro {
             return []
         }
 
+        // Gather all the struct/class's properties, except for static and computed properties,
         let variableDecls = members.compactMap { member -> VariableDeclSyntax? in
             guard let variableDecl = member.decl.as(VariableDeclSyntax.self) else {
                 return nil
             }
 
-            // Check if the 'static' modifier is present; we don't want these properties copied into the generated copyWith
-            // method.
-            let isStatic = variableDecl.modifiers.contains { modifier in
-                modifier.name.tokenKind == .keyword(.static)
+            // Check if this is a computed value; we don't want computed values copied into the generated copyWith method.
+            guard !variableDecl.bindings.contains(where: { $0.accessorBlock != nil }) else {
+                // Stored properties (i.e. regular `let` and `var` properties) do NOT contain `accessorBlocks`
+                return nil
             }
 
-            return isStatic ? nil : variableDecl
+            // Check if the `static` modifier is present; we don't want these properties copied into the generated copyWith
+            // method.
+            guard !variableDecl.modifiers.contains(where: { $0.name.tokenKind == .keyword(.static) }) else {
+                return nil
+            }
+
+            return variableDecl
         }
 
         let bindings = variableDecls.flatMap { $0.bindings }
