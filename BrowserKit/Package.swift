@@ -11,12 +11,14 @@ let package = Package(
     products: [
         .library(name: "Shared",
                  targets: ["Shared"]),
+        .library(name: "SharedMocks", targets: ["SharedMocks"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
         .library(
             name: "Common",
             targets: ["Common"]),
+        .library(name: "CommonMocks", targets: ["CommonMocks"]),
         .library(
             name: "TabDataStore",
             targets: ["TabDataStore"]),
@@ -101,6 +103,11 @@ let package = Package(
             ]
         ),
         .target(
+            name: "SharedMocks",
+            dependencies: ["Shared"],
+            swiftSettings: []
+        ),
+        .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
             swiftSettings: [
@@ -143,6 +150,11 @@ let package = Package(
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]
+        ),
+        .target(
+            name: "CommonMocks",
+            dependencies: ["Common"],
+            swiftSettings: []
         ),
         .testTarget(
             name: "CommonTests",
