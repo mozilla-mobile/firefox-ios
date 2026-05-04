@@ -844,7 +844,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
 
-        let expectation = XCTestExpectation(description: "reloadWebsite dispatched when disabling translations on active page")
+        let expectation = XCTestExpectation(description: "reloadWebsite dispatched when disabling translations")
         mockStore.dispatchCalled = { expectation.fulfill() }
 
         subject.translationsProvider(mockStore.state, action)
