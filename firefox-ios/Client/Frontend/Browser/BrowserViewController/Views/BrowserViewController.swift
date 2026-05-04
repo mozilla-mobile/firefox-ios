@@ -1499,11 +1499,9 @@ class BrowserViewController: UIViewController,
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
         }, completion: { [weak self] _ in
-            guard let self else { return }
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
-            guard let popover else { return }
-            self.view.layoutIfNeeded()
+            guard let self, let popover else { return }
             self.displayedPopoverController = popover
             self.updateDisplayedPopoverProperties?()
             self.present(popover, animated: false, completion: nil)
