@@ -138,6 +138,21 @@ final class TabTrayViewController: UIViewController,
         return selector
     }()
 
+    private lazy var experimentiPadSegmentControl: TabTrayiPadSelectorView = {
+        let selectedIndex = experimentConvertSelectedIndex()
+        let titles = [TabTrayPanelType.privateTabs.label,
+                     TabTrayPanelType.tabs.label,
+                     TabTrayPanelType.syncedTabs.label]
+        let selector = TabTrayiPadSelectorView(selectedIndex: selectedIndex,
+                                               theme: retrieveTheme(),
+                                               buttonTitles: titles)
+        selector.delegate = self
+        selector.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.navBarSegmentedControl
+
+        didSelectSection(panelType: tabTrayState.selectedPanel)
+        return selector
+    }()
+
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
@@ -345,9 +360,16 @@ final class TabTrayViewController: UIViewController,
                 navigationItem.rightBarButtonItems = [doneButton]
             }
         case .regular:
-            navigationItem.titleView = tabTrayUtils.shouldDisplayExperimentUI() ? experimentSegmentControl : segmentedControl
+
+            navigationItem.titleView = getSegmentedControl()
         }
         updateToolbarItems()
+    }
+
+    func getSegmentedControl() -> UIView {
+        guard tabTrayUtils.shouldDisplayExperimentUI() else { return segmentedControl }
+
+        return shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
     }
 
     // MARK: - Redux
@@ -646,7 +668,7 @@ final class TabTrayViewController: UIViewController,
     }
 
     private func setupForiPadExperiment() {
-        navigationItem.titleView = experimentSegmentControl
+        navigationItem.titleView = getSegmentedControl()
         view.addSubviews(containerView)
         containerView.addSubview(panelContainer)
         setupBlurView()
@@ -664,7 +686,8 @@ final class TabTrayViewController: UIViewController,
 
             // Because experimentSegmentControl doesn't inherit from UISegmentControl
             // we need to set height and width constraints
-            experimentSegmentControl.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.iPadWidth),
+            experimentSegmentControl.widthAnchor.constraint(equalToConstant:
+                                                                UX.NavigationMenu.iPadWidth),
             experimentSegmentControl.heightAnchor.constraint(equalToConstant: tabTrayUtils.segmentedControlHeight)
         ])
     }
