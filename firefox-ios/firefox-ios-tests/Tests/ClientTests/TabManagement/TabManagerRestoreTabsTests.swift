@@ -23,10 +23,12 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, mockTabStore] in
-            XCTAssertEqual(tabs.count, 4)
-            XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 1)
-            expectation.fulfill()
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [mockTabStore] in
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, 4)
+                XCTAssertEqual(mockTabStore?.fetchWindowDataCalledCount, 1)
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation])
     }
@@ -48,11 +50,13 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, selectedTab = subject.selectedTab] in
-            // Tabs count has to be same as restoration data, since deeplink tab has same of URL of a restored tab.
-            XCTAssertEqual(tabs.count, tabData.count)
-            XCTAssertEqual(selectedTab, deeplinkTab)
-            expectation.fulfill()
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                // Tabs count has to be same as restoration data, since deeplink tab has same of URL of a restored tab.
+                XCTAssertEqual(subject.tabs.count, tabData.count)
+                XCTAssertEqual(subject.selectedTab, deeplinkTab)
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation])
     }
@@ -74,10 +78,12 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, tabUUID = subject.selectedTab?.tabUUID] in
-            XCTAssertEqual(tabs.count, tabData.count)
-            XCTAssertEqual(tabUUID, previouslySelectedTabData.id.uuidString)
-            expectation.fulfill()
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, tabData.count)
+                XCTAssertEqual(subject.selectedTab?.tabUUID, previouslySelectedTabData.id.uuidString)
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation])
     }
@@ -100,10 +106,12 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
 
         subject.restoreTabs()
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs, selectedTab = subject.selectedTab] in
-            XCTAssertEqual(tabs.count, tabData.count + 1)
-            XCTAssertEqual(selectedTab, deeplinkTab)
-            expectation.fulfill()
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                XCTAssertEqual(subject.tabs.count, tabData.count + 1)
+                XCTAssertEqual(subject.selectedTab, deeplinkTab)
+                expectation.fulfill()
+            }
         }
         wait(for: [expectation])
     }
@@ -124,11 +132,13 @@ final class TabManagerRestoreTabsTests: TabManagerTestsBase {
             tabData: getMockTabData(count: 4)
         )
 
-        AppEventQueue.wait(for: .tabRestoration(testUUID)) { [tabs = subject.tabs] in
-            // Tabs count has to be the sum of deeplink and restored tabs, since the deeplink tab is not present in
-            // the restored once.
-            XCTAssertEqual(tabs.count, 5)
-            expectation.fulfill()
+        AppEventQueue.wait(for: .tabRestoration(testUUID)) {
+            ensureMainThread {
+                // Tabs count has to be the sum of deeplink and restored tabs, since the deeplink tab is not present in
+                // the restored once.
+                XCTAssertEqual(subject.tabs.count, 5)
+                expectation.fulfill()
+            }
         }
 
         subject.restoreTabs()
