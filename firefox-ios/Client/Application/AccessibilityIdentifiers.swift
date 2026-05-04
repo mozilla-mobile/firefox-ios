@@ -371,6 +371,7 @@ struct AccessibilityIdentifiers {
         static let tabCell = "TabDisplayView.tabCell"
         static let closeButton = "tabCloseButton"
         static let tabsTray = "Tabs Tray"
+        static let iPadSelectionBackgroundView =  "TabTraySelectorView.selectionBackgroundView"
     }
 
     struct LibraryPanels {
