@@ -1491,19 +1491,22 @@ class BrowserViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
+        let popover = displayedPopoverController
         dismissVisibleMenus()
         let legacyScrollController = scrollController as? LegacyTabScrollProvider
 
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if let popover = displayedPopoverController {
-                updateDisplayedPopoverProperties?()
-                present(popover, animated: true, completion: nil)
-            }
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
+            guard let self else { return }
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
+            guard let popover else { return }
+            self.view.layoutIfNeeded()
+            self.displayedPopoverController = popover
+            self.updateDisplayedPopoverProperties?()
+            self.present(popover, animated: false, completion: nil)
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
@@ -4845,7 +4848,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         _ popoverPresentationController: UIPopoverPresentationController
     ) {
         displayedPopoverController = nil
-        updateDisplayedPopoverProperties = nil
     }
 }
 
