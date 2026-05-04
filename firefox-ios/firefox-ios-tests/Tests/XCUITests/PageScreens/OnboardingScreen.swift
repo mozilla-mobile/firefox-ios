@@ -179,7 +179,13 @@ final class OnboardingScreen {
         switch flowType {
         case .legacy:
             themes.append("System Auto")
-        case .modernKit, .modernOrangeAndBlue:
+        case .modernOrangeAndBlue:
+            if BaseTestCase().isFennec {
+                themes.append("System Auto")
+            } else {
+                themes.append("Automatic")
+            }
+        case .modernKit:
             themes.append("Automatic")
         }
 
@@ -393,8 +399,18 @@ final class OnboardingScreen {
         XCTAssertTrue(darkButton.exists, "Dark theme option should exist")
 
         // The "System Auto" / "Automatic" label is different between the two modern flows
-        let systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
-        XCTAssertEqual(systemButton.exists, true, "System Auto theme option should exist")
+
+        var systemButton: XCUIElement?
+        if BaseTestCase().isFennec {
+            if case .modernOrangeAndBlue = flowType {
+                systemButton = app.buttons["\(rootA11yId)SegmentedButton.System Auto"]
+            } else if case .modernKit = flowType {
+                systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
+            }
+        } else {
+            systemButton = app.buttons["\(rootA11yId)SegmentedButton.Automatic"]
+        }
+        XCTAssertEqual(systemButton?.exists, true, "System Auto theme option should exist")
     }
 
     func assertSyncScreen() {
@@ -411,12 +427,23 @@ final class OnboardingScreen {
             // There are textual differences between the flows for the description
             let expectedDescription: String
             let expectedSecondary: String
+            let longerDescription = "Grab bookmarks, passwords, and more on any device in a snap." +
+            " Your personal data stays safe and secure with encryption."
+            let shorterDescription = "Get your bookmarks, history, and passwords on any device."
             switch flowType {
-            case .modernKit, .modernOrangeAndBlue:
+            case .modernKit:
                 // swiftlint:disable line_length
-                expectedDescription = "Grab bookmarks, passwords, and more on any device in a snap. Your personal data stays safe and secure with encryption."
+                expectedDescription = longerDescription
                 expectedSecondary = "Not Now"
                 // swiftlint:enable line_length
+            case .modernOrangeAndBlue:
+                if BaseTestCase().isFennec {
+                    expectedDescription = shorterDescription
+                    expectedSecondary = "Not now"
+                } else {
+                    expectedDescription = longerDescription
+                    expectedSecondary = "Not Now"
+                }
             case .legacy:
                 expectedDescription = "" // Unexpected path; should not happen
                 expectedSecondary = ""
