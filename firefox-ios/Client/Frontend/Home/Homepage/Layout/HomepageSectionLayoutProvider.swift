@@ -247,6 +247,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         // The normal homepage top spacing belongs to the logo header section, not the collection view inset.
         // status bar overlay space is handled separately as a scroll inset by the homepage.
+        // Example: 40pt logo spacing stays in this section; a 54pt status bar overlay stays in scroll insets.
         section.contentInsets = NSDirectionalEdgeInsets(
             top: UX.topSpacing,
             leading: horizontalInset,

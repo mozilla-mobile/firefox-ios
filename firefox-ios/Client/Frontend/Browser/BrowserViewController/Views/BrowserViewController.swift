@@ -1571,6 +1571,8 @@ class BrowserViewController: UIViewController,
 
         // When the homepage is pinned to the screen top, BVC owns the status bar overlay space.
         // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
+        // For example, an empty BVC header with a 54pt status bar overlay gives the homepage a 54pt top inset;
+        // when BVC has header content, the homepage starts below the header and this inset is 0.
         let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
         homepageViewController.updateTopContentInset(homepageTopContentInset)
     }
@@ -3195,6 +3197,8 @@ class BrowserViewController: UIViewController,
 
         // Keep this in sync with the top inset passed to HomepageViewController so spacer layout
         // and scroll-view geometry describe the same visible viewport.
+        // Example: if the visible viewport is 800pt high and BVC contributes a 54pt overlay inset,
+        // spacer calculations should use 746pt of usable homepage content height.
         let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
         let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
         let availableContentHeight = getAvailableHomepageContentHeight(topContentInset: homepageTopContentInset)

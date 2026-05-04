@@ -279,12 +279,20 @@ final class HomepageViewController: UIViewController,
     func updateTopContentInset(_ topInset: CGFloat) {
         guard collectionViewTopContentInset != topInset else { return }
         let previousAdjustedTopInset = collectionView?.adjustedContentInset.top ?? collectionViewTopContentInset
+        let wasScrolledToTop = collectionView.map { $0.contentOffset.y <= 0 } ?? true
         collectionViewTopContentInset = topInset
         updateCollectionViewContentInset()
         if let collectionView {
-            // Preserve the visible content when BVC chrome changes the collection view's top inset.
-            let adjustedTopInsetDelta = collectionView.adjustedContentInset.top - previousAdjustedTopInset
-            collectionView.contentOffset.y -= adjustedTopInsetDelta
+            if wasScrolledToTop {
+                // Top of scrollable content is always -topInset, e.g. a 54pt top inset means y = -54.
+                collectionView.contentOffset.y = -collectionView.adjustedContentInset.top
+            } else {
+                // Preserve the visible content when BVC chrome changes the collection view's top inset.
+                // Example: offset 120 + inset 0 shows normalized y = 120. If inset becomes 54,
+                // move offset to 66 so 66 + 54 still shows normalized y = 120.
+                let adjustedTopInsetDelta = collectionView.adjustedContentInset.top - previousAdjustedTopInset
+                collectionView.contentOffset.y -= adjustedTopInsetDelta
+            }
             handleScroll(collectionView, isUserInteraction: false)
         }
     }
