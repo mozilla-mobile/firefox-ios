@@ -20,7 +20,6 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
         navigationDelegate = MockNavigationDelegate()
         tabWebViewDelegate = MockTabWebViewDelegate()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {

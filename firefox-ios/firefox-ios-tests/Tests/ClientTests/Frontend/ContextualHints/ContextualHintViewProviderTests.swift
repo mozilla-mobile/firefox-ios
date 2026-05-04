@@ -15,7 +15,6 @@ class ContextualHintViewProviderTests: XCTestCase {
 
     override func setUp() async throws {
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         try await super.setUp()
     }
 

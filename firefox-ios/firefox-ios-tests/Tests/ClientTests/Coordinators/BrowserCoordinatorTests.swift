@@ -15,7 +15,9 @@ import Shared
 @testable import Client
 
 @MainActor
-final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTestUtility {
+final class BrowserCoordinatorTests: XCTestCase,
+                                     FeatureFlaggable,
+                                     StoreTestUtility {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -35,7 +37,6 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         self.tabManager = mockTabManager
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -78,7 +79,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         let subject = createSubject()
         subject.start(with: nil)
         // TODO: FXIOS-12947 - Add tests for ToU Feature implementation
-        if !featureFlags.isFeatureEnabled(.touFeature, checking: .buildOnly) {
+        if !featureFlagsProvider.isEnabled(.touFeature) {
             XCTAssertNotNil(mockRouter.rootViewController as? BrowserViewController)
             XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
             XCTAssertTrue(subject.childCoordinators.isEmpty)
@@ -258,7 +259,7 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
 
-        if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.trackingProtectionRefactor) {
             XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
         } else {
             XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
@@ -538,7 +539,11 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
 
     // MARK: - Summarize Panel
 
-    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
+    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -556,7 +561,11 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         await Task.yield()
     }
 
-    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
+    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
@@ -581,7 +590,11 @@ final class BrowserCoordinatorTests: XCTestCase, LegacyFeatureFlaggable, StoreTe
         }))
     }
 
-    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
+    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)

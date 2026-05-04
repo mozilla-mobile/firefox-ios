@@ -35,7 +35,7 @@ private enum RemoteCommand: String {
 }
 
 @MainActor
-class FxAWebViewModel: LegacyFeatureFlaggable {
+class FxAWebViewModel {
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams

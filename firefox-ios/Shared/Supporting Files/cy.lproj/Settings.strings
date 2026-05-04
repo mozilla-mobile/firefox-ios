@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "** Wedi'ch rhwystro **: fyddwch chi ddim yn gweld ac na gallu defnyddio'r nodwedd. Ar gyfer AI ar y ddyfais, bydd unrhyw fodelau wedi'u llwytho i lawr yn cael eu dileu.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Wedi'u Rhwystro**: Fyddwch chi ddim yn gweld nac yn gallu defnyddio'r nodwedd. Pan fydd AI ar y ddyfais, mae unrhyw fodelau sydd eisoes wedi'u llwytho i lawr yn cael eu dileu.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Dyw tudalennau a chrynodebau byth yn cael eu cadw.";
 

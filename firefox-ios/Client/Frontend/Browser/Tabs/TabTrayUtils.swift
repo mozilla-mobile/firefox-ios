@@ -25,7 +25,7 @@ protocol TabTrayUtils {
 
 /// Tiny utility to simplify checking for availability of the tab tray features
 @MainActor
-struct DefaultTabTrayUtils: LegacyFeatureFlaggable, TabTrayUtils {
+struct DefaultTabTrayUtils: FeatureFlaggable, TabTrayUtils {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
         static let segmentedControlHeight: CGFloat = 53
@@ -33,15 +33,15 @@ struct DefaultTabTrayUtils: LegacyFeatureFlaggable, TabTrayUtils {
     }
 
     var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
     }
 
     var isTabTrayIpadUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayiPadUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayiPadUIExperiments)
     }
 
     var isTabTrayTranslucencyEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayTranslucency, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayTranslucency)
     }
 
     var isReduceTransparencyEnabled: Bool {

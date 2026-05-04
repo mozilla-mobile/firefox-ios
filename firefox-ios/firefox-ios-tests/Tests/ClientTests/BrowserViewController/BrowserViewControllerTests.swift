@@ -29,7 +29,6 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         browserCoordinator = MockBrowserCoordinator()
         appStartupTelemetry = MockAppStartupTelemetry()
         recordVisitManager = MockRecordVisitObservationManager()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         setIsSwipingTabsEnabled(false)
         setIsHostedSummarizerEnabled(false)
@@ -135,7 +134,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         subject.tabManager(tabManager, didSelectedTabChange: testTab, previousTab: testTab, isRestoring: false)
         wait(for: [expectation])
 
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[2] as? GeneralBrowserAction)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions[0] as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 5)

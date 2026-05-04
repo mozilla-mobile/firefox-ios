@@ -21,7 +21,6 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
             PrefsKeys.Settings.aiKillSwitchFeature: true
         ], prefix: "")
         mockProfile.prefs = mockPrefs
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 

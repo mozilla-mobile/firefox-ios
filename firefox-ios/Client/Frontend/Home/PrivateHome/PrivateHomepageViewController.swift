@@ -20,8 +20,7 @@ protocol PrivateHomepageDelegate: AnyObject {
 final class PrivateHomepageViewController: UIViewController,
                                            ContentContainable,
                                            Screenshotable,
-                                           Themeable,
-                                           LegacyFeatureFlaggable {
+                                           Themeable {
     enum UX {
         static let scrollContainerStackSpacing: CGFloat = 24
         static let scrollContainerTopPadding: CGFloat = 32

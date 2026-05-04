@@ -9,9 +9,7 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource:
-    UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>,
-    LegacyFeatureFlaggable {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>, FeatureFlaggable {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -31,6 +29,7 @@ final class HomepageDiffableDataSource:
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
+        case worldcup(TextColor?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -58,6 +57,7 @@ final class HomepageDiffableDataSource:
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -72,6 +72,7 @@ final class HomepageDiffableDataSource:
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
+                WorldCupTimerCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -98,6 +99,7 @@ final class HomepageDiffableDataSource:
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
@@ -127,6 +129,11 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
         }
 
+        if state.worldcupState.shouldShowSection, featureFlagsProvider.isEnabled(.worldCupWidget) {
+            snapshot.appendSections([.worldcup(textColor)])
+            snapshot.appendItems([.worldcupCard], toSection: .worldcup(textColor))
+        }
+
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
             snapshot.appendSections([.jumpBackIn(textColor, configuration)])
             snapshot.appendItems(tabs, toSection: .jumpBackIn(textColor, configuration))
@@ -151,7 +158,7 @@ final class HomepageDiffableDataSource:
             snapshot.appendItems(stories, toSection: pocketSection)
         }
 
-        apply(snapshot, animatingDifferences: true, completion: completion)
+        apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
     }
 
     /// Gets the proper amount of top sites based on layout configuration

@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blockiert**: Sie werden die Funktion nicht sehen und können die Funktion nicht verwenden. Für die geräteinterne KI werden alle heruntergeladenen Modelle entfernt.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blockiert**: Die Funktion wird nicht angezeigt und kann nicht verwendet werden. Für die geräteinterne KI werden alle heruntergeladenen Modelle entfernt.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Seiten und Zusammenfassungen werden nie gespeichert.";
 

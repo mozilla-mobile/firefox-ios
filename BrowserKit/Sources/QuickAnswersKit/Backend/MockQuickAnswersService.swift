@@ -43,11 +43,8 @@ struct MockQuickAnswersService: QuickAnswersService {
         }
         return .success(
             SearchResult(
-                title: "The weather in Paris is cloudy",
-                body: "The weather is cloudy with a chance of rain at 18:00",
-                url: URL(
-                    string: "https://weather.com/weather/today"
-                )
+                resultText: "The weather is cloudy with a chance of rain at 18:00",
+                sources: [SearchResult.Source(title: "Weather Channel", thumbnailURL: nil, faviconURL: nil)]
             )
         )
     }

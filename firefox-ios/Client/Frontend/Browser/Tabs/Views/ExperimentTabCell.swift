@@ -48,12 +48,23 @@ final class ExperimentTabCell: UICollectionViewCell, ThemeApplicable, ReusableCe
         view.clipsToBounds = false
     }
 
-    private lazy var screenshotView: UIImageView = .build { view in
+    private lazy var screenshotViewPhone: UIImageView = .build { view in
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = UX.cornerRadius
         view.clipsToBounds = true
         view.isAccessibilityElement = false
         view.accessibilityElementsHidden = true
+    }
+
+    private lazy var screenshotViewPad: TabCellCustomImage = .build { view in
+        view.layer.cornerRadius = UX.cornerRadius
+        view.isAccessibilityElement = false
+        view.accessibilityElementsHidden = true
+    }
+
+    private var screenshotView: UIImageView {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        return isPad ? screenshotViewPad : screenshotViewPhone
     }
 
     /// Invisible button without corner radius to ensure the button has the required hitbox size

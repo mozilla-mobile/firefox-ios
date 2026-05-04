@@ -16,7 +16,6 @@ final class BookmarksSectionStateTests: XCTestCase {
         try await super.setUp()
         mockProfile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupNimbusHomepageBookmarksSectionDefaultTesting(isEnabled: false)
     }
 

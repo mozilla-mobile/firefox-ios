@@ -5,7 +5,7 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable {
     enum ActionType {
         case back
         case forward

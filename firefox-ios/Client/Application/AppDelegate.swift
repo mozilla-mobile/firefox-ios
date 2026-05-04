@@ -15,7 +15,6 @@ import enum MozillaAppServices.MozAdsEnvironment
 
 class AppDelegate: UIResponder,
                    UIApplicationDelegate,
-                   LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                    FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -86,11 +85,6 @@ class AppDelegate: UIResponder,
             .accountManagerInitialized,
             .browserIsReady
         ])
-
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
@@ -174,7 +168,7 @@ class AppDelegate: UIResponder,
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }

@@ -1,0 +1,54 @@
+/* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Skrýt aktualizace z Mistrovství světa";
+
+/* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Získejte živé informace o zápasech a další informace.";
+
+/* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Sledovat tým";
+
+/* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Získejte vlastní tapetu";
+
+/* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Související zápasy";
+
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "ŽIVĚ";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "Odebrat";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Obnovit";
+
+/* The label for the 'Bronze final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "O TŘETÍ MÍSTO";
+
+/* The label for the 'Final' match in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINÁLE";
+
+/* The label indicating the displaying match has ended after penalties. */
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Konec zápasu • Po penaltách";
+
+/* The label for the 'Quarter-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "ČTVRTFINÁLE";
+
+/* The label for the 'Semi-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINÁLE";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "TŘETÍ MÍSTO";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Nadcházející";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "MISTROVSTVÍ SVĚTA 2026";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Další možnosti";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Sdílet";
+

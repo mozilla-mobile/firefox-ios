@@ -292,16 +292,6 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
-            public static let ToolbarUpdateTitle = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Update.Title.v139",
-                tableName: "ToolbarLocation",
-                value: "We moved a few things",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
-            public static let ToolbarUpdateBody = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Update.Description.v139",
-                tableName: "ToolbarLocation",
-                value: "Tabs and menu have switched places for easier access as you browse.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
         public struct Summarize {
@@ -957,11 +947,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Follow Your Team",
                 comment: "Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event.")
-            public static let DoneButtonTitle = MZLocalizedString(
-                key: "WorldCup.CountryPicker.DoneButtonTitle.v151",
+            public static let SkipButtonTitle = MZLocalizedString(
+                key: "WorldCup.CountryPicker.SkipButton.Title.v151",
                 tableName: "WorldCup",
-                value: "Done",
-                comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
+                value: "Skip",
+                comment: "Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "WorldCup.CountryPicker.Close.AccessibilityLabel.v151",
                 tableName: "WorldCup",
@@ -1049,6 +1039,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Change team",
                 comment: "The label for the button that allows to change the team displayed in the World Cup widget more options panel.")
+            public static let FollowTeamLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FollowTeamLabel.v151",
+                tableName: "WorldCup",
+                value: "Follow team",
+                comment: "The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected.")
             public static let GetCustomWallpaperLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151",
                 tableName: "WorldCup",
@@ -1068,7 +1063,12 @@ extension String {
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
                 value: "(Full Time)",
-                comment: "The label indicating that the displaying match as ended.")
+                comment: "The label indicating that the displaying match has ended.")
+            public static let FullTimeNoParenthesisLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151",
+                tableName: "WorldCup",
+                value: "Full Time",
+                comment: "The label indicating that the displaying match has ended.")
             public static let FullTimePenaltiesLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
                 tableName: "WorldCup",
@@ -1084,6 +1084,21 @@ extension String {
                 tableName: "WorldCup",
                 value: "Refresh",
                 comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
+            public static let MatchUnavailableLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableLabel.v151",
+                tableName: "WorldCup",
+                value: "Match info is not available right now. Try refreshing in a few minutes.",
+                comment: "Message shown in the World Cup widget when match data is temporarily unavailable.")
+            public static let MatchUnavailableRefreshButtonLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151",
+                tableName: "WorldCup",
+                value: "Refresh",
+                comment: "Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data.")
+            public static let OfflineLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.OfflineLabel.v151",
+                tableName: "WorldCup",
+                value: "Looks like you’re offline. Check your internet connection and try again.",
+                comment: "Message shown in the World Cup widget when the device has no internet connection.")
             public struct CountDown {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.CountDown.Title.v151",
@@ -1105,6 +1120,11 @@ extension String {
                     tableName: "WorldCup",
                     value: "M",
                     comment: "M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues.")
+                public static let ViewScheduleButtonLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151",
+                    tableName: "WorldCup",
+                    value: "View Schedule",
+                    comment: "Label for the button that takes users to the World Cup schedule website on the countdown section.")
             }
             public struct FollowTeamCard {
                 public static let Title = MZLocalizedString(
@@ -1246,6 +1266,11 @@ extension String {
                     tableName: "WorldCup",
                     value: "Upcoming",
                     comment: "The label for an upcoming match in the World Cup widget round phase.")
+                public static let ThirdPlaceLabel = MZLocalizedString(
+                    key: "WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151",
+                    tableName: "WorldCup",
+                    value: "THIRD PLACE",
+                    comment: "The label for the 'Third place' winner in the World Cup widget.")
                 public static let WinWorldCupLabel = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151",
                     tableName: "WorldCup",
@@ -9000,6 +9025,16 @@ extension String {
                 tableName: "TabsTray",
                 value: "Tabs Closed: %d",
                 comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. ")
+            public static let ToolbarUpdateTitle = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Title.v139",
+                tableName: "ToolbarLocation",
+                value: "We moved a few things",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
+            public static let ToolbarUpdateBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Description.v139",
+                tableName: "ToolbarLocation",
+                value: "Tabs and menu have switched places for easier access as you browse.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
         struct v151 {
             public static let BlockedStatusDescription = MZLocalizedString(
@@ -9008,6 +9043,11 @@ extension String {
                 value: "**Blocked**: you won’t see and can’t use the feature. For on-device AI, any downloaded models are removed.",
                 comment: "In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation."
             )
+            public static let DoneButtonTitle = MZLocalizedString(
+                key: "WorldCup.CountryPicker.DoneButtonTitle.v151",
+                tableName: "WorldCup",
+                value: "Done",
+                comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
         }
     }
 }

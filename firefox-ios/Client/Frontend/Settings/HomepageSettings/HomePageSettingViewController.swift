@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class HomePageSettingViewController: SettingsTableViewController,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     FeatureFlaggable,
                                      UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
@@ -134,7 +134,7 @@ class HomePageSettingViewController: SettingsTableViewController,
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: userPreferences.isHomepageJumpBackInSectionEnabled,
+                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -151,7 +151,7 @@ class HomePageSettingViewController: SettingsTableViewController,
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: userPreferences.isHomepageBookmarksSectionEnabled,
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
@@ -163,6 +163,26 @@ class HomePageSettingViewController: SettingsTableViewController,
                 )
             }
             sectionItems.append(bookmarksSetting)
+
+            if featureFlagsProvider.isEnabled(.worldCupWidget) {
+                let windowUUID = self.windowUUID
+                let worldCupSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
+                ) { value in
+                    store.dispatch(
+                        WorldCupAction(
+                            windowUUID: windowUUID,
+                            actionType: WorldCupActionType.didChangeHomepageSettings,
+                            shouldShowHomepageWorldCupSection: value
+                        )
+                    )
+                }
+                sectionItems.append(worldCupSetting)
+            }
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
@@ -205,7 +225,7 @@ class HomePageSettingViewController: SettingsTableViewController,
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let pref = userPreferences.startAtHomeSetting
         currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
@@ -272,7 +292,7 @@ class HomePageSettingViewController: SettingsTableViewController,
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, LegacyFeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -306,7 +326,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, LegacyFeatureFlaggable {
+    class WallpaperSettings: Setting {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

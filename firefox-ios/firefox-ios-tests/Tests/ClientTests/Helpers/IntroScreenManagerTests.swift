@@ -16,7 +16,6 @@ final class IntroScreenManagerTests: XCTestCase {
         try await super.setUp()
         prefs = MockProfilePrefs()
         let mockProfile = MockProfile(databasePrefix: "IntroScreenManagerTests_")
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 

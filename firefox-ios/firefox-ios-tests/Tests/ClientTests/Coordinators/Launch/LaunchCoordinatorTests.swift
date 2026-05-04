@@ -18,9 +18,8 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
         delegate = MockLaunchCoordinatorDelegate()
     }

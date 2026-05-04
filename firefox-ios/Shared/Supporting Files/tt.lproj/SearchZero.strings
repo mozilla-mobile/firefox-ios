@@ -1,0 +1,6 @@
+/* When a user taps on the address bar, they can see their recent searches. This is the title of the button that the user can tap on to clear the list of their recent searches. */
+"SearchZero.Clear.ButtonTitle.v146" = "Чистарту";
+
+/* When a user taps on the address bar, they can see their recent searches. This is the title of the section that shows the list of their recent searches. */
+"SearchZero.RecentSearches.SectionTitle.v146" = "Соңгы эзләүләр";
+

@@ -12,9 +12,8 @@ final class LaunchTypeTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        await DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        await DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {

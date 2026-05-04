@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
@@ -246,11 +245,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
-    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
-        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
-        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
-    }()
-
     private(set) lazy var translationContextHintVC: ContextualHintViewController = {
         let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
@@ -282,23 +276,16 @@ class BrowserViewController: UIViewController,
     // MARK: Feature flags
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        let flagToCheck = FeatureFlagID.tabTrayUIExperiments
-        let featureFlagStatus = featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        let featureFlagStatus = featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         return featureFlagStatus && UIDevice.current.userInterfaceIdiom != .pad
     }
 
     var isUnifiedSearchEnabled: Bool {
-        let flagToCheck = FeatureFlagID.unifiedSearch
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.unifiedSearch)
     }
 
     var isSwipingTabsEnabled: Bool {
         return toolbarHelper.isSwipingTabsEnabled
-    }
-
-    var isToolbarUpdateHintEnabled: Bool {
-        let flagToCheck = FeatureFlagID.toolbarUpdateHint
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -326,26 +313,25 @@ class BrowserViewController: UIViewController,
     }
 
     var isTabScrollRefactoringEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabScrollRefactorFeature, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabScrollRefactorFeature)
     }
 
     private var isRecentOrTrendingSearchEnabled: Bool {
-        let isTrendingSearchEnabled = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isTrendingSearchEnabled = featureFlagsProvider.isEnabled(.trendingSearches)
         let isRecentSearchEnabled = featureFlagsProvider.isEnabled(.recentSearches)
         return isTrendingSearchEnabled || isRecentSearchEnabled
     }
 
     private var isRecentSearchEnabled: Bool {
-        let flagToCheck = FeatureFlagID.recentSearches
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     var isSnapKitRemovalEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.snapkitRemovalRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.snapkitRemovalRefactor)
     }
 
     var isAppStoreReviewTriggerEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.improvedAppStoreReviewTriggerFeature, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.improvedAppStoreReviewTriggerFeature)
     }
 
     // MARK: Computed vars
@@ -948,7 +934,7 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
-        if featureFlags.isFeatureEnabled(.translationLanguagePicker, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
             handleAutoTranslatePrompt(state: state)
         }
 
@@ -1561,16 +1547,6 @@ class BrowserViewController: UIViewController,
             if translationContextHintVC.isPresenting || UIDevice.current.userInterfaceIdiom == .phone {
                 translationContextHintVC.dismiss(animated: true)
             }
-        }
-
-        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
-        // as this also could change if the navigation bar is shown or not
-        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
-        previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-
-        if toolbarUpdateContextHintVC.isPresenting,
-           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
-            toolbarUpdateContextHintVC.dismiss(animated: true)
         }
     }
 
@@ -2645,9 +2621,6 @@ class BrowserViewController: UIViewController,
             actionType: ToolbarMiddlewareActionType.urlDidChange)
         store.dispatch(middlewareAction)
 
-        configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
-                                             navigationToolbarView: navigationToolbarContainer)
-
         // update the background view to ensure translucency is displayed correctly
         applyTheme()
     }
@@ -2964,8 +2937,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -2992,22 +2965,6 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
-        }
-
-        if let title = alert.title {
-            let attributedTitleKey = "attributedTitle"
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
         }
 
         if let popover = alert.popoverPresentationController {
@@ -4633,12 +4590,6 @@ extension BrowserViewController: TabManagerDelegate {
         // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
-        if selectedTab.isDownloadingDocument() {
-            navigationHandler?.showDocumentLoading()
-        } else {
-            navigationHandler?.removeDocumentLoading()
-        }
-
         // Remove the old accessibilityLabel only when the selected tab isn't the previous tab.
         // When the previous webview isn't visible anymore we ensure proper clean up for tests.
         if let previousWebView = previousTab?.webView, selectedTab != previousTab {
@@ -4649,6 +4600,82 @@ extension BrowserViewController: TabManagerDelegate {
             previousWebView.removeFromSuperview()
         }
 
+        let needsReloadRefactorEnabled = featureFlagsProvider.isEnabled(.needsReloadRefactor)
+        var needsReload = false
+        if let webView = selectedTab.webView {
+            webView.accessibilityLabel = .WebViewAccessibilityLabel
+            webView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.WebView.contentView
+            webView.accessibilityElementsHidden = false
+
+            updateSelectedTabWebview(selectedTab: selectedTab, previousTab: previousTab, webView: webView)
+
+            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+            if !needsReloadRefactorEnabled {
+                if selectedTab.isFxHomeTab {
+                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
+                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
+                    needsReload = true
+                }
+            }
+
+            // Do not reload if it's an about:blank page [FXIOS-14782]
+            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
+                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
+                // [FXIOS-15440] Blank page when opening inactive tabs from tab tray
+                // The URL is nil when this happens so we reload that tab upon selection
+                needsReload = true
+            }
+        }
+
+        updateUIAfterTabSelection(selectedTab: selectedTab, previousTab: previousTab)
+
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        /// If the selectedTab is showing an error page trigger a reload
+        if !needsReloadRefactorEnabled,
+           let url = selectedTab.url,
+           let internalUrl = InternalURL(url),
+           internalUrl.isErrorPage {
+            needsReload = true
+        }
+
+        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
+        if !needsReloadRefactorEnabled {
+            // Do not reload when it's an about:blank page or has a temporary document
+            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
+                needsReload = false
+            }
+        }
+
+        if needsReload {
+            selectedTab.reload()
+        }
+    }
+
+    private func updateSelectedTabWebview(selectedTab: Tab, previousTab: Tab?, webView: TabWebView) {
+        if selectedTab.isFxHomeTab && previousTab != nil {
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
+                )
+            )
+        } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
+            updateInContentHomePanel(url)
+        }
+    }
+
+    // Selecting a new tab triggers a lot of UI updates, with some of them being to ensure the content
+    // shown is the right one for that particular tab content.
+    private func updateUIAfterTabSelection(selectedTab: Tab, previousTab: Tab?) {
+        // Ensure tab PDF content is up-to-date
+        if selectedTab.isDownloadingDocument() {
+            navigationHandler?.showDocumentLoading()
+        } else {
+            navigationHandler?.removeDocumentLoading()
+        }
+
+        // Update theme upon tab selection
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
@@ -4679,42 +4706,6 @@ extension BrowserViewController: TabManagerDelegate {
             scrollController.tab = selectedTab
         } else {
             scrollController.tabProvider = TabProviderAdapter(selectedTab)
-        }
-
-        var needsReload = false
-        if let webView = selectedTab.webView {
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
-
-            if selectedTab.isFxHomeTab && previousTab != nil {
-                store.dispatch(
-                    GeneralBrowserAction(
-                        windowUUID: windowUUID,
-                        actionType: GeneralBrowserActionType.didSelectedTabChangeToHomepage
-                    )
-                )
-            } else if let url = webView.url, InternalURL(url)?.isErrorPage == true {
-                updateInContentHomePanel(url)
-            }
-
-            // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-            if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-                if selectedTab.isFxHomeTab {
-                    // Added as initial fix for WKWebView memory leak. Needs further investigation.
-                    // See: https://mozilla-hub.atlassian.net/browse/FXIOS-10612] +
-                    // [https://mozilla-hub.atlassian.net/browse/FXIOS-10335]
-                    needsReload = true
-                }
-            }
-
-            // Do not reload if it's an about:blank page [FXIOS-14782]
-            if webView.url == nil && selectedTab.url?.absoluteString != "about:blank" {
-                logger.log("Webview was zombified, reloading tab upon selection", level: .debug, category: .lifecycle)
-                // The webView can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                needsReload = true
-            }
         }
 
         updateTabCountUsingTabManager(tabManager)
@@ -4754,27 +4745,6 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         } else if isSwipingTabsEnabled {
             addressToolbarContainer.updateSkeletonAddressBarsVisibility(tabManager: tabManager)
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        /// If the selectedTab is showing an error page trigger a reload
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor),
-           let url = selectedTab.url,
-           let internalUrl = InternalURL(url),
-           internalUrl.isErrorPage {
-            needsReload = true
-        }
-
-        // FXIOS-14783: Experimentation on removing this code, do not add anything in there
-        if !featureFlagsProvider.isEnabled(.needsReloadRefactor) {
-            // Do not reload when it's an about:blank page or has a temporary document
-            if selectedTab.temporaryDocument != nil || selectedTab.url?.absoluteString == "about:blank" {
-                needsReload = false
-            }
-        }
-
-        if needsReload {
-            selectedTab.reload()
         }
     }
 

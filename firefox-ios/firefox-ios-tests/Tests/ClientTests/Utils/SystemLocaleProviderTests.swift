@@ -146,7 +146,7 @@ final class SystemLocaleProviderTests: XCTestCase {
 
     func test_nativeLanguageName_knownCode_returnsNameInItsOwnLanguage() {
         let subject = createSubject(with: Locale(identifier: "en_US"))
-        XCTAssertEqual(subject.nativeLanguageName(for: "fr"), "français")
+        XCTAssertEqual(subject.nativeLanguageName(for: "fr"), "Français")
     }
 
     func test_nativeLanguageName_unknownCode_returnsFallbackCode() {

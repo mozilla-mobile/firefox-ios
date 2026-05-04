@@ -18,8 +18,7 @@ protocol SearchViewDelegate: AnyObject {
 }
 
 @MainActor
-class SearchViewModel: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
-                       FeatureFlaggable,
+class SearchViewModel: FeatureFlaggable,
                        UserFeaturePreferenceProvider,
                        LoaderListener {
     private var profile: Profile
@@ -199,7 +198,7 @@ class SearchViewModel: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
     // Show list of trending searches if user puts focus in the address bar but does not enter any text.
     @MainActor
     var shouldShowTrendingSearches: Bool {
-        let isFeatureOn = featureFlags.isFeatureEnabled(.trendingSearches, checking: .buildOnly)
+        let isFeatureOn = featureFlagsProvider.isEnabled(.trendingSearches)
         let isSettingsToggleOn = model.shouldShowTrendingSearches
         return isFeatureOn && isSettingsToggleOn && isZeroSearchState
     }
@@ -304,7 +303,8 @@ class SearchViewModel: LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
 
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
                 && (includeNonSponsored || includeSponsored) else {
             if !firefoxSuggestions.isEmpty {
                 firefoxSuggestions = []

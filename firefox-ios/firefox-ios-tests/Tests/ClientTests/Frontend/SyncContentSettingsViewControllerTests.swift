@@ -16,7 +16,6 @@ class SyncContentSettingsViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         syncContentSettingsVC = SyncContentSettingsViewController(windowUUID: windowUUID)
         syncContentSettingsVC?.profile = profile
     }
