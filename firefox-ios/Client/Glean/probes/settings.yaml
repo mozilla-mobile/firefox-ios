@@ -189,12 +189,14 @@ settings:
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
       - https://mozilla-hub.atlassian.net/browse/FXIOS-12437
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15588
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
       - https://github.com/mozilla-mobile/firefox-ios/pull/27180
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33508
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
@@ -254,57 +256,6 @@ settings.app_icon:
     metadata:
       tags:
         - AppIconSelection
-
-# AI Controls Settings
-settings.ai_controls:
-  ai_control_toggled:
-    type: event
-    description: |
-      Recorded when the user toggles the AI controls kill switch in settings.
-    extra_keys:
-      toggle_value:
-        type: boolean
-        description: |
-          The new value of the AI controls toggle.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-15588
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  translation_setting_toggled:
-    type: event
-    description: |
-      Recorded when the user toggles AI-powered translations in settings.
-    extra_keys:
-      toggle_value:
-        type: boolean
-        description: |
-          The new value of the translations toggle.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/FXIOS-15588
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
-  page_summaries_toggled:
-    type: event
-    description: |
-      Recorded when the user toggles page summaries in settings.
-    extra_keys:
-      toggle_value:
-        type: boolean
-        description: |
-          The new value of the page summaries toggle.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/FXIOS-15588
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/33508#issuecomment-4344810572
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: never
         
 # Default Zoom Settings
 settings.zoom_bar:

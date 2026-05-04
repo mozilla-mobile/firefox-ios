@@ -60,19 +60,4 @@ struct SettingsTelemetry {
         let extra = GleanMetrics.Settings.OptionSelectedExtra(option: option.rawValue)
         gleanWrapper.recordEvent(for: GleanMetrics.Settings.optionSelected, extras: extra)
     }
-
-    func aiControlToggled(_ toggleValue: Bool) {
-        let extra = GleanMetrics.SettingsAiControls.AiControlToggledExtra(toggleValue: toggleValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsAiControls.aiControlToggled, extras: extra)
-    }
-
-    func translationSettingToggled(_ toggleValue: Bool) {
-        let extra = GleanMetrics.SettingsAiControls.TranslationSettingToggledExtra(toggleValue: toggleValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsAiControls.translationSettingToggled, extras: extra)
-    }
-
-    func pageSummariesToggled(_ toggleValue: Bool) {
-        let extra = GleanMetrics.SettingsAiControls.PageSummariesToggledExtra(toggleValue: toggleValue)
-        gleanWrapper.recordEvent(for: GleanMetrics.SettingsAiControls.pageSummariesToggled, extras: extra)
-    }
 }

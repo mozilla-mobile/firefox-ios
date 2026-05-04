@@ -106,19 +106,31 @@ class AIControlsModel: ObservableObject,
         prefs.setBool(newValue, forKey: PrefsKeys.Settings.aiKillSwitchFeature)
         updatePageSummariesFeature(to: !newValue)
         updateTranslationsFeature(to: !newValue)
-        settingsTelemetry.aiControlToggled(newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Settings.aiKillSwitchFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
     }
 
     @MainActor
     func toggleTranslationsFeature(to newValue: Bool) {
         updateTranslationsFeature(to: newValue)
-        settingsTelemetry.translationSettingToggled(newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Settings.translationsFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
     }
 
     @MainActor
     func togglePageSummariesFeature(to newValue: Bool) {
         updatePageSummariesFeature(to: newValue)
-        settingsTelemetry.pageSummariesToggled(newValue)
+        settingsTelemetry.changedSetting(
+            PrefsKeys.Summarizer.summarizeContentFeature,
+            to: String(newValue),
+            from: String(!newValue)
+        )
     }
 
     @MainActor
