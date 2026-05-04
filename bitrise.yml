@@ -275,15 +275,14 @@ workflows:
             echo "coverage.json created successfully"
 
             # Define a cleanup function to remove the file
-            # function cleanup_coverage {
-            #   if [ -f coverage.json ]; then
-            #     echo "Removing coverage.json"
-            #     rm coverage.json
-            #   fi
-            # }
+            function cleanup_coverage {
+              if [ -f coverage.json ]; then
+                echo "Removing coverage.json"
+                rm coverage.json
+              fi
+            }
             # Register it to run on script exit
-            # trap cleanup_coverage EXIT
-            cat coverage.json
+            trap cleanup_coverage EXIT
             echo "Running Danger"
             swift run danger-swift ci
     - slack@4.2.1:
