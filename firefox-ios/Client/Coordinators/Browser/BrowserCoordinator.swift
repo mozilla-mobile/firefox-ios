@@ -1083,6 +1083,7 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
             router: router,
