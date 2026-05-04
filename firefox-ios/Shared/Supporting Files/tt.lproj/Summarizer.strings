@@ -1,6 +1,9 @@
 /* The label for the error button that allows the user to close the summary view because there is an error summarizing the page and the summary cannot be retried. */
 "Summarizer.CloseButton.Label.v142" = "Ябу";
 
+/* The label for the error button that allows the user to retry summarizing the page. */
+"Summarizer.RetryButton.Label.v142" = "Кабатлау";
+
 /* The label for the accept button in the info panel in the summarizer when the user has not yet accepted the ToS. */
 "Summarizer.ToS.InfoPanel.ContinueButton.Label.v143" = "Дәвам итү";
 

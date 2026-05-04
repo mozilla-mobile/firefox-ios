@@ -245,11 +245,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
-    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
-        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
-        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
-    }()
-
     private(set) lazy var translationContextHintVC: ContextualHintViewController = {
         let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
@@ -291,10 +286,6 @@ class BrowserViewController: UIViewController,
 
     var isSwipingTabsEnabled: Bool {
         return toolbarHelper.isSwipingTabsEnabled
-    }
-
-    var isToolbarUpdateHintEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.toolbarUpdateHint)
     }
 
     var isNativeErrorPageEnabled: Bool {
@@ -1551,16 +1542,6 @@ class BrowserViewController: UIViewController,
                 translationContextHintVC.dismiss(animated: true)
             }
         }
-
-        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
-        // as this also could change if the navigation bar is shown or not
-        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
-        previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-
-        if toolbarUpdateContextHintVC.isPresenting,
-           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
-            toolbarUpdateContextHintVC.dismiss(animated: true)
-        }
     }
 
     // MARK: - Constraints
@@ -2634,9 +2615,6 @@ class BrowserViewController: UIViewController,
             actionType: ToolbarMiddlewareActionType.urlDidChange)
         store.dispatch(middlewareAction)
 
-        configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
-                                             navigationToolbarView: navigationToolbarContainer)
-
         // update the background view to ensure translucency is displayed correctly
         applyTheme()
     }
@@ -2953,8 +2931,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -2981,22 +2959,6 @@ class BrowserViewController: UIViewController,
         if #available(iOS 26, *), sourceButton != nil {
         } else {
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
-        }
-
-        if let title = alert.title {
-            let attributedTitleKey = "attributedTitle"
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
         }
 
         if let popover = alert.popoverPresentationController {

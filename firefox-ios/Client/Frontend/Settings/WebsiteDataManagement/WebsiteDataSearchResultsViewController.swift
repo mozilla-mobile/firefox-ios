@@ -20,6 +20,11 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
     private var currentSearchText = ""
 
+    private var shouldShowSectionBorders: Bool {
+        guard #available(iOS 26.0, *) else { return true }
+        return false
+    }
+
     init(viewModel: WebsiteDataManagementViewModel,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -43,7 +48,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
         footer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        footer.showBorder(for: .top, true)
+        footer.showBorder(for: .top, shouldShowSectionBorders)
         tableView.tableFooterView = footer
 
         KeyboardHelper.defaultHelper.addDelegate(self)
@@ -151,8 +156,8 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         headerView.titleLabel.text = section == Section.sites.rawValue ? .SettingsWebsiteDataTitle : nil
 
-        headerView.showBorder(for: .top, true)
-        headerView.showBorder(for: .bottom, true)
+        headerView.showBorder(for: .top, shouldShowSectionBorders)
+        headerView.showBorder(for: .bottom, shouldShowSectionBorders)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }

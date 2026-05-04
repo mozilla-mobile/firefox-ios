@@ -113,6 +113,7 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
     }
 
     public struct SearchSettings {
@@ -160,7 +161,6 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case relayMaskKey = "ContextualHintRelayMaskKey"
-        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }

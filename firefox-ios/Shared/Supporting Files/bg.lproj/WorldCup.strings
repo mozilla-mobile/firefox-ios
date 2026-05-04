@@ -34,6 +34,9 @@
 /* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
 "WorldCup.CountryPicker.DoneButtonTitle.v151" = "Готово";
 
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Пропускане";
+
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.CountryPicker.Title.v151" = "Следвайте екипа си";
 
@@ -88,6 +91,9 @@
 /* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
 "WorldCup.HomepageWidget.CountDown.Title.v151" = "Обратно връщане до Световното първенство по футбол";
 
+/* Label for the button that takes users to the World Cup schedule website on the countdown section. */
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Преглед на графика";
+
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
 "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Изключване на известията";
 
@@ -120,6 +126,9 @@
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
 "WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Следете Световното първенство по футбол";
+
+/* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Следвайте отбора";
 
 /* The label indicating that the displaying match as ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Пълно работно време)";
@@ -162,6 +171,9 @@
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "ПОЛУФИНАЛИ";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ТРЕТО МЯСТО";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Предстоящи";

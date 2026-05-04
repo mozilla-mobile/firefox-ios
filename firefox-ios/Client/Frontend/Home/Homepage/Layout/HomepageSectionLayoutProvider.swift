@@ -9,7 +9,7 @@ import UIKit
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
 @MainActor
-final class HomepageSectionLayoutProvider {
+final class HomepageSectionLayoutProvider: FeatureFlaggable {
     struct UX {
         static let topSpacing: CGFloat = 40
         static let standardInset: CGFloat = 16
@@ -42,6 +42,10 @@ final class HomepageSectionLayoutProvider {
 
         struct MessageCardConstants {
             static let height: CGFloat = 180
+        }
+
+        struct WorldcupConstants {
+            static let maxWidth: CGFloat = 500
         }
 
         struct PocketConstants {
@@ -156,6 +160,8 @@ final class HomepageSectionLayoutProvider {
             return createStoriesSectionLayout(for: environment)
         case .bookmarks:
             return createBookmarksSectionLayout(for: environment)
+        case .worldcup:
+            return createWorldcupSectionLayout(for: environment)
         case .spacer:
             return createSpacerSectionLayout(for: environment)
         }
@@ -185,6 +191,39 @@ final class HomepageSectionLayoutProvider {
             leading: leadingInset,
             bottom: bottomInsets,
             trailing: leadingInset)
+
+        return section
+    }
+
+    private func createWorldcupSectionLayout(
+        for environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection {
+        let traitCollection = environment.traitCollection
+        let containerWidth = environment.container.contentSize.width
+        let itemHeight = UX.MessageCardConstants.height
+
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(itemHeight))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+
+        let maxWidth = UX.WorldcupConstants.maxWidth
+        let horizontalInset: CGFloat
+        if containerWidth > maxWidth {
+            // Centre the cell when the container is wider than the max width
+            horizontalInset = (containerWidth - maxWidth) / 2
+        } else {
+            horizontalInset = UX.leadingInset(traitCollection: traitCollection)
+        }
+
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: horizontalInset,
+            bottom: UX.spacingBetweenSections,
+            trailing: horizontalInset)
 
         return section
     }
@@ -802,6 +841,19 @@ final class HomepageSectionLayoutProvider {
         return headerHeight
     }
 
+    /// Returns the estimated height of the World Cup section when it is visible, or 0 when hidden.
+    private func getWorldcupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
+        guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
+              state.worldcupState.shouldShowSection,
+              featureFlagsProvider.isEnabled(.worldCupWidget) else { return 0 }
+
+        let containerWidth = normalizedDimension(environment.container.contentSize.width)
+        let cell = WorldCupTimerCell()
+        let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
+
+        return cellHeight + UX.spacingBetweenSections
+    }
+
     /// Returns the height that the spacer should be, before accounting for vertical stories peeking above the fold.
     /// Baseline stories: gets the height available for the spacer to take up to force the stories section to be
     /// right above the fold
@@ -817,6 +869,7 @@ final class HomepageSectionLayoutProvider {
         let headerLogoHeight = getHeaderLogoHeight(environment: environment)
         let privacyNoticeHeight = getPrivacyNoticeSectionHeight(environment: environment)
         let topSitesHeight = getShortcutsSectionHeight(environment: environment)
+        let worldcupHeight = getWorldcupSectionHeight(environment: environment)
         let jumpBackInHeight = getJumpBackInSectionHeight(environment: environment)
         let bookmarksHeight = getBookmarksSectionHeight(environment: environment)
         let searchBarHeight = getSearchBarSectionHeight(environment: environment)
@@ -826,6 +879,7 @@ final class HomepageSectionLayoutProvider {
             - headerLogoHeight
             - privacyNoticeHeight
             - topSitesHeight
+            - worldcupHeight
             - jumpBackInHeight
             - bookmarksHeight
             - searchBarHeight

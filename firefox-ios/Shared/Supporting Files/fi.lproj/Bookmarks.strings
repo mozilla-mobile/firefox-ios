@@ -61,6 +61,9 @@
 /* The label displayed in the toast notification when saving a bookmark via the menu to a custom folder. %@ represents the custom name of the folder, created by the user, where the bookmark will be saved to. */
 "Bookmarks.Menu.SavedBookmarkToastLabel.v136" = "Tallennettu kansioon “%@”";
 
+/* Placeholder text for the search field in the bookmarks panel, used to filter bookmarks by title or URL. */
+"Bookmarks.Search.Placeholder.v151" = "Etsi kirjanmerkeistä";
+
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "Muokkaa";
 

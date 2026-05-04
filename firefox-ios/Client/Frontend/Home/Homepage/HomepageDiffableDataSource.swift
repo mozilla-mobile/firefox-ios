@@ -9,7 +9,7 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>, FeatureFlaggable {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -29,6 +29,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case jumpBackIn(TextColor?, JumpBackInSectionLayoutConfiguration)
         case bookmarks(TextColor?)
         case pocket(TextColor?)
+        case worldcup(TextColor?)
         case spacer
 
         var canHandleLongPress: Bool {
@@ -56,6 +57,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -70,6 +72,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 SyncedTabCell.self,
                 BookmarksCell.self,
                 StoryCell.self,
+                WorldCupTimerCell.self,
                 HomepageSpacerCell.self
             ]
         }
@@ -124,6 +127,11 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             )
             snapshot.appendSections([topSitesSection])
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
+        }
+
+        if state.worldcupState.shouldShowSection, featureFlagsProvider.isEnabled(.worldCupWidget) {
+            snapshot.appendSections([.worldcup(textColor)])
+            snapshot.appendItems([.worldcupCard], toSection: .worldcup(textColor))
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {

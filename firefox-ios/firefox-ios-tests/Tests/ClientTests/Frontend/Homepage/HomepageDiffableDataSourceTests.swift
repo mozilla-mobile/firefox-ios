@@ -23,6 +23,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
+        setIsWorldCupWidgetFeatureEnabled(true)
     }
 
     override func tearDown() async throws {
@@ -42,9 +43,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 2)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .spacer])
+        XCTAssertEqual(snapshot.numberOfSections, 3)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .worldcup(nil), .spacer])
         XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .worldcup(nil)), 1)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
     }
 
@@ -86,6 +88,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            .worldcup(.systemCyan),
             .spacer,
             .pocket(.systemCyan)
         ]
@@ -123,6 +126,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .topSites(nil, numberOfTilesPerRow, true),
+            .worldcup(nil),
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -160,6 +164,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .topSites(nil, numberOfTilesPerRow, false),
+            .worldcup(nil),
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -184,6 +189,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(nil)), 20)
         let expectedSections: [HomepageSection] = [
             .header,
+            .worldcup(nil),
             .spacer,
             .pocket(nil)
         ]
@@ -288,6 +294,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .messageCard,
+            .worldcup(nil),
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
@@ -326,6 +333,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .bookmarks(nil)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
+            .worldcup(nil),
             .bookmarks(nil),
             .spacer
         ]
@@ -359,6 +367,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .jumpBackIn(nil, mockSectionConfig)), 1)
         let expectedSections: [HomepageSection] = [
             .header,
+            .worldcup(nil),
             .jumpBackIn(nil, mockSectionConfig),
             .spacer
         ]
@@ -382,9 +391,16 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let expectedSections: [HomepageSection] = [
             .header,
             .privacyNotice,
+            .worldcup(nil),
             .spacer
         ]
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
+    }
+
+    private func setIsWorldCupWidgetFeatureEnabled(_ isEnabled: Bool) {
+        FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
+            return WorldCupWidgetFeature(enabled: isEnabled)
+        }
     }
 
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {

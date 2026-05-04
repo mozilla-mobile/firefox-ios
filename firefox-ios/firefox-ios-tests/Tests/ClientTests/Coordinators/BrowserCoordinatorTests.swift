@@ -539,7 +539,11 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Summarize Panel
 
-    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
+    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -557,7 +561,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         await Task.yield()
     }
 
-    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
+    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
@@ -582,7 +590,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         }))
     }
 
-    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
+    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
