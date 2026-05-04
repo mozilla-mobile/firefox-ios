@@ -48,5 +48,4 @@ struct TestType {
     }
 
     let extraPropertyAfterComputedProperty: Int
-
 }

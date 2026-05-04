@@ -138,6 +138,7 @@ final class CopyWithUpdatesTests: XCTestCase {
 
     func testMacro_withComputedProperty() throws {
         #if canImport(CopyWithUpdatesMacros)
+        // swiftlint:disable line_length
         assertMacroExpansion(
             """
             @CopyWithUpdates
@@ -150,7 +151,7 @@ final class CopyWithUpdatesTests: XCTestCase {
                         value > 0
                     }
                 }
-            
+
                 let extraPropertyAfterComputedProperty: Int
             }
             """,
@@ -164,7 +165,7 @@ final class CopyWithUpdatesTests: XCTestCase {
                         value > 0
                     }
                 }
-            
+
                 let extraPropertyAfterComputedProperty: Int
 
                 public func copyWithUpdates(constantProperty: [Int]? = nil, variableProperty: Int? = nil, extraPropertyAfterComputedProperty: Int? = nil) -> Self {
@@ -178,6 +179,7 @@ final class CopyWithUpdatesTests: XCTestCase {
             """,
             macros: testMacros
         )
+        // swiftlint:enable line_length
         #else
         throw XCTSkip("macros are only supported when running tests for the host platform")
         #endif
