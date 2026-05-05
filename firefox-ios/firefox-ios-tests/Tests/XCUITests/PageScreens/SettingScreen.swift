@@ -17,6 +17,9 @@ final class SettingScreen {
     private var clearDataCell: XCUIElement { sel.CLEAR_PRIVATE_DATA_CELL.element(in: app) }
     private var okButton: XCUIElement { sel.ALERT_OK_BUTTON.element(in: app)}
     private var toggle: XCUIElement { sel.BLOCK_POPUPS_SWITCH.element(in: app) }
+    private var copiedLinksToggle: XCUIElement {
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"]
+    }
     private var translationCell: XCUIElement { sel.TRANSLATION_CELL_TITLE.element(in: app) }
 
     func closeSettingsWithDoneButton() {
@@ -101,6 +104,33 @@ final class SettingScreen {
 
         let value = toggle.value as? String
         XCTAssertEqual(value, "0", "Expected 'Block Pop-Ups' switch to be OFF (value = 0), but got \(String(describing: value))")
+    }
+
+    func assertCopiedLinksToggleIsOff() {
+        BaseTestCase().mozWaitForElementToExist(copiedLinksToggle)
+
+        let value = copiedLinksToggle.value as? String
+        XCTAssertEqual(
+            value,
+            "0",
+            "Expected 'Offer to Open Copied Links, When opening Firefox' switch to be OFF (value = 0), but got \(String(describing: value))"
+        )
+    }
+
+    func assertCopiedLinksToggleIsOn() {
+        BaseTestCase().mozWaitForElementToExist(copiedLinksToggle)
+
+        let value = copiedLinksToggle.value as? String
+        XCTAssertEqual(
+            value,
+            "1",
+            "Expected 'Offer to Open Copied Links, When opening Firefox' switch to be ON (value = 1), but got \(String(describing: value))"
+        )
+    }
+
+    func tapCopiedLinksToggle() {
+        BaseTestCase().mozWaitForElementToExist(copiedLinksToggle)
+        copiedLinksToggle.waitAndTap()
     }
 
     func navigateBackToHomePage() {
