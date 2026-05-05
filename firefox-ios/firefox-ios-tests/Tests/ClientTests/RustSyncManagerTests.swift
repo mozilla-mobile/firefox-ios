@@ -5,7 +5,7 @@
 @testable import Client
 import Shared
 import Sync
-import TestKit
+import CommonMocks
 import XCTest
 
 class RustSyncManagerTests: XCTestCase {

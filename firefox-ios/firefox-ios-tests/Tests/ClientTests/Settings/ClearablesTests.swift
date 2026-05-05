@@ -2,11 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Testing
-import TestKit
-import WebKit
 import Combine
+import CommonMocks
 import Shared
+import Testing
+import WebKit
 @testable import Client
 
 @Suite("CookiesClearable")

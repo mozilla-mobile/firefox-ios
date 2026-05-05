@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 import Storage
-import TestKit
+import CommonMocks
 import XCTest
 
 @testable import Client

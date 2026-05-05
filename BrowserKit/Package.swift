@@ -230,7 +230,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "MLPAKitTests",
-            dependencies: ["MLPAKit", "TestKit"],
+            dependencies: ["MLPAKit", "SharedMocks", "TestKit"],
             swiftSettings: []
         ),
         .target(

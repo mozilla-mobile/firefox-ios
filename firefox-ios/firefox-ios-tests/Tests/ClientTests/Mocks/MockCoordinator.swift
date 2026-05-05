@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import TestKit
+import CommonMocks
 import UIKit
 @testable import Client
 

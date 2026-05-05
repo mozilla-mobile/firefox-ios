@@ -4,7 +4,7 @@
 
 import Common
 import Shared
-import TestKit
+import CommonMocks
 import XCTest
 
 @testable import Client

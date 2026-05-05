@@ -6,7 +6,7 @@ import Common
 import MozillaAppServices
 import Shared
 import StoreKit
-import TestKit
+import CommonMocks
 import XCTest
 
 @testable import Client

@@ -4,6 +4,7 @@
 
 import Account
 import Common
+import CommonMocks
 import Foundation
 import MozillaAppServices
 import Shared
