@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Common
 import Shared
+import UIKit
 
 @MainActor
 final class TranslationsMiddleware: FeatureFlaggable {
@@ -34,6 +35,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// the active translation is discarded, tryAutoTranslate picks this up and translates to the
     /// requested language instead of the user's top preferred language.
     private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
+    private var didBecomeActiveObserver: NSObjectProtocol?
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -50,6 +52,15 @@ final class TranslationsMiddleware: FeatureFlaggable {
         self.translationsTelemetry = translationsTelemetry
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
+        didBecomeActiveObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.clearStuckLoadingState()
+            }
+        }
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -324,6 +335,24 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {
         windowManager.tabManager(for: windowUUID).selectedTab
+    }
+
+    private func clearStuckLoadingState() {
+        for tabManager in windowManager.allWindowTabManagers() {
+            guard let tab = tabManager.selectedTab,
+                  tab.translationConfiguration?.state == .loading else { continue }
+            let windowUUID = tabManager.windowUUID
+            translationFlowIds[windowUUID] = nil
+            selectedTargetLanguages[windowUUID] = nil
+            dispatchClearTranslationIcon(windowUUID: windowUUID, on: tab)
+            let action = ToolbarAction(
+                url: tab.url,
+                translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+            checkTranslationsAreEligible(for: action)
+        }
     }
 
     /// If auto-translate is enabled, triggers translation to the user's top preferred language.
