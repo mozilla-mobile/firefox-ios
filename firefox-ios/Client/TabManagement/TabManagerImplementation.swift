@@ -672,7 +672,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task { [weak tab, self] in
+        Task { [weak tab, weak self] in
             guard let tab else { return }
             do {
                 let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
@@ -949,15 +949,17 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
-        Task { [weak self] in
-            try? await self?.imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+        let imageStore = imageStore
+        Task {
+            try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
     }
 
     private func cleanUpTabSessionData() {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
-        Task { [weak self] in
-            await self?.tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+        let tabSessionStore = tabSessionStore
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
     }
 
@@ -979,8 +981,9 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
-        Task { [weak self] in
-            await self?.tabSessionStore.deleteUnusedTabSessionData(keeping: [])
+        let tabSessionStore = tabSessionStore
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
     }
 
