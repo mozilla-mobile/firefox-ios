@@ -849,7 +849,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
 
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let cell = WorldCupCell()
-        cell.configure(with: state.worldcupState, theme: LightTheme())
+        cell.configure(with: state.worldcupState, theme: LightTheme(), onHeightChange: { _ in })
         let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
 
         return cellHeight + UX.spacingBetweenSections

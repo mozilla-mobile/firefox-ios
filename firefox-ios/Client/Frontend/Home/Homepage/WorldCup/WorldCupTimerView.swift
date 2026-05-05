@@ -120,6 +120,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         stack.alignment = .leading
         stack.spacing = UX.contentSpacing
         stack.setContentCompressionResistancePriority(.required, for: .horizontal)
+        stack.setContentHuggingPriority(.required, for: .vertical)
     }
 
     // MARK: - Init

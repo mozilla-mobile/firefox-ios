@@ -8,18 +8,18 @@ import Foundation
 /// A homepage cell that pages through an arbitrary set of subviews with a page-indicator.
 /// The cell dynamically resizes its height to match the currently visible page.
 /// When there is only one subview, scrolling is disabled and the page indicator is hidden.
-final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
-        static let generalCornerRadius: CGFloat = 16
-        static let contentInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-        static let pageControlHeight: CGFloat = 20
-        static let pageControlBottomSpacing: CGFloat = 4
+        static let rootContainerCornerRadius: CGFloat = 26
+        static let padding: CGFloat = 16
+        static let pageControlHeight: CGFloat = 6.0
+        static let pageControlTopPadding: CGFloat = 4
     }
 
     // MARK: - UI Elements
 
     private let rootContainer: UIView = .build { view in
-        view.layer.cornerRadius = UX.generalCornerRadius
+        view.layer.cornerRadius = UX.rootContainerCornerRadius
         view.clipsToBounds = true
     }
 
@@ -51,6 +51,7 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
     private var pageControlHeightConstraint: NSLayoutConstraint?
     private var currentPage = 0
     private var currentState: WorldCupSectionState?
+    private var onHeightChange: ((_ animated: Bool) -> Void)?
 
     // MARK: - Inits
 
@@ -58,7 +59,6 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
         super.init(frame: .zero)
 
         isAccessibilityElement = false
-
         scrollView.delegate = self
         setupLayout()
     }
@@ -67,22 +67,20 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        removePageViews()
-        scrollView.contentOffset = .zero
-        pageControl.currentPage = 0
-        currentPage = 0
-        currentState = nil
-    }
-
     // MARK: - Public
 
     /// Configures the cell with the given state, displaying its pages as full-width subviews.
     /// The cell height adapts to the currently visible page's height.
     /// When there is a single page, scrolling is disabled and the page indicator is hidden.
     /// Subviews are only rebuilt when the state changes; theme is always reapplied.
-    func configure(with state: WorldCupSectionState, theme: Theme) {
+    /// `onHeightChange` is invoked when the cell needs the parent collection view to relayout
+    /// to reflect a new height.
+    func configure(
+        with state: WorldCupSectionState,
+        theme: Theme,
+        onHeightChange: @escaping (_ animated: Bool) -> Void
+    ) {
+        self.onHeightChange = onHeightChange
         if currentState != state {
             currentState = state
             rebuildPages(for: state)
@@ -91,7 +89,10 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
     }
 
     private func makeSubviews(for state: WorldCupSectionState) -> [UIView] {
-        return [WorldCupTimerView(windowUUID: state.windowUUID)]
+        let view = UIView()
+        view.backgroundColor = .red
+        view.heightAnchor.constraint(equalToConstant: 200.0).isActive = true
+        return [WorldCupTimerView(windowUUID: state.windowUUID), view]
     }
 
     private func rebuildPages(for state: WorldCupSectionState) {
@@ -140,18 +141,18 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
             rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             scrollView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
-                                            constant: UX.contentInsets.top),
+                                            constant: UX.padding),
             scrollView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                                constant: UX.contentInsets.left),
+                                                constant: UX.padding),
             scrollView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                 constant: -UX.contentInsets.right),
+                                                 constant: -UX.padding),
             heightConstraint,
 
             pageControl.topAnchor.constraint(equalTo: scrollView.bottomAnchor,
-                                             constant: UX.pageControlBottomSpacing),
+                                             constant: UX.pageControlTopPadding),
             pageControl.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
             pageControl.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                                constant: -UX.contentInsets.bottom),
+                                                constant: -UX.padding),
             pageControlHeight,
 
             pagesStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
@@ -177,15 +178,7 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
         guard scrollViewHeightConstraint?.constant != targetHeight else { return }
         scrollViewHeightConstraint?.constant = targetHeight
 
-        guard let collectionView = superview as? UICollectionView else { return }
-
-        if animated {
-            collectionView.performBatchUpdates(nil)
-        } else {
-            UIView.performWithoutAnimation {
-                collectionView.performBatchUpdates(nil)
-            }
-        }
+        onHeightChange?(animated)
     }
 
     private func removePageViews() {
@@ -195,15 +188,22 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
         pageViews.removeAll()
     }
 
-    private func setupShadow(theme: Theme) {
-        contentView.layer.shadowPath = UIBezierPath(
-            roundedRect: contentView.bounds,
-            cornerRadius: UX.generalCornerRadius
-        ).cgPath
-        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
-        contentView.layer.shadowOffset = HomepageUX.shadowOffset
-        contentView.layer.shadowRadius = HomepageUX.shadowRadius
+    // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = scrollView.frame.width
+        guard pageWidth > 0 else { return }
+        let newPage = Int(round(scrollView.contentOffset.x / pageWidth))
+        guard newPage != currentPage else { return }
+        currentPage = newPage
+        pageControl.currentPage = newPage
+        updateScrollViewHeight(for: newPage, animated: true)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageWidth = scrollView.frame.width
+        guard pageWidth > 0 else { return }
+        pageControl.currentPage = Int(round(scrollView.contentOffset.x / pageWidth))
     }
 
     // MARK: - ThemeApplicable
@@ -228,24 +228,15 @@ final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
             setupShadow(theme: theme)
         }
     }
-}
-
-// MARK: - UIScrollViewDelegate
-
-extension WorldCupCell: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageWidth = scrollView.frame.width
-        guard pageWidth > 0 else { return }
-        let newPage = Int(round(scrollView.contentOffset.x / pageWidth))
-        guard newPage != currentPage else { return }
-        currentPage = newPage
-        pageControl.currentPage = newPage
-        updateScrollViewHeight(for: newPage, animated: true)
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let pageWidth = scrollView.frame.width
-        guard pageWidth > 0 else { return }
-        pageControl.currentPage = Int(round(scrollView.contentOffset.x / pageWidth))
+    
+    private func setupShadow(theme: Theme) {
+        contentView.layer.shadowPath = UIBezierPath(
+            roundedRect: contentView.bounds,
+            cornerRadius: UX.rootContainerCornerRadius
+        ).cgPath
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
+        contentView.layer.shadowOffset = HomepageUX.shadowOffset
+        contentView.layer.shadowRadius = HomepageUX.shadowRadius
     }
 }
