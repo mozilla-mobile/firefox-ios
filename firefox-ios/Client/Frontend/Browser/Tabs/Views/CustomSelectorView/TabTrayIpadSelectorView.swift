@@ -15,7 +15,7 @@ class TabTrayiPadSelectorView: UIView, ThemeApplicable {
         static let fontScaleDelta: CGFloat = 0.055
         static let containerHorizontalSpacing: CGFloat = 16
         static let stackViewHorizontalSpacing: CGFloat = 80
-        static let topSpacing: CGFloat = 8
+        static let verticalSpacing: CGFloat = 8
         static let bottomSpacingIOS26: CGFloat = 16
     }
 
@@ -78,7 +78,7 @@ class TabTrayiPadSelectorView: UIView, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        selectionBackgroundView.layer.cornerRadius = containerView.bounds.height / 2
+        selectionBackgroundView.layer.cornerRadius = selectionBackgroundView.frame.height / 2
         if #available(iOS 26, *) {
             visualEffectView.layer.cornerRadius = containerView.bounds.height / 2
         }
@@ -99,9 +99,8 @@ class TabTrayiPadSelectorView: UIView, ThemeApplicable {
             addSubview(visualEffectView)
         }
         addSubview(containerView)
-        containerView.addSubview(selectionBackgroundView)
         containerView.addSubview(stackView)
-        containerView.sendSubviewToBack(selectionBackgroundView)
+        insertSubview(selectionBackgroundView, belowSubview: containerView)
 
         for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
@@ -111,17 +110,19 @@ class TabTrayiPadSelectorView: UIView, ThemeApplicable {
         }
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor, constant: UX.topSpacing),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpacingIOS26),
+            containerView.topAnchor.constraint(equalTo: topAnchor, constant: UX.verticalSpacing),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.verticalSpacing),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                    constant: UX.containerHorizontalSpacing),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                     constant: -UX.containerHorizontalSpacing),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: UX.verticalSpacing),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.stackViewHorizontalSpacing),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.verticalSpacing),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                               constant: UX.stackViewHorizontalSpacing),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                 constant: -UX.stackViewHorizontalSpacing),
         ])
