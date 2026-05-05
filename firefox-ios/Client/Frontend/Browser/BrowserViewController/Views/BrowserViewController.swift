@@ -2604,7 +2604,7 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(prefs: profile.prefs),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
