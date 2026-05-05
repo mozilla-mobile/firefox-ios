@@ -172,6 +172,45 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         XCTAssertNotNil(translateItem)
     }
 
+    func test_translateItem_inactive_a11yHintIsOff() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: Locale(identifier: "en"))
+        )
+        let allItems = sections.flatMap { $0.options }
+        let translateItem = allItems.first { $0.title == .MainMenu.ToolsSection.Translation.TranslatePageTitle }
+
+        XCTAssertEqual(translateItem?.a11yHint, .MainMenu.ToolsSection.Translation.Off)
+    }
+
+    func test_translateItem_active_a11yHintIsLanguageName() {
+        setLanguagePickerEnabled(true)
+        let mockProfile = MockProfile()
+        let config = TranslationConfiguration(prefs: mockProfile.prefs, state: .active, translatedToLanguage: "fr")
+        let tabInfo = getTabInfo(translationConfiguration: config)
+
+        let locale = Locale(identifier: "en")
+        let sections = configUtility.generateMenuElements(
+            with: tabInfo,
+            and: windowUUID,
+            isExpanded: true,
+            localeProvider: MockLocaleProvider(current: locale)
+        )
+        let allItems = sections.flatMap { $0.options }
+        let title = String.MainMenu.ToolsSection.Translation.TranslatedPageTitle
+        let translateItem = allItems.first { $0.title == title }
+        let expectedHint = locale.localizedString(forLanguageCode: "fr")
+
+        XCTAssertEqual(translateItem?.a11yHint, expectedHint)
+    }
+
     private func setIsSummarizerLanguageExpansionEnabled(_ enabled: Bool) {
         FxNimbus.shared.features.summarizerLanguageExpansionFeature.with { _, _ in
             return SummarizerLanguageExpansionFeature(enabled: enabled)
