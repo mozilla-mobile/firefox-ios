@@ -74,6 +74,7 @@ struct AddressCellView: View {
             Divider().frame(height: UX.dividerHeight)
         }
         .contentShape(Rectangle())
+        // This animation mimics List row selection behavior to animate the entire cell (notably in landscape mode).
         .onChange(of: isPressing) { pressing in
             if pressing {
                 isHighlighted = true
