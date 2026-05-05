@@ -450,6 +450,38 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         return SecCertificateCreateWithData(nil, data! as CFData)!
     }
 
+    // MARK: - didCommit
+
+    @MainActor
+    func testWebViewDidCommit_withNoHandler_clearsTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertNil(tab.translationConfiguration)
+    }
+
+    @MainActor
+    func testWebViewDidCommit_withOnNextCommit_callsHandlerAndPreservesTranslationConfiguration() {
+        let subject = createSubject()
+        let tab = createTab()
+        tab.translationConfiguration = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
+        var handlerCalled = false
+        tab.onNextCommit = { handlerCalled = true }
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertTrue(handlerCalled)
+        XCTAssertNil(tab.onNextCommit)
+        XCTAssertNotNil(tab.translationConfiguration)
+    }
+
     // This test is being skipped because there are some very strange side effects
     // in webView didFinish because the profile database is not being stubbed out
     // TODO: FXIOS-13435 to look in to this

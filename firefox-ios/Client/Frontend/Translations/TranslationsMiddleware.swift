@@ -193,7 +193,7 @@ final class TranslationsMiddleware: LegacyFeatureFlaggable {
     }
 
     private func markPendingRestoreReload(on tab: Tab?) {
-        tab?.pendingRestoreReload = true
+        tab?.onNextCommit = {}
     }
 
     private func showLanguagePickerForActiveTranslation(

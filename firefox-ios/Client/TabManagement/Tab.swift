@@ -410,11 +410,10 @@ class Tab: NSObject,
     /// Cleared on real navigation in `webView(_:didCommit:)`.
     var translationConfiguration: TranslationConfiguration?
 
-    /// One-shot flag set by the middleware before the restore-original-page reload (FXIOS-15227).
-    /// `webView(_:didCommit:)` consumes it to distinguish a restore-flow same-URL reload (where
-    /// the just-dispatched `.inactive` must be kept) from a manual reload (where the cache must
-    /// be cleared so eligibility can re-run against the fresh DOM).
-    var pendingRestoreReload = false
+    /// One-shot closure registered by a feature before a navigation it owns. `webView(_:didCommit:)`
+    /// calls and clears it on the next commit; if nil the commit is treated as a regular navigation
+    /// and any feature-owned state (e.g. `translationConfiguration`) is cleared.
+    var onNextCommit: (() -> Void)?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?

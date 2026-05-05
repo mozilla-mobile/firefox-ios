@@ -1173,16 +1173,10 @@ extension BrowserViewController: WKNavigationDelegate {
 
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
-        let previousURL = tab.url
         tab.url = webView.url
-        // A real navigation (URL change) or a manual reload (same URL, no pending restore)
-        // replaces the DOM and drops any prior in-page translation, so the cache must be
-        // cleared so eligibility can re-run. The restore-original flow (FXIOS-15227) marks
-        // its same-URL reload via `pendingRestoreReload`; in that case we keep the
-        // already-dispatched `.inactive` and just consume the flag, avoiding an icon flash.
-        let isSameURLReload = previousURL == webView.url
-        if isSameURLReload && tab.pendingRestoreReload {
-            tab.pendingRestoreReload = false
+        if let handler = tab.onNextCommit {
+            tab.onNextCommit = nil
+            handler()
         } else {
             tab.translationConfiguration = nil
         }

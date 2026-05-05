@@ -753,7 +753,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockTranslationsTelemetry.webpageRestoredCalledCount, 1)
     }
 
-    /// Restore-active tap persists `.inactive` and sets `pendingRestoreReload` on the tab.
+    /// Restore-active tap persists `.inactive` and registers an `onNextCommit` handler on the tab.
     func test_didTapButton_whenActive_persistsRestoreStateOnTab() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
@@ -781,7 +781,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         wait(for: [expectation], timeout: 1.0)
         XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
-        XCTAssertTrue(tab.pendingRestoreReload)
+        XCTAssertNotNil(tab.onNextCommit)
     }
 
     // MARK: - didTranslationSettingsChange tests
