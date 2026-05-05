@@ -55,25 +55,6 @@ struct HomepageLayoutMeasurementCache {
         let result: Result
     }
 
-    struct StoriesMeasurement: Equatable {
-        struct Key: Equatable {
-            let stories: [MerinoStoryConfiguration]
-            let headerState: SectionHeaderConfiguration
-            let cellWidth: Double
-            let containerWidth: Double
-            let shouldShowSection: Bool
-            let contentSizeCategory: UIContentSizeCategory
-        }
-
-        struct Result: Equatable {
-            let tallestCellHeight: CGFloat
-            let totalHeight: CGFloat
-        }
-
-        let key: Key
-        let result: Result
-    }
-
     struct SearchBarMeasurement: Equatable {
         struct Key: Equatable {
             let shouldShowSearchBar: Bool
@@ -88,7 +69,6 @@ struct HomepageLayoutMeasurementCache {
     private var topSites: TopSitesMeasurement?
     private var jumpBackIn: JumpBackInMeasurement?
     private var bookmarks: BookmarksMeasurement?
-    private var stories: StoriesMeasurement?
     private var searchBar: SearchBarMeasurement?
 
     mutating func setHeight(_ height: CGFloat, for key: TopSitesMeasurement.Key) {
@@ -124,15 +104,6 @@ struct HomepageLayoutMeasurementCache {
 
     func result(for key: BookmarksMeasurement.Key) -> BookmarksMeasurement.Result? {
         guard let measurement = bookmarks, measurement.key == key else { return nil }
-        return measurement.result
-    }
-
-    mutating func setResult(_ result: StoriesMeasurement.Result, for key: StoriesMeasurement.Key) {
-        stories = StoriesMeasurement(key: key, result: result)
-    }
-
-    func result(for key: StoriesMeasurement.Key) -> StoriesMeasurement.Result? {
-        guard let measurement = stories, measurement.key == key else { return nil }
         return measurement.result
     }
 }

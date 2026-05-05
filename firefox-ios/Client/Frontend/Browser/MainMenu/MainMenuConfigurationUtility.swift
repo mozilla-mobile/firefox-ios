@@ -22,24 +22,25 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let editThisBookmark = StandardImageIdentifiers.Large.bookmarkFill
         static let saveAsPDF = StandardImageIdentifiers.Large.saveFile
         static let summarizer = StandardImageIdentifiers.Large.summarizer
+        static let translate = StandardImageIdentifiers.Medium.translate
         static let avatarCircle = StandardImageIdentifiers.Large.avatarCircle
         static let share = StandardImageIdentifiers.Large.share
     }
 
     private var shouldShowReportSiteIssue: Bool {
-        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.reportSiteIssue)
     }
 
     private var isNewAppearanceMenuOn: Bool {
-        featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly)
+        featureFlagsProvider.isEnabled(.appearanceMenu)
     }
 
     private var isSummarizerOn: Bool {
         return DefaultSummarizerNimbusUtils().isSummarizeFeatureToggledOn
     }
 
-    private var isDefaultZoomEnabled: Bool {
-        featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
+    private var isSummarizerLanguageExpansionEnabled: Bool {
+        return DefaultSummarizerNimbusUtils().isLanguageExpansionEnabled
     }
 
     @MainActor
@@ -47,9 +48,16 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with tabInfo: MainMenuTabInfo,
         and uuid: WindowUUID,
         isExpanded: Bool = false,
-        profileImage: UIImage? = nil
+        profileImage: UIImage? = nil,
+        localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> [MenuSection] {
-        return getMainMenuElements(with: uuid, and: tabInfo, isExpanded: isExpanded, profileImage: profileImage)
+        return getMainMenuElements(
+            with: uuid,
+            and: tabInfo,
+            isExpanded: isExpanded,
+            profileImage: profileImage,
+            localeProvider: localeProvider
+        )
     }
 
     // MARK: - Main Menu
@@ -59,7 +67,8 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo,
         isExpanded: Bool = false,
-        profileImage: UIImage?
+        profileImage: UIImage?,
+        localeProvider: LocaleProvider
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = []
@@ -68,7 +77,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         } else {
-            menuSections.append(getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
+            menuSections.append(
+                getSiteSection(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded, localeProvider: localeProvider)
+            )
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         }
@@ -215,7 +226,13 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
 
     // Site Section
     @MainActor
-    private func getSiteSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo, isExpanded: Bool) -> MenuSection {
+    // swiftlint:disable:next function_body_length
+    private func getSiteSection(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        isExpanded: Bool,
+        localeProvider: LocaleProvider
+    ) -> MenuSection {
         var options: [MenuElement] = [
             configureBookmarkPageItem(with: uuid, and: tabInfo),
             MenuElement(
@@ -238,17 +255,21 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 }
             ),
         ]
-        // Conditionally add the Summarizer item if the feature is enabled
         if isSummarizerOn, tabInfo.summaryIsAvailable, !UIWindow.isLandscape {
             options.append(configureSummarizerItem(with: uuid, tabInfo: tabInfo))
         }
         options.append(configureUserAgentItem(with: uuid, tabInfo: tabInfo))
-
         if !isExpanded {
             options.append(configureMoreLessItem(with: uuid, tabInfo: tabInfo, isExpanded: isExpanded))
         } else {
+            options.append(configureZoomItem(with: uuid, and: tabInfo))
+            if let translationItem = configureTranslationItem(with: uuid, tabInfo: tabInfo, localeProvider: localeProvider) {
+                options.append(translationItem)
+            }
+            if isSummarizerLanguageExpansionEnabled {
+                options.append(configureReaderViewItem(with: uuid, tabInfo: tabInfo))
+            }
             options.append(contentsOf: [
-                configureZoomItem(with: uuid, and: tabInfo),
                 configureWebsiteDarkModeItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
                 MenuElement(
@@ -386,6 +407,63 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         )
     }
 
+    private func configureTranslationItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        localeProvider: LocaleProvider
+    ) -> MenuElement? {
+        guard featureFlagsProvider.isEnabled(.translationLanguagePicker),
+              let translationConfig = tabInfo.translationConfiguration,
+              translationConfig.isTranslationFeatureEnabled,
+              translationConfig.state != nil
+        else { return nil }
+        let isMultiLanguageFlow = translationConfig.isMultiLanguageFlow
+        let isActive = translationConfig.state == .active
+        let infoTitle: String
+        if isActive, let langCode = translationConfig.translatedToLanguage {
+            infoTitle = localeProvider.current.localizedString(forLanguageCode: langCode) ?? langCode
+        } else {
+            infoTitle = .MainMenu.ToolsSection.Translation.Off
+        }
+
+        let a11yLabel = isActive
+            ? String(
+                format: .MainMenu.ToolsSection.AccessibilityLabels.Translation.TranslatedPageLanguageLabel,
+                infoTitle
+              )
+            : .MainMenu.ToolsSection.Translation.TranslatePageTitle
+
+        let title: String
+        if isActive {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatedPageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatedPageTitle
+        } else {
+            title = isMultiLanguageFlow ? .MainMenu.ToolsSection.Translation.TranslatePageTitleMultiLanguage
+                                        : .MainMenu.ToolsSection.Translation.TranslatePageTitle
+        }
+
+        return MenuElement(
+            title: title,
+            iconName: Icons.translate,
+            isEnabled: true,
+            isActive: isActive,
+            a11yLabel: a11yLabel,
+            a11yHint: nil,
+            a11yId: AccessibilityIdentifiers.MainMenu.translatePage,
+            infoTitle: infoTitle,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(.translatePage),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
     private func configureSummarizerItem(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo
@@ -410,6 +488,35 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     )
                 }
             )
+    }
+
+    private func configureReaderViewItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        // TODO: FXIOS-15069 Add correct strings for s2s UI components.
+        // The strings used produces the correct behavior, but we'd need to use the proper ones once available in v150.
+        return MenuElement(
+            title: .MainMenu.ToolsSection.ReaderViewTitle,
+            iconName: "",
+            isEnabled: tabInfo.readerModeConfiguration.isAvailable,
+            isActive: tabInfo.readerModeConfiguration.isActive,
+            a11yLabel: .MainMenu.ToolsSection.ReaderViewTitle,
+            a11yHint: tabInfo.readerModeConfiguration.isActive ?
+                .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff,
+            a11yId: AccessibilityIdentifiers.MainMenu.readerView,
+            infoTitle: tabInfo.readerModeConfiguration.isActive ?
+                .MainMenu.ToolsSection.DesktopSiteOn : .MainMenu.ToolsSection.DesktopSiteOff
+        ) {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: uuid,
+                    actionType: MainMenuActionType.tapNavigateToDestination,
+                    navigationDestination: MenuNavigationDestination(.readerView),
+                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                )
+            )
+        }
     }
 
     private func configureMoreLessItem(
@@ -496,10 +603,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: nightModeIsOn,
             a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.WebsiteDarkMode,
-            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
+            a11yHint: nightModeIsOn ? Tools.WebsiteDarkModeOn : Tools.WebsiteDarkModeOff,
             a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             isOptional: true,
-            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOnV2 : Tools.WebsiteDarkModeOffV2,
+            infoTitle: nightModeIsOn ? Tools.WebsiteDarkModeOn : Tools.WebsiteDarkModeOff,
             action: {
                 store.dispatch(
                     MainMenuAction(

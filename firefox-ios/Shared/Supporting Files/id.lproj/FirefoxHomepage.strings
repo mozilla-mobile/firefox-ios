@@ -1,6 +1,3 @@
-/* This is the title of the Pocket section on Firefox Homepage. */
-"FirefoxHome.Pocket.SectionTitle.v140" = "Cerita";
-
 /* Body label for the Privacy Notice card showed at the top of the homepage notifying users that the Privacy Notice has been updated. The %1$@ placeholder is for the string “Privacy Notice” which will contain a link to the updated privacy notice. The %2$@ placeholder is for the app name (e.g. Firefox). The %3$@ placeholder is for the string “Learn More” which will contain a link to specifically what has changed in the updated Privacy Notice */
 "FirefoxHome.PrivacyNotice.Body.v148" = "Kami telah memperbarui %1$@ kami untuk mencerminkan fitur terbaru di %2$@. %3$@";
 
@@ -18,6 +15,12 @@
 
 /* This is the title that appears in the navigation bar for the All Stories view, a screen that displays a collection of trending news articles */
 "FirefoxHome.Stories.AllStoriesViewTitle.v145" = "Semua Cerita";
+
+/* This is the label, combined with a newspaper icon and a ^ chevron, used to show affordance that scrolling the homepage up reveals the News section containing a collection of trending news articles */
+"FirefoxHome.Stories.NewsAffordanceLabel.v149" = "Berita";
+
+/* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
+"FirefoxHome.Stories.NewsSectionTitle.v149" = "Berita";
 
 /* This is the title of the stories section on Firefox Homepage, which displays a collection of trending news articles */
 "FirefoxHome.Stories.PopularTodaySectionTitle.v145" = "Populer Hari Ini";

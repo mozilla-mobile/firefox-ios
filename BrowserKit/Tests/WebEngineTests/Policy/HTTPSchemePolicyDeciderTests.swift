@@ -55,15 +55,6 @@ final class HTTPSchemePolicyDeciderTests: XCTestCase {
         XCTAssertEqual(policy, .allow)
     }
 
-    func testPolicyForPopupNavigation_blockPayPalPopup() {
-        let subject = createSubject()
-        let url = URL(string: "https://www.paypal.com")!
-
-        let policy = subject.policyForPopupNavigation(action: MockNavigationAction(url: url))
-
-        XCTAssertEqual(policy, .cancel)
-    }
-
     func testPolicyForPopupNavigation_blockUnsupportedScheme() {
         let subject = createSubject()
         let url = URL(string: "itms-apps://test-app")!

@@ -6,7 +6,11 @@ import Common
 import SiteImageView
 
 /// The synced tab cell used in the homepage's Jump Back In section
-class SyncedTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable, Notifiable, FeatureFlaggable {
+class SyncedTabCell: UICollectionViewCell,
+                     ReusableCell,
+                     ThemeApplicable,
+                     Blurrable,
+                     Notifiable {
     struct UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)

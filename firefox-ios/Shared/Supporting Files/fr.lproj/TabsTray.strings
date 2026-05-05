@@ -16,11 +16,14 @@
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Synchroniser les onglets";
 
+/* When user choose to have Blank Page as homepage, this will be displayed as tab title. */
+"TabTray.TabsSelectorBlankTabsTitle.v149" = "Nouvel onglet";
+
 /* The title on the button to look at regular tabs. */
 "TabTray.TabsSelectorNormalTabsTitle.v140" = "Onglets";
 
 /* The title on the button to look at synced tabs. */
-"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synchronisation";
+"TabTray.TabsSelectorSyncedTabsTitle.v140" = "Synchronisés";
 
 /* Text for a button in the tabs tray used to open another menu to close older tabs. */
 "TabTrayCloseOldTabsTitle.v140" = "Fermer les anciens onglets…";

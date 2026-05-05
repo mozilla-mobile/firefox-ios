@@ -13,34 +13,65 @@ private let MozDomain = "mozilla"
 private let MozErrorDownloadsNotEnabled = 100
 private let MessageOpenInSafari = "openInSafari"
 private let MessageCertVisitOnce = "certVisitOnce"
+private let ErrorPageBadCertParam = "badcert"
+private let ErrorPageCertErrorParam = "certerror"
+private let PeerCertificateChainKey = "NSErrorPeerCertificateChainKey"
+private let StreamErrorCodeKey = "_kCFStreamErrorCodeKey"
 
-// Regardless of cause, NSURLErrorServerCertificateUntrusted is currently returned in all cases.
-// Check the other cases in case this gets fixed in the future.
-private let CertErrors = [
-    NSURLErrorServerCertificateUntrusted,
-    NSURLErrorServerCertificateHasBadDate,
-    NSURLErrorServerCertificateHasUnknownRoot,
-    NSURLErrorServerCertificateNotYetValid
-]
+private struct LegacyCertErrors {
+    // Error codes copied from Gecko. The ints corresponding to these codes were determined
+    // by inspecting the NSError in each of these cases.
+    // TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
+    // in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
+    enum GeckoCode: Int {
+        case unknownIssuer = -9813
+        case expiredCertificate = -9814
+        case badCertDomain = -9843
 
-// Error codes copied from Gecko. The ints corresponding to these codes were determined
-// by inspecting the NSError in each of these cases.
-// TODO: This legacy constant should eventually be removed in favor of CertErrorCodes
-// in NativeErrorPageHelper.swift once ErrorPageHelper is fully replaced.
-private let LegacyCertErrorCodes = [
-    -9813: "SEC_ERROR_UNKNOWN_ISSUER",
-    -9814: "SEC_ERROR_EXPIRED_CERTIFICATE",
-    -9843: "SSL_ERROR_BAD_CERT_DOMAIN",
-]
+        var description: String {
+            switch self {
+            case .unknownIssuer: return "SEC_ERROR_UNKNOWN_ISSUER"
+            case .expiredCertificate: return "SEC_ERROR_EXPIRED_CERTIFICATE"
+            case .badCertDomain: return "SSL_ERROR_BAD_CERT_DOMAIN"
+            }
+        }
+    }
+
+    // Cert errors may be reported inconsistently across iOS versions.
+    // `_kCFStreamErrorCodeKey` can be absent on iOS 26.4. In that case we only
+    // have NSURLErrorDomain codes, so map them to the closest legacy cert code.
+    let certErrors = [
+        NSURLErrorServerCertificateUntrusted,
+        NSURLErrorServerCertificateHasBadDate,
+        NSURLErrorServerCertificateHasUnknownRoot,
+        NSURLErrorServerCertificateNotYetValid
+    ]
+
+    let errorMapping: [Int: GeckoCode] = [
+        NSURLErrorServerCertificateUntrusted: .unknownIssuer,
+        NSURLErrorServerCertificateHasUnknownRoot: .unknownIssuer,
+        NSURLErrorServerCertificateHasBadDate: .expiredCertificate,
+        NSURLErrorServerCertificateNotYetValid: .expiredCertificate
+    ]
+}
+
+private let legacyCertErrors = LegacyCertErrors()
+
+private func certErrorFromNetworkErrorCode(_ networkErrorCode: Int) -> String {
+    guard let geckoCode = legacyCertErrors.errorMapping[networkErrorCode] else {
+        assertionFailure("Missing legacy cert mapping for NSURLErrorDomain code: \(networkErrorCode)")
+        return LegacyCertErrors.GeckoCode.unknownIssuer.description
+    }
+    return geckoCode.description
+}
 
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if let encodedCert = components?.queryItems?.first(where: { $0.name == "badcert" })?.value,
+        if let encodedCert = components?.queryItems?.first(where: { $0.name == ErrorPageBadCertParam })?.value,
             let certData = Data(base64Encoded: encodedCert, options: []) {
             return SecCertificateCreateWithData(nil, certData as CFData)
         }
-
         return nil
     }
 
@@ -51,7 +82,6 @@ private func certFromErrorURL(_ url: URL) -> SecCertificate? {
 
     // Fallback case when the error url is nested, this happens when restoring an error url,
     // it will be inside a 'sessionrestore' url.
-    // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
     if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
         return getCert(url)
     }
@@ -150,7 +180,7 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
+final class ErrorPageHandler: InternalSchemeResponse {
     static let path = InternalURL.Path.errorpage.rawValue
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or private homepage.
@@ -161,6 +191,10 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
 
     var isNICErrorPageEnabled: Bool {
         return NativeErrorPageFeatureFlag().isNICErrorPageEnabled
+    }
+
+    var isBadCertDomainErrorPageEnabled: Bool {
+        return NativeErrorPageFeatureFlag().isBadCertDomainErrorPageEnabled
     }
 
     @MainActor
@@ -177,8 +211,11 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
         )
 
-        // Only handle No internet access because other cases show about:blank page
-        if isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage {
+        let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
+        let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+
+        // Handle No internet access or certificate errors with native error page
+        if isNoInternetError || isCertificateError {
             return responseForNativeErrorPage(request: request)
         } else {
             return responseForErrorWebPage(request: request)
@@ -242,14 +279,9 @@ final class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
                 actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
             }
             errDomain = ""
-        } else if CertErrors.contains(errCode) {
-            guard let url = request.url,
-                  let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                  let certError = comp.valueForQuery("certerror")
-            else {
-                assertionFailure("Error unwrapping the cert error")
-                return nil
-            }
+        } else if legacyCertErrors.certErrors.contains(errCode) {
+            let certError = components.valueForQuery(ErrorPageCertErrorParam)
+                ?? certErrorFromNetworkErrorCode(errCode)
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
             actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
@@ -315,16 +347,20 @@ class ErrorPageHelper {
         // user to go back or continue. The certificate itself is encoded and added as
         // a query parameter to the error page URL; we then read the certificate from
         // the URL if the user wants to continue.
-        if CertErrors.contains(error.code),
-            let certChain = error.userInfo["NSErrorPeerCertificateChainKey"] as? [SecCertificate],
-            let cert = certChain.first,
-            let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError,
-            let certErrorCode = underlyingError.userInfo["_kCFStreamErrorCodeKey"] as? Int {
-            let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
-            queryItems.append(URLQueryItem(name: "badcert", value: encodedCert))
+        // TODO: FXIOS-14569 — Investigate using SecTrustEvaluateWithError to evaluate TLS trust
+        // errors instead of private APIs.
+        if legacyCertErrors.certErrors.contains(error.code) {
+            if let certChain = error.userInfo[PeerCertificateChainKey] as? [SecCertificate],
+               let cert = certChain.first {
+                let encodedCert = (SecCertificateCopyData(cert) as Data).base64EncodedString
+                queryItems.append(URLQueryItem(name: ErrorPageBadCertParam, value: encodedCert))
+            }
 
-            let certError = LegacyCertErrorCodes[certErrorCode] ?? ""
-            queryItems.append(URLQueryItem(name: "certerror", value: String(certError)))
+            let underlyingError = error.userInfo[NSUnderlyingErrorKey] as? NSError
+            let certErrorCode = underlyingError?.userInfo[StreamErrorCodeKey] as? Int
+            let certError = LegacyCertErrors.GeckoCode(rawValue: certErrorCode ?? Int.min)?.description
+                ?? certErrorFromNetworkErrorCode(error.code)
+            queryItems.append(URLQueryItem(name: ErrorPageCertErrorParam, value: certError))
         }
 
         components.queryItems = queryItems
@@ -365,22 +401,25 @@ extension ErrorPageHelper: TabContentScript {
         didReceiveScriptMessage message: WKScriptMessage
     ) {
         guard let errorURL = message.frameInfo.request.url,
-            let internalUrl = InternalURL(errorURL),
-            internalUrl.isErrorPage,
-            let originalURL = internalUrl.originalURLFromErrorPage,
-            let res = message.body as? [String: String],
-            let type = res["type"] else { return }
+              let internalUrl = InternalURL(errorURL),
+              internalUrl.isErrorPage,
+              let originalURL = internalUrl.originalURLFromErrorPage,
+              let res = message.body as? [String: String],
+              let type = res["type"] else {
+            return
+        }
 
         switch type {
         case MessageOpenInSafari:
             UIApplication.shared.open(originalURL, options: [:])
         case MessageCertVisitOnce:
+            // User taps "visit anyway" for an untrusted connection
             if let cert = certFromErrorURL(errorURL),
                 let host = originalURL.host {
                 let origin = "\(host):\(originalURL.port ?? 443)"
                 certStore?.addCertificate(cert, forOrigin: origin)
+                // Note: webview.reload will not change the error URL back to the original URL
                 message.webView?.replaceLocation(with: originalURL)
-                // webview.reload will not change the error URL back to the original URL
             }
         default:
             assertionFailure("Unknown error message")

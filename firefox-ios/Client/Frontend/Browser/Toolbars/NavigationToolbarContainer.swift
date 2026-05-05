@@ -125,7 +125,7 @@ final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber
 
 extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
     func configureContextualHint(for button: UIButton, with contextualHintType: String) {
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
         if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }

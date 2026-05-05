@@ -14,7 +14,7 @@ struct ThemeSettingsState: ScreenState {
     var windowUUID: WindowUUID
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let themeState = appState.screenState(
+        guard let themeState = appState.componentState(
             ThemeSettingsState.self,
             for: .themeSettings,
             window: uuid

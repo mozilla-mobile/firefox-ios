@@ -17,7 +17,7 @@ if releaseCheck.isReleaseBranch {
     checkStringsFile()
     checkForFunMetrics()
     checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
-    checkForWebEngineFileChange()
+    checkForSpecificFileChange()
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
     CodeCoverageGate().failOnNewFilesWithoutCoverage()
@@ -98,9 +98,8 @@ func checkCodeCoverage() {
 }
 
 class CodeCoverageGate {
-    private let coverageBypassLabel = "coverage-exception"
+    private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let threshold: Double = 35
     private let minimumAddedLines = 5
 
     func failOnNewFilesWithoutCoverage() {
@@ -112,13 +111,23 @@ class CodeCoverageGate {
         }
 
         let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
-        // Consider created + modified Swift files, excluding Tests & Generated
-        let candidates = (danger.git.createdFiles + danger.git.modifiedFiles).filter {
+        // Consider created Swift files, excluding Tests & Generated
+        // Excluding `danger.git.modifiedFiles` for now
+        let candidates = (danger.git.createdFiles).filter {
             $0.hasSuffix(".swift") &&
             !$0.contains("Tests/") &&
             !$0.contains("/Generated/") &&
             !$0.contains("/Strings.swift") &&
-            !$0.contains("/AccessibilityIdentifiers.swift")
+            !$0.contains("/AccessibilityIdentifiers.swift") &&
+            !$0.contains("Protocol.swift")
+        }
+
+        guard !candidates.isEmpty else {
+            markdown("""
+            ### ✅ New file code coverage
+            No new file detected so code coverage gate wasn't ran.
+            """)
+            return
         }
 
         // Ignore tiny edits: only gate files with at least `minimumAddedLines`
@@ -156,6 +165,10 @@ class CodeCoverageGate {
                 return raw <= 1.000001 ? raw * 100.0 : raw
             }()
 
+            // Calculate threshold based on file length
+            let lineCount = countLines(in: file)
+            let threshold = scaledPercentage(for: Double(lineCount)) * 100.0
+
             if percent + 0.0001 < threshold { // epsilon for float stability
                 rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
             }
@@ -163,30 +176,60 @@ class CodeCoverageGate {
 
         guard !rows.isEmpty else {
             markdown("""
-            ### ✅ Per-file coverage
-            All changed files meet the threshold of **\(formatPct(threshold))**.
+            ### ✅ New file code coverage
+            All new files meet their thresholds**.
             """)
             return
         }
 
         let header = """
-        ### ❌ Per-file test coverage gate
-        The following changed file(s) are below **\(formatPct(threshold))** coverage:
+        ### ❌ New file code coverage
+        The following new file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
         """
 
-        markdown("\(header)")
-        // If we want to fail the PRs at one point, then uncomment this and remove the markdown
-//        let hasBypass = danger.github.issue.labels.contains { $0.name == coverageBypassLabel }
-//        if hasBypass {
-//            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
-//        } else {
-//            let tip = "*Tip:* Add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
-//            fail("\(header)\n\n\(tip)")
-//        }
+        if hasLabel(coverageBypassLabel) {
+            warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
+        } else {
+            let tip = "You can add the `\(coverageBypassLabel)` label with a short justification to bypass this check."
+            let team = "[@fxios-unit-test-owners](https://github.com/orgs/mozilla-mobile/teams/fxios-unit-test-owners)"
+            let owners = "Please also tag a member of the \(team) if the bypass is used."
+            fail("\(header)\n\n\(tip) \(owners)")
+        }
+    }
+
+    /// Maps an input value to a percentage using logarithmic scaling.
+    /// - Parameter x: Input value (must be > 0)
+    /// - Returns: A value between 0.5 and 0.8 for inputs between 10 and 500
+    func scaledPercentage(for x: Double) -> Double {
+        precondition(x > 0, "Input must be greater than 0")
+
+        let minX = 10.0
+        let maxX = 500.0
+        let minY = 0.4
+        let maxY = 0.7
+
+        // Clamp to min/max bounds
+        if x <= minX { return minY }
+        if x >= maxX { return maxY }
+
+        let numerator = log(x / minX)
+        let denominator = log(maxX / minX)
+
+        return minY + (maxY - minY) * (numerator / denominator)
+    }
+
+    /// Counts the number of lines in a file
+    /// - Parameter filePath: Path to the file
+    /// - Returns: Number of lines in the file, or 0 if file cannot be read
+    private func countLines(in filePath: String) -> Int {
+        guard let content = try? String(contentsOfFile: filePath, encoding: .utf8) else {
+            return 0
+        }
+        return content.components(separatedBy: .newlines).count
     }
 
     // Small helper to format percentages
@@ -261,18 +304,53 @@ func checkBigPullRequest() {
     }
 }
 
-// Detect and warn about some changes related to WebView management to ensure we port changes to the WebEngine project
-func checkForWebEngineFileChange() {
-    let webEngineFiles = ["Tab.swift", "BrowserViewController+WebViewDelegates.swift"]
+// Detect and tag specific people whenever specific files are modified
+func checkForSpecificFileChange() {
     let modifiedFiles = danger.git.modifiedFiles
-    let affectedFiles = modifiedFiles.filter { file in
-        webEngineFiles.contains { webFile in file.hasSuffix(webFile) }
+
+    struct FileCheck {
+        let fileMatches: (String) -> Bool
+        let message: String
+        let contacts: String
+        var foundMatches: [String] = []
     }
 
-    if !affectedFiles.isEmpty {
-        let message = "Ensure that necessary updates are also ported to the WebEngine project if required"
-        let contact = "(cc @lmarceau)."
-        warn("Changes detected in files: \(affectedFiles.joined(separator: ", ")). \(message) \(contact)")
+    var fileChecks = [
+        FileCheck(
+            fileMatches: { file in
+                ["Tab.swift",
+                 "TabManager.swift",
+                 "TabManagerImplementation.swift",
+                 "BrowserViewController+WebViewDelegates.swift"
+                ].contains { file.hasSuffix($0) }
+            },
+            message: "Detected tab related changes in:",
+            contacts: "(cc @lmarceau)"
+        ),
+        FileCheck(
+            fileMatches: { $0.hasSuffix(".sh") },
+            message: "Detected shell script changes in:",
+            contacts: "(cc @adudenamedruby)"
+        ),
+        FileCheck(
+            fileMatches: { file in
+                file.contains("firefox-ios/Client/Glean/") && (file.hasSuffix(".yaml"))
+            },
+            message: "Detected telemetry changes in:",
+            contacts: "(cc @ih-codes @adudenamedruby)"
+        )
+    ]
+
+    for file in modifiedFiles {
+        for fileIndex in fileChecks.indices where fileChecks[fileIndex].fileMatches(file) {
+            fileChecks[fileIndex].foundMatches.append(file)
+        }
+    }
+
+    // Issue warnings only for categories with matches
+    for check in fileChecks where !check.foundMatches.isEmpty {
+        let matches = check.foundMatches.joined(separator: ", ")
+        warn("\(check.message) \(matches) \(check.contacts)")
     }
 }
 
@@ -358,6 +436,12 @@ class CodeUsageDetector {
         "MozillaRustComponents/Sources/MozillaRustComponentsWrapper/Generated/"
     ]
 
+    private struct Detection {
+        let keyword: Keywords
+        let file: String
+        let lineNumber: Int
+    }
+
     private enum Keywords: CaseIterable {
         static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
 
@@ -369,28 +453,23 @@ class CodeUsageDetector {
         case task
         case notifiable
 
-        var message: String {
+        var bundledHeader: String {
             switch self {
             case .print:
-                return "Print() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `print()` usage detected\nPrint() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .nsLog:
-                return "NSLog() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `NSLog()` usage detected\nNSLog() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .osLog:
-                return "os_log() function seems to be used in file %@ at line %d.\(Keywords.commonLoggerSentence)"
+                return "### ⚠️ `os_log()` usage detected\nos_log() function seems to be used.\(Keywords.commonLoggerSentence)"
             case .deferred:
-                return "Deferred class is used in file %@ at line %d. Please replace with completion handler instead."
+                return "### ⚠️ `Deferred` usage detected\nDeferred class is used. Please replace with completion handler instead."
             case .swiftUIText:
-                return "SwiftUI 'Text(\"\"'  in file %@ at line %d needs to be avoided, use Strings.swift localization instead."
+                return "### ⚠️ SwiftUI `Text(\"\")` usage detected\nSwiftUI 'Text(\"\"' needs to be avoided, use Strings.swift localization instead."
             case .task:
                 let contacts = "@Cramsden @ih-codes @lmarceau"
-                return """
-                ### 🧑‍💻 New `Task {}` detected
-                New `Task {}` added in file %@ at line %d.
-                Please add a concurrency reviewer on your PR: \(contacts)
-                """
+                return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
-                let usage = "Please prefer Notifiable over `NotificationCenter` unless specific circumstances."
-                return "`NotificationCenter.default.addObserver` detected in file %@ at line %d. \(usage)"
+                return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
             }
         }
 
@@ -442,6 +521,7 @@ class CodeUsageDetector {
     }
 
     func checkForCodeUsage() {
+        var detections: [Detection] = []
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
         // Iterate through each added and modified file, running the checks on swift files only
         for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
@@ -451,12 +531,11 @@ class CodeUsageDetector {
                 if file == BrowserViewControllerChecker.bvcPath {
                     BrowserViewControllerChecker().checkBrowserViewControllerSize(fileDiff: diff)
                 }
-
                 switch diff.changes {
                 case let .modified(hunks), let .renamed(_, hunks):
-                    detect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                    detections += collect(keywords: Keywords.allCases, inHunks: hunks, file: file)
                 case let .created(newLines):
-                    detect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                    detections += collect(keywords: Keywords.allCases, inLines: newLines, file: file)
                 case .deleted:
                     break // do not warn on deleted lines
                 }
@@ -464,16 +543,40 @@ class CodeUsageDetector {
                 break
             }
         }
-    }
 
-    private func detect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) {
-        for keyword in keywords {
-            detect(keyword: keyword, inHunks: hunks, file: file, message: keyword.message)
+        // Group by keyword and emit one bundled message per keyword
+        let grouped = Dictionary(grouping: detections, by: { $0.keyword })
+        for keyword in Keywords.allCases {
+            guard let items = grouped[keyword], !items.isEmpty else { continue }
+            emitBundled(keyword: keyword, detections: items)
         }
     }
 
-    private func detect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
-        guard !shouldSkip(keyword, for: file) else { return }
+    private func emitBundled(keyword: Keywords, detections: [Detection]) {
+        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) |" }.joined(separator: "\n")
+        let fullMessage = """
+        \(keyword.bundledHeader)
+
+        | File | Line |
+        |---|---|
+        \(rows)
+        """
+        if keyword.shouldComment {
+            markdown(fullMessage)
+        } else if keyword.shouldWarn {
+            warn(fullMessage)
+        } else {
+            failOrWarn(fullMessage)
+        }
+    }
+
+    private func collect(keywords: [Keywords], inHunks hunks: [FileDiff.Hunk], file: String) -> [Detection] {
+        keywords.flatMap { collect(keyword: $0, inHunks: hunks, file: file) }
+    }
+
+    private func collect(keyword: Keywords, inHunks hunks: [FileDiff.Hunk], file: String) -> [Detection] {
+        guard !shouldSkip(keyword, for: file) else { return [] }
+        var detections: [Detection] = []
         for hunk in hunks {
             var newLineCount = 0
             for line in hunk.lines {
@@ -482,39 +585,24 @@ class CodeUsageDetector {
                 // Make sure our newLineCount is proper to fail on correct line number
                 guard isAddedLine || !isRemovedLine else { continue }
                 newLineCount += 1
-
-                // Fail only on added line having the particular keyword
+                // Collect only added lines having the particular keyword
                 guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
-
                 let lineNumber = hunk.newLineStart + newLineCount - 1
-                if keyword.shouldComment {
-                    markdown(String(format: message, file, lineNumber))
-                } else if keyword.shouldWarn {
-                    warn(String(format: message, file, lineNumber))
-                } else {
-                    failOrWarn(String(format: message, file, lineNumber))
-                }
+                detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber))
             }
         }
+        return detections
     }
 
-    private func detect(keywords: [Keywords], inLines lines: [String], file: String) {
-        for keyword in keywords {
-            detect(keyword: keyword, inLines: lines, file: file, message: keyword.message)
-        }
+    private func collect(keywords: [Keywords], inLines lines: [String], file: String) -> [Detection] {
+        keywords.flatMap { collect(keyword: $0, inLines: lines, file: file) }
     }
 
-    private func detect(keyword: Keywords, inLines lines: [String], file: String, message: String) {
-        guard !shouldSkip(keyword, for: file) else { return }
-        for (index, line) in lines.enumerated() where line.contains(keyword.keyword) {
-            let lineNumber = index + 1
-            if keyword.shouldComment {
-                markdown(String(format: message, file, lineNumber))
-            } else if keyword.shouldWarn {
-                warn(String(format: message, file, lineNumber))
-            } else {
-                failOrWarn(String(format: message, file, lineNumber))
-            }
+    private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
+        guard !shouldSkip(keyword, for: file) else { return [] }
+        return lines.enumerated().compactMap { index, line in
+            guard line.contains(keyword.keyword) else { return nil }
+            return Detection(keyword: keyword, file: file, lineNumber: index + 1)
         }
     }
 }

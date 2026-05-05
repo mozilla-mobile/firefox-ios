@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "Откажи";
+
+/* The button that clears private data. */
+"OK" = "У реду";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "Ова радња ће обрисати све ваше приватне податке. То се не може поништити.";
+

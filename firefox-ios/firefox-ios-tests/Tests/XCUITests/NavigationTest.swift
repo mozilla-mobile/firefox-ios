@@ -20,13 +20,27 @@ let website_2 = [
 ]
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
-class NavigationTest: BaseTestCase {
+class NavigationTest: FeatureFlaggedTestSuite {
+    // There are multiple onboarding flows, so use a feature flag to test just against the newest flow.
+    let onboardingFlowType = OnboardingScreen.OnboardingFlowType.modernKit
+
+    override func setUpExperimentVariables() {
+        jsonFileName = onboardingFlowType.jsonFeatureOverrideFileName
+        featureName = onboardingFlowType.onboardingFeatureName
+    }
+
     var contextMenuScreen: ContextMenuScreen!
     var toolbarScreen: ToolbarScreen!
     var settingsScreen: SettingScreen!
     var browserScreen: BrowserScreen!
     var sslScreen: SSLWarningScreen!
     var mainMenuScreen: MainMenuScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+
+        launchApp()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
@@ -145,6 +159,7 @@ class NavigationTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleExperimentSyncMode)
 
@@ -178,22 +193,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306836
     // Smoketest
     func testLongPressLinkOptions() {
-        openContextMenuForArticleLink()
-        waitForElementsToExist(
-            [
-                app.buttons["Open in New Tab"],
-                app.buttons["Open in New Private Tab"],
-                app.buttons["Copy Link"],
-                app.buttons["Download Link"],
-                app.buttons["Share Link"],
-                app.buttons["Bookmark Link"]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306836
-    // Smoketest TAE
-    func testLongPressLinkOptions_TAE() {
         let contextMenuScreen = ContextMenuScreen(app: app)
 
         openContextMenuForArticleLink()
@@ -374,57 +373,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441776
     // Smoketest
     func testPopUpBlocker() throws {
-        // Check that it is enabled by default
-        navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
-        navigator.goto(BrowsingSettings)
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
-        let switchBlockPopUps = app.tables.cells.switches[AccessibilityIdentifiers.Settings.Browsing.blockPopUps]
-        let switchValue = switchBlockPopUps.value!
-        XCTAssertEqual(switchValue as? String, "1")
-        // Navigate back to the homepage
-        navigator.goto(BrowserTab)
-        navigator.nowAt(NewTabScreen)
-
-        // Check that there are no pop ups
-        navigator.openURL(popUpTestUrl)
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "localhost")
-        mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
-
-        let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
-        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
-
-        // Now disable the Browsing -> Block PopUps option
-        navigator.goto(BrowserTabMenu)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-        }
-        navigator.goto(BrowsingSettings)
-        mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Browsing.links])
-
-        switchBlockPopUps.waitAndTap()
-        let switchValueAfter = switchBlockPopUps.value!
-        XCTAssertEqual(switchValueAfter as? String, "0")
-        // Navigate back to the homepage
-        app.buttons[AccessibilityIdentifiers.Settings.title].waitAndTap()
-        app.buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-        navigator.nowAt(HomePanelsScreen)
-
-        // Check that now pop ups are shown, two sites loaded
-        navigator.goto(URLBarOpen)
-        navigator.openURL(popUpTestUrl)
-        waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "example.com")
-        let numTabsAfter = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
-        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2441776
-    // Smoketest TAE
-    func testPopUpBlocker_TAE() throws {
         let toolbarScreen = ToolbarScreen(app: app)
         let settingsScreen = SettingScreen(app: app)
         let browserScreen = BrowserScreen(app: app)
@@ -471,35 +419,19 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
-        navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
-        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
-        app.buttons["Go Back"].waitAndTap()
-        mozWaitForElementToNotExist(app.webViews.otherElements["This Connection is Untrusted"])
-        // SearchbarCell may not appear, so open a new tab just to be sure.
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
-        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
-        app.buttons["Advanced"].waitAndTap()
-        app.links["Visit site anyway"].waitAndTap()
-        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2306858
-    // Smoketest TAE
-    func testSSL_TAE() {
         let sslScreen = SSLWarningScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let browserScreen = BrowserScreen(app: app)
 
-        navigator.openURL("https://expired.badssl.com/")
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
         sslScreen.tapGoBack()
         sslScreen.waitForWarningToDisappear()
 
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openURL("https://expired.badssl.com/")
+        toolbarScreen.openNewTabFromTabTray()
+        browserScreen.navigateToURL("https://expired.badssl.com/")
         sslScreen.waitForWarning()
         sslScreen.assertWarningVisible()
 
@@ -528,23 +460,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307020
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        waitForElementsToExist(
-            [
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.passwords],
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.settings]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307020
-    // Smoketest TAE
-    func testVerifyBrowserTabMenu_TAE() {
         let toolbarScreen = ToolbarScreen(app: app)
         let mainMenuScreen = MainMenuScreen(app: app)
         toolbarScreen.assertSettingsButtonExists()
@@ -556,23 +471,6 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
-        let text = "example.com\n"
-        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        urlBar.waitAndTap()
-
-        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        // swiftlint:disable empty_count
-        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
-        app.typeText(text)
-
-        mozWaitForValueContains(urlBar, value: "example.com")
-        XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
-        // swiftlint:enable empty_count
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2441775
-    // Smoketest TAE
-    func testURLBar_TAE() {
         let browserScreen = BrowserScreen(app: app)
         browserScreen.tapOnAddressBar()
 
@@ -594,6 +492,7 @@ class NavigationTest: BaseTestCase {
         openContextMenuForArticleLink()
         app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.elementContainingText("Example Domain"))
         let numTabs = app.otherElements[tabsTray].cells.count
@@ -607,6 +506,7 @@ class NavigationTest: BaseTestCase {
         openContextMenuForArticleLink()
         app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         var numTabs = app.otherElements[tabsTray].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
@@ -614,10 +514,7 @@ class NavigationTest: BaseTestCase {
         if iPad() {
             app.buttons["Private"].waitAndTap()
         } else {
-            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/25093
-            // Waiting is needed before switching to private tab in order to display the expected domain
-            sleep(3)
-            // workaround end
+            mozWaitForElementToExist(app.otherElements["navBarTabTray"])
             navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
         }
         numTabs = app.otherElements[tabsTray].cells.count
@@ -688,6 +585,103 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(BrowserTab)
         validateExternalLink()
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2306833
+    func testLongTapFirefoxIconNewTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        waitForTabsButton()
+        springBoardScreen.pressHomeButton()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.tapNewTabButton()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3408299
+    func testLongTapFirefoxIconNewPrivateTab() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
+        waitForTabsButton()
+        app.terminate()
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+        springBoardScreen.tapNewPrivateButton()
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
+        onboardingScreen.closeTourIfNeeded()
+        browserScreen.assertPrivateModeMessageCardExists()
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/edit/3408300
+    func testLongTapFirefoxIconOpenLastBookmark() throws {
+        guard #available(iOS 18, *) else {
+            throw XCTSkip("Test requires iOS 18+ due to app icon springboard behavior after app.terminate()")
+        }
+        let springBoardScreen = SpringboardScreen(springboard: springboard)
+        let browserScreen = BrowserScreen(app: app)
+        let onboardingScreen = OnboardingScreen(app: app, flowType: onboardingFlowType)
+
+        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
+
+        // Open and bookmark a page
+        navigator.openURL(website_1["url"]!)
+        waitUntilPageLoad()
+        bookmark(isLockIconOff: false)
+
+        // Terminate app and go to springboard
+        app.terminate()
+
+        if isFennec {
+            springBoardScreen.assertFennecIconExists()
+            springBoardScreen.longPressFennecIcon(at: 0, duration: 1.5)
+        } else {
+            springBoardScreen.assertFirefoxIconExists()
+            springBoardScreen.longPressFirefoxIcon(at: 0, duration: 1.5)
+        }
+
+        // Verify all context menu options are present
+        springBoardScreen.assertAllContextMenuOptionsExist()
+        springBoardScreen.tapOpenLastBookmarkButton()
+
+        // Close onboarding if it appears
+        onboardingScreen.handleTermsOfService()
+        onboardingScreen.waitForCurrentScreenElements(waitForImage: false)
+        onboardingScreen.closeTourIfNeeded()
+
+        // Verify the bookmarked page opens
+        waitUntilPageLoad()
+        browserScreen.assertAddressBarContains(value: website_1["value"]!)
+        browserScreen.assertLinkExists(named: "Mozilla")
+        browserScreen.assertWebViewLinkTextExists(text: "Legal")
     }
 
     private func validateExternalLink() {

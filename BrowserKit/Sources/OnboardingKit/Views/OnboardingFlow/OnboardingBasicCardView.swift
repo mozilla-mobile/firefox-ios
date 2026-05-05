@@ -17,17 +17,20 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
+    let variant: OnboardingVariant
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
 
     init(
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
+        variant: OnboardingVariant,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
         self.onBottomButtonAction = onBottomButtonAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
     }
@@ -63,13 +66,13 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
         }
         .scrollBounceBehavior(basedOnSize: true)
         .if(horizontalSizeClass != .regular) { view in
-            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: variant)
         }
     }
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFontForCurrentLocale)
+            .font(UX.CardView.titleFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -97,7 +100,7 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
             .foregroundColor(theme.colors.textSecondary.color)
-            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .multilineTextAlignment(UX.CardView.textAlignment())
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
     }
@@ -112,7 +115,8 @@ struct OnboardingBasicCardView<ViewModel: OnboardingCardInfoModelProtocol>: Them
                 )
             },
             theme: theme,
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            variant: variant
         )
         .if(horizontalSizeClass == .regular) { view in
             view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)

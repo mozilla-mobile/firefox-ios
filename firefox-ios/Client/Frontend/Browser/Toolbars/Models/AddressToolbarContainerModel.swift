@@ -19,6 +19,7 @@ final class AddressToolbarContainerModel: Equatable {
     let searchEngineName: String
     let searchEngineImage: UIImage
     let searchEnginesManager: SearchEnginesManager
+    let lockIconButtonA11yId: String?
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
@@ -60,7 +61,7 @@ final class AddressToolbarContainerModel: Equatable {
                 format: .AddressToolbar.SearchEngineA11yLabel,
                 searchEngineName
             ),
-            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
+            lockIconButtonA11yId: lockIconButtonA11yId,
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
@@ -108,16 +109,12 @@ final class AddressToolbarContainerModel: Equatable {
     /// Returns a skeleton (placeholder) `AddressToolbarConfiguration` for the address bar.
     /// This method is intended to provide a minimal configuration for loading or placeholder states,
     /// with only essential actions and UI elements set up. Most properties are left empty or set to default values.
-    /// - Parameters:
-    ///   - url: The URL to display in the address bar, if any.
-    ///   - isReaderModeAvailableOrActive: Indicates if reader mode is available or active,
+    /// - Parameter tab: The tab whose URL, secure content status are used to configure
+    /// and determine which page actions should be displayed.
     ///   used to determine trailing actions.
     /// - Returns: A skeleton `AddressToolbarConfiguration` suitable for placeholder or loading UI.
     @MainActor
-    func configureSkeletonAddressBar(
-        with url: URL?,
-        isReaderModeAvailableOrActive: Bool?
-    ) -> AddressToolbarConfiguration {
+    func getSkeletonAddressBarConfiguration(for tab: Tab?) -> AddressToolbarConfiguration {
         let backgroundAlpha = toolbarHelper.glassEffectAlpha
         let shouldBlur = toolbarHelper.shouldBlur()
         let uxConfiguration: AddressToolbarUXConfiguration = .experiment(backgroundAlpha: backgroundAlpha,
@@ -133,15 +130,6 @@ final class AddressToolbarContainerModel: Equatable {
         )
 
         // Trailing Page Actions
-        let readerModeAction: ToolbarActionConfiguration = .init(
-            actionType: .readerMode,
-            iconName: StandardImageIdentifiers.Medium.readerView,
-            isEnabled: true,
-            hasCustomColor: true,
-            a11yLabel: "",
-            a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton
-        )
-
         let reloadAction: ToolbarActionConfiguration = .init(
             actionType: .reload,
             iconName: StandardImageIdentifiers.Medium.arrowClockwise,
@@ -154,23 +142,35 @@ final class AddressToolbarContainerModel: Equatable {
         var leadingPageElements = [ToolbarElement]()
         var trailingPageElements = [ToolbarElement]()
 
+        let url = tab?.url?.displayURL
         if url != nil {
             leadingPageElements = Self.mapActions([shareAction], isShowingTopTabs: false, windowUUID: windowUUID)
-            trailingPageElements = isReaderModeAvailableOrActive == true
-            ? Self.mapActions([readerModeAction, reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
-            : Self.mapActions([reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
+            trailingPageElements = Self.mapActions([reloadAction], isShowingTopTabs: false, windowUUID: windowUUID)
+        }
+
+        var lockIconImageName: String?
+        var lockIconNeedsTheming = true
+
+        let hasSecureContent = tab?.webView?.hasOnlySecureContent == true
+        let isWebsiteMode = tab?.url?.isReaderModeURL == false
+
+        if isWebsiteMode {
+            lockIconImageName = hasSecureContent ?
+                StandardImageIdentifiers.Small.shieldCheckmarkFill :
+                StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+            lockIconNeedsTheming = hasSecureContent
         }
 
         let locationViewConfiguration = LocationViewConfiguration(
             searchEngineImageViewA11yId: "",
             searchEngineImageViewA11yLabel: "",
-            lockIconButtonA11yId: "",
+            lockIconButtonA11yId: nil,
             lockIconButtonA11yLabel: "",
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: "",
             searchEngineImage: nil,
-            lockIconImageName: "",
-            lockIconNeedsTheming: false,
+            lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
             url: url,
             droppableUrl: nil,
@@ -230,6 +230,7 @@ final class AddressToolbarContainerModel: Equatable {
         self.searchEngineName = searchEngineModel?.name ?? ""
         self.searchEngineImage = searchEngineModel?.image ?? UIImage()
         self.searchEnginesManager = searchEnginesManager
+        self.lockIconButtonA11yId = state.addressToolbar.lockIconButtonA11yId
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
@@ -270,6 +271,7 @@ final class AddressToolbarContainerModel: Equatable {
                 iconName: action.iconName,
                 title: action.actionLabel,
                 badgeImageName: action.badgeImageName,
+                bottomBadgeImage: action.bottomBadgeImage,
                 maskImageName: action.maskImageName,
                 templateModeForImage: action.templateModeForImage,
                 loadingConfig: action.loadingConfig,
@@ -287,6 +289,8 @@ final class AddressToolbarContainerModel: Equatable {
                 a11yCustomActionName: action.a11yCustomActionName,
                 a11yCustomAction: getA11yCustomAction(action: action, windowUUID: windowUUID),
                 hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
+                previousTabScreenshot: action.previousTabScreenshot,
+                nextTabScreenshot: action.nextTabScreenshot,
                 onSelected: getOnSelected(action: action, windowUUID: windowUUID),
                 onLongPress: getOnLongPress(action: action, windowUUID: windowUUID, isShowingTopTabs: isShowingTopTabs)
             )
@@ -338,6 +342,7 @@ final class AddressToolbarContainerModel: Equatable {
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineName == rhs.searchEngineName &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
+        lhs.lockIconButtonA11yId == rhs.lockIconButtonA11yId &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
         lhs.lockIconNeedsTheming == rhs.lockIconNeedsTheming &&
         lhs.safeListedURLImageName == rhs.safeListedURLImageName &&

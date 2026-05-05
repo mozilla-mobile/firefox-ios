@@ -29,16 +29,24 @@ let package = Package(
         .library(
             name: "WebEngine",
             targets: ["WebEngine"]),
+        .library(name: "TestKit",
+                 targets: ["TestKit"]),
         .library(
             name: "ToolbarKit",
             targets: ["ToolbarKit"]),
         .library(
             name: "MenuKit",
             targets: ["MenuKit"]),
+        .library(
+            name: "MLPAKit",
+            targets: ["MLPAKit"]),
         .library(name: "SummarizeKit",
                  targets: ["SummarizeKit"]),
         .library(name: "JWTKit",
                  targets: ["JWTKit"]),
+        .library(
+            name: "LLMKit",
+            targets: ["LLMKit"]),
         .library(
             name: "UnifiedSearchKit",
             targets: ["UnifiedSearchKit"]),
@@ -52,8 +60,8 @@ let package = Package(
             name: "ActionExtensionKit",
             targets: ["ActionExtensionKit"]),
         .library(
-            name: "VoiceSearchKit",
-            targets: ["VoiceSearchKit"]),
+            name: "QuickAnswersKit",
+            targets: ["QuickAnswersKit"]),
         .executable(
             name: "ExecutableContentBlockingGenerator",
             targets: ["ExecutableContentBlockingGenerator"]),
@@ -64,16 +72,16 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "8.2.0"),
+            exact: "8.8.1"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
         .package(
             url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
-            exact: "2.0.0"),
+            exact: "2.1.1"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.36.0"),
+            exact: "9.10.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
@@ -114,7 +122,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
+            dependencies: [
+                "SiteImageView",
+                "TestKit",
+                .product(name: "GCDWebServers", package: "GCDWebServer")
+            ],
             resources: [
                 .copy("Resources/mozilla.ico"),
                 .copy("Resources/inf-nan.svg"),
@@ -145,7 +157,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"],
+            dependencies: ["TabDataStore", "TestKit"],
             swiftSettings: [
             ]
         ),
@@ -170,10 +182,11 @@ let package = Package(
             ]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"],
+            dependencies: ["WebEngine", "TestKit"],
             swiftSettings: [
             ]
         ),
+        .target(name: "TestKit", dependencies: ["Shared"]),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
@@ -182,7 +195,7 @@ let package = Package(
             ]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"],
+            dependencies: ["ToolbarKit", "TestKit"],
             swiftSettings: [
         ]),
         .target(
@@ -198,18 +211,30 @@ let package = Package(
             ]
         ),
         .target(
+            name: "MLPAKit",
+            dependencies: ["Common", "JWTKit", "Shared"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]),
+        .testTarget(
+            name: "MLPAKitTests",
+            dependencies: ["MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "SummarizeKit",
             dependencies: [
                 "Common",
                 "ComponentLibrary",
-                "Down"
+                "Down",
+                "LLMKit"
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]
         ),
         .testTarget(name: "SummarizeKitTests",
-                    dependencies: ["SummarizeKit"],
+                    dependencies: ["SummarizeKit", "TestKit"],
                     swiftSettings: [
                         .unsafeFlags(["-enable-testing"]),
                     ]),
@@ -227,21 +252,33 @@ let package = Package(
             ]
         ),
         .target(
+            name: "LLMKit",
+            dependencies: ["MLPAKit"],
+            swiftSettings: [
+                .unsafeFlags(["-enable-testing"]),
+            ]
+        ),
+        .testTarget(
+            name: "LLMKitTests",
+            dependencies: ["LLMKit", "MLPAKit", "TestKit"],
+            swiftSettings: []
+        ),
+        .target(
             name: "UnifiedSearchKit",
             dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
             ]),
         .target(
-            name: "VoiceSearchKit",
-            dependencies: ["Common"],
+            name: "QuickAnswersKit",
+            dependencies: ["Common", "Shared", "MLPAKit", "LLMKit", "SiteImageView"],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"])
             ]
         ),
         .testTarget(
-            name: "VoiceSearchKitTests",
-            dependencies: ["VoiceSearchKit"]
+            name: "QuickAnswersKitTests",
+            dependencies: ["QuickAnswersKit", "Shared", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",
@@ -257,14 +294,10 @@ let package = Package(
             name: "OnboardingKit",
             dependencies: ["Common", "ComponentLibrary"],
             resources: [
-                .process("Shaders")
+                .process("IntroVideo.mp4")
             ],
             swiftSettings: [
                 .unsafeFlags(["-enable-testing"]),
-            ],
-            linkerSettings: [
-                .linkedFramework("Metal"),
-                .linkedFramework("MetalKit")
             ]),
         .testTarget(
             name: "OnboardingKitTests",

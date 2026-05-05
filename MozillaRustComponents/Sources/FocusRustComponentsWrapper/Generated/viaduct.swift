@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -503,13 +522,13 @@ public protocol Backend: AnyObject, Sendable {
     
 }
 open class BackendImpl: Backend, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -519,36 +538,37 @@ open class BackendImpl: Backend, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_viaduct_fn_clone_backend(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_viaduct_fn_clone_backend(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_viaduct_fn_free_backend(pointer, $0) }
+        try! rustCall { uniffi_viaduct_fn_free_backend(handle, $0) }
     }
 
     
@@ -559,7 +579,7 @@ open func sendRequest(request: Request, settings: ClientSettings)async throws  -
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_viaduct_fn_method_backend_send_request(
-                    self.uniffiClonePointer(),
+                    self.uniffiCloneHandle(),
                     FfiConverterTypeRequest_lower(request),FfiConverterTypeClientSettings_lower(settings)
                 )
             },
@@ -572,7 +592,9 @@ open func sendRequest(request: Request, settings: ClientSettings)async throws  -
 }
     
 
+    
 }
+
 
 
 // Put the implementation in a struct so we don't pollute the top-level namespace
@@ -584,13 +606,27 @@ fileprivate struct UniffiCallbackInterfaceBackend {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceBackend] = [UniffiVTableCallbackInterfaceBackend(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterTypeBackend.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface Backend: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterTypeBackend.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface Backend: handle missing in uniffiClone")
+            }
+        },
         sendRequest: { (
             uniffiHandle: UInt64,
             request: RustBuffer,
             settings: RustBuffer,
             uniffiFutureCallback: @escaping UniffiForeignFutureCompleteRustBuffer,
             uniffiCallbackData: UInt64,
-            uniffiOutReturn: UnsafeMutablePointer<UniffiForeignFuture>
+            uniffiOutDroppedCallback: UnsafeMutablePointer<UniffiForeignFutureDroppedCallbackStruct>
         ) in
             let makeCall = {
                 () async throws -> Response in
@@ -606,7 +642,7 @@ fileprivate struct UniffiCallbackInterfaceBackend {
             let uniffiHandleSuccess = { (returnValue: Response) in
                 uniffiFutureCallback(
                     uniffiCallbackData,
-                    UniffiForeignFutureStructRustBuffer(
+                    UniffiForeignFutureResultRustBuffer(
                         returnValue: FfiConverterTypeResponse_lower(returnValue),
                         callStatus: RustCallStatus()
                     )
@@ -615,25 +651,19 @@ fileprivate struct UniffiCallbackInterfaceBackend {
             let uniffiHandleError = { (statusCode, errorBuf) in
                 uniffiFutureCallback(
                     uniffiCallbackData,
-                    UniffiForeignFutureStructRustBuffer(
+                    UniffiForeignFutureResultRustBuffer(
                         returnValue: RustBuffer.empty(),
                         callStatus: RustCallStatus(code: statusCode, errorBuf: errorBuf)
                     )
                 )
             }
-            let uniffiForeignFuture = uniffiTraitInterfaceCallAsyncWithError(
+            uniffiTraitInterfaceCallAsyncWithError(
                 makeCall: makeCall,
                 handleSuccess: uniffiHandleSuccess,
                 handleError: uniffiHandleError,
-                lowerError: FfiConverterTypeViaductError_lower
+                lowerError: FfiConverterTypeViaductError_lower,
+                droppedCallback: uniffiOutDroppedCallback
             )
-            uniffiOutReturn.pointee = uniffiForeignFuture
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterTypeBackend.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface Backend: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -642,42 +672,43 @@ private func uniffiCallbackInitBackend() {
     uniffi_viaduct_fn_init_callback_vtable_backend(UniffiCallbackInterfaceBackend.vtable)
 }
 
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeBackend: FfiConverter {
     fileprivate static let handleMap = UniffiHandleMap<Backend>()
 
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = Backend
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> Backend {
-        return BackendImpl(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> Backend {
+        if ((handle & 1) == 0) {
+            // Rust-generated handle, construct a new class that uses the handle to implement the
+            // interface
+            return BackendImpl(unsafeFromHandle: handle)
+        } else {
+            // Swift-generated handle, get the object from the handle map
+            return try handleMap.remove(handle: handle)
+        }
     }
 
-    public static func lower(_ value: Backend) -> UnsafeMutableRawPointer {
-        guard let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: handleMap.insert(obj: value))) else {
-            fatalError("Cast to UnsafeMutableRawPointer failed")
-        }
-        return ptr
+    public static func lower(_ value: Backend) -> UInt64 {
+         if let rustImpl = value as? BackendImpl {
+             // Rust-implemented object.  Clone the handle and return it
+            return rustImpl.uniffiCloneHandle()
+         } else {
+            // Swift object, generate a new vtable handle and return that.
+            return handleMap.insert(obj: value)
+         }
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Backend {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: Backend, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -685,21 +716,21 @@ public struct FfiConverterTypeBackend: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeBackend_lift(_ pointer: UnsafeMutableRawPointer) throws -> Backend {
-    return try FfiConverterTypeBackend.lift(pointer)
+public func FfiConverterTypeBackend_lift(_ handle: UInt64) throws -> Backend {
+    return try FfiConverterTypeBackend.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeBackend_lower(_ value: Backend) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeBackend_lower(_ value: Backend) -> UInt64 {
     return FfiConverterTypeBackend.lower(value)
 }
 
 
 
 
-public struct ClientSettings {
+public struct ClientSettings: Equatable, Hashable {
     /**
      * Timeout for the entire request in ms (0 indicates no timeout).
      */
@@ -708,6 +739,10 @@ public struct ClientSettings {
      * Maximum amount of redirects to follow (0 means redirects are not allowed)
      */
     public var redirectLimit: UInt32
+    /**
+     * OHTTP channel to use for all requests (if any)
+     */
+    public var ohttpChannel: String?
     /**
      * Client default user-agent.
      *
@@ -726,6 +761,9 @@ public struct ClientSettings {
          * Maximum amount of redirects to follow (0 means redirects are not allowed)
          */redirectLimit: UInt32 = UInt32(10), 
         /**
+         * OHTTP channel to use for all requests (if any)
+         */ohttpChannel: String?, 
+        /**
          * Client default user-agent.
          *
          * This overrides the global default user-agent and is used when no `User-agent` header is set
@@ -733,37 +771,18 @@ public struct ClientSettings {
          */userAgent: String? = nil) {
         self.timeout = timeout
         self.redirectLimit = redirectLimit
+        self.ohttpChannel = ohttpChannel
         self.userAgent = userAgent
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ClientSettings: Sendable {}
 #endif
-
-
-extension ClientSettings: Equatable, Hashable {
-    public static func ==(lhs: ClientSettings, rhs: ClientSettings) -> Bool {
-        if lhs.timeout != rhs.timeout {
-            return false
-        }
-        if lhs.redirectLimit != rhs.redirectLimit {
-            return false
-        }
-        if lhs.userAgent != rhs.userAgent {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(timeout)
-        hasher.combine(redirectLimit)
-        hasher.combine(userAgent)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -774,6 +793,7 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
             try ClientSettings(
                 timeout: FfiConverterUInt32.read(from: &buf), 
                 redirectLimit: FfiConverterUInt32.read(from: &buf), 
+                ohttpChannel: FfiConverterOptionString.read(from: &buf), 
                 userAgent: FfiConverterOptionString.read(from: &buf)
         )
     }
@@ -781,6 +801,7 @@ public struct FfiConverterTypeClientSettings: FfiConverterRustBuffer {
     public static func write(_ value: ClientSettings, into buf: inout [UInt8]) {
         FfiConverterUInt32.write(value.timeout, into: &buf)
         FfiConverterUInt32.write(value.redirectLimit, into: &buf)
+        FfiConverterOptionString.write(value.ohttpChannel, into: &buf)
         FfiConverterOptionString.write(value.userAgent, into: &buf)
     }
 }
@@ -801,7 +822,76 @@ public func FfiConverterTypeClientSettings_lower(_ value: ClientSettings) -> Rus
 }
 
 
-public struct Request {
+/**
+ * Configuration for an OHTTP channel
+ */
+public struct OhttpConfig: Equatable, Hashable {
+    /**
+     * The relay URL that will proxy requests
+     */
+    public var relayUrl: String
+    /**
+     * The gateway host that provides encryption keys and decrypts requests
+     */
+    public var gatewayHost: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The relay URL that will proxy requests
+         */relayUrl: String, 
+        /**
+         * The gateway host that provides encryption keys and decrypts requests
+         */gatewayHost: String) {
+        self.relayUrl = relayUrl
+        self.gatewayHost = gatewayHost
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension OhttpConfig: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeOhttpConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> OhttpConfig {
+        return
+            try OhttpConfig(
+                relayUrl: FfiConverterString.read(from: &buf), 
+                gatewayHost: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: OhttpConfig, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.relayUrl, into: &buf)
+        FfiConverterString.write(value.gatewayHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeOhttpConfig_lift(_ buf: RustBuffer) throws -> OhttpConfig {
+    return try FfiConverterTypeOhttpConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeOhttpConfig_lower(_ value: OhttpConfig) -> RustBuffer {
+    return FfiConverterTypeOhttpConfig.lower(value)
+}
+
+
+public struct Request: Equatable, Hashable {
     public var method: Method
     public var url: ViaductUrl
     public var headers: Headers
@@ -815,39 +905,15 @@ public struct Request {
         self.headers = headers
         self.body = body
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Request: Sendable {}
 #endif
-
-
-extension Request: Equatable, Hashable {
-    public static func ==(lhs: Request, rhs: Request) -> Bool {
-        if lhs.method != rhs.method {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.headers != rhs.headers {
-            return false
-        }
-        if lhs.body != rhs.body {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(method)
-        hasher.combine(url)
-        hasher.combine(headers)
-        hasher.combine(body)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -890,7 +956,7 @@ public func FfiConverterTypeRequest_lower(_ value: Request) -> RustBuffer {
 /**
  * A response from the server.
  */
-public struct Response {
+public struct Response: Equatable, Hashable {
     /**
      * The method used to request this response.
      */
@@ -936,43 +1002,15 @@ public struct Response {
         self.headers = headers
         self.body = body
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Response: Sendable {}
 #endif
-
-
-extension Response: Equatable, Hashable {
-    public static func ==(lhs: Response, rhs: Response) -> Bool {
-        if lhs.requestMethod != rhs.requestMethod {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.status != rhs.status {
-            return false
-        }
-        if lhs.headers != rhs.headers {
-            return false
-        }
-        if lhs.body != rhs.body {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(requestMethod)
-        hasher.combine(url)
-        hasher.combine(status)
-        hasher.combine(headers)
-        hasher.combine(body)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1021,7 +1059,7 @@ public func FfiConverterTypeResponse_lower(_ value: Response) -> RustBuffer {
  * The supported methods are the limited to what's supported by android-components.
  */
 
-public enum Method : UInt8 {
+public enum Method: UInt8, Equatable, Hashable {
     
     case get = 0
     case head = 1
@@ -1032,8 +1070,12 @@ public enum Method : UInt8 {
     case options = 6
     case trace = 7
     case patch = 8
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension Method: Sendable {}
@@ -1130,15 +1172,8 @@ public func FfiConverterTypeMethod_lower(_ value: Method) -> RustBuffer {
 }
 
 
-extension Method: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum ViaductError: Swift.Error {
+public enum ViaductError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1167,8 +1202,21 @@ public enum ViaductError: Swift.Error {
     case OhttpResponseError(String
     )
     case OhttpNotSupported
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension ViaductError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1302,21 +1350,6 @@ public func FfiConverterTypeViaductError_lower(_ value: ViaductError) -> RustBuf
     return FfiConverterTypeViaductError.lower(value)
 }
 
-
-extension ViaductError: Equatable, Hashable {}
-
-
-
-
-extension ViaductError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -1362,6 +1395,31 @@ fileprivate struct FfiConverterOptionData: FfiConverterRustBuffer {
         case 1: return try FfiConverterData.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
+    typealias SwiftType = [String]
+
+    public static func write(_ value: [String], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterString.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [String]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterString.read(from: &buf))
+        }
+        return seq
     }
 }
 
@@ -1479,7 +1537,7 @@ public func FfiConverterTypeViaductUrl_lower(_ value: ViaductUrl) -> RustBuffer 
 }
 
 private let UNIFFI_RUST_FUTURE_POLL_READY: Int8 = 0
-private let UNIFFI_RUST_FUTURE_POLL_MAYBE_READY: Int8 = 1
+private let UNIFFI_RUST_FUTURE_POLL_WAKE: Int8 = 1
 
 fileprivate let uniffiContinuationHandleMap = UniffiHandleMap<UnsafeContinuation<Int8, Never>>()
 
@@ -1503,7 +1561,9 @@ fileprivate func uniffiRustCallAsync<F, T>(
         pollResult = await withUnsafeContinuation {
             pollFunc(
                 rustFuture,
-                uniffiFutureContinuationCallback,
+                { handle, pollResult in
+                    uniffiFutureContinuationCallback(handle: handle, pollResult: pollResult)
+                },
                 uniffiContinuationHandleMap.insert(obj: $0)
             )
         }
@@ -1527,8 +1587,9 @@ fileprivate func uniffiFutureContinuationCallback(handle: UInt64, pollResult: In
 private func uniffiTraitInterfaceCallAsync<T>(
     makeCall: @escaping () async throws -> T,
     handleSuccess: @escaping (T) -> (),
-    handleError: @escaping (Int8, RustBuffer) -> ()
-) -> UniffiForeignFuture {
+    handleError: @escaping (Int8, RustBuffer) -> (),
+    droppedCallback: UnsafeMutablePointer<UniffiForeignFutureDroppedCallbackStruct>
+) {
     let task = Task {
         // Note: it's important we call either `handleSuccess` or `handleError` exactly once.  Each
         // call consumes an Arc reference, which means there should be no possibility of a double
@@ -1548,16 +1609,19 @@ private func uniffiTraitInterfaceCallAsync<T>(
         handleSuccess(callResult)
     }
     let handle = UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.insert(obj: task)
-    return UniffiForeignFuture(handle: handle, free: uniffiForeignFutureFree)
-
+    droppedCallback.pointee = UniffiForeignFutureDroppedCallbackStruct(
+        handle: handle,
+        free: uniffiForeignFutureDroppedCallback
+    )
 }
 
 private func uniffiTraitInterfaceCallAsyncWithError<T, E>(
     makeCall: @escaping () async throws -> T,
     handleSuccess: @escaping (T) -> (),
     handleError: @escaping (Int8, RustBuffer) -> (),
-    lowerError: @escaping (E) -> RustBuffer
-) -> UniffiForeignFuture {
+    lowerError: @escaping (E) -> RustBuffer,
+    droppedCallback: UnsafeMutablePointer<UniffiForeignFutureDroppedCallbackStruct>
+) {
     let task = Task {
         // See the note in uniffiTraitInterfaceCallAsync for details on `handleSuccess` and
         // `handleError`.
@@ -1574,7 +1638,10 @@ private func uniffiTraitInterfaceCallAsyncWithError<T, E>(
         handleSuccess(callResult)
     }
     let handle = UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.insert(obj: task)
-    return UniffiForeignFuture(handle: handle, free: uniffiForeignFutureFree)
+    droppedCallback.pointee = UniffiForeignFutureDroppedCallbackStruct(
+        handle: handle,
+        free: uniffiForeignFutureDroppedCallback
+    )
 }
 
 // Borrow the callback handle map implementation to store foreign future handles
@@ -1591,7 +1658,7 @@ fileprivate protocol UniffiForeignFutureTask {
 
 extension Task: UniffiForeignFutureTask {}
 
-private func uniffiForeignFutureFree(handle: UInt64) {
+private func uniffiForeignFutureDroppedCallback(handle: UInt64) {
     do {
         let task = try UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.remove(handle: handle)
         // Set the cancellation flag on the task.  If it's still running, the code can check the
@@ -1599,7 +1666,7 @@ private func uniffiForeignFutureFree(handle: UInt64) {
         // a no-op.
         task.cancel()
     } catch {
-        print("uniffiForeignFutureFree: handle missing from handlemap")
+        print("uniffiForeignFutureDroppedCallback: handle missing from handlemap")
     }
 }
 
@@ -1608,16 +1675,92 @@ public func uniffiForeignFutureHandleCountViaduct() -> Int {
     UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.count
 }
 /**
- * Allow non-HTTPS requests to the emulator loopback URL
+ * Send a request through an OHTTP channel.
+ *
+ * This encrypts the request and routes it through the configured OHTTP
+ * relay/gateway for the specified channel.
+ *
+ * # Arguments
+ * * `request` - The request to send
+ * * `channel` - The name of the OHTTP channel to use (e.g., "merino")
+ *
+ * # Example (Kotlin)
+ * ```kotlin
+ * val response = sendOhttpRequest(
+ * Request(
+ * method = Method.GET,
+ * url = "https://example.com/api",
+ * headers = mapOf("Accept" to "application/json"),
+ * body = null
+ * ),
+ * "merino"
+ * )
+ * ```
  */
-public func allowAndroidEmulatorLoopback()  {try! rustCall() {
-    uniffi_viaduct_fn_func_allow_android_emulator_loopback($0
-    )
-}
+public func sendOhttpRequest(request: Request, channel: String)async throws  -> Response  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_viaduct_fn_func_send_ohttp_request(FfiConverterTypeRequest_lower(request),FfiConverterString.lower(channel)
+                )
+            },
+            pollFunc: ffi_viaduct_rust_future_poll_rust_buffer,
+            completeFunc: ffi_viaduct_rust_future_complete_rust_buffer,
+            freeFunc: ffi_viaduct_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeResponse_lift,
+            errorHandler: FfiConverterTypeViaductError_lift
+        )
 }
 public func initBackend(backend: Backend)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
     uniffi_viaduct_fn_func_init_backend(
         FfiConverterTypeBackend_lower(backend),$0
+    )
+}
+}
+/**
+ * Clear all OHTTP channel configurations
+ */
+public func clearOhttpChannels()  {try! rustCall() {
+    uniffi_viaduct_fn_func_clear_ohttp_channels($0
+    )
+}
+}
+/**
+ * Configure default OHTTP channels for common Mozilla services
+ * This sets up:
+ * - "relay1": For general telemetry and services through Mozilla's shared gateway
+ * - "merino": For Firefox Suggest recommendations through Merino's dedicated relay/gateway
+ */
+public func configureDefaultOhttpChannels()throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+    uniffi_viaduct_fn_func_configure_default_ohttp_channels($0
+    )
+}
+}
+/**
+ * Configure an OHTTP channel with the given configuration
+ * If an existing OHTTP config exists with the same name, it will be overwritten
+ */
+public func configureOhttpChannel(channel: String, config: OhttpConfig)throws   {try rustCallWithError(FfiConverterTypeViaductError_lift) {
+    uniffi_viaduct_fn_func_configure_ohttp_channel(
+        FfiConverterString.lower(channel),
+        FfiConverterTypeOhttpConfig_lower(config),$0
+    )
+}
+}
+/**
+ * List all configured OHTTP channels
+ */
+public func listOhttpChannels() -> [String]  {
+    return try!  FfiConverterSequenceString.lift(try! rustCall() {
+    uniffi_viaduct_fn_func_list_ohttp_channels($0
+    )
+})
+}
+/**
+ * Allow non-HTTPS requests to the emulator loopback URL
+ */
+public func allowAndroidEmulatorLoopback()  {try! rustCall() {
+    uniffi_viaduct_fn_func_allow_android_emulator_loopback($0
     )
 }
 }
@@ -1643,22 +1786,37 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_viaduct_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_viaduct_checksum_func_allow_android_emulator_loopback() != 38617) {
+    if (uniffi_viaduct_checksum_func_send_ohttp_request() != 6311) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_init_backend() != 21801) {
+    if (uniffi_viaduct_checksum_func_init_backend() != 54406) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 33213) {
+    if (uniffi_viaduct_checksum_func_clear_ohttp_channels() != 2859) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_viaduct_checksum_method_backend_send_request() != 4029) {
+    if (uniffi_viaduct_checksum_func_configure_default_ohttp_channels() != 1921) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_configure_ohttp_channel() != 19406) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_list_ohttp_channels() != 38695) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_allow_android_emulator_loopback() != 12993) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_func_set_global_default_user_agent() != 45260) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_viaduct_checksum_method_backend_send_request() != 64490) {
         return InitializationResult.apiChecksumMismatch
     }
 

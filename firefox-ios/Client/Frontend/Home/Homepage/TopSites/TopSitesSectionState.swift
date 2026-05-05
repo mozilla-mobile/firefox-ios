@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 import Shared
@@ -10,20 +11,24 @@ import Shared
 /// State for the top sites section that is used in the homepage
 /// The state does not only contain the top sites list, but needs to also know about the number of rows
 /// and tiles per row in order to only show a specific amount of the top sites data.
+@CopyWithUpdates
 struct TopSitesSectionState: StateType, Equatable {
     var windowUUID: WindowUUID
     let topSitesData: [TopSiteConfiguration]
     let numberOfRows: Int
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
+    let shouldShowSectionHeader: Bool
 
-    let sectionHeaderState = SectionHeaderConfiguration(
-        title: .FirefoxHomepage.Shortcuts.SectionTitle,
-        a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
-        isButtonHidden: false,
-        buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
-        buttonTitle: .BookmarksSavedShowAllText
-    )
+    struct Constants {
+        static let sectionHeaderConfiguration = SectionHeaderConfiguration(
+            title: .FirefoxHomepage.Shortcuts.SectionTitle,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
+            isButtonHidden: false,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.shortcuts,
+            buttonTitle: .BookmarksSavedShowAllText
+        )
+    }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
         let preferredNumberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows)
@@ -36,7 +41,8 @@ struct TopSitesSectionState: StateType, Equatable {
             topSitesData: [],
             numberOfRows: numberOfRows,
             numberOfTilesPerRow: TopSitesSectionLayoutProvider.UX.minCards,
-            shouldShowSection: shouldShowSection
+            shouldShowSection: shouldShowSection,
+            shouldShowSectionHeader: false
         )
     }
 
@@ -45,13 +51,15 @@ struct TopSitesSectionState: StateType, Equatable {
         topSitesData: [TopSiteConfiguration],
         numberOfRows: Int,
         numberOfTilesPerRow: Int,
-        shouldShowSection: Bool
+        shouldShowSection: Bool,
+        shouldShowSectionHeader: Bool,
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
         self.numberOfRows = numberOfRows
         self.numberOfTilesPerRow = numberOfTilesPerRow
         self.shouldShowSection = shouldShowSection
+        self.shouldShowSectionHeader = shouldShowSectionHeader
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -81,12 +89,11 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
+        let shouldShowSectionHeader = sites.count > state.numberOfRows * state.numberOfTilesPerRow
+
+        return state.copyWithUpdates(
             topSitesData: sites,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -97,12 +104,11 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
+        let shouldShowSectionHeader = state.topSitesData.count > numberOfRows * state.numberOfTilesPerRow
+
+        return state.copyWithUpdates(
             numberOfRows: numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -113,12 +119,11 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
+        let shouldShowSectionHeader = state.topSitesData.count > state.numberOfRows * numberOfTilesPerRow
+
+        return state.copyWithUpdates(
             numberOfTilesPerRow: numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
+            shouldShowSectionHeader: shouldShowSectionHeader
         )
     }
 
@@ -129,22 +134,12 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
+        return state.copyWithUpdates(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
-        return TopSitesSectionState(
-            windowUUID: state.windowUUID,
-            topSitesData: state.topSitesData,
-            numberOfRows: state.numberOfRows,
-            numberOfTilesPerRow: state.numberOfTilesPerRow,
-            shouldShowSection: state.shouldShowSection
-        )
+        return state.copyWithUpdates()
     }
 }

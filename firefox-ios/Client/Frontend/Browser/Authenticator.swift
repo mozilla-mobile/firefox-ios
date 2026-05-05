@@ -14,6 +14,27 @@ class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
     @MainActor
+    static func handleAuthRequestAsync(
+        _ viewController: UIViewController,
+        challenge: URLAuthenticationChallenge,
+        loginsHelper: LoginsHelper?
+    ) async throws -> (LoginEntry) {
+        try await withCheckedThrowingContinuation { continuation in
+            Authenticator.handleAuthRequest(
+                viewController,
+                challenge: challenge,
+                loginsHelper: loginsHelper) { result in
+                    switch result {
+                    case .success(let loginEntry):
+                        continuation.resume(returning: loginEntry)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+            }
+        }
+    }
+
+    @MainActor
     static func handleAuthRequest(
         _ viewController: UIViewController,
         challenge: URLAuthenticationChallenge,

@@ -19,17 +19,14 @@ public struct PrefsKeys {
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyMailToOption = "MailToOption"
-    public static let HasFocusInstalled = "HasFocusInstalled"
-    public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
     public static let TermsOfServiceAccepted = "TermsOfServiceAccepted"
-    public static let TermsOfServiceAcceptedVersion = "TermsOfServiceAcceptedVersion"
     public static let TermsOfServiceAcceptedDate = "TermsOfServiceAcceptedDate"
     // TermsOfUseAccepted should use same string key as before to maintain compatibility
     public static let TermsOfUseAccepted = "termsOfUseAccepted"
-    public static let TermsOfUseAcceptedVersion = "TermsOfUseAcceptedVersion"
     public static let TermsOfUseAcceptedDate = "TermsOfUseAcceptedDate"
     public static let TermsOfUseFirstShown = "TermsOfUseFirstShown"
+    public static let TermsOfUseShownRecorded = "TermsOfUseShownRecorded"
     public static let TermsOfUseDismissedDate = "TermsOfUseDismissedDate"
     public static let TermsOfUseImpressionCount = "TermsOfUseImpressionCount"
     public static let TermsOfUseRemindMeLaterCount = "TermsOfUseRemindMeLaterCount"
@@ -39,11 +36,12 @@ public struct PrefsKeys {
     public static let TermsOfUseLearnMoreTapDate = "TermsOfUseLearnMoreTapDate"
     public static let TermsOfUsePrivacyNoticeTapDate = "TermsOfUsePrivacyNoticeTapDate"
     public static let TermsOfUseTermsLinkTapDate = "TermsOfUseTermsLinkTapDate"
+    public static let TermsOfUseExperimentKey = "TermsOfUseExperimentKey" // "<slug>|<branch>|<name>"
+    public static let TermsOfUseExperimentTrackingInitialized = "TermsOfUseExperimentTrackingInitialized"
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
     public static let LoginsSaveEnabled = "saveLogins"
-    public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyDefaultBrowserCardShowType = "defaultBrowserCardShowType"
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
@@ -79,6 +77,7 @@ public struct PrefsKeys {
         public static let didAgreeTermsOfService = "didAgreeTermOfService"
         public static let summarizeContentFeature = "summarizeContentFeature"
         public static let shakeGestureEnabled = "shakeGestureEnabledKey"
+        public static let selectedLanguage = "selectedLanguage"
     }
 
     public struct AppVersion {
@@ -113,6 +112,8 @@ public struct PrefsKeys {
     public struct HomepageSettings {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
     }
 
     public struct SearchSettings {
@@ -140,6 +141,10 @@ public struct PrefsKeys {
         public static let signedInFxaAccount = "signedInFxaAccountKey"
     }
 
+    public struct MLPASettings {
+        public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
@@ -148,7 +153,6 @@ public struct PrefsKeys {
 
     // Firefox contextual hint
     public enum ContextualHints: String, CaseIterable {
-        case dataClearanceKey = "ContextualHintDataClearance"
         case jumpBackinKey = "ContextualHintJumpBackin"
         case jumpBackInConfiguredKey = "JumpBackInConfigured"
         case jumpBackInSyncedTabKey = "ContextualHintJumpBackInSyncedTab"
@@ -157,7 +161,6 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case relayMaskKey = "ContextualHintRelayMaskKey"
-        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
@@ -168,6 +171,10 @@ public struct PrefsKeys {
         public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
         public static let navigationToolbarMiddleButton = "settings.navigationToolbarMiddleButton"
         public static let translationsFeature = "settings.translationFeature"
+        public static let translationPreferredLanguages = "settings.translationPreferredLanguages"
+        public static let translationAutoTranslate = "settings.translationAutoTranslate"
+        public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
+        public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
     }
 
     // Activity Stream
@@ -214,9 +221,6 @@ public struct PrefsKeys {
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 
-    // Only used in unit tests to override the user's setting for nimbus features
-    public static let NimbusUserEnabledFeatureTestsOverride = "NimbusUserEnabledFeatureTestsOverride"
-
     // Only used to force faster Terms of Use timeout for debugging purposes
     public static let FasterTermsOfUseTimeoutOverride = "FasterTermsOfUseTimeoutOverride"
 
@@ -228,18 +232,12 @@ public struct PrefsKeys {
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 
-    // Represents whether or not the user has seen the photon main menu once, at least.
-    public static let PhotonMainMenuShown = "PhotonMainMenuShown"
-
     // The guid of the bookmark folder that was most recently created or saved to by the user.
     // Used to indicate where we should save the next bookmark by default.
     public static let RecentBookmarkFolder = "RecentBookmarkFolder"
 
     // The timestamp where the app was last opened as default browser
     public static let LastOpenedAsDefaultBrowser = "LastOpenedAsDefaultBrowser"
-
-    // Used to only show the felt deletion alert confirmation once, used for private mode
-    public static let dataClearanceAlertShown = "dataClearanceAlertShownKey"
 
     // Used to only show the Default Browser Banner, in Main Menu, until is dismissed by the user
     public static let defaultBrowserBannerShown = "defaultBrowserBannerShownKey"

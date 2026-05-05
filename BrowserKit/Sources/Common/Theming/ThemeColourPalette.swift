@@ -34,6 +34,7 @@ public protocol ThemeColourPalette {
     var layerGradientURL: Gradient { get }
     var layerSurfaceLow: UIColor { get }
     var layerSurfaceMedium: UIColor { get }
+    var layerSurfaceMediumAlpha: UIColor { get }
     var layerSurfaceMediumAlt: UIColor { get }
     var layerGradientSummary: Gradient { get }
 
@@ -101,4 +102,7 @@ public protocol ThemeColourPalette {
     var gradientOnboardingStop2: UIColor { get }
     var gradientOnboardingStop3: UIColor { get }
     var gradientOnboardingStop4: UIColor { get }
+    var gradientAIStrongStop1: UIColor { get }
+    var gradientAIStrongStop2: UIColor { get }
+    var gradientAIStrongStop3: UIColor { get }
 }

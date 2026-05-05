@@ -19,6 +19,9 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Toto vám umožňuje ukladať fotky.";
 
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox používa rozpoznávanie reči na prevod vášho hlasu na text pre hlasové vyhľadávanie.";
+
 /* (No Comment) */
 "Scan QR Code" = "Skenovanie QR kódu";
 

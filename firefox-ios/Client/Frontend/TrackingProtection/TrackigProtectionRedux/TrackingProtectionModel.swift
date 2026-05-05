@@ -14,6 +14,7 @@ import SwiftASN1
 
 class TrackingProtectionModel {
     // MARK: - Constants
+    private let userDefaults: UserDefaultsInterface?
     let contentBlockerStatus: BlockerStatus
     var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
@@ -121,13 +122,15 @@ class TrackingProtectionModel {
 
     // MARK: - Initializers
 
-    init(url: URL,
+    init(userDefaults: UserDefaultsInterface?,
+         url: URL,
          displayTitle: String,
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
          contentBlockerStats: TPPageStats?,
          selectedTab: Tab?) {
+        self.userDefaults = userDefaults
         self.url = url
         self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
@@ -160,6 +163,7 @@ class TrackingProtectionModel {
 
     func getBlockedTrackersModel() -> BlockedTrackersTableModel {
         return BlockedTrackersTableModel(
+            userDefaults: userDefaults,
             topLevelDomain: websiteTitle,
             title: displayTitle,
             URL: url.absoluteDisplayString,
@@ -225,7 +229,9 @@ class TrackingProtectionModel {
 
     @MainActor
     func clearCookiesAndSiteData() {
-        _ = CookiesClearable().clear()
-        _ = SiteDataClearable().clear()
+        guard let domain = url.baseDomain else { return }
+        Task {
+            await CookiesClearable().clear(forDomain: domain)
+        }
     }
 }

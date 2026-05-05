@@ -273,22 +273,6 @@ final class DefaultWKEngineWebView: WKWebView,
                 contentSizeObserver
             ]
         )
-
-        // Observe fullscreen state, there are four states but we are reacting to `.enteringFullscreen`
-        // and `.exitingFullscreen` only. When the view is on fullscreen is removed from the view hierarchy
-        // so we add it back for `.exitingFullscreen`
-        if #available(iOS 16.0, *) {
-            let fullscreenObserver = observe(\.fullscreenState, options: [.new]) { [weak self] object, change in
-                guard let self else { return }
-                ensureMainThread {
-                    guard object.fullscreenState == .enteringFullscreen ||
-                            object.fullscreenState == .exitingFullscreen else { return }
-
-                    self.delegate?.webViewPropertyChanged(.isFullScreen(object.fullscreenState == .enteringFullscreen))
-                }
-            }
-            observedTokens.append(fullscreenObserver)
-        }
     }
 
     private func removeObservers() {

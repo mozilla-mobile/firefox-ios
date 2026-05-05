@@ -5,7 +5,7 @@
 "New Tab" = "Nueva pestaña";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox usa la cámara para escanear los códigos QR, tomar fotos y grabar video.";
+"NSCameraUsageDescription" = "Firefox usa la cámara para escanear los códigos QR, sacar fotos y grabar video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox requiere Face ID para acceder a tus contraseñas guardadas y métodos de pago.";
@@ -18,6 +18,9 @@
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar las fotos.";
+
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "Firefox usa reconocimiento de voz para convertir tu voz a texto para la búsqueda por voz.";
 
 /* (No Comment) */
 "Scan QR Code" = "Escanear código QR";

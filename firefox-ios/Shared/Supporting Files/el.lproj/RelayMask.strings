@@ -2,9 +2,6 @@
 "RelayMask.RelayEmailMaskAvailableCFR.v146" = "Νέο! Οι μάσκες email του %@ Relay είναι πλέον διαθέσιμες και σε κινητές συσκευές.";
 
 /* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
-"RelayMask.RelayEmailMaskFreeTierLimitReached.v146" = "Οι 5 δωρεάν μάσκες email σας χρησιμοποιούνται, γι' αυτό επιλέξαμε μία για εσάς.";
-
-/* Message displayed to users when they attempt to generate a new Relay email mask but they have reached their free tier 5 mask limit, and so an existing mask is chosen for them randomly. */
 "RelayMask.RelayEmailMaskFreeTierLimitReached.v147" = "Έχετε χρησιμοποιήσει τις 5 δωρεάν μάσκες email σας, επομένως επιλέξαμε μία για επαναχρησιμοποίηση.";
 
 /* Generic error message displayed to users when an unexpected error occurs while attempting to generate a Relay email mask. */
@@ -12,9 +9,6 @@
 
 /* VoiceOver announcement spoken aloud to accessibility users when an email mask is inserted successfully. */
 "RelayMask.RelayEmailMaskInsertedA11yAnnouncement.v147" = "Έγινε εισαγωγή μάσκας email";
-
-/* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
-"RelayMask.RelayEmailMaskSettingsDetailInfo.v146" = "Αποκρύψτε το πραγματικό σας email για να προστατέψετε τα εισερχόμενά σας από ανεπιθύμητα μηνύματα. Ορισμένοι ιστότοποι δεν το υποστηρίζουν.";
 
 /* Detailed informational label to explain the Relay anonymous email masking feature to users, and warn that some websites may not support that functionality. */
 "RelayMask.RelayEmailMaskSettingsDetailInfo.v147" = "Αποκρύψτε το πραγματικό σας email για να προστατέψετε τα εισερχόμενά σας από ανεπιθύμητα μηνύματα. Ορισμένοι ιστότοποι δεν υποστηρίζουν μάσκες email.";

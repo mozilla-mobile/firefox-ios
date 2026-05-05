@@ -462,18 +462,18 @@ extension PreviewModel {
         instructionsPopup: nil,
         embededLinkText: [
             EmbeddedLink(
-                fullText: "By continuing, you agree to the %@",
+                fullText: "By continuing, you agree to the Firefox Terms of Use",
                 linkText: "Firefox Terms of Use",
                 action: .openTermsOfService
             ),
             EmbeddedLink(
-                fullText: "%1$@ cares about your privacy. Read more in our %2$@",
+                fullText: "Firefox cares about your privacy. Read more in our Privacy Notice",
                 linkText: "Privacy Notice",
                 action: .openPrivacyNotice
             ),
             EmbeddedLink(
                 fullText:
-                    "To help improve the browser, %1$@ sends diagnostic and interaction data to %2$@. %3$@",
+                    "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage settings",
                 linkText: "Manage settings",
                 action: .openManageSettings
             )
@@ -556,12 +556,34 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.brandRefreshFlow,
             skipText: "Skip",
+            variant: .brandRefresh,
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
-        )
+            onComplete: { _, _ in }
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
+}
+
+#Preview("Onboarding Flow - Brand Refresh (Dark)") {
+    OnboardingView<PreviewModel>(
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: ""),
+        viewModel: OnboardingFlowViewModel(
+            onboardingCards: PreviewModel.brandRefreshFlow,
+            skipText: "Skip",
+            variant: .brandRefresh,
+            onActionTap: { _, _, _ in
+            },
+            onMultipleChoiceActionTap: { _, _ in },
+            onComplete: { _, _ in }
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
+    )
+    .preferredColorScheme(.dark)
 }
 
 #Preview("Onboarding Flow - Modern") {
@@ -571,11 +593,14 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.modernFlow,
             skipText: "Skip",
+            variant: .modern,
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
-        )
+            onComplete: { _, _ in }
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
 }
 
@@ -586,11 +611,14 @@ extension PreviewModel {
         viewModel: OnboardingFlowViewModel(
             onboardingCards: PreviewModel.japanFlow,
             skipText: "Skip",
+            variant: .japan,
             onActionTap: { _, _, _ in
             },
             onMultipleChoiceActionTap: { _, _ in },
-            onComplete: { _ in }
-        )
+            onComplete: { _, _ in }
+        ),
+        pageControlAccessibilityId: "onboarding_pageControl_preview",
+        closeButtonAccessibilityId: "onboarding_closeButton_preview",
     )
 }
 
@@ -598,6 +626,7 @@ extension PreviewModel {
     TermsOfUseView(
         viewModel: TermsOfUseFlowViewModel(
             configuration: PreviewModel.tos,
+            variant: .modern,
             onTermsOfUseTap: {},
             onPrivacyNoticeTap: {},
             onManageSettingsTap: {},
@@ -606,6 +635,37 @@ extension PreviewModel {
         windowUUID: .DefaultUITestingUUID,
         themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
     )
+}
+
+#Preview("Terms of service - Brand Refresh") {
+    TermsOfUseView(
+        viewModel: TermsOfUseFlowViewModel(
+            configuration: PreviewModel.tos,
+            variant: .brandRefresh,
+            onTermsOfUseTap: {},
+            onPrivacyNoticeTap: {},
+            onManageSettingsTap: {},
+            onComplete: {}
+        ),
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+    )
+}
+
+#Preview("Terms of service - Brand Refresh (Dark)") {
+    TermsOfUseView(
+        viewModel: TermsOfUseFlowViewModel(
+            configuration: PreviewModel.tos,
+            variant: .brandRefresh,
+            onTermsOfUseTap: {},
+            onPrivacyNoticeTap: {},
+            onManageSettingsTap: {},
+            onComplete: {}
+        ),
+        windowUUID: .DefaultUITestingUUID,
+        themeManager: DefaultThemeManager(sharedContainerIdentifier: "")
+    )
+    .preferredColorScheme(.dark)
 }
 
 #endif

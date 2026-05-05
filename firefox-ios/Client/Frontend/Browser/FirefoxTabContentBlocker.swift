@@ -117,7 +117,7 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     override func notifiedTabSetupRequired() {
         guard let tab = self.tab as? Tab else { return }
         self.logger.log("Notified tab setup required", level: .info, category: .adblock)
-        self.setupForTab(completion: { tab.reloadPage() })
+        self.setupForTab(completion: { tab.reload() })
         TabEvent.post(.didChangeContentBlocking, for: tab)
     }
 

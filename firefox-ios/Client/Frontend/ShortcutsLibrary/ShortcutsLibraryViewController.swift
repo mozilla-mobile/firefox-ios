@@ -8,7 +8,6 @@ import Redux
 
 class ShortcutsLibraryViewController: UIViewController,
                                       UICollectionViewDelegate,
-                                      FeatureFlaggable,
                                       StoreSubscriber,
                                       Themeable,
                                       DismissalNotifiable {
@@ -127,10 +126,10 @@ class ShortcutsLibraryViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.showScreen,
-            screen: .shortcutsLibrary
+            actionType: ComponentActionType.addComponent,
+            component: .shortcutsLibrary
         )
         store.dispatch(action)
 
@@ -152,10 +151,10 @@ class ShortcutsLibraryViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(
+        let action = ComponentAction(
             windowUUID: windowUUID,
-            actionType: ScreenActionType.closeScreen,
-            screen: .shortcutsLibrary
+            actionType: ComponentActionType.removeComponent,
+            component: .shortcutsLibrary
         )
         store.dispatch(action)
     }
@@ -208,7 +207,7 @@ class ShortcutsLibraryViewController: UIViewController,
         let layout = UICollectionViewCompositionalLayout { [weak self ](sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let self else { return nil }
-            let homepageState = store.state.screenState(HomepageState.self, for: .homepage, window: windowUUID)
+            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
             let numberOfTilesPerRow = homepageState?.topSitesState.numberOfTilesPerRow ?? 4
             let section = TopSitesSectionLayoutProvider.createTopSitesSectionLayout(
                 for: environment.traitCollection,

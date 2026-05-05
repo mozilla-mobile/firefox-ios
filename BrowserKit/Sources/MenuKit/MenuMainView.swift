@@ -4,13 +4,10 @@
 
 import Common
 import UIKit
-import ComponentLibrary
 
 public final class MenuMainView: UIView, ThemeApplicable {
     private struct UX {
         static let headerTopMargin: CGFloat = 24
-        static let horizontalMargin: CGFloat = 16
-        static let closeButtonSize: CGFloat = 30
         static let headerTopMarginWithButton: CGFloat = 8
     }
 
@@ -29,8 +26,6 @@ public final class MenuMainView: UIView, ThemeApplicable {
     private var viewConstraints: [NSLayoutConstraint] = []
 
     // MARK: - Properties
-    // If default browser banner sub flag is enabled
-    private var isMenuDefaultBrowserBanner = false
     // If FF is the default browser
     private var isBrowserDefault = false
     // If banner was already shown
@@ -53,7 +48,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
         self.addSubview(tableView)
         if let section = data.first(where: { $0.isHomepage }), section.isHomepage {
             self.siteProtectionHeader.removeFromSuperview()
-            if isHeaderBanner, isMenuDefaultBrowserBanner, !isBrowserDefault, !bannerShown {
+            if isHeaderBanner, !isBrowserDefault, !bannerShown {
                 isBannerVisible = true
                 self.addSubview(headerBanner)
                 viewConstraints.append(contentsOf: [
@@ -115,12 +110,10 @@ public final class MenuMainView: UIView, ThemeApplicable {
         title: String,
         subtitle: String,
         image: UIImage?,
-        isBannerFlagEnabled: Bool,
         isBrowserDefault: Bool,
         bannerShown: Bool
     ) {
         headerBanner.setupDetails(title: title, subtitle: subtitle, image: image)
-        isMenuDefaultBrowserBanner = isBannerFlagEnabled
         self.isBrowserDefault = isBrowserDefault
         self.bannerShown = bannerShown
     }
@@ -180,13 +173,9 @@ public final class MenuMainView: UIView, ThemeApplicable {
     }
 
     private func setHeightForHomepageMenu(height: CGFloat) {
-        if isMenuDefaultBrowserBanner {
-            let headerBannerHeight = headerBanner.frame.height
-            let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
-            self.onCalculatedHeight?(calculatedHeight)
-        } else {
-            self.onCalculatedHeight?(height)
-        }
+        let headerBannerHeight = headerBanner.frame.height
+        let calculatedHeight = isBannerVisible ? height + headerBannerHeight : height
+        self.onCalculatedHeight?(calculatedHeight)
     }
 
     private func handleBannerCallback(with data: [MenuSection]) {
@@ -218,6 +207,7 @@ public final class MenuMainView: UIView, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
+        tableView.reloadTableView(with: menuData, isBannerVisible: isBannerVisible)
         siteProtectionHeader.applyTheme(theme: theme)
         headerBanner.applyTheme(theme: theme)
     }

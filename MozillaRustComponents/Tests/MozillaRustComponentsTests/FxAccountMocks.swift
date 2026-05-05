@@ -20,7 +20,13 @@ class MockFxAccount: PersistedFirefoxAccount {
         case getAccessToken
         case initializeDevice
         case getDevices
+        case processEvent
     }
+
+    /// Controls what state `processEvent(.initialize)` returns.
+    /// Set to `.connected` for a restored account, `.disconnected` for no account,
+    /// `.authIssues` for a restored account with auth problems.
+    var initializeResult: FxaState = .disconnected
 
     init() {
         super.init(inner: FirefoxAccount(config: FxaConfig(server: FxaServer.custom(url: ""), clientId: "", redirectUri: "", tokenServerUrlOverride: nil)))
@@ -32,6 +38,30 @@ class MockFxAccount: PersistedFirefoxAccount {
 
     required convenience init(config _: FxAConfig) {
         fatalError("init(config:) has not been implemented")
+    }
+
+    override func processEvent(event: FxaEvent) throws -> FxaState {
+        queue.sync { invocations.append(.processEvent) }
+        switch event {
+        case .initialize:
+            return initializeResult
+        case .beginOAuthFlow:
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
+        case .beginPairingFlow:
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
+        case let .completeOAuthFlow(_, state):
+            // Simulate Rust's OAuth state validation
+            return state == "bobo" ? .connected : .disconnected
+        case .cancelOAuthFlow:
+            return .disconnected
+        case .checkAuthorizationStatus:
+            let info = try checkAuthorizationStatus()
+            return info.active ? .connected : .authIssues
+        case .disconnect:
+            return .disconnected
+        case .callGetProfile:
+            return .connected
+        }
     }
 
     override func initializeDevice(name _: String, deviceType _: DeviceType, supportedCapabilities _: [DeviceCapability]) throws {
@@ -79,7 +109,7 @@ class MockFxAccount: PersistedFirefoxAccount {
 }
 
 final class MockFxAccountManager: FxAccountManager, @unchecked Sendable {
-    var storedAccount: PersistedFirefoxAccount?
+    var storedAccount: MockFxAccount?
 
     override func createAccount() -> PersistedFirefoxAccount {
         return MockFxAccount()
@@ -97,23 +127,11 @@ final class MockFxAccountManager: FxAccountManager, @unchecked Sendable {
 final class MockDeviceConstellation: DeviceConstellation, @unchecked Sendable {
     var invocations: [MethodInvocation] = []
     enum MethodInvocation {
-        case ensureCapabilities
-        case initDevice
         case refreshState
     }
 
     override init(account: PersistedFirefoxAccount?) {
         super.init(account: account ?? MockFxAccount())
-    }
-
-    override func initDevice(name: String, type: DeviceType, capabilities: [DeviceCapability]) {
-        queue.sync { invocations.append(.initDevice) }
-        super.initDevice(name: name, type: type, capabilities: capabilities)
-    }
-
-    override func ensureCapabilities(capabilities: [DeviceCapability]) {
-        queue.sync { invocations.append(.ensureCapabilities) }
-        super.ensureCapabilities(capabilities: capabilities)
     }
 
     override func refreshState() {

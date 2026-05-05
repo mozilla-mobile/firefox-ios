@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -402,6 +421,22 @@ private let IDX_CALLBACK_FREE: Int32 = 0
 private let UNIFFI_CALLBACK_SUCCESS: Int32 = 0
 private let UNIFFI_CALLBACK_ERROR: Int32 = 1
 private let UNIFFI_CALLBACK_UNEXPECTED_ERROR: Int32 = 2
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterUInt32: FfiConverterPrimitive {
+    typealias FfiType = UInt32
+    typealias SwiftType = UInt32
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt32 {
+        return try lift(readInt(&buf))
+    }
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -445,7 +480,118 @@ fileprivate struct FfiConverterString: FfiConverter {
 }
 
 
-public struct TracingEvent {
+/**
+ * Describes which events to an EventSink
+ */
+public struct EventSinkSpecification: Equatable, Hashable {
+    public var targets: [EventTarget]
+    public var minLevel: TracingLevel?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(targets: [EventTarget] = [], minLevel: TracingLevel? = nil) {
+        self.targets = targets
+        self.minLevel = minLevel
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension EventSinkSpecification: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEventSinkSpecification: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EventSinkSpecification {
+        return
+            try EventSinkSpecification(
+                targets: FfiConverterSequenceTypeEventTarget.read(from: &buf), 
+                minLevel: FfiConverterOptionTypeTracingLevel.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: EventSinkSpecification, into buf: inout [UInt8]) {
+        FfiConverterSequenceTypeEventTarget.write(value.targets, into: &buf)
+        FfiConverterOptionTypeTracingLevel.write(value.minLevel, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSinkSpecification_lift(_ buf: RustBuffer) throws -> EventSinkSpecification {
+    return try FfiConverterTypeEventSinkSpecification.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSinkSpecification_lower(_ value: EventSinkSpecification) -> RustBuffer {
+    return FfiConverterTypeEventSinkSpecification.lower(value)
+}
+
+
+public struct EventTarget: Equatable, Hashable {
+    public var target: String
+    public var level: TracingLevel
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(target: String, level: TracingLevel) {
+        self.target = target
+        self.level = level
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension EventTarget: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEventTarget: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EventTarget {
+        return
+            try EventTarget(
+                target: FfiConverterString.read(from: &buf), 
+                level: FfiConverterTypeTracingLevel.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: EventTarget, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.target, into: &buf)
+        FfiConverterTypeTracingLevel.write(value.level, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventTarget_lift(_ buf: RustBuffer) throws -> EventTarget {
+    return try FfiConverterTypeEventTarget.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventTarget_lower(_ value: EventTarget) -> RustBuffer {
+    return FfiConverterTypeEventTarget.lower(value)
+}
+
+
+public struct TracingEvent: Equatable, Hashable {
     public var level: TracingLevel
     public var target: String
     public var name: String
@@ -461,43 +607,15 @@ public struct TracingEvent {
         self.message = message
         self.fields = fields
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension TracingEvent: Sendable {}
 #endif
-
-
-extension TracingEvent: Equatable, Hashable {
-    public static func ==(lhs: TracingEvent, rhs: TracingEvent) -> Bool {
-        if lhs.level != rhs.level {
-            return false
-        }
-        if lhs.target != rhs.target {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.message != rhs.message {
-            return false
-        }
-        if lhs.fields != rhs.fields {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(level)
-        hasher.combine(target)
-        hasher.combine(name)
-        hasher.combine(message)
-        hasher.combine(fields)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -541,15 +659,19 @@ public func FfiConverterTypeTracingEvent_lower(_ value: TracingEvent) -> RustBuf
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum TracingLevel {
+public enum TracingLevel: Equatable, Hashable {
     
     case error
     case warn
     case info
     case debug
     case trace
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension TracingLevel: Sendable {}
@@ -622,13 +744,6 @@ public func FfiConverterTypeTracingLevel_lower(_ value: TracingLevel) -> RustBuf
 }
 
 
-extension TracingLevel: Equatable, Hashable {}
-
-
-
-
-
-
 
 
 
@@ -648,6 +763,20 @@ fileprivate struct UniffiCallbackInterfaceEventSink {
     // This creates 1-element array, since this seems to be the only way to construct a const
     // pointer that we can pass to the Rust code.
     static let vtable: [UniffiVTableCallbackInterfaceEventSink] = [UniffiVTableCallbackInterfaceEventSink(
+        uniffiFree: { (uniffiHandle: UInt64) -> () in
+            do {
+                try FfiConverterCallbackInterfaceEventSink.handleMap.remove(handle: uniffiHandle)
+            } catch {
+                print("Uniffi callback interface EventSink: handle missing in uniffiFree")
+            }
+        },
+        uniffiClone: { (uniffiHandle: UInt64) -> UInt64 in
+            do {
+                return try FfiConverterCallbackInterfaceEventSink.handleMap.clone(handle: uniffiHandle)
+            } catch {
+                fatalError("Uniffi callback interface EventSink: handle missing in uniffiClone")
+            }
+        },
         onEvent: { (
             uniffiHandle: UInt64,
             event: RustBuffer,
@@ -671,12 +800,6 @@ fileprivate struct UniffiCallbackInterfaceEventSink {
                 makeCall: makeCall,
                 writeReturn: writeReturn
             )
-        },
-        uniffiFree: { (uniffiHandle: UInt64) -> () in
-            let result = try? FfiConverterCallbackInterfaceEventSink.handleMap.remove(handle: uniffiHandle)
-            if result == nil {
-                print("Uniffi callback interface EventSink: handle missing in uniffiFree")
-            }
         }
     )]
 }
@@ -745,6 +868,99 @@ public func FfiConverterCallbackInterfaceEventSink_lower(_ v: EventSink) -> UInt
     return FfiConverterCallbackInterfaceEventSink.lower(v)
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionTypeTracingLevel: FfiConverterRustBuffer {
+    typealias SwiftType = TracingLevel?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTracingLevel.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTracingLevel.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeEventTarget: FfiConverterRustBuffer {
+    typealias SwiftType = [EventTarget]
+
+    public static func write(_ value: [EventTarget], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeEventTarget.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [EventTarget] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [EventTarget]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeEventTarget.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+
+/**
+ * Typealias from the type name used in the UDL file to the builtin type.  This
+ * is needed because the UDL type name is used in function/method signatures.
+ */
+public typealias EventSinkId = UInt32
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeEventSinkId: FfiConverter {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EventSinkId {
+        return try FfiConverterUInt32.read(from: &buf)
+    }
+
+    public static func write(_ value: EventSinkId, into buf: inout [UInt8]) {
+        return FfiConverterUInt32.write(value, into: &buf)
+    }
+
+    public static func lift(_ value: UInt32) throws -> EventSinkId {
+        return try FfiConverterUInt32.lift(value)
+    }
+
+    public static func lower(_ value: EventSinkId) -> UInt32 {
+        return FfiConverterUInt32.lower(value)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSinkId_lift(_ value: UInt32) throws -> EventSinkId {
+    return try FfiConverterTypeEventSinkId.lift(value)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeEventSinkId_lower(_ value: EventSinkId) -> UInt32 {
+    return FfiConverterTypeEventSinkId.lower(value)
+}
+
+
 
 /**
  * Typealias from the type name used in the UDL file to the builtin type.  This
@@ -788,32 +1004,17 @@ public func FfiConverterTypeTracingJsonValue_lower(_ value: TracingJsonValue) ->
     return FfiConverterTypeTracingJsonValue.lower(value)
 }
 
-public func registerEventSink(target: String, level: TracingLevel, sink: EventSink)  {try! rustCall() {
+public func registerEventSink(targets: EventSinkSpecification, sink: EventSink) -> EventSinkId  {
+    return try!  FfiConverterTypeEventSinkId_lift(try! rustCall() {
     uniffi_tracing_support_fn_func_register_event_sink(
-        FfiConverterString.lower(target),
-        FfiConverterTypeTracingLevel_lower(level),
+        FfiConverterTypeEventSinkSpecification_lower(targets),
         FfiConverterCallbackInterfaceEventSink_lower(sink),$0
     )
+})
 }
-}
-public func registerMinLevelEventSink(level: TracingLevel, sink: EventSink)  {try! rustCall() {
-    uniffi_tracing_support_fn_func_register_min_level_event_sink(
-        FfiConverterTypeTracingLevel_lower(level),
-        FfiConverterCallbackInterfaceEventSink_lower(sink),$0
-    )
-}
-}
-public func unregisterEventSink(target: String)  {try! rustCall() {
+public func unregisterEventSink(id: EventSinkId)  {try! rustCall() {
     uniffi_tracing_support_fn_func_unregister_event_sink(
-        FfiConverterString.lower(target),$0
-    )
-}
-}
-/**
- * Remove the sink registered with [register_min_level_event_sink], if any.
- */
-public func unregisterMinLevelEventSink()  {try! rustCall() {
-    uniffi_tracing_support_fn_func_unregister_min_level_event_sink($0
+        FfiConverterTypeEventSinkId_lower(id),$0
     )
 }
 }
@@ -827,22 +1028,16 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_tracing_support_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_tracing_support_checksum_func_register_event_sink() != 21336) {
+    if (uniffi_tracing_support_checksum_func_register_event_sink() != 23235) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tracing_support_checksum_func_register_min_level_event_sink() != 23353) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_tracing_support_checksum_func_unregister_event_sink() != 40761) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_tracing_support_checksum_func_unregister_min_level_event_sink() != 40850) {
+    if (uniffi_tracing_support_checksum_func_unregister_event_sink() != 20703) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tracing_support_checksum_method_eventsink_on_event() != 39979) {

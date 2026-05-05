@@ -4,11 +4,14 @@
 
 import Foundation
 import Shared
+import OnboardingKit
 
 protocol IntroScreenManagerProtocol {
     var shouldShowIntroScreen: Bool { get }
     var isModernOnboardingEnabled: Bool { get }
+    var shouldShowVideoIntro: Bool { get }
     var onboardingVariant: OnboardingVariant { get }
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant { get }
     func didSeeIntroScreen()
 }
 
@@ -24,15 +27,19 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
     }
 
     var isModernOnboardingEnabled: Bool {
-        featureFlags.isFeatureEnabled(.modernOnboardingUI, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.modernOnboardingUI)
+    }
+
+    var shouldShowVideoIntro: Bool {
+        featureFlagsProvider.isEnabled(.videoIntroOnboarding)
     }
 
     var shouldUseBrandRefreshConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseBrandRefreshConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseBrandRefreshConfiguration)
     }
 
     var shouldUseJapanConfiguration: Bool {
-        featureFlags.isFeatureEnabled(.shouldUseJapanConfiguration, checking: .buildAndUser)
+        featureFlagsProvider.isEnabled(.shouldUseJapanConfiguration)
     }
 
     /// Determines the onboarding variant based on feature flags.
@@ -55,5 +62,11 @@ struct IntroScreenManager: FeatureFlaggable, IntroScreenManagerProtocol {
         } else {
             return .legacy
         }
+    }
+
+    /// Returns the OnboardingKit variant corresponding to the onboarding variant.
+    /// This avoids duplication of conversion logic across the codebase.
+    var onboardingKitVariant: OnboardingKit.OnboardingVariant {
+        return OnboardingKit.OnboardingVariant(rawValue: onboardingVariant.rawValue) ?? .modern
     }
 }

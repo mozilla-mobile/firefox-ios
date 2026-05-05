@@ -10,8 +10,12 @@ import Glean
 import TabDataStore
 
 import class MozillaAppServices.Viaduct
+import struct MozillaAppServices.RustAdsClient
+import enum MozillaAppServices.MozAdsEnvironment
 
-class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
+class AppDelegate: UIResponder,
+                   UIApplicationDelegate,
+                   FeatureFlaggable {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -27,13 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: AppInfo.sharedContainerIdentifier,
-        isNewAppearanceMenuOnClosure: { self.featureFlags.isFeatureEnabled(.appearanceMenu, checking: .buildOnly) }
+        isNewAppearanceMenuOnClosure: { self.featureFlagsProvider.isEnabled(.appearanceMenu) }
     )
     lazy var documentLogger = DocumentLogger(logger: logger)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
     lazy var windowManager = WindowManagerImplementation()
+    lazy var relayController: RelayControllerProtocol = RelayController()
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()
@@ -66,9 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
-        Viaduct.shared.useReqwestBackend()
+        Viaduct.shared.initialize(userAgent: UserAgent.fxaUserAgent)
 
-        initializeRustErrors(logger: logger)
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
@@ -81,11 +85,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             .accountManagerInitialized,
             .browserIsReady
         ])
-
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
@@ -112,8 +111,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
 
     private func startRecordingStartupOpenURLTime() {
         shareTelemetry.recordOpenDeeplinkTime()
-        var recordCompleteToken: ActionToken?
-        var recordCancelledToken: ActionToken?
+        nonisolated(unsafe) var recordCompleteToken: ActionToken?
+        nonisolated(unsafe) var recordCancelledToken: ActionToken?
         recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
             ensureMainThread { [weak self] in
                 self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
@@ -169,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
         /// Prewarm translation resources off the main thread
         /// This will fetch the translator WASM and model attachments for the device language.
         /// Running this on a utility QoS to avoid impacting app launch time.
-        if featureFlags.isFeatureEnabled(.translation, checking: .buildOnly) {
+        if featureFlagsProvider.isEnabled(.translation) {
             Task(priority: .utility) {
                 await ASTranslationModelsFetcher().prewarmResourcesForStartup()
             }
@@ -218,9 +217,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
             profile?.pollCommands(forcePoll: false)
         }
 
+        prefetchMerinoStories()
         updateWallpaperMetadata()
         loadBackgroundTabs()
         ingestFirefoxSuggestions(in: application)
+
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -285,6 +286,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FeatureFlaggable {
                 self?.isLoadingBackgroundTabs = false
                 self?.backgroundTabLoader.loadBackgroundTabs()
             }
+        }
+    }
+
+    private func prefetchMerinoStories() {
+        Task(priority: .utility) {
+            let merinoManager: MerinoManagerProvider = AppContainer.shared.resolve()
+            await merinoManager.prefetchStories()
         }
     }
 

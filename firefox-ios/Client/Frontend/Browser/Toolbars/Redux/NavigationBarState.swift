@@ -48,14 +48,6 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
-    private static let dataClearanceAction = ToolbarActionConfiguration(
-        actionType: .dataClearance,
-        iconName: StandardImageIdentifiers.Large.dataClearance,
-        isEnabled: true,
-        contextualHintType: ContextualHintType.dataClearance.rawValue,
-        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-
     private static let newTabAction = ToolbarActionConfiguration(
         actionType: .newTab,
         iconName: StandardImageIdentifiers.Large.plus,
@@ -95,6 +87,9 @@ struct NavigationBarState: StateType, Equatable {
 
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChangedAction(state: state, action: action)
+
+        case ToolbarActionType.didSetTabScreenshot:
+            return handleDidSetTabScreenshotAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
@@ -145,6 +140,18 @@ struct NavigationBarState: StateType, Equatable {
 
     @MainActor
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
+        )
+    }
+
+    @MainActor
+    private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return NavigationBarState(
@@ -224,11 +231,12 @@ struct NavigationBarState: StateType, Equatable {
     -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
 
         let isLoadAction = action.actionType as? ToolbarActionType == .didLoadToolbars
         let layout = isLoadAction ? action.toolbarLayout : toolbarState.toolbarLayout
+        let tabTrayButtonStyle = isLoadAction ? action.tabTrayButtonStyle : toolbarState.tabTrayButtonStyle
 
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
@@ -238,8 +246,6 @@ struct NavigationBarState: StateType, Equatable {
 
         let middleAction = getMiddleButtonAction(url: url,
                                                  isPrivateMode: toolbarState.isPrivateMode,
-                                                 canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
-                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
                                                  middleButton: middleButton)
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
@@ -250,20 +256,39 @@ struct NavigationBarState: StateType, Equatable {
         let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
+        let isTabScreenshotAction = action.actionType as? ToolbarActionType == .didSetTabScreenshot
+        let previousTabScreenshot = isTabScreenshotAction ? action.previousTabScreenshot : toolbarState.previousTabScreenshot
+        let nextTabScreenshot = isTabScreenshotAction ? action.nextTabScreenshot : toolbarState.nextTabScreenshot
+
         actions = [
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward)
         ]
+
+        let iconName: String? = switch tabTrayButtonStyle {
+        case .number, .none: StandardImageIdentifiers.Large.tab
+        case .screenshot: nil
+        }
 
         switch layout {
         case .version1, .none:
             actions.append(middleAction)
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
-            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+            actions.append(tabsAction(iconName: iconName,
+                                      numberOfTabs: numberOfTabs,
+                                      isPrivateMode: toolbarState.isPrivateMode,
+                                      previousTabScreenshot: previousTabScreenshot,
+                                      nextTabScreenshot: nextTabScreenshot)
+            )
         case .version2:
             actions.append(middleAction)
-            actions.append(tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode))
+            actions.append(tabsAction(iconName: iconName,
+                                      numberOfTabs: numberOfTabs,
+                                      isPrivateMode: toolbarState.isPrivateMode,
+                                      previousTabScreenshot: previousTabScreenshot,
+                                      nextTabScreenshot: nextTabScreenshot)
+            )
             actions.append(menuAction(iconName: StandardImageIdentifiers.Large.moreHorizontalRound,
                                       showWarningBadge: showWarningBadge))
         }
@@ -273,16 +298,13 @@ struct NavigationBarState: StateType, Equatable {
 
     private static func getMiddleButtonAction(url: URL?,
                                               isPrivateMode: Bool,
-                                              canShowDataClearanceAction: Bool,
-                                              isNewTabFeatureEnabled: Bool,
                                               middleButton: NavigationBarMiddleButtonType)
     -> ToolbarActionConfiguration {
         let customizedMiddleButton = switch middleButton {
         case .home: homeAction
         case .newTab: newTabAction
         }
-        let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
-        let middleActionForWebpage = canShowDataClearanceAction ? dataClearanceAction : customizedMiddleButton
+        let middleActionForWebpage = customizedMiddleButton
         let middleActionForHomepage = searchAction
         let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
@@ -311,20 +333,25 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private static func tabsAction(numberOfTabs: Int = 1,
-                                   isPrivateMode: Bool = false) -> ToolbarActionConfiguration {
+    private static func tabsAction(iconName: String?,
+                                   numberOfTabs: Int = 1,
+                                   isPrivateMode: Bool = false,
+                                   previousTabScreenshot: UIImage? = nil,
+                                   nextTabScreenshot: UIImage? = nil) -> ToolbarActionConfiguration {
         let largeContentTitle = numberOfTabs > 99 ?
             .Toolbars.TabsButtonOverflowLargeContentTitle :
             String(format: .Toolbars.TabsButtonLargeContentTitle, NSNumber(value: numberOfTabs))
 
         return ToolbarActionConfiguration(
             actionType: .tabs,
-            iconName: StandardImageIdentifiers.Large.tab,
+            iconName: iconName,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
-            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
+            maskImageName: (isPrivateMode && iconName != nil) ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
             largeContentTitle: largeContentTitle,
+            previousTabScreenshot: previousTabScreenshot,
+            nextTabScreenshot: nextTabScreenshot,
             a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }

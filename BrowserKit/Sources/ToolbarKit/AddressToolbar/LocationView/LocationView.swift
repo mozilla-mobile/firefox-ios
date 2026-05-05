@@ -35,7 +35,7 @@ final class LocationView: UIView,
     private var onTapLockIcon: (@MainActor (UIButton) -> Void)?
     private var onLongPress: (@MainActor () -> Void)?
     private weak var delegate: LocationViewDelegate?
-    private var theme: Theme?
+    private var theme: any Theme = LightTheme()
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
     private var lockIconNeedsTheming = false
@@ -77,10 +77,6 @@ final class LocationView: UIView,
         return CGFloat(width)
     }
 
-    private lazy var urlTextFieldColor: UIColor = .label
-    private lazy var urlTextFieldSubdomainColor: UIColor = .clear
-    private lazy var lockIconImageColor: UIColor = .clear
-    private lazy var safeListedURLImageColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
     private lazy var containerView: UIView = .build()
@@ -127,7 +123,7 @@ final class LocationView: UIView,
     private var isURLTextFieldCentered = false {
         didSet {
             // We need to call applyTheme to ensure the colors are updated in sync whenever the layout changes.
-            guard let theme, isURLTextFieldCentered != oldValue else { return }
+            guard isURLTextFieldCentered != oldValue else { return }
             applyTheme(theme: theme)
         }
     }
@@ -146,12 +142,29 @@ final class LocationView: UIView,
 
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
+        // Skip if urlTextField is already first responder to avoid triggering duplicate delegate callbacks
+        guard !urlTextField.isFirstResponder else { return true }
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
+        // Skip if urlTextField has already resigned to avoid redundant state changes
+        guard urlTextField.isFirstResponder else { return true }
         return urlTextField.resignFirstResponder()
+    }
+
+    func configureNonInteractive(_ config: LocationViewConfiguration, uxConfig: AddressToolbarUXConfiguration) {
+        isURLTextFieldCentered = uxConfig.isLocationTextCentered
+        hasAlternativeLocationColor = uxConfig.hasAlternativeLocationColor
+        configureLockIconButton(config)
+        configureURLPlaceholder(basedOn: config)
+        setTextFieldPlaceholder(color: theme.colors.textPrimary)
+        urlTextField.text = config.url?.absoluteString
+        updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
+                            locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
+        layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
+        formatAndTruncateURLTextField()
     }
 
     func configure(_ config: LocationViewConfiguration,
@@ -182,9 +195,13 @@ final class LocationView: UIView,
         configureLockIconButton(config)
         configureURLTextField(config)
         configureA11y(config)
+
+        // Must be called before updateIconContainer. The overflow check inside updateIconContainer measures
+        // urlTextField.text to determine layout; without this call the text still holds the raw URL instead
+        // of the normalized host, causing overflow to trigger incorrectly in reader mode
+        // and producing a visible shift when the lock icon is hidden.
         formatAndTruncateURLTextField()
-        updateIconContainer(iconContainerCornerRadius: uxConfig.toolbarCornerRadius,
-                            isURLTextFieldCentered: isURLTextFieldCentered,
+        updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
         handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
         handleGesture(
@@ -198,8 +215,6 @@ final class LocationView: UIView,
         onLongPress = config.onLongPress
 
         layoutContainerView(isEditing: config.isEditing, isURLTextFieldCentered: isURLTextFieldCentered)
-
-        guard let theme else { return }
         applyTheme(theme: theme)
     }
 
@@ -238,13 +253,6 @@ final class LocationView: UIView,
     }
 
     // MARK: - Layout
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        DispatchQueue.main.async { [self] in
-            formatAndTruncateURLTextField()
-        }
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -356,8 +364,7 @@ final class LocationView: UIView,
         iconContainerStackView.removeAllArrangedViews()
     }
 
-    private func updateIconContainer(iconContainerCornerRadius: CGFloat,
-                                     isURLTextFieldCentered: Bool,
+    private func updateIconContainer(isURLTextFieldCentered: Bool,
                                      locationTextFieldTrailingPadding: CGFloat) {
         guard !isEditing else {
             updateUIForSearchEngineDisplay(isURLTextFieldCentered: isURLTextFieldCentered)
@@ -414,10 +421,10 @@ final class LocationView: UIView,
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
+
         updateURLTextFieldLeadingConstraintBasedOnState()
 
         let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
-
         iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
@@ -445,7 +452,9 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-                self.urlTextField.isUserInteractionEnabled = false
+            }, completion: { [unowned self] _ in
+                urlTextField.isUserInteractionEnabled = false
+                isUserInteractionEnabled = false
             })
     }
 
@@ -456,9 +465,9 @@ final class LocationView: UIView,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            },
-            completion: { [unowned self] _ in
+            }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
+                isUserInteractionEnabled = true
             }
         )
     }
@@ -485,22 +494,13 @@ final class LocationView: UIView,
             restoreLocationViewSize()
             removeGlassEffectImmediately()
         }
-        if let theme { applyTheme(theme: theme) }
+        applyTheme(theme: theme)
     }
 
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ config: LocationViewConfiguration) {
         let configurationIsEditing = config.isEditing
-        isEditing = configurationIsEditing
-
-        if !isEditing && config.url != nil {
-            // allow proper centering of the urlTextField removing placeholder size.
-            urlTextField.placeholder = nil
-        } else {
-            urlTextField.placeholder = config.urlTextFieldPlaceholder
-        }
-        urlAbsolutePath = config.url?.absoluteString
-
+        configureURLPlaceholder(basedOn: config)
         // This code is fragile and needs to be called in this exact location or it will break.
         // This is because when we rotate the device, a `keyboardWillHide` notification is fired
         // even though we have set the text field to the first responder. When that notification fires
@@ -535,12 +535,29 @@ final class LocationView: UIView,
 
         DispatchQueue.main.async { [unowned self] in
             if shouldShowKeyboard && config.shouldSelectSearchTerm {
-                urlTextField.text = text
-                urlTextField.selectAll(nil)
+                let start = urlTextField.beginningOfDocument
+                let end = urlTextField.endOfDocument
+                urlTextField.selectedTextRange = urlTextField.textRange(from: start, to: end)
             }
         }
     }
 
+    private func configureURLPlaceholder(basedOn config: LocationViewConfiguration) {
+        isEditing = config.isEditing
+        if !isEditing && config.url != nil {
+            // allow proper centering of the urlTextField removing placeholder size.
+            urlTextField.placeholder = nil
+        } else {
+            urlTextField.placeholder = config.urlTextFieldPlaceholder
+        }
+        urlAbsolutePath = config.url?.absoluteString
+    }
+
+    /// Updates the URL text field (when not editing) by:
+    /// - Extracting the subdomain and normalized host.
+    /// - Applying primary color to the host and secondary color to the subdomain.
+    /// - Truncating from the head if the text is too long.
+    /// - Setting the styled result as the text field's attributed text.
     private func formatAndTruncateURLTextField() {
         guard !isEditing else { return }
 
@@ -550,13 +567,14 @@ final class LocationView: UIView,
         let urlString = urlAbsolutePath ?? ""
         let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
 
+        let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
         let attributedString = NSMutableAttributedString(
             string: normalizedHost,
-            attributes: [.foregroundColor: urlTextFieldColor])
+            attributes: [.foregroundColor: primaryColor])
 
         if let subdomain {
             let range = NSRange(location: 0, length: subdomain.count)
-            attributedString.addAttribute(.foregroundColor, value: urlTextFieldSubdomainColor, range: range)
+            attributedString.addAttribute(.foregroundColor, value: secondaryColor, range: range)
         }
         attributedString.addAttribute(
             .paragraphStyle,
@@ -597,9 +615,9 @@ final class LocationView: UIView,
             lockImage = UIImage(named: lockIconImageName)
 
             if lockIconNeedsTheming {
-                lockImage = lockImage?.withTintColor(lockIconImageColor)
+                lockImage = lockImage?.withTintColor(theme.colors.textSecondary)
             }
-
+            let safeListedURLImageColor = theme.colors.iconAccentBlue
             if let dotImage = UIImage(named: safeListedURLImageName)?.withTintColor(safeListedURLImageColor) {
                 let origin = isURLTextFieldCentered ? CGPoint(x: 10, y: 10) : CGPoint(x: 13.5, y: 13)
                 let image = lockImage?.overlayWith(image: dotImage, modifier: 0.4, origin: origin)
@@ -670,7 +688,7 @@ final class LocationView: UIView,
     }
 
     // MARK: - LocationTextFieldDelegate
-    func locationTextField(_ textField: LocationTextField, didEnterText text: String) {
+    func locationTextFieldDidEnterText(_ text: String) {
         delegate?.locationViewDidEnterText(text)
     }
 
@@ -685,7 +703,7 @@ final class LocationView: UIView,
         }
     }
 
-    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
+    func locationTextFieldShouldClear() -> Bool {
         delegate?.locationViewDidClearText()
         return true
     }
@@ -702,8 +720,7 @@ final class LocationView: UIView,
         delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
 
-    func locationTextFieldDidEndEditing(_ textField: UITextField) {
-        formatAndTruncateURLTextField()
+    func locationTextFieldDidEndEditing() {
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
@@ -711,7 +728,7 @@ final class LocationView: UIView,
         }
     }
 
-    func locationTextFieldNeedsSearchReset(_ textField: UITextField) {
+    func locationTextFieldNeedsSearchReset() {
         delegate?.locationTextFieldNeedsSearchReset()
     }
 
@@ -733,19 +750,9 @@ final class LocationView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         let colors = theme.colors
-
         let mainBackgroundColor = hasAlternativeLocationColor ? colors.layerSurfaceMediumAlt : colors.layerSurfaceMedium
-        if #available(iOS 26.0, *), scrollAlpha.isZero {
-            // We want to use system colors when the location view is fully transparent
-            // To make sure it blends well with the background when using glass effect.
-            urlTextFieldColor =  .label
-            urlTextFieldSubdomainColor = .label
-            lockIconButton.tintColor = .label
-        } else {
-            urlTextFieldColor = colors.textPrimary
-            urlTextFieldSubdomainColor = colors.textSecondary
-            lockIconButton.tintColor = colors.textSecondary
-        }
+        let (primaryColor, secondaryColor) = getPrimaryAndSecondaryColors()
+
         gradientLayer.colors = Gradient(
             colors: [
                 mainBackgroundColor.withAlphaComponent(1),
@@ -753,15 +760,11 @@ final class LocationView: UIView,
             ]
         ).cgColors
         searchEngineContentView.applyTheme(theme: theme)
+        lockIconButton.tintColor = secondaryColor
         lockIconButton.backgroundColor = scrollAlpha.isZero ? nil : mainBackgroundColor
         urlTextField.applyTheme(theme: theme)
-        urlTextField.attributedPlaceholder = NSAttributedString(
-            string: urlTextField.placeholder ?? "",
-            attributes: [.foregroundColor: colors.textPrimary]
-        )
-
-        safeListedURLImageColor = colors.iconAccentBlue
-        lockIconImageColor = colors.textSecondary
+        urlTextField.textColor = primaryColor
+        setTextFieldPlaceholder(color: colors.textPrimary)
 
         setLockIconImage()
         // Applying the theme to urlTextField can cause the url formatting to get removed
@@ -769,13 +772,22 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
     }
 
-    // MARK: - UIGestureRecognizerDelegate
-    func gestureRecognizer(
-        _ gestureRecognizer: UIGestureRecognizer,
-        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-    ) -> Bool {
-        // When long pressing a button make sure the textfield's long press gesture is not triggered
-        return !(otherGestureRecognizer.view is UIButton)
+    private func getPrimaryAndSecondaryColors() -> (primary: UIColor, secondary: UIColor) {
+        if #available(iOS 26.0, *), scrollAlpha.isZero {
+            // We want to use system colors when the location view is fully transparent
+            // To make sure it blends well with the background when using glass effect.
+            return (.label, .label)
+        } else {
+            return (theme.colors.textPrimary, theme.colors.textSecondary)
+        }
+    }
+
+    private func setTextFieldPlaceholder(color: UIColor) {
+        guard let placeholder = urlTextField.placeholder, !placeholder.isEmpty else { return }
+        urlTextField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: color]
+        )
     }
 }
 

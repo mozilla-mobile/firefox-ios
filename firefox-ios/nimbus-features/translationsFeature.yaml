@@ -8,11 +8,18 @@ features:
         description: >
           Whether or not to enable translations feature.
         type: Boolean
+        default: true
+      languagePickerEnabled:
+        description: >
+          Whether or not to enable the translations language picker (Phase 2).
+        type: Boolean
         default: false
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
+          languagePickerEnabled: false
       - channel: developer
         value:
-          enabled: false
+          enabled: true
+          languagePickerEnabled: false

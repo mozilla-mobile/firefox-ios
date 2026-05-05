@@ -9,7 +9,7 @@ features:
         description: >
           Toggle between legacy (false) and modern (true) UI variants.
         type: Boolean
-        default: false
+        default: true
       should-use-japan-configuration:
         description: >
           Toggle between standard (false) and Japan-specific (true) assets and content.
@@ -18,6 +18,12 @@ features:
       should-use-brand-refresh-configuration:
         description: >
           Toggle between standard (false) and brand refresh (true) onboarding content.
+        type: Boolean
+        default: true
+      enable-video-intro:
+        description: >
+          When true, a full-screen video is displayed before the Terms of Service
+          screen during fresh-install onboarding.
         type: Boolean
         default: false
       conditions:
@@ -43,9 +49,10 @@ features:
     defaults:
       - channel: developer, beta, release
         value:
-          enable-modern-ui: false
+          enable-video-intro: false
+          enable-modern-ui: true
           should-use-japan-configuration: false
-          should-use-brand-refresh-configuration: false
+          should-use-brand-refresh-configuration: true
           conditions:
             ALWAYS:                   "true"
             NEVER:                    "false"
@@ -408,7 +415,7 @@ features:
             welcome-brand-refresh:
               card-type: basic
               order: 10
-              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2
+              title: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149
               body: Onboarding/Onboarding.Modern.BrandRefresh.Welcome.Description.v148
               image: trackers-brand-refresh
               buttons:
@@ -527,13 +534,13 @@ objects:
       body:
         type: Text
         description: >
-          The body text dispalyed on the card, in less prominent text.
+          The body text displayed on the card, in less prominent text.
           This should never be defaulted.
         default: ""
       image:
         type: NimbusOnboardingHeaderImage
         description: >
-          The image that should be dispalyed on the card.
+          The image that should be displayed on the card.
         default: welcome-globe
       link:
         type: Option<NimbusOnboardingLink>
@@ -734,7 +741,7 @@ enums:
   OnboardingInstructionsPopupActions:
     description: >
       The identifiers for the different actions available for the
-      insturction card in onboarding
+      instruction card in onboarding
     variants:
       open-ios-fx-settings:
         description: >

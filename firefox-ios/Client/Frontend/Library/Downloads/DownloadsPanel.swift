@@ -21,6 +21,7 @@ class DownloadsPanel: UIViewController,
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var navigationHandler: DownloadsNavigationHandler?
     var state: LibraryPanelMainState
+    var isTransitioning = false
     var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeListenerCancellable: Any?

@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -443,13 +462,31 @@ fileprivate struct FfiConverterString: FfiConverter {
 /**
  * Enumeration for the different types of device.
  *
- * Firefox Accounts separates devices into broad categories for display purposes,
- * such as distinguishing a desktop PC from a mobile phone. Upon signin, the
- * application should inspect the device it is running on and select an appropriate
+ * Firefox Accounts and the broader Sync universe separates devices into broad categories for
+ * various purposes, such as distinguishing a desktop PC from a mobile phone.
+ * Upon signin, the application should inspect the device it is running on and select an appropriate
  * [`DeviceType`] to include in its device registration record.
+ *
+ * A special variant in this enum, [`DeviceType::Unknown`] is used to capture
+ * the string values we don't recognise. It also has a custom serde serializer and deserializer
+ * which implements the following semantics:
+ * * deserializing a `DeviceType` which uses a string value we don't recognise or null will return
+ * `DeviceType::Unknown` rather than returning an error.
+ * * serializing `DeviceType::Unknown` will serialize `null`.
+ *
+ * This has a few important implications:
+ * * In general, `Option<DeviceType>` should be avoided, and a plain `DeviceType` used instead,
+ * because in that case, `None` would be semantically identical to `DeviceType::Unknown` and
+ * as mentioned above, `null` already deserializes as `DeviceType::Unknown`.
+ * * Any unknown device types can not be round-tripped via this enum - eg, if you deserialize
+ * a struct holding a `DeviceType` string value we don't recognize, then re-serialize it, the
+ * original string value is lost. We don't consider this a problem because in practice, we only
+ * upload records with *this* device's type, not the type of other devices, and it's reasonable
+ * to assume that this module knows about all valid device types for the device type it is
+ * deployed on.
  */
 
-public enum DeviceType {
+public enum DeviceType: Equatable, Hashable {
     
     case desktop
     case mobile
@@ -457,8 +494,12 @@ public enum DeviceType {
     case vr
     case tv
     case unknown
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension DeviceType: Sendable {}
@@ -537,13 +578,6 @@ public func FfiConverterTypeDeviceType_lower(_ value: DeviceType) -> RustBuffer 
 }
 
 
-extension DeviceType: Equatable, Hashable {}
-
-
-
-
-
-
 private enum InitializationResult {
     case ok
     case contractVersionMismatch
@@ -553,7 +587,7 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_sync15_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {

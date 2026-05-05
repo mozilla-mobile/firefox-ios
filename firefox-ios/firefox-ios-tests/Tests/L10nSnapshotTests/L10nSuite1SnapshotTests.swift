@@ -31,51 +31,39 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testIntro() {
-        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.Title"])
-        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.Subtitle"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.OnboardingTitleLabel"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["TermsOfService.OnboardingDescriptionLabel"])
         snapshot("Onboarding-0")
 
         // Agree to the terms of service
-        app.buttons["TermsOfService.AgreeAndContinueButton"].waitAndTap()
+        app.buttons["TermsOfService.OnboardingPrimaryButton"].waitAndTap()
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
         snapshot("Onboarding-1")
 
         // Swipe to the second screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
         currentScreen += 1
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
         mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
         snapshot("Onboarding-2")
 
         // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
         currentScreen += 1
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
         snapshot("Onboarding-3")
 
         // Swipe to the Homescreen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["\(rootA11yId)PrimaryButton"].waitAndTap()
         currentScreen += 1
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
         snapshot("Onboarding-4")
 
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        snapshot("Onboarding-5")
-
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        currentScreen += 1
+        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
         mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
         snapshot("Homescreen-first-visit")
     }
@@ -111,7 +99,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testWebViewAuthenticationDialog() {
-        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/")
+        navigator.openURL("https://httpbin.org/basic-auth/user/passwd")
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         // The auth dialog no longer shown in debugDescription.
         // The presence of the keyboard is a good indicator that the user/pass window appears.
@@ -196,7 +184,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Enable Strict ETP
         navigator.goto(TrackingProtectionSettings)
         // Check the warning alert
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].waitAndTap()
 
         snapshot("TrackingProtectionStrictWarning-01")
 
@@ -260,6 +248,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
 
         allSettingsScreens.forEach { nodeName in
+            self.navigator.goto(SettingsScreen)
             self.navigator.goto(nodeName)
             if nodeName == "DisplaySettings" {
                 snapshot("Settings-\(nodeName)")

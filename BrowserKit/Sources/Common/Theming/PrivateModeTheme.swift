@@ -48,6 +48,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     ])
     var layerSurfaceLow = UIColor(rgb: 0x342B4A)
     var layerSurfaceMedium = UIColor(rgb: 0x24183A)
+    var layerSurfaceMediumAlpha = UIColor(rgb: 0x24183A).withAlphaComponent(0.8)
     var layerSurfaceMediumAlt = UIColor(rgb: 0x24183A)
     var layerGradientSummary = Gradient(colors: [
         FXColors.Red70,
@@ -117,6 +118,9 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var gradientOnboardingStop2: UIColor = FXColors.Blue50
     var gradientOnboardingStop3: UIColor = FXColors.Red60
     var gradientOnboardingStop4: UIColor = FXColors.Orange50
+    var gradientAIStrongStop1: UIColor = FXColors.Violet50
+    var gradientAIStrongStop2: UIColor = FXColors.Pink40
+    var gradientAIStrongStop3: UIColor = FXColors.Yellow50
 
     var shadowBorder: UIColor = FXColors.DarkGrey50.withAlphaComponent(0.50)
 }

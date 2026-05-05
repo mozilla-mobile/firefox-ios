@@ -17,6 +17,8 @@ final class BrowserScreen {
     private var addressBar: XCUIElement { sel.ADDRESS_BAR.element(in: app) }
     private var cancelButton: XCUIElement { sel.CANCEL_BUTTON_URL_BAR.element(in: app) }
     private var bookText: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT.element(in: app) }
+    private var bookTextInTable: XCUIElement { sel.BOOK_OF_MOZILLA_TEXT_IN_TABLE.element(in: app) }
+    private var clearButton: XCUIElement { sel.CLEAR_TEXT_BUTTON.element(in: app) }
 
     func assertAddressBarContains(value: String, timeout: TimeInterval = TIMEOUT) {
         let addressBar = sel.ADDRESS_BAR.element(in: app)
@@ -73,13 +75,6 @@ final class BrowserScreen {
         assertUserAgentTextExists("MOBILE_UA", timeout: timeout)
     }
 
-    func handleIos15ToastIfNecessary() {
-        if #unavailable(iOS 16) {
-            // iOS 15 displays a toast that covers the reload button
-            sleep(2)
-        }
-    }
-
     func tapDownloadsToastButton() {
         let downloadsButton = sel.DOWNLOADS_TOAST_BUTTON.element(in: app)
         downloadsButton.waitAndTap()
@@ -97,9 +92,12 @@ final class BrowserScreen {
     }
 
     func clearURL() {
-        let clearButton = sel.CLEAR_TEXT_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(clearButton)
         clearButton.waitAndTap()
+    }
+
+    func tapClearButtonIfExists() {
+        clearButton.tapIfExists()
     }
 
     func assertFirefoxHomepageElementsCached() {
@@ -175,6 +173,12 @@ final class BrowserScreen {
         addressBar.typeText(text)
     }
 
+    func navigateToURL(_ url: String) {
+        tapOnAddressBar()
+        addressBar.typeText(url)
+        addressBar.typeText("\r")
+    }
+
     func assertCancelButtonOnUrlBarExists() {
         BaseTestCase().mozWaitForElementToExist(cancelButton)
     }
@@ -189,7 +193,7 @@ final class BrowserScreen {
     }
 
     func tapCancelButtonIfExist() {
-        sel.CANCEL_BUTTON.element(in: app).tapIfExists()
+        sel.CANCEL_BUTTON_URL_BAR.element(in: app).tapIfExists()
     }
 
     func assertRFCLinkExist(timeout: TimeInterval = TIMEOUT) {
@@ -205,11 +209,19 @@ final class BrowserScreen {
     }
 
     func waitForBookOfMozillaToDisappear(timeout: TimeInterval = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToNotExist(bookText, timeout: timeout)
+        BaseTestCase().mozWaitForElementToNotExist(bookTextInTable, timeout: timeout)
     }
 
     func assertAddressBar_LockIconExist(timeout: TimeInterval = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON.element(in: app))
+    }
+
+    func assertAddressBar_LockIconOffExist(timeout: TimeInterval = TIMEOUT_LONG) {
+        BaseTestCase().mozWaitForElementToExist(sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app))
+    }
+
+    func isAddressBarLockIconOffPresent() -> Bool {
+        return sel.ADDRESSTOOLBAR_LOCKICON_OFF.element(in: app).exists
     }
 
     func assertAddressBarHasKeyboardFocus() {
@@ -264,4 +276,114 @@ final class BrowserScreen {
         let text = sel.webPageElement(with: text).element(in: app)
         BaseTestCase().mozWaitForElementToExist(text)
     }
-}
+
+    func tapWebViewTextIfExists(text: String) {
+        app.webViews.staticTexts[text].tapIfExists()
+    }
+
+    func dismissMicrosurveyIfExists() {
+        let microsurveyCloseButton = sel.MICROSURVEY_CLOSE_BUTTON.element(in: app)
+        microsurveyCloseButton.tapIfExists()
+    }
+
+    func assertWebViewLoaded(timeout: TimeInterval = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(app.webViews.firstMatch, timeout: timeout)
+    }
+
+    func assertWebViewHasContent(timeout: TimeInterval = TIMEOUT) {
+        let firstText = app.webViews.firstMatch.staticTexts.firstMatch
+        BaseTestCase().mozWaitForElementToExist(firstText, timeout: timeout)
+    }
+
+    func tapWebViewButton(buttonText: String) {
+        app.webViews.buttons[buttonText].waitAndTap()
+    }
+
+    func assertWebElements(shouldExist: Bool = true, _ elements: XCUIElement..., timeout: TimeInterval = TIMEOUT_LONG) {
+        let base = BaseTestCase()
+        for element in elements {
+            if shouldExist {
+                base.mozWaitForElementToExist(element, timeout: timeout)
+            } else {
+                base.mozWaitForElementToNotExist(element, timeout: timeout)
+            }
+        }
+    }
+
+    func assertSuggestedLinesNotEmpty() {
+        let suggestedLines = app.tables.firstMatch.cells
+        XCTAssertNotEqual(suggestedLines.count, 0, "Expected suggestions to appear")
+    }
+
+    func tapSaveButtonIfExist() {
+        let saveButton = sel.SAVE_BUTTON.element(in: app)
+        saveButton.tapIfExists()
+    }
+
+    func swipeToAndValidateAddressBarValue(swipeRight: Bool,
+                                           _ value: String,
+                                           durations: [TimeInterval] = [0.06, 0.02],
+                                           maxAttempts: Int = 2,
+                                           checkTimeout: TimeInterval = 2.0) {
+        // Ensure address bar exists and is hittable
+        BaseTestCase().mozWaitForElementToExist(addressBar)
+        let waitUntil = Date().addingTimeInterval(2)
+        while !addressBar.isHittable && Date() < waitUntil {
+            RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        }
+        guard addressBar.isHittable else {
+            XCTFail("Address bar not hittable, cannot perform swipe")
+            return
+        }
+
+        // Coordinates with margins to avoid edge gestures
+        let leftPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.12, dy: 0.5))
+        let rightPoint = addressBar.coordinate(withNormalizedOffset: CGVector(dx: 0.88, dy: 0.5))
+        let startPoint = swipeRight ? leftPoint : rightPoint
+        let endPoint = swipeRight ? rightPoint : leftPoint
+
+        for attempt in 0..<maxAttempts {
+            let duration = durations[min(attempt, durations.count - 1)]
+            // Press-and-drag; varying `duration` changes the feel/velocity of the gesture
+            startPoint.press(forDuration: duration, thenDragTo: endPoint)
+
+            // Let UI settle briefly
+            RunLoop.current.run(until: Date().addingTimeInterval(0.35))
+
+            // Poll address bar value for the expected substring
+            let deadline = Date().addingTimeInterval(checkTimeout)
+            var success = false
+            while Date() < deadline {
+                if let val = (addressBar.value as? String), val.contains(value) {
+                    success = true
+                    break
+                }
+                RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+            }
+            assertAddressBarContains(value: value)
+            if success { return }
+        }
+
+        XCTFail("Failed to achieve expected address bar value '\(value)' after \(maxAttempts) attempts")
+    }
+
+    func waitForClipboardToastToDisappear(timeout: TimeInterval = TIMEOUT) {
+        let clipboardToast = sel.CLIPBOARD_TOAST.element(in: app)
+        BaseTestCase().mozWaitForElementToNotExist(clipboardToast, timeout: timeout)
+    }
+
+    func assertLinkExists(named name: String, timeout: TimeInterval = TIMEOUT) {
+        let link = app.links[name].firstMatch
+        BaseTestCase().mozWaitForElementToExist(link, timeout: timeout)
+    }
+
+    func assertWebViewLinkTextExists(text: String, timeout: TimeInterval = TIMEOUT) {
+        let linkText = app.webViews.links.staticTexts[text]
+        BaseTestCase().mozWaitForElementToExist(linkText, timeout: timeout)
+    }
+
+    func assertPrivateModeMessageCardExists(timeout: TimeInterval = TIMEOUT) {
+        let privateMessage = sel.PRIVATE_MODE_HOMEPAGE_TITLE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateMessage, timeout: timeout)
+    }
+ }

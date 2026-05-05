@@ -1,0 +1,18 @@
+/* Body of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Пронађите нешто у близини. Или откријте нешто забавно.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Започните своју прву претрагу";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.A.Body.v114" = "Приватно прегледање у апликацији %@ не чува ваше податке и блокира скривене пратиоце.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Прегледајте без трага";
+
+/* Body of notification sent to user after inactivity to encourage them to use the private browsing feature. %@ is the app name (e.g. Firefox). */
+"Engagement.Notification.Treatment.B.Body.v114" = "Прегледајте без сачуваних колачића или историјата у апликацији %@.";
+
+/* Title of notification sent to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Испробајте приватно прегледање";
+

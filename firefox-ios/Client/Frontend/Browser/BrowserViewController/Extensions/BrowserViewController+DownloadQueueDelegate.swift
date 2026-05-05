@@ -26,7 +26,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         self.downloadProgressManager = downloadProgressManager
 
         if #available(iOS 17, *),
-            featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+            featureFlagsProvider.isEnabled(.downloadLiveActivities),
             tabManager.selectedTab?.isPrivate == false {
             let downloadLiveActivityWrapper = DownloadLiveActivityWrapper(
                 downloadProgressManager: downloadProgressManager,
@@ -43,7 +43,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     private func dismissDownloadLiveActivity() {
         if #available(iOS 17, *),
-           featureFlags.isFeatureEnabled(.downloadLiveActivities, checking: .buildOnly),
+           featureFlagsProvider.isEnabled(.downloadLiveActivities),
             let downloadLiveActivityWrapper = self.downloadLiveActivityWrapper {
             downloadLiveActivityWrapper.end(durationToDismissal: .none)
             self.downloadLiveActivityWrapper = nil
@@ -60,10 +60,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // Handle download cancellation
         if buttonPressed, !downloadQueue.isEmpty {
             downloadQueue.cancelAll(for: windowUUID)
-
-            SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                            bottomContainer: self.contentContainer,
-                                            theme: self.currentTheme())
+            showPlainToast(message: .DownloadCancelledToastLabelText)
         }
     }
 
@@ -119,9 +116,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             self.downloadProgressManager = nil
 
             if error != nil {
-                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
-                                                bottomContainer: self.contentContainer,
-                                                theme: self.currentTheme())
+                self.showPlainToast(message: .DownloadCancelledToastLabelText)
             }
         }
     }

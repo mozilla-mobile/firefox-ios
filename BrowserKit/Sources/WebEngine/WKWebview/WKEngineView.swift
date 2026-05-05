@@ -5,7 +5,7 @@
 import Common
 import UIKit
 
-final class WKEngineView: UIView, EngineView, FullscreenDelegate {
+final class WKEngineView: UIView, EngineView {
     private var session: WKEngineSession?
     private var logger: Logger
     private var sessionlifeCycleManager: WKSessionLifecycleManager
@@ -52,13 +52,11 @@ final class WKEngineView: UIView, EngineView, FullscreenDelegate {
 
     private func remove(session: WKEngineSession) {
         session.webView.removeFromSuperview()
-        session.fullscreenDelegate = nil
         sessionlifeCycleManager.deactivate(session)
     }
 
     private func add(session: WKEngineSession) {
         self.session = session
-        session.fullscreenDelegate = self
         sessionlifeCycleManager.activate(session)
         setupWebViewLayout()
     }
@@ -75,17 +73,5 @@ final class WKEngineView: UIView, EngineView, FullscreenDelegate {
             webView.trailingAnchor.constraint(equalTo: trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
         ])
-    }
-
-    func enteringFullscreen() {
-        guard let session else { return }
-
-        let webView = session.webView
-        webView.translatesAutoresizingMaskIntoConstraints = true
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    }
-
-    func exitingFullscreen() {
-        setupWebViewLayout()
     }
 }

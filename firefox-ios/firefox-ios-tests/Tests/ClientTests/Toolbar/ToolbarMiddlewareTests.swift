@@ -16,20 +16,20 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var toolbarManager: ToolbarManager!
     var mockGleanWrapper: MockGleanWrapper!
-    var summarizationChecker: MockSummarizationChecker!
     var mockRecentSearchProvider: MockRecentSearchProvider!
     var windowManager: MockWindowManager!
     var tabManager: MockTabManager!
     var profile: MockProfile!
+    var summarizerConfigFactory: MockSummarizerConfigFactory!
 
     override func setUp() async throws {
         try await super.setUp()
         setIsHostedSummaryEnabled(false)
         mockGleanWrapper = MockGleanWrapper()
-        summarizationChecker = MockSummarizationChecker()
         mockRecentSearchProvider = MockRecentSearchProvider()
         tabManager = MockTabManager()
         profile = MockProfile()
+        summarizerConfigFactory = MockSummarizerConfigFactory()
         windowManager = MockWindowManager(wrappedManager: WindowManagerImplementation(), tabManager: tabManager)
         DependencyHelperMock().bootstrapDependencies(injectedWindowManager: windowManager,
                                                      injectedTabManager: tabManager)
@@ -37,16 +37,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
         // We must reset the global mock store prior to each test
         setupStore()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {
         mockGleanWrapper = nil
-        summarizationChecker = nil
         mockRecentSearchProvider = nil
         tabManager = nil
         profile = nil
         windowManager = nil
+        summarizerConfigFactory = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -170,11 +169,11 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
         tab.webView = MockTabWebView(tab: tab)
         tabManager.selectedTab = tab
+        summarizerConfigFactory.returnedConfig = .defaultConfig
 
         let action = ToolbarMiddlewareAction(readerModeState: .active,
                                              windowUUID: .XCTestDefaultUUID,
                                              actionType: ToolbarMiddlewareActionType.loadSummaryState)
-        summarizationChecker.overrideResponse = MockSummarizationChecker.success
         mockStore.dispatchCalled = {
             expectation.fulfill()
         }
@@ -461,6 +460,25 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.enabled, false)
     }
 
+    func testDidTapButton_tapOnReaderModeWithSummarizerButton_dispatchesShowReaderModes() throws {
+        try didTapButton(buttonType: .readerModeWithSummarizer, expectedActionType: .showReaderMode)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.ReaderModeButtonTappedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.ReaderModeButtonTappedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.Toolbar.readerModeButtonTapped)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.isPrivate, false)
+        XCTAssertEqual(savedExtras.enabled, false)
+    }
+
     func testDidTapButton_tapOnReloadButton_dispatchesReloadWebsite() throws {
         try didTapButton(buttonType: .reload, expectedActionType: GeneralBrowserActionType.reloadWebsite)
 
@@ -532,27 +550,21 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.isPrivate, false)
     }
 
-    func testDidTapButton_tapOnDataClearanceButton_dispatchesClearData() throws {
-        try didTapButton(buttonType: .dataClearance, expectedActionType: GeneralBrowserActionType.clearData)
+    func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
+        summarizerConfigFactory.returnedConfig = .defaultConfig
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
 
-        let savedMetric = try XCTUnwrap(
-            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.Toolbar.DataClearanceButtonTappedExtra>
+        let expectation = XCTestExpectation(
+            description: "GeneralBrowserActionType.showSummarizer should have been dispatched"
         )
-        let savedExtras = try XCTUnwrap(
-            mockGleanWrapper.savedExtras.first as? GleanMetrics.Toolbar.DataClearanceButtonTappedExtra
+        try didTapButton(
+            buttonType: .summarizer,
+            expectedActionType: .showSummarizer,
+            expectation: expectation
         )
-        let expectedMetricType = type(of: GleanMetrics.Toolbar.dataClearanceButtonTapped)
-        let resultMetricType = type(of: savedMetric)
-        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
-
-        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
-        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
-        XCTAssertEqual(savedExtras.isPrivate, false)
     }
-    // TODO(FXIOS-13126): Fix and uncomment this test
-//    func testDidTapButton_tapOnSummarizerButton_dispatchesShowSummarizer() throws {
-//        try didTapButton(buttonType: .summarizer, expectedActionType: .showSummarizer)
-//    }
 
     func testDidTapButton_longPressOnBackButton_dispatchesShowBackForwardList() throws {
         try didLongPressButton(buttonType: .back, expectedActionType: GeneralBrowserActionType.showBackForwardList)
@@ -657,6 +669,19 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
 
     func testDidTapButton_longPressOnSummarizer_dispatchesShowReaderModeAction() throws {
         try didLongPressButton(buttonType: .summarizer, expectedActionType: .showReaderMode)
+    }
+
+    func testDidTapButton_longPressOnReaderModeWithSummarizer_dispatchesShowSummarizerAction() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
+
+        try didLongPressButton(
+            buttonType: .readerModeWithSummarizer,
+            expectedActionType: .showSummarizer,
+            expectation: expectation(description: "The show summarizer action should have been dispatched.")) { action in
+                XCTAssertEqual(action.summarizerTrigger, .toolbarIcon)
+        }
     }
 
     func testUrlDidChange_dispatchesBorderPositionChanged() throws {
@@ -831,14 +856,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             manager: manager,
             toolbarTelemetry: ToolbarTelemetry(gleanWrapper: mockGleanWrapper),
             profile: profile,
-            summarizationChecker: summarizationChecker,
+            summarizerConfigFactory: summarizerConfigFactory,
             recentSearchProvider: mockRecentSearchProvider,
-            windowManager: windowManager
+            windowManager: windowManager,
         )
     }
 
     private func didTapButton(buttonType: ToolbarActionConfiguration.ActionType,
-                              expectedActionType: GeneralBrowserActionType) throws {
+                              expectedActionType: GeneralBrowserActionType,
+                              expectation: XCTestExpectation? = nil) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
@@ -846,7 +872,15 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton)
 
+        mockStore.dispatchCalled = {
+            expectation?.fulfill()
+        }
+
         subject.toolbarProvider(mockStore.state, action)
+
+        if let expectation {
+            wait(for: [expectation], timeout: 1.0)
+        }
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
@@ -856,7 +890,9 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func didLongPressButton(buttonType: ToolbarActionConfiguration.ActionType,
-                                    expectedActionType: GeneralBrowserActionType) throws {
+                                    expectedActionType: GeneralBrowserActionType,
+                                    expectation: XCTestExpectation? = nil,
+                                    assertAction: (GeneralBrowserAction) -> Void = { _ in }) throws {
         let subject = createSubject(manager: toolbarManager)
         let action = ToolbarMiddlewareAction(
             buttonType: buttonType,
@@ -864,13 +900,22 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.didTapButton)
 
+        mockStore.dispatchCalled = {
+            expectation?.fulfill()
+        }
+
         subject.toolbarProvider(mockStore.state, action)
+
+        if let expectation {
+            wait(for: [expectation], timeout: 1.0)
+        }
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserActionType)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, expectedActionType)
+        assertAction(actionCalled)
     }
 
     private func cancelEditMode(dispatchedActionsCount: Int = 2) throws {
@@ -895,8 +940,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         toolbarState.isPrivateMode = true
 
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -913,8 +958,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
         toolbarState.toolbarPosition = .bottom
 
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID
@@ -929,8 +974,8 @@ final class ToolbarMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

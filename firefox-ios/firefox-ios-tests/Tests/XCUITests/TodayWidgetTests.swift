@@ -135,6 +135,13 @@ private func skipOnboardingIfNeeded(app: XCUIApplication) {
 
 // swiftlint:disable:next type_body_length
 class TodayWidgetTests: BaseTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        if !isFennec {
+            throw XCTSkip("Skipping TodayWidgetTests on Firefox or FirefoxBeta schemas")
+        }
+    }
+
     private func removeFirefoxWidget() {
         let maxSwipes = 3
         var numberOfSwipes = 0
@@ -587,7 +594,7 @@ class TodayWidgetTests: BaseTestCase {
         UIPasteboard.general.string = copiedString
         app.terminate()
 
-        sleep(3)
+        _ = app.wait(for: .notRunning, timeout: TIMEOUT)
 
         goToTodayWidgetPage()
         // Remove Firefox Widget if it already exists
@@ -614,7 +621,6 @@ class TodayWidgetTests: BaseTestCase {
             format: "label CONTAINS[c] %@", "Copied Link")
         ).element.waitAndTap()
 
-        sleep(2)
         mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
         springboard.alerts.buttons["Allow Paste"].waitAndTap()
         skipOnboardingIfNeeded(app: app)

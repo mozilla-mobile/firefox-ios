@@ -4,13 +4,10 @@
 
 import Foundation
 
-class FeatureFlagsBoolSetting: BoolSetting {
+class FeatureFlagsBoolSetting: BoolSetting, FeatureFlaggable {
     override func displayBool(_ control: UISwitch) {
         if let featureFlagName = getFeatureFlagName() {
-            control.isOn = featureFlags.isFeatureEnabled(
-                featureFlagName,
-                checking: .buildOnly
-            )
+            control.isOn = featureFlagsProvider.isEnabled(featureFlagName)
         } else {
             guard let key = prefKey, let defaultValue = getDefaultValue(), let prefs else { return }
             control.isOn = prefs.boolForKey(key) ?? defaultValue
@@ -19,7 +16,7 @@ class FeatureFlagsBoolSetting: BoolSetting {
 
     override func writeBool(_ control: UISwitch) {
         if let featureFlagName = getFeatureFlagName() {
-            featureFlags.set(feature: featureFlagName, to: control.isOn, isDebug: true)
+            featureFlagsProvider.setDebugOverride(featureFlagName, to: control.isOn)
         } else {
             guard let key = prefKey, let prefs else { return }
             prefs.setBool(control.isOn, forKey: key)

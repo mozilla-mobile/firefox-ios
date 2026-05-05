@@ -10,15 +10,15 @@ class StoryTests: BaseTestCase {
         case up, down, left, right
     }
 
-    func validatePocketStoriesCount() {
-        let numPocketStories = app.collectionViews
+    func validateNewsStoriesCount() {
+        let numNewsStories = app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.count
-        XCTAssertTrue(numPocketStories > 1, "Expected at least 2 stories.")
+        XCTAssertTrue(numNewsStories > 1, "Expected at least 2 stories.")
     }
 
-    func togglePocket(shouldEnable: Bool) {
-        navigator.performAction(shouldEnable ? Action.TogglePocketInNewTab : Action.TogglePocketInNewTab)
+    func toggleStories(shouldEnable: Bool) {
+        navigator.performAction(shouldEnable ? Action.ToggleStoriesInNewTab : Action.ToggleStoriesInNewTab)
         navigator.goto(NewTabScreen)
     }
 
@@ -41,28 +41,23 @@ class StoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
-    func testPocketEnabledByDefault() {
+    func testNewsStoriesEnabledByDefault() {
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
-        XCTAssertEqual(
-            app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino].label,
-            "Popular Today"
-        )
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
 
-        // There should be at least 8 stories on iPhone and 7 on iPad.
-        // You can see more stories on iPhone by swiping left, but not all
-        // stories are displayed at once.
-        validatePocketStoriesCount()
+        validateNewsStoriesCount()
 
-        // Disable Pocket
-        togglePocket(shouldEnable: false)
+        // Disable Stories
+        toggleStories(shouldEnable: false)
         mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
 
         // Enable it again
-        togglePocket(shouldEnable: true)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        toggleStories(shouldEnable: true)
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
 
-        // Tap on the first Pocket element
+        // Tap on the first News element
         app.collectionViews
             .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
             .staticTexts.firstMatch.tap()
@@ -73,12 +68,13 @@ class StoryTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
-    func testValidatePocketContextMenu() {
+    func testValidateNewsContextMenu() {
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino])
+        app.partialSwipeUp(distance: 0.2)
+        mozWaitForElementToExist(app.otherElements["News"])
         // Long tap on one of the stories
-        let pocketCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
-        app.collectionViews.cells.matching(identifier: pocketCell).staticTexts.firstMatch.press(forDuration: 1.5)
+        let newsCell = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
+        app.collectionViews.cells.matching(identifier: newsCell).staticTexts.firstMatch.press(forDuration: 1.5)
         // Validate Context menu
         let contextMenuTable = app.tables["Context Menu"]
         waitForElementsToExist(

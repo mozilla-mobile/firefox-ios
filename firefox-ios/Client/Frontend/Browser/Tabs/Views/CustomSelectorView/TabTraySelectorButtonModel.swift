@@ -14,13 +14,10 @@ struct TabTraySelectorButtonModel {
     let cornerRadius: CGFloat
 }
 
-final class TabTraySelectorButton: UIButton, ThemeApplicable, FeatureFlaggable {
+final class TabTraySelectorButton: UIButton, ThemeApplicable {
     private var foregroundColorNormal: UIColor = .clear
     private var foregroundColorHighlighted: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
-    private var isPerformanceOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarTranslucencyRefactor, checking: .buildOnly)
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,9 +48,6 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable, FeatureFlaggable {
         accessibilityHint = viewModel.a11yHint
 
         configuration = updatedConfiguration
-        if !isPerformanceOptimizationRefactorEnabled {
-            layoutIfNeeded()
-        }
     }
 
     /// The `TabTraySelectorButton` font is adjusted whenever it is selected
@@ -67,9 +61,6 @@ final class TabTraySelectorButton: UIButton, ThemeApplicable, FeatureFlaggable {
             return outgoing
         }
         configuration = updatedConfiguration
-        if !isPerformanceOptimizationRefactorEnabled {
-            layoutIfNeeded()
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {

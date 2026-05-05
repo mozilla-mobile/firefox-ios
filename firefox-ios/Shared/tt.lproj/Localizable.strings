@@ -16,8 +16,23 @@
 /* About settings section title */
 "About" = "Хакында";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Ярлыкларга өстәү";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Беркетү";
+
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Аерып алу";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Кире кайту";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. %d is the number of tabs. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Таблар: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Күптән түгел сакланган";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Соңгы каралган";
@@ -184,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Кораллар панеленең көйләүләре";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
+"ContextualHints.TabTray.InactiveTabs" = "Ике атна эчендә каралмаган таблар монда күчереләчәк.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Көйләүләрдә сүндерү";
 
@@ -313,6 +331,9 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Firefox баш бит";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Баш битне көйләү";
+
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "Күбрәген күрү";
 
@@ -348,6 +369,9 @@
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "Спонсорланган";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Stories.Sponsored.v140" = "Спонсорланган";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Алга";
@@ -439,6 +463,9 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Күптән түгел ябылган";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Өйгә";
+
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Кыстыргыч";
 
@@ -495,6 +522,9 @@
 
 /* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Үткән табны күрсәтү";
+
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Барлык актив булмаган табларны ябу";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Текст үлчәмен зурайту";
@@ -613,6 +643,15 @@
 /* Toggle logins syncing setting */
 "Logins" = "Логиннар";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Күбрәк белү";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Дәвам итү";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Күбрәк белү";
+
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Firefox өчен автотутыру функциясен куллану өчен, җиһаз серсүзе кабынган булырга тиеш.";
 
@@ -634,6 +673,12 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Сөзгеч";
 
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Эзләвегезгә туры килгән нәтиҗәләр юк.";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Баш тарту";
+
 /* Title for the list of logins */
 "LoginsList.Title" = "САКЛАНГАН ЛОГИННАР";
 
@@ -652,6 +697,9 @@
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Өстәү";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Ярлыкларга өстәлде";
+
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "Өстәү";
 
@@ -660,6 +708,9 @@
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "Ярлыкларга өстәү";
+
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Кыстыргычлар";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Адресны күчереп алу";
@@ -670,20 +721,41 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Баш битне көйләү";
 
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Йөкләүләр";
+
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Бу сайт өчен саклау СҮНДЕРЕЛГӘН";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ярдәм";
 
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
+"Menu.History.Label" = "Тарих";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Яңа хосусый таб";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Яңа таб";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "Төнге режимны сүндерү";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "Төнге режимны кабызу";
+
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Серсүзләр";
 
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "Ябыштыру";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Ябыштыру һәм күчү";
+
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Уку исемлеге";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "Күзәтелүдән cаклауны сүндереп, әлеге сайтны яңадан ачу";
@@ -723,6 +795,9 @@
 
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Өйгә";
+
+/* String to let users know the site verifier, where %@ represents the SSL certificate signer. */
+"Menu.TrackingProtection.Details.Verifier" = "Раслаучы: %@";
 
 /* The title for tracking protection settings */
 "Menu.TrackingProtection.ProtectionSettings.Title" = "Саклау көйләүләре";
@@ -826,6 +901,12 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
 "Privacy Policy" = "Хосусыйлык сәясәте";
 
+/* This is the value for a label that indicates if a user is on an unencrypted website. */
+"ProtectionStatus.NotSecure" = "Бәйләнеш хәвефсез түгел";
+
+/* This is the value for a label that indicates if a user is on a secure https connection. */
+"ProtectionStatus.Secure" = "Бәйләнеш хәвефсез";
+
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Тиз эзләү системалары";
 
@@ -852,6 +933,9 @@
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Күптән түгел ябылган";
+
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Барысын да күрсәтү";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Яңарту";
@@ -903,6 +987,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Эзләү яки адрес язу";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Табка күчү";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
 "Search.SuggestSectionTitle.v102" = "Firefox тәкъдиме";

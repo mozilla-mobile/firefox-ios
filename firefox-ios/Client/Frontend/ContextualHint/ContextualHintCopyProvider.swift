@@ -12,7 +12,7 @@ enum ContextualHintCopyType {
 
 /// `ContextualHintCopyProvider` exists to provide the requested description or action strings back
 /// for the specified `ContextualHintType`.
-struct ContextualHintCopyProvider: FeatureFlaggable {
+struct ContextualHintCopyProvider {
     typealias CFRStrings = String.ContextualHints
 
     /// Arrow direction infuences toolbar copy, so it exists here.
@@ -55,9 +55,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .mainMenu:
             return CFRStrings.MainMenu.MenuRedesign.Title
 
-        case .toolbarUpdate:
-            return CFRStrings.Toolbar.ToolbarUpdateTitle
-
         case .translation:
             return String(format: CFRStrings.Translations.Title, AppName.shortName.rawValue)
 
@@ -69,9 +66,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var descriptionCopy = ""
 
         switch hint {
-        case .dataClearance:
-            descriptionCopy = CFRStrings.FeltDeletion.Body
-
         case .jumpBackIn:
                 descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
 
@@ -87,9 +81,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .relay:
             descriptionCopy = String(format: String.RelayMask.RelayEmailMaskAvailableCFR, AppName.shortName.rawValue)
 
-        case .toolbarUpdate:
-            descriptionCopy = CFRStrings.Toolbar.ToolbarUpdateBody
-
         case .translation:
             descriptionCopy = CFRStrings.Translations.Body
 
@@ -104,8 +95,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         var actionCopy: String
 
         switch hint {
-        case .dataClearance:
-            actionCopy = ""
         case .mainMenu:
             actionCopy = ""
         case .jumpBackIn,
@@ -114,8 +103,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .navigation:
             actionCopy = ""
         case .relay:
-            actionCopy = ""
-        case .toolbarUpdate:
             actionCopy = ""
         case .translation:
             actionCopy = ""

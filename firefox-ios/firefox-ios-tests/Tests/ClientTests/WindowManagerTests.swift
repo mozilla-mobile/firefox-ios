@@ -138,7 +138,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(savedUUID, subject.reserveNextAvailableWindowUUID(isIpad: isIpad).uuid)
         // Open a window using this UUID
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: savedUUID)
-        // Check that asking for another UUID returns the same UUID, becase there is only ever
+        // Check that asking for another UUID returns the same UUID, because there is only ever
         // one window on the iPhone devices
         XCTAssertEqual(savedUUID, subject.reserveNextAvailableWindowUUID(isIpad: isIpad).uuid)
     }

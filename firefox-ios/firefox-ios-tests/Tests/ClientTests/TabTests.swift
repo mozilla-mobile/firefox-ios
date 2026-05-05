@@ -25,7 +25,6 @@ class TabTests: XCTestCase {
         mockTabWebView.loadedURL = url
         mockFileManager = MockFileManager()
         mockDispatchQueue = MockDispatchQueue()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -109,6 +108,65 @@ class TabTests: XCTestCase {
         tab.enqueueDocument(document)
 
         XCTAssertTrue(tab.isDownloadingDocument())
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleIsNotEmpty_returnsDisplayTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        mockTabWebView.mockTitle = "Test Page Title"
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "Test Page Title")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andBaseDomainExists_returnsBaseDomain() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "https://google.com")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "https://google.com")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andBaseDomainContainsLocal_returnsLegacyHomeTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "internal://local/about/home")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, .LegacyAppMenu.AppMenuOpenHomePageTitleString)
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andInternalAboutURL_returnsAboutComponent() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = URL(string: "file:///about/test")!
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, "test")
+    }
+
+    func testGetTabTrayTitle_whenDisplayTitleEmpty_andURLIsNil_returnsBlankTabsTitle() {
+        let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let mockTabWebView = MockTabWebView(tab: tab)
+        tab.webView = mockTabWebView
+        tab.url = nil
+        mockTabWebView.mockTitle = ""
+
+        let title = tab.getTabTrayTitle()
+
+        XCTAssertEqual(title, .TabsTray.TabsSelectorBlankTabsTitle)
     }
 
     // MARK: - isSameTypeAs
@@ -481,6 +539,41 @@ class TabTests: XCTestCase {
         XCTAssertEqual(mockFileManager.removeItemAtURLCalled, session.count)
     }
 
+    // MARK: - HTTPS Navigation Policy
+    @MainActor
+    func testCreateWebview_whenHTTPSUpgradeEnabled_setsUpgradePolicy() async throws {
+        guard #available(iOS 18.2, *) else {
+            throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
+        }
+
+        setHTTPSUpgradeFeature(isEnabled: true)
+
+        let subject = createSubject()
+        subject.createWebview(configuration: WKWebViewConfiguration())
+
+        let policy = subject.webView?.configuration
+            .defaultWebpagePreferences?
+            .preferredHTTPSNavigationPolicy
+        XCTAssertEqual(policy, .automaticFallbackToHTTP)
+        await subject.close()
+    }
+
+    @MainActor
+    func testCreateWebview_whenHTTPSUpgradeDisabled_doesNotSetUpgradePolicy() async throws {
+        guard #available(iOS 18.2, *) else {
+            throw XCTSkip("preferredHTTPSNavigationPolicy requires iOS 18.2+")
+        }
+        setHTTPSUpgradeFeature(isEnabled: false)
+        let subject = createSubject()
+        subject.createWebview(configuration: WKWebViewConfiguration())
+
+        let policy = subject.webView?.configuration
+            .defaultWebpagePreferences?
+            .preferredHTTPSNavigationPolicy
+        XCTAssertNotEqual(policy, .automaticFallbackToHTTP)
+        await subject.close()
+    }
+
     // MARK: - Helpers
     @MainActor
     private func createSubject() -> Tab {
@@ -492,6 +585,12 @@ class TabTests: XCTestCase {
         )
         trackForMemoryLeaks(subject)
         return subject
+    }
+
+    private func setHTTPSUpgradeFeature(isEnabled: Bool = true) {
+        FxNimbus.shared.features.httpsUpgradeFeature.with { _, _ in
+            return HttpsUpgradeFeature(enabled: isEnabled)
+        }
     }
 }
 

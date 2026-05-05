@@ -46,7 +46,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -72,7 +72,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -98,33 +98,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedHomepageStories)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
-        XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
-    }
-
-    func test_initializeStoriesFeed_getPocketData() throws {
-        let subject = createSubject(merinoManager: merinoManager)
-        let action = HomepageAction(
-            windowUUID: .XCTestDefaultUUID,
-            actionType: StoriesFeedActionType.initialize
-        )
-
-        let expectation = XCTestExpectation(description: "Stories feed action initialize dispatched")
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
-
-        subject.pocketSectionProvider(AppState(), action)
-
-        wait(for: [expectation])
-
-        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? MerinoAction)
-        let actionType = try XCTUnwrap(actionCalled.actionType as? MerinoMiddlewareActionType)
-
-        XCTAssertEqual(actionType, MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories)
-        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertTrue(mockStore.dispatchedActions.first is MerinoAction)
-        XCTAssertEqual(actionCalled.merinoStories?.count, 3)
+        XCTAssertEqual(actionCalled.merinoResponse?.stories?.count, 3)
         XCTAssertEqual(merinoManager.getMerinoItemsCalled, 1)
     }
 
@@ -193,7 +167,7 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
         let subject = createSubject(merinoManager: merinoManager)
 
         let merinoItem = createMerinoItem()
-        guard case let .merino(state) = merinoItem else { return }
+        guard case let .merino(state, _) = merinoItem else { return }
         let action = ContextMenuAction(
             menuType: MenuType(homepageItem: merinoItem),
             site: Site.createBasicSite(url: state.url?.absoluteString ?? "", title: state.title),
@@ -256,7 +230,8 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
                     tileId: 0,
                     receivedRank: 0
                 )
-            )
+            ),
+            nil
         )
     }
 
@@ -271,8 +246,8 @@ final class MerinoMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .homepage(
                         HomepageState(
                             windowUUID: .XCTestDefaultUUID

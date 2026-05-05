@@ -9,20 +9,32 @@ protocol OnboardingSelectorsSet {
     func descriptionLabel(rootId: String) -> Selector
     func primaryButton(rootId: String) -> Selector
     func secondaryButton(rootId: String) -> Selector
+    func betaPrimaryButton(screenIndex: Int) -> Selector
+    func betaSecondaryButton(screenIndex: Int) -> Selector
+    func multipleChoiceButton(rootId: String) -> Selector
+    func modernTosPrimaryButton() -> Selector
+    func addressBarTopButton(rootId: String, position: OnboardingScreen.AddressBarPosition) -> Selector
+
     var AGREE_AND_CONTINUE_BUTTON: Selector { get }
+    var ONBOARDING_PRIMARY_BUTTON: Selector { get }
+    var CONTINUE_BUTTON: Selector { get }
     var MANAGE_TEXT_BUTTON: Selector { get }
+    var LAST_TOS_DESCRIPTION_TEXT: Selector { get }
     var QR_SIGN_IN_BUTTON: Selector { get }
     var EMAIL_SIGN_IN_BUTTON: Selector { get }
     var DONE_BUTTON: Selector { get }
     var CLOSE_BUTTON: Selector { get }
     var NAVBAR_SYNC_AND_SAVE: Selector { get }
     var CLOSE_TOUR_BUTTON: Selector { get }
+    var PAGE_CONTROL: Selector { get }
     var all: [Selector] { get }
 }
 
 struct OnboardingSelectors: OnboardingSelectorsSet {
     private enum IDs {
         static let termsAndService_AgreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let termsAndService_OnboardingPrimaryButton = "TermsOfService.OnboardingPrimaryButton"
+        static let continueButton = "Continue"
         static let manage_Text = "TermsOfService.ManageDataCollectionAgreement"
         static let QRCode_SignIn = "QRCodeSignIn.button"
         static let emailSignIn = "EmailSignIn.button"
@@ -30,6 +42,7 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         static let closeButton = "CloseButton"
         static let syncAndSaveData = "Sync and Save Data"
         static let closeTourButton = AccessibilityIdentifiers.Onboarding.closeButton
+        static let pageControl = AccessibilityIdentifiers.Onboarding.pageControl
     }
 
     let AGREE_AND_CONTINUE_BUTTON = Selector.buttonId(
@@ -38,9 +51,27 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         groups: ["onboarding"]
     )
 
+    let ONBOARDING_PRIMARY_BUTTON = Selector.buttonId(
+        IDs.termsAndService_OnboardingPrimaryButton,
+        description: "Continue button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let CONTINUE_BUTTON = Selector.buttonByLabel(
+        IDs.continueButton,
+        description: "Continue button on first screen for Firefox/Firefox Beta",
+        groups: ["onboarding"]
+    )
+
     let MANAGE_TEXT_BUTTON = Selector.buttonId(
         IDs.manage_Text,
         description: "Help improve button on first onboarding screen",
+        groups: ["onboarding"]
+    )
+
+    let LAST_TOS_DESCRIPTION_TEXT = Selector.staticTextByLabel(
+        "To help improve the browser, Firefox sends diagnostic and interaction data to Mozilla. Manage",
+        description: "The last set of text on the ToS card with the Manage hyperlink.",
         groups: ["onboarding"]
     )
 
@@ -73,6 +104,22 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
             "\(rootId)SecondaryButton",
             description: "Dynamic secondary button for onboarding screen \(rootId)",
             groups: ["onboarding"]
+        )
+    }
+
+    func betaPrimaryButton(screenIndex: Int) -> Selector {
+        Selector.buttonId(
+            "onboarding.\(screenIndex)PrimaryButton",
+            description: "Beta-specific primary button for screen \(screenIndex)",
+            groups: ["onboarding", "beta"]
+        )
+    }
+
+    func betaSecondaryButton(screenIndex: Int) -> Selector {
+        Selector.buttonId(
+            "onboarding.\(screenIndex)SecondaryButton",
+            description: "Beta-specific secondary button for screen \(screenIndex)",
+            groups: ["onboarding", "beta"]
         )
     }
 
@@ -112,8 +159,38 @@ struct OnboardingSelectors: OnboardingSelectorsSet {
         groups: ["onboarding"]
     )
 
+    func multipleChoiceButton(rootId: String) -> Selector {
+        Selector.buttonId(
+            "\(rootId)MultipleChoiceButton",
+            description: "Multiple choice button for onboarding screen \(rootId)",
+            groups: ["onboarding", "modern"]
+        )
+    }
+
+    func modernTosPrimaryButton() -> Selector {
+        Selector.buttonId(
+            "\(AccessibilityIdentifiers.TermsOfService.root)PrimaryButton",
+            description: "Modern Terms of Service primary button",
+            groups: ["onboarding", "modern"]
+        )
+    }
+
+    func addressBarTopButton(rootId: String, position: OnboardingScreen.AddressBarPosition) -> Selector {
+        Selector.buttonId(
+            "\(rootId)SegmentedButton.\(position.rawValue)",
+            description: "Modern address bar position button for \(position.rawValue)",
+            groups: ["onboarding", "modern"]
+        )
+    }
+
+    let PAGE_CONTROL = Selector.pageIndicatorById(
+        IDs.pageControl,
+        description: "Page control indicator showing onboarding progress",
+        groups: ["onboarding"]
+    )
+
     var all: [Selector] {
-        [AGREE_AND_CONTINUE_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
-         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON]
+        [AGREE_AND_CONTINUE_BUTTON, CONTINUE_BUTTON, MANAGE_TEXT_BUTTON, QR_SIGN_IN_BUTTON, EMAIL_SIGN_IN_BUTTON,
+         DONE_BUTTON, CLOSE_BUTTON, NAVBAR_SYNC_AND_SAVE, CLOSE_TOUR_BUTTON, PAGE_CONTROL]
     }
 }

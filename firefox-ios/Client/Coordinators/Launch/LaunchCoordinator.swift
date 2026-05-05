@@ -45,6 +45,8 @@ final class LaunchCoordinator: BaseCoordinator,
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
+        case .videoIntro:
+            presentVideoIntro()
         case .termsOfService(let manager):
             if manager.isModernOnboardingEnabled {
                 presentModernTermsOfUse(with: manager, isFullScreen: isFullScreen)
@@ -66,6 +68,21 @@ final class LaunchCoordinator: BaseCoordinator,
         }
     }
 
+    // MARK: - Video Intro
+    private func presentVideoIntro() {
+        let viewController = OnboardingVideoIntroViewController(windowUUID: windowUUID)
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        viewController.configure(buttonModel: PrimaryRoundedButtonViewModel(
+            title: String(format: .Onboarding.TermsOfService.Title, AppName.shortName.rawValue),
+            a11yIdentifier: AccessibilityIdentifiers.Onboarding.VideoIntro.continueButton
+        ))
+        viewController.onDismiss = { [weak self] in
+            self?.router.dismiss(animated: true)
+        }
+        router.present(viewController, animated: false)
+    }
+
     // MARK: - Terms of Use
     private func presentModernTermsOfUse(
         with manager: TermsOfServiceManager,
@@ -73,8 +90,13 @@ final class LaunchCoordinator: BaseCoordinator,
     ) {
         TermsOfServiceTelemetry().termsOfServiceScreenDisplayed()
 
+        // Get the onboarding variant from IntroScreenManager since ToS is shown before intro
+        let introManager = IntroScreenManager(prefs: profile.prefs)
+        let onboardingKitVariant = introManager.onboardingKitVariant
+
         let viewModel = TermsOfUseFlowViewModel(
             configuration: TermsOfServiceManager.brandRefreshTermsOfUseConfiguration,
+            variant: onboardingKitVariant,
             onTermsOfUseTap: { [weak self] in
                 guard let self = self else { return }
                 TermsOfServiceTelemetry().termsOfServiceLinkTapped()
@@ -195,9 +217,11 @@ final class LaunchCoordinator: BaseCoordinator,
             for: .freshInstall
         )
         let activityEventHelper = ActivityEventHelper()
+        let onboardingReason: OnboardingReason = manager.shouldShowIntroScreen ? .newUser : .showTour
         let telemetryUtility = OnboardingTelemetryUtility(
             with: onboardingModel,
-            onboardingVariant: manager.onboardingVariant
+            onboardingVariant: manager.onboardingVariant,
+            onboardingReason: onboardingReason
         )
 
         // Create onboardingService and store it directly - don't create local variable
@@ -211,9 +235,12 @@ final class LaunchCoordinator: BaseCoordinator,
         )
         self.onboardingService?.telemetryUtility = telemetryUtility
 
+        let onboardingKitVariant = manager.onboardingKitVariant
+
         let flowViewModel = OnboardingFlowViewModel<OnboardingKitCardInfoModel>(
             onboardingCards: onboardingModel.cards,
             skipText: .Onboarding.LaterAction,
+            variant: onboardingKitVariant,
             onActionTap: { [weak self] action, cardName, completion in
                 guard let onboardingService = self?.onboardingService else { return }
                 onboardingService.handleAction(
@@ -231,8 +258,12 @@ final class LaunchCoordinator: BaseCoordinator,
                     from: cardName
                 )
             },
-            onComplete: { [weak self] currentCardName in
+            onComplete: { [weak self] currentCardName, outcome in
                 guard let self = self else { return }
+                if outcome == .skipped {
+                    telemetryUtility.sendDismissOnboardingTelemetry(from: currentCardName)
+                }
+                telemetryUtility.sendOnboardingDismissedTelemetry(outcome: outcome)
                 manager.didSeeIntroScreen()
                 SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
                 self.onboardingService = nil
@@ -259,16 +290,12 @@ final class LaunchCoordinator: BaseCoordinator,
             )
         }
 
-        flowViewModel.onDismiss = { [weak self] cardName in
-            guard let self = self else { return }
-            telemetryUtility.sendDismissOnboardingTelemetry(from: cardName)
-            self.onboardingService = nil
-        }
-
         let view = OnboardingView<OnboardingKitCardInfoModel>(
             windowUUID: windowUUID,
             themeManager: themeManager,
-            viewModel: flowViewModel
+            viewModel: flowViewModel,
+            pageControlAccessibilityId: AccessibilityIdentifiers.Onboarding.pageControl,
+            closeButtonAccessibilityId: AccessibilityIdentifiers.Onboarding.closeButton
         )
 
         let hostingController = PortraitOnlyHostingController(rootView: view)
@@ -279,14 +306,19 @@ final class LaunchCoordinator: BaseCoordinator,
         hostingController.view.backgroundColor = .clear
 
         router.present(hostingController, animated: true)
+        telemetryUtility.sendOnboardingShownTelemetry()
     }
 
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManagerProtocol,
                                         isFullScreen: Bool) {
         let onboardingModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .freshInstall)
+        let onboardingReason: OnboardingReason = manager.shouldShowIntroScreen ? .newUser : .showTour
 
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(
+            with: onboardingModel,
+            onboardingReason: onboardingReason
+        )
         let introViewModel = IntroViewModel(introScreenManager: manager,
                                             profile: profile,
                                             model: onboardingModel,
@@ -301,6 +333,7 @@ final class LaunchCoordinator: BaseCoordinator,
         if isFullScreen {
             introViewController.modalPresentationStyle = .fullScreen
             router.present(introViewController, animated: false)
+            telemetryUtility.sendOnboardingShownTelemetry()
         } else {
             introViewController.preferredContentSize = CGSize(
                 width: ViewControllerConsts.PreferredSize.IntroViewController.width,
@@ -314,6 +347,7 @@ final class LaunchCoordinator: BaseCoordinator,
             router.present(introViewController, animated: true) {
                 introViewController.closeOnboarding()
             }
+            telemetryUtility.sendOnboardingShownTelemetry()
         }
     }
 

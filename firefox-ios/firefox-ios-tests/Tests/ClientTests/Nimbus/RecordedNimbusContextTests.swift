@@ -25,6 +25,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -38,6 +39,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -69,6 +71,10 @@ class RecordedNimbusContextTests: XCTestCase {
             recordedContext.hasAcceptedTermsOfUse
         )
         XCTAssertEqual(
+            json?.removeValue(forKey: "user_disabled_ai") as? Bool,
+            recordedContext.userDisabledAi
+        )
+        XCTAssertEqual(
             json?.removeValue(forKey: "is_apple_intelligence_available") as? Bool,
             recordedContext.isAppleIntelligenceAvailable
         )
@@ -96,22 +102,16 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
 
-        var value: GleanMetrics.NimbusSystem.RecordedNimbusContextObject?
-        let expectation = expectation(description: "The Firefox Suggest ping was sent")
-        GleanMetrics.Pings.shared.nimbus.testBeforeNextSubmit { e in
-            value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue()
-            expectation.fulfill()
-        }
-
         recordedContext.setEventQueryValues(eventQueryValues: [RecordedNimbusContext.DAYS_OPENED_IN_LAST_28: 1.5])
         recordedContext.record()
 
-        wait(for: [expectation], timeout: 5.0)
-
+        // Check value on nimbus-targeting-context ping
+        let value = GleanMetrics.NimbusSystem.recordedNimbusContext.testGetValue("nimbus-targeting-context")
         XCTAssertNotNil(value)
         XCTAssertEqual(value?.appVersion, recordedContext.appVersion)
         XCTAssertEqual(value?.isFirstRun, recordedContext.isFirstRun)
@@ -132,10 +132,13 @@ class RecordedNimbusContextTests: XCTestCase {
             recordedContext.hasAcceptedTermsOfUse
         )
         XCTAssertEqual(
+            value?.userDisabledAi,
+            recordedContext.userDisabledAi
+        )
+        XCTAssertEqual(
             value?.touExperiencePoints,
             recordedContext.touExperiencePoints.toInt64()
         )
-
         XCTAssertNotNil(value?.eventQueryValues)
         XCTAssertEqual(value?.eventQueryValues?.daysOpenedInLast28, 1)
     }
@@ -147,6 +150,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -164,6 +168,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )
@@ -185,6 +190,7 @@ class RecordedNimbusContextTests: XCTestCase {
             isBottomToolbarUser: true,
             hasEnabledTipsNotifications: true,
             hasAcceptedTermsOfUse: true,
+            userDisabledAi: true,
             isAppleIntelligenceAvailable: true,
             cannotUseAppleIntelligence: true
         )

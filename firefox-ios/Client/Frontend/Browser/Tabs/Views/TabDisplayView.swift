@@ -29,7 +29,6 @@ final class TabDisplayView: UIView,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
                       SwipeAnimatorDelegate,
-                      FeatureFlaggable,
                       InsetUpdatable {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
@@ -42,6 +41,7 @@ final class TabDisplayView: UIView,
     private let windowUUID: WindowUUID
     var theme: Theme?
     weak var dragAndDropDelegate: TabDisplayViewDragAndDropInteraction?
+    private var tabTrayUtils: TabTrayUtils
 
     lazy var dataSource =
     TabDisplayDiffableDataSource(
@@ -52,6 +52,7 @@ final class TabDisplayView: UIView,
 
             switch sectionItem {
             case .tab(let tab):
+                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
                 if isTabTrayUIExperimentsEnabled {
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: ExperimentTabCell.cellIdentifier,
@@ -59,7 +60,7 @@ final class TabDisplayView: UIView,
                     ) as? ExperimentTabCell else { return UICollectionViewCell() }
 
                     let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
                     return cell
                 } else {
                     guard let cell = collectionView.dequeueReusableCell(
@@ -68,15 +69,14 @@ final class TabDisplayView: UIView,
                     ) as? TabCell else { return UICollectionViewCell() }
 
                     let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
-                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
+                    cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId, newTabTitle: newTabTitle)
                     return cell
                 }
             }
         })
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
-        && UIDevice.current.userInterfaceIdiom != .pad
+        return tabTrayUtils.shouldDisplayExperimentUI()
     }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
@@ -125,11 +125,13 @@ final class TabDisplayView: UIView,
 
     public init(panelType: TabTrayPanelType,
                 state: TabsPanelState,
-                windowUUID: WindowUUID) {
+                windowUUID: WindowUUID,
+                tabTrayUtils: TabTrayUtils = DefaultTabTrayUtils()) {
         self.panelType = panelType
         self.tabsState = state
         self.tabsSectionManager = TabsSectionManager()
         self.windowUUID = windowUUID
+        self.tabTrayUtils = tabTrayUtils
         super.init(frame: .zero)
         setupLayout()
         configureDataSource()
@@ -200,7 +202,8 @@ final class TabDisplayView: UIView,
             ) as? TabTitleSupplementaryView else { return nil }
 
             if let tab = tabsState.tabs[safe: indexPath.row] {
-                titleView.configure(with: tab, theme: theme)
+                let newTabTitle = tab.url == nil ? String.TabsTray.TabsSelectorBlankTabsTitle : nil
+                titleView.configure(with: tab, theme: theme, newTabTitle: newTabTitle)
             }
             return titleView
 

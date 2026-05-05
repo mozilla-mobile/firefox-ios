@@ -31,7 +31,7 @@ struct AddCreditCardSelectors: AddCreditCardSelectorsSet {
         static let nameButtonId = "name"
         static let numberButtonId = "number"
         static let expirationButtonId = "expiration"
-        static let save = "Save"
+        static let save = AccessibilityIdentifiers.Settings.CreditCards.AddCreditCard.save
         static let invalidCardNumberMessage = "Enter a valid card number"
         static let invalidExpirationDateMessage = "Enter a valid expiration date"
         static let usedSavedCardLabel = "Use saved card"
@@ -86,7 +86,7 @@ struct AddCreditCardSelectors: AddCreditCardSelectorsSet {
         groups: ["addcreditcards"]
     )
 
-    let SAVE_BUTTON = Selector.buttonByLabel(
+    let SAVE_BUTTON = Selector.buttonId(
         IDs.save,
         description: "Save button in Add Credit Card screen",
         groups: ["addcreditcards"]

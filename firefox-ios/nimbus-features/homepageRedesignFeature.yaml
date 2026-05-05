@@ -19,16 +19,22 @@ features:
           If true, enables the jump back in homepage section by default
         type: Boolean
         default: false
-
+      categories-enabled:
+        description: >
+          If true, enables the categories flow in the stories
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
+          categories-enabled: false
 
       - channel: developer
         value:
           search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
+          categories-enabled: false

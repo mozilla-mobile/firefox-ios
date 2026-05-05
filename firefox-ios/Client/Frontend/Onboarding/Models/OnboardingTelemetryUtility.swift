@@ -4,6 +4,7 @@
 
 import Foundation
 import Glean
+import OnboardingKit
 import Shared
 
 final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
@@ -11,16 +12,19 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private let cardOrder: [String]
     private let flowType: String
     private let onboardingVariant: OnboardingVariant
+    private let onboardingReason: OnboardingReason
     private let gleanWrapper: GleanWrapper
 
     // MARK: - Initializer (Legacy)
     init(
         with model: OnboardingKitViewModel,
+        onboardingReason: OnboardingReason,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
         self.onboardingVariant = .legacy
+        self.onboardingReason = onboardingReason
         self.gleanWrapper = gleanWrapper
     }
 
@@ -28,11 +32,13 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     init(
         with model: OnboardingKitViewModel,
         onboardingVariant: OnboardingVariant,
+        onboardingReason: OnboardingReason,
         gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.cardOrder = model.cards.map { $0.name }
         self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
         self.onboardingVariant = onboardingVariant
+        self.onboardingReason = onboardingReason
         self.gleanWrapper = gleanWrapper
     }
 
@@ -41,11 +47,13 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.Onboarding.CardViewExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingReason: onboardingReason.rawValue,
             onboardingVariant: onboardingVariant.rawValue,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
         )
         gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.cardView, extras: extras)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
     }
 
     func sendButtonActionTelemetry(
@@ -61,6 +69,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingReason: onboardingReason.rawValue,
                 onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
@@ -71,6 +80,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                 buttonAction: buttonAction,
                 cardType: baseExtras.cardType,
                 flowType: baseExtras.flowType,
+                onboardingReason: onboardingReason.rawValue,
                 onboardingVariant: baseExtras.onboardingVariant,
                 sequenceId: baseExtras.sequenceId,
                 sequencePosition: baseExtras.sequencePosition
@@ -88,6 +98,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             buttonAction: action.rawValue,
             cardType: baseExtras.cardType,
             flowType: baseExtras.flowType,
+            onboardingReason: onboardingReason.rawValue,
             onboardingVariant: baseExtras.onboardingVariant,
             sequenceId: baseExtras.sequenceId,
             sequencePosition: baseExtras.sequencePosition
@@ -99,6 +110,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         let extras = GleanMetrics.Onboarding.CloseTapExtra(
             cardType: cardName,
             flowType: flowType,
+            onboardingReason: onboardingReason.rawValue,
             onboardingVariant: onboardingVariant.rawValue,
             sequenceId: sequenceID(from: cardOrder),
             sequencePosition: sequencePosition(for: cardName, from: cardOrder)
@@ -108,6 +120,7 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     func sendGoToSettingsButtonTappedTelemetry() {
         let extras = GleanMetrics.OnboardingDefaultBrowserSheet.GoToSettingsButtonTappedExtra(
+            onboardingReason: onboardingReason.rawValue,
             onboardingVariant: onboardingVariant.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.OnboardingDefaultBrowserSheet.goToSettingsButtonTapped, extras: extras)
@@ -115,9 +128,71 @@ final class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
 
     func sendDismissButtonTappedTelemetry() {
         let extras = GleanMetrics.OnboardingDefaultBrowserSheet.DismissButtonTappedExtra(
+            onboardingReason: onboardingReason.rawValue,
             onboardingVariant: onboardingVariant.rawValue
         )
         gleanWrapper.recordEvent(for: GleanMetrics.OnboardingDefaultBrowserSheet.dismissButtonTapped, extras: extras)
+    }
+
+    func sendOnboardingShownTelemetry() {
+        let extras = GleanMetrics.Onboarding.ShownExtra(onboardingReason: onboardingReason.rawValue)
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.shown, extras: extras)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
+    }
+
+    func sendOnboardingDismissedTelemetry(outcome: OnboardingFlowOutcome) {
+        let extras = GleanMetrics.Onboarding.DismissedExtra(
+            method: outcome.rawValue,
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.dismissed, extras: extras)
+        gleanWrapper.submit(ping: GleanMetrics.Pings.shared.onboarding)
+    }
+
+    func sendWallpaperSelectorViewTelemetry() {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorViewExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorView, extras: extras)
+    }
+
+    func sendWallpaperSelectorCloseTelemetry() {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorCloseExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorClose, extras: extras)
+    }
+
+    func sendWallpaperSelectorSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(
+            onboardingReason: onboardingReason.rawValue,
+            wallpaperName: wallpaperName,
+            wallpaperType: wallpaperType
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelectorSelected, extras: extras)
+    }
+
+    func sendWallpaperSelectedTelemetry(wallpaperName: String, wallpaperType: String) {
+        let extras = GleanMetrics.Onboarding.WallpaperSelectedExtra(
+            onboardingReason: onboardingReason.rawValue,
+            wallpaperName: wallpaperName,
+            wallpaperType: wallpaperType
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.wallpaperSelected, extras: extras)
+    }
+
+    func sendEngagementNotificationTappedTelemetry() {
+        let extras = GleanMetrics.Onboarding.EngagementNotificationTappedExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.engagementNotificationTapped, extras: extras)
+    }
+
+    func sendEngagementNotificationCancelTelemetry() {
+        let extras = GleanMetrics.Onboarding.EngagementNotificationCancelExtra(
+            onboardingReason: onboardingReason.rawValue
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Onboarding.engagementNotificationCancel, extras: extras)
     }
 
     private struct BaseExtras {

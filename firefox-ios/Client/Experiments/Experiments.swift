@@ -34,7 +34,7 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 ///
 /// This should be done with the `withExperiment(featureId:)` method.
 /// ```
-/// button.text = Exeriments.shared.withExperiment(featureId: .submitButton) { branchId in
+/// button.text = Experiments.shared.withExperiment(featureId: .submitButton) { branchId in
 ///    switch branchId {
 ///      NimbusExperimentBranch.treatment -> return "Ok then"
 ///      else -> return "OK"
@@ -218,6 +218,11 @@ enum Experiments {
         return prefsReader.hasAcceptedTermsOfUse()
     }
 
+    private static func hasDisabledAIFeatures() -> Bool {
+        let prefsReader = ProfilePrefsReader()
+        return prefsReader.hasDisabledAIFeatures()
+    }
+
     static func touExperiencePoints(region: String?) -> Int32 {
         let prefsReader = ProfilePrefsReader()
         return prefsReader.getTouExperiencePoints(region: region)
@@ -257,6 +262,7 @@ enum Experiments {
             isBottomToolbarUser: isBottomToolbarUser(),
             hasEnabledTipsNotifications: hasEnabledTipsNotifications(),
             hasAcceptedTermsOfUse: hasAcceptedTermsOfUse(),
+            userDisabledAi: hasDisabledAIFeatures(),
             isAppleIntelligenceAvailable: isAppleIntelligenceAvailable(),
             cannotUseAppleIntelligence: cannotUseAppleIntelligence()
         )

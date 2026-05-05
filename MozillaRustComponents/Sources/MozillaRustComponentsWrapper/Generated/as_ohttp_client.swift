@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -499,13 +518,13 @@ public protocol OhttpSessionProtocol: AnyObject, Sendable {
  * object to manage encryption state.
  */
 open class OhttpSession: OhttpSessionProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -515,47 +534,48 @@ open class OhttpSession: OhttpSessionProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_as_ohttp_client_fn_clone_ohttpsession(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_as_ohttp_client_fn_clone_ohttpsession(self.handle, $0) }
     }
     /**
      * Initialize encryption state based on specific Gateway key config
      */
 public convenience init(config: [UInt8])throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeOhttpError_lift) {
     uniffi_as_ohttp_client_fn_constructor_ohttpsession_new(
         FfiConverterSequenceUInt8.lower(config),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_as_ohttp_client_fn_free_ohttpsession(pointer, $0) }
+        try! rustCall { uniffi_as_ohttp_client_fn_free_ohttpsession(handle, $0) }
     }
 
     
@@ -568,7 +588,8 @@ public convenience init(config: [UInt8])throws  {
      */
 open func decapsulate(encoded: [UInt8])throws  -> OhttpResponse  {
     return try  FfiConverterTypeOhttpResponse_lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
-    uniffi_as_ohttp_client_fn_method_ohttpsession_decapsulate(self.uniffiClonePointer(),
+    uniffi_as_ohttp_client_fn_method_ohttpsession_decapsulate(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceUInt8.lower(encoded),$0
     )
 })
@@ -581,7 +602,8 @@ open func decapsulate(encoded: [UInt8])throws  -> OhttpResponse  {
      */
 open func encapsulate(method: String, scheme: String, server: String, endpoint: String, headers: [String: String], payload: [UInt8])throws  -> [UInt8]  {
     return try  FfiConverterSequenceUInt8.lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
-    uniffi_as_ohttp_client_fn_method_ohttpsession_encapsulate(self.uniffiClonePointer(),
+    uniffi_as_ohttp_client_fn_method_ohttpsession_encapsulate(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(method),
         FfiConverterString.lower(scheme),
         FfiConverterString.lower(server),
@@ -593,6 +615,7 @@ open func encapsulate(method: String, scheme: String, server: String, endpoint: 
 }
     
 
+    
 }
 
 
@@ -600,33 +623,24 @@ open func encapsulate(method: String, scheme: String, server: String, endpoint: 
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeOhttpSession: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = OhttpSession
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> OhttpSession {
-        return OhttpSession(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> OhttpSession {
+        return OhttpSession(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: OhttpSession) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: OhttpSession) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> OhttpSession {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: OhttpSession, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -634,14 +648,14 @@ public struct FfiConverterTypeOhttpSession: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeOhttpSession_lift(_ pointer: UnsafeMutableRawPointer) throws -> OhttpSession {
-    return try FfiConverterTypeOhttpSession.lift(pointer)
+public func FfiConverterTypeOhttpSession_lift(_ handle: UInt64) throws -> OhttpSession {
+    return try FfiConverterTypeOhttpSession.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeOhttpSession_lower(_ value: OhttpSession) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeOhttpSession_lower(_ value: OhttpSession) -> UInt64 {
     return FfiConverterTypeOhttpSession.lower(value)
 }
 
@@ -671,13 +685,13 @@ public protocol OhttpTestServerProtocol: AnyObject, Sendable {
  * should only be used for testing.
  */
 open class OhttpTestServer: OhttpTestServerProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -687,43 +701,44 @@ open class OhttpTestServer: OhttpTestServerProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_as_ohttp_client_fn_clone_ohttptestserver(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_as_ohttp_client_fn_clone_ohttptestserver(self.handle, $0) }
     }
 public convenience init() {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_as_ohttp_client_fn_constructor_ohttptestserver_new($0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_as_ohttp_client_fn_free_ohttptestserver(pointer, $0) }
+        try! rustCall { uniffi_as_ohttp_client_fn_free_ohttptestserver(handle, $0) }
     }
 
     
@@ -734,14 +749,16 @@ public convenience init() {
      */
 open func getConfig() -> [UInt8]  {
     return try!  FfiConverterSequenceUInt8.lift(try! rustCall() {
-    uniffi_as_ohttp_client_fn_method_ohttptestserver_get_config(self.uniffiClonePointer(),$0
+    uniffi_as_ohttp_client_fn_method_ohttptestserver_get_config(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func receive(message: [UInt8])throws  -> TestServerRequest  {
     return try  FfiConverterTypeTestServerRequest_lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
-    uniffi_as_ohttp_client_fn_method_ohttptestserver_receive(self.uniffiClonePointer(),
+    uniffi_as_ohttp_client_fn_method_ohttptestserver_receive(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceUInt8.lower(message),$0
     )
 })
@@ -749,13 +766,15 @@ open func receive(message: [UInt8])throws  -> TestServerRequest  {
     
 open func respond(response: OhttpResponse)throws  -> [UInt8]  {
     return try  FfiConverterSequenceUInt8.lift(try rustCallWithError(FfiConverterTypeOhttpError_lift) {
-    uniffi_as_ohttp_client_fn_method_ohttptestserver_respond(self.uniffiClonePointer(),
+    uniffi_as_ohttp_client_fn_method_ohttptestserver_respond(
+            self.uniffiCloneHandle(),
         FfiConverterTypeOhttpResponse_lower(response),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -763,33 +782,24 @@ open func respond(response: OhttpResponse)throws  -> [UInt8]  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeOhttpTestServer: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = OhttpTestServer
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> OhttpTestServer {
-        return OhttpTestServer(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> OhttpTestServer {
+        return OhttpTestServer(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: OhttpTestServer) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: OhttpTestServer) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> OhttpTestServer {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: OhttpTestServer, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -797,14 +807,14 @@ public struct FfiConverterTypeOhttpTestServer: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeOhttpTestServer_lift(_ pointer: UnsafeMutableRawPointer) throws -> OhttpTestServer {
-    return try FfiConverterTypeOhttpTestServer.lift(pointer)
+public func FfiConverterTypeOhttpTestServer_lift(_ handle: UInt64) throws -> OhttpTestServer {
+    return try FfiConverterTypeOhttpTestServer.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeOhttpTestServer_lower(_ value: OhttpTestServer) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeOhttpTestServer_lower(_ value: OhttpTestServer) -> UInt64 {
     return FfiConverterTypeOhttpTestServer.lower(value)
 }
 
@@ -814,7 +824,7 @@ public func FfiConverterTypeOhttpTestServer_lower(_ value: OhttpTestServer) -> U
 /**
  * The decrypted response from the Gateway/Target
  */
-public struct OhttpResponse {
+public struct OhttpResponse: Equatable, Hashable {
     public var statusCode: UInt16
     public var headers: [String: String]
     public var payload: [UInt8]
@@ -826,35 +836,15 @@ public struct OhttpResponse {
         self.headers = headers
         self.payload = payload
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension OhttpResponse: Sendable {}
 #endif
-
-
-extension OhttpResponse: Equatable, Hashable {
-    public static func ==(lhs: OhttpResponse, rhs: OhttpResponse) -> Bool {
-        if lhs.statusCode != rhs.statusCode {
-            return false
-        }
-        if lhs.headers != rhs.headers {
-            return false
-        }
-        if lhs.payload != rhs.payload {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(statusCode)
-        hasher.combine(headers)
-        hasher.combine(payload)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -892,7 +882,7 @@ public func FfiConverterTypeOhttpResponse_lower(_ value: OhttpResponse) -> RustB
 }
 
 
-public struct TestServerRequest {
+public struct TestServerRequest: Equatable, Hashable {
     public var method: String
     public var scheme: String
     public var server: String
@@ -910,47 +900,15 @@ public struct TestServerRequest {
         self.headers = headers
         self.payload = payload
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension TestServerRequest: Sendable {}
 #endif
-
-
-extension TestServerRequest: Equatable, Hashable {
-    public static func ==(lhs: TestServerRequest, rhs: TestServerRequest) -> Bool {
-        if lhs.method != rhs.method {
-            return false
-        }
-        if lhs.scheme != rhs.scheme {
-            return false
-        }
-        if lhs.server != rhs.server {
-            return false
-        }
-        if lhs.endpoint != rhs.endpoint {
-            return false
-        }
-        if lhs.headers != rhs.headers {
-            return false
-        }
-        if lhs.payload != rhs.payload {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(method)
-        hasher.combine(scheme)
-        hasher.combine(server)
-        hasher.combine(endpoint)
-        hasher.combine(headers)
-        hasher.combine(payload)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -994,7 +952,7 @@ public func FfiConverterTypeTestServerRequest_lower(_ value: TestServerRequest) 
 }
 
 
-public enum OhttpError: Swift.Error {
+public enum OhttpError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1014,8 +972,21 @@ public enum OhttpError: Swift.Error {
     
     case DuplicateHeaders(message: String)
     
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension OhttpError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1110,21 +1081,6 @@ public func FfiConverterTypeOhttpError_lower(_ value: OhttpError) -> RustBuffer 
     return FfiConverterTypeOhttpError.lower(value)
 }
 
-
-extension OhttpError: Equatable, Hashable {}
-
-
-
-
-extension OhttpError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
@@ -1185,25 +1141,25 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_as_ohttp_client_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_decapsulate() != 16642) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_decapsulate() != 58277) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_encapsulate() != 33112) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttpsession_encapsulate() != 34473) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_get_config() != 41388) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_get_config() != 861) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_receive() != 56163) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_receive() != 9216) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_respond() != 21845) {
+    if (uniffi_as_ohttp_client_checksum_method_ohttptestserver_respond() != 29697) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_as_ohttp_client_checksum_constructor_ohttpsession_new() != 12377) {

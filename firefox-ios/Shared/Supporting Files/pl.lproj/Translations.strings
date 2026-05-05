@@ -1,0 +1,93 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "Włącz";
+
+/* Persistent prompt shown above the address bar after the user's first manual translation, asking if they want to enable auto-translate. */
+"Translations.AutoTranslatePrompt.Message.v151" = "Czy automatycznie tłumaczyć strony, kiedy to możliwe?";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
+"Translations.Banner.Close.Button.AccessibilityLabel.v145" = "Zamknij panel tłumaczenia";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that the page has been translated to another language. %1$@ is the original language and %2$@ is the language that the page was translated to. */
+"Translations.Banner.ConfirmationTitleLabel.v145" = "Język oryginalny: %1$@, język tłumaczenia: %2$@";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they hit an error or issue when trying to translate the page. */
+"Translations.Banner.ErrorMessage.TitleLabel.v145" = "Nie można przetłumaczyć strony";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the loading button that appears when the page is being translated. */
+"Translations.Banner.Loading.Button.AccessibilityLabel.v145" = "Tłumaczenie strony";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the chevron button that navigates the user to the translation settings page. */
+"Translations.Banner.OpenSettings.Button.AccessibilityLabel.v145" = "Otwórz preferencje języków";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to try to translate a page again after facing an error. */
+"Translations.Banner.RetryButton.v145" = "Spróbuj ponownie";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the text that appears on the banner to inform the user that they can translate the page to another language. %@ is the other language (e.g. English). */
+"Translations.Banner.TitleLabel.v145" = "Czy przetłumaczyć stronę na %@?";
+
+/* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
+"Translations.Banner.TranslateButton.v145" = "Przetłumacz";
+
+/* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
+"Translations.LanguagePicker.PageTranslatedTitle.v151" = "Strona przetłumaczona na %@";
+
+/* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
+"Translations.LanguagePicker.PreferredLanguages.v151" = "Preferowane języki…";
+
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "Wyświetl w oryginale";
+
+/* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
+"Translations.LanguagePicker.Title.v151" = "Przetłumacz stronę na…";
+
+/* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.Button.v145" = "Przetłumacz";
+
+/* This is the text for the cell that indicates that a user can choose a language to translate from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ChooseLanguage.v145" = "Wybierz język";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralSubtitle.v145" = "Proszę spróbować ponownie.";
+
+/* On the translation feature bottom sheet, this is the text that describes that an error has occurred. */
+"Translations.Sheet.Error.GeneralTitle.v145" = "Nie można przetłumaczyć strony";
+
+/* On the translation feature bottom sheet, this is the title for the button that allows the user to try to translate a page again after facing an error. */
+"Translations.Sheet.Error.RetryButton.v145" = "Spróbuj ponownie";
+
+/* On the translation feature bottom sheet, this is the subtitle for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.SubtitleLabel.v145" = "Sprawdź połączenie z Internetem i spróbuj ponownie.";
+
+/* On the translation feature bottom sheet, this is the text for the error message that appears when a user has no internet connection when trying to translate a page. */
+"Translations.Sheet.Error.TitleLabel.v145" = "Nie można wczytać języków";
+
+/* This is a less descriptive text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.FromLabel.v145" = "Język źródłowy:";
+
+/* This is the text on the secondary button used to indicate that page is being translated and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.LoadingButton.v145" = "Tłumaczenie strony";
+
+/* This is the accessibility label to announce that the page is translated and loading is completed. From a user perspective, they will see the translation icon go from loading state to active state, which means we received the a valid translation response from translating the page. */
+"Translations.Sheet.LoadingCompleted.AccessibilityLabel.v147" = "Przetłumaczono stronę";
+
+/* This is the text on the secondary button used to restore the translated page to its original language and the button is shown on the translation feature bottom sheet view. */
+"Translations.Sheet.ShowOriginalButton.v145" = "Wyświetl w oryginale";
+
+/* This is the title for the bottom sheet view that allows users to configure their language preferences for the translations feature. */
+"Translations.Sheet.TitleLabel.v145" = "Przetłumacz stronę";
+
+/* This is the less descriptive text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.ToLabel.v145" = "Język docelowy:";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateFrom.AccessibilityLabel.v145" = "Język źródłowy: %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page from, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateFromLabel.v145" = "Język źródłowy:";
+
+/* This is the accessibility label for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. %@ is the language selected (e.g. English). */
+"Translations.Sheet.TranslateTo.AccessibilityLabel.v145" = "Język docelowy: %@";
+
+/* This is the text for the cell that allows users to select what language they want to translate the page to, as part of the bottom sheet view for the translations feature. */
+"Translations.Sheet.TranslateToLabel.v145" = "Język docelowy:";
+

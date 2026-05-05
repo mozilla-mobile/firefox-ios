@@ -23,6 +23,7 @@ final class CreditCardsScreen {
     private var saveAutofillSwitch: XCUIElement { sel.SAVE_AUTOFILL_SWITCH.element(in: app) }
     private var useSavedCardButton: XCUIElement { sel.USE_SAVED_CARD_BUTTON.element(in: app) }
     private var cardNumber: XCUIElement { sel.CARD_NUMBER_STATIC_TEXT.element(in: app) }
+    private var cardNumberTextField: XCUIElement { sel.CARD_NUMBER_TEXT_FIELD.element(in: app)}
 
     func getSaveAndFillSwitch() -> XCUIElement {
         return saveAutofillSwitch.firstMatch
@@ -103,9 +104,9 @@ final class CreditCardsScreen {
     }
 
     func assertNoAutofillPromptWhenEnteringCard() {
-        var cardNumberField = cardNumber
+        var cardNumberField = sel.CARD_NUMBER_TEXT_FIELD.element(in: app)
         if #unavailable(iOS 17) {
-            cardNumberField = cardNumber
+            cardNumberField = sel.CARD_NUMBER_STATIC_TEXT.element(in: app)
         }
 
         BaseTestCase().mozWaitForElementToExist(cardNumberField)
@@ -121,7 +122,7 @@ final class CreditCardsScreen {
         if #unavailable(iOS 17) {
             return cardNumber
         } else {
-            return cardNumber
+            return cardNumberTextField
         }
     }
 
@@ -135,12 +136,11 @@ final class CreditCardsScreen {
             let expYear = sel.EXPIRATION_YEAR_FIELD.element(in: app)
             expMonth.waitAndTap()
             expYear.waitAndTap()
-        }
-
-        if #available(iOS 16, *), ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 16 {
+        } else {
             toolbarScreen.tapReloadButton()
 
-            cardNumber.waitAndTap()
+            let cardNumberStaticText = sel.CARD_NUMBER_STATIC_TEXT.element(in: app)
+            cardNumberStaticText.waitAndTap()
         }
 
         BaseTestCase().mozWaitForElementToExist(useSavedCardButton)

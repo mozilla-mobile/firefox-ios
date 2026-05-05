@@ -42,7 +42,7 @@ class RemoteTabsPanel: UIViewController,
     var notificationCenter: NotificationProtocol
     private let windowUUID: WindowUUID
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
 
@@ -163,7 +163,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     var shouldUsePrivateOverride: Bool {
-        return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        return true
     }
 
     var shouldBeInPrivateTheme: Bool {
@@ -190,10 +190,11 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        let showScreenAction = ScreenAction(windowUUID: windowUUID,
-                                            actionType: ScreenActionType.showScreen,
-                                            screen: .remoteTabsPanel)
-        store.dispatch(showScreenAction)
+        store.dispatch(ComponentAction(
+            windowUUID: windowUUID,
+            actionType: ComponentActionType.addComponent,
+            component: .remoteTabsPanel
+        ))
 
         let didAppearAction = RemoteTabsPanelAction(windowUUID: windowUUID,
                                                     actionType: RemoteTabsPanelActionType.panelDidAppear)
@@ -207,9 +208,9 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .remoteTabsPanel)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .remoteTabsPanel)
         store.dispatch(action)
     }
 
@@ -229,10 +230,6 @@ class RemoteTabsPanel: UIViewController,
 
     func remoteTabsClientAndTabsDataSourceDidCloseURL(deviceId: String, url: URL) {
         handleCloseRemoteTab(deviceId, url: url)
-    }
-
-    func remoteTabsClientAndTabsDataSourceDidUndo(deviceId: String, url: URL) {
-        handleUndoCloseTab(deviceId, url: url)
     }
 
     func remoteTabsClientAndTabsDataSourceDidTabCommandsFlush(deviceId: String) {
@@ -267,16 +264,6 @@ class RemoteTabsPanel: UIViewController,
         store.dispatch(action)
         // Once we add the tab to the command queue, the rust tab store will start removing it from
         // the list, so refresh the tabs
-        refreshTabs(useCache: true)
-    }
-
-    private func handleUndoCloseTab(_ deviceId: String, url: URL) {
-        let action = RemoteTabsPanelAction(url: url,
-                                           targetDeviceId: deviceId,
-                                           windowUUID: windowUUID,
-                                           actionType: RemoteTabsPanelActionType.undoCloseSelectedRemoteURL)
-        store.dispatch(action)
-
         refreshTabs(useCache: true)
     }
 

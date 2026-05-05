@@ -13,31 +13,35 @@ final class MockTranslationsService: TranslationsServiceProtocol {
     private let translateResult: Result<Void, Error>
     private let firstResponseReceivedResult: Result<Void, Error>
     private let discardResult: Result<Void, Error>
+    private let detectPageLanguageResult: Result<String, Error>
 
     // MARK: - Init
     init(
         shouldOfferTranslationResult: Result<Bool, Error> = .success(false),
         translateResult: Result<Void, Error> = .success(()),
         firstResponseReceivedResult: Result<Void, Error> = .success(()),
-        discardResult: Result<Void, Error> = .success(())
+        discardResult: Result<Void, Error> = .success(()),
+        detectPageLanguageResult: Result<String, Error> = .success("en")
     ) {
         self.shouldOfferTranslationResult = shouldOfferTranslationResult
         self.translateResult = translateResult
         self.firstResponseReceivedResult = firstResponseReceivedResult
         self.discardResult = discardResult
+        self.detectPageLanguageResult = detectPageLanguageResult
     }
 
     // MARK: - TranslationsServiceProtocol
-    func shouldOfferTranslation(for windowUUID: WindowUUID) async throws -> Bool {
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
         return try shouldOfferTranslationResult.get()
     }
 
     func translateCurrentPage(
         for windowUUID: WindowUUID,
+        to targetLanguage: String,
         onLanguageIdentified: ((String, String) -> Void)?
     ) async throws {
         try translateResult.get()
-        onLanguageIdentified?("en", "de")
+        onLanguageIdentified?("en", targetLanguage)
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {
@@ -46,5 +50,13 @@ final class MockTranslationsService: TranslationsServiceProtocol {
 
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         try discardResult.get()
+    }
+
+    func fetchSupportedTargetLanguages() async -> [String] {
+        return []
+    }
+
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String {
+        return try detectPageLanguageResult.get()
     }
 }

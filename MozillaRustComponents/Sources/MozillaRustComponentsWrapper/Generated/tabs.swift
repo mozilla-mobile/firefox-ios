@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -527,13 +546,13 @@ public protocol RemoteCommandStoreProtocol: AnyObject, Sendable {
     
 }
 open class RemoteCommandStore: RemoteCommandStoreProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -543,36 +562,37 @@ open class RemoteCommandStore: RemoteCommandStoreProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_tabs_fn_clone_remotecommandstore(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_tabs_fn_clone_remotecommandstore(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_tabs_fn_free_remotecommandstore(pointer, $0) }
+        try! rustCall { uniffi_tabs_fn_free_remotecommandstore(handle, $0) }
     }
 
     
@@ -583,7 +603,8 @@ open class RemoteCommandStore: RemoteCommandStoreProtocol, @unchecked Sendable {
      */
 open func addRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_remotecommandstore_add_remote_command(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_remotecommandstore_add_remote_command(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
         FfiConverterTypeRemoteCommand_lower(command),$0
     )
@@ -595,7 +616,8 @@ open func addRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> B
      */
 open func addRemoteCommandAt(deviceId: String, command: RemoteCommand, when: Timestamp)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_remotecommandstore_add_remote_command_at(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_remotecommandstore_add_remote_command_at(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
         FfiConverterTypeRemoteCommand_lower(command),
         FfiConverterTypeTimestamp_lower(when),$0
@@ -608,7 +630,8 @@ open func addRemoteCommandAt(deviceId: String, command: RemoteCommand, when: Tim
      */
 open func getUnsentCommands()throws  -> [PendingCommand]  {
     return try  FfiConverterSequenceTypePendingCommand.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_remotecommandstore_get_unsent_commands(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_remotecommandstore_get_unsent_commands(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
@@ -619,7 +642,8 @@ open func getUnsentCommands()throws  -> [PendingCommand]  {
      */
 open func removeRemoteCommand(deviceId: String, command: RemoteCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_remotecommandstore_remove_remote_command(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_remotecommandstore_remove_remote_command(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(deviceId),
         FfiConverterTypeRemoteCommand_lower(command),$0
     )
@@ -631,13 +655,15 @@ open func removeRemoteCommand(deviceId: String, command: RemoteCommand)throws  -
      */
 open func setPendingCommandSent(command: PendingCommand)throws  -> Bool  {
     return try  FfiConverterBool.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_remotecommandstore_set_pending_command_sent(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_remotecommandstore_set_pending_command_sent(
+            self.uniffiCloneHandle(),
         FfiConverterTypePendingCommand_lower(command),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -645,33 +671,24 @@ open func setPendingCommandSent(command: PendingCommand)throws  -> Bool  {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeRemoteCommandStore: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = RemoteCommandStore
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> RemoteCommandStore {
-        return RemoteCommandStore(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> RemoteCommandStore {
+        return RemoteCommandStore(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: RemoteCommandStore) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: RemoteCommandStore) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RemoteCommandStore {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: RemoteCommandStore, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -679,14 +696,14 @@ public struct FfiConverterTypeRemoteCommandStore: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRemoteCommandStore_lift(_ pointer: UnsafeMutableRawPointer) throws -> RemoteCommandStore {
-    return try FfiConverterTypeRemoteCommandStore.lift(pointer)
+public func FfiConverterTypeRemoteCommandStore_lift(_ handle: UInt64) throws -> RemoteCommandStore {
+    return try FfiConverterTypeRemoteCommandStore.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeRemoteCommandStore_lower(_ value: RemoteCommandStore) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeRemoteCommandStore_lower(_ value: RemoteCommandStore) -> UInt64 {
     return FfiConverterTypeRemoteCommandStore.lower(value)
 }
 
@@ -735,13 +752,13 @@ public protocol TabsBridgedEngineProtocol: AnyObject, Sendable {
  * NOTE: all timestamps here are milliseconds.
  */
 open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -751,36 +768,37 @@ open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_tabs_fn_clone_tabsbridgedengine(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_tabs_fn_clone_tabsbridgedengine(self.handle, $0) }
     }
     // No primary constructor declared for this class.
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_tabs_fn_free_tabsbridgedengine(pointer, $0) }
+        try! rustCall { uniffi_tabs_fn_free_tabsbridgedengine(handle, $0) }
     }
 
     
@@ -788,14 +806,16 @@ open class TabsBridgedEngine: TabsBridgedEngineProtocol, @unchecked Sendable {
     
 open func apply()throws  -> [String]  {
     return try  FfiConverterSequenceString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_apply(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_apply(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_ensure_current_sync_id(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsbridgedengine_ensure_current_sync_id(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(newSyncId),$0
     )
 })
@@ -803,40 +823,46 @@ open func ensureCurrentSyncId(newSyncId: String)throws  -> String  {
     
 open func lastSync()throws  -> Int64  {
     return try  FfiConverterInt64.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_last_sync(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_last_sync(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func prepareForSync(clientData: String)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_prepare_for_sync(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsbridgedengine_prepare_for_sync(
+            self.uniffiCloneHandle(),
         FfiConverterString.lower(clientData),$0
     )
 }
 }
     
 open func reset()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_reset(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_reset(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func resetSyncId()throws  -> String  {
     return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_reset_sync_id(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_reset_sync_id(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func setLastSync(lastSync: Int64)throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_set_last_sync(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsbridgedengine_set_last_sync(
+            self.uniffiCloneHandle(),
         FfiConverterInt64.lower(lastSync),$0
     )
 }
 }
     
 open func setUploaded(newTimestamp: Int64, uploadedIds: [TabsGuid])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_set_uploaded(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsbridgedengine_set_uploaded(
+            self.uniffiCloneHandle(),
         FfiConverterInt64.lower(newTimestamp),
         FfiConverterSequenceTypeTabsGuid.lower(uploadedIds),$0
     )
@@ -844,38 +870,44 @@ open func setUploaded(newTimestamp: Int64, uploadedIds: [TabsGuid])throws   {try
 }
     
 open func storeIncoming(incomingEnvelopesAsJson: [String])throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_store_incoming(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsbridgedengine_store_incoming(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceString.lower(incomingEnvelopesAsJson),$0
     )
 }
 }
     
 open func syncFinished()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_sync_finished(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_sync_finished(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func syncId()throws  -> String?  {
     return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_sync_id(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_sync_id(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func syncStarted()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_sync_started(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_sync_started(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func wipe()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lift) {
-    uniffi_tabs_fn_method_tabsbridgedengine_wipe(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsbridgedengine_wipe(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -883,33 +915,24 @@ open func wipe()throws   {try rustCallWithError(FfiConverterTypeTabsApiError_lif
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeTabsBridgedEngine: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = TabsBridgedEngine
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TabsBridgedEngine {
-        return TabsBridgedEngine(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> TabsBridgedEngine {
+        return TabsBridgedEngine(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: TabsBridgedEngine) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: TabsBridgedEngine) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TabsBridgedEngine {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: TabsBridgedEngine, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -917,14 +940,14 @@ public struct FfiConverterTypeTabsBridgedEngine: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeTabsBridgedEngine_lift(_ pointer: UnsafeMutableRawPointer) throws -> TabsBridgedEngine {
-    return try FfiConverterTypeTabsBridgedEngine.lift(pointer)
+public func FfiConverterTypeTabsBridgedEngine_lift(_ handle: UInt64) throws -> TabsBridgedEngine {
+    return try FfiConverterTypeTabsBridgedEngine.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeTabsBridgedEngine_lower(_ value: TabsBridgedEngine) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeTabsBridgedEngine_lower(_ value: TabsBridgedEngine) -> UInt64 {
     return FfiConverterTypeTabsBridgedEngine.lower(value)
 }
 
@@ -957,13 +980,13 @@ public protocol TabsStoreProtocol: AnyObject, Sendable {
     
 }
 open class TabsStore: TabsStoreProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -973,44 +996,45 @@ open class TabsStore: TabsStoreProtocol, @unchecked Sendable {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_tabs_fn_clone_tabsstore(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_tabs_fn_clone_tabsstore(self.handle, $0) }
     }
 public convenience init(path: String) {
-    let pointer =
+    let handle =
         try! rustCall() {
     uniffi_tabs_fn_constructor_tabsstore_new(
         FfiConverterString.lower(path),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_tabs_fn_free_tabsstore(pointer, $0) }
+        try! rustCall { uniffi_tabs_fn_free_tabsstore(handle, $0) }
     }
 
     
@@ -1018,33 +1042,38 @@ public convenience init(path: String) {
     
 open func bridgedEngine() -> TabsBridgedEngine  {
     return try!  FfiConverterTypeTabsBridgedEngine_lift(try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_bridged_engine(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsstore_bridged_engine(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func closeConnection()  {try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_close_connection(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsstore_close_connection(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
     
 open func getAll() -> [ClientRemoteTabs]  {
     return try!  FfiConverterSequenceTypeClientRemoteTabs.lift(try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_get_all(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsstore_get_all(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func newRemoteCommandStore() -> RemoteCommandStore  {
     return try!  FfiConverterTypeRemoteCommandStore_lift(try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_new_remote_command_store(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsstore_new_remote_command_store(
+            self.uniffiCloneHandle(),$0
     )
 })
 }
     
 open func registerWithSyncManager()  {try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_register_with_sync_manager(self.uniffiClonePointer(),$0
+    uniffi_tabs_fn_method_tabsstore_register_with_sync_manager(
+            self.uniffiCloneHandle(),$0
     )
 }
 }
@@ -1053,7 +1082,8 @@ open func registerWithSyncManager()  {try! rustCall() {
      * An API for clients which know nothing about windows or tab groups.
      */
 open func setLocalTabs(remoteTabs: [RemoteTabRecord])  {try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_set_local_tabs(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsstore_set_local_tabs(
+            self.uniffiCloneHandle(),
         FfiConverterSequenceTypeRemoteTabRecord.lower(remoteTabs),$0
     )
 }
@@ -1063,13 +1093,15 @@ open func setLocalTabs(remoteTabs: [RemoteTabRecord])  {try! rustCall() {
      * More context-aware API for setting information about a tab like window and groups.
      */
 open func setLocalTabsInfo(info: LocalTabsInfo)  {try! rustCall() {
-    uniffi_tabs_fn_method_tabsstore_set_local_tabs_info(self.uniffiClonePointer(),
+    uniffi_tabs_fn_method_tabsstore_set_local_tabs_info(
+            self.uniffiCloneHandle(),
         FfiConverterTypeLocalTabsInfo_lower(info),$0
     )
 }
 }
     
 
+    
 }
 
 
@@ -1077,33 +1109,24 @@ open func setLocalTabsInfo(info: LocalTabsInfo)  {try! rustCall() {
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeTabsStore: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = TabsStore
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> TabsStore {
-        return TabsStore(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> TabsStore {
+        return TabsStore(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: TabsStore) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: TabsStore) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TabsStore {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: TabsStore, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -1111,21 +1134,21 @@ public struct FfiConverterTypeTabsStore: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeTabsStore_lift(_ pointer: UnsafeMutableRawPointer) throws -> TabsStore {
-    return try FfiConverterTypeTabsStore.lift(pointer)
+public func FfiConverterTypeTabsStore_lift(_ handle: UInt64) throws -> TabsStore {
+    return try FfiConverterTypeTabsStore.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeTabsStore_lower(_ value: TabsStore) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeTabsStore_lower(_ value: TabsStore) -> UInt64 {
     return FfiConverterTypeTabsStore.lower(value)
 }
 
 
 
 
-public struct ClientRemoteTabs {
+public struct ClientRemoteTabs: Equatable, Hashable {
     /**
      * misnamed: this is the fxa_device_id of the client (which may or may not be the same as the corresponding ID in the `clients` collection)
      */
@@ -1157,51 +1180,15 @@ public struct ClientRemoteTabs {
         self.tabGroups = tabGroups
         self.windows = windows
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ClientRemoteTabs: Sendable {}
 #endif
-
-
-extension ClientRemoteTabs: Equatable, Hashable {
-    public static func ==(lhs: ClientRemoteTabs, rhs: ClientRemoteTabs) -> Bool {
-        if lhs.clientId != rhs.clientId {
-            return false
-        }
-        if lhs.clientName != rhs.clientName {
-            return false
-        }
-        if lhs.deviceType != rhs.deviceType {
-            return false
-        }
-        if lhs.lastModified != rhs.lastModified {
-            return false
-        }
-        if lhs.remoteTabs != rhs.remoteTabs {
-            return false
-        }
-        if lhs.tabGroups != rhs.tabGroups {
-            return false
-        }
-        if lhs.windows != rhs.windows {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(clientId)
-        hasher.combine(clientName)
-        hasher.combine(deviceType)
-        hasher.combine(lastModified)
-        hasher.combine(remoteTabs)
-        hasher.combine(tabGroups)
-        hasher.combine(windows)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1247,7 +1234,7 @@ public func FfiConverterTypeClientRemoteTabs_lower(_ value: ClientRemoteTabs) ->
 }
 
 
-public struct LocalTabsInfo {
+public struct LocalTabsInfo: Equatable, Hashable {
     public var tabs: [RemoteTabRecord]
     public var tabGroups: [String: TabGroup]
     public var windows: [String: Window]
@@ -1259,35 +1246,15 @@ public struct LocalTabsInfo {
         self.tabGroups = tabGroups
         self.windows = windows
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension LocalTabsInfo: Sendable {}
 #endif
-
-
-extension LocalTabsInfo: Equatable, Hashable {
-    public static func ==(lhs: LocalTabsInfo, rhs: LocalTabsInfo) -> Bool {
-        if lhs.tabs != rhs.tabs {
-            return false
-        }
-        if lhs.tabGroups != rhs.tabGroups {
-            return false
-        }
-        if lhs.windows != rhs.windows {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(tabs)
-        hasher.combine(tabGroups)
-        hasher.combine(windows)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1328,7 +1295,7 @@ public func FfiConverterTypeLocalTabsInfo_lower(_ value: LocalTabsInfo) -> RustB
 /**
  * Represents a "pending" command.
  */
-public struct PendingCommand {
+public struct PendingCommand: Equatable, Hashable {
     public var deviceId: String
     public var command: RemoteCommand
     public var timeRequested: Timestamp
@@ -1342,39 +1309,15 @@ public struct PendingCommand {
         self.timeRequested = timeRequested
         self.timeSent = timeSent
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension PendingCommand: Sendable {}
 #endif
-
-
-extension PendingCommand: Equatable, Hashable {
-    public static func ==(lhs: PendingCommand, rhs: PendingCommand) -> Bool {
-        if lhs.deviceId != rhs.deviceId {
-            return false
-        }
-        if lhs.command != rhs.command {
-            return false
-        }
-        if lhs.timeRequested != rhs.timeRequested {
-            return false
-        }
-        if lhs.timeSent != rhs.timeSent {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(deviceId)
-        hasher.combine(command)
-        hasher.combine(timeRequested)
-        hasher.combine(timeSent)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1414,7 +1357,7 @@ public func FfiConverterTypePendingCommand_lower(_ value: PendingCommand) -> Rus
 }
 
 
-public struct RemoteTabRecord {
+public struct RemoteTabRecord: Equatable, Hashable {
     public var title: String
     public var urlHistory: [String]
     public var icon: String?
@@ -1444,59 +1387,15 @@ public struct RemoteTabRecord {
         self.windowId = windowId
         self.tabGroupId = tabGroupId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RemoteTabRecord: Sendable {}
 #endif
-
-
-extension RemoteTabRecord: Equatable, Hashable {
-    public static func ==(lhs: RemoteTabRecord, rhs: RemoteTabRecord) -> Bool {
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.urlHistory != rhs.urlHistory {
-            return false
-        }
-        if lhs.icon != rhs.icon {
-            return false
-        }
-        if lhs.lastUsed != rhs.lastUsed {
-            return false
-        }
-        if lhs.inactive != rhs.inactive {
-            return false
-        }
-        if lhs.pinned != rhs.pinned {
-            return false
-        }
-        if lhs.index != rhs.index {
-            return false
-        }
-        if lhs.windowId != rhs.windowId {
-            return false
-        }
-        if lhs.tabGroupId != rhs.tabGroupId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(title)
-        hasher.combine(urlHistory)
-        hasher.combine(icon)
-        hasher.combine(lastUsed)
-        hasher.combine(inactive)
-        hasher.combine(pinned)
-        hasher.combine(index)
-        hasher.combine(windowId)
-        hasher.combine(tabGroupId)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1549,7 +1448,7 @@ public func FfiConverterTypeRemoteTabRecord_lower(_ value: RemoteTabRecord) -> R
 /**
  * A tab-group, representing a session store `TabGroupStateData`.
  */
-public struct TabGroup {
+public struct TabGroup: Equatable, Hashable {
     public var id: String
     public var name: String
     public var color: String
@@ -1563,39 +1462,15 @@ public struct TabGroup {
         self.color = color
         self.collapsed = collapsed
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension TabGroup: Sendable {}
 #endif
-
-
-extension TabGroup: Equatable, Hashable {
-    public static func ==(lhs: TabGroup, rhs: TabGroup) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.color != rhs.color {
-            return false
-        }
-        if lhs.collapsed != rhs.collapsed {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(name)
-        hasher.combine(color)
-        hasher.combine(collapsed)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1635,7 +1510,7 @@ public func FfiConverterTypeTabGroup_lower(_ value: TabGroup) -> RustBuffer {
 }
 
 
-public struct Window {
+public struct Window: Equatable, Hashable {
     public var id: String
     public var lastUsed: Timestamp
     public var index: UInt32
@@ -1649,39 +1524,15 @@ public struct Window {
         self.index = index
         self.windowType = windowType
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Window: Sendable {}
 #endif
-
-
-extension Window: Equatable, Hashable {
-    public static func ==(lhs: Window, rhs: Window) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.lastUsed != rhs.lastUsed {
-            return false
-        }
-        if lhs.index != rhs.index {
-            return false
-        }
-        if lhs.windowType != rhs.windowType {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(lastUsed)
-        hasher.combine(index)
-        hasher.combine(windowType)
-    }
-}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1726,12 +1577,16 @@ public func FfiConverterTypeWindow_lower(_ value: Window) -> RustBuffer {
  * A command which should be sent to a remote device.
  */
 
-public enum RemoteCommand {
+public enum RemoteCommand: Equatable, Hashable {
     
     case closeTab(url: String
     )
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension RemoteCommand: Sendable {}
@@ -1782,15 +1637,8 @@ public func FfiConverterTypeRemoteCommand_lower(_ value: RemoteCommand) -> RustB
 }
 
 
-extension RemoteCommand: Equatable, Hashable {}
 
-
-
-
-
-
-
-public enum TabsApiError: Swift.Error {
+public enum TabsApiError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
 
     
     
@@ -1800,8 +1648,21 @@ public enum TabsApiError: Swift.Error {
     )
     case UnexpectedTabsError(reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension TabsApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1870,29 +1731,18 @@ public func FfiConverterTypeTabsApiError_lower(_ value: TabsApiError) -> RustBuf
     return FfiConverterTypeTabsApiError.lower(value)
 }
 
-
-extension TabsApiError: Equatable, Hashable {}
-
-
-
-
-extension TabsApiError: Foundation.LocalizedError {
-    public var errorDescription: String? {
-        String(reflecting: self)
-    }
-}
-
-
-
-
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 
-public enum WindowType : UInt8 {
+public enum WindowType: UInt8, Equatable, Hashable {
     
     case normal = 0
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension WindowType: Sendable {}
@@ -1939,13 +1789,6 @@ public func FfiConverterTypeWindowType_lift(_ buf: RustBuffer) throws -> WindowT
 public func FfiConverterTypeWindowType_lower(_ value: WindowType) -> RustBuffer {
     return FfiConverterTypeWindowType.lower(value)
 }
-
-
-extension WindowType: Equatable, Hashable {}
-
-
-
-
 
 
 #if swift(>=5.8)
@@ -2270,85 +2113,85 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_tabs_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command() != 11837) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command() != 2773) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command_at() != 62435) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_add_remote_command_at() != 25564) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_get_unsent_commands() != 62092) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_get_unsent_commands() != 40420) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_remove_remote_command() != 19318) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_remove_remote_command() != 28236) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_remotecommandstore_set_pending_command_sent() != 59831) {
+    if (uniffi_tabs_checksum_method_remotecommandstore_set_pending_command_sent() != 17621) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 40956) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_apply() != 22966) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_ensure_current_sync_id() != 34052) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_ensure_current_sync_id() != 35742) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_last_sync() != 56171) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_last_sync() != 62008) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_prepare_for_sync() != 49464) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_prepare_for_sync() != 24801) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset() != 15243) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset() != 8836) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset_sync_id() != 59348) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_reset_sync_id() != 64041) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_last_sync() != 64083) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_last_sync() != 15023) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 24434) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_set_uploaded() != 3213) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_store_incoming() != 49801) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_store_incoming() != 6635) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_finished() != 33662) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_finished() != 62322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_id() != 10877) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_id() != 3494) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_started() != 19846) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_sync_started() != 56074) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsbridgedengine_wipe() != 21505) {
+    if (uniffi_tabs_checksum_method_tabsbridgedengine_wipe() != 20977) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_bridged_engine() != 43478) {
+    if (uniffi_tabs_checksum_method_tabsstore_bridged_engine() != 15763) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_close_connection() != 6630) {
+    if (uniffi_tabs_checksum_method_tabsstore_close_connection() != 24061) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_get_all() != 1572) {
+    if (uniffi_tabs_checksum_method_tabsstore_get_all() != 13681) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_new_remote_command_store() != 26531) {
+    if (uniffi_tabs_checksum_method_tabsstore_new_remote_command_store() != 26945) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_register_with_sync_manager() != 1224) {
+    if (uniffi_tabs_checksum_method_tabsstore_register_with_sync_manager() != 37153) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs() != 10534) {
+    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs() != 30185) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs_info() != 21646) {
+    if (uniffi_tabs_checksum_method_tabsstore_set_local_tabs_info() != 31893) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_tabs_checksum_constructor_tabsstore_new() != 24843) {

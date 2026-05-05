@@ -35,5 +35,5 @@
 "Alerts.RestoreTabs.Message.v109" = "Desculpe. Restaure abas para continuar de onde parou.";
 
 /* The title of the restore tabs pop-up alert. This alert is displayed when opening up Firefox after it crashed. %@ is the name of the app (e.g. Firefox). */
-"Alerts.RestoreTabs.Title.v109.v2" = "O %@ travou. Restaurar abas?";
+"Alerts.RestoreTabs.Title.v109.v2" = "O %@ falhou. Restaurar abas?";
 

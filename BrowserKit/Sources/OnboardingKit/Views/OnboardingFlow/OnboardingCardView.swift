@@ -10,6 +10,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
+    let variant: OnboardingVariant
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
@@ -17,12 +18,14 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
+        variant: OnboardingVariant,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
     }
@@ -35,6 +38,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
+                    variant: variant,
                     onBottomButtonAction: onBottomButtonAction
                 )
             case .multipleChoice:
@@ -42,6 +46,7 @@ struct OnboardingCardView<ViewModel: OnboardingCardInfoModelProtocol>: View {
                     viewModel: viewModel,
                     windowUUID: windowUUID,
                     themeManager: themeManager,
+                    variant: variant,
                     onBottomButtonAction: onBottomButtonAction,
                     onMultipleChoiceAction: onMultipleChoiceAction
                 )

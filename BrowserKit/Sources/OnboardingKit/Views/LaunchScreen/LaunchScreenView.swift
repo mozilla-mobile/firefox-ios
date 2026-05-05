@@ -8,24 +8,30 @@ import Common
 public struct LaunchScreenBackgroundView: View {
     private let windowUUID: WindowUUID
     private let themeManager: ThemeManager
+    private let variant: OnboardingVariant
 
-    public init(windowUUID: WindowUUID, themeManager: ThemeManager) {
+    public init(
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        variant: OnboardingVariant = .modern
+    ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
     }
 
     public var body: some View {
-        AnimatedGradientView(
+        OnboardingBackgroundView(
             windowUUID: windowUUID,
-            themeManager: themeManager
+            themeManager: themeManager,
+            variant: variant
         )
-        .ignoresSafeArea()
     }
 }
 
 public class LaunchScreenLoaderView: UIView {
     private let imageView: UIImageView = .build {
-        $0.image = UIImage(named: UX.LaunchScreen.Logo.image, in: Bundle.module, with: nil)
+        $0.image = UIImage(named: OnboardingImageIdentifiers.firefoxLoader, in: Bundle.module, with: nil)
         $0.contentMode = .scaleAspectFit
     }
 

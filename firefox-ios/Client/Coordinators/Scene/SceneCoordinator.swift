@@ -4,6 +4,7 @@
 
 import Common
 import UIKit
+import OnboardingKit
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator,
@@ -13,7 +14,7 @@ class SceneCoordinator: BaseCoordinator,
     var window: UIWindow?
     var windowUUID: WindowUUID { reservedWindowUUID.uuid }
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.deeplinkOptimizationRefactor, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
@@ -58,7 +59,12 @@ class SceneCoordinator: BaseCoordinator,
         let launchScreenVC: UIViewController
         if introManager.isModernOnboardingEnabled && introManager.shouldShowIntroScreen {
             // Show modern launch screen only for first-time users when modern onboarding is enabled
-            launchScreenVC = ModernLaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
+            let onboardingKitVariant = introManager.onboardingKitVariant
+            launchScreenVC = ModernLaunchScreenViewController(
+                windowUUID: windowUUID,
+                coordinator: self,
+                variant: onboardingKitVariant
+            )
         } else {
             // Use legacy launch screen for returning users or when modern onboarding is disabled
             launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)

@@ -17,6 +17,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     let viewModel: ViewModel
+    let variant: OnboardingVariant
     let onBottomButtonAction: (ViewModel.OnboardingActionType, String) -> Void
     let onMultipleChoiceAction: (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
 
@@ -24,12 +25,14 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         viewModel: ViewModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
+        variant: OnboardingVariant,
         onBottomButtonAction: @escaping (ViewModel.OnboardingActionType, String) -> Void,
         onMultipleChoiceAction: @escaping (ViewModel.OnboardingMultipleChoiceActionType, String) -> Void
     ) {
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.variant = variant
         self.onBottomButtonAction = onBottomButtonAction
         self.onMultipleChoiceAction = onMultipleChoiceAction
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -54,14 +57,7 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                     .padding(.top, UX.CardView.titleCompactTopPadding)
 
                 Spacer(minLength: UX.CardView.minContentSpacing)
-                OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
-                    theme: theme,
-                    selection: $selectedAction,
-                    items: viewModel.multipleChoiceButtons
-                )
-                .onChange(of: selectedAction) { newAction in
-                    onMultipleChoiceAction(newAction, viewModel.name)
-                }
+                segmentedControl
                 Spacer(minLength: UX.CardView.minContentSpacing)
                 if !viewModel.body.isEmpty {
                     bodyView
@@ -88,13 +84,13 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         }
         .scrollBounceBehavior(basedOnSize: true)
         .if(horizontalSizeClass != .regular) { view in
-            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius)
+            view.cardBackground(theme: theme, cornerRadius: UX.CardView.cornerRadius, variant: variant)
         }
     }
 
     var titleView: some View {
         Text(viewModel.title)
-            .font(UX.CardView.titleFontForCurrentLocale)
+            .font(UX.CardView.titleFont())
             .foregroundColor(theme.colors.textPrimary.color)
             .multilineTextAlignment(.center)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)TitleLabel")
@@ -109,9 +105,22 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
         Text(viewModel.body)
             .font(UX.CardView.bodyFont)
             .foregroundColor(theme.colors.textSecondary.color)
-            .multilineTextAlignment(UX.CardView.textAlignmentForCurrentLocale)
+            .multilineTextAlignment(UX.CardView.textAlignment())
             .lineLimit(nil)
             .accessibility(identifier: "\(viewModel.a11yIdRoot)DescriptionLabel")
+    }
+
+    var segmentedControl: some View {
+        OnboardingSegmentedControl<ViewModel.OnboardingMultipleChoiceActionType>(
+            theme: theme,
+            variant: variant,
+            selection: $selectedAction,
+            items: viewModel.multipleChoiceButtons,
+            a11yIdRoot: viewModel.a11yIdRoot
+        )
+        .onChange(of: selectedAction) { newAction in
+            onMultipleChoiceAction(newAction, viewModel.name)
+        }
     }
 
     var primaryButton: some View {
@@ -124,7 +133,8 @@ struct OnboardingMultipleChoiceCardView<ViewModel: OnboardingCardInfoModelProtoc
                 )
             },
             theme: theme,
-            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton"
+            accessibilityIdentifier: "\(viewModel.a11yIdRoot)PrimaryButton",
+            variant: variant
         )
         .if(horizontalSizeClass == .regular) { view in
             view.frame(maxWidth: UX.CardView.primaryButtonWidthiPad)

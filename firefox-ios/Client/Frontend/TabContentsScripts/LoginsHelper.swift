@@ -34,7 +34,7 @@ struct LoginItem: Codable {
 }
 
 // TODO: FXIOS-13180 Make LoginsHelper actually sendable
-class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
+class LoginsHelper: @unchecked Sendable, TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
@@ -422,8 +422,7 @@ class LoginsHelper: @unchecked Sendable, TabContentScript, FeatureFlaggable {
     @MainActor
     public static func setUpdatedPasswordEnabled(with tab: Tab?) {
         guard let tab = tab else { return }
-        let status = LegacyFeatureFlagsManager.shared.isFeatureEnabled(.updatedPasswordManager, checking: .buildOnly)
-        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(\(status))"
+        let jsUpdatedPasswordEnabled = "window.__firefox__.logins.isUpdatedPasswordManagerEnabled(true)"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsUpdatedPasswordEnabled)
     }
 

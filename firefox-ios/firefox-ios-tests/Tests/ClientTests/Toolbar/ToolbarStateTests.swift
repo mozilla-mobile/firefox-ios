@@ -44,8 +44,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(initialState.canGoForward)
         XCTAssertEqual(initialState.numberOfTabs, 1)
         XCTAssertFalse(initialState.showMenuWarningBadge)
-        XCTAssertFalse(initialState.isNewTabFeatureEnabled)
-        XCTAssertFalse(initialState.canShowDataClearanceAction)
         XCTAssertFalse(initialState.canShowNavigationHint)
         XCTAssertTrue(initialState.shouldAnimate)
     }
@@ -60,8 +58,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 toolbarPosition: .top,
                 addressBorderPosition: .bottom,
                 displayNavBorder: true,
-                isNewTabFeatureEnabled: false,
-                canShowDataClearanceAction: false,
                 translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars)
@@ -76,8 +72,6 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.canGoForward)
         XCTAssertEqual(newState.numberOfTabs, 1)
         XCTAssertFalse(newState.showMenuWarningBadge)
-        XCTAssertFalse(newState.isNewTabFeatureEnabled)
-        XCTAssertFalse(newState.canShowDataClearanceAction)
         XCTAssertFalse(newState.canShowNavigationHint)
         XCTAssertNil(newState.addressToolbar.translationConfiguration)
     }
@@ -578,7 +572,7 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
                 isShowingNavigationToolbar: true,
                 canGoBack: true,
                 canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                lockIconImageName: StandardImageIdentifiers.Small.shieldCheckmarkFill,
                 safeListedURLImageName: nil,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
@@ -589,8 +583,8 @@ final class ToolbarStateTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: windowUUID

@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 import SummarizeKit
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
@@ -34,6 +35,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     @MainActor
     func showPrintSheet()
 
+    @MainActor
+    func showReaderMode()
+
     /// Open the share sheet to share the currently selected `Tab`.
     @MainActor
     func showShareSheetForCurrentlySelectedTab()
@@ -42,7 +46,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSummarizePanel(_ trigger: SummarizerTrigger, config: SummarizerConfig?)
 }
 
-class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
+class MainMenuCoordinator: BaseCoordinator {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
@@ -123,6 +127,10 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         case .passwords:
             navigationHandler?.showSettings(at: .password)
 
+        case .readerView:
+            // TODO: FXIOS-15099 Refactor showReaderMode with NavigationBrowserAction
+            navigationHandler?.showReaderMode()
+
         case .settings:
             navigationHandler?.showSettings(at: .general)
 
@@ -153,8 +161,43 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             DefaultApplicationHelper().openSettings()
 
         case .webpageSummary(let config):
-            dismissMenuModal(animated: true)
             navigationHandler?.showSummarizePanel(.mainMenu, config: config)
+
+        case .translatePage:
+            let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+            let translationConfig = toolbarState?.addressToolbar.translationConfiguration
+            let isTranslated = translationConfig?.state == .active
+            let translatedLanguage = translationConfig?.translatedToLanguage
+            let isSingleLanguageFlow = if let translationConfig {
+                !translationConfig.isMultiLanguageFlow
+            } else {
+                false
+            }
+            let prefs = profile.prefs
+            Task {
+                let manager = PreferredTranslationLanguagesManager(prefs: prefs)
+                let supported = await ASTranslationModelsFetcher.shared.fetchSupportedTargetLanguages()
+                let languages = manager.preferredLanguages(supportedTargetLanguages: supported)
+                let pageLanguage = isTranslated
+                    ? translationConfig?.sourceLanguage
+                    : (try? await TranslationsService().detectPageLanguage(for: windowUUID))
+                let filteredLanguages = languages.filter { $0 != pageLanguage && $0 != translatedLanguage }
+                if isSingleLanguageFlow, let language = filteredLanguages.first, !isTranslated {
+                    store.dispatch(TranslationLanguageSelectedAction(
+                        windowUUID: windowUUID,
+                        targetLanguage: language,
+                        actionType: TranslationsActionType.didSelectTargetLanguage
+                    ))
+                } else {
+                    store.dispatch(GeneralBrowserAction(
+                        translationLanguages: filteredLanguages,
+                        isPageTranslated: isTranslated,
+                        translatedToLanguage: translatedLanguage,
+                        windowUUID: windowUUID,
+                        actionType: GeneralBrowserActionType.showTranslationLanguagePicker
+                    ))
+                }
+            }
         }
     }
 

@@ -3,19 +3,24 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Foundation
 import Redux
 
 /// State for the header cell that is used in the homepage header section
+@CopyWithUpdates
 struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showiPadSetup: Bool
 
-    init(windowUUID: WindowUUID) {
+    init(
+        windowUUID: WindowUUID,
+        isPrivate: Bool = false,
+    ) {
         self.init(
             windowUUID: windowUUID,
-            isPrivate: false,
+            isPrivate: isPrivate,
             showiPadSetup: false
         )
     }
@@ -39,7 +44,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         switch action.actionType {
         case HomepageActionType.initialize:
             return handleInitializeAction(for: state, with: action)
-        case HomepageActionType.traitCollectionDidChange:
+        case HomepageActionType.traitCollectionDidChange,
+             HomepageActionType.viewWillAppear:
             return handleTraitCollectionDidChangeAction(for: state, with: action)
         default:
             return defaultState(from: state)
@@ -52,8 +58,7 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return HeaderState(
-            windowUUID: state.windowUUID,
+        return state.copyWithUpdates(
             isPrivate: false,
             showiPadSetup: showiPadSetup
         )
@@ -65,18 +70,12 @@ struct HeaderState: StateType, Equatable, Hashable {
         else {
             return defaultState(from: state)
         }
-        return HeaderState(
-            windowUUID: state.windowUUID,
-            isPrivate: state.isPrivate,
+        return state.copyWithUpdates(
             showiPadSetup: showiPadSetup
         )
     }
 
     static func defaultState(from state: HeaderState) -> HeaderState {
-        return HeaderState(
-            windowUUID: state.windowUUID,
-            isPrivate: state.isPrivate,
-            showiPadSetup: state.showiPadSetup
-        )
+        return state.copyWithUpdates()
     }
 }

@@ -187,6 +187,9 @@
 /* Title for the welcome card in the v148 brand refresh onboarding flow. */
 "Onboarding.Modern.BrandRefresh.Welcome.Title.v148.v2" = "透過內建隱私權保護的瀏覽器開啟鏈結";
 
+/* Title for the welcome card in the v149 brand refresh onboarding flow. */
+"Onboarding.Modern.BrandRefresh.Welcome.TitleV3.v149" = "透過內建隱私權保護的瀏覽器開啟所有鏈結";
+
 /* Option for the automatic theme. */
 "Onboarding.Modern.Customization.Theme.Automatic.v145" = "自動";
 

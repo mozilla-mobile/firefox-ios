@@ -55,6 +55,8 @@ public protocol BookmarksHandler {
         completion: @Sendable @escaping (Result<Void, any Error>) -> Void
     )
 
+    func deleteBookmarkNode(guid: GUID) -> Success
+
     func isBookmarked(url: String, completion: @escaping @Sendable (Result<Bool, Error>) -> Void)
 }
 
@@ -324,12 +326,6 @@ public class RustPlaces: @unchecked Sendable, BookmarksHandler, HistoryHandler {
     public func getRecentBookmarks(limit: UInt) -> Deferred<Maybe<[BookmarkItemData]>> {
         return withReader { connection in
             return try connection.getRecentBookmarks(limit: limit)
-        }
-    }
-
-    public func getBookmarkURLForKeyword(keyword: String) -> Deferred<Maybe<String?>> {
-        return withReader { connection in
-            return try connection.getBookmarkURLForKeyword(keyword: keyword)
         }
     }
 

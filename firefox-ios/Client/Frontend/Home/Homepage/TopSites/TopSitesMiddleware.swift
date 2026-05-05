@@ -9,7 +9,7 @@ import Storage
 
 /// Middleware to handle top sites related actions, if this gets too big, should split out the telemetry.
 @MainActor
-final class TopSitesMiddleware: FeatureFlaggable {
+final class TopSitesMiddleware {
     private let topSitesManager: TopSitesManagerInterface
     private let homepageTelemetry: HomepageTelemetry
     private let bookmarksTelemetry: BookmarksTelemetry

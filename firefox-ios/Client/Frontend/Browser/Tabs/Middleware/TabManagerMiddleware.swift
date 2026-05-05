@@ -13,21 +13,18 @@ import SummarizeKit
 import enum MozillaAppServices.BookmarkRoots
 
 @MainActor
-final class TabManagerMiddleware: FeatureFlaggable,
-                                  CanRemoveQuickActionBookmark {
+final class TabManagerMiddleware: FeatureFlaggable, CanRemoveQuickActionBookmark {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
     private let bookmarksSaver: BookmarksSaver
-    private let toastTelemetry: ToastTelemetry
     private let summarizerNimbusUtils: SummarizerNimbusUtils
-    private let summarizationChecker: SummarizationCheckerProtocol
-    private let summarizerServiceFactory: SummarizerServiceFactory
+    private let summarizerConfigFactory: SummarizerConfigFactory
     private let tabsPanelTelemetry: TabsPanelTelemetry
     var bookmarksHandler: BookmarksHandler
 
     private var isTabTrayUIExperimentsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.tabTrayUIExperiments, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.tabTrayUIExperiments)
         && UIDevice.current.userInterfaceIdiom != .pad
     }
     private var isSummarizerEnabled: Bool {
@@ -44,20 +41,17 @@ final class TabManagerMiddleware: FeatureFlaggable,
          logger: Logger = DefaultLogger.shared,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtility: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
-         summarizerServiceFactory: SummarizerServiceFactory = DefaultSummarizerServiceFactory(),
-         summarizationChecker: SummarizationCheckerProtocol = SummarizationChecker(),
+         summarizerConfigFactory: SummarizerConfigFactory = SummarizerMiddleware(),
          bookmarksSaver: BookmarksSaver? = nil,
          gleanWrapper: GleanWrapper = DefaultGleanWrapper()
     ) {
         self.summarizerNimbusUtils = summarizerNimbusUtility
+        self.summarizerConfigFactory = summarizerConfigFactory
         self.profile = profile
         self.bookmarksHandler = profile.places
-        self.summarizationChecker = summarizationChecker
         self.logger = logger
-        self.summarizerServiceFactory = summarizerServiceFactory
         self.windowManager = windowManager
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
-        self.toastTelemetry = ToastTelemetry(gleanWrapper: gleanWrapper)
         self.tabsPanelTelemetry = TabsPanelTelemetry(gleanWrapper: gleanWrapper, logger: logger)
     }
 
@@ -75,13 +69,13 @@ final class TabManagerMiddleware: FeatureFlaggable,
         } else if let action = action as? ScreenshotAction {
             self.resolveScreenshotActions(action: action, state: state)
         } else if let action = action as? ShortcutsLibraryAction {
-            self.resolveShortcutsLibrartActions(action: action, state: state)
+            self.resolveShortcutsLibraryActions(action: action, state: state)
         } else {
             self.resolveHomepageActions(with: action)
         }
     }
 
-    private func resolveShortcutsLibrartActions(action: ShortcutsLibraryAction, state: AppState) {
+    private func resolveShortcutsLibraryActions(action: ShortcutsLibraryAction, state: AppState) {
         switch action.actionType {
         case ShortcutsLibraryActionType.switchTabToastButtonTapped:
             tabManager(for: action.windowUUID).selectTab(action.tab)
@@ -100,9 +94,9 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let manager = tabManager(for: action.windowUUID)
         manager.tabDidSetScreenshot(action.tab)
 
-        guard let tabsState = state.screenState(TabsPanelState.self,
-                                                for: .tabsPanel,
-                                                window: action.windowUUID) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self,
+                                                   for: .tabsPanel,
+                                                   window: action.windowUUID) else { return }
         triggerRefresh(uuid: action.windowUUID, isPrivate: tabsState.isPrivateMode)
     }
 
@@ -122,10 +116,9 @@ final class TabManagerMiddleware: FeatureFlaggable,
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.closeTab:
-            // TODO: verify if this works for closing a tab from an unselected tab panel
-            guard let tabsState = state.screenState(TabsPanelState.self,
-                                                    for: .tabsPanel,
-                                                    window: action.windowUUID) else { return }
+            guard let tabsState = state.componentState(TabsPanelState.self,
+                                                       for: .tabsPanel,
+                                                       window: action.windowUUID) else { return }
             tabPeekCloseTab(with: tabUUID,
                             uuid: action.windowUUID,
                             isPrivate: tabsState.isPrivateMode)
@@ -142,9 +135,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         case RemoteTabsPanelActionType.closeSelectedRemoteURL:
             guard let url = action.url, let deviceId = action.targetDeviceId else { return }
             closeSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
-        case RemoteTabsPanelActionType.undoCloseSelectedRemoteURL:
-            guard let url = action.url, let deviceId = action.targetDeviceId else { return }
-            undoCloseSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
         case RemoteTabsPanelActionType.flushTabCommands:
             guard let deviceId = action.targetDeviceId else { return }
             flushTabCommands(deviceId: deviceId, windowUUID: action.windowUUID)
@@ -229,9 +219,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
                                  uuid: action.windowUUID,
                                  isPrivate: action.panelType == .privateTabs)
 
-        case TabPanelViewActionType.undoClose:
-            undoCloseTab(state: state, uuid: action.windowUUID)
-
         case TabPanelViewActionType.cancelCloseAllTabs:
             tabsPanelTelemetry.closeAllTabsSheetOptionSelected(
                 option: .cancel,
@@ -244,9 +231,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         case TabPanelViewActionType.deleteTabsOlderThan:
             guard let period = action.deleteTabPeriod else { return }
             deleteNormalTabsOlderThan(period: period, uuid: action.windowUUID)
-
-        case TabPanelViewActionType.undoCloseAllTabs:
-            undoCloseAllTabs(uuid: action.windowUUID)
 
         case TabPanelViewActionType.selectTab:
             guard let tabUUID = action.tabUUID else { return }
@@ -308,10 +292,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
 
     private func closeSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
         self.profile.addTabToCommandQueue(deviceId, url: url)
-    }
-
-    private func undoCloseSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
-        self.profile.removeTabFromCommandQueue(deviceId, url: url)
     }
 
     private func flushTabCommands(deviceId: String, windowUUID: WindowUUID) {
@@ -444,7 +424,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
-        let shouldDismiss = self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
+        let shouldDismiss = closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
         triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
         if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
@@ -452,30 +432,12 @@ final class TabManagerMiddleware: FeatureFlaggable,
                                                    windowUUID: uuid,
                                                    actionType: TabPanelViewActionType.tabPanelDidLoad)
             store.dispatch(didLoadAction)
-
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                           windowUUID: uuid,
-                                                           actionType: TabPanelMiddlewareActionType.showToast)
-                store.dispatch(toastAction)
-            }
         } else if shouldDismiss {
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
 
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            }
             addNewTabIfPrivate(uuid: uuid)
-        } else if !isTabTrayUIExperimentsEnabled {
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
         }
     }
 
@@ -490,15 +452,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
-
-        if !isTabTrayUIExperimentsEnabled {
-            // The Tab Tray uses a "SimpleToast", so the urlString will go unused
-            let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark(urlString: shareItem.url),
-                                                       windowUUID: uuid,
-                                                       actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(toastAction)
-        }
-
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
                                      object: .bookmark,
@@ -514,57 +467,16 @@ final class TabManagerMiddleware: FeatureFlaggable,
         store.dispatch(action)
     }
 
-    /// Handles undoing the close tab action, gets the backup tab from `TabManager`
-    private func undoCloseTab(state: AppState, uuid: WindowUUID) {
-        toastTelemetry.undoClosedSingleTab()
-        let tabManager = tabManager(for: uuid)
-        guard tabManager.backupCloseTab != nil else { return }
-
-        tabManager.undoCloseTab()
-
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
-
-        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(refreshAction)
-
-        // Scroll to the restored tab so the user knows it was restored, especially if it was restored off screen
-        // (e.g. restoring the tab in the last row, first column)
-        let scrollBehavior: TabScrollBehavior = tabManager.backupCloseTab != nil
-            ? .scrollToTab(withTabUUID: tabManager.backupCloseTab!.tab.tabUUID, shouldAnimate: true)
-            : .scrollToSelectedTab(shouldAnimate: true)
-        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                    scrollBehavior: scrollBehavior,
-                                                    windowUUID: uuid,
-                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
-        store.dispatch(scrollAction)
-    }
-
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        guard let tabsState = state.componentState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
 
         tabsPanelTelemetry.closeAllTabsSheetOptionSelected(option: .all, mode: tabsState.isPrivateMode ? .private : .normal)
-        let normalCount = tabManager.normalTabs.count
-        let privateCount = tabManager.privateTabs.count
         tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
         triggerRefresh(uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
-        if tabsState.isPrivateMode && !isTabTrayUIExperimentsEnabled {
-            let action = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: privateCount),
-                                                  windowUUID: uuid,
-                                                  actionType: TabPanelMiddlewareActionType.showToast)
-            store.dispatch(action)
-        } else {
-            if !isTabTrayUIExperimentsEnabled {
-                let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
-                                                       windowUUID: uuid,
-                                                       actionType: GeneralBrowserActionType.showToast)
-                store.dispatch(toastAction)
-            }
+        if !tabsState.isPrivateMode {
             addNewTabIfPrivate(uuid: uuid)
         }
 
@@ -594,26 +506,6 @@ final class TabManagerMiddleware: FeatureFlaggable,
         if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
             tabManager.addTab(nil, isPrivate: false)
         }
-    }
-
-    private func undoCloseAllTabs(uuid: WindowUUID) {
-        toastTelemetry.undoClosedAllTabs()
-        let tabManager = tabManager(for: uuid)
-        tabManager.undoCloseAllTabs()
-
-        // The private tab panel is the only panel that stays open after a close all tabs action
-        let model = getTabsDisplayModel(for: true, uuid: uuid)
-        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                     windowUUID: uuid,
-                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(refreshAction)
-
-        // Scroll to the selected tab if all closed tabs are restored
-        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                    scrollBehavior: .scrollToSelectedTab(shouldAnimate: true),
-                                                    windowUUID: uuid,
-                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
-        store.dispatch(scrollAction)
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
@@ -654,38 +546,40 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let tabManager = tabManager(for: uuid)
         let tab = tabManager.getTabForUUID(uuid: tabID)
         let urlString = tab?.url?.absoluteString ?? ""
-        let profile = self.profile
 
-        profile.places.isBookmarked(url: urlString).uponQueue(.main) { isBookmarkedResult in
-            ensureMainThread {
-                guard case .success(let isBookmarked) = isBookmarkedResult else {
-                    return
-                }
+        getIsBookmarked(url: urlString, dataQueue: .main) { isBookmarked in
+            // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
+            MainActor.assumeIsolated {
+                let canBeSaved = self.canTabBeSavedToBookmarks(tab: tab, isBookmarked: isBookmarked, urlString: urlString)
+                let isSyncEnabled = self.profile.hasSyncableAccount()
 
-                let canBeSaved: Bool
-                if isBookmarked || (tab?.urlIsTooLong ?? false) || (tab?.isFxHomeTab ?? false) {
-                    canBeSaved = false
-                } else {
-                    canBeSaved = true
-                }
-
-                let browserProfile = profile as? BrowserProfile
-                browserProfile?.tabs.getClientGUIDs { (result, error) in
-                    ensureMainThread {
-                        let model = TabPeekModel(canTabBeSaved: canBeSaved,
-                                                 canTabBeRemoved: isBookmarked,
-                                                 canCopyURL: !(tab?.isFxHomeTab ?? false),
-                                                 isSyncEnabled: !(result?.isEmpty ?? true),
-                                                 screenshot: tab?.screenshot ?? UIImage(),
-                                                 accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
-                        let action = TabPeekAction(tabPeekModel: model,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPeekActionType.loadTabPeek)
-                        store.dispatch(action)
-                    }
-                }
+                let model = TabPeekModel(canTabBeSaved: canBeSaved,
+                                         canTabBeRemoved: isBookmarked,
+                                         canCopyURL: self.canAddCopyOption(tab: tab, urlString: urlString),
+                                         isSyncEnabled: isSyncEnabled,
+                                         screenshot: tab?.screenshot ?? UIImage(),
+                                         accessiblityLabel: tab?.webView?.accessibilityLabel ?? "")
+                let action = TabPeekAction(tabPeekModel: model,
+                                           windowUUID: uuid,
+                                           actionType: TabPeekActionType.loadTabPeek)
+                store.dispatch(action)
             }
         }
+    }
+
+    private func canTabBeSavedToBookmarks(tab: Tab?, isBookmarked: Bool, urlString: String) -> Bool {
+        guard let tab else { return false }
+
+        // Can be saved only if it is not already bookmarked, the URL is not too long (database restriction),
+        // and it is not a homepage (FxHome) tab or empty url
+        return !isBookmarked && !tab.urlIsTooLong && !tab.isFxHomeTab && !urlString.isEmpty
+    }
+
+    private func canAddCopyOption(tab: Tab?, urlString: String) -> Bool {
+        guard let tab else { return false }
+
+        // the option is not available if is homepage (FxHome) tab or empty url
+        return !tab.isFxHomeTab && !urlString.isEmpty
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
@@ -776,18 +670,17 @@ final class TabManagerMiddleware: FeatureFlaggable,
         let isSummarizerEnabled = isSummarizerEnabled
         fetchProfileTabInfo(for: selectedTab.url) { [weak self] profileTabInfo in
             assert(Thread.isMainThread)
-            if isSummarizerEnabled {
+            if isSummarizerEnabled, !selectedTab.isFxHomeTab {
                 Task {
-                    let summarizeMiddleware = SummarizerMiddleware()
-                    let summarizationCheckResult = await summarizeMiddleware.checkSummarizationResult(selectedTab)
-                    let contentType = summarizationCheckResult?.contentType ?? .generic
+                    guard let webView = selectedTab.webView else { return }
+                    let summarizerConfig = await self?.summarizerConfigFactory.makeConfiguration(from: webView)
                     self?.dispatchTabInfo(
                         info: profileTabInfo,
                         selectedTab: selectedTab,
                         windowUUID: windowUUID,
                         accountData: accountData,
-                        canSummarize: summarizationCheckResult?.canSummarize ?? false,
-                        summarizerConfig: summarizeMiddleware.getConfig(for: contentType)
+                        canSummarize: summarizerConfig != nil,
+                        summarizerConfig: summarizerConfig
                     )
                     self?.provideProfileImage(forWindow: windowUUID, accountData: accountData)
                 }
@@ -825,7 +718,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
             windowUUID: windowUUID,
             accountData: accountData,
             canSummarize: false,
-            summarizerConfig: SummarizerMiddleware().getConfig(for: .generic)
+            summarizerConfig: nil
         )
     }
 
@@ -889,6 +782,8 @@ final class TabManagerMiddleware: FeatureFlaggable,
         canSummarize: Bool,
         summarizerConfig: SummarizerConfig? = nil
     ) {
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let translationConfig = toolbarState?.addressToolbar.translationConfiguration
         store.dispatch(
             MainMenuAction(
                 windowUUID: windowUUID,
@@ -901,13 +796,17 @@ final class TabManagerMiddleware: FeatureFlaggable,
                     isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                     hasChangedUserAgent: selectedTab.changedUserAgent,
                     zoomLevel: selectedTab.pageZoom,
-                    readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                    readerModeConfiguration: ReaderModeConfiguration(
+                        isAvailable: selectedTab.readerModeAvailableOrActive,
+                        isActive: selectedTab.readerModeState == .active
+                    ),
                     summaryIsAvailable: canSummarize,
                     summarizerConfig: summarizerConfig,
                     isBookmarked: info.isBookmarked,
                     isInReadingList: info.isInReadingList,
                     isPinned: info.isPinned,
-                    accountData: accountData
+                    accountData: accountData,
+                    translationConfiguration: translationConfig
                 )
             )
         )
@@ -1098,7 +997,7 @@ final class TabManagerMiddleware: FeatureFlaggable,
                 // FXIOS-13228 It should be safe to assumeIsolated here because of `.main` queue above
                 MainActor.assumeIsolated {
                     guard result.isSuccess else { return }
-                    self.removeBookmarkShortcut()
+                    Self.removeBookmarkShortcut(withBookmarksHandler: self.bookmarksHandler)
                 }
             }
     }

@@ -7,75 +7,6 @@
 import XCTest
 
 class FxAccountManagerTests: XCTestCase {
-    func testStateTransitionsStart() {
-        let state: AccountState = .start
-        XCTAssertEqual(.start, FxAccountManager.nextState(state: state, event: .initialize))
-        XCTAssertEqual(.notAuthenticated, FxAccountManager.nextState(state: state, event: .accountNotFound))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .accountRestored))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticated(authData: FxaAuthData(code: "foo", state: "bar", actionQueryParam: "bobo"))))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticationError))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchProfile(ignoreCache: false)))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchedProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .failedToFetchProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .logout))
-    }
-
-    func testStateTransitionsNotAuthenticated() {
-        let state: AccountState = .notAuthenticated
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .initialize))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountNotFound))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountRestored))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .authenticated(authData: FxaAuthData(code: "foo", state: "bar", actionQueryParam: "bobo"))))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticationError))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchProfile(ignoreCache: false)))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchedProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .failedToFetchProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .logout))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .recoveredFromAuthenticationProblem))
-    }
-
-    func testStateTransitionsAuthenticatedNoProfile() {
-        let state: AccountState = .authenticatedNoProfile
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .initialize))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountNotFound))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountRestored))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticated(authData: FxaAuthData(code: "foo", state: "bar", actionQueryParam: "bobo"))))
-        XCTAssertEqual(.authenticationProblem, FxAccountManager.nextState(state: state, event: .authenticationError))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .fetchProfile(ignoreCache: false)))
-        XCTAssertEqual(.authenticatedWithProfile, FxAccountManager.nextState(state: state, event: .fetchedProfile))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .failedToFetchProfile))
-        XCTAssertEqual(.notAuthenticated, FxAccountManager.nextState(state: state, event: .logout))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .recoveredFromAuthenticationProblem))
-    }
-
-    func testStateTransitionsAuthenticatedWithProfile() {
-        let state: AccountState = .authenticatedWithProfile
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .initialize))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountNotFound))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountRestored))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticated(authData: FxaAuthData(code: "foo", state: "bar", actionQueryParam: "bobo"))))
-        XCTAssertEqual(.authenticationProblem, FxAccountManager.nextState(state: state, event: .authenticationError))
-        XCTAssertEqual(.authenticatedWithProfile, FxAccountManager.nextState(state: state, event: .fetchProfile(ignoreCache: false)))
-        XCTAssertEqual(.authenticatedWithProfile, FxAccountManager.nextState(state: state, event: .fetchedProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .failedToFetchProfile))
-        XCTAssertEqual(.notAuthenticated, FxAccountManager.nextState(state: state, event: .logout))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .recoveredFromAuthenticationProblem))
-    }
-
-    func testStateTransitionsAuthenticationProblem() {
-        let state: AccountState = .authenticationProblem
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .initialize))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountNotFound))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .accountRestored))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .authenticated(authData: FxaAuthData(code: "foo", state: "bar", actionQueryParam: "bobo"))))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .authenticationError))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchProfile(ignoreCache: false)))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .fetchedProfile))
-        XCTAssertNil(FxAccountManager.nextState(state: state, event: .failedToFetchProfile))
-        XCTAssertEqual(.notAuthenticated, FxAccountManager.nextState(state: state, event: .logout))
-        XCTAssertEqual(.authenticatedNoProfile, FxAccountManager.nextState(state: state, event: .recoveredFromAuthenticationProblem))
-    }
-
     func testAccountNotFound() {
         let mgr = mockFxAManager()
 
@@ -88,13 +19,18 @@ class FxAccountManagerTests: XCTestCase {
         let account = mgr.account as! MockFxAccount
         let constellation = mgr.constellation as! MockDeviceConstellation
 
-        XCTAssertEqual(account.invocations, [])
+        XCTAssertFalse(mgr.hasAccount())
+        XCTAssertEqual(mgr.state, .disconnected)
+        // processEvent should be called, but no device/profile calls
+        XCTAssertTrue(account.invocations.contains(.processEvent))
+        XCTAssertFalse(account.invocations.contains(.getProfile))
         XCTAssertEqual(constellation.invocations, [])
     }
 
     func testAccountRestoration() {
         let mgr = mockFxAManager()
         let account = MockFxAccount()
+        account.initializeResult = .connected
         mgr.storedAccount = account
 
         expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
@@ -106,66 +42,25 @@ class FxAccountManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5, handler: nil)
 
-        // Fetch devices is run async, so it could happen after getProfile, hence we don't do a strict
-        // equality.
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.registerPersistCallback))
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.ensureCapabilities))
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.getProfile))
-
-        let constellation = mgr.constellation as! MockDeviceConstellation
-        XCTAssertEqual(constellation.invocations, [
-            MockDeviceConstellation.MethodInvocation.ensureCapabilities,
-            MockDeviceConstellation.MethodInvocation.refreshState,
-        ])
-    }
-
-    func testAccountRestorationEnsureCapabilitiesNonAuthError() {
-        class MockAccount: MockFxAccount {
-            override func ensureCapabilities(supportedCapabilities _: [DeviceCapability]) throws {
-                throw FxaError.Network(message: "The WiFi cable is detached.")
-            }
-        }
-        let mgr = mockFxAManager()
-        let account = MockAccount()
-        mgr.storedAccount = account
-
-        expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
-        expectation(forNotification: .accountProfileUpdate, object: nil, handler: nil)
-
-        let initDone = expectation(description: "Initialization done")
-        mgr.initialize { _ in
-            initDone.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
-
+        XCTAssertTrue(mgr.hasAccount())
+        XCTAssertEqual(mgr.state, .connected)
         XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.registerPersistCallback))
         XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.getProfile))
 
         let constellation = mgr.constellation as! MockDeviceConstellation
+        // initDevice/ensureCapabilities are now handled by the Rust state machine internally;
+        // only refreshState is called from postAuthenticated on the iOS side.
         XCTAssertEqual(constellation.invocations, [
-            MockDeviceConstellation.MethodInvocation.ensureCapabilities,
             MockDeviceConstellation.MethodInvocation.refreshState,
         ])
     }
 
-    func testAccountRestorationEnsureCapabilitiesAuthError() {
-        class MockAccount: MockFxAccount {
-            override func ensureCapabilities(supportedCapabilities _: [DeviceCapability]) throws {
-                notifyAuthError()
-                throw FxaError.Authentication(message: "Your token is expired yo.")
-            }
-
-            override func checkAuthorizationStatus() throws -> AuthorizationInfo {
-                _ = try super.checkAuthorizationStatus()
-                return AuthorizationInfo(active: false)
-            }
-        }
+    func testAccountRestorationWithAuthIssues() {
         let mgr = mockFxAManager()
-        let account = MockAccount()
+        let account = MockFxAccount()
+        account.initializeResult = .authIssues
         mgr.storedAccount = account
 
-        expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
-        expectation(forNotification: .accountProfileUpdate, object: nil, handler: nil)
         expectation(forNotification: .accountAuthProblems, object: nil, handler: nil)
 
         let initDone = expectation(description: "Initialization done")
@@ -175,16 +70,7 @@ class FxAccountManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
 
         XCTAssertTrue(mgr.accountNeedsReauth())
-
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.registerPersistCallback))
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.getProfile))
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.checkAuthorizationStatus))
-
-        let constellation = mgr.constellation as! MockDeviceConstellation
-        XCTAssertEqual(constellation.invocations, [
-            MockDeviceConstellation.MethodInvocation.ensureCapabilities,
-            MockDeviceConstellation.MethodInvocation.refreshState,
-        ])
+        XCTAssertEqual(mgr.state, .authIssues)
     }
 
     func testNewAccountLogIn() {
@@ -200,6 +86,9 @@ class FxAccountManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(authURL, "https://foo.bar/oauth?state=bobo")
 
+        expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
+        expectation(forNotification: .accountProfileUpdate, object: nil, handler: nil)
+
         let finishAuthDone = expectation(description: "finishAuthDone")
         mgr.finishAuthentication(authData: FxaAuthData(code: "bobo", state: "bobo", actionQueryParam: "email")) { result in
             if case .success = result {
@@ -208,14 +97,17 @@ class FxAccountManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5, handler: nil)
 
+        XCTAssertTrue(mgr.hasAccount())
+        XCTAssertEqual(mgr.state, .connected)
+
         let account = mgr.account! as! MockFxAccount
         XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.registerPersistCallback))
-        XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.initializeDevice))
         XCTAssertTrue(account.invocations.contains(MockFxAccount.MethodInvocation.getProfile))
 
         let constellation = mgr.constellation as! MockDeviceConstellation
+        // initDevice is now handled by the Rust state machine internally;
+        // only refreshState is called from postAuthenticated on the iOS side.
         XCTAssertEqual(constellation.invocations, [
-            MockDeviceConstellation.MethodInvocation.initDevice,
             MockDeviceConstellation.MethodInvocation.refreshState,
         ])
     }
@@ -233,6 +125,8 @@ class FxAccountManagerTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(authURL, "https://foo.bar/oauth?state=bobo")
 
+        // The mock simulates Rust's OAuth state validation: wrong state → disconnected.
+        // finishAuthentication returns .failure when the FSM lands in a non-connected state.
         let finishAuthDone = expectation(description: "finishAuthDone")
         mgr.finishAuthentication(authData: FxaAuthData(code: "bobo", state: "NOTBOBO", actionQueryParam: "email")) { result in
             if case .failure = result {
@@ -240,6 +134,10 @@ class FxAccountManagerTests: XCTestCase {
             }
         }
         waitForExpectations(timeout: 5, handler: nil)
+
+        // State should be disconnected since wrong OAuth state was provided
+        XCTAssertEqual(mgr.state, .disconnected)
+        XCTAssertFalse(mgr.hasAccount())
     }
 
     func testProfileRecoverableAuthError() {
@@ -258,9 +156,15 @@ class FxAccountManagerTests: XCTestCase {
         }
         let mgr = mockFxAManager()
         let account = MockAccount()
+        account.initializeResult = .connected
         mgr.storedAccount = account
 
-        expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
+        // accountAuthenticated fires twice: once from the initial .initialize path, and again
+        // after the auth error is recovered via .checkAuthorizationStatus.
+        let authExpectation = expectation(forNotification: .accountAuthenticated, object: nil, handler: nil)
+        authExpectation.expectedFulfillmentCount = 2
+        // accountProfileUpdate fires once: the first getProfile call throws (no notification posted),
+        // and only the second successful call fires it.
         expectation(forNotification: .accountProfileUpdate, object: nil, handler: nil)
 
         let initDone = expectation(description: "Initialization done")
@@ -271,7 +175,40 @@ class FxAccountManagerTests: XCTestCase {
 
         XCTAssertFalse(mgr.accountNeedsReauth())
 
-        XCTAssertTrue(account.invocations.contains(MockAccount.MethodInvocation.checkAuthorizationStatus))
+        // Read invocations through the same serial queue used for writes to avoid
+        // a potential memory visibility issue on the main test thread.
+        var hasCheckAuthStatus = false
+        queue.sync { hasCheckAuthStatus = account.invocations.contains(.checkAuthorizationStatus) }
+        XCTAssertTrue(hasCheckAuthStatus)
+    }
+
+    func testReLoginAfterLogout() {
+        // Regression test: after logout, onDisconnected() creates a fresh account.
+        // That account must be re-initialized so that beginAuthentication works again.
+        let mgr = mockFxAManager()
+
+        let initDone = expectation(description: "initDone")
+        mgr.initialize { _ in initDone.fulfill() }
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertEqual(mgr.state, .disconnected)
+
+        // Simulate logout
+        let logoutDone = expectation(description: "logoutDone")
+        expectation(forNotification: .accountLoggedOut, object: nil, handler: nil)
+        mgr.logout { _ in logoutDone.fulfill() }
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertEqual(mgr.state, .disconnected)
+
+        // After logout, sign in must still work (account was re-initialized by onDisconnected)
+        let beginAuthDone = expectation(description: "beginAuthDone")
+        nonisolated(unsafe) var authURL: String?
+        mgr.beginAuthentication(entrypoint: "test_re_login_after_logout") { url in
+            authURL = try? url.get().absoluteString
+            beginAuthDone.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertEqual(authURL, "https://foo.bar/oauth?state=bobo",
+                       "beginAuthentication must succeed after logout — onDisconnected must re-initialize the account")
     }
 
     func testGetTokenServerEndpointURL() {
@@ -282,6 +219,7 @@ class FxAccountManagerTests: XCTestCase {
         }
         let mgr = mockFxAManager()
         let account = MockAccount()
+        account.initializeResult = .connected
         mgr.storedAccount = account
 
         let initDone = expectation(description: "Initialization done")

@@ -70,9 +70,14 @@ extension BrowserViewController {
             readerModeBar.unread = true
             readerModeBar.added = false
         }
+        readerModeBar.updateContent(
+            shouldShowSummarizerButton: browserViewControllerState?.shouldShowReaderModeBarSummarizerButton ?? false
+        )
     }
 
     func showReaderModeBar(animated: Bool) {
+        var needsConstraintsUpdate = false
+
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
             readerModeBar.delegate = self
@@ -83,10 +88,16 @@ extension BrowserViewController {
             }
 
             self.readerModeBar = readerModeBar
+            needsConstraintsUpdate = true
         }
 
         updateReaderModeBar()
-        updateViewConstraints()
+
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        } else if needsConstraintsUpdate, let readerModeBar {
+            browserLayoutManager.addReaderModeBarHeight(readerModeBar)
+        }
     }
 
     func hideReaderModeBar(animated: Bool) {
@@ -98,7 +109,10 @@ extension BrowserViewController {
             header.removeArrangedView(readerModeBar)
         }
         self.readerModeBar = nil
-        updateViewConstraints()
+
+        if !isSnapKitRemovalEnabled {
+            updateViewConstraints()
+        }
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
@@ -262,6 +276,13 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             profile.readingList.deleteRecord(record, completion: nil)
             readerModeBar.added = false
             readerModeBar.unread = false
+        case .summarizer:
+            store.dispatch(
+                GeneralBrowserAction(
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.didTapReaderModeBarSummarizerButton
+                )
+            )
         }
     }
 }

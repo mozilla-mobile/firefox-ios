@@ -10,6 +10,7 @@ struct ToolbarState: ScreenState, Sendable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
     var toolbarLayout: ToolbarLayoutStyle
+    var tabTrayButtonStyle: TabTrayButtonStyle
     var isPrivateMode: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
@@ -20,14 +21,14 @@ struct ToolbarState: ScreenState, Sendable {
     let scrollAlpha: Float
     var numberOfTabs: Int
     var showMenuWarningBadge: Bool
-    var isNewTabFeatureEnabled: Bool
-    var canShowDataClearanceAction: Bool
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
     var isTranslucent: Bool
+    var previousTabScreenshot: UIImage?
+    var nextTabScreenshot: UIImage?
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let toolbarState = appState.screenState(
+        guard let toolbarState = appState.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: uuid)
@@ -39,6 +40,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.init(windowUUID: toolbarState.windowUUID,
                   toolbarPosition: toolbarState.toolbarPosition,
                   toolbarLayout: toolbarState.toolbarLayout,
+                  tabTrayButtonStyle: toolbarState.tabTrayButtonStyle,
                   isPrivateMode: toolbarState.isPrivateMode,
                   addressToolbar: toolbarState.addressToolbar,
                   navigationToolbar: toolbarState.navigationToolbar,
@@ -49,11 +51,11 @@ struct ToolbarState: ScreenState, Sendable {
                   numberOfTabs: toolbarState.numberOfTabs,
                   scrollAlpha: toolbarState.scrollAlpha,
                   showMenuWarningBadge: toolbarState.showMenuWarningBadge,
-                  isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
-                  canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
-                  isTranslucent: toolbarState.isTranslucent
+                  isTranslucent: toolbarState.isTranslucent,
+                  previousTabScreenshot: toolbarState.previousTabScreenshot,
+                  nextTabScreenshot: toolbarState.nextTabScreenshot
         )
     }
 
@@ -62,6 +64,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: windowUUID,
             toolbarPosition: .top,
             toolbarLayout: .version1,
+            tabTrayButtonStyle: .number,
             isPrivateMode: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
@@ -72,11 +75,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: 1,
             scrollAlpha: 1,
             showMenuWarningBadge: false,
-            isNewTabFeatureEnabled: false,
-            canShowDataClearanceAction: false,
             canShowNavigationHint: false,
             shouldAnimate: true,
-            isTranslucent: false
+            isTranslucent: false,
+            previousTabScreenshot: nil,
+            nextTabScreenshot: nil
         )
     }
 
@@ -84,6 +87,7 @@ struct ToolbarState: ScreenState, Sendable {
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
         toolbarLayout: ToolbarLayoutStyle,
+        tabTrayButtonStyle: TabTrayButtonStyle,
         isPrivateMode: Bool,
         addressToolbar: AddressBarState,
         navigationToolbar: NavigationBarState,
@@ -94,15 +98,16 @@ struct ToolbarState: ScreenState, Sendable {
         numberOfTabs: Int,
         scrollAlpha: Float,
         showMenuWarningBadge: Bool,
-        isNewTabFeatureEnabled: Bool,
-        canShowDataClearanceAction: Bool,
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
-        isTranslucent: Bool
+        isTranslucent: Bool,
+        previousTabScreenshot: UIImage?,
+        nextTabScreenshot: UIImage?
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
         self.toolbarLayout = toolbarLayout
+        self.tabTrayButtonStyle = tabTrayButtonStyle
         self.isPrivateMode = isPrivateMode
         self.addressToolbar = addressToolbar
         self.navigationToolbar = navigationToolbar
@@ -113,11 +118,11 @@ struct ToolbarState: ScreenState, Sendable {
         self.numberOfTabs = numberOfTabs
         self.scrollAlpha = scrollAlpha
         self.showMenuWarningBadge = showMenuWarningBadge
-        self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
-        self.canShowDataClearanceAction = canShowDataClearanceAction
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
         self.isTranslucent = isTranslucent
+        self.previousTabScreenshot = previousTabScreenshot
+        self.nextTabScreenshot = nextTabScreenshot
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -151,7 +156,8 @@ struct ToolbarState: ScreenState, Sendable {
             ToolbarActionType.translationCompleted,
             ToolbarActionType.receivedTranslationLanguage,
             ToolbarActionType.didReceiveErrorTranslating,
-            ToolbarActionType.didTranslationSettingsChange:
+            ToolbarActionType.didTranslationSettingsChange,
+            ToolbarActionType.didSummarizeSettingsChange:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -159,6 +165,9 @@ struct ToolbarState: ScreenState, Sendable {
 
         case ToolbarActionType.numberOfTabsChanged:
             return handleNumberOfTabsChanged(state: state, action: action)
+
+        case ToolbarActionType.didSetTabScreenshot:
+            return handleDidSetTabScreenshot(state: state, action: action)
 
         case ToolbarActionType.toolbarPositionChanged:
             return handleToolbarPositionChanged(state: state, action: action)
@@ -189,6 +198,7 @@ struct ToolbarState: ScreenState, Sendable {
         guard let toolbarAction = action as? ToolbarAction,
               let toolbarPosition = toolbarAction.toolbarPosition,
               let toolbarLayout = toolbarAction.toolbarLayout,
+              let tabTrayButtonStyle = toolbarAction.tabTrayButtonStyle,
               let isTranslucent = toolbarAction.isTranslucent
         else { return defaultState(from: state) }
 
@@ -197,6 +207,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: position,
             toolbarLayout: toolbarLayout,
+            tabTrayButtonStyle: tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -207,11 +218,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: isTranslucent
+            isTranslucent: isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -223,6 +234,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -233,11 +245,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: toolbarAction.scrollAlpha ?? state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
-            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent
+            isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -248,6 +260,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -258,11 +271,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: toolbarAction.showMenuWarningBadge ?? state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -273,6 +286,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -283,11 +297,37 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
+        )
+    }
+
+    @MainActor
+    private static func handleDidSetTabScreenshot(state: Self, action: Action) -> ToolbarState {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            scrollAlpha: state.scrollAlpha,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            canShowNavigationHint: state.canShowNavigationHint,
+            shouldAnimate: state.shouldAnimate,
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: toolbarAction.previousTabScreenshot,
+            nextTabScreenshot: toolbarAction.nextTabScreenshot
         )
     }
 
@@ -303,6 +343,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: position,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
@@ -313,11 +354,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -328,6 +369,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -338,11 +380,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -353,6 +395,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -363,11 +406,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -378,6 +421,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -388,11 +432,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: true,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -403,6 +447,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -413,11 +458,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: false,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -431,6 +476,7 @@ struct ToolbarState: ScreenState, Sendable {
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
             toolbarLayout: state.toolbarLayout,
+            tabTrayButtonStyle: state.tabTrayButtonStyle,
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, searchEngineSelectionAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction),
@@ -441,11 +487,11 @@ struct ToolbarState: ScreenState, Sendable {
             numberOfTabs: state.numberOfTabs,
             scrollAlpha: state.scrollAlpha,
             showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
-            isTranslucent: state.isTranslucent
+            isTranslucent: state.isTranslucent,
+            previousTabScreenshot: state.previousTabScreenshot,
+            nextTabScreenshot: state.nextTabScreenshot
         )
     }
 
@@ -461,6 +507,7 @@ struct ToolbarState: ScreenState, Sendable {
         return ToolbarState(windowUUID: state.windowUUID,
                             toolbarPosition: state.toolbarPosition,
                             toolbarLayout: state.toolbarLayout,
+                            tabTrayButtonStyle: state.tabTrayButtonStyle,
                             isPrivateMode: state.isPrivateMode,
                             addressToolbar: state.addressToolbar,
                             navigationToolbar: state.navigationToolbar,
@@ -471,10 +518,10 @@ struct ToolbarState: ScreenState, Sendable {
                             numberOfTabs: state.numberOfTabs,
                             scrollAlpha: state.scrollAlpha,
                             showMenuWarningBadge: state.showMenuWarningBadge,
-                            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                            canShowDataClearanceAction: state.canShowDataClearanceAction,
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
-                            isTranslucent: state.isTranslucent)
+                            isTranslucent: state.isTranslucent,
+                            previousTabScreenshot: state.previousTabScreenshot,
+                            nextTabScreenshot: state.nextTabScreenshot)
     }
 }

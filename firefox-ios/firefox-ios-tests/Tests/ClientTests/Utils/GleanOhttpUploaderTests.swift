@@ -4,6 +4,8 @@
 
 import Glean
 import XCTest
+import TestKit
+
 @testable import Client
 
 class GleanOhttpUploaderTests: XCTestCase {

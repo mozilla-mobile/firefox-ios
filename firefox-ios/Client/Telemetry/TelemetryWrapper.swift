@@ -8,6 +8,7 @@ import Common
 import Glean
 import Shared
 import Storage
+import class MozillaAppServices.NimbusGleanPings
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -40,7 +41,7 @@ enum SearchLocation: String {
 
 // FIXME: FXIOS-13987 Make truly thread safe
 class TelemetryWrapper: TelemetryWrapperProtocol,
-                        FeatureFlaggable,
+                        UserFeaturePreferenceProvider,
                         Notifiable,
                         @unchecked Sendable {
     typealias ExtraKey = TelemetryWrapper.EventExtraKey
@@ -153,6 +154,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
         }
 
         glean.registerPings(GleanMetrics.Pings.shared)
+        glean.registerPings(NimbusGleanPings.nimbusTargetingContext)
 
         // Initialize Glean telemetry
         let gleanConfig: Configuration
@@ -321,7 +323,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol,
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
 
-        let startAtHomeOption: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let startAtHomeOption = userPreferences.startAtHomeSetting
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption.rawValue)
 
         // Record summarizer user preferences
@@ -447,9 +449,6 @@ extension TelemetryWrapper {
         case trackingProtectionMenu = "tracking-protection-menu"
         case url = "url"
         case searchText = "searchText"
-        case whatsNew = "whats-new"
-        case help = "menu-help"
-        case customizeHomePage = "menu-customize-home-page"
         case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
         case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
         case dismissedETPCoverSheet = "dismissed-etp-sheet"
@@ -542,16 +541,12 @@ extension TelemetryWrapper {
         case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
         case mediumTopSitesWidget = "medium-top-sites-widget"
         // MARK: - App menu
-        case homePageMenu = "homepage-menu" // Legacy photon menu
-        case siteMenu = "site-menu" // Legacy photon menu
         case home = "home-page"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
         case navigateTabHistoryBackSwipe = "navigate-tab-history-back-swipe"
         case navigateTabHistoryForward = "navigate-tab-history-forward"
-        case nightModeEnabled = "night-mode-enabled"
-        case nightModeDisabled = "night-mode-disabled"
         case logins = "logins-and-passwords"
         case signIntoSync = "sign-into-sync"
         case syncTab = "sync-tab"
@@ -574,13 +569,6 @@ extension TelemetryWrapper {
         case shareSheet = "share-sheet"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
-        case copyAddress = "copy-address"
-        case reportSiteIssue = "report-site-issue"
-        case findInPage = "find-in-page"
-        case requestDesktopSite = "request-desktop-site"
-        case requestMobileSite = "request-mobile-site"
-        case pinToTopSites = "pin-to-top-sites"
-        case removePinnedSite = "remove-pinned-site"
         case wallpaperSettings = "wallpaper-settings"
         case contextualHint = "contextual-hint"
         case reload = "reload"
@@ -592,9 +580,6 @@ extension TelemetryWrapper {
         case fxaConfirmSignUpCode = "fxa-confirm-signup-code"
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
-        case viewDownloadsPanel = "view-downloads-panel"
-        case viewHistoryPanel = "view-history-panel"
-        case createNewTab = "create-new-tab"
         case sponsoredShortcuts = "sponsored-shortcuts"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
@@ -612,7 +597,6 @@ extension TelemetryWrapper {
         case homePanel = "home-panel"
         case markAsRead = "mark-as-read"
         case markAsUnread = "mark-as-unread"
-        case pageActionMenu = "page-action-menu"
         case readerModeToolbar = "reader-mode-toolbar"
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
@@ -1112,10 +1096,6 @@ extension TelemetryWrapper {
         // MARK: Default Browser
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
-        case(.action, .tap, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationTapped.record()
-        case(.action, .cancel, .engagementNotification, _, _):
-            GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.information, .view, .homeTabBannerEvergreen, _, _):
             GleanMetrics.DefaultBrowserCard.evergreenImpression.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
@@ -1221,27 +1201,6 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-        case (.action, .tap, .onboardingSelectWallpaper, .wallpaperSelected, let extras):
-            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
-               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectedExtra(wallpaperName: name, wallpaperType: type)
-                GleanMetrics.Onboarding.wallpaperSelected.record(wallpaperExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .tap, .onboardingWallpaperSelector, .wallpaperSelected, let extras):
-            if let name = extras?[EventExtraKey.wallpaperName.rawValue] as? String,
-               let type = extras?[EventExtraKey.wallpaperType.rawValue] as? String {
-                let wallpaperExtra = GleanMetrics.Onboarding.WallpaperSelectorSelectedExtra(wallpaperName: name, wallpaperType: type)
-                GleanMetrics.Onboarding.wallpaperSelectorSelected.record(wallpaperExtra)
-            } else {
-                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
-            }
-        case (.action, .view, .onboardingWallpaperSelector, _, _):
-            GleanMetrics.Onboarding.wallpaperSelectorView.record()
-        case (.action, .close, .onboardingWallpaperSelector, _, _):
-            GleanMetrics.Onboarding.wallpaperSelectorClose.record()
-
         // MARK: Widget
         case (.action, .open, .mediumTabsOpenUrl, _, _):
             GleanMetrics.Widget.mTabsOpenUrl.add()
@@ -1383,10 +1342,6 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: App menu
-        case (.action, .tap, .homePageMenu, _, _):
-            GleanMetrics.AppMenu.homepageMenu.add()
-        case (.action, .tap, .siteMenu, _, _):
-            GleanMetrics.AppMenu.siteMenu.add()
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
@@ -1397,18 +1352,6 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):
             GleanMetrics.AppMenu.blockImagesDisabled.add()
-        case (.action, .tap, .nightModeEnabled, _, _):
-            GleanMetrics.AppMenu.nightModeEnabled.add()
-        case (.action, .tap, .nightModeDisabled, _, _):
-            GleanMetrics.AppMenu.nightModeDisabled.add()
-        case (.action, .open, .whatsNew, _, _):
-            GleanMetrics.AppMenu.whatsNew.add()
-        case (.action, .tap, .help, _, _):
-            GleanMetrics.AppMenu.help.add()
-        case (.action, .tap, .customizeHomePage, _, _):
-            GleanMetrics.AppMenu.customizeHomepage.add()
-        case (.action, .open, .settings, _, _):
-            GleanMetrics.AppMenu.settings.add()
         case(.action, .open, .logins, _, _):
             GleanMetrics.AppMenu.passwords.record()
 
@@ -1417,26 +1360,6 @@ extension TelemetryWrapper {
             GleanMetrics.PageActionMenu.sharePageWith.add()
         case (.action, .tap, .sendToDevice, _, _):
             GleanMetrics.PageActionMenu.sendToDevice.add()
-        case (.action, .tap, .copyAddress, _, _):
-            GleanMetrics.PageActionMenu.copyAddress.add()
-        case (.action, .tap, .reportSiteIssue, _, _):
-            GleanMetrics.PageActionMenu.reportSiteIssue.add()
-        case (.action, .tap, .findInPage, _, _):
-            GleanMetrics.PageActionMenu.findInPage.add()
-        case (.action, .tap, .pinToTopSites, _, _):
-            GleanMetrics.PageActionMenu.pinToTopSites.add()
-        case (.action, .tap, .removePinnedSite, _, _):
-            GleanMetrics.PageActionMenu.removePinnedSite.add()
-        case (.action, .tap, .requestDesktopSite, _, _):
-            GleanMetrics.PageActionMenu.requestDesktopSite.add()
-        case (.action, .tap, .requestMobileSite, _, _):
-            GleanMetrics.PageActionMenu.requestMobileSite.add()
-        case (.action, .tap, .viewDownloadsPanel, _, _):
-            GleanMetrics.PageActionMenu.viewDownloadsPanel.add()
-        case (.action, .tap, .viewHistoryPanel, _, _):
-            GleanMetrics.PageActionMenu.viewHistoryPanel.add()
-        case (.action, .tap, .createNewTab, _, _):
-            GleanMetrics.PageActionMenu.createNewTab.add()
 
         // MARK: Tracking Protection
         case (.action, .tap, .trackingProtectionMenu, _, let extras):

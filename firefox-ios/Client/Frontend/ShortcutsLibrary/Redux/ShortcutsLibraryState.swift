@@ -3,15 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import CopyWithUpdates
 import Redux
 
+@CopyWithUpdates
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let shortcuts: [TopSiteConfiguration]
     let shouldRecordImpressionTelemetry: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let shortcutsLibraryState = appState.screenState(
+        guard let shortcutsLibraryState = appState.componentState(
             ShortcutsLibraryState.self,
             for: .shortcutsLibrary,
             window: uuid
@@ -20,11 +22,7 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
             return
         }
 
-        self.init(
-            windowUUID: shortcutsLibraryState.windowUUID,
-            shortcuts: shortcutsLibraryState.shortcuts,
-            shouldRecordImpressionTelemetry: shortcutsLibraryState.shouldRecordImpressionTelemetry
-        )
+        self = shortcutsLibraryState.copyWithUpdates()
     }
 
     init(windowUUID: WindowUUID) {
@@ -64,17 +62,13 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     }
 
     private static func handleInitializeAction(state: Self) -> ShortcutsLibraryState {
-        return ShortcutsLibraryState(
-            windowUUID: state.windowUUID,
-            shortcuts: state.shortcuts,
+        return state.copyWithUpdates(
             shouldRecordImpressionTelemetry: true
         )
     }
 
     private static func handleImpressionTelemetryRecordedAction(state: Self) -> ShortcutsLibraryState {
-        return ShortcutsLibraryState(
-            windowUUID: state.windowUUID,
-            shortcuts: state.shortcuts,
+        return state.copyWithUpdates(
             shouldRecordImpressionTelemetry: false
         )
     }
@@ -86,18 +80,12 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
             return defaultState(from: state)
         }
 
-        return ShortcutsLibraryState(
-            windowUUID: state.windowUUID,
-            shortcuts: sites,
-            shouldRecordImpressionTelemetry: state.shouldRecordImpressionTelemetry
+        return state.copyWithUpdates(
+            shortcuts: sites
         )
     }
 
     static func defaultState(from state: ShortcutsLibraryState) -> ShortcutsLibraryState {
-        return ShortcutsLibraryState(
-            windowUUID: state.windowUUID,
-            shortcuts: state.shortcuts,
-            shouldRecordImpressionTelemetry: state.shouldRecordImpressionTelemetry
-        )
+        return state.copyWithUpdates()
     }
 }

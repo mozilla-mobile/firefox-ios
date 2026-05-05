@@ -29,8 +29,6 @@ final class MerinoMiddleware {
             HomepageMiddlewareActionType.enteredForeground,
             MerinoActionType.toggleShowSectionSetting:
             self.getHomepageStoriesAndUpdateState(for: action)
-        case StoriesFeedActionType.initialize:
-            self.getStoriesFeedStoriesAndUpdateState(for: action)
         case MerinoActionType.tapOnHomepageMerinoCell:
             self.sendOpenPocketItemTelemetry(for: action)
         case MerinoActionType.viewedSection:
@@ -47,22 +45,9 @@ final class MerinoMiddleware {
             let merinoStories = await merinoManager.getMerinoItems(source: .homepage)
             store.dispatch(
                 MerinoAction(
-                    merinoStories: merinoStories,
+                    merinoStoryResponse: merinoStories,
                     windowUUID: action.windowUUID,
                     actionType: MerinoMiddlewareActionType.retrievedUpdatedHomepageStories
-                )
-            )
-        }
-    }
-
-    private func getStoriesFeedStoriesAndUpdateState(for action: Action) {
-        Task {
-            let merinoStories = await merinoManager.getMerinoItems(source: .storiesFeed)
-            store.dispatch(
-                MerinoAction(
-                    merinoStories: merinoStories,
-                    windowUUID: action.windowUUID,
-                    actionType: MerinoMiddlewareActionType.retrievedUpdatedStoriesFeedStories
                 )
             )
         }

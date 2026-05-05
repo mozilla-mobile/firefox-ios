@@ -36,7 +36,7 @@ struct TabTrayState: ScreenState, Equatable {
     }
 
     init(appState: AppState, uuid: WindowUUID) {
-        guard let panelState = appState.screenState(
+        guard let panelState = appState.componentState(
             TabTrayState.self,
             for: .tabsTray,
             window: uuid
@@ -189,17 +189,6 @@ struct TabTrayState: ScreenState, Equatable {
                                 privateTabsCount: tabDisplayModel.privateTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount,
                                 enableDeleteTabsButton: tabDisplayModel.enableDeleteTabsButton)
-
-        case TabPanelMiddlewareActionType.showToast:
-            guard let type = action.toastType else { return defaultState(from: state) }
-
-            return TabTrayState(windowUUID: state.windowUUID,
-                                isPrivateMode: state.isPrivateMode,
-                                selectedPanel: state.selectedPanel,
-                                normalTabsCount: state.normalTabsCount,
-                                privateTabsCount: state.privateTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount,
-                                toastType: type)
 
         default:
             return defaultState(from: state)

@@ -19,6 +19,7 @@ final class MockTabWebView: TabWebView {
     var loadedURL: URL?
     var takeSnapshotWasCalled = false
     var takeSnapshotShouldFail = false
+    var mockHasOnlySecureContent = false
 
     override var title: String? {
         return mockTitle
@@ -26,6 +27,10 @@ final class MockTabWebView: TabWebView {
 
     override var url: URL? {
         return loadedURL
+    }
+
+    override var hasOnlySecureContent: Bool {
+        return mockHasOnlySecureContent
     }
 
     override init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
@@ -99,10 +104,15 @@ final class MockTabWebView: TabWebView {
 class MockTab: Tab {
     private var isHomePage: Bool
     var enqueueDocumentCalled = 0
+    var overrideReaderModeState: ReaderModeState?
 
     init(profile: Profile, isPrivate: Bool = false, windowUUID: WindowUUID, isHomePage: Bool = false) {
         self.isHomePage = isHomePage
         super.init(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
+    }
+
+    override var readerModeState: ReaderModeState? {
+        return overrideReaderModeState
     }
 
     override var isFxHomeTab: Bool {

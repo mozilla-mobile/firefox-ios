@@ -6,6 +6,7 @@ import XCTest
 import Shared
 import UniformTypeIdentifiers
 import Glean
+import Common
 
 @testable import Client
 
@@ -15,15 +16,18 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
     let testSubtitle = "Test subtitle"
     private let testFileURL = URL(string: "file://some/file/url")!
     private let testWebURL = URL(string: "https://mozilla.org")!
+    private var profile: MockProfile!
 
-    override func setUp() {
-        super.setUp()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+    override func setUp() async throws {
+        try await super.setUp()
+        profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 
-    override func tearDown() {
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
-        super.tearDown()
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        profile = nil
+        try await super.tearDown()
     }
 
     func testWithShareType_noShareMessage_callTelemetryOnly() throws {
@@ -82,7 +86,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: testNimbusEnrollment, isTreatmentA: true)
 
         // Opt in the user preference
-        UserDefaults.standard.set(testUserOptIn, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -113,7 +118,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: testNimbusEnrollment, isTreatmentA: true)
 
         // Opt in the user preference
-        UserDefaults.standard.set(testUserOptIn, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -144,7 +150,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: testNimbusEnrollment, isTreatmentA: true)
 
         // Opt in the user preference
-        UserDefaults.standard.set(testUserOptIn, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,
@@ -175,7 +182,8 @@ final class ShareTelemetryActivityItemProviderTests: XCTestCase {
         setupNimbusSentFromFirefoxTesting(isEnabled: testNimbusEnrollment, isTreatmentA: true)
 
         // Opt in the user preference
-        UserDefaults.standard.set(testUserOptIn, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        let userPreferences: UserFeaturePreferring = AppContainer.shared.resolve()
+        userPreferences.setPreferenceFor(.sentFromFirefox, to: testUserOptIn)
 
         let shareTelemetryActivityItemProvider = ShareTelemetryActivityItemProvider(
             shareTypeName: testShareType.typeName,

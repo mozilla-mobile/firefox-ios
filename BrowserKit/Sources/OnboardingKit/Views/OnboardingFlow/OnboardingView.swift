@@ -14,15 +14,21 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     public let windowUUID: WindowUUID
     public var themeManager: ThemeManager
     @State public var theme: Theme
+    let pageControlAccessibilityId: String
+    let closeButtonAccessibilityId: String
 
     public init(
         windowUUID: WindowUUID,
         themeManager: ThemeManager,
-        viewModel: OnboardingFlowViewModel<ViewModel>
+        viewModel: OnboardingFlowViewModel<ViewModel>,
+        pageControlAccessibilityId: String,
+        closeButtonAccessibilityId: String
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
+        self.pageControlAccessibilityId = pageControlAccessibilityId
+        self.closeButtonAccessibilityId = closeButtonAccessibilityId
         _viewModel = StateObject(
             wrappedValue: viewModel
         )
@@ -31,7 +37,11 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
     public var body: some View {
         GeometryReader { geo in
             ZStack {
-                backgroundGradient
+                backgroundView
+                    .frame(
+                        width: geo.size.width,
+                        height: geo.size.height
+                    )
                 if horizontalSizeClass == .regular {
                     regularLayout
                 } else {
@@ -63,13 +73,16 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                         currentPage: $viewModel.pageCount,
                         numberOfPages: viewModel.onboardingCards.count,
                         windowUUID: windowUUID,
-                        themeManager: themeManager
+                        themeManager: themeManager,
+                        isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI,
+                        accessibilityIdentifier: pageControlAccessibilityId
                     )
                     .padding(.bottom)
                 }
                 .cardBackground(
                     theme: theme,
-                    cornerRadius: UX.CardView.cornerRadius
+                    cornerRadius: UX.CardView.cornerRadius,
+                    variant: viewModel.variant
                 )
             }
             .accessibilityScrollAction { edge in
@@ -99,7 +112,9 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
                 numberOfPages: viewModel.onboardingCards.count,
                 windowUUID: windowUUID,
                 themeManager: themeManager,
-                style: .compact
+                style: .compact,
+                isBrandRefresh: viewModel.variant.shouldShowBrandRefreshUI,
+                accessibilityIdentifier: pageControlAccessibilityId
             )
             .padding(
                 .bottom,
@@ -114,9 +129,12 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
         .ignoresSafeArea(.all, edges: .bottom)
     }
 
-    private var backgroundGradient: some View {
-        AnimatedGradientView(windowUUID: windowUUID, themeManager: themeManager)
-            .ignoresSafeArea()
+    private var backgroundView: some View {
+        OnboardingBackgroundView(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            variant: viewModel.variant
+        )
     }
 
     private var skipButton: some View {
@@ -124,8 +142,9 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             Text(viewModel.skipText)
                 .font(FXFontStyles.Bold.body.scaledSwiftUIFont(sizeCap: UX.Onboarding.Font.skipButtonSizeCap))
         }
-        .skipButtonStyle(theme: theme)
+        .skipButtonStyle(theme: theme, variant: viewModel.variant)
         .accessibilityLabel(viewModel.skipText)
+        .accessibilityIdentifier(closeButtonAccessibilityId)
     }
 
     private var tabView: some View {
@@ -143,6 +162,7 @@ public struct OnboardingView<ViewModel: OnboardingCardInfoModelProtocol>: Themea
             viewModel: card,
             windowUUID: windowUUID,
             themeManager: themeManager,
+            variant: viewModel.variant,
             onBottomButtonAction: handleBottomButtonAction,
             onMultipleChoiceAction: viewModel.handleMultipleChoiceAction
         )

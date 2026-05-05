@@ -19,7 +19,6 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         static let siteProtectionsContentHorizontalPadding: CGFloat = 10
         static let siteProtectionsContentVerticalPadding: CGFloat = 6
         static let siteProtectionsIcon: CGFloat = 16
-        static let protectionIconMargin: CGFloat = 2
         static let siteProtectionsMoreSettingsIcon: CGFloat = 20
         static let siteProtectionsContentSpacing: CGFloat = 4
     }

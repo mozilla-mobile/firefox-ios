@@ -61,9 +61,9 @@ final class WeakURLSessionDelegate: NSObject, URLSessionDownloadDelegate, @unche
 
 // TODO: FXIOS-13619 Make DefaultTemporaryDocument actually sendable
 final class DefaultTemporaryDocument: NSObject,
-                                TemporaryDocument,
-                                FeatureFlaggable,
-                                URLSessionDownloadDelegate, @unchecked Sendable {
+                                      TemporaryDocument,
+                                      URLSessionDownloadDelegate,
+                                      @unchecked Sendable {
     private let session: URLSession
     private let request: URLRequest
     private var currentDownloadTask: URLSessionDownloadTask?

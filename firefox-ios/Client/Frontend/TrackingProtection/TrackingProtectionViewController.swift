@@ -8,6 +8,7 @@ import Common
 import ComponentLibrary
 import SiteImageView
 import Redux
+import X509
 
 struct TPMenuUX {
     struct UX {
@@ -17,6 +18,7 @@ struct TPMenuUX {
         static let headerLabelDistance: CGFloat = 2.0
         static let iconSize: CGFloat = 24
         static let connectionDetailsHeaderMargins: CGFloat = 8
+        static let connectionDetailsFooterMargins: CGFloat = 16
         static let faviconCornerRadius: CGFloat = 16
         static let clearDataButtonTopDistance: CGFloat = 32
         static let clearDataButtonBorderWidth: CGFloat = 0
@@ -192,17 +194,33 @@ class TrackingProtectionViewController: UIViewController,
         }
     }
 
+    private func getCertificates(from serverTrust: SecTrust) -> [Certificate] {
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return []
+        }
+        var certificates = [Certificate]()
+        certificates.reserveCapacity(certificateChain.count)
+        for certificate in certificateChain {
+            let certificateData = SecCertificateCopyData(certificate) as Data
+            do {
+                let certificate = try Certificate(derEncoded: Array(certificateData))
+                certificates.append(certificate)
+            } catch {
+                DefaultLogger.shared.log("\(error)",
+                                         level: .warning,
+                                         category: .certificate)
+            }
+        }
+        return certificates
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateBlockedTrackersCount()
         updateConnectionStatus()
         applyTheme()
-        getCertificates(for: model.url) { certificates in
-            if let certificates {
-                ensureMainThread { [weak self] in
-                    self?.model.certificates = certificates
-                }
-            }
+        if let serverTrust = model.selectedTab?.webView?.serverTrust {
+            model.certificates = getCertificates(from: serverTrust)
         }
     }
 
@@ -259,9 +277,9 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .trackingProtection)
+        let action = ComponentAction(windowUUID: windowUUID,
+                                     actionType: ComponentActionType.addComponent,
+                                     component: .trackingProtection)
         store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
@@ -272,9 +290,9 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: self.windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .trackingProtection)
+        let action = ComponentAction(windowUUID: self.windowUUID,
+                                     actionType: ComponentActionType.removeComponent,
+                                     component: .trackingProtection)
         store.dispatch(action)
     }
 
@@ -368,7 +386,11 @@ class TrackingProtectionViewController: UIViewController,
         ]
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = { [weak self] in
-            guard let self else { return }
+            guard let self,
+                  let trackersBlocked = model.contentBlockerStats?.total,
+                  trackersBlocked > 0 else {
+                return
+            }
             store.dispatch(
                 TrackingProtectionAction(
                     windowUUID: self.windowUUID,

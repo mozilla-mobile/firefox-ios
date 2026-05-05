@@ -96,7 +96,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Remove the list entry
         // Workaround for iPad, the swipe gesture is not controlled and the Remove button
-        // is kept behing the Mark as read and so the test fails
+        // is kept behind the Mark as read and so the test fails
         if BrowserUtils.iPad() {
             // Add once iPad tests run
         } else {

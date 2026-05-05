@@ -4,19 +4,23 @@
 
 import Common
 import Storage
+import TestKit
 @testable import Client
 
 final class DependencyHelperMock {
     @MainActor
     func bootstrapDependencies(
+        injectedProfile: Profile? = nil,
         injectedWindowManager: WindowManager? = nil,
         injectedTabManager: TabManager? = nil,
         injectedMicrosurveyManager: MicrosurveyManager? = nil,
-        injectedMerinoManager: MerinoManagerProvider? = nil
+        injectedMerinoManager: MerinoManagerProvider? = nil,
+        injectedFeatureFlagProvider: FeatureFlagProviding? = nil,
+        injectedUserFeaturePreferences: UserFeaturePreferring? = nil
     ) {
         AppContainer.shared.reset()
 
-        let profile: Profile = BrowserProfile(
+        let profile: Profile = injectedProfile ?? BrowserProfile(
             localName: "profile"
         )
         AppContainer.shared.register(service: profile as Profile)
@@ -65,6 +69,14 @@ final class DependencyHelperMock {
         let gleanUsageReportingMetricsService: GleanUsageReportingMetricsService =
         MockGleanUsageReportingMetricsService(profile: profile)
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
+
+        let featureFlagProvider = injectedFeatureFlagProvider ?? FeatureFlagsProvider(prefs: profile.prefs)
+        AppContainer.shared.register(service: featureFlagProvider as FeatureFlagProviding)
+
+        let userFeatureProvider = injectedUserFeaturePreferences ?? UserFeaturePreferenceManager(
+            prefs: profile.prefs
+        )
+        AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

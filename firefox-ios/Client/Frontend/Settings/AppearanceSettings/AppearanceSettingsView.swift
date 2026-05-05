@@ -12,7 +12,7 @@ protocol AppearanceSettingsDelegate: AnyObject {
 }
 
 /// The main view displaying the settings for the appearance menu.
-struct AppearanceSettingsView: View, FeatureFlaggable {
+struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
     weak var delegate: AppearanceSettingsDelegate?
 
@@ -20,10 +20,6 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
     var themeManager
 
     @State private var currentTheme: Theme?
-
-    var shouldShowPageZoom: Bool {
-        return featureFlags.isFeatureEnabled(.defaultZoomFeature, checking: .buildOnly)
-    }
 
     /// Compute the theme option to display in the ThemeSelectionView.
     /// - Returns: .automatic if system theme or automatic brightness is enabled;
@@ -63,10 +59,8 @@ struct AppearanceSettingsView: View, FeatureFlaggable {
                 // Section for toggling website appearance (e.g., dark mode).
                 WebsiteAppearanceSection(theme: currentTheme, onChange: setWebsiteDarkMode, cornerRadius: UX.cornerRadius)
 
-                if shouldShowPageZoom {
-                    PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
-                        delegate?.pressedPageZoom()
-                    }
+                PageZoomSection(theme: currentTheme, cornerRadius: UX.cornerRadius) {
+                    delegate?.pressedPageZoom()
                 }
 
                 Spacer()

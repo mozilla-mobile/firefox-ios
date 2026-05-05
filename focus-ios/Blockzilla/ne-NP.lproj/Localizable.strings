@@ -26,7 +26,7 @@
 "About.rowRights" = "तपाईँका अधिकारहरु";
 
 /* Label for row in About screen */
-"About.rowTerms" = "प्रयोग सर्तहरू";
+"About.rowTerms" = "प्रयोगका सर्तहरू";
 
 /* Label on About screen */
 "About.safariBullet1" = "सुधारिएको गोपनीयताको लागि ट्रयाकरहरु बन्द गर्नुहोस्";
@@ -233,25 +233,25 @@
 "Onboarding.Protection.Description" = "तपाईंले कति वा कति थोरै साझेदारी गर्ने निर्णय गर्न सक्नुहुन्छ भनेर सेटिङहरू कन्फिगर गर्नुहोस्।";
 
 /* Text for a label that indicates the title of protection section from onboarding screen. */
-"Onboarding.Protection.Title" = "तपाईंको आफ्नै विवेकमा सुरक्षा";
+"Onboarding.Protection.Title" = "आफ्नै निर्णयअनुसार सुरक्षा";
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
 "Onboarding.Subtitle" = "आफ्नो निजी ब्राउजिङ्गलाई अर्को स्तरमा लिनुहोस्।";
 
 /* Label for the agreement button in the Terms of Use screen. */
-"Onboarding.TermsOfUse.ButtonText" = "सहमत हुनुहोस् र जारी राख्नुहोस्";
+"Onboarding.TermsOfUse.ButtonText" = "सहमति जनाउनुहोस् र अगाडि बढ्नुहोस्";
 
 /* Label for the agreement button in the Terms of Use screen. */
-"Onboarding.TermsOfUse.ButtonTextV2" = "जारी राख्नुहोस्";
+"Onboarding.TermsOfUse.ButtonTextV2" = "अगाडि बढ्नुहोस्";
 
 /* Button label to dismiss the Privacy Policy and Terms of Use screen. */
 "Onboarding.TermsOfUse.Done.ButtonText" = "सम्पन्न भयो";
 
 /* Used as a text for the link in Onboarding.TermsOfUse.Text. */
-"Onboarding.TermsOfUse.LinkText" = "Firefox प्रयोग सर्तहरू";
+"Onboarding.TermsOfUse.LinkText" = "Firefox प्रयोगका सर्तहरू";
 
 /* Subtitle for the Terms of Use screen during onboarding. */
-"Onboarding.TermsOfUse.Subtitle" = "छिटो। निजी। कुनै अवरोधहरु।";
+"Onboarding.TermsOfUse.Subtitle" = "छिटो। गोप्य। ध्यान बिथोल्ने कुराहरू छैनन्।";
 
 /* Text that describes the agreement to the Firefox Terms of Use. %@ is a link using Onboarding.TermsOfUse.LinkText as text. */
 "Onboarding.TermsOfUse.Text" = "जारी राखेर, तपाईँ %@ मा सहमत हुनुहुन्छ।";
@@ -269,7 +269,7 @@
 "Safari.instructionsEnable" = "%@ सक्षम पार्नुहोस्";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsExtentions" = "सफारी चयन गर्नुहोस्, त्यसपछि विस्तार चयन गर्नुहोस्";
+"Safari.instructionsExtentions" = "सफारी छान्नुहोस्, त्यसपछि एक्सटेन्सनहरू छान्नुहोस्";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "Safari.instructionsNotEnabled" = "%@ सक्षम पारिएको छैन ।";
@@ -278,7 +278,7 @@
 "Safari.instructionsOpen" = "सेटिङ्ग अनुप्रयोग खोल्नुहोस्";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
-"Safari.openInstruction" = "यन्त्रको सेटिङहरू खोल्नुहोस्";
+"Safari.openInstruction" = "उपकरणको सेटिङहरू खोल्नुहोस्";
 
 /* Save button label */
 "Save" = "सङ्ग्रह गर्नुहोस्";
@@ -314,7 +314,7 @@
 "Settings.DailyUsagePing.Message" = "यसले मोजिलालाई सक्रिय प्रयोगकर्ताहरूको अनुमान गर्न मद्दत गर्छ।";
 
 /* On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping. */
-"Settings.DailyUsagePing.Title" = "दैनिक उपयोग पिङ";
+"Settings.DailyUsagePing.Title" = "दैनिक प्रयोग पिङ";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "अँध्यारो";
@@ -449,7 +449,7 @@
 "Settings.toggleHomeScreenTips" = "गृह स्क्रिनमा सुझावहरू देखाउनुहोस्";
 
 /* Label for Rollouts toggle on the settings screen */
-"Settings.toggleRollouts" = "टाढाको सुधारहरूलाई अनुमति दिनुहोस्";
+"Settings.toggleRollouts" = "टाढाबाट सुधार गर्न अनुमति दिनुहोस्";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "सफारी";
@@ -461,7 +461,7 @@
 "Settings.toggleStudies" = "अध्ययनहरु";
 
 /* Label for Studies toggle on the settings screen */
-"Settings.toggleStudies.v2" = "सुविधा अध्ययनलाई अनुमति दिनुहोस्";
+"Settings.toggleStudies.v2" = "फिचर अध्ययनहरू गर्न अनुमति दिनुहोस्";
 
 /* Label for toggle on settings screen */
 "Settings.toggleTouchID" = "एप अनलक गर्न टच आईडीको प्रयोग गर्नुहोस्";
@@ -542,7 +542,7 @@
 "ShowMeHowOnboarding.ButtonText.V2" = "सम्पन्न भयो";
 
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
-"ShowMeHowOnboarding.SubtitleStepOne.V2" = "आइकनहरूले पल्टाउन सुरु नगरेसम्म गृह स्क्रिनमा थिच्नुहोस्।";
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "गृह स्क्रिनमा आइकनहरू हल्लिन थाल्ने सम्म लामो समयसम्म थिचेर राख्नुहोस्।";
 
 /* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@को खोजी गर्नुहोस्। त्यसपछि विजेट छान्नुहोस्।";
@@ -626,25 +626,25 @@
 "TodayWidget.SearchInApp.Instruction" = "%@मा खोज्नुहोस्";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "विशिष्ट गोपनीयता & सुरक्षा विकल्पहरू व्यवस्थापन गर्न सेटिङ्गहरूमा जानुहोस्।";
+"TooltipBodyText.ContextMenu" = "विशेष गोपनीयता र सुरक्षा विकल्पहरू व्यवस्थापन गर्न सेटिङमा जानुहोस्।";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "यी पूर्वनिर्धारित सेटिङ्गहरूले बलियो सुरक्षा प्रदान गर्दछन्। तर तपाईंको विशेष आवश्यकताहरू पूरा गर्न सेटिङ्गहरू ट्वीक गर्न सजिलो छ।";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
-"TooltipBodyText.SearchBar" = "आफ्नो निजी ब्राउजिङ्ग सत्र सुरु गर्नुहोस्, र हामी तपाईँलाई जाँदा ट्र्याकरहरू र अन्य नराम्रो सामग्री रोक्नेछौं।";
+"TooltipBodyText.SearchBar" = "आफ्नो निजी ब्राउजिङ सत्र सुरु गर्नुहोस्, र तपाईं इन्टरनेट चलाउँदा हामी ट्रयाकरहरू र अन्य हानिकारक सामग्रीहरू रोक्नेछौं";
 
 /* This is the body text that is displayed for the Shield icon tooltip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TooltipBodyText.ShieldIcon" = "%@ले यो साइटलाई तपाईँको जासुसी गर्नबाट रोक्यो। हामीले के रोक्यौं भन्ने जानकारीको लागि शिल्ड ट्याप गर्नुहोस्।";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "तिनीहरूलाई बुझे! हामीले यो साइटलाई तपाईंको जासुसी गर्नबाट रोक्यौं। हामीले के रोक्दै छौँ भनेर हेर्न कुनै पनि समय शिल्डमा ट्याप गर्नुहोस्।";
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "पक्र्यौं! हामीले यो साइटलाई तपाईंमाथि जासुसी गर्नबाट रोक्यौं। हामी के रोकिरहेका छौं भनेर हेर्न कहिल्यै पनि शिल्डमा ट्याप गर्नुहोस्!";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "तपाईंको हालको सत्रका सबै निशानहरू हटाउन कुनै पनि समय रद्दीको टोकरीमा ट्याप गर्नुहोस्।";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "यो सबै रद्दी टोकरीमा गर्न यहाँ ट्याप गर्नुहोस् - इतिहास, कुकीहरू, सबै कुरा — र नयाँ ट्याबमा ताजा सुरु गर्नुहोस्।";
+"TooltipBodyText.TrashIcon.V2" = "यहाँ ट्याप गरेर इतिहास, कुकीहरू, सबै कुरा हटाउनुहोस् — अनि नयाँ ट्याबमा सफा रूपमा सुरु गर्नुहोस्";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "तपाईं सुरक्षित हुनुहुन्छ! ";
@@ -701,10 +701,10 @@
 "URL.trackersBlockedLabel" = "त्ट्रयाकरहरु अवरुद्ध गरियो";
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
-"WidgetOnboardingCard.ActionButton" = "कसरी देखाउनुहोस्";
+"WidgetOnboardingCard.ActionButton" = "मलाई कसरी गर्ने भनेर देखाउनुहोस्";
 
 /* Subtitle shown on card view explaining the app has a widget option. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"WidgetOnboardingCard.Subtitle" = "हामी तपाईंलाई तपाईंको निजी ब्राउजिङ्ग गर्न छोड्नेछौं, तर तपाईंको गृह स्क्रिनमा %@ विजेटको साथ अर्को पटक छिटो सुरुवात प्राप्त गर्नुहोस्।";
+"WidgetOnboardingCard.Subtitle" = "हामी तपाईंलाई निजी ब्राउजिङ गर्न दिन्छौं, तर अर्को पटक आफ्नो गृह स्क्रिनमा %@ विजेट प्रयोग गरेर छिटो सुरु गर्नुहोस्।";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "ब्राउजिङ्ग इतिहास खाली गरियो! 🎉";

@@ -352,19 +352,29 @@ private func uniffiTraitInterfaceCallWithError<T, E>(
         callStatus.pointee.errorBuf = FfiConverterString.lower(String(describing: error))
     }
 }
+// Initial value and increment amount for handles. 
+// These ensure that SWIFT handles always have the lowest bit set
+fileprivate let UNIFFI_HANDLEMAP_INITIAL: UInt64 = 1
+fileprivate let UNIFFI_HANDLEMAP_DELTA: UInt64 = 2
+
 fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
     // All mutation happens with this lock held, which is why we implement @unchecked Sendable.
     private let lock = NSLock()
     private var map: [UInt64: T] = [:]
-    private var currentHandle: UInt64 = 1
+    private var currentHandle: UInt64 = UNIFFI_HANDLEMAP_INITIAL
 
     func insert(obj: T) -> UInt64 {
         lock.withLock {
-            let handle = currentHandle
-            currentHandle += 1
-            map[handle] = obj
-            return handle
+            return doInsert(obj)
         }
+    }
+
+    // Low-level insert function, this assumes `lock` is held.
+    private func doInsert(_ obj: T) -> UInt64 {
+        let handle = currentHandle
+        currentHandle += UNIFFI_HANDLEMAP_DELTA
+        map[handle] = obj
+        return handle
     }
 
      func get(handle: UInt64) throws -> T {
@@ -373,6 +383,15 @@ fileprivate final class UniffiHandleMap<T>: @unchecked Sendable {
                 throw UniffiInternalError.unexpectedStaleHandle
             }
             return obj
+        }
+    }
+
+     func clone(handle: UInt64) throws -> UInt64 {
+        try lock.withLock {
+            guard let obj = map[handle] else {
+                throw UniffiInternalError.unexpectedStaleHandle
+            }
+            return doInsert(obj)
         }
     }
 
@@ -513,19 +532,38 @@ fileprivate struct FfiConverterString: FfiConverter {
 
 
 
+/**
+ * Client for fetching curated recommendations from the Merino service.
+ *
+ * Construct using [`CuratedRecommendationsClient::new`] with a
+ * [`CuratedRecommendationsConfig`], then call
+ * [`get_curated_recommendations`](CuratedRecommendationsClient::get_curated_recommendations)
+ * to fetch recommendations.
+ */
 public protocol CuratedRecommendationsClientProtocol: AnyObject, Sendable {
     
+    /**
+     * Fetches curated recommendations from the Merino API.
+     */
     func getCuratedRecommendations(request: CuratedRecommendationsRequest) throws  -> CuratedRecommendationsResponse
     
 }
+/**
+ * Client for fetching curated recommendations from the Merino service.
+ *
+ * Construct using [`CuratedRecommendationsClient::new`] with a
+ * [`CuratedRecommendationsConfig`], then call
+ * [`get_curated_recommendations`](CuratedRecommendationsClient::get_curated_recommendations)
+ * to fetch recommendations.
+ */
 open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @unchecked Sendable {
-    fileprivate let pointer: UnsafeMutableRawPointer!
+    fileprivate let handle: UInt64
 
-    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public struct NoPointer {
+    public struct NoHandle {
         public init() {}
     }
 
@@ -535,58 +573,67 @@ open class CuratedRecommendationsClient: CuratedRecommendationsClientProtocol, @
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        self.pointer = pointer
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
     }
 
     // This constructor can be used to instantiate a fake object.
-    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
     //
     // - Warning:
-    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public init(noPointer: NoPointer) {
-        self.pointer = nil
+    public init(noHandle: NoHandle) {
+        self.handle = 0
     }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
-        return try! rustCall { uniffi_merino_fn_clone_curatedrecommendationsclient(self.pointer, $0) }
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_curatedrecommendationsclient(self.handle, $0) }
     }
+    /**
+     * Creates a new client from the given configuration.
+     */
 public convenience init(config: CuratedRecommendationsConfig)throws  {
-    let pointer =
+    let handle =
         try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
     uniffi_merino_fn_constructor_curatedrecommendationsclient_new(
         FfiConverterTypeCuratedRecommendationsConfig_lower(config),$0
     )
 }
-    self.init(unsafeFromRawPointer: pointer)
+    self.init(unsafeFromHandle: handle)
 }
 
     deinit {
-        guard let pointer = pointer else {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
             return
         }
 
-        try! rustCall { uniffi_merino_fn_free_curatedrecommendationsclient(pointer, $0) }
+        try! rustCall { uniffi_merino_fn_free_curatedrecommendationsclient(handle, $0) }
     }
 
     
 
     
+    /**
+     * Fetches curated recommendations from the Merino API.
+     */
 open func getCuratedRecommendations(request: CuratedRecommendationsRequest)throws  -> CuratedRecommendationsResponse  {
     return try  FfiConverterTypeCuratedRecommendationsResponse_lift(try rustCallWithError(FfiConverterTypeCuratedRecommendationsApiError_lift) {
-    uniffi_merino_fn_method_curatedrecommendationsclient_get_curated_recommendations(self.uniffiClonePointer(),
+    uniffi_merino_fn_method_curatedrecommendationsclient_get_curated_recommendations(
+            self.uniffiCloneHandle(),
         FfiConverterTypeCuratedRecommendationsRequest_lower(request),$0
     )
 })
 }
     
 
+    
 }
 
 
@@ -594,33 +641,24 @@ open func getCuratedRecommendations(request: CuratedRecommendationsRequest)throw
 @_documentation(visibility: private)
 #endif
 public struct FfiConverterTypeCuratedRecommendationsClient: FfiConverter {
-
-    typealias FfiType = UnsafeMutableRawPointer
+    typealias FfiType = UInt64
     typealias SwiftType = CuratedRecommendationsClient
 
-    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> CuratedRecommendationsClient {
-        return CuratedRecommendationsClient(unsafeFromRawPointer: pointer)
+    public static func lift(_ handle: UInt64) throws -> CuratedRecommendationsClient {
+        return CuratedRecommendationsClient(unsafeFromHandle: handle)
     }
 
-    public static func lower(_ value: CuratedRecommendationsClient) -> UnsafeMutableRawPointer {
-        return value.uniffiClonePointer()
+    public static func lower(_ value: CuratedRecommendationsClient) -> UInt64 {
+        return value.uniffiCloneHandle()
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CuratedRecommendationsClient {
-        let v: UInt64 = try readInt(&buf)
-        // The Rust code won't compile if a pointer won't fit in a UInt64.
-        // We have to go via `UInt` because that's the thing that's the size of a pointer.
-        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
-        if (ptr == nil) {
-            throw UniffiInternalError.unexpectedNullPointer
-        }
-        return try lift(ptr!)
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
     }
 
     public static func write(_ value: CuratedRecommendationsClient, into buf: inout [UInt8]) {
-        // This fiddling is because `Int` is the thing that's the same size as a pointer.
-        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
-        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+        writeInt(&buf, lower(value))
     }
 }
 
@@ -628,129 +666,207 @@ public struct FfiConverterTypeCuratedRecommendationsClient: FfiConverter {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsClient_lift(_ pointer: UnsafeMutableRawPointer) throws -> CuratedRecommendationsClient {
-    return try FfiConverterTypeCuratedRecommendationsClient.lift(pointer)
+public func FfiConverterTypeCuratedRecommendationsClient_lift(_ handle: UInt64) throws -> CuratedRecommendationsClient {
+    return try FfiConverterTypeCuratedRecommendationsClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedRecommendationsClient) -> UnsafeMutableRawPointer {
+public func FfiConverterTypeCuratedRecommendationsClient_lower(_ value: CuratedRecommendationsClient) -> UInt64 {
     return FfiConverterTypeCuratedRecommendationsClient.lower(value)
 }
 
 
 
 
-public struct CuratedRecommendationsBucket {
-    public var recommendations: [RecommendationDataItem]
-    public var title: String?
 
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(recommendations: [RecommendationDataItem], title: String? = nil) {
-        self.recommendations = recommendations
-        self.title = title
+
+/**
+ * A client for the merino suggest endpoint.
+ *
+ * Use [`SuggestClient::new`] to create an instance, then call
+ * [`SuggestClient::get_suggestions`] to fetch suggestions for a query.
+ */
+public protocol SuggestClientProtocol: AnyObject, Sendable {
+    
+    /**
+     * Fetches suggestions from the merino suggest endpoint for the given query.
+     *
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
+     */
+    func getSuggestions(query: String, options: SuggestOptions) throws  -> String?
+    
+}
+/**
+ * A client for the merino suggest endpoint.
+ *
+ * Use [`SuggestClient::new`] to create an instance, then call
+ * [`SuggestClient::get_suggestions`] to fetch suggestions for a query.
+ */
+open class SuggestClient: SuggestClientProtocol, @unchecked Sendable {
+    fileprivate let handle: UInt64
+
+    /// Used to instantiate a [FFIObject] without an actual handle, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoHandle {
+        public init() {}
     }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromHandle handle: UInt64) {
+        self.handle = handle
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noHandle: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing handle the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noHandle: NoHandle) {
+        self.handle = 0
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiCloneHandle() -> UInt64 {
+        return try! rustCall { uniffi_merino_fn_clone_suggestclient(self.handle, $0) }
+    }
+    /**
+     * Creates a new `SuggestClient` from the given configuration.
+     */
+public convenience init(config: SuggestConfig)throws  {
+    let handle =
+        try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
+    uniffi_merino_fn_constructor_suggestclient_new(
+        FfiConverterTypeSuggestConfig_lower(config),$0
+    )
+}
+    self.init(unsafeFromHandle: handle)
 }
 
-#if compiler(>=6)
-extension CuratedRecommendationsBucket: Sendable {}
-#endif
-
-
-extension CuratedRecommendationsBucket: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsBucket, rhs: CuratedRecommendationsBucket) -> Bool {
-        if lhs.recommendations != rhs.recommendations {
-            return false
+    deinit {
+        if handle == 0 {
+            // Mock objects have handle=0 don't try to free them
+            return
         }
-        if lhs.title != rhs.title {
-            return false
-        }
-        return true
+
+        try! rustCall { uniffi_merino_fn_free_suggestclient(handle, $0) }
     }
 
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(recommendations)
-        hasher.combine(title)
-    }
+    
+
+    
+    /**
+     * Fetches suggestions from the merino suggest endpoint for the given query.
+     *
+     * Returns the raw JSON response body as a string, or `None` if the server
+     * returned HTTP 204 (no suggestions available for weather).
+     */
+open func getSuggestions(query: String, options: SuggestOptions)throws  -> String?  {
+    return try  FfiConverterOptionString.lift(try rustCallWithError(FfiConverterTypeMerinoSuggestApiError_lift) {
+    uniffi_merino_fn_method_suggestclient_get_suggestions(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(query),
+        FfiConverterTypeSuggestOptions_lower(options),$0
+    )
+})
 }
+    
 
-extension CuratedRecommendationsBucket: Codable {}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeCuratedRecommendationsBucket: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CuratedRecommendationsBucket {
-        return
-            try CuratedRecommendationsBucket(
-                recommendations: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
-                title: FfiConverterOptionString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: CuratedRecommendationsBucket, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeRecommendationDataItem.write(value.recommendations, into: &buf)
-        FfiConverterOptionString.write(value.title, into: &buf)
-    }
+    
 }
 
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsBucket_lift(_ buf: RustBuffer) throws -> CuratedRecommendationsBucket {
-    return try FfiConverterTypeCuratedRecommendationsBucket.lift(buf)
+public struct FfiConverterTypeSuggestClient: FfiConverter {
+    typealias FfiType = UInt64
+    typealias SwiftType = SuggestClient
+
+    public static func lift(_ handle: UInt64) throws -> SuggestClient {
+        return SuggestClient(unsafeFromHandle: handle)
+    }
+
+    public static func lower(_ value: SuggestClient) -> UInt64 {
+        return value.uniffiCloneHandle()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestClient {
+        let handle: UInt64 = try readInt(&buf)
+        return try lift(handle)
+    }
+
+    public static func write(_ value: SuggestClient, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestClient_lift(_ handle: UInt64) throws -> SuggestClient {
+    return try FfiConverterTypeSuggestClient.lift(handle)
 }
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-public func FfiConverterTypeCuratedRecommendationsBucket_lower(_ value: CuratedRecommendationsBucket) -> RustBuffer {
-    return FfiConverterTypeCuratedRecommendationsBucket.lower(value)
+public func FfiConverterTypeSuggestClient_lower(_ value: SuggestClient) -> UInt64 {
+    return FfiConverterTypeSuggestClient.lower(value)
 }
 
 
-public struct CuratedRecommendationsConfig {
+
+
+/**
+ * Configuration options for initializing a [`CuratedRecommendationsClient`](crate::curated_recommendations::CuratedRecommendationsClient).
+ */
+public struct CuratedRecommendationsConfig: Equatable, Hashable, Codable {
+    /**
+     * Optional custom base host URL. Defaults to the production Merino service if `None`.
+     */
     public var baseHost: String?
+    /**
+     * The `User-Agent` header value to send with API requests.
+     */
     public var userAgentHeader: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(baseHost: String?, userAgentHeader: String) {
+    public init(
+        /**
+         * Optional custom base host URL. Defaults to the production Merino service if `None`.
+         */baseHost: String?, 
+        /**
+         * The `User-Agent` header value to send with API requests.
+         */userAgentHeader: String) {
         self.baseHost = baseHost
         self.userAgentHeader = userAgentHeader
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsConfig: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsConfig: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsConfig, rhs: CuratedRecommendationsConfig) -> Bool {
-        if lhs.baseHost != rhs.baseHost {
-            return false
-        }
-        if lhs.userAgentHeader != rhs.userAgentHeader {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(baseHost)
-        hasher.combine(userAgentHeader)
-    }
-}
-
-extension CuratedRecommendationsConfig: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -786,20 +902,77 @@ public func FfiConverterTypeCuratedRecommendationsConfig_lower(_ value: CuratedR
 }
 
 
-public struct CuratedRecommendationsRequest {
+/**
+ * Parameters for requesting curated recommendations from the Merino API.
+ */
+public struct CuratedRecommendationsRequest: Equatable, Hashable, Codable {
+    /**
+     * The locale to use when selecting recommendations.
+     */
     public var locale: CuratedRecommendationLocale
+    /**
+     * Optional ISO 3166-1 region code (e.g. `"US"`, `"GB"`) to further refine results.
+     */
     public var region: String?
+    /**
+     * Maximum number of recommendations to return. Defaults to 100 if not specified.
+     */
     public var count: Int32?
+    /**
+     * Optional list of topic slugs to filter recommendations by (e.g. `"business"`, `"tech"`).
+     */
     public var topics: [String]?
+    /**
+     * Optional list of feed types to include in the response (e.g. `"sections"`).
+     */
     public var feeds: [String]?
+    /**
+     * Optional per-section follow/block preferences.
+     */
     public var sections: [SectionSettings]?
+    /**
+     * Optional experiment name for server-side A/B testing.
+     */
     public var experimentName: String?
+    /**
+     * Optional experiment branch for server-side A/B testing.
+     */
     public var experimentBranch: String?
+    /**
+     * Whether to include the interest picker in the response.
+     */
     public var enableInterestPicker: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(locale: CuratedRecommendationLocale, region: String? = nil, count: Int32? = 100, topics: [String]? = nil, feeds: [String]? = nil, sections: [SectionSettings]? = nil, experimentName: String? = nil, experimentBranch: String? = nil, enableInterestPicker: Bool = false) {
+    public init(
+        /**
+         * The locale to use when selecting recommendations.
+         */locale: CuratedRecommendationLocale, 
+        /**
+         * Optional ISO 3166-1 region code (e.g. `"US"`, `"GB"`) to further refine results.
+         */region: String? = nil, 
+        /**
+         * Maximum number of recommendations to return. Defaults to 100 if not specified.
+         */count: Int32? = 100, 
+        /**
+         * Optional list of topic slugs to filter recommendations by (e.g. `"business"`, `"tech"`).
+         */topics: [String]? = nil, 
+        /**
+         * Optional list of feed types to include in the response (e.g. `"sections"`).
+         */feeds: [String]? = nil, 
+        /**
+         * Optional per-section follow/block preferences.
+         */sections: [SectionSettings]? = nil, 
+        /**
+         * Optional experiment name for server-side A/B testing.
+         */experimentName: String? = nil, 
+        /**
+         * Optional experiment branch for server-side A/B testing.
+         */experimentBranch: String? = nil, 
+        /**
+         * Whether to include the interest picker in the response.
+         */enableInterestPicker: Bool = false) {
         self.locale = locale
         self.region = region
         self.count = count
@@ -810,61 +983,15 @@ public struct CuratedRecommendationsRequest {
         self.experimentBranch = experimentBranch
         self.enableInterestPicker = enableInterestPicker
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsRequest: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsRequest: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsRequest, rhs: CuratedRecommendationsRequest) -> Bool {
-        if lhs.locale != rhs.locale {
-            return false
-        }
-        if lhs.region != rhs.region {
-            return false
-        }
-        if lhs.count != rhs.count {
-            return false
-        }
-        if lhs.topics != rhs.topics {
-            return false
-        }
-        if lhs.feeds != rhs.feeds {
-            return false
-        }
-        if lhs.sections != rhs.sections {
-            return false
-        }
-        if lhs.experimentName != rhs.experimentName {
-            return false
-        }
-        if lhs.experimentBranch != rhs.experimentBranch {
-            return false
-        }
-        if lhs.enableInterestPicker != rhs.enableInterestPicker {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(locale)
-        hasher.combine(region)
-        hasher.combine(count)
-        hasher.combine(topics)
-        hasher.combine(feeds)
-        hasher.combine(sections)
-        hasher.combine(experimentName)
-        hasher.combine(experimentBranch)
-        hasher.combine(enableInterestPicker)
-    }
-}
-
-extension CuratedRecommendationsRequest: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -914,55 +1041,56 @@ public func FfiConverterTypeCuratedRecommendationsRequest_lower(_ value: Curated
 }
 
 
-public struct CuratedRecommendationsResponse {
+/**
+ * Top-level response from the Merino curated recommendations API.
+ */
+public struct CuratedRecommendationsResponse: Equatable, Hashable, Codable {
+    /**
+     * Timestamp (in milliseconds since epoch) when the recommendations were generated.
+     */
     public var recommendedAt: Int64
+    /**
+     * The list of recommended items.
+     */
     public var data: [RecommendationDataItem]
-    public var feeds: Feeds?
+    /**
+     * Optional categorized feeds (e.g. by topic section).
+     */
+    public var feeds: [FeedSection]?
+    /**
+     * Optional interest picker configuration for displaying section selection UI.
+     */
     public var interestPicker: InterestPicker?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(recommendedAt: Int64, data: [RecommendationDataItem], feeds: Feeds? = nil, interestPicker: InterestPicker? = nil) {
+    public init(
+        /**
+         * Timestamp (in milliseconds since epoch) when the recommendations were generated.
+         */recommendedAt: Int64, 
+        /**
+         * The list of recommended items.
+         */data: [RecommendationDataItem], 
+        /**
+         * Optional categorized feeds (e.g. by topic section).
+         */feeds: [FeedSection]? = nil, 
+        /**
+         * Optional interest picker configuration for displaying section selection UI.
+         */interestPicker: InterestPicker? = nil) {
         self.recommendedAt = recommendedAt
         self.data = data
         self.feeds = feeds
         self.interestPicker = interestPicker
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension CuratedRecommendationsResponse: Sendable {}
 #endif
-
-
-extension CuratedRecommendationsResponse: Equatable, Hashable {
-    public static func ==(lhs: CuratedRecommendationsResponse, rhs: CuratedRecommendationsResponse) -> Bool {
-        if lhs.recommendedAt != rhs.recommendedAt {
-            return false
-        }
-        if lhs.data != rhs.data {
-            return false
-        }
-        if lhs.feeds != rhs.feeds {
-            return false
-        }
-        if lhs.interestPicker != rhs.interestPicker {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(recommendedAt)
-        hasher.combine(data)
-        hasher.combine(feeds)
-        hasher.combine(interestPicker)
-    }
-}
-
-extension CuratedRecommendationsResponse: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -973,7 +1101,7 @@ public struct FfiConverterTypeCuratedRecommendationsResponse: FfiConverterRustBu
             try CuratedRecommendationsResponse(
                 recommendedAt: FfiConverterInt64.read(from: &buf), 
                 data: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
-                feeds: FfiConverterOptionTypeFeeds.read(from: &buf), 
+                feeds: FfiConverterOptionSequenceTypeFeedSection.read(from: &buf), 
                 interestPicker: FfiConverterOptionTypeInterestPicker.read(from: &buf)
         )
     }
@@ -981,7 +1109,7 @@ public struct FfiConverterTypeCuratedRecommendationsResponse: FfiConverterRustBu
     public static func write(_ value: CuratedRecommendationsResponse, into buf: inout [UInt8]) {
         FfiConverterInt64.write(value.recommendedAt, into: &buf)
         FfiConverterSequenceTypeRecommendationDataItem.write(value.data, into: &buf)
-        FfiConverterOptionTypeFeeds.write(value.feeds, into: &buf)
+        FfiConverterOptionSequenceTypeFeedSection.write(value.feeds, into: &buf)
         FfiConverterOptionTypeInterestPicker.write(value.interestPicker, into: &buf)
     }
 }
@@ -1002,282 +1130,73 @@ public func FfiConverterTypeCuratedRecommendationsResponse_lower(_ value: Curate
 }
 
 
-public struct FakespotCta {
-    public var ctaCopy: String
-    public var url: String
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(ctaCopy: String, url: String) {
-        self.ctaCopy = ctaCopy
-        self.url = url
-    }
-}
-
-#if compiler(>=6)
-extension FakespotCta: Sendable {}
-#endif
-
-
-extension FakespotCta: Equatable, Hashable {
-    public static func ==(lhs: FakespotCta, rhs: FakespotCta) -> Bool {
-        if lhs.ctaCopy != rhs.ctaCopy {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ctaCopy)
-        hasher.combine(url)
-    }
-}
-
-extension FakespotCta: Codable {}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotCta: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotCta {
-        return
-            try FakespotCta(
-                ctaCopy: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotCta, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.ctaCopy, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotCta_lift(_ buf: RustBuffer) throws -> FakespotCta {
-    return try FfiConverterTypeFakespotCta.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotCta_lower(_ value: FakespotCta) -> RustBuffer {
-    return FfiConverterTypeFakespotCta.lower(value)
-}
-
-
-public struct FakespotFeed {
-    public var products: [FakespotProduct]
-    public var defaultCategoryName: String
-    public var headerCopy: String
-    public var footerCopy: String
-    public var cta: FakespotCta
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(products: [FakespotProduct], defaultCategoryName: String, headerCopy: String, footerCopy: String, cta: FakespotCta) {
-        self.products = products
-        self.defaultCategoryName = defaultCategoryName
-        self.headerCopy = headerCopy
-        self.footerCopy = footerCopy
-        self.cta = cta
-    }
-}
-
-#if compiler(>=6)
-extension FakespotFeed: Sendable {}
-#endif
-
-
-extension FakespotFeed: Equatable, Hashable {
-    public static func ==(lhs: FakespotFeed, rhs: FakespotFeed) -> Bool {
-        if lhs.products != rhs.products {
-            return false
-        }
-        if lhs.defaultCategoryName != rhs.defaultCategoryName {
-            return false
-        }
-        if lhs.headerCopy != rhs.headerCopy {
-            return false
-        }
-        if lhs.footerCopy != rhs.footerCopy {
-            return false
-        }
-        if lhs.cta != rhs.cta {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(products)
-        hasher.combine(defaultCategoryName)
-        hasher.combine(headerCopy)
-        hasher.combine(footerCopy)
-        hasher.combine(cta)
-    }
-}
-
-extension FakespotFeed: Codable {}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotFeed: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotFeed {
-        return
-            try FakespotFeed(
-                products: FfiConverterSequenceTypeFakespotProduct.read(from: &buf), 
-                defaultCategoryName: FfiConverterString.read(from: &buf), 
-                headerCopy: FfiConverterString.read(from: &buf), 
-                footerCopy: FfiConverterString.read(from: &buf), 
-                cta: FfiConverterTypeFakespotCta.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotFeed, into buf: inout [UInt8]) {
-        FfiConverterSequenceTypeFakespotProduct.write(value.products, into: &buf)
-        FfiConverterString.write(value.defaultCategoryName, into: &buf)
-        FfiConverterString.write(value.headerCopy, into: &buf)
-        FfiConverterString.write(value.footerCopy, into: &buf)
-        FfiConverterTypeFakespotCta.write(value.cta, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotFeed_lift(_ buf: RustBuffer) throws -> FakespotFeed {
-    return try FfiConverterTypeFakespotFeed.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotFeed_lower(_ value: FakespotFeed) -> RustBuffer {
-    return FfiConverterTypeFakespotFeed.lower(value)
-}
-
-
-public struct FakespotProduct {
-    public var id: String
-    public var title: String
-    public var category: String
-    public var imageUrl: String
-    public var url: String
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(id: String, title: String, category: String, imageUrl: String, url: String) {
-        self.id = id
-        self.title = title
-        self.category = category
-        self.imageUrl = imageUrl
-        self.url = url
-    }
-}
-
-#if compiler(>=6)
-extension FakespotProduct: Sendable {}
-#endif
-
-
-extension FakespotProduct: Equatable, Hashable {
-    public static func ==(lhs: FakespotProduct, rhs: FakespotProduct) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.category != rhs.category {
-            return false
-        }
-        if lhs.imageUrl != rhs.imageUrl {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(title)
-        hasher.combine(category)
-        hasher.combine(imageUrl)
-        hasher.combine(url)
-    }
-}
-
-extension FakespotProduct: Codable {}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFakespotProduct: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FakespotProduct {
-        return
-            try FakespotProduct(
-                id: FfiConverterString.read(from: &buf), 
-                title: FfiConverterString.read(from: &buf), 
-                category: FfiConverterString.read(from: &buf), 
-                imageUrl: FfiConverterString.read(from: &buf), 
-                url: FfiConverterString.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: FakespotProduct, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.id, into: &buf)
-        FfiConverterString.write(value.title, into: &buf)
-        FfiConverterString.write(value.category, into: &buf)
-        FfiConverterString.write(value.imageUrl, into: &buf)
-        FfiConverterString.write(value.url, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotProduct_lift(_ buf: RustBuffer) throws -> FakespotProduct {
-    return try FfiConverterTypeFakespotProduct.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFakespotProduct_lower(_ value: FakespotProduct) -> RustBuffer {
-    return FfiConverterTypeFakespotProduct.lower(value)
-}
-
-
-public struct FeedSection {
+/**
+ * A categorized feed section containing recommendations and responsive layout configuration.
+ */
+public struct FeedSection: Equatable, Hashable, Codable {
+    /**
+     * Identifier for this feed section (the key from the API response map,
+     * e.g. `"top_stories_section"`, `"travel"`, `"arts"`).
+     */
+    public var feedId: String
+    /**
+     * The display position of this section within the overall feed.
+     */
     public var receivedFeedRank: Int32
+    /**
+     * The recommendations in this section.
+     */
     public var recommendations: [RecommendationDataItem]
+    /**
+     * Display title for this section.
+     */
     public var title: String
+    /**
+     * Optional subtitle for this section.
+     */
     public var subtitle: String?
+    /**
+     * Responsive layout configuration for rendering this section.
+     */
     public var layout: Layout
+    /**
+     * Whether the user is following this section.
+     */
     public var isFollowed: Bool
+    /**
+     * Whether the user has blocked this section.
+     */
     public var isBlocked: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(receivedFeedRank: Int32, recommendations: [RecommendationDataItem], title: String, subtitle: String? = nil, layout: Layout, isFollowed: Bool, isBlocked: Bool) {
+    public init(
+        /**
+         * Identifier for this feed section (the key from the API response map,
+         * e.g. `"top_stories_section"`, `"travel"`, `"arts"`).
+         */feedId: String, 
+        /**
+         * The display position of this section within the overall feed.
+         */receivedFeedRank: Int32, 
+        /**
+         * The recommendations in this section.
+         */recommendations: [RecommendationDataItem], 
+        /**
+         * Display title for this section.
+         */title: String, 
+        /**
+         * Optional subtitle for this section.
+         */subtitle: String? = nil, 
+        /**
+         * Responsive layout configuration for rendering this section.
+         */layout: Layout, 
+        /**
+         * Whether the user is following this section.
+         */isFollowed: Bool, 
+        /**
+         * Whether the user has blocked this section.
+         */isBlocked: Bool) {
+        self.feedId = feedId
         self.receivedFeedRank = receivedFeedRank
         self.recommendations = recommendations
         self.title = title
@@ -1286,53 +1205,15 @@ public struct FeedSection {
         self.isFollowed = isFollowed
         self.isBlocked = isBlocked
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension FeedSection: Sendable {}
 #endif
-
-
-extension FeedSection: Equatable, Hashable {
-    public static func ==(lhs: FeedSection, rhs: FeedSection) -> Bool {
-        if lhs.receivedFeedRank != rhs.receivedFeedRank {
-            return false
-        }
-        if lhs.recommendations != rhs.recommendations {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.subtitle != rhs.subtitle {
-            return false
-        }
-        if lhs.layout != rhs.layout {
-            return false
-        }
-        if lhs.isFollowed != rhs.isFollowed {
-            return false
-        }
-        if lhs.isBlocked != rhs.isBlocked {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(receivedFeedRank)
-        hasher.combine(recommendations)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-        hasher.combine(layout)
-        hasher.combine(isFollowed)
-        hasher.combine(isBlocked)
-    }
-}
-
-extension FeedSection: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1341,6 +1222,7 @@ public struct FfiConverterTypeFeedSection: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FeedSection {
         return
             try FeedSection(
+                feedId: FfiConverterString.read(from: &buf), 
                 receivedFeedRank: FfiConverterInt32.read(from: &buf), 
                 recommendations: FfiConverterSequenceTypeRecommendationDataItem.read(from: &buf), 
                 title: FfiConverterString.read(from: &buf), 
@@ -1352,6 +1234,7 @@ public struct FfiConverterTypeFeedSection: FfiConverterRustBuffer {
     }
 
     public static func write(_ value: FeedSection, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.feedId, into: &buf)
         FfiConverterInt32.write(value.receivedFeedRank, into: &buf)
         FfiConverterSequenceTypeRecommendationDataItem.write(value.recommendations, into: &buf)
         FfiConverterString.write(value.title, into: &buf)
@@ -1378,263 +1261,56 @@ public func FfiConverterTypeFeedSection_lower(_ value: FeedSection) -> RustBuffe
 }
 
 
-public struct Feeds {
-    public var needToKnow: CuratedRecommendationsBucket?
-    public var fakespot: FakespotFeed?
-    public var topStoriesSection: FeedSection?
-    public var business: FeedSection?
-    public var career: FeedSection?
-    public var arts: FeedSection?
-    public var food: FeedSection?
-    public var health: FeedSection?
-    public var home: FeedSection?
-    public var finance: FeedSection?
-    public var government: FeedSection?
-    public var sports: FeedSection?
-    public var tech: FeedSection?
-    public var travel: FeedSection?
-    public var education: FeedSection?
-    public var hobbies: FeedSection?
-    public var societyParenting: FeedSection?
-    public var educationScience: FeedSection?
-    public var society: FeedSection?
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(needToKnow: CuratedRecommendationsBucket? = nil, fakespot: FakespotFeed? = nil, topStoriesSection: FeedSection? = nil, business: FeedSection? = nil, career: FeedSection? = nil, arts: FeedSection? = nil, food: FeedSection? = nil, health: FeedSection? = nil, home: FeedSection? = nil, finance: FeedSection? = nil, government: FeedSection? = nil, sports: FeedSection? = nil, tech: FeedSection? = nil, travel: FeedSection? = nil, education: FeedSection? = nil, hobbies: FeedSection? = nil, societyParenting: FeedSection? = nil, educationScience: FeedSection? = nil, society: FeedSection? = nil) {
-        self.needToKnow = needToKnow
-        self.fakespot = fakespot
-        self.topStoriesSection = topStoriesSection
-        self.business = business
-        self.career = career
-        self.arts = arts
-        self.food = food
-        self.health = health
-        self.home = home
-        self.finance = finance
-        self.government = government
-        self.sports = sports
-        self.tech = tech
-        self.travel = travel
-        self.education = education
-        self.hobbies = hobbies
-        self.societyParenting = societyParenting
-        self.educationScience = educationScience
-        self.society = society
-    }
-}
-
-#if compiler(>=6)
-extension Feeds: Sendable {}
-#endif
-
-
-extension Feeds: Equatable, Hashable {
-    public static func ==(lhs: Feeds, rhs: Feeds) -> Bool {
-        if lhs.needToKnow != rhs.needToKnow {
-            return false
-        }
-        if lhs.fakespot != rhs.fakespot {
-            return false
-        }
-        if lhs.topStoriesSection != rhs.topStoriesSection {
-            return false
-        }
-        if lhs.business != rhs.business {
-            return false
-        }
-        if lhs.career != rhs.career {
-            return false
-        }
-        if lhs.arts != rhs.arts {
-            return false
-        }
-        if lhs.food != rhs.food {
-            return false
-        }
-        if lhs.health != rhs.health {
-            return false
-        }
-        if lhs.home != rhs.home {
-            return false
-        }
-        if lhs.finance != rhs.finance {
-            return false
-        }
-        if lhs.government != rhs.government {
-            return false
-        }
-        if lhs.sports != rhs.sports {
-            return false
-        }
-        if lhs.tech != rhs.tech {
-            return false
-        }
-        if lhs.travel != rhs.travel {
-            return false
-        }
-        if lhs.education != rhs.education {
-            return false
-        }
-        if lhs.hobbies != rhs.hobbies {
-            return false
-        }
-        if lhs.societyParenting != rhs.societyParenting {
-            return false
-        }
-        if lhs.educationScience != rhs.educationScience {
-            return false
-        }
-        if lhs.society != rhs.society {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(needToKnow)
-        hasher.combine(fakespot)
-        hasher.combine(topStoriesSection)
-        hasher.combine(business)
-        hasher.combine(career)
-        hasher.combine(arts)
-        hasher.combine(food)
-        hasher.combine(health)
-        hasher.combine(home)
-        hasher.combine(finance)
-        hasher.combine(government)
-        hasher.combine(sports)
-        hasher.combine(tech)
-        hasher.combine(travel)
-        hasher.combine(education)
-        hasher.combine(hobbies)
-        hasher.combine(societyParenting)
-        hasher.combine(educationScience)
-        hasher.combine(society)
-    }
-}
-
-extension Feeds: Codable {}
-
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeFeeds: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Feeds {
-        return
-            try Feeds(
-                needToKnow: FfiConverterOptionTypeCuratedRecommendationsBucket.read(from: &buf), 
-                fakespot: FfiConverterOptionTypeFakespotFeed.read(from: &buf), 
-                topStoriesSection: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                business: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                career: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                arts: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                food: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                health: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                home: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                finance: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                government: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                sports: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                tech: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                travel: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                education: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                hobbies: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                societyParenting: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                educationScience: FfiConverterOptionTypeFeedSection.read(from: &buf), 
-                society: FfiConverterOptionTypeFeedSection.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: Feeds, into buf: inout [UInt8]) {
-        FfiConverterOptionTypeCuratedRecommendationsBucket.write(value.needToKnow, into: &buf)
-        FfiConverterOptionTypeFakespotFeed.write(value.fakespot, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.topStoriesSection, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.business, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.career, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.arts, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.food, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.health, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.home, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.finance, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.government, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.sports, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.tech, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.travel, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.education, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.hobbies, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.societyParenting, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.educationScience, into: &buf)
-        FfiConverterOptionTypeFeedSection.write(value.society, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFeeds_lift(_ buf: RustBuffer) throws -> Feeds {
-    return try FfiConverterTypeFeeds.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeFeeds_lower(_ value: Feeds) -> RustBuffer {
-    return FfiConverterTypeFeeds.lower(value)
-}
-
-
-public struct InterestPicker {
+/**
+ * Configuration for the interest picker UI, which lets users select preferred content sections.
+ */
+public struct InterestPicker: Equatable, Hashable, Codable {
+    /**
+     * The display position of the interest picker within the feed.
+     */
     public var receivedFeedRank: Int32
+    /**
+     * Title text for the interest picker.
+     */
     public var title: String
+    /**
+     * Subtitle text for the interest picker.
+     */
     public var subtitle: String
+    /**
+     * The sections available for the user to choose from.
+     */
     public var sections: [InterestPickerSection]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(receivedFeedRank: Int32, title: String, subtitle: String, sections: [InterestPickerSection]) {
+    public init(
+        /**
+         * The display position of the interest picker within the feed.
+         */receivedFeedRank: Int32, 
+        /**
+         * Title text for the interest picker.
+         */title: String, 
+        /**
+         * Subtitle text for the interest picker.
+         */subtitle: String, 
+        /**
+         * The sections available for the user to choose from.
+         */sections: [InterestPickerSection]) {
         self.receivedFeedRank = receivedFeedRank
         self.title = title
         self.subtitle = subtitle
         self.sections = sections
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InterestPicker: Sendable {}
 #endif
-
-
-extension InterestPicker: Equatable, Hashable {
-    public static func ==(lhs: InterestPicker, rhs: InterestPicker) -> Bool {
-        if lhs.receivedFeedRank != rhs.receivedFeedRank {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.subtitle != rhs.subtitle {
-            return false
-        }
-        if lhs.sections != rhs.sections {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(receivedFeedRank)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-        hasher.combine(sections)
-    }
-}
-
-extension InterestPicker: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1674,37 +1350,32 @@ public func FfiConverterTypeInterestPicker_lower(_ value: InterestPicker) -> Rus
 }
 
 
-public struct InterestPickerSection {
+/**
+ * A section entry within the interest picker.
+ */
+public struct InterestPickerSection: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the section.
+     */
     public var sectionId: String
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(sectionId: String) {
+    public init(
+        /**
+         * Unique identifier for the section.
+         */sectionId: String) {
         self.sectionId = sectionId
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension InterestPickerSection: Sendable {}
 #endif
-
-
-extension InterestPickerSection: Equatable, Hashable {
-    public static func ==(lhs: InterestPickerSection, rhs: InterestPickerSection) -> Bool {
-        if lhs.sectionId != rhs.sectionId {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sectionId)
-    }
-}
-
-extension InterestPickerSection: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1738,43 +1409,40 @@ public func FfiConverterTypeInterestPickerSection_lower(_ value: InterestPickerS
 }
 
 
-public struct Layout {
+/**
+ * A named layout configuration containing one or more responsive layout breakpoints.
+ */
+public struct Layout: Equatable, Hashable, Codable {
+    /**
+     * Name identifier for this layout (e.g. `"4-large"`, `"3-medium"`).
+     */
     public var name: String
+    /**
+     * Responsive layout variants for different screen widths.
+     */
     public var responsiveLayouts: [ResponsiveLayout]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(name: String, responsiveLayouts: [ResponsiveLayout]) {
+    public init(
+        /**
+         * Name identifier for this layout (e.g. `"4-large"`, `"3-medium"`).
+         */name: String, 
+        /**
+         * Responsive layout variants for different screen widths.
+         */responsiveLayouts: [ResponsiveLayout]) {
         self.name = name
         self.responsiveLayouts = responsiveLayouts
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Layout: Sendable {}
 #endif
-
-
-extension Layout: Equatable, Hashable {
-    public static func ==(lhs: Layout, rhs: Layout) -> Bool {
-        if lhs.name != rhs.name {
-            return false
-        }
-        if lhs.responsiveLayouts != rhs.responsiveLayouts {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(responsiveLayouts)
-    }
-}
-
-extension Layout: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1810,23 +1478,98 @@ public func FfiConverterTypeLayout_lower(_ value: Layout) -> RustBuffer {
 }
 
 
-public struct RecommendationDataItem {
+/**
+ * A single curated recommendation item.
+ */
+public struct RecommendationDataItem: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the corpus item.
+     */
     public var corpusItemId: String
-    public var scheduledCorpusItemId: String
+    /**
+     * Unique identifier for the scheduled corpus item.
+     */
+    public var scheduledCorpusItemId: String?
+    /**
+     * URL of the recommended article.
+     */
     public var url: String
+    /**
+     * Title of the recommended article.
+     */
     public var title: String
+    /**
+     * Short excerpt or summary of the article.
+     */
     public var excerpt: String
+    /**
+     * Optional topic slug (e.g. `"business"`, `"government"`).
+     */
     public var topic: String?
+    /**
+     * Name of the publisher.
+     */
     public var publisher: String
+    /**
+     * Whether the recommendation is time-sensitive (e.g. breaking news).
+     */
     public var isTimeSensitive: Bool
+    /**
+     * URL of the article's hero/thumbnail image.
+     */
     public var imageUrl: String
+    /**
+     * Optional URL of the publisher's favicon.
+     */
     public var iconUrl: String?
-    public var tileId: Int64
+    /**
+     * Numeric tile identifier used for telemetry.
+     */
+    public var tileId: Int64?
+    /**
+     * The position rank at which this item was received from the server.
+     */
     public var receivedRank: Int64
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(corpusItemId: String, scheduledCorpusItemId: String, url: String, title: String, excerpt: String, topic: String? = nil, publisher: String, isTimeSensitive: Bool, imageUrl: String, iconUrl: String?, tileId: Int64, receivedRank: Int64) {
+    public init(
+        /**
+         * Unique identifier for the corpus item.
+         */corpusItemId: String, 
+        /**
+         * Unique identifier for the scheduled corpus item.
+         */scheduledCorpusItemId: String? = nil, 
+        /**
+         * URL of the recommended article.
+         */url: String, 
+        /**
+         * Title of the recommended article.
+         */title: String, 
+        /**
+         * Short excerpt or summary of the article.
+         */excerpt: String, 
+        /**
+         * Optional topic slug (e.g. `"business"`, `"government"`).
+         */topic: String? = nil, 
+        /**
+         * Name of the publisher.
+         */publisher: String, 
+        /**
+         * Whether the recommendation is time-sensitive (e.g. breaking news).
+         */isTimeSensitive: Bool, 
+        /**
+         * URL of the article's hero/thumbnail image.
+         */imageUrl: String, 
+        /**
+         * Optional URL of the publisher's favicon.
+         */iconUrl: String?, 
+        /**
+         * Numeric tile identifier used for telemetry.
+         */tileId: Int64? = nil, 
+        /**
+         * The position rank at which this item was received from the server.
+         */receivedRank: Int64) {
         self.corpusItemId = corpusItemId
         self.scheduledCorpusItemId = scheduledCorpusItemId
         self.url = url
@@ -1840,73 +1583,15 @@ public struct RecommendationDataItem {
         self.tileId = tileId
         self.receivedRank = receivedRank
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension RecommendationDataItem: Sendable {}
 #endif
-
-
-extension RecommendationDataItem: Equatable, Hashable {
-    public static func ==(lhs: RecommendationDataItem, rhs: RecommendationDataItem) -> Bool {
-        if lhs.corpusItemId != rhs.corpusItemId {
-            return false
-        }
-        if lhs.scheduledCorpusItemId != rhs.scheduledCorpusItemId {
-            return false
-        }
-        if lhs.url != rhs.url {
-            return false
-        }
-        if lhs.title != rhs.title {
-            return false
-        }
-        if lhs.excerpt != rhs.excerpt {
-            return false
-        }
-        if lhs.topic != rhs.topic {
-            return false
-        }
-        if lhs.publisher != rhs.publisher {
-            return false
-        }
-        if lhs.isTimeSensitive != rhs.isTimeSensitive {
-            return false
-        }
-        if lhs.imageUrl != rhs.imageUrl {
-            return false
-        }
-        if lhs.iconUrl != rhs.iconUrl {
-            return false
-        }
-        if lhs.tileId != rhs.tileId {
-            return false
-        }
-        if lhs.receivedRank != rhs.receivedRank {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(corpusItemId)
-        hasher.combine(scheduledCorpusItemId)
-        hasher.combine(url)
-        hasher.combine(title)
-        hasher.combine(excerpt)
-        hasher.combine(topic)
-        hasher.combine(publisher)
-        hasher.combine(isTimeSensitive)
-        hasher.combine(imageUrl)
-        hasher.combine(iconUrl)
-        hasher.combine(tileId)
-        hasher.combine(receivedRank)
-    }
-}
-
-extension RecommendationDataItem: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -1916,7 +1601,7 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
         return
             try RecommendationDataItem(
                 corpusItemId: FfiConverterString.read(from: &buf), 
-                scheduledCorpusItemId: FfiConverterString.read(from: &buf), 
+                scheduledCorpusItemId: FfiConverterOptionString.read(from: &buf), 
                 url: FfiConverterString.read(from: &buf), 
                 title: FfiConverterString.read(from: &buf), 
                 excerpt: FfiConverterString.read(from: &buf), 
@@ -1925,14 +1610,14 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
                 isTimeSensitive: FfiConverterBool.read(from: &buf), 
                 imageUrl: FfiConverterString.read(from: &buf), 
                 iconUrl: FfiConverterOptionString.read(from: &buf), 
-                tileId: FfiConverterInt64.read(from: &buf), 
+                tileId: FfiConverterOptionInt64.read(from: &buf), 
                 receivedRank: FfiConverterInt64.read(from: &buf)
         )
     }
 
     public static func write(_ value: RecommendationDataItem, into buf: inout [UInt8]) {
         FfiConverterString.write(value.corpusItemId, into: &buf)
-        FfiConverterString.write(value.scheduledCorpusItemId, into: &buf)
+        FfiConverterOptionString.write(value.scheduledCorpusItemId, into: &buf)
         FfiConverterString.write(value.url, into: &buf)
         FfiConverterString.write(value.title, into: &buf)
         FfiConverterString.write(value.excerpt, into: &buf)
@@ -1941,7 +1626,7 @@ public struct FfiConverterTypeRecommendationDataItem: FfiConverterRustBuffer {
         FfiConverterBool.write(value.isTimeSensitive, into: &buf)
         FfiConverterString.write(value.imageUrl, into: &buf)
         FfiConverterOptionString.write(value.iconUrl, into: &buf)
-        FfiConverterInt64.write(value.tileId, into: &buf)
+        FfiConverterOptionInt64.write(value.tileId, into: &buf)
         FfiConverterInt64.write(value.receivedRank, into: &buf)
     }
 }
@@ -1962,43 +1647,40 @@ public func FfiConverterTypeRecommendationDataItem_lower(_ value: Recommendation
 }
 
 
-public struct ResponsiveLayout {
+/**
+ * A layout variant for a specific column count, defining how tiles are arranged.
+ */
+public struct ResponsiveLayout: Equatable, Hashable, Codable {
+    /**
+     * Number of columns in this layout variant.
+     */
     public var columnCount: Int32
+    /**
+     * Tile configurations for this layout.
+     */
     public var tiles: [Tile]
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(columnCount: Int32, tiles: [Tile]) {
+    public init(
+        /**
+         * Number of columns in this layout variant.
+         */columnCount: Int32, 
+        /**
+         * Tile configurations for this layout.
+         */tiles: [Tile]) {
         self.columnCount = columnCount
         self.tiles = tiles
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension ResponsiveLayout: Sendable {}
 #endif
-
-
-extension ResponsiveLayout: Equatable, Hashable {
-    public static func ==(lhs: ResponsiveLayout, rhs: ResponsiveLayout) -> Bool {
-        if lhs.columnCount != rhs.columnCount {
-            return false
-        }
-        if lhs.tiles != rhs.tiles {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(columnCount)
-        hasher.combine(tiles)
-    }
-}
-
-extension ResponsiveLayout: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2034,49 +1716,48 @@ public func FfiConverterTypeResponsiveLayout_lower(_ value: ResponsiveLayout) ->
 }
 
 
-public struct SectionSettings {
+/**
+ * User preferences for a content section, controlling whether it is followed or blocked.
+ */
+public struct SectionSettings: Equatable, Hashable, Codable {
+    /**
+     * Unique identifier for the section.
+     */
     public var sectionId: String
+    /**
+     * Whether the user has opted to follow this section.
+     */
     public var isFollowed: Bool
+    /**
+     * Whether the user has opted to block this section.
+     */
     public var isBlocked: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(sectionId: String, isFollowed: Bool, isBlocked: Bool) {
+    public init(
+        /**
+         * Unique identifier for the section.
+         */sectionId: String, 
+        /**
+         * Whether the user has opted to follow this section.
+         */isFollowed: Bool, 
+        /**
+         * Whether the user has opted to block this section.
+         */isBlocked: Bool) {
         self.sectionId = sectionId
         self.isFollowed = isFollowed
         self.isBlocked = isBlocked
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension SectionSettings: Sendable {}
 #endif
-
-
-extension SectionSettings: Equatable, Hashable {
-    public static func ==(lhs: SectionSettings, rhs: SectionSettings) -> Bool {
-        if lhs.sectionId != rhs.sectionId {
-            return false
-        }
-        if lhs.isFollowed != rhs.isFollowed {
-            return false
-        }
-        if lhs.isBlocked != rhs.isBlocked {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sectionId)
-        hasher.combine(isFollowed)
-        hasher.combine(isBlocked)
-    }
-}
-
-extension SectionSettings: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2114,55 +1795,249 @@ public func FfiConverterTypeSectionSettings_lower(_ value: SectionSettings) -> R
 }
 
 
-public struct Tile {
+/**
+ * Configuration for the merino suggest client.
+ */
+public struct SuggestConfig: Equatable, Hashable, Codable {
+    /**
+     * The base host for the merino endpoint. Defaults to the production host if not set.
+     */
+    public var baseHost: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * The base host for the merino endpoint. Defaults to the production host if not set.
+         */baseHost: String?) {
+        self.baseHost = baseHost
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SuggestConfig: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSuggestConfig: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestConfig {
+        return
+            try SuggestConfig(
+                baseHost: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SuggestConfig, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.baseHost, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestConfig_lift(_ buf: RustBuffer) throws -> SuggestConfig {
+    return try FfiConverterTypeSuggestConfig.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestConfig_lower(_ value: SuggestConfig) -> RustBuffer {
+    return FfiConverterTypeSuggestConfig.lower(value)
+}
+
+
+/**
+ * Options for a suggest request, mapped to merino suggest endpoint query parameters.
+ * All fields are optional — omitted fields are not sent to merino.
+ */
+public struct SuggestOptions: Equatable, Hashable, Codable {
+    /**
+     * List of suggestion providers to query (e.g. `["wikipedia", "adm"]`).
+     */
+    public var providers: [String]?
+    /**
+     * Identifier of which part of firefox the request comes from (e.g. `"urlbar"`, `"newtab"`).
+     */
+    public var source: String?
+    /**
+     * ISO 3166-1 country code (e.g. `"US"`).
+     */
+    public var country: String?
+    /**
+     * Comma separated string of subdivision code(s) (e.g. `"CA"`).
+     */
+    public var region: String?
+    /**
+     * City name (e.g. `"San Francisco"`).
+     */
+    public var city: String?
+    /**
+     * List of any experiments or rollouts that are affecting the client's Suggest experience.
+     * If Merino recognizes any of them it will modify its behavior accordingly.
+     */
+    public var clientVariants: [String]?
+    /**
+     * For AccuWeather provider, the request type should be either a "location" or "weather" string. For "location" it will get location completion suggestion. For "weather" it will return weather suggestions.
+     * If omitted, it defaults to weather suggestions.
+     */
+    public var requestType: String?
+    /**
+     * The `Accept-Language` header value to forward to Merino (e.g. `"en-US"`).
+     */
+    public var acceptLanguage: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * List of suggestion providers to query (e.g. `["wikipedia", "adm"]`).
+         */providers: [String]?, 
+        /**
+         * Identifier of which part of firefox the request comes from (e.g. `"urlbar"`, `"newtab"`).
+         */source: String?, 
+        /**
+         * ISO 3166-1 country code (e.g. `"US"`).
+         */country: String?, 
+        /**
+         * Comma separated string of subdivision code(s) (e.g. `"CA"`).
+         */region: String?, 
+        /**
+         * City name (e.g. `"San Francisco"`).
+         */city: String?, 
+        /**
+         * List of any experiments or rollouts that are affecting the client's Suggest experience.
+         * If Merino recognizes any of them it will modify its behavior accordingly.
+         */clientVariants: [String]?, 
+        /**
+         * For AccuWeather provider, the request type should be either a "location" or "weather" string. For "location" it will get location completion suggestion. For "weather" it will return weather suggestions.
+         * If omitted, it defaults to weather suggestions.
+         */requestType: String?, 
+        /**
+         * The `Accept-Language` header value to forward to Merino (e.g. `"en-US"`).
+         */acceptLanguage: String?) {
+        self.providers = providers
+        self.source = source
+        self.country = country
+        self.region = region
+        self.city = city
+        self.clientVariants = clientVariants
+        self.requestType = requestType
+        self.acceptLanguage = acceptLanguage
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension SuggestOptions: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSuggestOptions: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SuggestOptions {
+        return
+            try SuggestOptions(
+                providers: FfiConverterOptionSequenceString.read(from: &buf), 
+                source: FfiConverterOptionString.read(from: &buf), 
+                country: FfiConverterOptionString.read(from: &buf), 
+                region: FfiConverterOptionString.read(from: &buf), 
+                city: FfiConverterOptionString.read(from: &buf), 
+                clientVariants: FfiConverterOptionSequenceString.read(from: &buf), 
+                requestType: FfiConverterOptionString.read(from: &buf), 
+                acceptLanguage: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: SuggestOptions, into buf: inout [UInt8]) {
+        FfiConverterOptionSequenceString.write(value.providers, into: &buf)
+        FfiConverterOptionString.write(value.source, into: &buf)
+        FfiConverterOptionString.write(value.country, into: &buf)
+        FfiConverterOptionString.write(value.region, into: &buf)
+        FfiConverterOptionString.write(value.city, into: &buf)
+        FfiConverterOptionSequenceString.write(value.clientVariants, into: &buf)
+        FfiConverterOptionString.write(value.requestType, into: &buf)
+        FfiConverterOptionString.write(value.acceptLanguage, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestOptions_lift(_ buf: RustBuffer) throws -> SuggestOptions {
+    return try FfiConverterTypeSuggestOptions.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSuggestOptions_lower(_ value: SuggestOptions) -> RustBuffer {
+    return FfiConverterTypeSuggestOptions.lower(value)
+}
+
+
+/**
+ * Properties for a single tile within a responsive layout.
+ */
+public struct Tile: Equatable, Hashable, Codable {
+    /**
+     * Display size of the tile (e.g. `"large"`, `"medium"`, `"small"`).
+     */
     public var size: String
+    /**
+     * Zero-based position index of this tile within the layout.
+     */
     public var position: Int32
+    /**
+     * Whether this tile position may contain an advertisement.
+     */
     public var hasAd: Bool
+    /**
+     * Whether this tile should display an article excerpt.
+     */
     public var hasExcerpt: Bool
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(size: String, position: Int32, hasAd: Bool, hasExcerpt: Bool) {
+    public init(
+        /**
+         * Display size of the tile (e.g. `"large"`, `"medium"`, `"small"`).
+         */size: String, 
+        /**
+         * Zero-based position index of this tile within the layout.
+         */position: Int32, 
+        /**
+         * Whether this tile position may contain an advertisement.
+         */hasAd: Bool, 
+        /**
+         * Whether this tile should display an article excerpt.
+         */hasExcerpt: Bool) {
         self.size = size
         self.position = position
         self.hasAd = hasAd
         self.hasExcerpt = hasExcerpt
     }
+
+    
+
+    
 }
 
 #if compiler(>=6)
 extension Tile: Sendable {}
 #endif
-
-
-extension Tile: Equatable, Hashable {
-    public static func ==(lhs: Tile, rhs: Tile) -> Bool {
-        if lhs.size != rhs.size {
-            return false
-        }
-        if lhs.position != rhs.position {
-            return false
-        }
-        if lhs.hasAd != rhs.hasAd {
-            return false
-        }
-        if lhs.hasExcerpt != rhs.hasExcerpt {
-            return false
-        }
-        return true
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(size)
-        hasher.combine(position)
-        hasher.combine(hasAd)
-        hasher.combine(hasExcerpt)
-    }
-}
-
-extension Tile: Codable {}
-
-
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2203,8 +2078,14 @@ public func FfiConverterTypeTile_lower(_ value: Tile) -> RustBuffer {
 
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Locales supported by Merino curated recommendations.
+ *
+ * Each variant maps to a BCP 47 locale string (e.g. `"en-US"`, `"fr"`) used when
+ * requesting recommendations from the Merino API.
+ */
 
-public enum CuratedRecommendationLocale {
+public enum CuratedRecommendationLocale: Equatable, Hashable, Codable {
     
     case fr
     case frFr
@@ -2220,8 +2101,12 @@ public enum CuratedRecommendationLocale {
     case deDe
     case deAt
     case deCh
-}
 
+
+
+
+
+}
 
 #if compiler(>=6)
 extension CuratedRecommendationLocale: Sendable {}
@@ -2348,26 +2233,42 @@ public func FfiConverterTypeCuratedRecommendationLocale_lower(_ value: CuratedRe
 }
 
 
-extension CuratedRecommendationLocale: Equatable, Hashable {}
 
-extension CuratedRecommendationLocale: Codable {}
-
-
-
-
-
-
-
-public enum CuratedRecommendationsApiError: Swift.Error {
+/**
+ * Public error type exposed to consumers via UniFFI.
+ *
+ * This is a simplified version of [`Error`] suitable for cross-platform callers,
+ * distinguishing network failures from other errors.
+ */
+public enum CuratedRecommendationsApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
 
     
     
+    /**
+     * A network-level failure (e.g. DNS resolution, connection timeout).
+     */
     case Network(reason: String
     )
+    /**
+     * Any other error, including HTTP errors and deserialization failures.
+     */
     case Other(code: UInt16?, reason: String
     )
+
+    
+
+    
+
+    
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+    
 }
 
+#if compiler(>=6)
+extension CuratedRecommendationsApiError: Sendable {}
+#endif
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2431,21 +2332,96 @@ public func FfiConverterTypeCuratedRecommendationsApiError_lower(_ value: Curate
 }
 
 
-extension CuratedRecommendationsApiError: Equatable, Hashable {}
+public enum MerinoSuggestApiError: Swift.Error, Equatable, Hashable, Codable, Foundation.LocalizedError {
 
-extension CuratedRecommendationsApiError: Codable {}
+    
+    
+    /**
+     * A network-level failure.
+     */
+    case Network(reason: String
+    )
+    /**
+     * Any other error, e.g. HTTP errors, validation errors.
+     */
+    case Other(code: UInt16?, reason: String
+    )
 
+    
 
+    
 
-
-extension CuratedRecommendationsApiError: Foundation.LocalizedError {
+    
     public var errorDescription: String? {
         String(reflecting: self)
+    }
+    
+}
+
+#if compiler(>=6)
+extension MerinoSuggestApiError: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeMerinoSuggestApiError: FfiConverterRustBuffer {
+    typealias SwiftType = MerinoSuggestApiError
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> MerinoSuggestApiError {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+
+        
+
+        
+        case 1: return .Network(
+            reason: try FfiConverterString.read(from: &buf)
+            )
+        case 2: return .Other(
+            code: try FfiConverterOptionUInt16.read(from: &buf), 
+            reason: try FfiConverterString.read(from: &buf)
+            )
+
+         default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: MerinoSuggestApiError, into buf: inout [UInt8]) {
+        switch value {
+
+        
+
+        
+        
+        case let .Network(reason):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(reason, into: &buf)
+            
+        
+        case let .Other(code,reason):
+            writeInt(&buf, Int32(2))
+            FfiConverterOptionUInt16.write(code, into: &buf)
+            FfiConverterString.write(reason, into: &buf)
+            
+        }
     }
 }
 
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoSuggestApiError_lift(_ buf: RustBuffer) throws -> MerinoSuggestApiError {
+    return try FfiConverterTypeMerinoSuggestApiError.lift(buf)
+}
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeMerinoSuggestApiError_lower(_ value: MerinoSuggestApiError) -> RustBuffer {
+    return FfiConverterTypeMerinoSuggestApiError.lower(value)
+}
 
 #if swift(>=5.8)
 @_documentation(visibility: private)
@@ -2498,6 +2474,30 @@ fileprivate struct FfiConverterOptionInt32: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionInt64: FfiConverterRustBuffer {
+    typealias SwiftType = Int64?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterInt64.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
     typealias SwiftType = String?
 
@@ -2514,102 +2514,6 @@ fileprivate struct FfiConverterOptionString: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterString.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeCuratedRecommendationsBucket: FfiConverterRustBuffer {
-    typealias SwiftType = CuratedRecommendationsBucket?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeCuratedRecommendationsBucket.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeCuratedRecommendationsBucket.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFakespotFeed: FfiConverterRustBuffer {
-    typealias SwiftType = FakespotFeed?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFakespotFeed.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFakespotFeed.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFeedSection: FfiConverterRustBuffer {
-    typealias SwiftType = FeedSection?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFeedSection.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFeedSection.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionTypeFeeds: FfiConverterRustBuffer {
-    typealias SwiftType = Feeds?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterTypeFeeds.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterTypeFeeds.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2690,6 +2594,30 @@ fileprivate struct FfiConverterOptionSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionSequenceTypeFeedSection: FfiConverterRustBuffer {
+    typealias SwiftType = [FeedSection]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterSequenceTypeFeedSection.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterSequenceTypeFeedSection.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionSequenceTypeSectionSettings: FfiConverterRustBuffer {
     typealias SwiftType = [SectionSettings]?
 
@@ -2739,23 +2667,23 @@ fileprivate struct FfiConverterSequenceString: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
-fileprivate struct FfiConverterSequenceTypeFakespotProduct: FfiConverterRustBuffer {
-    typealias SwiftType = [FakespotProduct]
+fileprivate struct FfiConverterSequenceTypeFeedSection: FfiConverterRustBuffer {
+    typealias SwiftType = [FeedSection]
 
-    public static func write(_ value: [FakespotProduct], into buf: inout [UInt8]) {
+    public static func write(_ value: [FeedSection], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for item in value {
-            FfiConverterTypeFakespotProduct.write(item, into: &buf)
+            FfiConverterTypeFeedSection.write(item, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FakespotProduct] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FeedSection] {
         let len: Int32 = try readInt(&buf)
-        var seq = [FakespotProduct]()
+        var seq = [FeedSection]()
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeFakespotProduct.read(from: &buf))
+            seq.append(try FfiConverterTypeFeedSection.read(from: &buf))
         }
         return seq
     }
@@ -2917,22 +2845,28 @@ private enum InitializationResult {
 // the code inside is only computed once.
 private let initializationResult: InitializationResult = {
     // Get the bindings contract version from our ComponentInterface
-    let bindings_contract_version = 29
+    let bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
     let scaffolding_contract_version = ffi_merino_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 53330) {
+    if (uniffi_merino_checksum_func_all_curated_recommendation_locales() != 41991) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 17864) {
+    if (uniffi_merino_checksum_func_curated_recommendation_locale_from_string() != 28998) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 49968) {
+    if (uniffi_merino_checksum_method_curatedrecommendationsclient_get_curated_recommendations() != 52246) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 14537) {
+    if (uniffi_merino_checksum_method_suggestclient_get_suggestions() != 55159) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_constructor_curatedrecommendationsclient_new() != 18166) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_merino_checksum_constructor_suggestclient_new() != 14568) {
         return InitializationResult.apiChecksumMismatch
     }
 

@@ -6,6 +6,7 @@ import XCTest
 import Common
 @testable import Client
 
+@MainActor
 class LibraryViewModelTests: XCTestCase {
     private var subject: LibraryViewModel!
     private var profile: MockProfile!
@@ -13,10 +14,9 @@ class LibraryViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        await DependencyHelperMock().bootstrapDependencies()
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "libraryViewModel_tests")
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

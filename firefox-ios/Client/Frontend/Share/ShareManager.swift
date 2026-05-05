@@ -6,6 +6,7 @@ import Foundation
 import MobileCoreServices
 import WebKit
 import UniformTypeIdentifiers
+import Common
 
 class ShareManager: NSObject, FeatureFlaggable {
     private struct ActivityIdentifiers {
@@ -70,10 +71,9 @@ class ShareManager: NSObject, FeatureFlaggable {
             }
 
         case .tab(let siteURL, let tab):
-            let isSentFromFirefoxEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
-                .sentFromFirefox,
-                checking: .buildAndUser
-            )
+            let provider: FeatureFlagProviding = AppContainer.shared.resolve()
+            let prefs: UserFeaturePreferring = AppContainer.shared.resolve()
+            let isSentFromFirefoxEnabled = provider.isEnabled(.sentFromFirefox) && prefs.getPreferenceFor(.sentFromFirefox)
             activityItems.append(
                 URLActivityItemProvider(
                     url: siteURL,

@@ -7,32 +7,35 @@ import MozillaAppServices
 import Shared
 
 protocol StoryProviderInterface: Sendable {
-    func fetchHomepageStories() async -> [MerinoStory]
-    func fetchDiscoverMoreStories() async -> [MerinoStory]
+    func fetchHomepageStories() async -> MerinoStoryResponse
+    func prefetchStories() async
 }
 
-final class StoryProvider: StoryProviderInterface, FeatureFlaggable, Sendable {
-    private struct Constants {
-        static let defaultNumberOfHomepageStories = 9
-        static let defaultNumberOfDiscoverMoreStories = 20
-    }
-
+final class StoryProvider: StoryProviderInterface, Sendable {
     private let merinoAPI: MerinoStoriesProviding
 
     init(merinoAPI: MerinoStoriesProviding) {
         self.merinoAPI = merinoAPI
     }
 
-    func fetchHomepageStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfHomepageStories)
+    func fetchHomepageStories() async -> MerinoStoryResponse {
+        guard let response = try? await merinoAPI.fetchContent() else {
+            return MerinoStoryResponse(stories: [])
+        }
+
+        return MerinoStoryResponse(
+            stories: response.data
+                .map(MerinoStory.init)
+                .compactMap { MerinoStoryConfiguration(story: $0) },
+            categories: response.feeds?
+                .compactMap({ MerinoCategory(from: $0) })
+                .compactMap { MerinoCategoryConfiguration(category: $0) }
+        )
     }
 
-    func fetchDiscoverMoreStories() async -> [MerinoStory] {
-        return await fetchStories(Constants.defaultNumberOfDiscoverMoreStories).shuffled()
-    }
-
-    private func fetchStories(_ numberOfRequestedStories: Int) async -> [MerinoStory] {
-        let data = (try? await merinoAPI.fetchStories(numberOfRequestedStories)) ?? []
-        return data.map(MerinoStory.init)
+    func prefetchStories() async {
+        // Because a prefetch basically warms the cache, we don't actually need
+        // to do anything with the results
+        _ = try? await merinoAPI.fetchContent()
     }
 }

@@ -34,9 +34,11 @@ struct TranslationRecord: Codable {
 
 protocol TranslationModelsFetcherProtocol: Sendable {
     func fetchTranslatorWASM() async -> Data?
-    func fetchModels(from sourceLang: String, to targetLang: String) -> Data?
-    func fetchModelBuffer(recordId: String) -> Data?
+    func fetchModels(from sourceLang: String, to targetLang: String) async -> Data?
+    func fetchModelBuffer(recordId: String) async -> Data?
     func prewarmResources(for sourceLang: String, to targetLang: String) async
+    func fetchSupportedTargetLanguages() async -> [String]
+    func resetStorage() async
 }
 
 final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
@@ -109,14 +111,21 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
         // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
         // We intentionally mark this method as async so that we don't block the main thread
         // and `getAttachment` should eventually be an async method as well.
-        try? translatorsClient?.getAttachment(record: record)
+        return try? translatorsClient?.getAttachment(record: record)
+    }
+
+    func getRecordsForModels() async -> [RemoteSettingsRecord]? {
+        // TODO: FXIOS-14616: Should make Rust method async and remove this wrapper method
+        // We intentionally mark this method as async so that we don't block the main thread
+        // and `getRecords` should eventually be an async method as well.
+        return modelsClient?.getRecords(syncIfEmpty: true)
     }
 
     /// Fetches the translation model files for a given language pair matching the pinned version.
     /// If no direct model is found, attempts to find pivot models through `Constants.pivotLanguage`.
     /// e.g. given `fr` -> `en` and `en` -> `it` we can translate `fr` -> `it`.
-    func fetchModels(from sourceLang: String, to targetLang: String) -> Data? {
-        guard let records = modelsClient?.getRecords(syncIfEmpty: true) else {
+    func fetchModels(from sourceLang: String, to targetLang: String) async -> Data? {
+        guard let records = await getRecordsForModels() else {
             logger.log("No model records found.", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -149,8 +158,8 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     }
 
     /// Fetches the buffer data for a given model by record id.
-    func fetchModelBuffer(recordId: String) -> Data? {
-        guard let record = modelsClient?.getRecords(syncIfEmpty: true)?.first(where: { $0.id == recordId }) else {
+    func fetchModelBuffer(recordId: String) async -> Data? {
+        guard let record = await getRecordsForModels()?.first(where: { $0.id == recordId }) else {
             logger.log("No model record found.", level: .warning, category: .remoteSettings)
             return nil
         }
@@ -192,6 +201,33 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
             return
         }
         await prewarmResources(for: Constants.pivotLanguage, to: deviceLanguage)
+    }
+
+    /// Returns the unique set of `toLang` values across all model records.
+    /// These are the languages that can be used as translation targets.
+    func fetchSupportedTargetLanguages() async -> [String] {
+        guard let records = await getRecordsForModels() else {
+            logger.log("No model records found.", level: .warning, category: .remoteSettings)
+            return []
+        }
+
+        return records
+            .compactMap { (decodeRecord($0) as ModelFieldsRecord?)?.toLang }
+            .uniqued()
+    }
+
+    /// Resets any local storage of models.
+    func resetStorage() async {
+        guard let client = modelsClient else {
+            logger.log("Models client not available, skipping reset.", level: .warning, category: .remoteSettings)
+            return
+        }
+
+        do {
+            try client.resetStorage()
+        } catch {
+            logger.log("Resetting storage for models failed with error \(error.localizedDescription).", level: .warning, category: .remoteSettings)
+        }
     }
 
     /// Pre-warms attachments for a list of records by fetching them

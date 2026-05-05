@@ -1,38 +1,41 @@
 name: "Firefox: import translations"
+
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   schedule:
-    - cron: '0 11 * * 4'
+    - cron: '0 11 * * THU'
   workflow_dispatch:
     inputs:
       branchName:
         description: 'Branch used as target for automation'
         required: true
         default: 'main'
+
 jobs:
-  build:
-    runs-on: macos-15
+  import:
+    runs-on: macos-26
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.11]
-        xcode: ["26.0"]
+        xcode: ["26.3"]
+        python-version: ["3.12"]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         persist-credentials: false
-        token: ${{ secrets.GITHUB_TOKEN }}
         ref: ${{ github.event.inputs.branchName }}
 
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Determine PR Version Number
-      id: versioning
       run: |
         # This step is used to determine the next version number for the PR title
         # The output includes debugging for the piped commands that generate
@@ -71,12 +74,12 @@ jobs:
         git restore firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
+      uses: peter-evans/create-pull-request@v8
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: ${{ env.pr_title }}
-        title: "Add FXIOS [Localization] String import ${{ env.current_date }} for v${{ env.next_version }}"
+        title: "Localize FXIOS [Strings] Import l10n from ${{ env.current_date }} for v${{ env.next_version }}"
         branch: ${{ env.branch_name }}
         body: ${{ env.pr_body }}

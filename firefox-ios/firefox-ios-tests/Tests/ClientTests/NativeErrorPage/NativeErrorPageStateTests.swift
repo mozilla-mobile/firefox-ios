@@ -15,6 +15,8 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(initialState.description, "")
         XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
+        XCTAssertNil(initialState.advancedSection)
+        XCTAssertFalse(initialState.showGoBackButton)
     }
 
     @MainActor
@@ -40,6 +42,49 @@ final class NativeErrorPageStateTests: XCTestCase {
         XCTAssertEqual(newState.description, mockModel.errorDescription)
         XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
         XCTAssertEqual(newState.url, mockModel.url)
+        XCTAssertNil(newState.advancedSection)
+        XCTAssertFalse(newState.showGoBackButton)
+    }
+
+    @MainActor
+    func testLoadCertificateErrorWithAdvancedSection() {
+        let initialState = createSubject()
+        let reducer = nativeErrorPageReducer()
+
+        let advancedSection = ErrorPageModel.AdvancedSectionConfig(
+            buttonText: "Advanced",
+            infoText: "Firefox doesn’t trust this site because the certificate provided isn’t valid for example.com.",
+            warningText: """
+You might need to sign in through your network, or check your settings.
+If you’re on a corporate network, your support team might have more info.
+""",
+            certificateErrorCode: "SSL_ERROR_BAD_CERT_DOMAIN",
+            showProceedButton: true
+        )
+
+        let mockModel = ErrorPageModel(
+            errorTitle: "Be careful. Something doesn’t look right.",
+            errorDescription: "Someone pretending to be the site could try to steal your personal info.",
+            foxImageName: "securityError",
+            url: URL(string: "https://example.com"),
+            advancedSection: advancedSection,
+            showGoBackButton: true
+        )
+
+        let action = getAction(model: mockModel, for: .initialize)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.title, mockModel.errorTitle)
+        XCTAssertEqual(newState.description, mockModel.errorDescription)
+        XCTAssertEqual(newState.foxImage, mockModel.foxImageName)
+        XCTAssertEqual(newState.url, mockModel.url)
+        XCTAssertTrue(newState.showGoBackButton)
+        XCTAssertNotNil(newState.advancedSection)
+        XCTAssertEqual(newState.advancedSection?.buttonText, advancedSection.buttonText)
+        XCTAssertEqual(newState.advancedSection?.infoText, advancedSection.infoText)
+        XCTAssertEqual(newState.advancedSection?.warningText, advancedSection.warningText)
+        XCTAssertEqual(newState.advancedSection?.certificateErrorCode, advancedSection.certificateErrorCode)
+        XCTAssertEqual(newState.advancedSection?.showProceedButton, advancedSection.showProceedButton)
     }
 
     // MARK: - Private

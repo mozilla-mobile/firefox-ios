@@ -45,30 +45,6 @@ class BrowsingPDFTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307117
     func testOpenLinkFromPDF() {
-        // Sometimes the test fails before opening the URL
-        // Let's make sure the homepage is ready
-        mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
-        navigator.openURL(PDF_website["url"]!)
-        waitUntilPageLoad()
-
-        // Click on a link on the pdf and check that the website is shown
-        app.webViews.links.element(boundBy: 0).tapOnApp()
-        waitUntilPageLoad()
-        let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
-        if checkboxValidation.exists {
-            checkboxValidation.waitAndTap()
-        }
-        mozWaitForValueContains(url, value: PDF_website["urlValue"]!)
-        // Let's comment the next line until that fails intermittently due to the page re-direction
-        // mozWaitForElementToExist(app.staticTexts["Education and schools"])
-
-        // Go back to pdf view
-        app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
-        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307117
-    func testOpenLinkFromPDF_TAE() {
         // Sometimes the test fails before opening the URL. Let's make sure the homepage is ready
         topSites.assertVisible()
 
@@ -145,46 +121,6 @@ class BrowsingPDFTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307120
     // Smoketest
     func testPinPDFtoTopSites() {
-        navigator.openURL(PDF_website["url"]!)
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenuMore)
-        navigator.performAction(Action.PinToTopSitesPAM)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        let pinnedItem = app
-            .links[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-            .staticTexts[PDF_website["bookmarkLabel"]!]
-        mozWaitForElementToExist(pinnedItem)
-
-        // Open pdf from pinned site
-        let pdfTopSite = app
-            .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .links["Pinned: \(PDF_website["bookmarkLabel"]!)"]
-            .children(matching: .other)
-            .element
-            .children(matching: .other)
-            .element(boundBy: 0)
-        if iPad() {
-            app.buttons["Cancel"].waitAndTap()
-        }
-        pdfTopSite.waitAndTap()
-        waitUntilPageLoad()
-        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
-
-        // Remove pdf pinned site
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        if iPad() {
-            app.buttons["Cancel"].waitAndTap()
-        }
-        mozWaitForElementToExist(pinnedItem)
-        pdfTopSite.press(forDuration: 1)
-        app.tables.cells.buttons[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
-        mozWaitForElementToNotExist(pinnedItem)
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307120
-    // Smoketest TAE
-    func testPinPDFtoTopSites_TAE() {
         // 1. Open a PDF and pin it to Top Sites.
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -225,32 +161,16 @@ class BrowsingPDFTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2307121
     // Smoketest
     func testBookmarkPDF() {
-        navigator.openURL(PDF_website["url"]!)
-        waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.Bookmark)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_Bookmarks)
-        waitForElementsToExist(
-            [
-                app.tables["Bookmarks List"],
-                app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!]
-            ]
-        )
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2307121
-    // Smoketest TAE
-    func testBookmarkPDF_TAE() {
         library = LibraryScreen(app: app)
         // Open the PDF URL and wait for the page to load
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
+        waitForTabsButton()
 
         // Navigate to the browser menu and perform the bookmark action
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.Bookmark)
+        waitForTabsButton()
 
         // Navigate to the bookmarks section
         navigator.goto(BrowserTabMenu)

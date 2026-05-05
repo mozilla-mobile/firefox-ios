@@ -24,10 +24,7 @@ class MockWKEngineSession: WKEngineSession {
                    scriptResponder: EngineSessionScriptResponder(),
                    metadataFetcher: DefaultMetadataFetcherHelper(),
                    navigationHandler: DefaultNavigationHandler(),
-                   uiHandler: DefaultUIHandler.factory(
-                    sessionDependencies: defaultDependencies.sessionDependencies,
-                    sessionCreator: MockSessionCreator()
-                   ),
+                   uiHandler: DefaultUIHandler.factory(sessionDependencies: defaultDependencies.sessionDependencies),
                    readerModeDelegate: MockWKReaderModeDelegate())!
     }
 

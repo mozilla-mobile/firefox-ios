@@ -44,6 +44,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     var didTapManageCardsClosure: (() -> Void)?
     var didSelectCreditCardToFill: ((UnencryptedCreditCardFields) -> Void)?
 
+    private var cardTableViewObserver: NSKeyValueObservation?
+
     private var numberOfCards: Int {
         switch viewModel.state {
         case .save, .update:
@@ -115,11 +117,16 @@ class CreditCardBottomSheetViewController: UIViewController,
 
         // Only allow selection when we are in selectSavedCard state
         // No selection is allowed for save / update states
-        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard ? true : false
+        self.cardTableView.allowsSelection = viewModel.state == .selectSavedCard
+        observeCardTableViewContentSize()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        cardTableViewObserver?.invalidate()
     }
 
     // MARK: View Lifecycle
@@ -127,11 +134,11 @@ class CreditCardBottomSheetViewController: UIViewController,
         super.viewDidLoad()
 
         addSubviews()
-        setupView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupView()
 
         listenForThemeChanges(withNotificationCenter: notificationCenter)
         applyTheme()
@@ -140,6 +147,16 @@ class CreditCardBottomSheetViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateConstraints()
+    }
+
+    // Observing cardTableView content size change to update the modal height correctly because initially
+    // the size of the modal is not calculated correctly
+    private func observeCardTableViewContentSize() {
+        cardTableViewObserver = cardTableView.observe(\.contentSize, options: .new) { [weak self] _, _ in
+            ensureMainThread { [weak self] in
+                self?.updateContentHeight()
+            }
+        }
     }
 
     // MARK: View Setup
@@ -217,15 +234,17 @@ class CreditCardBottomSheetViewController: UIViewController,
         )
     }
 
-    func updateConstraints() {
-        if let contentViewHeightConstraint {
-            let buttonsHeight = buttonsContainerStackView.frame.height
-            let estimatedContentHeight = cardTableView.contentSize.height +
-                buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
-            let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
-            contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
-        }
+    private func updateContentHeight() {
+        let estimatedContentHeight =
+            cardTableView.contentSize.height +
+            buttonsContainerStackView.frame.height +
+            UX.bottomSpacing +
+            UX.distanceBetweenHeaderAndTop
 
+        contentViewHeightConstraint?.constant = estimatedContentHeight
+    }
+
+    func updateConstraints() {
         let contentWidthCheck = UX.contentViewWidth > view.frame.size.width
         let contentViewWidth = contentWidthCheck ? view.frame.size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint?.constant = contentViewWidth
@@ -252,8 +271,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     private func didTapYes() {
         self.viewModel.didTapMainButton { [weak self] error in
             DispatchQueue.main.async { [weak self] in
-                self?.dismissVC()
                 self?.didTapYesClosure?(error)
+                self?.dismissVC()
             }
         }
     }

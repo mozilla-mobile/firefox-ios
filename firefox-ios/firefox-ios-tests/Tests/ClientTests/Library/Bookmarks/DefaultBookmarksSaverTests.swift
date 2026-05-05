@@ -4,6 +4,7 @@
 
 import XCTest
 import MozillaAppServices
+import Shared
 @testable import Client
 
 final class DefaultBookmarksSaverTests: XCTestCase {
@@ -18,7 +19,6 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         let mockProfile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         helper = BookmarksSaverTestsHelper(mockProfile: mockProfile, rootFolderGUID: rootFolderGUID)
         testBookmarkGUID = await helper.addBookmark(title: testBookmark.title, url: testBookmark.url)
         testFolderGUID = await helper.addFolder(title: testFolder.title)
@@ -263,6 +263,44 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         XCTAssertEqual(addedNode.url, bookmarkUrl)
         XCTAssertEqual(addedNode.title, bookmarkTitle)
         XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
+    }
+
+    func testCreateBookmark_usesRecentFolderWhenValid() async throws {
+        let bookmarkUrl = "https://www.mozilla.com/recent"
+        let bookmarkTitle = "recentTitle"
+        let recentFolderGuid = try await unwrapAsync {
+            return await helper.addFolder(title: "Recent Folder")
+        }
+        helper.mockProfile.prefs.setString(recentFolderGuid, forKey: PrefsKeys.RecentBookmarkFolder)
+
+        let subject = createSubject()
+
+        await subject.createBookmark(url: bookmarkUrl, title: bookmarkTitle, position: 0)
+
+        let addedNode = try await unwrapAsync {
+            return await helper.readNode(url: bookmarkUrl) as? BookmarkItemData
+        }
+
+        XCTAssertEqual(addedNode.title, bookmarkTitle)
+        XCTAssertEqual(addedNode.parentGUID, recentFolderGuid)
+    }
+
+    func testCreateBookmark_fallsBackWhenRecentFolderMissing() async throws {
+        let bookmarkUrl = "https://www.mozilla.com/missing"
+        let bookmarkTitle = "missingTitle"
+        helper.mockProfile.prefs.setString("missing-guid", forKey: PrefsKeys.RecentBookmarkFolder)
+
+        let subject = createSubject()
+
+        await subject.createBookmark(url: bookmarkUrl, title: bookmarkTitle, position: 0)
+
+        let addedNode = try await unwrapAsync {
+            return await helper.readNode(url: bookmarkUrl) as? BookmarkItemData
+        }
+
+        XCTAssertEqual(addedNode.title, bookmarkTitle)
+        XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
+        XCTAssertNil(helper.mockProfile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder))
     }
 
     private func createSubject() -> DefaultBookmarksSaver {

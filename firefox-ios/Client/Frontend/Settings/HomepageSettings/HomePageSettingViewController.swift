@@ -6,7 +6,9 @@ import Foundation
 import Shared
 import Common
 
-class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
+class HomePageSettingViewController: SettingsTableViewController,
+                                     FeatureFlaggable,
+                                     UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -132,7 +134,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: featureFlags.isFeatureEnabled(.homepageJumpBackinSectionDefault, checking: .userOnly),
+                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -149,7 +151,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: featureFlags.isFeatureEnabled(.homepageBookmarksSectionDefault, checking: .userOnly),
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
@@ -161,6 +163,26 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
                 )
             }
             sectionItems.append(bookmarksSetting)
+
+            if featureFlagsProvider.isEnabled(.worldCupWidget) {
+                let windowUUID = self.windowUUID
+                let worldCupSetting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
+                ) { value in
+                    store.dispatch(
+                        WorldCupAction(
+                            windowUUID: windowUUID,
+                            actionType: WorldCupActionType.didChangeHomepageSettings,
+                            shouldShowHomepageWorldCupSection: value
+                        )
+                    )
+                }
+                sectionItems.append(worldCupSetting)
+            }
         }
 
         // TODO: FXIOS-12980: Replace "Stories" title with "Top Stories" string once it is translated in v143
@@ -203,7 +225,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func setupStartAtHomeSection() -> SettingSection {
-        let pref: StartAtHome = featureFlags.getCustomState(for: .startAtHome) ?? .afterFourHours
+        let pref = userPreferences.startAtHomeSetting
         currentStartAtHomeSetting = StartAtHomeSetting(rawValue: pref.rawValue) ?? .afterFourHours
 
         typealias a11y = AccessibilityIdentifiers.Settings.Homepage.StartAtHome
@@ -270,7 +292,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, FeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -304,7 +326,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, FeatureFlaggable {
+    class WallpaperSettings: Setting {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

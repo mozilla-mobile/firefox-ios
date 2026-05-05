@@ -57,7 +57,7 @@ class LaunchScreenViewModel {
         self.profile = profile
         self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
         self.introScreenManager = introScreenManager ?? IntroScreenManager(prefs: profile.prefs)
-        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
+        let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel, onboardingReason: .newUser)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility,
@@ -105,6 +105,9 @@ class LaunchScreenViewModel {
         var order: [LaunchType] = []
 
         if introScreenManager.shouldShowIntroScreen {
+            if introScreenManager.shouldShowVideoIntro {
+                order.append(.videoIntro)
+            }
             if termsOfServiceManager.shouldShowScreen {
                 order.append(.termsOfService(manager: termsOfServiceManager))
             }

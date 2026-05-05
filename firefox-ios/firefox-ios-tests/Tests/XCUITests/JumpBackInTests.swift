@@ -36,6 +36,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         // Open a new tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
@@ -53,6 +54,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         waitUntilPageLoad()
 
         // Open a new tab and check the "Jump Back In" section
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -67,6 +69,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(jumpBackInItem.staticTexts["Wikipedia"])
 
         // Open private browsing
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
 
@@ -92,6 +95,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
         waitUntilPageLoad()
 
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -121,6 +125,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         }
 
         // Open a new tab in normal browsing
+        waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -136,6 +141,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(jumpBackInItem.staticTexts["Example Domain"])
 
         // Close the amazon tab
+        waitForTabsButton()
         navigator.goto(TabTray)
         if isTablet {
             mozWaitForElementToExist(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -171,6 +177,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
         app.buttons["Open in New Tab"].waitAndTap()
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)

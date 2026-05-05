@@ -4,37 +4,14 @@
 
 import Foundation
 
-protocol HasNimbusFeatureFlags { }
-
-extension HasNimbusFeatureFlags {
-    var nimbusFlags: NimbusFeatureFlagLayer {
-        return NimbusManager.shared.featureFlagLayer
-    }
-}
-
-protocol HasNimbusSearchBar { }
-
-extension HasNimbusSearchBar {
-    var nimbusSearchBar: NimbusSearchBarLayer {
-        return NimbusManager.shared.bottomSearchBarLayer
-    }
-}
-
 final class NimbusManager: Sendable {
     // MARK: - Singleton
-
-    /// To help with access control, we should use protocols to access the required
-    /// layers. `.shared` should, ideally, never be directly accessed.
     static let shared = NimbusManager()
 
     // MARK: - Properties
     let featureFlagLayer: NimbusFeatureFlagLayer
-    let bottomSearchBarLayer: NimbusSearchBarLayer
 
-    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer(),
-         bottomSearchBarLayer: NimbusSearchBarLayer = NimbusSearchBarLayer()
-    ) {
+    init(with featureFlagLayer: NimbusFeatureFlagLayer = NimbusFeatureFlagLayer()) {
         self.featureFlagLayer = featureFlagLayer
-        self.bottomSearchBarLayer = bottomSearchBarLayer
     }
 }

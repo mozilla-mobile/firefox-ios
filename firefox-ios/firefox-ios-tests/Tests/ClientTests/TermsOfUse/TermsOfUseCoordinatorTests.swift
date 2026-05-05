@@ -25,7 +25,6 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         router = MockRouter(navigationController: MockNavigationController())
         notificationCenter = MockNotificationCenter()
         setupNimbusTouFeatureForTesting(isEnabled: true, maxRemindersCount: 5)
@@ -35,7 +34,8 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
             router: router,
             themeManager: AppContainer.shared.resolve(),
             notificationCenter: notificationCenter,
-            prefs: profile.prefs
+            prefs: profile.prefs,
+            experimentsTracking: ToUExperimentsTracking(prefs: profile.prefs)
         )
     }
 
@@ -59,11 +59,17 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
     }
 
     func testShouldShowTermsOfUse_ReturnsFalse_WhenTermsOfServiceAccepted() {
+        // Test that legacy TermsOfServiceAccepted is migrated and recognized
         profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
+
+        // Trigger migration explicitly (as it would happen in AppLaunchUtil)
+        TermsOfUseMigration(prefs: profile.prefs).migrateTermsOfService()
 
         let result = coordinator.shouldShowTermsOfUse(context: .appLaunch)
 
         XCTAssertFalse(result)
+        // Verify migration happened - TermsOfUseAccepted should be set
+        XCTAssertTrue(profile.prefs.boolForKey(PrefsKeys.TermsOfUseAccepted) ?? false)
     }
 
     func testShouldShowTermsOfUse_ReturnsFalse_WhenTimeoutPeriodNotElapsed() {

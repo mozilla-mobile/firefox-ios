@@ -35,6 +35,7 @@ final class ScreenshotHelperTests: XCTestCase, StoreTestUtility {
         let tab = Tab(profile: profile, windowUUID: .XCTestDefaultUUID)
         let homeURL = URL(string: "internal://local/about/home")
         let mockTabWebView = MockTabWebView(tab: tab)
+        tabManager.selectedTab = tab
 
         mockTabWebView.loadedURL = homeURL
         tab.webView = mockTabWebView

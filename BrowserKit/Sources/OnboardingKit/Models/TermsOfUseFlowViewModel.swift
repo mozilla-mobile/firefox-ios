@@ -6,6 +6,7 @@ import SwiftUI
 
 public final class TermsOfUseFlowViewModel<ViewModel: OnboardingCardInfoModelProtocol>: ObservableObject {
     public let configuration: ViewModel
+    public let variant: OnboardingVariant
     public let onTermsOfUseTap: () -> Void
     public let onPrivacyNoticeTap: () -> Void
     public let onManageSettingsTap: () -> Void
@@ -13,12 +14,14 @@ public final class TermsOfUseFlowViewModel<ViewModel: OnboardingCardInfoModelPro
 
     public init(
         configuration: ViewModel,
+        variant: OnboardingVariant = .modern,
         onTermsOfUseTap: @escaping () -> Void,
         onPrivacyNoticeTap: @escaping () -> Void,
         onManageSettingsTap: @escaping () -> Void = {},
         onComplete: @escaping () -> Void
     ) {
         self.configuration = configuration
+        self.variant = variant
         self.onTermsOfUseTap = onTermsOfUseTap
         self.onPrivacyNoticeTap = onPrivacyNoticeTap
         self.onManageSettingsTap = onManageSettingsTap

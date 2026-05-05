@@ -8,29 +8,32 @@ import Account
 import Shared
 
 @MainActor
-final class MainMenuMiddleware: FeatureFlaggable {
+final class MainMenuMiddleware {
     private enum TelemetryAction {
-        static let findInPage = "find_in_page"
+        static let addToShortcuts = "add_to_shortcuts"
         static let bookmarks = "bookmarks"
-        static let history = "history"
+        static let bookmarkThisPage = "bookmark_this_page"
+        static let defaultBrowserSettings = "default_browser_settings"
         static let downloads = "downloads"
+        static let editBookmark = "edit_bookmark"
+        static let findInPage = "find_in_page"
+        static let history = "history"
+        static let nightModeTurnOff = "night_mode_turn_off"
+        static let nightModeTurnOn = "night_mode_turn_on"
         static let passwords = "passwords"
-        static let settings = "settings"
+        static let readerView = "reader_view"
         static let print = "print"
-        static let share = "share"
+        static let removeFromShortcuts = "remove_from_shortcuts"
         static let saveAsPDF = "save_as_PDF"
+        static let settings = "settings"
+        static let share = "share"
+        static let signInAccount = "sign_in_account"
+        static let siteProtections = "site_protections"
         static let switchToDesktopSite = "switch_to_desktop_site"
         static let switchToMobileSite = "switch_to_mobile_site"
-        static let signInAccount = "sign_in_account"
+        static let translatePage = "translate_page"
+        static let webpageSummary = "webpage_summary"
         static let zoom = "zoom"
-        static let bookmarkThisPage = "bookmark_this_page"
-        static let editBookmark = "edit_bookmark"
-        static let addToShortcuts = "add_to_shortcuts"
-        static let removeFromShortcuts = "remove_from_shortcuts"
-        static let nightModeTurnOn = "night_mode_turn_on"
-        static let nightModeTurnOff = "night_mode_turn_off"
-        static let siteProtections = "site_protections"
-        static let defaultBrowserSettings = "default_browser_settings"
     }
 
     private let logger: Logger
@@ -201,6 +204,9 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .passwords:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.passwords)
 
+        case .readerView:
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.readerView)
+
         case .settings:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.settings)
 
@@ -228,8 +234,11 @@ final class MainMenuMiddleware: FeatureFlaggable {
         case .defaultBrowser:
             self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.defaultBrowserSettings)
 
-        case .webpageSummary: break
-            // TODO(FXIOS-12761): Add telemetry for summarizer MVP
+        case .webpageSummary:
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.webpageSummary)
+
+        case .translatePage:
+            self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.translatePage)
         }
     }
 }

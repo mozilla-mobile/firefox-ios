@@ -19,7 +19,6 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         let profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: profile)
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
@@ -117,6 +116,19 @@ final class ModernLaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
         guard case .defaultBrowser = coordinatorDelegate.savedLaunchType else {
             XCTFail("Expected default browser launch type")
+            return
+        }
+    }
+
+    func test_launchWithLaunchType_withVideoIntroType_callsCoordinatorCorrectly() {
+        let subject = createSubject()
+        let launchType: LaunchType = .videoIntro
+
+        subject.launchWith(launchType: launchType)
+
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        guard case .videoIntro = coordinatorDelegate.savedLaunchType else {
+            XCTFail("Expected video intro launch type")
             return
         }
     }

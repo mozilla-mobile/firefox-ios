@@ -31,9 +31,9 @@ final class ShortcutsLibraryMiddleware {
 
     @MainActor
     private func handleViewDidAppearAction(state: AppState, action: Action) {
-        guard let shortcutsLibraryState = state.screenState(ShortcutsLibraryState.self,
-                                                            for: .shortcutsLibrary,
-                                                            window: action.windowUUID) else { return }
+        guard let shortcutsLibraryState = state.componentState(ShortcutsLibraryState.self,
+                                                               for: .shortcutsLibrary,
+                                                               window: action.windowUUID) else { return }
         if shortcutsLibraryState.shouldRecordImpressionTelemetry {
             self.shortcutsLibraryTelemetry.sendShortcutsLibraryViewedEvent()
             store.dispatch(

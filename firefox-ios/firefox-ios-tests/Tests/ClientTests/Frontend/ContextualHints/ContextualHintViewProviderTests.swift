@@ -15,7 +15,6 @@ class ContextualHintViewProviderTests: XCTestCase {
 
     override func setUp() async throws {
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         try await super.setUp()
     }
 
@@ -25,29 +24,6 @@ class ContextualHintViewProviderTests: XCTestCase {
     }
 
     // MARK: Mark Contextual Hint Configuration
-
-    func test_dataClearanceConfiguration() {
-        let subject = ContextualHintViewProvider(forHintType: .dataClearance, with: profile)
-        XCTAssertTrue(subject.shouldPresentContextualHint())
-    }
-
-    func test_markContextualHintPresented_setPrefsTrue() {
-        let subject = ContextualHintViewProvider(forHintType: .dataClearance, with: profile)
-        subject.markContextualHintPresented()
-        XCTAssertTrue(profile.prefs.boolForKey(CFRPrefsKeys.dataClearanceKey.rawValue)!)
-    }
-
-    func test_markContextualHintConfiguration_withDataClearanceTrue_doesNotSetPrefs() {
-        let subject = ContextualHintViewProvider(forHintType: .dataClearance, with: profile)
-        subject.markContextualHintConfiguration(configured: true)
-        XCTAssertNil(profile.prefs.boolForKey(CFRPrefsKeys.dataClearanceKey.rawValue))
-    }
-
-    func test_markContextualHintConfiguration_withDataClearanceFalse_doesNotSetPrefs() {
-        let subject = ContextualHintViewProvider(forHintType: .dataClearance, with: profile)
-        subject.markContextualHintConfiguration(configured: false)
-        XCTAssertNil(profile.prefs.boolForKey(CFRPrefsKeys.dataClearanceKey.rawValue))
-    }
 
     func testJumpBackInSyncTabConfiguredTrue() {
         let subject = ContextualHintViewProvider(forHintType: .jumpBackInSyncedTab, with: profile)

@@ -10,6 +10,7 @@ protocol SearchSettingsSelectorsSet {
     var BACK_BUTTON: Selector { get }
     var TRENDING_SEARCH_SWITCH: Selector { get }
     var RECENT_SEARCH_SWITCH: Selector { get }
+    var DEFAULT_SEARCH_ENGINE_NAVBAR: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -20,6 +21,7 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         static let recentSearchesSwitch     = AccessibilityIdentifiers.Settings.Search.showRecentSearchesSwitch
         static let backButtoniOS26          = AccessibilityIdentifiers.Settings.Search.backButtoniOS26
         static let backButton               = AccessibilityIdentifiers.Settings.Search.backButton
+        static let defaultSearchEngineNavBar = "Default Search Engine"
     }
 
     let NAVBAR = Selector.navigationBarId(
@@ -52,7 +54,13 @@ struct SearchSettingsSelectors: SearchSettingsSelectorsSet {
         groups: ["settings", "search", "recent searches"]
     )
 
+    let DEFAULT_SEARCH_ENGINE_NAVBAR = Selector.navigationBarId(
+        IDs.defaultSearchEngineNavBar,
+        description: "Default Search Engine navigation bar (appears when selecting engine)",
+        groups: ["settings", "search"]
+    )
+
     var all: [Selector] {
-        [NAVBAR, BACK_BUTTON_iOS26, BACK_BUTTON, TRENDING_SEARCH_SWITCH, RECENT_SEARCH_SWITCH]
+        [NAVBAR, BACK_BUTTON_iOS26, BACK_BUTTON, TRENDING_SEARCH_SWITCH, RECENT_SEARCH_SWITCH, DEFAULT_SEARCH_ENGINE_NAVBAR]
     }
 }

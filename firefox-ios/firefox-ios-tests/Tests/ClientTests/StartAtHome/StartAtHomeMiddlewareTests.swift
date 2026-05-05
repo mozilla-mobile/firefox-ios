@@ -18,7 +18,6 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
         mockTabManager.tabRestoreHasFinished = true
@@ -26,8 +25,13 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
-        DependencyHelperMock().bootstrapDependencies(injectedWindowManager: mockWindowManager)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        mockWindowManager.overrideWindows = true
+        // Inject the mock profile so that `UserFeaturePreferring` resolved from the
+        // AppContainer reads from `mockProfile.prefs` (which the tests configure).
+        DependencyHelperMock().bootstrapDependencies(
+            injectedProfile: mockProfile,
+            injectedWindowManager: mockWindowManager,
+        )
         setupStore()
         appState = setupAppState()
     }
@@ -137,8 +141,8 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
     // MARK: StoreTestUtility
     func setupAppState() -> Client.AppState {
         let appState = AppState(
-            activeScreens: ActiveScreensState(
-                screens: [
+            presentedComponents: PresentedComponentsState(
+                components: [
                     .browserViewController(
                         BrowserViewControllerState(
                             windowUUID: .XCTestDefaultUUID

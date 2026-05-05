@@ -2148,7 +2148,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Blockzilla" */;
 			buildPhases = (
-				5A2D1A4E2D8877150066F7C9 /* Update Version */,
 				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
 				D48C953D27FF411800FF8AEF /* Run Swiftlint */,
 				D5D067F9252F939600C35227 /* Glean */,
@@ -2520,25 +2519,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
-		};
-		5A2D1A4E2D8877150066F7C9 /* Update Version */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Update Version";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\nVERSION_FILE=\"${SRCROOT}/../version.txt\"\nXCCONFIG_FILE=\"${SRCROOT}/version.xcconfig\"\n\n# Read version from file\nif [ -f \"$VERSION_FILE\" ]; then\n    VERSION_NUMBER=$(cat \"$VERSION_FILE\" | tr -d '[:space:]')\nelse\n    echo \"Error: version.txt not found!\"\n    exit 1\nfi\n\n# Update the xcconfig file with the version number\necho \"APP_VERSION = $VERSION_NUMBER\" > \"$XCCONFIG_FILE\"\n\necho \"Updated Version.xcconfig with version: $VERSION_NUMBER\"\n";
 		};
 		D48C953D27FF411800FF8AEF /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -7337,7 +7317,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.36.0;
+				version = 9.10.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

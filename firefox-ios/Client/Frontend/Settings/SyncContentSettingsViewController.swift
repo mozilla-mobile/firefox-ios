@@ -184,7 +184,7 @@ class DeviceNameSetting: StringSetting {
     }
 }
 
-class SyncContentSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
     init(windowUUID: WindowUUID) {

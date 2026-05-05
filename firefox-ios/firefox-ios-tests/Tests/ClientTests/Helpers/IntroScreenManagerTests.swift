@@ -12,16 +12,17 @@ import OnboardingKit
 final class IntroScreenManagerTests: XCTestCase {
     var prefs: MockProfilePrefs!
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         prefs = MockProfilePrefs()
         let mockProfile = MockProfile(databasePrefix: "IntroScreenManagerTests_")
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        await DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
         prefs = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - shouldShowIntroScreen Tests
@@ -94,7 +95,7 @@ final class IntroScreenManagerTests: XCTestCase {
     func testOnboardingVariant_whenModernEnabledButJapanDisabled_returnsModern() {
         setupNimbusFeatureFlags(enableModernUi: true, shouldUseJapanConfiguration: false)
         let subject = IntroScreenManager(prefs: prefs)
-        XCTAssertEqual(subject.onboardingVariant, .modern)
+        XCTAssertEqual(subject.onboardingVariant, .brandRefresh)
     }
 
     func testOnboardingVariant_whenBothFlagsEnabled_returnsJapan() {
@@ -110,9 +111,21 @@ final class IntroScreenManagerTests: XCTestCase {
         XCTAssertEqual(subject.onboardingVariant, .legacy)
     }
 
+    // MARK: - shouldShowVideoIntro Tests
+
+    func testShouldShowVideoIntro() {
+        setupNimbusFeatureFlags(enableModernUi: false, shouldUseJapanConfiguration: false)
+        let subject = IntroScreenManager(prefs: prefs)
+
+        XCTAssertFalse(subject.shouldShowVideoIntro)
+    }
+
     // MARK: - Helper Methods
 
-    private func setupNimbusFeatureFlags(enableModernUi: Bool, shouldUseJapanConfiguration: Bool) {
+    private func setupNimbusFeatureFlags(enableModernUi: Bool,
+                                         shouldUseBrandRefreshConfiguration: Bool = true,
+                                         shouldUseJapanConfiguration: Bool,
+                                         enableVideoIntro: Bool = false) {
         FxNimbus.shared.features.onboardingFrameworkFeature.with { appContext, _ in
             OnboardingFrameworkFeature(
                 appContext,
@@ -121,6 +134,8 @@ final class IntroScreenManagerTests: XCTestCase {
                 conditions: ["ALWAYS": "true"],
                 dismissable: false,
                 enableModernUi: enableModernUi,
+                enableVideoIntro: enableVideoIntro,
+                shouldUseBrandRefreshConfiguration: shouldUseBrandRefreshConfiguration,
                 shouldUseJapanConfiguration: shouldUseJapanConfiguration
             )
         }

@@ -89,8 +89,7 @@ class SlideOverPresentationController: UIPresentationController, FeatureFlaggabl
 
     @objc
     func dismissController() {
-        let trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor,
-                                                                             checking: .buildOnly)
+        let trackingProtectionRefactorStatus = featureFlagsProvider.isEnabled(.trackingProtectionRefactor)
         if trackingProtectionRefactorStatus {
             enhancedTrackingProtectionMenuDelegate?.didFinish()
         } else {
