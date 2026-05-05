@@ -672,7 +672,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task {
+        Task { [weak tab] in
+            guard let tab else { return }
             do {
                 let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
@@ -926,9 +927,10 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func storeScreenshot(tab: Tab) {
         guard let screenshot = tab.screenshot else { return }
 
+        let tabUUID = tab.tabUUID
         Task {
             do {
-                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+                try await imageStore?.saveImageForKey(tabUUID, image: screenshot)
             } catch {
                 logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
             }
@@ -936,8 +938,9 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func removeScreenshot(tab: Tab) {
+        let tabUUID = tab.tabUUID
         Task {
-            await imageStore?.deleteImageForKey(tab.tabUUID)
+            await imageStore?.deleteImageForKey(tabUUID)
         }
     }
 

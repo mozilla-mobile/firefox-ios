@@ -577,11 +577,9 @@ class Tab: NSObject,
         }
     }
 
+    /// Keep final cleanup in deinit as a safety net, but add call in close() explicitly
+    /// because retained tabs may delay deinit and keep resources alive.
     deinit {
-        webViewLoadingObserver?.invalidate()
-
-        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
-
 #if DEBUG
         debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -614,9 +612,10 @@ class Tab: NSObject,
         }
     }
 
+    /// Performs cleanup because deinit may be delayed by retain cycles or long-lived references.
     func close() async {
         await webView?.pauseAllMediaPlayback()
-        await webView?.closeAllMediaPresentations()
+
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -627,10 +626,14 @@ class Tab: NSObject,
         }
 
         webView?.addUITestMemoryLeakDetectionUIElement()
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
+
+        webViewLoadingObserver?.invalidate()
+        webViewLoadingObserver = nil
         webView = nil
+
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
     }
 
     func goBack() {
