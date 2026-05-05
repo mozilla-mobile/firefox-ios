@@ -12,19 +12,23 @@ struct TranslationSettingsViewAction: Action {
     let languages: [String]?
     let pendingLanguages: [PreferredLanguageDetails]?
     let newSettingValue: Bool?
+    let toggledViaAIControls: Bool?
 
     init(languageCode: String? = nil,
          languages: [String]? = nil,
          pendingLanguages: [PreferredLanguageDetails]? = nil,
          newSettingValue: Bool? = nil,
+         toggledViaAIControls: Bool? = nil,
          windowUUID: WindowUUID,
-         actionType: ActionType) {
+         actionType: ActionType
+    ) {
         self.languageCode = languageCode
         self.languages = languages
         self.pendingLanguages = pendingLanguages
         self.newSettingValue = newSettingValue
         self.windowUUID = windowUUID
         self.actionType = actionType
+        self.toggledViaAIControls = toggledViaAIControls
     }
 }
 
