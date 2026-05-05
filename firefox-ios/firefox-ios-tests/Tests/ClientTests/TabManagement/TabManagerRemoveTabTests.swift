@@ -4,10 +4,7 @@
 
 import Foundation
 import XCTest
-import TabDataStore
-import WebKit
 import Shared
-import Common
 @testable import Client
 
 final class TabManagerRemoveTabTests: TabManagerTestsBase {
