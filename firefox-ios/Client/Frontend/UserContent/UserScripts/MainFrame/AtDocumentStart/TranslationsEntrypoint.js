@@ -82,7 +82,10 @@ const discardTranslations = ({from, to}) => {
 /// NOTE: This returns a promise that resolves when the translation process is "done".
 /// This is used mainly to turn the translations button to the active state in the UI.
 /// This should be called from swift.
-const isDone = async () => isDonePromise;
+const isDone = () => Promise.race([
+    isDonePromise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("translation timed out")), 15000))
+]);
 
 /// NOTE: Expose the Translations API to the privileged context.
 /// Anything not exposed here will not be accessible outside this user script.
