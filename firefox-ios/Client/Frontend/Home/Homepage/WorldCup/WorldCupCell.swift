@@ -8,7 +8,7 @@ import Foundation
 /// A homepage cell that pages through an arbitrary set of subviews with a page-indicator.
 /// The cell dynamically resizes its height to match the currently visible page.
 /// When there is only one subview, scrolling is disabled and the page indicator is hidden.
-final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
+final class WorldCupCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
         static let generalCornerRadius: CGFloat = 16
         static let contentInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -48,7 +48,9 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
     private var pageViews: [UIView] = []
     private var pageConstraints: [NSLayoutConstraint] = []
     private var scrollViewHeightConstraint: NSLayoutConstraint?
+    private var pageControlHeightConstraint: NSLayoutConstraint?
     private var currentPage = 0
+    private var currentState: WorldCupSectionState?
 
     // MARK: - Inits
 
@@ -71,43 +73,50 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
         scrollView.contentOffset = .zero
         pageControl.currentPage = 0
         currentPage = 0
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.layer.shadowPath = UIBezierPath(
-            roundedRect: contentView.bounds,
-            cornerRadius: UX.generalCornerRadius
-        ).cgPath
+        currentState = nil
     }
 
     // MARK: - Public
 
-    /// Replaces the current content with the given subviews, displayed as full-width pages.
+    /// Configures the cell with the given state, displaying its pages as full-width subviews.
     /// The cell height adapts to the currently visible page's height.
-    /// When there is a single subview, scrolling is disabled and the page indicator is hidden.
-    func configure(with subviews: [UIView], theme: Theme) {
-        removePageViews()
-        scrollView.contentOffset = .zero
-        pageControl.currentPage = 0
-        currentPage = 0
+    /// When there is a single page, scrolling is disabled and the page indicator is hidden.
+    /// Subviews are only rebuilt when the state changes; theme is always reapplied.
+    func configure(with state: WorldCupSectionState, theme: Theme) {
+        if currentState != state {
+            currentState = state
+            rebuildPages(for: state)
+        }
+        applyTheme(theme: theme)
+    }
 
+    private func makeSubviews(for state: WorldCupSectionState) -> [UIView] {
+        return [WorldCupTimerView(windowUUID: state.windowUUID)]
+    }
+
+    private func rebuildPages(for state: WorldCupSectionState) {
+        removePageViews()
+
+        let subviews = makeSubviews(for: state)
         pageViews = subviews
         pageControl.numberOfPages = subviews.count
         scrollView.isScrollEnabled = subviews.count > 1
+        pageControlHeightConstraint?.constant = subviews.count > 1 ? UX.pageControlHeight : 0
 
         var constraints: [NSLayoutConstraint] = []
         for view in subviews {
+            view.translatesAutoresizingMaskIntoConstraints = false
             pagesStack.addArrangedSubview(view)
             constraints.append(view.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor))
         }
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
 
-        // Set initial scroll view height to first page
-        updateScrollViewHeight(for: 0, animated: false)
+        scrollView.contentOffset = .zero
+        pageControl.currentPage = 0
+        currentPage = 0
 
-        applyTheme(theme: theme)
+        updateScrollViewHeight(for: 0, animated: false)
     }
 
     // MARK: - Layout
@@ -120,6 +129,9 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
 
         let heightConstraint = scrollView.heightAnchor.constraint(equalToConstant: 0)
         scrollViewHeightConstraint = heightConstraint
+
+        let pageControlHeight = pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight)
+        pageControlHeightConstraint = pageControlHeight
 
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -140,7 +152,7 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
             pageControl.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
             pageControl.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
                                                 constant: -UX.contentInsets.bottom),
-            pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight),
+            pageControlHeight,
 
             pagesStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             pagesStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -200,13 +212,15 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
         pageControl.currentPageIndicatorTintColor = theme.colors.iconPrimary
         pageControl.pageIndicatorTintColor = theme.colors.iconSecondary
         adjustBlur(theme: theme)
+        pageViews
+            .compactMap { $0 as? ThemeApplicable }
+            .forEach { $0.applyTheme(theme: theme) }
     }
 
     // MARK: - Blurrable
 
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
-            rootContainer.layoutIfNeeded()
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
@@ -218,7 +232,7 @@ final class WorldCupScrollableCell: UICollectionViewCell, ReusableCell, ThemeApp
 
 // MARK: - UIScrollViewDelegate
 
-extension WorldCupScrollableCell: UIScrollViewDelegate {
+extension WorldCupCell: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth = scrollView.frame.width
         guard pageWidth > 0 else { return }

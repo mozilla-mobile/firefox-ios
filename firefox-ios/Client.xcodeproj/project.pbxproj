@@ -1614,7 +1614,7 @@
 		C29B64832AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */; };
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
 		C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64ED2AD937D400F3244B /* QRCodeNavigationHandler.swift */; };
-		C2A057E32FA8C32200100C24 /* WorldCupScrollableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A057E22FA8C32200100C24 /* WorldCupScrollableCell.swift */; };
+		C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A057E22FA8C32200100C24 /* WorldCupCell.swift */; };
 		C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A662A76938C002ACCE2 /* DownloadsCoordinator.swift */; };
 		C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */; };
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
@@ -1638,7 +1638,7 @@
 		C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1442ECE62E8004E20AB /* MockTranslationsService.swift */; };
 		C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */; };
 		C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */; };
-		C2EA234C2FA0B8AE004B6338 /* WorldCupTimerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA234B2FA0B8AE004B6338 /* WorldCupTimerCell.swift */; };
+		C2EA234C2FA0B8AE004B6338 /* WorldCupTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */; };
 		C2EA23512FA1B8AE004B6339 /* WorldCupCountdownModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */; };
 		C2EA23522FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23532FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift */; };
 		C2EA23542FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */; };
@@ -10372,7 +10372,7 @@
 		C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeParentCoordinator.swift; sourceTree = "<group>"; };
 		C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinatorTests.swift; sourceTree = "<group>"; };
 		C29B64ED2AD937D400F3244B /* QRCodeNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeNavigationHandler.swift; sourceTree = "<group>"; };
-		C2A057E22FA8C32200100C24 /* WorldCupScrollableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupScrollableCell.swift; sourceTree = "<group>"; };
+		C2A057E22FA8C32200100C24 /* WorldCupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCell.swift; sourceTree = "<group>"; };
 		C2A72A662A76938C002ACCE2 /* DownloadsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinator.swift; sourceTree = "<group>"; };
 		C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinator.swift; sourceTree = "<group>"; };
 		C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -10402,7 +10402,7 @@
 		C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsServiceTests.swift; sourceTree = "<group>"; };
 		C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMainMenuCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
-		C2EA234B2FA0B8AE004B6338 /* WorldCupTimerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTimerCell.swift; sourceTree = "<group>"; };
+		C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTimerView.swift; sourceTree = "<group>"; };
 		C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountdownModel.swift; sourceTree = "<group>"; };
 		C2EA23532FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupNowOverrideSetting.swift; sourceTree = "<group>"; };
 		C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupResetDismissedSetting.swift; sourceTree = "<group>"; };
@@ -15058,8 +15058,8 @@
 		C2D7AC3B2F9B5D750090EC28 /* WorldCup */ = {
 			isa = PBXGroup;
 			children = (
-				C2A057E22FA8C32200100C24 /* WorldCupScrollableCell.swift */,
-				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerCell.swift */,
+				C2A057E22FA8C32200100C24 /* WorldCupCell.swift */,
+				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */,
 				FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */,
 				C2D7AC3C2F9B5DC30090EC28 /* WorldCupAction.swift */,
@@ -19463,7 +19463,7 @@
 				C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
-				C2A057E32FA8C32200100C24 /* WorldCupScrollableCell.swift in Sources */,
+				C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
@@ -19896,7 +19896,7 @@
 				E19F86032D6F4B51007453A7 /* ToolbarLayoutStyle.swift in Sources */,
 				C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
-				C2EA234C2FA0B8AE004B6338 /* WorldCupTimerCell.swift in Sources */,
+				C2EA234C2FA0B8AE004B6338 /* WorldCupTimerView.swift in Sources */,
 				C2EA23512FA1B8AE004B6339 /* WorldCupCountdownModel.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */,

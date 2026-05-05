@@ -608,13 +608,9 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard:
-            return configuredCell(cellType: WorldCupTimerCell.self, at: indexPath) { cell in
-                cell.configure(theme: currentTheme) { [weak self] in
-                    self?.openWorldCupLink()
-                } onDismiss: { [weak self] in
-                    self?.dispatchWorldCupCardClosed()
-                }
+        case .worldcupCard(let state):
+            return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
+                cell.configure(with: state, theme: currentTheme)
             }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
@@ -966,21 +962,6 @@ final class HomepageViewController: UIViewController,
         dispatchNavigationBrowserAction(
             with: NavigationDestination(.tabTray(type)),
             actionType: NavigationBrowserActionType.tapOnJumpBackInShowAllButton
-        )
-    }
-
-    private func openWorldCupLink() {
-        guard let url = URL(string: "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures") else { return }
-        navigateToNewTab(with: url)
-    }
-
-    private func dispatchWorldCupCardClosed() {
-        store.dispatch(
-            WorldCupAction(
-                windowUUID: windowUUID,
-                actionType: WorldCupActionType.closedCard,
-                shouldShowHomepageWorldCupSection: false
-            )
         )
     }
 
