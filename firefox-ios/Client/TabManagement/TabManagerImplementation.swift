@@ -672,16 +672,16 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task { [weak tab] in
+        Task { [weak tab, weak self] in
             guard let tab else { return }
             do {
-                let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
+                let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
             } catch {
-                logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
+                self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            await MainActor.run { dispatchDidSetScreenshotAction(for: tab) }
+            await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
         }
     }
 
@@ -949,6 +949,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
+        let imageStore = imageStore
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
@@ -956,6 +957,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func cleanUpTabSessionData() {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
@@ -979,6 +981,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
