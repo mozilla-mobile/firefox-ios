@@ -48,21 +48,22 @@ jobs:
         echo "next_version=${next_version}" >> $GITHUB_ENV
 
     - name: Get PR info
+      env:
+        # Use 'main' when triggered via cron
+        CURRENT_BRANCH: ${{ github.event.inputs.branchName || 'main' }}
       run: |
         current_date=$(date +"%Y-%m-%d")
-        # Use 'main' when triggered via cron
-        current_branch=${{ github.event.inputs.branchName || 'main' }}
         echo "current_date=$current_date" >> $GITHUB_ENV
-        if [[ $current_branch == 'main' ]]; then
+        if [[ $CURRENT_BRANCH == 'main' ]]; then
           echo "branch_name=string-import-$current_date" >> $GITHUB_ENV
-          echo "pr_title=Localize [v${{ env.next_version }}] String import $current_date" >> $GITHUB_ENV
+          echo "pr_title=Localize [v${next_version}] String import $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR imports string changes" >> $GITHUB_ENV
         else
           # version: v105.0 -> v105
-          version=${current_branch%??}
-          echo "branch_name=string-import-$current_branch-$current_date" >> $GITHUB_ENV
+          version=${CURRENT_BRANCH%??}
+          echo "branch_name=string-import-$CURRENT_BRANCH-$current_date" >> $GITHUB_ENV
           echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
-          echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
+          echo "pr_body=This automated PR imports string changes into branch $CURRENT_BRANCH" >> $GITHUB_ENV
         fi
 
     - name: Run script to import strings
