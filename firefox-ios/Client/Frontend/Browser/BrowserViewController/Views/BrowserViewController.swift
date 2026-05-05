@@ -155,11 +155,12 @@ class BrowserViewController: UIViewController,
     }
 
     // Constraints used to show/hide toolbars
-    private var contentContainerTopConstraint: NSLayoutConstraint?
     var headerTopConstraint: ConstraintReference?
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+    private var contentContainerTopConstraint: NSLayoutConstraint?
+    private var isContentContainerPinnedToScreenTop: Bool?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -743,7 +744,6 @@ class BrowserViewController: UIViewController,
             topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
-        updateContentContainerTopConstraint()
     }
 
     func dismissVisibleMenus() {
@@ -1077,7 +1077,6 @@ class BrowserViewController: UIViewController,
         header.addArrangedViewToTop(topTabsViewController.view)
         topTabsViewController.didMove(toParent: self)
         self.topTabsViewController = topTabsViewController
-        updateContentContainerTopConstraint()
     }
 
     private func setupAccessibleActions() {
@@ -1553,8 +1552,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Constraints
 
     private func setupConstraints() {
-        updateContentContainerTopConstraint()
-
         NSLayoutConstraint.activate([
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -1627,19 +1624,22 @@ class BrowserViewController: UIViewController,
     func updateContentContainerTopConstraint() {
         guard isViewLoaded else { return }
 
-        let shouldPinContentContainerToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
-        let pinToScreenTop = shouldPinContentContainerToScreenTop
-        contentContainerTopConstraint?.isActive = false
-        contentContainerTopConstraint = contentContainer.topAnchor.constraint(
-            equalTo: pinToScreenTop ? view.topAnchor : header.bottomAnchor
-        )
-        contentContainerTopConstraint?.isActive = true
+        let shouldPinToScreenTop = contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
 
-        let frontViews = pinToScreenTop
-            ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
-            : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
-               bottomContentStackView, bottomContainer, overKeyboardContainer]
-        frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+        if isContentContainerPinnedToScreenTop != shouldPinToScreenTop || contentContainerTopConstraint == nil {
+            isContentContainerPinnedToScreenTop = shouldPinToScreenTop
+            contentContainerTopConstraint?.isActive = false
+            contentContainerTopConstraint = contentContainer.topAnchor.constraint(
+                equalTo: shouldPinToScreenTop ? view.topAnchor : header.bottomAnchor
+            )
+            contentContainerTopConstraint?.isActive = true
+
+            let frontViews = shouldPinToScreenTop
+                ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+                : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
+                   bottomContentStackView, bottomContainer, overKeyboardContainer]
+            frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+        }
 
         guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
 
@@ -1647,7 +1647,7 @@ class BrowserViewController: UIViewController,
         // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
         // For example, an empty BVC header with a 54pt status bar overlay gives the homepage a 54pt top inset;
         // when BVC has header content, the homepage starts below the header and this inset is 0.
-        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        let homepageTopContentInset = shouldPinToScreenTop ? statusBarOverlay.frame.height : 0
         homepageViewController.updateTopContentInset(homepageTopContentInset)
     }
 
