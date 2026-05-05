@@ -24,13 +24,16 @@ protocol UserFeaturePreferring: Sendable {
 final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Sendable {
     private let prefs: Prefs
     private let backendLayer: NimbusFeatureFlagLayerProviding
+    private let userInterfaceIdiom: UIUserInterfaceIdiom
 
     init(
         prefs: Prefs,
-        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer
+        backendLayer: NimbusFeatureFlagLayerProviding = NimbusManager.shared.featureFlagLayer,
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDeviceDetails.userInterfaceIdiom
     ) {
         self.prefs = prefs
         self.backendLayer = backendLayer
+        self.userInterfaceIdiom = userInterfaceIdiom
     }
 
     // MARK: - Generic bool preferences
@@ -61,6 +64,9 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
     // MARK: - Typed preferences
 
     var searchBarPosition: SearchBarPosition {
+        // Bottom search bar is not supported on iPad; clamp to `.top` regardless
+        // of any value persisted in prefs so a stale write can't surface in the UI.
+        guard userInterfaceIdiom != .pad else { return .top }
         if let raw = prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
            let position = SearchBarPosition(rawValue: raw) {
             return position
