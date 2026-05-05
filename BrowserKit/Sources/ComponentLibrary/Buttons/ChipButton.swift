@@ -33,7 +33,6 @@ public final class ChipButton: UIButton, ThemeApplicable {
         configuration?.background.backgroundColorTransformer = nil
         configuration?.titleLineBreakMode = .byTruncatingTail
         layer.masksToBounds = false
-        titleTextLayer.contentsScale = UIScreen.main.scale
         titleTextLayer.alignmentMode = .center
         titleTextLayer.truncationMode = .end
         titleTextLayer.actions = [
@@ -121,6 +120,13 @@ public final class ChipButton: UIButton, ThemeApplicable {
             accessibilityTraits = [.button, .selected]
         } else {
             accessibilityTraits = [.button]
+        }
+    }
+
+    override public func didMoveToWindow() {
+        super.didMoveToWindow()
+        if viewModel?.titleRendering == .coreAnimationLayer {
+            titleTextLayer.contentsScale = window?.windowScene?.screen.scale ?? 1
         }
     }
 
