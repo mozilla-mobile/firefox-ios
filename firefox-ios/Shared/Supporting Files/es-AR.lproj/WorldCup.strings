@@ -92,7 +92,7 @@
 "WorldCup.HomepageWidget.CountDown.Title.v151" = "Cuenta regresiva para la Copa del Mundo";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
-"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Ver programación";
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Ver fixture";
 
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
 "WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Deshabilitar notificaciones";
@@ -113,7 +113,7 @@
 "WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "¿Todavía querés seguirlo?";
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
-"WorldCup.HomepageWidget.ErrorLabel.v151" = "No pudimos cargar los datos de coincidencias. Actualizar.";
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "No pudimos cargar los datos de partidos. Actualizar.";
 
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Ocultar actualizaciones de la Copa del Mundo";
@@ -128,10 +128,13 @@
 "WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Mantenete al tanto de la Copa del Mundo";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
-"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Seguir al equipo";
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Seguir equipo";
 
-/* The label indicating that the displaying match as ended. */
+/* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Partido terminado)";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Partido terminado";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Obtener un fondo de pantalla personalizado";
@@ -141,6 +144,15 @@
 
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "EN VIVO";
+
+/* Message shown in the World Cup widget when match data is temporarily unavailable. */
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "La información del partido no está disponible en este momento. Probá actualizar en unos minutos.";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Refrescar";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Parece que no estás conectado. Verificá tu conexión a Internet y probá de nuevo.";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Eliminar";
@@ -155,7 +167,7 @@
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINAL";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Tiempo completo • Sanciones";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Partido terminado • Penales";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "CUARTOS DE FINAL";
@@ -167,7 +179,7 @@
 "WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "RONDA DE 32";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Desplazar para ver coincidencias anteriores o siguientes";
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Desplazar para ver partidos anteriores o siguientes";
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINALES";
