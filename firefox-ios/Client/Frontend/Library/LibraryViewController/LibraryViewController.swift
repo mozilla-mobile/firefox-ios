@@ -425,6 +425,7 @@ class LibraryViewController: UIViewController, Themeable {
         segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()
+        setupButtons()
         setupToolBarAppearance()
     }
 
