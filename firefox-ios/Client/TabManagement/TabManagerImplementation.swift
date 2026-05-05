@@ -1018,6 +1018,11 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         logger.log("Offloading WebViews for \(backgroundTabsWithWebViews.count) background tabs",
                    level: .info,
                    category: .tabs)
+        // Sending telemetry for all webviews alive, even the selected tab one
+        tabsTelemetry.trackMemoryWarningOffload(
+            tabCount: tabs.count,
+            webViewCount: backgroundTabsWithWebViews.count + 1
+        )
         Task {
             for tab in backgroundTabsWithWebViews {
                 await tab.offloadWebView()
