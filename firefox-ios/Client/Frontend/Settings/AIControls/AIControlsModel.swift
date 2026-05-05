@@ -147,6 +147,7 @@ class AIControlsModel: ObservableObject,
         translationEnabled = newValue
         store.dispatch(TranslationSettingsViewAction(
             newSettingValue: newValue,
+            toggledViaAIControls: true,
             windowUUID: windowUUID,
             actionType: TranslationSettingsViewActionType.toggleTranslationsEnabled
         ))

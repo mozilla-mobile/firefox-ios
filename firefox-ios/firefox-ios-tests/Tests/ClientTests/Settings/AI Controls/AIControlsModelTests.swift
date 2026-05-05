@@ -188,6 +188,7 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
         let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
         XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
+        XCTAssertTrue(try XCTUnwrap(action.toggledViaAIControls))
 
         // Each settings event gets called twice for the legacy and new change event
         XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
