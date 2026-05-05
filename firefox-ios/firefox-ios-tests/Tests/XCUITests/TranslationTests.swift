@@ -52,8 +52,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         addLaunchArgument(jsonFileName: "defaultEnabledOn", featureName: "translations-feature")
         app.launch()
 
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is on
         settingsScreen.openTranslationSettings()
@@ -71,8 +70,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     func testTranslationSettingsDoesNotAppear_translationExperimentOff() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "translations-feature")
         app.launch()
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
+        openSettingsFromToolbarMenu()
 
         // Check that translation setting is hidden
         settingsScreen.assertTranslationSettingsDoesNotExist()
@@ -94,8 +92,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         // Check that translation icon is shown in toolbar
         toolBarScreen.assertTranslateButtonExists(with: .inactive)
 
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is on
         settingsScreen.openTranslationSettings()
@@ -110,8 +107,7 @@ final class TranslationsTests: FeatureFlaggedTestBase {
         // Check that translation icon is no longer shown in toolbar
         toolBarScreen.assertTranslateButtonDoesNotExist(with: .inactive)
 
-        toolBarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapSettings()
+        openSettingsFromToolbarMenu()
 
         // Check that translation feature setting is off
         settingsScreen.openTranslationSettings()
@@ -130,6 +126,11 @@ final class TranslationsTests: FeatureFlaggedTestBase {
     private func dismissTranslationSettingsScreen() {
         translationSettingScreen.tapOnBackButton()
         settingsScreen.closeSettingsWithDoneButton()
+    }
+
+    private func openSettingsFromToolbarMenu() {
+        toolBarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
     }
 
     private func navigateToTranslationTestPage() {
