@@ -73,6 +73,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
 
+            xcrun simctl list
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec_Testing" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 17,OS=26.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
 
@@ -155,6 +156,10 @@ workflows:
     - restore-spm-cache@3:
         is_always_run: true
     - activate-build-cache-for-xcode@0: {}
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -349,6 +354,10 @@ workflows:
             brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Firefox
@@ -445,6 +454,10 @@ workflows:
             brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: FirefoxBeta
@@ -1966,6 +1979,10 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         title: "Build for Testing"
         inputs:
@@ -2090,6 +2107,10 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Focus
@@ -2147,6 +2168,10 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1.1:
+        title: Initialize CoreSimulator
+        inputs:
+        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Klar
