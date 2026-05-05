@@ -23,7 +23,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         static let topSpacing: CGFloat = 8
         static let bottomSpacingIOS26: CGFloat = 16
     }
-    
+
     weak var delegate: TabTraySelectorDelegate?
 
     private var theme: Theme

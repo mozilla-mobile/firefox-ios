@@ -682,13 +682,7 @@ final class TabTrayViewController: UIViewController,
             panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
             panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-
-            // Because experimentSegmentControl doesn't inherit from UISegmentControl
-            // we need to set height and width constraints
-            experimentSegmentControl.widthAnchor.constraint(equalToConstant:
-                                                                UX.NavigationMenu.iPadWidth),
-            experimentSegmentControl.heightAnchor.constraint(equalToConstant: tabTrayUtils.segmentedControlHeight)
+            panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
 
