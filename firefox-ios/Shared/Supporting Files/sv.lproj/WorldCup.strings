@@ -34,8 +34,11 @@
 /* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
 "WorldCup.CountryPicker.DoneButtonTitle.v151" = "Klar";
 
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Hoppa över";
+
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.Title.v151" = "Följ ditt team";
+"WorldCup.CountryPicker.Title.v151" = "Följ ditt lag";
 
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "Grupp A";
@@ -80,7 +83,7 @@
 "WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "D";
 
 /* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
-"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "H";
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "T";
 
 /* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
 "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "M";
@@ -88,11 +91,14 @@
 /* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
 "WorldCup.HomepageWidget.CountDown.Title.v151" = "Nedräkning till VM";
 
+/* Label for the button that takes users to the World Cup schedule website on the countdown section. */
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Visa schema";
+
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
-"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Inaktivera aviseringar";
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Inaktivera notiser";
 
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Välj grupp";
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Välj lag";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Välj ett annat lag för att hänga med i VM.";
@@ -104,22 +110,25 @@
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Ta bort";
 
 /* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Vill du fortfarande följa med?";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Vill du fortfarande följa turneringen?";
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
-"WorldCup.HomepageWidget.ErrorLabel.v151" = "Vi kunde inte ladda matchningsdata. Vänligen uppdatera.";
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "Vi kunde inte ladda matchdata. Vänligen uppdatera.";
 
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Dölj VM-uppdateringar";
 
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Följ ditt team";
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Följ ditt lag";
 
 /* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Få liveuppdateringar om matcher och mycket mer.";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Håll koll på världscupen";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Håll koll på VM";
+
+/* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Följ laget";
 
 /* The label indicating that the displaying match as ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Heltid)";
@@ -140,10 +149,10 @@
 "WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Uppdatera";
 
 /* The label for the 'Bronze final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "BRONS-FINAAL";
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "BRONSFINAL";
 
 /* The label for the 'Final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "SLUT";
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINAL";
 
 /* The label indicating the displaying match has ended after penalties. */
 "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Heltid • Straffar";
@@ -152,22 +161,25 @@
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "KVARTSFINALER";
 
 /* The label for the 'Round of 16' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "ÅTERGÅNG AV 16";
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "ÅTTONDELSFINAL";
 
 /* The label for the 'Round of 32' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "Omgång AV 32";
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "SEXTONDELSFINAL";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Bläddra för att se föregående eller nästa matcher";
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMI-FINALER";
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINALER";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "TREDJE PLATS";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Kommande";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 VM i fotboll";
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "VM-MÄSTARE 2026";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Fler alternativ";
@@ -176,5 +188,5 @@
 "WorldCup.HomepageWidget.ShareLabel.v151" = "Dela";
 
 /* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
-"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Vi håller dig uppdaterad när världscupen närmar sig";
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Vi håller dig uppdaterad när VM närmar sig";
 

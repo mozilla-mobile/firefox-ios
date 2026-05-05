@@ -1083,9 +1083,10 @@ final class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is QuickAnswersCoordinator }) else { return }
         let coordinator = QuickAnswersCoordinator(
             parentCoordinatorDelegate: self,
+            prefs: profile.prefs,
             windowUUID: windowUUID,
             themeManager: themeManager,
-            router: router
+            router: router,
         ) { [weak self] navigationType in
             switch navigationType {
             case .url(let url):

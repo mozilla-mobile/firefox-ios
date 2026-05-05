@@ -101,7 +101,9 @@ final class AppLaunchUtil: FeatureFlaggable, Sendable {
         }
 
         // Save toolbar position to user prefs
-        SearchBarLocationSaver().saveUserSearchBarLocation(profile: profile)
+        let searchBarLocationSaver = SearchBarLocationSaver()
+        searchBarLocationSaver.migrateBottomBarPositionToTopOnIPad(profile: profile)
+        searchBarLocationSaver.saveUserSearchBarLocation(profile: profile)
         let deviceName = UIDevice.current.name
 
         NotificationCenter.default.addObserver(

@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Shared
 
 public final class QuickAnswersViewController: UIViewController, Themeable {
     private struct UX {
@@ -84,18 +85,22 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private let notificationCenter: NotificationProtocol
     private weak var navigationHandler: QuickAnswersNavigationHandler?
     private let viewModel: QuickAnswersViewModel
+    private lazy var errorHandler = ErrorHandler(
+        presenter: self,
+        navigationHandler: navigationHandler
+    )
 
     public convenience init(
         navigationHandler: QuickAnswersNavigationHandler?,
         presentationTransitionType: QuickAnswersTransitionType = .crossDissolve,
+        prefs: Prefs,
         windowUUID: WindowUUID,
         themeManager: any ThemeManager,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
     ) {
         self.init(
             navigationHandler: navigationHandler,
-            // TODO: - FXIOS-15245 Add real QuickAnswersService instead of MockQuickAnswersService
-            viewModel: QuickAnswersViewModel(service: MockQuickAnswersService()),
+            viewModel: QuickAnswersViewModel(prefs: prefs),
             presentationTransitionType: presentationTransitionType,
             windowUUID: windowUUID,
             themeManager: themeManager,
@@ -136,9 +141,13 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
         setupSubviews()
         applyTheme()
         listenForThemeChanges(withNotificationCenter: notificationCenter)
+        registerViewModelUpdates()
+    }
+
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         backgroundRecordEffect.startAnimating()
         audioWaveform.startAnimating()
-        registerViewModelUpdates()
     }
 
     override public func viewDidLayoutSubviews() {
@@ -195,14 +204,24 @@ public final class QuickAnswersViewController: UIViewController, Themeable {
     private func registerViewModelUpdates() {
         viewModel.onStateChange = { [weak self] state in
             switch state {
-            case .recordVoice(let result, _):
-                self?.contentView.configureTranscript(result.text)
+            case .recordVoice(let result, let error):
+                if let error {
+                    self?.errorHandler.handleSpeechError(error)
+                } else {
+                    self?.contentView.configureTranscript(result.text)
+                }
             case .loadingSearchResult:
                 self?.audioWaveform.stopAnimating()
                 self?.contentView.configureSearching()
-            case .showSearchResult(let result, _):
-                self?.contentView.configureAnswer(result.resultText)
-                self?.contentView.configureSources(result.sources)
+            case .showSearchResult(let result, let error):
+                if let error {
+                    self?.errorHandler.handleSearchError(error)
+                } else {
+                    self?.contentView.configureAnswer(result.resultText)
+                    self?.contentView.configureSources(result.sources)
+                }
+            case .initializationFailed:
+                self?.errorHandler.handleInitializationError()
             }
         }
         viewModel.startRecordingVoice()

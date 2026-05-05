@@ -847,12 +847,12 @@ class BrowserViewController: UIViewController,
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
         let allWindowUUIDs = (AppContainer.shared.resolve() as WindowManager).windows.keys.map { $0.uuidString.prefix(4) }
-        logger.log("BrowserDidBecomeActive. UUID = \(windowUUID.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
+        logger.log("BrowserDidBecomeActive. UUID = \(uuid.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
                    level: .info,
                    category: .lifecycle)
 
         NightModeHelper.cleanNightModeDefaults()
-        dispatchStartAtHomeAction()
+        dispatchStartAtHomeAction(windowUUID: uuid)
     }
 
     // MARK: - Summarize
@@ -868,7 +868,7 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Start At Home
-    private func dispatchStartAtHomeAction() {
+    private func dispatchStartAtHomeAction(windowUUID: WindowUUID) {
         let startAtHomeAction = StartAtHomeAction(
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
@@ -1491,19 +1491,20 @@ class BrowserViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
+        let popover = displayedPopoverController
         dismissVisibleMenus()
         let legacyScrollController = scrollController as? LegacyTabScrollProvider
 
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if let popover = displayedPopoverController {
-                updateDisplayedPopoverProperties?()
-                present(popover, animated: true, completion: nil)
-            }
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
+            guard let self, let popover else { return }
+            self.displayedPopoverController = popover
+            self.updateDisplayedPopoverProperties?()
+            self.present(popover, animated: false, completion: nil)
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
@@ -2603,7 +2604,7 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(prefs: profile.prefs),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
@@ -3606,8 +3607,8 @@ class BrowserViewController: UIViewController,
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
 
         // Closure to handle found field values for credit card and address fields
-        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-            guard let self, let tabWebView = tab.webView else { return }
+        formAutofillHelper.foundFieldValues = { [weak self, weak tab, weak webView] fieldValues, type, frame in
+            guard let self, let tabWebView = tab?.webView else { return }
 
             // Handle different field types
             switch fieldValues.fieldValue {
@@ -3628,7 +3629,7 @@ class BrowserViewController: UIViewController,
 
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
-                                              webView: WKWebView,
+                                              webView: WKWebView?,
                                               frame: WKFrameInfo?,
                                               localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
@@ -3649,7 +3650,7 @@ class BrowserViewController: UIViewController,
 
         tabWebView.accessoryView.savedAddressesClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
         }
@@ -3658,7 +3659,7 @@ class BrowserViewController: UIViewController,
     private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
                                                  type: FormAutofillPayloadType?,
                                                  tabWebView: TabWebView,
-                                                 webView: WKWebView,
+                                                 webView: WKWebView?,
                                                  frame: WKFrameInfo?) {
         guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
               let type = type,
@@ -3714,10 +3715,10 @@ class BrowserViewController: UIViewController,
     }
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
-    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView, frame: WKFrameInfo?) {
+    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
         tabWebView.accessoryView.savedCardsClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
         }
@@ -4845,7 +4846,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         _ popoverPresentationController: UIPopoverPresentationController
     ) {
         displayedPopoverController = nil
-        updateDisplayedPopoverProperties = nil
     }
 }
 

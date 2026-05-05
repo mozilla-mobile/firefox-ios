@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blokovaná**: funkciu neuvidíte a nemôžete ju používať. V prípade umelej inteligencie v zariadení sa odstránia všetky stiahnuté modely.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokovaná**: funkciu neuvidíte a nemôžete ju používať. V prípade umelej inteligencie v zariadení sa odstránia všetky stiahnuté modely.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Stránky a súhrny sa nikdy neukladajú.";
 

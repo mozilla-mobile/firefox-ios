@@ -58,7 +58,7 @@ struct ToolbarActionConfiguration: Equatable {
                actionType == .readerMode ||
                actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
-               (actionType == .translate && isSelected) ||
+               actionType == .translate ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

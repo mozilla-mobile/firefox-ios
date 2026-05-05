@@ -35,6 +35,7 @@ protocol AudioEngineProvider: Sendable {
 }
 
 protocol AudioSessionProvider: Sendable {
+    var recordPermission: AVAudioSession.RecordPermission { get }
     func requestRecordPermission(_ response: @escaping @Sendable (Bool) -> Void)
     func setCategory(
         _ category: AVAudioSession.Category,
@@ -74,6 +75,12 @@ protocol SpeechRecognizerProvider: Sendable {
 }
 
 protocol AuthorizeProvider: Sendable {
-    func isMicrophonePermissionAuthorized() async -> Bool
-    func isSpeechPermissionAuthorized() async -> Bool
+    /// Asks the OS for microphone permission access.
+    /// Throws `SpeechError.microphonePermissionDenied(isFirstTime)` where `isFirstTime` is `true` when
+    /// the system prompt was shown, or `false` when it wasn't.
+    func requestMicrophonePermission() async throws
+    /// Asks the OS for speech permission access.
+    /// Throws `SpeechError.speechRecognitionPermissionDenied(isFirstTime)` where `isFirstTime` is `true` when
+    /// the system prompt was shown, or `false` when it wasn't.
+    func requestSpeechPermission() async throws
 }
