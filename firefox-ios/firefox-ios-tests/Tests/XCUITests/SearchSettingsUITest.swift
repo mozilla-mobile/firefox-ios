@@ -98,7 +98,13 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons["Done"])
 
         // Make sure switches are there
-        XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 3)
+        if isFennec {
+            XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 3)
+        } else {
+            // Enhanced search suggestion experiment is turned off on firefox
+            // Suggestion switches are not available
+            XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2353250
