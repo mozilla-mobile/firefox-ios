@@ -33,6 +33,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.spacing = UX.iconSpacing
+        stackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap)))
     }
 
     private lazy var newsIconImageView: UIImageView = .build { imageView in
@@ -53,7 +54,6 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
         accessibilityTraits = .button
         setupLayout()
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     required init?(coder: NSCoder) {
@@ -86,10 +86,12 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.stackTopInset),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.stackHorizontalInset),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.stackHorizontalInset),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.stackBottomInset),
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.stackTopInset),
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: UX.stackHorizontalInset),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.stackHorizontalInset),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -UX.stackBottomInset),
 
             chevronImageView.widthAnchor.constraint(equalToConstant: UX.chevronSize),
             chevronImageView.heightAnchor.constraint(equalToConstant: UX.chevronSize),
