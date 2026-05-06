@@ -914,24 +914,11 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func getProfile(ignoreCache: Bool) throws  -> Profile
     
     /**
-     * Get the session token for the user's account, if one is available.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that they can retrieve
-     * it an pass it back to said web content when required.
-     *
-     * # Notes
-     *
-     *    - Please do not attempt to use the resulting token to directly make calls to the
-     *      Firefox Accounts servers! All account management functionality should be performed
-     *      in web content.
-     *    - A session token is only available to applications that have requested the
-     *      `https:///identity.mozilla.com/tokens/session` scope.
-
+     * Returns a complete signedInUser JSON object for a WebChannel fxaccounts:fxa_status response,
+     * embedding the session token privately. Email and uid come from the cached profile in internal
+     * state. Returns null if no session token is set.
      */
-    func getSessionToken() throws  -> String
+    func getSignedInUserForWebChannel()  -> String?
     
     /**
      * Get the current state
@@ -964,21 +951,20 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
     func handlePushMessage(payload: String) throws  -> AccountEvent
     
     /**
-     * Update the stored session token for the user's account.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that said web content
-     * signals that it has generated a new session token, the stored value can be updated
-     * to match.
-     *
-     * # Arguments
-     *
-     *    - `session_token` - the new session token value provided from web content.
-
+     * Stores anything necessary from a WebChannel login JSON payload. This includes the session
+     * token, but that is abstracted because the consuming apps should not be aware of the
+     * specific payload format returned, nor should they get access to the session token
+     * directly if possible.
+     * The [json_payload] is the `data` object from the `fxaccounts:login` WebChannel command.
      */
-    func handleSessionTokenChange(sessionToken: String) throws 
+    func handleWebChannelLogin(jsonPayload: String) throws 
+    
+    /**
+     * Handle a WebChannel password-change notification by exchanging the new session token
+     * for a new refresh token via a network call.
+     * The [json_payload] is the `data` object from the `fxaccounts:change_password` WebChannel command.
+     */
+    func handleWebChannelPasswordChange(jsonPayload: String) throws 
     
     /**
      * Create a new device record for this application.
@@ -1109,14 +1095,6 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
 
      */
     func setPushSubscription(subscription: DevicePushSubscription) throws  -> LocalDevice
-    
-    /**
-     * Sets the users information based on the web content's login information
-     * This is intended to only be used by user agents (eg: Firefox) to set the users
-     * session token and tie it to the refresh token that will be issued at the end of the
-     * oauth flow.
-     */
-    func setUserData(userData: UserData) 
     
     /**
      * Used by the application to test auth token issues
@@ -1757,26 +1735,13 @@ open func getProfile(ignoreCache: Bool)throws  -> Profile  {
 }
     
     /**
-     * Get the session token for the user's account, if one is available.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that they can retrieve
-     * it an pass it back to said web content when required.
-     *
-     * # Notes
-     *
-     *    - Please do not attempt to use the resulting token to directly make calls to the
-     *      Firefox Accounts servers! All account management functionality should be performed
-     *      in web content.
-     *    - A session token is only available to applications that have requested the
-     *      `https:///identity.mozilla.com/tokens/session` scope.
-
+     * Returns a complete signedInUser JSON object for a WebChannel fxaccounts:fxa_status response,
+     * embedding the session token privately. Email and uid come from the cached profile in internal
+     * state. Returns null if no session token is set.
      */
-open func getSessionToken()throws  -> String  {
-    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_get_session_token(
+open func getSignedInUserForWebChannel() -> String?  {
+    return try!  FfiConverterOptionString.lift(try! rustCall() {
+    uniffi_fxa_client_fn_method_firefoxaccount_get_signed_in_user_for_web_channel(
             self.uniffiCloneHandle(),$0
     )
 })
@@ -1832,24 +1797,29 @@ open func handlePushMessage(payload: String)throws  -> AccountEvent  {
 }
     
     /**
-     * Update the stored session token for the user's account.
-     *
-     * **💾 This method alters the persisted account state.**
-     *
-     * Applications that function as a web browser may need to hold on to a session token
-     * on behalf of Firefox Accounts web content. This method exists so that said web content
-     * signals that it has generated a new session token, the stored value can be updated
-     * to match.
-     *
-     * # Arguments
-     *
-     *    - `session_token` - the new session token value provided from web content.
-
+     * Stores anything necessary from a WebChannel login JSON payload. This includes the session
+     * token, but that is abstracted because the consuming apps should not be aware of the
+     * specific payload format returned, nor should they get access to the session token
+     * directly if possible.
+     * The [json_payload] is the `data` object from the `fxaccounts:login` WebChannel command.
      */
-open func handleSessionTokenChange(sessionToken: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
-    uniffi_fxa_client_fn_method_firefoxaccount_handle_session_token_change(
+open func handleWebChannelLogin(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_login(
             self.uniffiCloneHandle(),
-        FfiConverterString.lower(sessionToken),$0
+        FfiConverterString.lower(jsonPayload),$0
+    )
+}
+}
+    
+    /**
+     * Handle a WebChannel password-change notification by exchanging the new session token
+     * for a new refresh token via a network call.
+     * The [json_payload] is the `data` object from the `fxaccounts:change_password` WebChannel command.
+     */
+open func handleWebChannelPasswordChange(jsonPayload: String)throws   {try rustCallWithError(FfiConverterTypeFxaError_lift) {
+    uniffi_fxa_client_fn_method_firefoxaccount_handle_web_channel_password_change(
+            self.uniffiCloneHandle(),
+        FfiConverterString.lower(jsonPayload),$0
     )
 }
 }
@@ -2032,20 +2002,6 @@ open func setPushSubscription(subscription: DevicePushSubscription)throws  -> Lo
         FfiConverterTypeDevicePushSubscription_lower(subscription),$0
     )
 })
-}
-    
-    /**
-     * Sets the users information based on the web content's login information
-     * This is intended to only be used by user agents (eg: Firefox) to set the users
-     * session token and tie it to the refresh token that will be issued at the end of the
-     * oauth flow.
-     */
-open func setUserData(userData: UserData)  {try! rustCall() {
-    uniffi_fxa_client_fn_method_firefoxaccount_set_user_data(
-            self.uniffiCloneHandle(),
-        FfiConverterTypeUserData_lower(userData),$0
-    )
-}
 }
     
     /**
@@ -3326,68 +3282,6 @@ public func FfiConverterTypeTabHistoryEntry_lift(_ buf: RustBuffer) throws -> Ta
 #endif
 public func FfiConverterTypeTabHistoryEntry_lower(_ value: TabHistoryEntry) -> RustBuffer {
     return FfiConverterTypeTabHistoryEntry.lower(value)
-}
-
-
-public struct UserData: Equatable, Hashable {
-    public var sessionToken: String
-    public var uid: String
-    public var email: String
-    public var verified: Bool
-
-    // Default memberwise initializers are never public by default, so we
-    // declare one manually.
-    public init(sessionToken: String, uid: String, email: String, verified: Bool) {
-        self.sessionToken = sessionToken
-        self.uid = uid
-        self.email = email
-        self.verified = verified
-    }
-
-    
-
-    
-}
-
-#if compiler(>=6)
-extension UserData: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeUserData: FfiConverterRustBuffer {
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UserData {
-        return
-            try UserData(
-                sessionToken: FfiConverterString.read(from: &buf), 
-                uid: FfiConverterString.read(from: &buf), 
-                email: FfiConverterString.read(from: &buf), 
-                verified: FfiConverterBool.read(from: &buf)
-        )
-    }
-
-    public static func write(_ value: UserData, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.sessionToken, into: &buf)
-        FfiConverterString.write(value.uid, into: &buf)
-        FfiConverterString.write(value.email, into: &buf)
-        FfiConverterBool.write(value.verified, into: &buf)
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeUserData_lift(_ buf: RustBuffer) throws -> UserData {
-    return try FfiConverterTypeUserData.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeUserData_lower(_ value: UserData) -> RustBuffer {
-    return FfiConverterTypeUserData.lower(value)
 }
 
 // Note that we don't yet support `indirect` for enums.
@@ -4777,7 +4671,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_profile() != 18322) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_session_token() != 45605) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_get_signed_in_user_for_web_channel() != 36302) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_get_state() != 11194) {
@@ -4789,7 +4683,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_push_message() != 12910) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_session_token_change() != 61407) {
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_login() != 61652) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_fxa_client_checksum_method_firefoxaccount_handle_web_channel_password_change() != 5890) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_initialize_device() != 52372) {
@@ -4811,9 +4708,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_set_push_subscription() != 27852) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_fxa_client_checksum_method_firefoxaccount_set_user_data() != 31422) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_fxa_client_checksum_method_firefoxaccount_simulate_network_error() != 31630) {
