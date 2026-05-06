@@ -1013,7 +1013,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
-    func offloadBackgroundWebViews() {
+    func offloadBackgroundWebViews() async {
         let backgroundTabsWithWebViews = tabs.filter { $0.webView != nil && $0 !== selectedTab }
         logger.log("Offloading WebViews for \(backgroundTabsWithWebViews.count) background tabs",
                    level: .info,
@@ -1023,10 +1023,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
             tabCount: tabs.count,
             webViewCount: backgroundTabsWithWebViews.count + 1
         )
-        Task {
-            for tab in backgroundTabsWithWebViews {
-                await tab.offloadWebView()
-            }
+        for tab in backgroundTabsWithWebViews {
+            await tab.offloadWebView()
         }
     }
 

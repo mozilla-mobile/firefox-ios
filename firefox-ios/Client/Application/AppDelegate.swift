@@ -264,9 +264,9 @@ class AppDelegate: UIResponder,
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         logger.log("Received memory warning", level: .info, category: .lifecycle)
-        Task { @MainActor in
-            windowManager.allWindowUUIDs(includingReserved: false).forEach { uuid in
-                windowManager.tabManager(for: uuid).offloadBackgroundWebViews()
+        Task {
+            for uuid in windowManager.allWindowUUIDs(includingReserved: false) {
+                await windowManager.tabManager(for: uuid).offloadBackgroundWebViews()
             }
         }
     }

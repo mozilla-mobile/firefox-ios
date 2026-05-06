@@ -373,8 +373,7 @@ final class TabManagerTests: TabManagerTestsBase {
         _ = subject.addTab(URLRequest(url: URL(string: "https://firefox.com")!), afterTab: nil, isPrivate: false)
         subject.selectTab(tab1)
 
-        subject.offloadBackgroundWebViews()
-        try await Task.sleep(nanoseconds: sleepTime)
+        await subject.offloadBackgroundWebViews()
 
         XCTAssertEqual(subject.tabs.count, 3)
     }
@@ -389,8 +388,7 @@ final class TabManagerTests: TabManagerTestsBase {
         subject.selectTab(tab3)
         subject.selectTab(tab1)
 
-        subject.offloadBackgroundWebViews()
-        try await Task.sleep(nanoseconds: sleepTime)
+        await subject.offloadBackgroundWebViews()
 
         XCTAssertNil(tab2.webView)
         XCTAssertNil(tab3.webView)
@@ -405,8 +403,7 @@ final class TabManagerTests: TabManagerTestsBase {
 
         XCTAssertNotNil(tab1.webView)
 
-        subject.offloadBackgroundWebViews()
-        try await Task.sleep(nanoseconds: sleepTime)
+        await subject.offloadBackgroundWebViews()
 
         XCTAssertNotNil(tab1.webView, "The selected tab's WebView should not be offloaded")
     }
@@ -420,8 +417,7 @@ final class TabManagerTests: TabManagerTestsBase {
         XCTAssertNil(tabs[1].webView)
         XCTAssertNil(tabs[2].webView)
 
-        subject.offloadBackgroundWebViews()
-        try await Task.sleep(nanoseconds: sleepTime)
+        await subject.offloadBackgroundWebViews()
 
         XCTAssertNil(tabs[1].webView)
         XCTAssertNil(tabs[2].webView)
@@ -429,9 +425,9 @@ final class TabManagerTests: TabManagerTestsBase {
     }
 
     @MainActor
-    func testOffloadBackgroundWebViews_emptyTabList_doesNotCrash() {
+    func testOffloadBackgroundWebViews_emptyTabList_doesNotCrash() async {
         let subject = createSubject()
-        subject.offloadBackgroundWebViews()
+        await subject.offloadBackgroundWebViews()
         XCTAssertEqual(subject.tabs.count, 0)
     }
 }

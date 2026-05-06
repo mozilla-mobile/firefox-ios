@@ -119,7 +119,7 @@ protocol TabManager: AnyObject {
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func tabDidSetScreenshot(_ tab: Tab)
-    func offloadBackgroundWebViews()
+    func offloadBackgroundWebViews() async
 }
 
 extension TabManager {
