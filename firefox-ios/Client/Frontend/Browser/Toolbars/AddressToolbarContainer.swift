@@ -692,6 +692,8 @@ final class AddressToolbarContainer: UIView,
     @objc
     private func escapeKeyCommand() {
         guard let windowUUID else { return }
+        guard state?.addressToolbar.isEditing ?? false else { return }
+
         store.dispatch(ToolbarMiddlewareAction(
             buttonType: .cancelEdit,
             gestureType: .tap,
