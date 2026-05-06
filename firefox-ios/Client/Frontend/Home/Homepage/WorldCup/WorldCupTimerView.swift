@@ -9,7 +9,7 @@ import UIKit
 
 final class WorldCupTimerView: UIView, ThemeApplicable {
     private struct UX {
-        static let contentSpacing: CGFloat = 8.0
+        static let leftContentStackSpacing: CGFloat = 16.0
         static let timerVerticalPadding: CGFloat = 8
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
@@ -58,6 +58,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         label.text = String.WorldCup.HomepageWidget.CountDown.Title
         label.textAlignment = .natural
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     private lazy var timerContainer: UIView = .build { view in
@@ -86,7 +87,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         stack.spacing = UX.timerSegmentSpacing
     }
 
-    private lazy var ctaButton: PrimaryRoundedGlassButton = .build { [weak self] button in
+    private lazy var ctaButton: PrimaryRoundedButton = .build { [weak self] button in
         let buttonViewModel = PrimaryRoundedButtonViewModel(
             title: String.WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel,
             a11yIdentifier: ""
@@ -95,6 +96,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         button.configuration?.titleLineBreakMode = .byWordWrapping
         button.titleLabel?.numberOfLines = 0
         button.setContentCompressionResistancePriority(.required, for: .vertical)
+        button.setContentHuggingPriority(.required, for: .vertical)
         button.addAction(
             UIAction { [weak self] _ in
                 self?.handleCTATap()
@@ -118,9 +120,8 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     private lazy var leftContentStack: UIStackView = .build { stack in
         stack.axis = .vertical
         stack.alignment = .leading
-        stack.spacing = UX.contentSpacing
+        stack.spacing = UX.leftContentStackSpacing
         stack.setContentCompressionResistancePriority(.required, for: .horizontal)
-        stack.setContentHuggingPriority(.required, for: .vertical)
     }
 
     // MARK: - Init
