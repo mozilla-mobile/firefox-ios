@@ -870,6 +870,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
         subject.translationsProvider(mockStore.state, toggleAction)
+        mockStore.dispatchedActions.removeAll()
 
         let retryAction = TranslationsAction(
             windowUUID: .XCTestDefaultUUID,
