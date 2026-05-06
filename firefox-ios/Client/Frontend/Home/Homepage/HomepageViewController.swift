@@ -610,8 +610,8 @@ final class HomepageViewController: UIViewController,
             return configureMerinoCell(story, at: indexPath)
         case .worldcupCard(let state):
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] animated in
-                    self?.relayoutForCellHeightChange(animated: animated)
+                cell.configure(with: state, theme: currentTheme) { [weak self] in
+                    self?.relayoutForCellHeightChange()
                 }
             }
         case .spacer:
@@ -631,15 +631,9 @@ final class HomepageViewController: UIViewController,
         return cell
     }
 
-    private func relayoutForCellHeightChange(animated: Bool) {
+    private func relayoutForCellHeightChange() {
         guard let collectionView else { return }
-        if animated {
-            collectionView.performBatchUpdates(nil)
-        } else {
-            UIView.performWithoutAnimation {
-                collectionView.performBatchUpdates(nil)
-            }
-        }
+        collectionView.performBatchUpdates(nil)
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {

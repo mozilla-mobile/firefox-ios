@@ -15,6 +15,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         static let timerSegmentSpacing: CGFloat = 8.0
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let heroImageWidth: CGFloat = 160
+        static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
@@ -65,6 +66,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         view.clipsToBounds = true
         view.isAccessibilityElement = true
         view.accessibilityTraits = .staticText
+        view.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var dayValueLabel: UILabel = makeValueLabel()
@@ -85,6 +87,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         stack.axis = .horizontal
         stack.distribution = .equalSpacing
         stack.spacing = UX.timerSegmentSpacing
+        stack.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var ctaButton: PrimaryRoundedButton = .build { [weak self] button in
@@ -95,8 +98,6 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         button.configure(viewModel: buttonViewModel)
         button.configuration?.titleLineBreakMode = .byWordWrapping
         button.titleLabel?.numberOfLines = 0
-        button.setContentCompressionResistancePriority(.required, for: .vertical)
-        button.setContentHuggingPriority(.required, for: .vertical)
         button.addAction(
             UIAction { [weak self] _ in
                 self?.handleCTATap()
@@ -168,7 +169,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
                 constant: -UX.heroImageTrailingPadding
             ),
             heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
-            heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
             heroImageView.topAnchor.constraint(equalTo: topAnchor).priority(.defaultLow),
             heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultLow),
 
@@ -291,8 +292,6 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
-        else { return }
         updateA11yLayout()
     }
 
