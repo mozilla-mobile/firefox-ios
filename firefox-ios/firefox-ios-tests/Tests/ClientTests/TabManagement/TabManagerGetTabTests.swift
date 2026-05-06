@@ -60,7 +60,7 @@ final class TabManagerGetTabTests: TabManagerTestsBase {
     @MainActor
     func testGetTabForURL_returnsNil_whenNoTabMatchesURL() {
         let subject = createSubject()
-        subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
 
         let result = subject.getTabForURL(URL(string: "https://example.com/")!)
 
