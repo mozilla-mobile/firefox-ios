@@ -186,12 +186,6 @@ final class SettingScreen {
         cell.waitAndTap()
     }
 
-    func navigateToSearchSettings() {
-        let searchCell = sel.SEARCH_CELL.element(in: app)
-        BaseTestCase().mozWaitForElementToExist(searchCell)
-        searchCell.waitAndTap()
-    }
-
     func navigateToDisplaySettings() {
         let cell = sel.DISPLAY_THEME_CELL.element(in: app)
         BaseTestCase().mozWaitForElementToExist(cell)
