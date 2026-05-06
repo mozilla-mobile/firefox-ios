@@ -90,8 +90,8 @@ final class ToolbarAnimatorTests: XCTestCase {
 
     func test_hideToolbar_withBottomSearchBar_withZeroOverKeyboardHeight_fadesOverKeyboardSubviews() {
         let zeroOverKeyboardContext = ToolbarContext(overKeyboardContainerHeight: 0,
-                                                    bottomContainerHeight: 80,
-                                                    headerHeight: -44)
+                                                     bottomContainerHeight: 80,
+                                                     headerHeight: -44)
         let subject = ToolbarAnimator(context: zeroOverKeyboardContext)
         let mockViewZero = MockToolbarView()
         mockViewZero.isBottomSearchBar = true
@@ -107,8 +107,8 @@ final class ToolbarAnimatorTests: XCTestCase {
 
     func test_showToolbar_withBottomSearchBar_withZeroOverKeyboardHeight_restoresOverKeyboardSubviewsAlpha() {
         let zeroOverKeyboardContext = ToolbarContext(overKeyboardContainerHeight: 0,
-                                                    bottomContainerHeight: 80,
-                                                    headerHeight: -44)
+                                                     bottomContainerHeight: 80,
+                                                     headerHeight: -44)
         let subject = ToolbarAnimator(context: zeroOverKeyboardContext)
         let mockViewZero = MockToolbarView()
         mockViewZero.isBottomSearchBar = true
