@@ -84,10 +84,12 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         selectedNewsfeedCategoryID: String? = nil,
         newsfeedCategoryPickerOffsetX: CGFloat? = nil,
         onCategoryPickerScroll: ((CGFloat) -> Void)? = nil,
+        onNewsAffordanceTap: (() -> Void)? = nil,
         onSelection: (@MainActor @Sendable (String?) -> Void)? = nil
     ) {
         self.transitionEnabled = transitionEnabled
         newsAffordanceHeaderView.applyTheme(theme: theme)
+        newsAffordanceHeaderView.configure(onTap: onNewsAffordanceTap)
         sectionTitleHeaderView.configure(
             sectionHeaderConfiguration: sectionHeaderConfiguration,
             moreButtonAction: nil,

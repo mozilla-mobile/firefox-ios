@@ -778,6 +778,9 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
             onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onNewsAffordanceTap: { [weak self] in
+                self?.scrollNewsfeedToTop(onlyIfScrolledPastHeader: false, animated: true)
+            },
             onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
@@ -1098,7 +1101,7 @@ final class HomepageViewController: UIViewController,
 
         // If the user switches categories while scrolled through the newsfeed, jump back to the
         // offset where the pinned news header sits at the top before replacing the story items.
-        scrollNewsfeedToTop(for: activeTabUUID)
+        scrollNewsfeedToTop()
 
         homepageTabStateStore.updateState(for: activeTabUUID) { state in
             state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
@@ -1134,15 +1137,17 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    private func scrollNewsfeedToTop(for tabUUID: TabUUID) {
-        guard let collectionView,
-              let targetOffsetY = newsfeedHeaderPinnedOffsetY(),
-              collectionView.contentOffset.y > targetOffsetY
+    private func scrollNewsfeedToTop(onlyIfScrolledPastHeader: Bool = true, animated: Bool = false) {
+        guard let activeTabUUID,
+              let collectionView,
+              let targetOffsetY = newsfeedHeaderPinnedOffsetY()
         else { return }
 
+        guard !onlyIfScrolledPastHeader || collectionView.contentOffset.y > targetOffsetY else { return }
+
         let targetOffset = CGPoint(x: collectionView.contentOffset.x, y: targetOffsetY)
-        collectionView.setContentOffset(targetOffset, animated: false)
-        homepageTabStateStore.updateState(for: tabUUID) { state in
+        collectionView.setContentOffset(targetOffset, animated: animated)
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
             state.scrollOffsetY = targetOffsetY
         }
     }

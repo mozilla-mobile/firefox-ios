@@ -46,10 +46,14 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         label.text = .FirefoxHomepage.Pocket.NewsAffordanceLabel
     }
 
+    private var onTap: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = .FirefoxHomepage.Pocket.NewsAffordanceLabel
+        accessibilityTraits = .button
         setupLayout()
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     required init?(coder: NSCoder) {
@@ -61,6 +65,15 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         chevronImageView.tintColor = color
         newsIconImageView.tintColor = color
         newsLabel.textColor = color
+    }
+
+    func configure(onTap: (() -> Void)?) {
+        self.onTap = onTap
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     private func setupLayout() {
