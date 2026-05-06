@@ -178,5 +178,4 @@ final class ToolbarScreen {
             BaseTestCase().mozWaitForElementToNotExist(translateActiveButton)
         }
     }
-
 }
