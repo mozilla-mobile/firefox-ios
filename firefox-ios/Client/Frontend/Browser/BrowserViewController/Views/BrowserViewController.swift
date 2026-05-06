@@ -347,7 +347,9 @@ class BrowserViewController: UIViewController,
     }
 
     private var shouldPinContentContainerToScreenTop: Bool {
-        contentContainer.hasHomepage && header.arrangedSubviews.isEmpty
+        featureFlagsProvider.isEnabled(.homepagePinnedHeader)
+            && contentContainer.hasHomepage
+            && header.arrangedSubviews.isEmpty
     }
 
     // MARK: Data management

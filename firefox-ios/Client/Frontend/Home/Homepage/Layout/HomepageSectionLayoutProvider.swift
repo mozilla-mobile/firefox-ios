@@ -311,7 +311,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
-        header.pinToVisibleBounds = true
+        header.pinToVisibleBounds = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
         section.boundarySupplementaryItems = [header]
 
         section.contentInsets = NSDirectionalEdgeInsets(
