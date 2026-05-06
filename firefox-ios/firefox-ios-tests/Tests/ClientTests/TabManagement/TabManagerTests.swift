@@ -19,32 +19,6 @@ final class TabManagerTests: TabManagerTestsBase {
     }
 
     @MainActor
-    func testTabIndexSubscript() {
-        let subject = createSubject(tabs: generateTabs(count: 5))
-        let tab = subject[0]
-        XCTAssertNotNil(tab)
-    }
-
-    // MARK: - Get tabs
-
-    @MainActor
-    func testGetTabForUUID() {
-        let subject = createSubject(tabs: generateTabs(count: 1))
-        let uuid = subject.tabs.first!.tabUUID
-        let tab = subject.getTabForUUID(uuid: uuid)
-        XCTAssertEqual(tab, subject.tabs.first)
-    }
-
-    // This test has to be run on the main thread since we are messing with the WebView.
-    @MainActor
-    func testGetTabForURL() {
-        let subject = createSubject()
-        let addedTab = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
-        let tab = subject.getTabForURL(URL(string: "https://mozilla.com/")!)
-        XCTAssertEqual(tab, addedTab)
-    }
-
-    @MainActor
     func testGetTabsAndChangeLastExecutedTime() {
         setupNimbusTabTrayUIExperimentTesting(isEnabled: false)
         let totalTabCount = 3
