@@ -72,7 +72,8 @@ final class CookiePersistenceTests: BaseTestCase {
 
     func testCookiePersistenceOpenRegularTabAfterPrivateTab() {
         // Go to private tab
-        toolbarScreen.switchToPrivateBrowsing()
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateBrowsing()
         tabTrayScreen.tapOnNewTabButton()
 
         // Open URL for Cookie login

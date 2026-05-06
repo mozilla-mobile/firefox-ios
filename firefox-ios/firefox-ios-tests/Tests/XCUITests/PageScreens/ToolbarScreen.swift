@@ -179,11 +179,4 @@ final class ToolbarScreen {
         }
     }
 
-    func switchToPrivateBrowsing() {
-        tabsButton.waitAndTap()
-        let base = BaseTestCase()
-        let privateModeButton = app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)0"]
-        base.mozWaitForElementToExist(privateModeButton)
-        privateModeButton.waitAndTap()
-    }
 }
