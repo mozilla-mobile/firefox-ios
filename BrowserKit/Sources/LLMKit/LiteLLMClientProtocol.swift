@@ -8,14 +8,14 @@ import Foundation
 /// This used because we want to be able to replace the real `LiteLLMClient` with a mock during testing.
 public protocol LiteLLMClientProtocol: Sendable {
     /// Sends a non-streaming chat completion request.
-    func requestChatCompletion(
-        messages: [LiteLLMMessage],
+    func requestChatCompletion<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> String
+    ) async throws -> LiteLLMMessage<ProviderFields>
 
     /// Sends a streaming chat completion request.
-    func requestChatCompletionStreamed(
-        messages: [LiteLLMMessage],
+    func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
     ) async throws -> AsyncThrowingStream<String, Error>
 }

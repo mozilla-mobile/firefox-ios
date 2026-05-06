@@ -36,6 +36,6 @@ public struct DefaultResultsServiceFactory: ResultsServiceFactory {
 
     // MARK: - Private Helpers
     private func makeLiteLLMClient(prefs: Prefs) -> LiteLLMClientProtocol? {
-        return liteLLMCreator.createAppAttestLiteLLM(using: prefs)
+        return liteLLMCreator.createAppAttestLiteLLM(using: prefs, serviceType: .quickAnswers)
     }
 }

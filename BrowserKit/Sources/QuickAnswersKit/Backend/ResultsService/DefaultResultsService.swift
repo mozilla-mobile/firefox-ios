@@ -21,13 +21,16 @@ final class DefaultResultsService: ResultsService {
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let message = LiteLLMMessage(role: .user, content: transcription)
+        let message: QuickAnswersMessage = LiteLLMMessage(role: .user, content: transcription)
         // TODO: FXIOS-15198 - Handle mapping errors from request
         let fullResponse = try await requestChatCompletion(for: message)
-        return try formatResult(from: fullResponse)
+
+        let citations = fullResponse.providerSpecificFields?.citations ?? []
+
+        return try formatResult(from: fullResponse.content, and: citations)
     }
 
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> String {
+    private func requestChatCompletion(for message: QuickAnswersMessage) async throws -> QuickAnswersMessage {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
@@ -37,15 +40,14 @@ final class DefaultResultsService: ResultsService {
         )
     }
 
-    private func formatResult(from response: String) throws -> SearchResult {
-        // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-        return SearchResult(
-            resultText: response,
-            sources: [SearchResult.Source(
-                title: "",
-                thumbnailURL: nil,
-                faviconURL: nil
-            )]
-        )
+    private func formatResult(from answer: String, and citations: [Citation]) throws -> SearchResult {
+        let sources = citations.map { citation in
+            SearchResult.Source(
+                title: citation.title ?? "",
+                thumbnailURL: URL(string: citation.image ?? ""),
+                faviconURL: URL(string: citation.favicon ?? "")
+            )
+        }
+        return SearchResult(resultText: answer, sources: sources)
     }
 }

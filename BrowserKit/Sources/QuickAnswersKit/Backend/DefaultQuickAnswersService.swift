@@ -60,21 +60,15 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         state = .idle
     }
 
-    // MARK: Results Service
-    // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-    // also remove search terminology while we are here
-
     /// Performs a search for the given transcription using the ResultsService.
     func search(text: String) async -> Result<SearchResult, SearchResultError> {
-        // TODO: FXIOS-15123 Add back call when integration with backend
-//        do {
-//            let result = try await resultsService.fetchResults(for: text)
-//            return .success(result)
-//        } catch {
-//            // TODO: FXIOS-15198 Handle errors appropriately
-//            return .failure(.unknown)
-//        }
-        return .success(SearchResult.empty())
+        do {
+            let result = try await resultsService.fetchResults(for: text)
+            return .success(result)
+        } catch {
+            // TODO: FXIOS-15198 Handle errors appropriately
+            return .failure(.unknown)
+        }
     }
 
     // MARK: Private Methods
