@@ -131,10 +131,10 @@
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Παρακολούθηση ομάδας";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(Τελικό)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(Κανονική διάρκεια)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Τελικό";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Κανονική διάρκεια";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Λήψη προσαρμοσμένης ταπετσαρίας";
@@ -167,7 +167,7 @@
 "WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "ΤΕΛΙΚΟΣ";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Τελικό • Πέναλτι";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Κανονική διάρκεια • Πέναλτι";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "ΠΡΟΗΜΙΤΕΛΙΚΟΙ";
