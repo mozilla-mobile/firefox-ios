@@ -3248,12 +3248,17 @@ class BrowserViewController: UIViewController,
     private func getAvailableHomepageWallpaperHeight(availableContentHeight: CGFloat) -> CGFloat {
         guard let window = view.window else {
             // Fallback before window attachment, this gets corrected on the next layout/state update.
-            return availableContentHeight + contentContainer.frame.origin.y
+            let topOffset = shouldPinContentContainerToScreenTop
+                ? statusBarOverlay.frame.height
+                : contentContainer.frame.origin.y
+            return availableContentHeight + topOffset
         }
 
-        // Homepage pins wallpaper to window top, so include the content container's window Y offset.
-        let contentTopOffset = contentContainer.convert(CGPoint.zero, to: window).y
-        return availableContentHeight + contentTopOffset
+        // Homepage pins wallpaper to window top, so add back the top space excluded from content height.
+        let topOffset = shouldPinContentContainerToScreenTop
+            ? statusBarOverlay.frame.height
+            : contentContainer.convert(CGPoint.zero, to: window).y
+        return availableContentHeight + topOffset
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
