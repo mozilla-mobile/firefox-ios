@@ -26,36 +26,36 @@ class TabTraySelectorView: UIView, ThemeApplicable {
 
     weak var delegate: TabTraySelectorDelegate?
 
-    private var theme: Theme
-    private var selectedIndex: Int
-    private var buttons: [TabTraySelectorButton] = []
-    private var buttonTitles: [String]
+    var theme: Theme
+    var selectedIndex: Int
+    var buttons: [TabTraySelectorButton] = []
+    let buttonTitles: [String]
+    let tabTrayUtils: TabTrayUtils
+
     private var selectionBackgroundWidthConstraint: NSLayoutConstraint?
     private var stackViewOffsetConstraint: NSLayoutConstraint?
     private let edgeFadeGradientLayer = CAGradientLayer()
 
-    private var tabTrayUtils: TabTrayUtils
-
-    private lazy var containerView: UIView = .build { view in
+    lazy var containerView: UIView = .build { view in
         if #available(iOS 26, *) {
             view.clipsToBounds = true
         }
     }
 
-    private lazy var selectionBackgroundView: UIView = .build { view in
+    lazy var selectionBackgroundView: UIView = .build { view in
         if #unavailable(iOS 26) {
             view.layer.cornerRadius = UX.cornerRadius
         }
     }
 
-    private lazy var stackView: UIStackView = .build { stackView in
+    lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.spacing = UX.horizontalSpacing
         stackView.distribution = .fill
         stackView.alignment = .center
     }
 
-    private lazy var visualEffectView: UIVisualEffectView = .build { view in
+    lazy var visualEffectView: UIVisualEffectView = .build { view in
 #if canImport(FoundationModels)
         if #available(iOS 26, *), !DeviceInfo.isRunningLiquidGlassEarlyBeta {
             view.effect = UIGlassEffect(style: .regular)
@@ -104,13 +104,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
     }
 
     private func setup() {
-        if #available(iOS 26, *) {
-            addSubview(visualEffectView)
-        }
-        addSubview(containerView)
-        containerView.addSubview(selectionBackgroundView)
-        containerView.addSubview(stackView)
-        containerView.layer.mask = edgeFadeGradientLayer
+        setupViewHierarchy()
 
         for (index, title) in buttonTitles.enumerated() {
             let button = createButton(with: index, title: title)
@@ -119,6 +113,23 @@ class TabTraySelectorView: UIView, ThemeApplicable {
             applyButtonWidthAnchor(on: button, with: title as NSString)
         }
 
+        setupConstraints()
+        applyInitialConstraints()
+        setupGestures()
+        applyTheme(theme: theme)
+    }
+
+    func setupViewHierarchy() {
+        if #available(iOS 26, *) {
+            addSubview(visualEffectView)
+        }
+        addSubview(containerView)
+        containerView.addSubview(selectionBackgroundView)
+        containerView.addSubview(stackView)
+        containerView.layer.mask = edgeFadeGradientLayer
+    }
+
+    func setupConstraints() {
         let bottomSpacing: CGFloat = if #available(iOS 26.0, *) {
             -UX.bottomSpacingIOS26
         } else {
@@ -148,14 +159,14 @@ class TabTraySelectorView: UIView, ThemeApplicable {
                 visualEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
             ])
         }
-
-        applyInitialConstraints()
-        addSwipeGestureRecognizer(direction: .right)
-        addSwipeGestureRecognizer(direction: .left)
-        applyTheme(theme: theme)
     }
 
-    private func createButton(with index: Int, title: String) -> TabTraySelectorButton {
+    func setupGestures() {
+        addSwipeGestureRecognizer(direction: .right)
+        addSwipeGestureRecognizer(direction: .left)
+    }
+
+    func createButton(with index: Int, title: String) -> TabTraySelectorButton {
         let button = TabTraySelectorButton()
         let hint = String(format: .TabsTray.TabTraySelectorAccessibilityHint,
                           NSNumber(value: index + 1),
@@ -186,7 +197,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         return button
     }
 
-    private func applyInitialConstraints() {
+    func applyInitialConstraints() {
         guard buttons.indices.contains(selectedIndex) else { return }
         layoutIfNeeded()
 
@@ -211,7 +222,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
     ///
     /// This prevents visual layout shifts during font weight transitions (e.g., from regular to bold),
     /// ensuring consistent spacing and avoiding jitter in horizontally stacked button layouts.
-    private func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+    func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
         if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
             existingConstraint.isActive = false
         }
@@ -254,7 +265,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         selectNewSection(from: oldValue, to: selectedIndex, sender: sender)
     }
 
-    private func selectNewSection(from fromIndex: Int, to toIndex: Int, sender: UIButton) {
+    func selectNewSection(from fromIndex: Int, to toIndex: Int, sender: UIButton) {
         guard buttons.indices.contains(fromIndex),
               buttons.indices.contains(toIndex) else { return }
 
@@ -287,7 +298,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         })
     }
 
-    private func adjustSelectedButtonFont(toIndex: Int) {
+    func adjustSelectedButtonFont(toIndex: Int) {
         for (index, button) in buttons.enumerated() {
             button.transform = .identity
             let isSelected = index == toIndex
@@ -300,7 +311,7 @@ class TabTraySelectorView: UIView, ThemeApplicable {
         }
     }
 
-    private func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
+    func simulateFontWeightTransition(from fromIndex: Int, to toIndex: Int, progress: CGFloat) {
         guard buttons.indices.contains(fromIndex), buttons.indices.contains(toIndex) else { return }
 
         let easedProgress = 1 - pow(1 - progress, 2)
