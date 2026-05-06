@@ -40,7 +40,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         control.hidesForSinglePage = true
         control.isUserInteractionEnabled = false
     }
-    
+
     private var pageConstraints: [NSLayoutConstraint] = []
     private var scrollViewHeightConstraint: NSLayoutConstraint?
     private var pageControlHeightConstraint: NSLayoutConstraint?
@@ -104,7 +104,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             pagesStack.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
         ])
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateScrollViewHeight(for: pageControl.currentPage, animated: true)
@@ -125,7 +125,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     private func rebuildPages(for state: WorldCupSectionState) {
         removePageViews()
-        
+
         let pages = makePages(for: state)
         pageControl.numberOfPages = pages.count
         scrollView.isScrollEnabled = pages.count > 1
@@ -146,7 +146,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
         updateScrollViewHeight(for: 0, animated: false)
     }
-    
+
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
         return [WorldCupTimerView(windowUUID: state.windowUUID)]
     }
@@ -161,7 +161,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             verticalFittingPriority: .fittingSizeLevel
         ).height
         guard scrollViewHeightConstraint?.constant != targetHeight else { return }
-        
+
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
@@ -217,7 +217,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             setupShadow(theme: theme)
         }
     }
-    
+
     private func setupShadow(theme: Theme) {
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
