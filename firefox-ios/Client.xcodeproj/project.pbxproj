@@ -1308,6 +1308,7 @@
 		8AFC09592FA54A240070CA11 /* TabManagerTestsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */; };
 		8AFC095A2FA54A240070CA11 /* TabManagerOlderTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC09522FA54A240070CA11 /* TabManagerOlderTabsTests.swift */; };
 		8AFC095B2FA54A240070CA11 /* TabManagerRestoreTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */; };
+		8AFC1B792FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1B782FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift */; };
 		8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */; };
 		8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */; };
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
@@ -9675,6 +9676,7 @@
 		8AFC09542FA54A240070CA11 /* TabManagerRemoveTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerRemoveTabTests.swift; sourceTree = "<group>"; };
 		8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerRestoreTabsTests.swift; sourceTree = "<group>"; };
 		8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerTestsBase.swift; sourceTree = "<group>"; };
+		8AFC1B782FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerPrivacyModeTests.swift; sourceTree = "<group>"; };
 		8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataTypeTests.swift; sourceTree = "<group>"; };
 		8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
 		8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -14508,6 +14510,7 @@
 				39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */,
 				8AFC09522FA54A240070CA11 /* TabManagerOlderTabsTests.swift */,
 				8AFC09532FA54A240070CA11 /* TabManagerPreserveTabsTests.swift */,
+				8AFC1B782FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift */,
 				8AFC09542FA54A240070CA11 /* TabManagerRemoveTabTests.swift */,
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
@@ -20221,6 +20224,7 @@
 				0B6AB0412DCA3CB900F03AF6 /* DocumentLoggerTests.swift in Sources */,
 				215360652D9475DA00D9B8E6 /* BrowsingSettingsViewControllerTests.swift in Sources */,
 				FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */,
+				8AFC1B792FAAAA3D0070CA11 /* TabManagerPrivacyModeTests.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
 				C2DFB1452ECE62EE004E20AB /* MockTranslationsService.swift in Sources */,
 				354F8FAB2E0985B9007DFFEB /* SearchBarStateTests.swift in Sources */,
