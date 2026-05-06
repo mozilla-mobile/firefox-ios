@@ -88,6 +88,52 @@ final class ToolbarAnimatorTests: XCTestCase {
         XCTAssertNoThrow(subject.updateToolbarTransition(progress: 10, towards: .collapsed))
     }
 
+    func test_hideToolbar_withBottomSearchBar_withZeroOverKeyboardHeight_fadesOverKeyboardSubviews() {
+        let zeroOverKeyboardContext = ToolbarContext(overKeyboardContainerHeight: 0,
+                                                    bottomContainerHeight: 80,
+                                                    headerHeight: -44)
+        let subject = ToolbarAnimator(context: zeroOverKeyboardContext)
+        let mockViewZero = MockToolbarView()
+        mockViewZero.isBottomSearchBar = true
+        let alphaDimmableSubview = MockAlphaDimmableView()
+        mockViewZero.overKeyboardContainer.addArrangedSubview(alphaDimmableSubview)
+        subject.view = mockViewZero
+        subject.delegate = delegate
+
+        subject.hideToolbar()
+
+        XCTAssertEqual(alphaDimmableSubview.lastAlpha, 0)
+    }
+
+    func test_showToolbar_withBottomSearchBar_withZeroOverKeyboardHeight_restoresOverKeyboardSubviewsAlpha() {
+        let zeroOverKeyboardContext = ToolbarContext(overKeyboardContainerHeight: 0,
+                                                    bottomContainerHeight: 80,
+                                                    headerHeight: -44)
+        let subject = ToolbarAnimator(context: zeroOverKeyboardContext)
+        let mockViewZero = MockToolbarView()
+        mockViewZero.isBottomSearchBar = true
+        let alphaDimmableSubview = MockAlphaDimmableView()
+        alphaDimmableSubview.alpha = 0
+        mockViewZero.overKeyboardContainer.addArrangedSubview(alphaDimmableSubview)
+        subject.view = mockViewZero
+        subject.delegate = delegate
+
+        subject.showToolbar()
+
+        XCTAssertEqual(alphaDimmableSubview.lastAlpha, 1)
+    }
+
+    func test_hideToolbar_withBottomSearchBar_withNonZeroOverKeyboardHeight_doesNotFadeOverKeyboardSubviews() {
+        let subject = createSubject()
+        mockView.isBottomSearchBar = true
+        let alphaDimmableSubview = MockAlphaDimmableView()
+        mockView.overKeyboardContainer.addArrangedSubview(alphaDimmableSubview)
+
+        subject.hideToolbar()
+
+        XCTAssertNil(alphaDimmableSubview.lastAlpha)
+    }
+
     // MARK: - Private
     private func createSubject() -> ToolbarAnimator {
         let subject = ToolbarAnimator(context: context)
@@ -117,5 +163,15 @@ final class MockToolbarAnimatorDelegate: ToolbarAnimator.Delegate {
 
     func dispatchScrollAlphaChange(alpha: CGFloat) {
         receivedAlphaValue = alpha
+    }
+}
+
+// MARK: - Mock AlphaDimmable View
+final class MockAlphaDimmableView: UIView, AlphaDimmable {
+    var lastAlpha: CGFloat?
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        lastAlpha = alpha
+        self.alpha = alpha
     }
 }
