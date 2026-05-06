@@ -145,6 +145,12 @@
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "ČTVRTFINÁLE";
 
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "OSMIFINÁLE";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "NEJLEPŠÍCH 32";
+
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINÁLE";
 

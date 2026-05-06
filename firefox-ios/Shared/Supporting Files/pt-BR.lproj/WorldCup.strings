@@ -1,0 +1,90 @@
+/* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Fechar seletor de países da Copa do Mundo";
+
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "África";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Ásia";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "América Central";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "Europa";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "América do Norte";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Oceania";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "América do Sul";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "Inglaterra";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Escócia";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Pronto";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Pular";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "Siga seu time";
+
+/* The title of the Group A group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupA.Title.v151" = "Grupo A";
+
+/* The title of the Group B group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupB.Title.v151" = "Grupo B";
+
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "Grupo C";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "Grupo D";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "Grupo E";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "Grupo F";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "Grupo G";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "Grupo H";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "Grupo I";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "Grupo J";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "Grupo K";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "Grupo L";
+
+/* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Mudar time";
+
+/* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "D";
+
+/* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "H";
+
+/* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "M";
+

@@ -6941,6 +6941,7 @@
 		43A715422A2DF94F00DD5747 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/UpdateCard.strings; sourceTree = "<group>"; };
 		43A71B272CA185AF00FB9C1A /* hy-AM */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hy-AM"; path = "hy-AM.lproj/PasswordGenerator.strings"; sourceTree = "<group>"; };
 		43A755B52EBCBAF600587254 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/SearchZero.strings"; sourceTree = "<group>"; };
+		43A76B062FAB4A6600ED76E8 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/WorldCup.strings; sourceTree = "<group>"; };
 		43A7AB3A2B83910E00E4B8FC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/KeyboardAccessory.strings; sourceTree = "<group>"; };
 		43A7AB3B2B83910E00E4B8FC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/PasswordAutofill.strings; sourceTree = "<group>"; };
 		43A7CA142A2DF99E00BCAA15 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/Footer.strings"; sourceTree = "<group>"; };
@@ -7527,6 +7528,7 @@
 		43CFACD42D75C46E00754E14 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/AppIconSelection.strings"; sourceTree = "<group>"; };
 		43CFB14C2C7C9A2B003B700F /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/NativeErrorPage.strings; sourceTree = "<group>"; };
 		43CFD03D2B9F1D1000E7EB9E /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/PasswordAutofill.strings; sourceTree = "<group>"; };
+		43CFD3092FAB4B6000BD2353 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/WorldCup.strings"; sourceTree = "<group>"; };
 		43D00492296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSettingsEmptyView.swift; sourceTree = "<group>"; };
 		43D01DD62DC5005000516FF1 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LiveActivity.strings; sourceTree = "<group>"; };
 		43D028382D5A15D00002732F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ExternalLink.strings; sourceTree = "<group>"; };
@@ -21516,6 +21518,8 @@
 				43DA5C3C2FAA7DF30006F798 /* es-ES */,
 				430D543C2FAA7DFC00504B67 /* es-MX */,
 				431DC3482FAA7F8B002D24F4 /* ro */,
+				43A76B062FAB4A6600ED76E8 /* ja */,
+				43CFD3092FAB4B6000BD2353 /* pt-BR */,
 			);
 			name = WorldCup.strings;
 			sourceTree = "<group>";

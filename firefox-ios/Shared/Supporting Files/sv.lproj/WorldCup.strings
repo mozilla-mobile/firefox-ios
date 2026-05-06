@@ -191,7 +191,7 @@
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Kommande";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "VM-MÄSTARE 2026";
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "VÄRLDSMÄSTARE 2026";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Fler alternativ";
