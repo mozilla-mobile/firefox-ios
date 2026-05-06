@@ -25,6 +25,12 @@ final class BrowserScreen {
         BaseTestCase().mozWaitForValueContains(addressBar, value: value, timeout: timeout)
     }
 
+    func assertSearchEngineLogoExists(timeout: TimeInterval = TIMEOUT) {
+		let searchEngineLogo = app.images[AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine]
+        BaseTestCase().mozWaitForElementToExist(searchEngineLogo, timeout: timeout)
+        XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: addressBar))
+    }
+
     func handleHumanVerification() {
         let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
         if checkboxValidation.exists {
