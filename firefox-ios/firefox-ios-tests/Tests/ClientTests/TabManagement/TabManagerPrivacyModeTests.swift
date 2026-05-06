@@ -31,7 +31,8 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
     }
 
     @MainActor
-    func testSwitchPrivacyMode_fromNormalTab_existingPrivateTabs_selectsMostRecentPrivateTab() {
+    func testSwitchPrivacyMode_fromNormalTab_existingPrivateTabs_closePrivateTabsDisabled_selectsMostRecentPrivateTab() {
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 2)
         let privateTabs = generateTabs(ofType: .privateAny, count: 3)
         let subject = createSubject(tabs: normalTabs + privateTabs)
@@ -57,6 +58,33 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
         XCTAssertEqual(result, .usedExistingTab)
         XCTAssertEqual(subject.privateTabs.count, 3, "No new private tab should be created")
         XCTAssertEqual(subject.selectedTab, recentPrivateTab)
+    }
+
+    @MainActor
+    func testSwitchPrivacyMode_fromNormalTab_closePrivateTabsEnabled_createsNewPrivateTab() {
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.closePrivateTabs)
+        let normalTabs = generateTabs(ofType: .normal, count: 2)
+        let privateTabs = generateTabs(ofType: .privateAny, count: 3)
+        let subject = createSubject(tabs: normalTabs + privateTabs)
+
+        guard let privateTab = subject.privateTabs.first,
+              let normalTab = subject.normalTabs.first else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Simulate leaving private mode: switching back to a normal tab wipes all private tabs
+        subject.selectTab(privateTab)
+        subject.selectTab(normalTab)
+
+        XCTAssertEqual(subject.privateTabs.count, 0, "Private tabs should have been deleted when leaving private mode")
+        XCTAssertFalse(subject.selectedTab?.isPrivate ?? true)
+
+        let result = subject.switchPrivacyMode()
+
+        XCTAssertEqual(result, .createdNewTab)
+        XCTAssertEqual(subject.privateTabs.count, 1, "A new private tab should be created since existing ones were wiped")
+        XCTAssertTrue(subject.selectedTab?.isPrivate ?? false)
     }
 
     @MainActor
@@ -104,7 +132,7 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 
     @MainActor
     func testRemoveAllPrivateTabs_whenSelectingNormalTab_withClosePrivateTabsEnabled() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let privateTabs = generateTabs(ofType: .privateAny, count: 3)
         let subject = createSubject(tabs: normalTabs + privateTabs)
@@ -132,7 +160,7 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 
     @MainActor
     func testRemoveAllPrivateTabs_whenSelectingNormalTab_withClosePrivateTabsDisabled() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = false
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let privateTabs = generateTabs(ofType: .privateAny, count: 3)
         let subject = createSubject(tabs: normalTabs + privateTabs)
@@ -152,7 +180,7 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 
     @MainActor
     func testRemoveAllPrivateTabs_resetsSelectedIndex_whenSelectedTabIsPrivate() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 2)
         let privateTabs = generateTabs(ofType: .privateAny, count: 2)
         let subject = createSubject(tabs: normalTabs + privateTabs)
@@ -175,7 +203,7 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 
     @MainActor
     func testRemoveAllPrivateTabs_notifiesDelegateForEachRemovedTab() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 2)
         let privateTabs = generateTabs(ofType: .privateAny, count: 3)
         let subject = createSubject(tabs: normalTabs + privateTabs)
@@ -200,7 +228,7 @@ final class TabManagerPrivacyModeTests: TabManagerTestsBase {
 
     @MainActor
     func testRemoveAllPrivateTabs_doesNotRemoveTabs_whenNoPrivateTabsExist() {
-        (mockProfile.prefs as? MockProfilePrefs)?.things[PrefsKeys.Settings.closePrivateTabs] = true
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.closePrivateTabs)
         let normalTabs = generateTabs(ofType: .normal, count: 3)
         let subject = createSubject(tabs: normalTabs)
 
