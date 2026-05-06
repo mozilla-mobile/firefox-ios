@@ -15,6 +15,7 @@ final class TabContentScriptManager: NSObject, WKScriptMessageHandler {
             }
             helper.value.prepareForDeinit()
         }
+        // See ADR-10 for context on `helpers.removeAll()`
         helpers.removeAll()
     }
 
