@@ -482,4 +482,24 @@ final class URLExtensionTests: XCTestCase {
         let favicon3 = url3?.faviconUrl()
         XCTAssertEqual(favicon3, URL(string: "scheme://another.website.net/favicon.ico")!)
     }
+
+    // MARK: normalizedHostWithLRI
+    func testNormalizedHostWithLRIHandlesRTLDomainAppropriately() {
+        let testURL = "https://xn--mgb.google.com.xn--mgb.suspicious-domain.abc/download.apk"
+        let url = URL(string: testURL)!
+        let displayDomain = url.normalizedHostWithLRI ?? url.absoluteString
+        XCTAssertEqual(displayDomain, "\u{202A}ا.google.com.ا.suspicious-domain.abc\u{202C}")
+    }
+
+    func testNormalizedHostWithLRIPreservesSubdomainsAndStripsMobile() {
+        // LRE+PDF doesn't hurt regular LTR domains (just harmless wrapping)
+        let testCases: [(String, String)] = [
+            ("https://www.example.com/path", "\u{202A}example.com\u{202C}"),
+            ("https://m.example.com/path", "\u{202A}example.com\u{202C}"),
+            ("https://mobile.example.com/path", "\u{202A}example.com\u{202C}"),
+            ("https://www.news.example.com/path", "\u{202A}news.example.com\u{202C}")
+        ]
+
+        testCases.forEach { XCTAssertEqual(URL(string: $0.0)!.normalizedHostWithLRI, $0.1) }
+    }
 }
