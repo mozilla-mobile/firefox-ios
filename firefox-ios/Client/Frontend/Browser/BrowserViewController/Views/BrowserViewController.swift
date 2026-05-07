@@ -1633,7 +1633,7 @@ class BrowserViewController: UIViewController,
 
     func updateContentContainerTopConstraint() {
         guard isHomepagePinnedHeaderEnabled else {
-            activateLegacyContentContainerTopConstraint()
+            activateDefaultContentContainerTopConstraint()
             return
         }
 
@@ -1670,7 +1670,7 @@ class BrowserViewController: UIViewController,
 
     /// Keeps the original content container top constraint in place when homepage pinned header is disabled,
     /// pinning the content container top to the header bottom.
-    private func activateLegacyContentContainerTopConstraint() {
+    private func activateDefaultContentContainerTopConstraint() {
         let hasActiveLegacyConstraint = isContentContainerPinnedToScreenTop == false
             && contentContainerTopConstraint?.isActive == true
         guard !hasActiveLegacyConstraint else { return }
