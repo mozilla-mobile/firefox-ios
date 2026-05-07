@@ -280,7 +280,9 @@ final class HomepageViewController: UIViewController,
     func updateTopContentInset(_ topInset: CGFloat) {
         // Pinned header mode lets BVC represent its status bar overlay as homepage content inset.
         // When disabled, use the legacy zero-inset layout so collection view offsets are not adjusted.
-        let effectiveTopInset = featureFlagsProvider.isEnabled(.homepagePinnedHeader) ? topInset : 0
+        let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
+                                  && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+        let effectiveTopInset = shouldPinNewsHeader ? topInset : 0
         guard collectionViewTopContentInset != effectiveTopInset else { return }
         let previousAdjustedTopInset = collectionView?.adjustedContentInset.top ?? collectionViewTopContentInset
         let wasScrolledToTop = collectionView.map { $0.contentOffset.y <= 0 } ?? true

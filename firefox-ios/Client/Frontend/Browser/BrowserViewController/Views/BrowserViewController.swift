@@ -346,10 +346,14 @@ class BrowserViewController: UIViewController,
         return topTabsViewController != nil
     }
 
+    private var isHomepagePinnedHeaderEnabled: Bool {
+        featureFlagsProvider.isEnabled(.homepagePinnedHeader) && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+    }
+
     private var shouldPinContentContainerToScreenTop: Bool {
-        featureFlagsProvider.isEnabled(.homepagePinnedHeader)
-            && contentContainer.hasHomepage
-            && header.arrangedSubviews.isEmpty
+        isHomepagePinnedHeaderEnabled
+        && contentContainer.hasHomepage
+        && header.arrangedSubviews.isEmpty
     }
 
     // MARK: Data management
@@ -1628,8 +1632,17 @@ class BrowserViewController: UIViewController,
     }
 
     func updateContentContainerTopConstraint() {
+        guard isHomepagePinnedHeaderEnabled else {
+            activateLegacyContentContainerTopConstraint()
+            return
+        }
+
         guard isViewLoaded else { return }
 
+        // Rebuild the top constraint and z-order only when the homepage pinning state changes,
+        // or when the constraint has not been created yet. When homepage content has a pinned header,
+        // we move the content to the front so the pinned section header can sit above the other views.
+        // Otherwise, the other views stays in front of the content container.
         if isContentContainerPinnedToScreenTop != shouldPinContentContainerToScreenTop
            || contentContainerTopConstraint == nil {
             isContentContainerPinnedToScreenTop = shouldPinContentContainerToScreenTop
@@ -1648,12 +1661,28 @@ class BrowserViewController: UIViewController,
 
         guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
 
-        // When the homepage is pinned to the screen top, BVC owns the status bar overlay space.
-        // Pass that obstruction to the homepage as scroll inset instead of baking it into section layout.
-        // For example, an empty BVC header with a 54pt status bar overlay gives the homepage a 54pt top inset;
-        // when BVC has header content, the homepage starts below the header and this inset is 0.
+        // When the homepage is pinned to the top of the screen, BVC needs to account for
+        // the status bar overlay height (safe area insets).
+        // Otherwise, the homepage remains pinned to header.bottomAnchor and no extra inset is needed.
         let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
         homepageViewController.updateTopContentInset(homepageTopContentInset)
+    }
+
+    /// Keeps the original content container top constraint in place when homepage pinned header is disabled,
+    /// pinning the content container top to the header bottom.
+    private func activateLegacyContentContainerTopConstraint() {
+        let hasActiveLegacyConstraint = isContentContainerPinnedToScreenTop == false
+            && contentContainerTopConstraint?.isActive == true
+        guard !hasActiveLegacyConstraint else { return }
+
+        contentContainerTopConstraint?.isActive = false
+        contentContainerTopConstraint = contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor)
+        isContentContainerPinnedToScreenTop = false
+
+        guard contentContainer.superview != nil,
+              header.superview != nil else { return }
+
+        contentContainerTopConstraint?.isActive = true
     }
 
     // MARK: - Snapkit related
