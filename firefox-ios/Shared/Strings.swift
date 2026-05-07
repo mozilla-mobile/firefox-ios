@@ -1183,6 +1183,11 @@ extension String {
             }
 
             public struct GroupPhase {
+                public static let GroupStageLabel = MZLocalizedString(
+                    key: "WorldCup.GroupPhase.GroupStageLabel.v151",
+                    tableName: "WorldCup",
+                    value: "Group Stage",
+                    comment: "The generic label indicating the Group Stage phase in the World Cup widget.")
                 public static let GroupA = MZLocalizedString(
                     key: "WorldCup.GroupPhase.GroupA.Title.v151",
                     tableName: "WorldCup",
