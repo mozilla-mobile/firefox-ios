@@ -6,7 +6,7 @@ permissions:
 
 on:
   schedule:
-    - cron: '0 11 * * THU'
+    - cron: '0 11 * * *'
   workflow_dispatch:
     inputs:
       branchName:
