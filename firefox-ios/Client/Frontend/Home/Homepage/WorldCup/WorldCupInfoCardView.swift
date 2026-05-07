@@ -14,8 +14,9 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         static let sectionSpacing: CGFloat = 16
         static let headerSpacing: CGFloat = 6
         static let headerInnerSpacing: CGFloat = 8
-        static let overflowIconSize: CGFloat = 24
-
+        static let moreOptionButtonIconSize: CGFloat = 24
+        
+        static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
         static let featuredColumnWidth: CGFloat = 104
         static let featuredColumnHeight: CGFloat = 60
         static let featuredFlagSize = CGSize(width: 60, height: 40)
@@ -64,7 +65,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     private lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = FXFontStyles.Bold.body.scaledFont()
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
     
@@ -86,8 +87,8 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
                 StandardImageIdentifiers.Medium.cross
             ),
             attributes: .destructive,
-            handler: { _ in
-        })
+            handler: { _ in}
+        )
         let menu = UIMenu(children: [changeTeamAction, removeAction])
         button.menu = menu
         button.showsMenuAsPrimaryAction = true
@@ -140,7 +141,6 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
 
     private let windowUUID: WindowUUID
     private var model: Model?
-
     private var featuredDividers: [UIView] = []
 
     // MARK: - Init
@@ -180,6 +180,11 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
             contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             
+            featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                          constant: UX.featuredMatchesStackHorizontalPadding),
+            featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                           constant: -UX.featuredMatchesStackHorizontalPadding),
+            
             liveLabel.leadingAnchor.constraint(equalTo: liveLabelContainer.leadingAnchor,
                                                constant: UX.liveLabelHorizontalPadding),
             liveLabel.trailingAnchor.constraint(equalTo: liveLabelContainer.trailingAnchor,
@@ -189,8 +194,8 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             liveLabel.bottomAnchor.constraint(equalTo: liveLabelContainer.bottomAnchor,
                                               constant: -UX.liveLabelVerticalPadding),
 
-            moreOptionsButton.widthAnchor.constraint(equalToConstant: UX.overflowIconSize),
-            moreOptionsButton.heightAnchor.constraint(equalToConstant: UX.overflowIconSize),
+            moreOptionsButton.widthAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
+            moreOptionsButton.heightAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
 
             divider.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
         ])
@@ -246,8 +251,8 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        moreOptionsButton.tintColor = theme.colors.iconPrimary
-        divider.backgroundColor = theme.colors.borderPrimary
+        moreOptionsButton.tintColor = theme.colors.iconSecondary
+        divider.backgroundColor = theme.colors.borderSecondary
         liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
 
         featuredMatchesStack.arrangedSubviews.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
@@ -560,9 +565,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         homeCodeLabel.textColor = theme.colors.textPrimary
         awayCodeLabel.textColor = theme.colors.textPrimary
         infoLabel.textColor = theme.colors.textSecondary
-        let borderColor = theme.colors.borderPrimary.cgColor
-        homeFlagView.layer.borderColor = borderColor
-        awayFlagView.layer.borderColor = borderColor
+        homeFlagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        awayFlagView.layer.borderColor = theme.colors.borderPrimary.cgColor
     }
 }
 
@@ -639,5 +643,30 @@ extension WorldCupInfoCardView.Model {
                 score: nil
             ),
         ]
+    )
+    
+    static let placeholderNoUpcoming = WorldCupInfoCardView.Model(
+        phaseTitle: "Group stage",
+        phaseDate: "Jun 11",
+        isLive: true,
+        featuredMatch: [
+            WorldCupInfoCardView.Match(
+                homeFlagAssetName: "us",
+                homeCode: "USA",
+                awayFlagAssetName: "py",
+                awayCode: "PAR",
+                date: "Jun 13",
+                score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
+            ),
+            WorldCupInfoCardView.Match(
+                homeFlagAssetName: "us",
+                homeCode: "USA",
+                awayFlagAssetName: "au",
+                awayCode: "AUS",
+                date: "Jun 19",
+                score: nil
+            ),
+        ],
+        upcomingMatches: []
     )
 }
