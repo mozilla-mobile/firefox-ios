@@ -5,7 +5,7 @@
 import XCTest
 import Common
 
-class StoryTests: BaseTestCase {
+class StoryTests: FeatureFlaggedTestBase {
     enum SwipeDirection {
         case up, down, left, right
     }
@@ -42,6 +42,8 @@ class StoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testNewsStoriesEnabledByDefault() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
@@ -69,6 +71,8 @@ class StoryTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2855360
     func testValidateNewsContextMenu() {
+        app.launch()
+
         navigator.goto(NewTabScreen)
         app.partialSwipeUp(distance: 0.2)
         mozWaitForElementToExist(app.otherElements["News"])
@@ -86,5 +90,37 @@ class StoryTests: BaseTestCase {
                 contextMenuTable.cells.buttons[StandardImageIdentifiers.Large.share]
             ]
         )
+    }
+
+    func testNewsStoryCategoriesFilterStories() {
+        addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
+        app.launch()
+
+        navigator.goto(NewTabScreen)
+        app.partialSwipeUp(distance: 0.2)
+
+        let allCategoryButton = app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory]
+        mozWaitForElementToExist(app.otherElements["News"])
+        mozWaitForElementToExist(allCategoryButton)
+
+        let categoryButtons = app.buttons.matching(
+            NSPredicate(
+                format: "identifier BEGINSWITH %@ AND identifier != %@",
+                AccessibilityIdentifiers.FirefoxHomepage.Pocket.category + ".",
+                AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory
+            )
+        )
+        XCTAssertGreaterThanOrEqual(categoryButtons.count, 2, "Expected at least two story category buttons.")
+
+        let firstStoryCell = app.collectionViews
+            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
+            .firstMatch
+
+        categoryButtons.element(boundBy: 0).waitAndTap()
+        mozWaitForElementToExist(firstStoryCell)
+        categoryButtons.element(boundBy: 1).waitAndTap()
+        mozWaitForElementToExist(firstStoryCell)
+        allCategoryButton.waitAndTap()
+        mozWaitForElementToExist(firstStoryCell)
     }
 }
