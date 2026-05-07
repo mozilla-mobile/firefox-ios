@@ -20,7 +20,7 @@ world_cup_countdown_widget:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-15733
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
@@ -31,7 +31,7 @@ world_cup_countdown_widget:
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-15733
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33671
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
