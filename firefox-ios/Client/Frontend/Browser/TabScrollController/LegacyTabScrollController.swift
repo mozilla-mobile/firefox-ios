@@ -353,7 +353,7 @@ final class LegacyTabScrollController: NSObject,
     }
 
     func showToolbars(animated: Bool) {
-        guard toolbarState != .visible else { return }
+        guard toolbarState != .visible, let tab, !tab.isFindInPageMode else { return }
 
         toolbarState = .visible
 

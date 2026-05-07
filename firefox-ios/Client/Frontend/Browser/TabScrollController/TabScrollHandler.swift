@@ -135,6 +135,7 @@ final class TabScrollHandler: NSObject,
 
     // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
+        guard let tabProvider, !tabProvider.isFindInPageMode else { return }
         toolbarDisplayState.update(displayState: .expanded)
         delegate?.showToolbar()
     }
