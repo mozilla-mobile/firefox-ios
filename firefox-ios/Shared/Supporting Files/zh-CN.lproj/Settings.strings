@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**屏蔽**：功能将不会出现，也无法使用。对于端侧 AI，所有已下载的模型都将移除。";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**屏蔽**：功能将不会出现，也无法使用。对于端侧 AI，所有已下载的模型都将移除。";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "页面和摘要内容始终不会被保存。";
 
@@ -84,6 +87,9 @@
 
 /* In the AI Controls settings, this is the title for the section that describes AI-powered features. This is uppercase to match the style on iOS apps. */
 "Settings.AIControls.AIPoweredFeaturesSection.Title.v151" = "AI 驱动的功能";
+
+/* In the AI Controls settings, in the AI powered features section, this is the message that describes the translation feature */
+"Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message.v151" = "翻译内容不会离开您的设备，以确保隐私。";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the translation feature */
 "Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title.v151" = "翻译";
@@ -375,6 +381,9 @@
 
 /* Footer text below the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.Footer.v151" = "翻译时将从这些语言中选择。";
+
+/* VoiceOver custom action label on a preferred language row in the Translation settings screen, used to remove that language from the list. */
+"Settings.Translation.PreferredLanguages.RemoveLanguageA11yAction.v151" = "删除";
 
 /* Section header for the preferred languages list in the Translation settings screen. */
 "Settings.Translation.PreferredLanguages.SectionTitle.v151" = "首选语言";
