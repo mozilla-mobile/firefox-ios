@@ -9,6 +9,7 @@ import UIKit
 
 final class WorldCupTimerView: UIView, ThemeApplicable {
     private struct UX {
+        static let horizontalPadding: CGFloat = 16.0
         static let leftContentStackSpacing: CGFloat = 16.0
         static let timerVerticalPadding: CGFloat = 8
         static let timerHorizontalPadding: CGFloat = 64
@@ -174,12 +175,12 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
             heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultLow),
 
             dismissButton.topAnchor.constraint(equalTo: topAnchor),
-            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
             dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
             dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
 
             leftContentStack.topAnchor.constraint(equalTo: topAnchor),
-            leftContentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            leftContentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
 
             timerStack.topAnchor.constraint(
                 equalTo: timerContainer.topAnchor,
@@ -207,7 +208,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         ]
 
         heroHiddenConstraints = [
-            leftContentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            leftContentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
         ]
 
         updateA11yLayout()

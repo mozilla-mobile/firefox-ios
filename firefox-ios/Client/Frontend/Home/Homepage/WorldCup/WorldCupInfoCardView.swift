@@ -15,6 +15,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         static let headerSpacing: CGFloat = 6
         static let headerInnerSpacing: CGFloat = 8
         static let moreOptionButtonIconSize: CGFloat = 24
+        static let horizontalPadding: CGFloat = 16.0
         
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
         static let featuredColumnWidth: CGFloat = 104
@@ -71,6 +72,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     
     private lazy var dateLabel: UILabel = .build { label in
         label.numberOfLines = 0
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
     }
@@ -125,17 +127,13 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         stack.spacing = UX.featuredMatchesSpacing
     }
 
-    private lazy var divider: UIView = .build()
+    private lazy var upcomingStackDivider: UIView = .build()
 
     private lazy var upcomingStack: UIStackView = .build { stack in
         stack.axis = .vertical
         stack.spacing = UX.upcomingRowSpacing
     }
-
-    private lazy var contentStack: UIStackView = .build { stack in
-        stack.axis = .vertical
-        stack.spacing = UX.sectionSpacing
-    }
+    private var featuredMatchesTopConstraint: NSLayoutConstraint?
 
     // MARK: - State
 
@@ -167,23 +165,27 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         headerStack.addArrangedSubview(UIView())
         headerStack.addArrangedSubview(moreOptionsButton)
         
-        contentStack.addArrangedSubview(headerStack)
-        contentStack.addArrangedSubview(featuredMatchesStack)
-        contentStack.addArrangedSubview(divider)
-        contentStack.addArrangedSubview(upcomingStack)
-
-        addSubview(contentStack)
-
+        addSubviews(headerStack, featuredMatchesStack, upcomingStack)
+        
+        let featuredMatchesTopConstraint = featuredMatchesStack.topAnchor.constraint(equalTo: headerStack.bottomAnchor,
+                                                                                     constant: UX.sectionSpacing)
+        self.featuredMatchesTopConstraint = featuredMatchesTopConstraint
         NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            headerStack.topAnchor.constraint(equalTo: topAnchor),
+            headerStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
+            headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
             
+            featuredMatchesTopConstraint,
             featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                           constant: UX.featuredMatchesStackHorizontalPadding),
             featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                            constant: -UX.featuredMatchesStackHorizontalPadding),
+
+            upcomingStack.topAnchor.constraint(equalTo: featuredMatchesStack.bottomAnchor,
+                                               constant: UX.sectionSpacing),
+            upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
+            upcomingStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
+            upcomingStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             liveLabel.leadingAnchor.constraint(equalTo: liveLabelContainer.leadingAnchor,
                                                constant: UX.liveLabelHorizontalPadding),
@@ -197,7 +199,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             moreOptionsButton.widthAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
             moreOptionsButton.heightAnchor.constraint(equalToConstant: UX.moreOptionButtonIconSize),
 
-            divider.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
+            upcomingStackDivider.heightAnchor.constraint(equalToConstant: UX.dividerHeight),
         ])
     }
 
@@ -224,6 +226,13 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         featuredDividers.forEach { $0.removeFromSuperview() }
         featuredDividers.removeAll()
+        
+        if matches.isEmpty {
+            upcomingStackDivider.isHidden = true
+            featuredMatchesTopConstraint?.constant = 0.0
+        } else {
+            featuredMatchesTopConstraint?.constant = UX.sectionSpacing
+        }
 
         for (index, match) in matches.enumerated() {
             if index > 0 {
@@ -239,8 +248,13 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     }
 
     private func rebuildUpcomingRows(matches: [Match]) {
+        upcomingStack.isHidden = matches.isEmpty
         upcomingStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
+        
+        if !matches.isEmpty {
+            upcomingStack.addArrangedSubview(upcomingStackDivider)
+        }
+        
         for match in matches {
             let row: UpcomingMatchRow = .build()
             row.configure(with: match)
@@ -251,8 +265,9 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
+        dateLabel.textColor = theme.colors.textSecondary
         moreOptionsButton.tintColor = theme.colors.iconSecondary
-        divider.backgroundColor = theme.colors.borderSecondary
+        upcomingStackDivider.backgroundColor = theme.colors.borderSecondary
         liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
 
         featuredMatchesStack.arrangedSubviews.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
@@ -650,23 +665,23 @@ extension WorldCupInfoCardView.Model {
         phaseDate: "Jun 11",
         isLive: true,
         featuredMatch: [
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "py",
-                awayCode: "PAR",
-                date: "Jun 13",
-                score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
-            ),
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "au",
-                awayCode: "AUS",
-                date: "Jun 19",
-                score: nil
-            ),
+            
         ],
-        upcomingMatches: []
+        upcomingMatches: [WorldCupInfoCardView.Match(
+            homeFlagAssetName: "us",
+            homeCode: "USA",
+            awayFlagAssetName: "py",
+            awayCode: "PAR",
+            date: "Jun 13",
+            score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
+        ),
+        WorldCupInfoCardView.Match(
+            homeFlagAssetName: "us",
+            homeCode: "USA",
+            awayFlagAssetName: "au",
+            awayCode: "AUS",
+            date: "Jun 19",
+            score: nil
+        ),]
     )
 }

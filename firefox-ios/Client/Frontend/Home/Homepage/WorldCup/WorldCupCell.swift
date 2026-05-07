@@ -81,10 +81,8 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
             scrollView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
                                             constant: UX.padding),
-            scrollView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                                constant: UX.padding),
-            scrollView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                 constant: -UX.padding),
+            scrollView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
             heightConstraint,
 
             pageControlTopConstraint,
@@ -176,6 +174,8 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
+                delay: 0.0,
+                options: [.allowUserInteraction],
                 animations: {
                     self.scrollViewHeightConstraint?.constant = targetHeight
                     self.contentView.layoutIfNeeded()
