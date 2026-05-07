@@ -9,6 +9,11 @@ let defaultSearchEngine2 = "Bing"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        navigator.goto(SettingsScreen)
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2435664
     func testDefaultSearchEngine() {
         let settingScreen = SettingScreen(app: app)
@@ -58,6 +63,8 @@ class SearchSettingsUITests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2353248
     func testCustomSearchEngineAsDefaultIsNotEditable() {
         let settingScreen = SettingScreen(app: app)
+        waitUntilPageLoad()
+        navigator.nowAt(NewTabScreen)
         settingScreen.navigateToSearchSettings()
         // Edit is disabled
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
