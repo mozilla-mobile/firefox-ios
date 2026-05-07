@@ -334,7 +334,10 @@ class LibraryViewController: UIViewController, Themeable {
         }
 
         navController.popViewController(animated: true)
-        currentPanel.handleLeftTopButton()
+        // After popping, notify the newly revealed panel so it can update its state
+        if let newPanel = getCurrentPanel() {
+            newPanel.handleLeftTopButton()
+        }
     }
 
     @objc

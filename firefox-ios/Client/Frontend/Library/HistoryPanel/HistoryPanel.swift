@@ -806,6 +806,8 @@ extension HistoryPanel {
 extension HistoryPanel {
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
+        let userInfo: [String: Any] = ["state": state]
+        NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: userInfo)
     }
 
     func handleRightTopButton() {
