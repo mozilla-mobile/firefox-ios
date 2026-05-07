@@ -1059,6 +1059,36 @@ extension String {
                 tableName: "WorldCup",
                 value: "Remove",
                 comment: "The label for the button that allows to remove the World Cup widget from the home screen in the more options panel.")
+            public static let FirstHalfLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FirstHalfLabel.v151",
+                tableName: "WorldCup",
+                value: "First half",
+                comment: "The label indicating that the displaying match is in the first half.")
+            public static let HalfTimeLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.HalfTimeLabel.v151",
+                tableName: "WorldCup",
+                value: "Half time",
+                comment: "The label indicating that the displaying match is in the half time.")
+            public static let SecondHalfLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.SecondHalfLabel.v151",
+                tableName: "WorldCup",
+                value: "Second half",
+                comment: "The label indicating that the displaying match is in the second half.")
+            public static let ExtraTimeLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.ExtraTimeLabel.v151",
+                tableName: "WorldCup",
+                value: "Extra time",
+                comment: "The label indicating that the displaying match is in the extra time part of the game.")
+            public static let PenaltiesLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.PenaltiesLabel.v151",
+                tableName: "WorldCup",
+                value: "Penalties (%@)",
+                comment: "The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties")
+            public static let FullTimePenaltiesScoreLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151",
+                tableName: "WorldCup",
+                value: "Full time • Penalties (%@)",
+                comment: "The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties")
             public static let FullTimeLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
@@ -1069,11 +1099,6 @@ extension String {
                 tableName: "WorldCup",
                 value: "Full Time",
                 comment: "The label indicating that the displaying match has ended.")
-            public static let FullTimePenaltiesLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
-                tableName: "WorldCup",
-                value: "Full time • Penalties",
-                comment: "The label indicating the displaying match has ended after penalties.")
             public static let ErrorLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.ErrorLabel.v151",
                 tableName: "WorldCup",
@@ -9048,6 +9073,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Done",
                 comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
+            public static let FullTimePenaltiesLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
+                tableName: "WorldCup",
+                value: "Full time • Penalties",
+                comment: "The label indicating the displaying match has ended after penalties.")
         }
     }
 }
