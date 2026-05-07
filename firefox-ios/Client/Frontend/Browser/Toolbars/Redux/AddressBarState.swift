@@ -1462,13 +1462,16 @@ struct AddressBarState: StateType, Sendable, Equatable {
         return ToolbarActionConfiguration(
             actionType: .readerModeWithSummarizer,
             iconName: StandardImageIdentifiers.Medium.readerView,
-            bottomBadgeImage: UIImage(named: ImageIdentifiers.lightningBadge),
+            bottomBadgeImage: UIImage(
+                named: StandardImageIdentifiers.Large.lightningFill
+            )?.withRenderingMode(.alwaysTemplate),
             isEnabled: true,
             isSelected: isSelected,
             hasCustomColor: !hasAlternativeLocationColor,
             a11yLabel: .Toolbars.ReaderModeWithSummarizerButtonAccessibilityLabel,
             a11yHint: .TabLocationReloadAccessibilityHint,
-            a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton)
+            a11yId: AccessibilityIdentifiers.Toolbar.readerModeWithSummarizerButton
+        )
     }
 
     // Sets up translation icon on the toolbar
