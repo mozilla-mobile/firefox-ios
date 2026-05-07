@@ -1095,6 +1095,11 @@ final class HomepageViewController: UIViewController,
 
     private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
         guard let activeTabUUID else { return }
+
+        // If the user switches categories while scrolled through the newsfeed, jump back to the
+        // offset where the pinned news header sits at the top before replacing the story items.
+        scrollNewsfeedToTop(for: activeTabUUID)
+
         homepageTabStateStore.updateState(for: activeTabUUID) { state in
             state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
         }
@@ -1127,6 +1132,48 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX
         )
+    }
+
+    private func scrollNewsfeedToTop(for tabUUID: TabUUID) {
+        guard let collectionView,
+              let targetOffsetY = newsfeedHeaderPinnedOffsetY(),
+              collectionView.contentOffset.y > targetOffsetY
+        else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x, y: targetOffsetY)
+        collectionView.setContentOffset(targetOffset, animated: false)
+        homepageTabStateStore.updateState(for: tabUUID) { state in
+            state.scrollOffsetY = targetOffsetY
+        }
+    }
+
+    private func newsfeedHeaderPinnedOffsetY() -> CGFloat? {
+        guard let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 { return true }
+                  return false
+              })
+        else {
+            return nil
+        }
+
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        let firstStoryIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        guard let firstStoryAttributes = collectionView.layoutAttributesForItem(at: firstStoryIndexPath),
+              let headerAttributes = collectionView.collectionViewLayout.layoutAttributesForSupplementaryView(
+                  ofKind: UICollectionView.elementKindSectionHeader,
+                  at: headerIndexPath
+              )
+        else {
+            return nil
+        }
+
+        // The pinned position is the header's natural minY adjusted for the collection view's top inset.
+        // Derive it from the first story cell so the calculation stays aligned with compositional layout spacing.
+        let naturalHeaderMinY = firstStoryAttributes.frame.minY
+            - HomepageSectionLayoutProvider.UX.headerSectionSpacing
+            - headerAttributes.frame.height
+        return naturalHeaderMinY - collectionView.adjustedContentInset.top
     }
 
     private func getNewsTransitionHeader() -> NewsTransitionHeaderCell? {
