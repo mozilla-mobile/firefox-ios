@@ -39,4 +39,16 @@ final class MainMenuScreen {
         BaseTestCase().mozWaitForElementToExist(settings)
         settings.waitAndTap()
     }
+
+    func tapBookmarks() {
+        let bookmarks = sel.BOOKMARKS_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarks)
+        bookmarks.waitAndTap()
+    }
+
+    func tapHistory() {
+        let history = sel.HISTORY_BUTTON.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(history)
+        history.waitAndTap()
+    }
 }
