@@ -368,7 +368,10 @@ class TabsTests: BaseTestCase {
         navigator.goto(TabTray)
         tabTrayScreen.longPressTabCellAtIndex(0)
         tabTrayScreen.tapCloseTabFromContextMenu()
-        tabTrayScreen.assertNoWebViewLeakDetected()
+        // Tab teardown has more deferred async work than the WKWebView (notably the
+        // `await pauseAllMediaPlayback()` step in close()), so dealloc can land later
+        // on slower CI simulators. Using TIMEOUT_LONG instead
+        tabTrayScreen.assertNoWebViewLeakDetected(timeout: TIMEOUT_LONG)
     }
 
     // Smoketest
