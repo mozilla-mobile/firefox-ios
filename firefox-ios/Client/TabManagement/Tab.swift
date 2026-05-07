@@ -593,7 +593,6 @@ class Tab: NSObject,
     /// Keep final cleanup in deinit as a safety net, but add call in close() explicitly
     /// because retained tabs may delay deinit and keep resources alive.
     deinit {
-#if DEBUG
         if Thread.isMainThread {
             MainActor.assumeIsolated {
                 // Note: this has no effect in production. This view is only
@@ -601,7 +600,7 @@ class Tab: NSObject,
                 uiTestLeakView?.removeFromSuperview()
             }
         }
-
+#if DEBUG
         debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
