@@ -173,10 +173,10 @@
 "WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "CUARTOS DE FINAL";
 
 /* The label for the 'Round of 16' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "RONDA DE 16";
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "OCTAVOS DE FINAL";
 
 /* The label for the 'Round of 32' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "RONDA DE 32";
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "16AVOS DE FINAL";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Desplazar para ver partidos anteriores o siguientes";

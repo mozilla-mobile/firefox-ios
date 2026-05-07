@@ -1,204 +1,204 @@
 /* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
-"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Dünya Kupası ülke seçicisini kapat";
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Loka vali á landsliði fyrir HM í fótbolta";
 
 /* Section header for the Africa region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Africa.v151" = "Afrika";
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "Afríka";
 
 /* Section header for the Asia region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Asia.v151" = "Asya";
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Asía";
 
 /* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
-"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Orta Amerika";
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Mið-Ameríka";
 
 /* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
 "WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
 
 /* Section header for the Europe region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Europe.v151" = "Avrupa";
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "Evrópa";
 
 /* Section header for the North America region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "Kuzey Amerika";
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "Norður-Ameríka";
 
 /* Section header for the Oceania region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Okyanusya";
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Eyjaálfa";
 
 /* Section header for the South America region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "Güney Amerika";
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "Suður-Ameríka";
 
 /* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
-"WorldCup.CountryPicker.Country.England.v151" = "İngiltere";
+"WorldCup.CountryPicker.Country.England.v151" = "England";
 
 /* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
-"WorldCup.CountryPicker.Country.Scotland.v151" = "İskoçya";
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Skotland";
 
 /* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Tamam";
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Lokið";
 
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
-"WorldCup.CountryPicker.SkipButton.Title.v151" = "Geç";
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Sleppa";
 
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.Title.v151" = "Takımınızı takip edin";
+"WorldCup.CountryPicker.Title.v151" = "Fylgdu liðinu þínu";
 
 /* The title of the Group A group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupA.Title.v151" = "A Grubu";
+"WorldCup.GroupPhase.GroupA.Title.v151" = "A-riðill";
 
 /* The title of the Group B group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupB.Title.v151" = "B Grubu";
+"WorldCup.GroupPhase.GroupB.Title.v151" = "B-riðill";
 
 /* The title of the Group C group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupC.Title.v151" = "C Grubu";
+"WorldCup.GroupPhase.GroupC.Title.v151" = "C-riðill";
 
 /* The title of the Group D group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupD.Title.v151" = "D Grubu";
+"WorldCup.GroupPhase.GroupD.Title.v151" = "D-riðill";
 
 /* The title of the Group E group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupE.Title.v151" = "E Grubu";
+"WorldCup.GroupPhase.GroupE.Title.v151" = "E-riðill";
 
 /* The title of the Group F group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupF.Title.v151" = "F Grubu";
+"WorldCup.GroupPhase.GroupF.Title.v151" = "F-riðill";
 
 /* The title of the Group G group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupG.Title.v151" = "G Grubu";
+"WorldCup.GroupPhase.GroupG.Title.v151" = "G-riðill";
 
 /* The title of the Group H group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupH.Title.v151" = "H Grubu";
+"WorldCup.GroupPhase.GroupH.Title.v151" = "H-riðill";
 
 /* The title of the Group I group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupI.Title.v151" = "I Grubu";
+"WorldCup.GroupPhase.GroupI.Title.v151" = "I-riðill";
 
 /* The title of the Group J group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupJ.Title.v151" = "J Grubu";
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "J-riðill";
 
 /* The title of the Group K group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupK.Title.v151" = "K Grubu";
+"WorldCup.GroupPhase.GroupK.Title.v151" = "K-riðill";
 
 /* The title of the Group L group in the World Cup Group Stage. */
-"WorldCup.GroupPhase.GroupL.Title.v151" = "L Grubu";
+"WorldCup.GroupPhase.GroupL.Title.v151" = "L-riðill";
 
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Takım değiştir";
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Skipta um lið";
 
 /* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
-"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "G";
+"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "D";
 
 /* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
-"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "S";
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "K";
 
 /* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
-"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "D";
+"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "M";
 
 /* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
-"WorldCup.HomepageWidget.CountDown.Title.v151" = "Dünya Kupası’na geri sayım";
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "Niðurtalning fyrir HM í fótbolta";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
-"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Takvimi gör";
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Skoða dagskrá";
 
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
-"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Bildirimleri devre dışı bırak";
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Slökkva á tilkynningum";
 
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Takım seç";
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Veldu lið";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Dünya Kupası’ndan haberdar olmak için başka bir takım seçin.";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Veldu annað lið til að halda með á HM.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Dünya Kupası aracını kaldır";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Fjarlægja HM-viðmótið";
 
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Kaldır";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Fjarlægja";
 
 /* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Hâlâ takip etmek istiyor musunuz?";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Viltu samt fylgjast með?";
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
-"WorldCup.HomepageWidget.ErrorLabel.v151" = "Maç verilerini yükleyemedik. Lütfen tazeleyin.";
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "Við gátum ekki hlaðið inn leikgögnum. Endurlestu síðuna.";
 
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Dünya Kupası gelişmelerini gizle";
+"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Fela uppfærslur um HM";
 
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Takımınızı takip edin";
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Fylgdu liðinu þínu";
 
 /* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Canlı maç haberlerini ve daha fazlasını alın.";
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Fáðu stöður leikja í beinni og fleira.";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Dünya Kupası’nı takip edin";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Fylgstu með HM í fótbolta";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
-"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Takımı takip et";
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Fylgja liði";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(Maç sonu)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(leik lokið)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Maç sonu";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Leik lokið";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Kişisel duvar kâğıdını indir";
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Náðu í sérsniðna bakgrunnsmynd";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
-"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "İlgili maçlar";
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Tengdir leikir";
 
 /* The label that appears for live World Cup matches. */
-"WorldCup.HomepageWidget.LiveLabel.v151" = "CANLI";
+"WorldCup.HomepageWidget.LiveLabel.v151" = "Í BEINNI";
 
 /* Message shown in the World Cup widget when match data is temporarily unavailable. */
-"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "Maç bilgisi şu anda mevcut değil. Birkaç dakika sonra yenilemeyi deneyin.";
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "Upplýsingar um leikinn eru ekki tiltækar eins og er. Reyndu aftur eftir nokkrar mínútur.";
 
 /* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
-"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Tazele";
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Endurlesa";
 
 /* Message shown in the World Cup widget when the device has no internet connection. */
-"WorldCup.HomepageWidget.OfflineLabel.v151" = "Çevrimdışısınız. İnternet bağlantınızı kontrol edip yeniden deneyin.";
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Þú virðist vera án nettengingar. Athugaðu nettenginguna þína og reyndu aftur.";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
-"WorldCup.HomepageWidget.RemoveLabel.v151" = "Kaldır";
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "Fjarlægja";
 
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
-"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Tazele";
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Endurlesa";
 
 /* The label for the 'Bronze final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "ÜÇÜNCÜLÜK MAÇI";
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "BRONSLEIKUR";
 
 /* The label for the 'Final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FİNAL";
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "ÚRSLITALEIKUR";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Maç sonu • Penaltılar";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Leik lokið • Vítaspyrnukeppni";
 
 /* The label for the 'Quarter-finals' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "ÇEYREK FİNALLER";
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "FJÓRÐUNGSÚRSLIT";
 
 /* The label for the 'Round of 16' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "16’LI TUR";
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "16-LIÐA ÚRSLIT";
 
 /* The label for the 'Round of 32' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "32’Lİ TUR";
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "32-LIÐA ÚRSLIT";
 
 /* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Önceki veya sonraki maçları görmek için kaydırın";
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Skrunaðu til að sjá fyrri eða næstu leiki";
 
 /* The label for the 'Semi-finals' phase in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "YARI FİNALLER";
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "UNDANÚRSLIT";
 
 /* The label for the 'Third place' winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ÜÇÜNCÜ";
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "ÞRIÐJA SÆTI";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
-"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Yaklaşıyor";
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Á næstunni";
 
 /* The label for the World Cup championship winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 DÜNYA KUPASI ŞAMPİYONU";
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "HEIMSMEISTARAR 2026";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
-"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Diğer seçenekler";
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Fleiri valkostir";
 
 /* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.ShareLabel.v151" = "Paylaş";
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Deila";
 
 /* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
-"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Dünya Kupası yaklaştıkça sizi bilgilendireceğiz";
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Við munum halda þér upplýstum þegar HM nálgast";
 
