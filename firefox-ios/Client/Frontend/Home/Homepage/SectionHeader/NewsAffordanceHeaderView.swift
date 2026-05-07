@@ -47,7 +47,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         label.text = .FirefoxHomepage.Pocket.NewsAffordanceLabel
     }
 
-    private var onTap: (() -> Void)?
+    private var onTap: (@MainActor () -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,7 +67,7 @@ final class NewsAffordanceHeaderView: UIView, ThemeApplicable {
         newsLabel.textColor = color
     }
 
-    func configure(onTap: (() -> Void)?) {
+    func configure(onTap: (@MainActor () -> Void)?) {
         self.onTap = onTap
     }
 

@@ -84,7 +84,7 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         selectedNewsfeedCategoryID: String? = nil,
         newsfeedCategoryPickerOffsetX: CGFloat? = nil,
         onCategoryPickerScroll: ((CGFloat) -> Void)? = nil,
-        onNewsAffordanceTap: (() -> Void)? = nil,
+        onNewsAffordanceTap: (@MainActor () -> Void)? = nil,
         onSelection: (@MainActor @Sendable (String?) -> Void)? = nil
     ) {
         self.transitionEnabled = transitionEnabled
