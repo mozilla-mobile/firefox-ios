@@ -28,6 +28,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     private let windowUUID: WindowUUID
     private let profile: Profile
     private var countdownModel: WorldCupCountdownModel?
+    private let telemetry = WorldCupTelemetry()
 
     private var heroVisibleConstraints: [NSLayoutConstraint] = []
     private var heroHiddenConstraints: [NSLayoutConstraint] = []
@@ -100,6 +101,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         button.titleLabel?.numberOfLines = 0
         button.addAction(
             UIAction { [weak self] _ in
+                self?.telemetry.viewScheduleTapped()
                 self?.handleCTATap()
             },
             for: .touchUpInside)
@@ -113,6 +115,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         button.accessibilityLabel = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
         button.addAction(
             UIAction { [weak self] _ in
+                self?.telemetry.closeButtonTapped()
                 self?.handleDismissTap()
             },
             for: .touchUpInside)
