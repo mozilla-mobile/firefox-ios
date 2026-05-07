@@ -1649,6 +1649,8 @@
 		C2DFB1472ECE686E004E20AB /* TranslationsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DFB1462ECE6866004E20AB /* TranslationsServiceTests.swift */; };
 		C2E4F4C62F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */; };
 		C2EA234C2FA0B8AE004B6338 /* WorldCupTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */; };
+		C2EA23542FA1B8AE004B6340 /* WorldCupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */; };
+		C28EA9822FA2554900AEC3AE /* WorldCupTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */; };
 		C2EA23512FA1B8AE004B6339 /* WorldCupCountdownModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */; };
 		C2EA23522FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23532FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift */; };
 		C2EA23542FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */; };
@@ -10441,6 +10443,8 @@
 		C2E4F4C52F62F959002A8524 /* MockMainMenuCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMainMenuCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C2E645149EB18AD0BDBB9696 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/Search.strings"; sourceTree = "<group>"; };
 		C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTimerView.swift; sourceTree = "<group>"; };
+		C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTelemetry.swift; sourceTree = "<group>"; };
+		C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTelemetryTests.swift; sourceTree = "<group>"; };
 		C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountdownModel.swift; sourceTree = "<group>"; };
 		C2EA23532FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupNowOverrideSetting.swift; sourceTree = "<group>"; };
 		C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupResetDismissedSetting.swift; sourceTree = "<group>"; };
@@ -15109,6 +15113,7 @@
 			children = (
 				C2A057E22FA8C32200100C24 /* WorldCupCell.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
+				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
 				C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */,
 				FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */,
 				C2D7AC3C2F9B5DC30090EC28 /* WorldCupAction.swift */,
@@ -16857,6 +16862,7 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */,
+				C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
@@ -19947,6 +19953,7 @@
 				C2886BAA2EC4A42F007AE6C3 /* TinyRouter.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				C2EA234C2FA0B8AE004B6338 /* WorldCupTimerView.swift in Sources */,
+				C2EA23542FA1B8AE004B6340 /* WorldCupTelemetry.swift in Sources */,
 				C2EA23512FA1B8AE004B6339 /* WorldCupCountdownModel.swift in Sources */,
 				8A83B7482A264FB7002FF9AC /* LibraryCoordinator.swift in Sources */,
 				C2F336EB2ECE44840071588A /* TranslationsServiceProtocol.swift in Sources */,
@@ -20053,6 +20060,7 @@
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				C28EA9812FA2554800AEC3AD /* WorldCupCountdownModelTests.swift in Sources */,
+				C28EA9822FA2554900AEC3AE /* WorldCupTelemetryTests.swift in Sources */,
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
