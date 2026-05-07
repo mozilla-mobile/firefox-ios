@@ -7,40 +7,32 @@ import ComponentLibrary
 import Shared
 import UIKit
 
-final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, ThemeApplicable {
+final class WorldCupTimerView: UIView, ThemeApplicable {
     private struct UX {
-        static let cardCornerRadius: CGFloat = 24
-        static let cardPaddingTop: CGFloat = 18
-        static let cardPaddingBottom: CGFloat = 18
-        static let cardPaddingLeading: CGFloat = 20
-        static let cardPaddingTrailing: CGFloat = 20
-        static let cardContentSpacing: CGFloat = 8.0
+        static let leftContentStackSpacing: CGFloat = 16.0
         static let timerVerticalPadding: CGFloat = 8
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let dismissButtonSize = CGSize(width: 16, height: 16)
         static let heroImageWidth: CGFloat = 160
+        static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
         static let heroImageName = "kitHero"
         static let heroFrameDuration = 0.04
         static let heroInitialFramePosition = 0.7
         static let heroAnimationRepeatCount = 2
+        static let scheduleURL = "https://www.fifa.com/tournaments/mens/worldcup/canadamexicousa2026/scores-fixtures"
     }
 
+    private let windowUUID: WindowUUID
+    private let profile: Profile
     private var countdownModel: WorldCupCountdownModel?
-    var onCTATapped: (() -> Void)?
-    var onDismiss: (() -> Void)?
 
     private var heroVisibleConstraints: [NSLayoutConstraint] = []
     private var heroHiddenConstraints: [NSLayoutConstraint] = []
 
     // MARK: - UI
-
-    private lazy var cardView: UIView = .build { view in
-        view.layer.cornerRadius = UX.cardCornerRadius
-        view.clipsToBounds = true
-    }
 
     private lazy var heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -67,12 +59,14 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         label.text = String.WorldCup.HomepageWidget.CountDown.Title
         label.textAlignment = .natural
         label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     private lazy var timerContainer: UIView = .build { view in
         view.clipsToBounds = true
         view.isAccessibilityElement = true
         view.accessibilityTraits = .staticText
+        view.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var dayValueLabel: UILabel = makeValueLabel()
@@ -91,12 +85,12 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
 
     private lazy var timerStack: UIStackView = .build { stack in
         stack.axis = .horizontal
-        stack.alignment = .center
         stack.distribution = .equalSpacing
         stack.spacing = UX.timerSegmentSpacing
+        stack.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
-    private lazy var ctaButton: PrimaryRoundedGlassButton = .build { [weak self] button in
+    private lazy var ctaButton: PrimaryRoundedButton = .build { [weak self] button in
         let buttonViewModel = PrimaryRoundedButtonViewModel(
             title: String.WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel,
             a11yIdentifier: ""
@@ -104,10 +98,9 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         button.configure(viewModel: buttonViewModel)
         button.configuration?.titleLineBreakMode = .byWordWrapping
         button.titleLabel?.numberOfLines = 0
-        button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.addAction(
             UIAction { [weak self] _ in
-                self?.onCTATapped?()
+                self?.handleCTATap()
             },
             for: .touchUpInside)
     }
@@ -120,7 +113,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         button.accessibilityLabel = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
         button.addAction(
             UIAction { [weak self] _ in
-                self?.onDismiss?()
+                self?.handleDismissTap()
             },
             for: .touchUpInside)
     }
@@ -128,15 +121,21 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
     private lazy var leftContentStack: UIStackView = .build { stack in
         stack.axis = .vertical
         stack.alignment = .leading
-        stack.spacing = UX.cardContentSpacing
+        stack.spacing = UX.leftContentStackSpacing
         stack.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     // MARK: - Init
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(
+        windowUUID: WindowUUID,
+        profile: Profile = AppContainer.shared.resolve()
+    ) {
+        self.windowUUID = windowUUID
+        self.profile = profile
+        super.init(frame: .zero)
         setupLayout()
+        startCountdown()
     }
 
     required init?(coder: NSCoder) {
@@ -161,32 +160,26 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         leftContentStack.addArrangedSubview(timerContainer)
         leftContentStack.addArrangedSubview(ctaButton)
 
-        cardView.addSubviews(leftContentStack, heroImageView, dismissButton)
-        contentView.addSubview(cardView)
+        addSubviews(leftContentStack, heroImageView, dismissButton)
 
         NSLayoutConstraint.activate([
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
-            heroImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
+            heroImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             heroImageView.trailingAnchor.constraint(
                 equalTo: dismissButton.leadingAnchor,
                 constant: -UX.heroImageTrailingPadding
             ),
             heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
-            heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
-            heroImageView.topAnchor.constraint(equalTo: cardView.topAnchor).priority(.defaultLow),
-            heroImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor).priority(.defaultLow),
+            heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
+            heroImageView.topAnchor.constraint(equalTo: topAnchor).priority(.defaultLow),
+            heroImageView.bottomAnchor.constraint(equalTo: bottomAnchor).priority(.defaultLow),
 
-            dismissButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.cardPaddingTop),
-            dismissButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.cardPaddingTrailing),
+            dismissButton.topAnchor.constraint(equalTo: topAnchor),
+            dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             dismissButton.widthAnchor.constraint(equalToConstant: UX.dismissButtonSize.width),
             dismissButton.heightAnchor.constraint(equalToConstant: UX.dismissButtonSize.height),
 
-            leftContentStack.topAnchor.constraint(equalTo: cardView.topAnchor, constant: UX.cardPaddingTop),
-            leftContentStack.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: UX.cardPaddingLeading),
+            leftContentStack.topAnchor.constraint(equalTo: topAnchor),
+            leftContentStack.leadingAnchor.constraint(equalTo: leadingAnchor),
 
             timerStack.topAnchor.constraint(
                 equalTo: timerContainer.topAnchor,
@@ -206,10 +199,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
                 constant: -UX.timerHorizontalPadding
             ).priority(.defaultLow),
 
-            leftContentStack.bottomAnchor.constraint(
-                equalTo: cardView.bottomAnchor,
-                constant: -UX.cardPaddingBottom
-            ),
+            leftContentStack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
         heroVisibleConstraints = [
@@ -217,10 +207,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         ]
 
         heroHiddenConstraints = [
-            leftContentStack.trailingAnchor.constraint(
-                equalTo: cardView.trailingAnchor,
-                constant: -UX.cardPaddingTrailing
-            ),
+            leftContentStack.trailingAnchor.constraint(equalTo: trailingAnchor),
         ]
 
         updateA11yLayout()
@@ -276,26 +263,16 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         return stack
     }
 
-    // MARK: - Configure
+    // MARK: - Countdown
 
-    func configure(
-        theme: Theme,
-        profile: Profile = AppContainer.shared.resolve(),
-        onCTATapped: @escaping () -> Void,
-        onDismiss: @escaping () -> Void
-    ) {
-        self.onCTATapped = onCTATapped
-        self.onDismiss = onDismiss
+    private func startCountdown() {
         let model = WorldCupCountdownModel(prefs: profile.prefs)
         model.onCountdownUpdated = { [weak self] countdown in
             self?.apply(countdown: countdown)
         }
         model.start()
         countdownModel = model
-        applyTheme(theme: theme)
     }
-
-    // MARK: - Countdown
 
     private func apply(countdown: WorldCupCountdown) {
         dayValueLabel.text = String(format: "%02d", countdown.days)
@@ -315,8 +292,6 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
-        else { return }
         updateA11yLayout()
     }
 
@@ -329,14 +304,32 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
         NSLayoutConstraint.activate(isA11y ? heroHiddenConstraints : heroVisibleConstraints)
     }
 
-    // MARK: - Blurrable
+    // MARK: - Actions
 
-    func adjustBlur(theme: Theme) {
-        if shouldApplyWallpaperBlur {
-            cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            cardView.removeVisualEffectView()
-        }
+    private func handleCTATap() {
+        guard let url = URL(string: UX.scheduleURL) else { return }
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(
+                    .newTab,
+                    url: url,
+                    isPrivate: false,
+                    selectNewTab: true
+                ),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    private func handleDismissTap() {
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.closedCard,
+                shouldShowHomepageWorldCupSection: false
+            )
+        )
     }
 
     // MARK: - ThemeApplicable
@@ -350,11 +343,7 @@ final class WorldCupTimerCell: UICollectionViewCell, ReusableCell, Blurrable, Th
             $0.textColor = theme.colors.textPrimary
         }
         dismissButton.imageView?.tintColor = theme.colors.textPrimary
-        backgroundColor = .clear
-        adjustBlur(theme: theme)
         ctaButton.applyTheme(theme: theme)
-        cardView.backgroundColor = theme.colors.layer5
         timerContainer.backgroundColor = theme.colors.layer3
-        cardView.applyShadow(FxShadow.shadow200, theme: theme)
     }
 }

@@ -848,7 +848,8 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
               featureFlagsProvider.isEnabled(.worldCupWidget) else { return 0 }
 
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
-        let cell = WorldCupTimerCell()
+        let cell = WorldCupCell()
+        cell.configure(with: state.worldcupState, theme: LightTheme(), onHeightChange: {})
         let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
 
         return cellHeight + UX.spacingBetweenSections
