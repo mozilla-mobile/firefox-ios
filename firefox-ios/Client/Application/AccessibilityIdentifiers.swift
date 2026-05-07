@@ -69,6 +69,10 @@ struct AccessibilityIdentifiers {
             static let contentView = "contentView"
         }
 
+        struct Tab {
+            static let automationTestLeakIndicator = "Tab.LeakIndicatorElement"
+        }
+
         static let overKeyboardContainer = "Browser.overKeyboardContainer"
         static let headerContainer = "Browser.headerContainer"
         static let bottomContainer = "Browser.bottomContainer"

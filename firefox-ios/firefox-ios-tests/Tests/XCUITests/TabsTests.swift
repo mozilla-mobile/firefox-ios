@@ -371,6 +371,26 @@ class TabsTests: BaseTestCase {
         tabTrayScreen.assertNoWebViewLeakDetected()
     }
 
+    // Smoketest
+    // This tests for leaks of the Tab object, ensuring that Tab instances are released
+    // after a tab is closed. If this test fails, it means that either:
+    // A) We've introduced a regression that leaks the Tab instance
+    // B) There is a bug in the sentinel UI element (make sure it's accessible)
+    func testCloseTabFreesTabObject_NoMemoryLeak() {
+        toolBarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+
+        toolBarScreen.assertTabsButtonExists()
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        tabTrayScreen.longPressTabCellAtIndex(0)
+        tabTrayScreen.tapCloseTabFromContextMenu()
+        tabTrayScreen.assertNoTabLeakDetected()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2306867
     func testCloseOneTabUndo() throws {
         throw XCTSkip("Undo toast no longer available")
