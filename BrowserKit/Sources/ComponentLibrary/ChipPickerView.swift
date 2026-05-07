@@ -26,6 +26,7 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
     private var currentTheme: Theme?
     private var items = [ChipPickerItem]()
     private var selectedID: String?
+    private var titleRendering = ChipButtonTitleRendering.configuration
     private var onSelection: (@MainActor (String) -> Void)?
     private var onScroll: ((CGFloat) -> Void)?
 
@@ -42,11 +43,13 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
         items: [ChipPickerItem],
         selectedID: String?,
         contentOffsetX: CGFloat = 0,
+        titleRendering: ChipButtonTitleRendering = .configuration,
         onScroll: ((CGFloat) -> Void)? = nil,
         onSelection: (@MainActor (String) -> Void)? = nil
     ) {
         self.items = items
         self.selectedID = selectedID
+        self.titleRendering = titleRendering
         self.onSelection = onSelection
         self.onScroll = onScroll
         rebuildButtons()
@@ -101,6 +104,7 @@ public final class ChipPickerView: UIView, ThemeApplicable, UIScrollViewDelegate
                     title: item.title,
                     a11yIdentifier: item.a11yIdentifier,
                     isSelected: item.id == selectedID,
+                    titleRendering: titleRendering,
                     touchUpAction: { [weak self] _ in
                         self?.handleSelection(id: item.id)
                     }

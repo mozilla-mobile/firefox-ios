@@ -15,6 +15,8 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         static let transitionDistance: CGFloat = 96
         /// Overall header transition progress where the picker starts moving; 0.2 means 20% into the transition.
         static let pickerTranslationStartProgress: CGFloat = 0.2
+        static let transitioningZPosition: CGFloat = -1
+        static let pinnedZPosition: CGFloat = 1
     }
 
     private lazy var newsAffordanceHeaderView: NewsAffordanceHeaderView = .build()
@@ -171,6 +173,8 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
     }
 
     private func updateViewState() {
+        layer.zPosition = transitionEnabled && progress < 1 ? UX.transitioningZPosition : UX.pinnedZPosition
+
         // Transitioning header + category picker
         if transitionEnabled {
             newsAffordanceHeaderView.alpha = 1 - progress

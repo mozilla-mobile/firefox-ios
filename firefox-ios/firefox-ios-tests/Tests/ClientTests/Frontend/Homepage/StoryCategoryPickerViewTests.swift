@@ -27,7 +27,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
 
         XCTAssertFalse(view.isHidden)
         XCTAssertEqual(buttons.count, 3)
-        XCTAssertEqual(buttons.map { $0.configuration?.title }, [
+        XCTAssertEqual(buttons.map { $0.accessibilityLabel }, [
             .FirefoxHomepage.Pocket.AllStoryCategories,
             "Technology",
             "Science",
@@ -118,7 +118,7 @@ final class StoryCategoryPickerViewTests: XCTestCase {
     }
 
     private func chipButtons(in view: UIView) -> [UIButton] {
-        allSubviews(in: view).compactMap { $0 as? UIButton }.filter { $0.configuration?.title != nil }
+        allSubviews(in: view).compactMap { $0 as? UIButton }
     }
 
     private func button(withA11yID a11yID: String, in view: UIView) -> UIButton? {

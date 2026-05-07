@@ -24,6 +24,11 @@ features:
           If true, enables the categories flow in the stories
         type: Boolean
         default: false
+      pinned-header-enabled:
+        description: >
+          If true, enables the pinned newsfeed header on homepage.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
@@ -31,6 +36,7 @@ features:
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: false
+          pinned-header-enabled: false
 
       - channel: developer
         value:
@@ -38,3 +44,4 @@ features:
           bookmarks-section-default: false
           jbi-section-default: false
           categories-enabled: false
+          pinned-header-enabled: false

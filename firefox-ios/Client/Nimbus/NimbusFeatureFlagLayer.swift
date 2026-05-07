@@ -66,6 +66,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .homepageJumpBackinSectionDefault:
             return checkHomepageJumpBackInSectionDefault()
 
+        case .homepagePinnedHeader:
+            return checkHomepagePinnedHeaderFeature()
+
         case .homepageSearchBar:
             return checkHomepageSearchBarFeature()
 
@@ -215,6 +218,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHomepageJumpBackInSectionDefault() -> Bool {
         return nimbus.features.homepageRedesignFeature.value().jbiSectionDefault
+    }
+
+    private func checkHomepagePinnedHeaderFeature() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().pinnedHeaderEnabled
     }
 
     private func checkHomepageSearchBarFeature() -> Bool {
