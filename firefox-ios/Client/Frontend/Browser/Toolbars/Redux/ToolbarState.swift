@@ -142,6 +142,7 @@ struct ToolbarState: ScreenState, Sendable {
             return handleDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged, ToolbarActionType.urlDidChange,
+            ToolbarActionType.lockIconChanged,
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.cancelEditOnHomepage,

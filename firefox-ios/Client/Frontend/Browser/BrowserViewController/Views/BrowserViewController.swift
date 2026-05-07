@@ -2554,11 +2554,30 @@ class BrowserViewController: UIViewController,
 
         guard let selectedTabURL = tabManager.selectedTab?.url,
               let webViewURL = webView.url,
-              selectedTabURL == webViewURL,
-              let selectedTab = tabManager.selectedTab
-        else { return }
+              selectedTabURL == webViewURL else { return }
 
-        updateURLBarDisplayURL(selectedTab)
+        let hasSecureContent = webView.hasOnlySecureContent
+        var lockIconButtonA11yId: String?
+        var lockIconImageName: String?
+        var lockIconNeedsTheming = true
+
+        lockIconImageName = hasSecureContent ?
+            StandardImageIdentifiers.Small.shieldCheckmarkFill :
+            StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        lockIconButtonA11yId = hasSecureContent ?
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
+        lockIconNeedsTheming = hasSecureContent
+        let isWebsiteMode = tabManager.selectedTab?.url?.isReaderModeURL == false
+        lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+
+        let action = ToolbarAction(
+            lockIconButtonA11yId: lockIconButtonA11yId,
+            lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.lockIconChanged)
+        store.dispatch(action)
     }
 
     // MARK: - Update UI
