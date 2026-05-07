@@ -12,7 +12,7 @@ $schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
 $tags:
   - WorldCupWidget
 
-world_cup_widget:
+world_cup_countdown_widget:
   close_button:
     type: event
     description: |
@@ -23,7 +23,7 @@ world_cup_widget:
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"
   view_schedule:
     type: event
     description: |
@@ -34,4 +34,4 @@ world_cup_widget:
       - https://github.com/mozilla-mobile/firefox-ios/pull/XXXXX
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2026-12-01"

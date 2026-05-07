@@ -12,10 +12,10 @@ struct WorldCupTelemetry {
     }
 
     func closeButtonTapped() {
-       gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.closeButton)
+       gleanWrapper.recordEvent(for: GleanMetrics.WorldCupCountdownWidget.closeButton)
     }
 
     func viewScheduleTapped() {
-        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.viewSchedule)
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupCountdownWidget.viewSchedule)
     }
 }
