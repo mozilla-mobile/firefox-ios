@@ -54,27 +54,27 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2459133
-    func testHistoryDatabaseFixture() throws {
-        toolbarScreen.assertTabsButtonExists()
-        toolbarScreen.tapSettingsMenuButton()
-        mainMenuScreen.tapHistory()
+   func testHistoryDatabaseFixture() throws {
+       toolbarScreen.assertTabsButtonExists()
+       toolbarScreen.tapSettingsMenuButton()
+       mainMenuScreen.tapHistory()
 
-        let historyList = app.tables["History List"].firstMatch
-        mozWaitForElementToExist(historyList)
+       let historyList = app.tables["History List"].firstMatch
+       mozWaitForElementToExist(historyList)
 
-        do {
-            let snapshot = try app.tables["History List"].snapshot()
-            let historyList = snapshot.children.count
-            if #available(iOS 18, *) {
-                XCTAssertEqual(historyList, 105, "There should be 105 entries in the history list")
-            } else {
-                // For iOS 18, the scrollbars (vertical and horizontal) are included in the table
-                XCTAssertEqual(historyList, 103, "There should be 103 entries in the history list")
-            }
-        } catch {
-            XCTFail("Failed to take snapshot: \(error)")
-        }
+       do {
+           let snapshot = try app.tables["History List"].snapshot()
+           let historyList = snapshot.children.count
+           if #available(iOS 18, *) {
+               XCTAssertEqual(historyList, 105, "There should be 105 entries in the history list")
+           } else {
+               // For iOS 18, the scrollbars (vertical and horizontal) are included in the table
+               XCTAssertEqual(historyList, 103, "There should be 103 entries in the history list")
+           }
+       } catch {
+           XCTFail("Failed to take snapshot: \(error)")
+       }
 
-        app.terminate()
-    }
+       app.terminate()
+   }
 }
