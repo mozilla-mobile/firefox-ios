@@ -115,7 +115,8 @@ struct CustomUserAgentConstant {
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA,
         // TODO: FXIOS-15483 [webcompat] Docusign forms broken using desktop UA
-        "docusign.com": defaultMobileUA
+        "docusign.com": defaultMobileUA,
+        "docusign.net": defaultMobileUA
     ]
 }
 
