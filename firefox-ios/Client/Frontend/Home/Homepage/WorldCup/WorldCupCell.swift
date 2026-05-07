@@ -148,7 +148,15 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
-        return [WorldCupTimerView(windowUUID: state.windowUUID)]
+        let live = WorldCupInfoCardView(windowUUID: state.windowUUID)
+        live.configure(with: .placeholderLive, theme: LightTheme())
+        let schedule = WorldCupInfoCardView(windowUUID: state.windowUUID)
+        schedule.configure(with: .placeholder, theme: LightTheme())
+        return [
+            WorldCupTimerView(windowUUID: state.windowUUID),
+            live,
+            schedule
+        ]
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool) {

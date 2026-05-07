@@ -32,6 +32,7 @@ public struct StandardImageIdentifiers {
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let readerView = "readerViewMedium"
+        public static let starFill = "starFillMedium"
         public static let share = "shareMedium"
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
