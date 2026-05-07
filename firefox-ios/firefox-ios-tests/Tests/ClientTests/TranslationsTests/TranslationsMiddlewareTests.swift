@@ -792,6 +792,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         tab.webView = MockTabWebView(tab: tab)
         tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .loading)
         mockTabManager.selectedTab = tab
+        mockWindowManager.newBrowserWindowConfigured(
+            AppWindowInfo(tabManager: mockTabManager, sceneCoordinator: nil),
+            uuid: .XCTestDefaultUUID
+        )
 
         let subject = createSubject(translationsService: mockTranslationService)
         // Dispatch clear + eligibility result: two receivedTranslationLanguage actions.
@@ -815,6 +819,10 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         tab.webView = MockTabWebView(tab: tab)
         tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .active)
         mockTabManager.selectedTab = tab
+        mockWindowManager.newBrowserWindowConfigured(
+            AppWindowInfo(tabManager: mockTabManager, sceneCoordinator: nil),
+            uuid: .XCTestDefaultUUID
+        )
 
         let subject = createSubject()
         _ = subject
