@@ -822,6 +822,10 @@ struct AccessibilityIdentifiers {
             static let blockAudio = "BlockAudio"
             static let blockAudioAndVideo = "BlockAudioAndVideo"
         }
+
+        struct Debug {
+            static let offloadBackgroundWebViews = "Settings.Debug.OffloadBackgroundWebViews"
+        }
     }
 
     struct Summarizer {

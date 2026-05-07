@@ -1026,6 +1026,7 @@
 		8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
 		8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */; };
+		8A5A24C12FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5A24C02FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift */; };
 		8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */; };
 		8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
 		8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */; };
@@ -9418,6 +9419,7 @@
 		8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
 		8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPassBookHelper.swift; sourceTree = "<group>"; };
+		8A5A24C02FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffloadBackgroundWebViewsSetting.swift; sourceTree = "<group>"; };
 		8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsBoolSetting.swift; sourceTree = "<group>"; };
 		8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesHelperTests.swift; sourceTree = "<group>"; };
 		8A5BD95B2878AA74000FE773 /* PinnedSiteInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedSiteInfo.swift; sourceTree = "<group>"; };
@@ -13785,6 +13787,7 @@
 				C72748232ECE1809003B394D /* MerinoTestDataSetting.swift */,
 				C2EA23532FA1B8AE004B6340 /* WorldCupNowOverrideSetting.swift */,
 				C2EA23552FA1B8AE004B6341 /* WorldCupResetDismissedSetting.swift */,
+				8A5A24C02FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift */,
 				8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */,
 				C705FD572EF3545500AC5EE7 /* PrivacyNoticeUpdate.swift */,
 				8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */,
@@ -19578,6 +19581,7 @@
 				1D5A117A2EAEC51100DD27F7 /* ResetSearchEnginePrefsSetting.swift in Sources */,
 				21618A932A4499FC00A5189E /* AppState.swift in Sources */,
 				81020C942BB5B026007B8481 /* OnboardingMultipleChoiceButtonViewModel.swift in Sources */,
+				8A5A24C12FA3F85B00D11F8A /* OffloadBackgroundWebViewsSetting.swift in Sources */,
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
 				0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */,
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
