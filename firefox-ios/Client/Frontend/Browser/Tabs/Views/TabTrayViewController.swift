@@ -427,7 +427,7 @@ final class TabTrayViewController: UIViewController,
         }
 
         let theme = retrieveTheme()
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary
         newTabButton.tintColor = theme.colors.iconPrimary
@@ -453,7 +453,7 @@ final class TabTrayViewController: UIViewController,
         let swipeTheme = TabTrayPanelSwipeTheme(from: fromTheme, to: toTheme, progress: progress)
         childPanelControllers.forEach({ ($0.topViewController as? TabTrayThemeable)?.applyTheme(swipeTheme) })
 
-        view.backgroundColor = swipeTheme.colors.layer1
+        view.backgroundColor = swipeTheme.colors.layer3
         navigationToolbar.barTintColor = swipeTheme.colors.layer1
         deleteButton.tintColor = swipeTheme.colors.iconPrimary
         newTabButton.tintColor = swipeTheme.colors.iconPrimary
@@ -540,7 +540,7 @@ final class TabTrayViewController: UIViewController,
                 panelContainer.topAnchor.constraint(equalTo: containerView.topAnchor),
                 panelContainer.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
                 panelContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                panelContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                panelContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
                 containerView.topAnchor.constraint(equalTo: view.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
