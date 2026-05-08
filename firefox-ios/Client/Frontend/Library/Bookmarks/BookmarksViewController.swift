@@ -682,9 +682,28 @@ final class BookmarksViewController: SiteTableViewController,
         bottomStackView.applyTheme(theme: currentTheme())
     }
 
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        switch state {
+        case .bookmarks(state: .mainView),
+             .bookmarks(state: .inFolder):
+            bottomRightButton.tintColor = currentTheme().colors.textPrimary
+        case .bookmarks(state: .inFolderEditMode):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditMode):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            return
+        }
+    }
+
     override func applyTheme() {
         super.applyTheme()
         applyThemeToSearchBar()
+        applyThemeToButtons()
     }
 
     // MARK: - UITableViewDragDelegate | UITableViewDropDelegate

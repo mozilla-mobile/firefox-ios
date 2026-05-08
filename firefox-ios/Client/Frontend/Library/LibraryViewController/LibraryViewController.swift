@@ -425,8 +425,22 @@ class LibraryViewController: UIViewController, Themeable {
         segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()
-        setupButtons()
         setupToolBarAppearance()
+        applyThemeToButtons()
+    }
+
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        let panelState = getCurrentPanelState()
+        switch panelState {
+        case .bookmarks(state: .itemEditMode):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            topRightButton.tintColor = currentTheme().colors.textPrimary
+        }
     }
 
     func setNavigationBarHidden(_ value: Bool) {
