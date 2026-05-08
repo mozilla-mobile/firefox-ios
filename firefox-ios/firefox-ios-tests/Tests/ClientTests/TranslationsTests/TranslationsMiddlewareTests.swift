@@ -798,6 +798,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         )
 
         let subject = createSubject(translationsService: mockTranslationService)
+        _ = subject
         // Dispatch clear + eligibility result: two receivedTranslationLanguage actions.
         let expectation = XCTestExpectation(description: "clear + eligibility dispatched after foreground")
         expectation.expectedFulfillmentCount = 2
