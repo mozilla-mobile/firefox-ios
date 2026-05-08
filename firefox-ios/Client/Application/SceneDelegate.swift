@@ -237,7 +237,15 @@ class SceneDelegate: UIResponder,
         sessionManager.launchSessionProvider.openedFromExternalSource = true
 
         if isDeeplinkOptimizationRefactorEnabled {
-            sceneCoordinator.findAndHandle(route: route)
+            AppEventQueue.wait(for: [.startupFlowComplete]) {
+                ensureMainThread { [weak self] in
+                    self?.logger.log("Start up flow done, will handle route",
+                                     level: .info,
+                                     category: .coordinator)
+                    sceneCoordinator.findAndHandle(route: route)
+                    AppEventQueue.signal(event: .recordStartupTimeOpenDeeplinkComplete)
+                }
+            }
         } else {
             AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
                 ensureMainThread { [weak self] in
