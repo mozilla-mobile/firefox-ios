@@ -680,7 +680,6 @@ private extension LegacyTabScrollController {
 
             if isBottomSearchBar && overKeyboardOffset == 0 {
                 overKeyboardContainer?.updateAlphaForSubviews(alpha)
-                overKeyboardContainer?.superview?.layoutIfNeeded()
             }
         }
     }
