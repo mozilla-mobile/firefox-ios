@@ -78,8 +78,6 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private weak var navigationDelegate: WKNavigationDelegate?
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
-    // The only tab present before doing tab restoration, since deeplink happens before it
-    private var deeplinkTab: Tab?
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
@@ -572,13 +570,6 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
-
-        let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
-            tabs.contains { $0.tabUUID == deeplinkTab.tabUUID }
-        } else {
-            false
-        }
-
         newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
         newTab.url = URL(string: tabData.siteUrl)
         newTab.lastTitle = tabData.title
