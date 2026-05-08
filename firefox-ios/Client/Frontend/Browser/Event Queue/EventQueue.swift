@@ -199,6 +199,15 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
         }
     }
 
+    /// Clears all signalled events and pending actions. Intended for use in tests only
+    /// to reset the global AppEventQueue between test cases.
+    func reset() {
+        mainQueue.ensureMainThread { [weak self] in
+            self?.signalledEvents.removeAll()
+            self?.actions.removeAll()
+        }
+    }
+
     /// Used to cancel an enqueued action using the token that was provided when the action was enqueued.
     /// - Returns: true if the action was canceled.
     ///
