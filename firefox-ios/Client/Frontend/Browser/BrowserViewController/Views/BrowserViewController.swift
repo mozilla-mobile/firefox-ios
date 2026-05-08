@@ -2480,9 +2480,7 @@ class BrowserViewController: UIViewController,
             tab.url = url
             // Update UI to reflect the URL we have set the tab to
             if tab === tabManager.selectedTab {
-                DispatchQueue.main.async { [weak self] in
-                    self?.updateUIForReaderHomeStateForTab(tab)
-                }
+                updateUIForReaderHomeStateForTab(tab)
             }
 
             // Catch history pushState navigation, but ONLY for same origin navigation,
