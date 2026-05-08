@@ -484,6 +484,7 @@ final class TabTrayViewController: UIViewController,
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
         experimentSegmentControl.applyTheme(theme: swipeTheme)
+        experimentiPadSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
     }
