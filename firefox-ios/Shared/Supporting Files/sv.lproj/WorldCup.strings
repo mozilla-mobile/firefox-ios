@@ -170,7 +170,7 @@
 "WorldCup.HomepageWidget.OfflineLabel.v151" = "Du verkar vara offline. Kontrollera din internetanslutning och försök igen.";
 
 /* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
-"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Straff (%@)";
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Straffar (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Ta bort";

@@ -203,7 +203,7 @@
 "WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "半决赛";
 
 /* The label for the 'Third place' winner in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "第三名";
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "季军";
 
 /* The label for an upcoming match in the World Cup widget round phase. */
 "WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "下场比赛";
