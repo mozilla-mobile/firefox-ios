@@ -60,8 +60,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
@@ -76,8 +76,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
@@ -102,8 +102,8 @@ class PerformanceTests: BaseTestCase {
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // go to tab tray
             tabsButton.waitAndTap()
@@ -128,8 +128,8 @@ class PerformanceTests: BaseTestCase {
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // go to tab tray
             tabsButton.waitAndTap()
@@ -146,8 +146,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
@@ -171,8 +171,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
@@ -203,8 +203,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
@@ -228,8 +228,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
@@ -260,8 +260,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
@@ -285,8 +285,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
@@ -312,8 +312,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
@@ -337,8 +337,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
@@ -364,8 +364,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
@@ -389,8 +389,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
