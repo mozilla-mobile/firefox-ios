@@ -202,6 +202,7 @@ final class EventQueue<QueueEventType: Hashable & Sendable>: @unchecked Sendable
     /// Clears all signalled events and pending actions. Intended for use in tests only
     /// to reset the global AppEventQueue between test cases.
     func reset() {
+        guard AppConstants.isRunningUnitTest else { assertionFailure("Test-only function called in production."); }
         mainQueue.ensureMainThread { [weak self] in
             self?.signalledEvents.removeAll()
             self?.actions.removeAll()
