@@ -5,13 +5,94 @@
 import Common
 import Foundation
 
+private final class PageContainer: UIView, ThemeApplicable {
+    private struct UX {
+        static let loadingImageSize: CGFloat = 24
+        static let rotationKey = "worldCupPageSpinnerRotation"
+        static let loadingImage = "ball"
+        static let rotationAnimationDuration: CFTimeInterval = 0.8
+        static let rotationAnimationFromValue: CGFloat = 0
+        static let rotationAnimationToValue: CGFloat = .pi * 2
+        static let visibleAlpha: CGFloat = 1.0
+        static let hiddenAlpha: CGFloat = 0.0
+    }
+
+    private let content: UIView
+    private let loadingImageView: UIImageView = .build { image in
+        image.image = UIImage(named: UX.loadingImage)
+        image.isAccessibilityElement = false
+        image.contentMode = .scaleAspectFit
+    }
+
+    init(content: UIView) {
+        self.content = content
+        super.init(frame: .zero)
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupLayout() {
+        translatesAutoresizingMaskIntoConstraints = false
+        content.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(loadingImageView)
+        addSubview(content)
+        NSLayoutConstraint.activate([
+            content.topAnchor.constraint(equalTo: topAnchor),
+            content.leadingAnchor.constraint(equalTo: leadingAnchor),
+            content.trailingAnchor.constraint(equalTo: trailingAnchor),
+            content.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            loadingImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            loadingImageView.widthAnchor.constraint(equalToConstant: UX.loadingImageSize),
+            loadingImageView.heightAnchor.constraint(equalToConstant: UX.loadingImageSize),
+        ])
+        startSpinning()
+    }
+    
+    /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
+    func setContentVisibility(_ isVisible: Bool) {
+        content.alpha = isVisible ? UX.visibleAlpha : UX.hiddenAlpha
+        loadingImageView.alpha = isVisible ? UX.hiddenAlpha : UX.visibleAlpha
+        if isVisible {
+            stopSpinning()
+        } else {
+            startSpinning()
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        (content as? ThemeApplicable)?.applyTheme(theme: theme)
+    }
+
+    private func startSpinning() {
+        guard loadingImageView.layer.animation(forKey: UX.rotationKey) == nil else { return }
+        let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotation.fromValue = UX.rotationAnimationFromValue
+        rotation.toValue = UX.rotationAnimationToValue
+        rotation.duration = UX.rotationAnimationDuration
+        rotation.repeatCount = .infinity
+        loadingImageView.layer.add(rotation, forKey: UX.rotationKey)
+    }
+    
+    private func stopSpinning() {
+        loadingImageView.layer.removeAnimation(forKey: UX.rotationKey)
+    }
+}
+
 final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCell, ThemeApplicable, Blurrable {
     private struct UX {
         static let rootContainerCornerRadius: CGFloat = 16
         static let padding: CGFloat = 16
         static let pageControlHeight: CGFloat = 6.0
         static let pageControlTopPadding: CGFloat = 16.0
-        static let heightChangeAnimationDuration: TimeInterval = 0.15
+        static let heightChangeAnimationDuration: TimeInterval = 0.1
+        static let contentFadeInDuration: TimeInterval = 0.1
+        static let initialScrollViewHeight: CGFloat = 0
+        static let animationDelay: TimeInterval = 0.0
     }
 
     // MARK: - UI Elements
@@ -64,7 +145,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         rootContainer.addSubviews(scrollView, pageControl)
         contentView.addSubview(rootContainer)
 
-        let heightConstraint = scrollView.heightAnchor.constraint(equalToConstant: 0)
+        let heightConstraint = scrollView.heightAnchor.constraint(equalToConstant: UX.initialScrollViewHeight)
         scrollViewHeightConstraint = heightConstraint
 
         let pageControlHeight = pageControl.heightAnchor.constraint(equalToConstant: UX.pageControlHeight)
@@ -158,7 +239,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             schedule,
             noUpcoming
         ]
-        return contents.map { WorldCupPageContainer(content: $0) }
+        return contents.map { PageContainer(content: $0) }
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {
@@ -181,7 +262,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
-                delay: 0.0,
+                delay: UX.animationDelay,
                 options: [.allowUserInteraction],
                 animations: {
                     self.scrollViewHeightConstraint?.constant = targetHeight
@@ -207,45 +288,33 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         let current = pageControl.currentPage
-        [current - 1, current + 1].forEach { index in
-            (pagesStack.arrangedSubviews[safe: index] as? WorldCupPageContainer)?.setContentAlpha(0)
+        for (index, page) in pagesStack.arrangedSubviews.enumerated() {
+            guard index != current else { continue }
+            (page as? PageContainer)?.setContentVisibility(false)
         }
     }
 
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !decelerate else { return }
-        handleScrollEnd(scrollView)
-    }
-
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        handleScrollEnd(scrollView)
-    }
-
-    private func handleScrollEnd(_ scrollView: UIScrollView) {
         let pageWidth = scrollView.frame.width
         guard pageWidth > 0 else { return }
         let newPage = Int(round(scrollView.contentOffset.x / pageWidth))
         let oldPage = pageControl.currentPage
 
-        [oldPage - 1, oldPage + 1].forEach { index in
-            if index != newPage,
-               let container = pagesStack.arrangedSubviews[safe: index] as? WorldCupPageContainer {
-                container.setContentAlpha(1)
-            }
+        for (index, page) in pagesStack.arrangedSubviews.enumerated() {
+            guard index != newPage else { continue }
+            (page as? PageContainer)?.setContentVisibility(true)
         }
 
         guard newPage != oldPage else { return }
         pageControl.currentPage = newPage
 
         updateScrollViewHeight(for: newPage, animated: true) { [weak self] in
-            guard let self,
-                  let container = self.pagesStack.arrangedSubviews[safe: newPage]
-                    as? WorldCupPageContainer else { return }
+            guard let container = self?.pagesStack.arrangedSubviews[safe: newPage] as? PageContainer else { return }
             UIView.animate(
-                withDuration: 0.1,
-                delay: 0.0,
+                withDuration: UX.contentFadeInDuration,
+                delay: UX.animationDelay,
                 options: [.allowUserInteraction],
-                animations: { container.setContentAlpha(1) }
+                animations: { container.setContentVisibility(true) }
             )
         }
     }
@@ -258,7 +327,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         pageControl.pageIndicatorTintColor = theme.colors.iconSecondary
         adjustBlur(theme: theme)
         pagesStack.arrangedSubviews.forEach {
-            ($0 as? WorldCupPageContainer)?.applyTheme(theme: theme)
+            ($0 as? PageContainer)?.applyTheme(theme: theme)
         }
     }
 
@@ -279,62 +348,5 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         contentView.layer.shadowOpacity = HomepageUX.shadowOpacity
         contentView.layer.shadowOffset = HomepageUX.shadowOffset
         contentView.layer.shadowRadius = HomepageUX.shadowRadius
-    }
-}
-
-private final class WorldCupPageContainer: UIView, ThemeApplicable {
-    private static let spinnerSize: CGFloat = 24
-    private static let rotationKey = "worldCupPageSpinnerRotation"
-
-    private let content: UIView
-    private let spinner: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "ball"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
-    init(content: UIView) {
-        self.content = content
-        super.init(frame: .zero)
-        translatesAutoresizingMaskIntoConstraints = false
-        content.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(spinner)
-        addSubview(content)
-        NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: topAnchor),
-            content.leadingAnchor.constraint(equalTo: leadingAnchor),
-            content.trailingAnchor.constraint(equalTo: trailingAnchor),
-            content.bottomAnchor.constraint(equalTo: bottomAnchor),
-            spinner.centerXAnchor.constraint(equalTo: centerXAnchor),
-            spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-            spinner.widthAnchor.constraint(equalToConstant: Self.spinnerSize),
-            spinner.heightAnchor.constraint(equalToConstant: Self.spinnerSize),
-        ])
-        startSpinning()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func setContentAlpha(_ value: CGFloat) {
-        content.alpha = value
-        spinner.alpha = value == 1.0 ? 0.0 : 1.0
-    }
-
-    func applyTheme(theme: Theme) {
-        spinner.tintColor = theme.colors.iconPrimary
-        (content as? ThemeApplicable)?.applyTheme(theme: theme)
-    }
-
-    private func startSpinning() {
-        guard spinner.layer.animation(forKey: Self.rotationKey) == nil else { return }
-        let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotation.fromValue = 0
-        rotation.toValue = CGFloat.pi * 2
-        rotation.duration = 2.0
-        rotation.repeatCount = .infinity
-        spinner.layer.add(rotation, forKey: Self.rotationKey)
     }
 }
