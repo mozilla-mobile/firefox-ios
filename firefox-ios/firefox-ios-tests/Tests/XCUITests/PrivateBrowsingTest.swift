@@ -221,6 +221,20 @@ class PrivateBrowsingTest: BaseTestCase {
         contextMenuScreen.assertPrivateModeOptionsVisible()
     }
 
+    func testLongPressLinkOptionsPrivateModeWithRTLDomain() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(BrowserTab)
+        let url = "https://store.spoofing.google.com.name-containing-many-an-dash.comma.sbs/link.html"
+        navigator.openURL(url)
+        let linkText = "Google Chrome APK"
+        mozWaitForElementToExist(app.webViews.links[linkText])
+        browserScreen.longPressLink(named: linkText)
+        browserScreen.waitForLinkPreview(named: "\u{202A}ا.google.com.ا.yen.comma.sbs\u{202C}")
+
+        contextMenuScreen.assertPrivateModeOptionsVisible()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() throws {
         // Several tabs opened in private tabs tray. Tap on the trashcan
