@@ -20,7 +20,9 @@ if releaseCheck.isReleaseBranch {
     checkForSpecificFileChange()
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
-    CodeCoverageGate().failOnNewFilesWithoutCoverage()
+    let coverageGate = CodeCoverageGate()
+    coverageGate.failOnNewFilesWithoutCoverage()
+    coverageGate.failOnModifiedFilesWithLowCoverage()
     BrowserViewControllerChecker().failsOnAddedExtension()
     checkCodeCoverage()
 }
@@ -101,26 +103,13 @@ class CodeCoverageGate {
     private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
     private let minimumAddedLines = 5
+    private let minimumModifiedLines = 20
 
     func failOnNewFilesWithoutCoverage() {
-        guard let data = FileManager.default.contents(atPath: jsonPath),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let targets = json["targets"] as? [[String: Any]] else {
-            fail("Could not parse coverage.json for per-file coverage")
-            return
-        }
+        guard let coverageFiles = parseCoverageFiles() else { return }
 
-        let coverageFiles: [[String: Any]] = targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
         // Consider created Swift files, excluding Tests & Generated
-        // Excluding `danger.git.modifiedFiles` for now
-        let candidates = (danger.git.createdFiles).filter {
-            $0.hasSuffix(".swift") &&
-            !$0.contains("Tests/") &&
-            !$0.contains("/Generated/") &&
-            !$0.contains("/Strings.swift") &&
-            !$0.contains("/AccessibilityIdentifiers.swift") &&
-            !$0.contains("Protocol.swift")
-        }
+        let candidates = swiftSourceCandidates(from: danger.git.createdFiles)
 
         guard !candidates.isEmpty else {
             markdown("""
@@ -131,28 +120,7 @@ class CodeCoverageGate {
         }
 
         // Ignore tiny edits: only gate files with at least `minimumAddedLines`
-        func addedLines(_ file: String) -> Int {
-            switch saferFileDiff(for: file) {
-            case .success(let diff):
-                switch diff.changes {
-                case .created(let newLines):
-                    return newLines.count
-                case .deleted:
-                    return 0
-                case .modified(let hunks), .renamed(_, let hunks):
-                    return hunks.reduce(0) { acc, h in
-                        acc + h.lines.filter {
-                            let s = String(describing: $0)
-                            return s.hasPrefix("+") && !s.hasPrefix("+++")
-                        }.count
-                    }
-                }
-            case .failure:
-                return 999 // if diff fails, be conservative and mention it
-            }
-        }
-
-        let gated = candidates.filter { addedLines($0) >= minimumAddedLines }
+        let gated = candidates.filter { addedLines(in: $0) >= minimumAddedLines }
         // Collect failures
         var rows: [String] = []
         for file in gated {
@@ -182,15 +150,110 @@ class CodeCoverageGate {
             return
         }
 
+        reportCoverageFailure(rows: rows, label: "New file")
+    }
+
+    func failOnModifiedFilesWithLowCoverage() {
+        guard let coverageFiles = parseCoverageFiles() else { return }
+
+        let candidates = swiftSourceCandidates(from: danger.git.modifiedFiles)
+
+        guard !candidates.isEmpty else {
+            markdown("""
+            ### ✅ Existing file code coverage
+            No modified file detected so code coverage gate wasn't ran.
+            """)
+            return
+        }
+
+        let gated = candidates.filter { addedLines(in: $0) >= minimumModifiedLines }
+
+        guard !gated.isEmpty else {
+            markdown("""
+            ### ✅ Existing file code coverage
+            No modified file had significant enough changes for the coverage gate to run.
+            """)
+            return
+        }
+
+        var rows: [String] = []
+        for file in gated {
+            let entry = coverageMatch(repoPath: file, coverageFiles: coverageFiles)
+            let percent: Double = {
+                guard let entry, let raw = entry["lineCoverage"] as? Double else { return 0 }
+                return raw <= 1.000001 ? raw * 100.0 : raw
+            }()
+
+            let lineCount = countLines(in: file)
+            let threshold = scaledPercentageForOldFiles(for: Double(lineCount)) * 100.0
+
+            if percent + 0.0001 < threshold {
+                rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
+            }
+        }
+
+        guard !rows.isEmpty else {
+            markdown("""
+            ### ✅ Existing file code coverage
+            All modified files meet their thresholds.
+            """)
+            return
+        }
+
+        reportCoverageFailure(rows: rows, label: "Existing file")
+    }
+
+    private func swiftSourceCandidates(from files: [String]) -> [String] {
+        files.filter {
+            $0.hasSuffix(".swift") &&
+            !$0.contains("Tests/") &&
+            !$0.contains("/Generated/") &&
+            !$0.contains("/Strings.swift") &&
+            !$0.contains("/AccessibilityIdentifiers.swift") &&
+            !$0.contains("Protocol.swift")
+        }
+    }
+
+    private func parseCoverageFiles() -> [[String: Any]]? {
+        guard let data = FileManager.default.contents(atPath: jsonPath),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let targets = json["targets"] as? [[String: Any]] else {
+            fail("Could not parse coverage.json for per-file coverage")
+            return nil
+        }
+        return targets.flatMap { $0["files"] as? [[String: Any]] ?? [] }
+    }
+
+    private func addedLines(in file: String) -> Int {
+        switch saferFileDiff(for: file) {
+        case .success(let diff):
+            switch diff.changes {
+            case .created(let newLines):
+                return newLines.count
+            case .deleted:
+                return 0
+            case .modified(let hunks), .renamed(_, let hunks):
+                return hunks.reduce(0) { acc, h in
+                    acc + h.lines.filter {
+                        let s = String(describing: $0)
+                        return s.hasPrefix("+") && !s.hasPrefix("+++")
+                    }.count
+                }
+            }
+        case .failure:
+            return 999 // if diff fails, be conservative and mention it
+        }
+    }
+
+    private func reportCoverageFailure(rows: [String], label: String) {
         let header = """
-        ### ❌ New file code coverage
-        The following new file(s) are below their scaled coverage:
+        ### ❌ \(label) code coverage
+        The following file(s) are below their scaled coverage:
 
         | File | Coverage | Required |
         |---|---:|---:|
         \(rows.joined(separator: "\n"))
         """
-
         if hasLabel(coverageBypassLabel) {
             warn("\(header)\n\n*Bypass label `\(coverageBypassLabel)` detected — reporting as warnings only for this PR.*")
         } else {
@@ -204,7 +267,7 @@ class CodeCoverageGate {
     /// Maps an input value to a percentage using logarithmic scaling.
     /// - Parameter x: Input value (must be > 0)
     /// - Returns: A value between 0.5 and 0.8 for inputs between 10 and 500
-    func scaledPercentage(for x: Double) -> Double {
+    private func scaledPercentage(for x: Double) -> Double {
         precondition(x > 0, "Input must be greater than 0")
 
         let minX = 10.0
@@ -213,6 +276,26 @@ class CodeCoverageGate {
         let maxY = 0.7
 
         // Clamp to min/max bounds
+        if x <= minX { return minY }
+        if x >= maxX { return maxY }
+
+        let numerator = log(x / minX)
+        let denominator = log(maxX / minX)
+
+        return minY + (maxY - minY) * (numerator / denominator)
+    }
+
+    /// Maps an input value to a percentage using logarithmic scaling, with lower bounds for existing files.
+    /// - Parameter x: Input value (must be > 0)
+    /// - Returns: A value between 0.1 and 0.25 for inputs between 10 and 500
+    private func scaledPercentageForOldFiles(for x: Double) -> Double {
+        precondition(x > 0, "Input must be greater than 0")
+
+        let minX = 10.0
+        let maxX = 500.0
+        let minY = 0.10
+        let maxY = 0.25
+
         if x <= minX { return minY }
         if x >= maxX { return maxY }
 
