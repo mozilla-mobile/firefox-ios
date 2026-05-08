@@ -412,7 +412,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         tabInfo: MainMenuTabInfo,
         localeProvider: LocaleProvider
     ) -> MenuElement? {
-        guard translationFeatureGate.shouldUsePickerUI,
+        guard translationFeatureGate.isLanguagePickerEnabled,
               let translationConfig = tabInfo.translationConfiguration,
               translationConfig.isTranslationFeatureEnabled,
               translationConfig.state != nil

@@ -944,7 +944,7 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
-        if translationFeatureGate.isMultiLanguageFlowEnabled {
+        if translationFeatureGate.isLanguagePickerEnabled {
             handleAutoTranslatePrompt(state: state)
         }
 

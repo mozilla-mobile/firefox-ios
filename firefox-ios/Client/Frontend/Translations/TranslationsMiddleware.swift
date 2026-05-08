@@ -131,7 +131,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         guard gestureType == .tap else { return }
 
         if translationConfiguration.state == .inactive,
-           translationFeatureGate.shouldUsePickerUI {
+           translationFeatureGate.isLanguagePickerEnabled {
             let capturedButton = action.buttonTapped
             Task {
                 let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
@@ -219,7 +219,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
         for action: ToolbarMiddlewareAction,
         translationConfiguration: TranslationConfiguration
     ) {
-        guard translationFeatureGate.shouldUsePickerUI else { return }
+        guard translationFeatureGate.isLanguagePickerEnabled else { return }
 
         if translationConfiguration.state == .inactive {
             let capturedButton = action.buttonTapped
@@ -365,11 +365,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
         return true
     }
 
-    /// Returns the list of target languages to check for translation eligibility.
-    /// When the language picker flag is ON, returns the user's full preferred list.
-    /// When OFF, returns only the primary device language (preserving legacy behavior).
     private func targetLanguagesForEligibilityCheck() async -> [String] {
-        if translationFeatureGate.isMultiLanguageFlowEnabled {
+        if translationFeatureGate.isLanguagePickerEnabled {
             let supported = await translationsService.fetchSupportedTargetLanguages()
             return manager.preferredLanguages(supportedTargetLanguages: supported)
         }
