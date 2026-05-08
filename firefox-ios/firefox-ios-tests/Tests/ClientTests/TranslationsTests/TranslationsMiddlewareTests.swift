@@ -798,7 +798,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         )
 
         let subject = createSubject(translationsService: mockTranslationService)
-        _ = subject
         // Dispatch clear + eligibility result: two receivedTranslationLanguage actions.
         let expectation = XCTestExpectation(description: "clear + eligibility dispatched after foreground")
         expectation.expectedFulfillmentCount = 2
@@ -812,6 +811,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         wait(for: [expectation], timeout: 2.0)
         XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
+        withExtendedLifetime(subject) {}
     }
 
     func test_appForeground_withNonLoadingTab_doesNotClearState() throws {
@@ -826,8 +826,6 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         )
 
         let subject = createSubject()
-        _ = subject
-
         let expectation = XCTestExpectation(description: "no dispatch for non-loading tab")
         expectation.isInverted = true
         mockStore.dispatchCalled = { [weak mockStore] in
@@ -840,6 +838,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        withExtendedLifetime(subject) {}
     }
 
     // MARK: - didTranslationSettingsChange tests
