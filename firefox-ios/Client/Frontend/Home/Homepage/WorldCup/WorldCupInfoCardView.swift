@@ -55,9 +55,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         let phaseTitle: String
         let phaseDate: String
         let isLive: Bool
-        /// One or two featured matches. When two are provided, a divider is rendered between them.
         let featuredMatch: [Match]
-        /// The next two games after `featuredMatch`. Anything beyond two entries is ignored.
         let upcomingMatches: [Match]
     }
 
@@ -80,13 +78,13 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     private lazy var moreOptionsButton: UIButton = .build { [weak self] button in
         let changeTeamAction = UIAction(
             title: .WorldCup.HomepageWidget.ChangeTeamLabel,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Medium.starFill),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
             handler: { _ in }
         )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
             image: UIImage.templateImageNamed(
-                StandardImageIdentifiers.Medium.cross
+                StandardImageIdentifiers.Large.cross
             ),
             attributes: .destructive,
             handler: { _ in }
@@ -100,6 +98,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             for: .normal
         )
         button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
+        button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
@@ -109,7 +108,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
         label.text = "\(UX.liveLabelDotText) \(String.WorldCup.HomepageWidget.LiveLabel)"
         label.textAlignment = .center
-        label.textColor = .white
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private lazy var liveLabelContainer: UIView = .build { view in
@@ -134,6 +133,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         stack.spacing = UX.upcomingRowSpacing
     }
     private var featuredMatchesTopConstraint: NSLayoutConstraint?
+    private var upcomingMatchesTopConstraint: NSLayoutConstraint?
 
     // MARK: - State
 
@@ -170,6 +170,9 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         let featuredMatchesTopConstraint = featuredMatchesStack.topAnchor.constraint(equalTo: headerStack.bottomAnchor,
                                                                                      constant: UX.sectionSpacing)
         self.featuredMatchesTopConstraint = featuredMatchesTopConstraint
+        let upcomingMatchesTopConstraint = upcomingStack.topAnchor.constraint(equalTo: featuredMatchesStack.bottomAnchor,
+                                                                              constant: UX.sectionSpacing)
+        self.upcomingMatchesTopConstraint = upcomingMatchesTopConstraint
         NSLayoutConstraint.activate([
             headerStack.topAnchor.constraint(equalTo: topAnchor),
             headerStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
@@ -181,8 +184,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             featuredMatchesStack.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                            constant: -UX.featuredMatchesStackHorizontalPadding),
 
-            upcomingStack.topAnchor.constraint(equalTo: featuredMatchesStack.bottomAnchor,
-                                               constant: UX.sectionSpacing),
+            upcomingMatchesTopConstraint,
             upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
             upcomingStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
             upcomingStack.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -210,7 +212,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         self.model = model
 
         rebuildFeaturedMatches(matches: model.featuredMatch)
-        rebuildUpcomingRows(matches: Array(model.upcomingMatches.prefix(2)))
+        rebuildUpcomingRows(matches: model.upcomingMatches)
         refreshHeader(model: model)
         applyTheme(theme: theme)
     }
@@ -251,7 +253,10 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         upcomingStack.isHidden = matches.isEmpty
         upcomingStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        if !matches.isEmpty {
+        if matches.isEmpty {
+            upcomingMatchesTopConstraint?.constant = 0.0
+        } else {
+            upcomingMatchesTopConstraint?.constant = UX.sectionSpacing
             upcomingStack.addArrangedSubview(upcomingStackDivider)
         }
 
@@ -265,10 +270,12 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
         dateLabel.textColor = theme.colors.textSecondary
         moreOptionsButton.tintColor = theme.colors.iconSecondary
         upcomingStackDivider.backgroundColor = theme.colors.borderSecondary
         liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
+        liveLabel.textColor = theme.colors.iconOnColor
 
         featuredMatchesStack.arrangedSubviews.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
         featuredDividers.forEach { $0.backgroundColor = theme.colors.borderPrimary }
@@ -459,6 +466,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     private struct UX {
         static let flagSize = CGSize(width: 36, height: 24)
         static let flagCornerRadius: CGFloat = 5
+        static let flagBorderWidth: CGFloat = 1
         static let flagToCodeSpacing: CGFloat = 8
         static let dateLabelInset: CGFloat = 8
     }
@@ -482,12 +490,13 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         label.lineBreakMode = .byTruncatingTail
     }
 
-    /// Label for showing info about the match, it could the date or the score.
+    /// Label for showing info about the match, it could be the date or the score.
     private lazy var infoLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
-        label.numberOfLines = 1
+        label.numberOfLines = 0
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     private lazy var leftStack: UIStackView = .build { stack in
@@ -519,11 +528,6 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         rightStack.addArrangedSubview(awayFlagView)
 
         addSubviews(leftStack, infoLabel, rightStack)
-
-        homeCodeLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        homeCodeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        awayCodeLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        awayCodeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         NSLayoutConstraint.activate([
             leftStack.topAnchor.constraint(equalTo: topAnchor),
@@ -557,7 +561,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             imageView.layer.cornerRadius = UX.flagCornerRadius
-            imageView.layer.borderWidth = 1
+            imageView.layer.borderWidth = UX.flagBorderWidth
             imageView.isAccessibilityElement = false
         }
     }
@@ -580,8 +584,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         homeCodeLabel.textColor = theme.colors.textPrimary
         awayCodeLabel.textColor = theme.colors.textPrimary
         infoLabel.textColor = theme.colors.textSecondary
-        homeFlagView.layer.borderColor = theme.colors.borderPrimary.cgColor
-        awayFlagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        homeFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
     }
 }
 
@@ -663,23 +667,50 @@ extension WorldCupInfoCardView.Model {
     static let placeholderNoUpcoming = WorldCupInfoCardView.Model(
         phaseTitle: "Group stage",
         phaseDate: "Jun 11",
-        isLive: true,
+        isLive: false,
         featuredMatch: [],
-        upcomingMatches: [WorldCupInfoCardView.Match(
+        upcomingMatches: [
+            WorldCupInfoCardView
+                .Match(
+                    homeFlagAssetName: "us",
+                    homeCode: "USA",
+                    awayFlagAssetName: "py",
+                    awayCode: "PAR",
+                    date: "Jun 13",
+                    score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
+                ),
+            WorldCupInfoCardView.Match(
+                homeFlagAssetName: "us",
+                homeCode: "USA",
+                awayFlagAssetName: "au",
+                awayCode: "AUS",
+                date: "Jun 19",
+                score: nil
+            ),
+            WorldCupInfoCardView
+                .Match(
+                    homeFlagAssetName: "us",
+                    homeCode: "USA",
+                    awayFlagAssetName: "au",
+                    awayCode: "AUS",
+                    date: "Jun 19",
+                    score: nil
+                ),
+        ]
+    )
+
+    static let placeholderNoFeautred = WorldCupInfoCardView.Model(
+        phaseTitle: "Group stage",
+        phaseDate: "Jun 11",
+        isLive: false,
+        featuredMatch: [WorldCupInfoCardView.Match(
             homeFlagAssetName: "us",
             homeCode: "USA",
             awayFlagAssetName: "py",
             awayCode: "PAR",
             date: "Jun 13",
             score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
-        ),
-        WorldCupInfoCardView.Match(
-            homeFlagAssetName: "us",
-            homeCode: "USA",
-            awayFlagAssetName: "au",
-            awayCode: "AUS",
-            date: "Jun 19",
-            score: nil
-        ), ]
+        )],
+        upcomingMatches: [    ]
     )
 }

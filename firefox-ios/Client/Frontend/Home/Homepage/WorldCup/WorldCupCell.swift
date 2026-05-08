@@ -248,11 +248,14 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         schedule.configure(with: .placeholder, theme: LightTheme())
         let noUpcoming = WorldCupInfoCardView(windowUUID: state.windowUUID)
         noUpcoming.configure(with: .placeholderNoUpcoming, theme: LightTheme())
+        let noF = WorldCupInfoCardView(windowUUID: state.windowUUID)
+        noF.configure(with: .placeholderNoFeautred, theme: LightTheme())
         let contents: [UIView] = [
             WorldCupTimerView(windowUUID: state.windowUUID),
             live,
             schedule,
-            noUpcoming
+            noUpcoming,
+            noF
         ]
         return contents.map { PageContainer(content: $0) }
     }
