@@ -52,7 +52,7 @@ class UrlBarTests: BaseTestCase {
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSettings()
         settingScreen.navigateToSearchSettings()
-        // Add a custom search engine and add it as default search engine
+        // Change default search engine
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine1])
         defaultSearchEngine.waitAndTap()
