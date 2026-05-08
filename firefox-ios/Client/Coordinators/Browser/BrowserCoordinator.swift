@@ -289,7 +289,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        guard checkRouteIsReady() else { return false }
+        guard checkBrowserIsReady() else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -300,7 +300,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        guard checkRouteIsReady() else { return }
+        guard checkBrowserIsReady() else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -347,9 +347,9 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
-    /// setup before we handle deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
+    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
     /// refactor is shipped, but this will be a subsequent initiative just in case.
-    private func checkRouteIsReady() -> Bool {
+    private func checkBrowserIsReady() -> Bool {
         let isReady = isDeeplinkOptimizationRefactorEnabled
         ? browserIsReady
         : browserIsReady && !tabManager.isRestoringTabs
