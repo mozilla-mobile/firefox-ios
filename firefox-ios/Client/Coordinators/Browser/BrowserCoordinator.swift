@@ -350,21 +350,23 @@ final class BrowserCoordinator: BaseCoordinator,
     /// setup before we handle deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
     /// refactor is shipped, but this will be a subsequent initiative just in case.
     private func checkRouteIsReady() -> Bool {
-        if isDeeplinkOptimizationRefactorEnabled {
-            guard browserIsReady else {
-                logger.log("Not handling route. Are we ready: \(browserIsReady)",
-                           level: .info,
-                           category: .coordinator)
-                return false
-            }
-        } else {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                logger.log("Not handling route. Are we ready: \(browserIsReady), or restoring: \(tabManager.isRestoringTabs)",
-                           level: .info,
-                           category: .coordinator)
-                return false
-            }
+        let isReady = isDeeplinkOptimizationRefactorEnabled
+        ? browserIsReady
+        : browserIsReady && !tabManager.isRestoringTabs
+
+        guard isReady else {
+            logger.log(
+            """
+            Not handling route. Browser ready: \(browserIsReady), \
+            restoring tabs: \(tabManager.isRestoringTabs) \
+            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            """,
+            level: .info,
+            category: .coordinator
+            )
+            return false
         }
+
         return true
     }
 
