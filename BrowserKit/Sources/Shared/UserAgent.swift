@@ -97,6 +97,7 @@ public enum UserAgentPlatform {
 struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let safariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "Version/18.6 \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+    private static let noSafariMobileUA = UserAgentBuilder.defaultMobileUserAgent().clone(extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitMobile)")
 
     static let customMobileUAForDomain = [
         // TODO: FXIOS-14371 [webcompat] rokuchannel blocking FXIOS "this browser isn't supported" (webcompat #126427)
@@ -104,8 +105,8 @@ struct CustomUserAgentConstant {
         // TODO: FXIOS-13391 [webcompat] "connection error" only on FxiOS/* UA (bug 1983983)
         "tver.jp": safariMobileUA,
         // TODO: FXIOS-15618 FXIOS-14398 [webcompat] ServiceNow rejects Mobile Safari version "null" (bug 1978984)
-        "lta.go.jp": safariMobileUA,
-        "service-now.com": safariMobileUA,
+        "lta.go.jp": noSafariMobileUA,
+        "service-now.com": noSafariMobileUA,
         // TODO: FXIOS-13096 [webcompat] UA version parsed as "Safari 0" (webcompat #170304)
         "epic.com": safariMobileUA,
         "athenahealth.com": safariMobileUA,
