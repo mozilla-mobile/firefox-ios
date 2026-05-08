@@ -1339,6 +1339,7 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
+        browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
 
         logCurrentNimbusExperimentsState()
