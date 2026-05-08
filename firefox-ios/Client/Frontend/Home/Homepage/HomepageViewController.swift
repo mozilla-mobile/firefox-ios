@@ -314,12 +314,16 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        snapNewsTransitionHeaderIfNeeded()
         saveVerticalScrollOffset()
         trackVisibleItemImpressions()
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        saveVerticalScrollOffset()
+        if !decelerate {
+            snapNewsTransitionHeaderIfNeeded()
+            saveVerticalScrollOffset()
+        }
         trackVisibleItemImpressions()
     }
 
@@ -875,6 +879,20 @@ final class HomepageViewController: UIViewController,
         let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
         let progress = normalizedOffset / NewsTransitionHeaderCell.UX.transitionDistance
         return min(max(progress, 0), 1)
+    }
+
+    /// Snaps the news transition header to either the start or end of the transition when scrolling stops mid-transition.
+    private func snapNewsTransitionHeaderIfNeeded() {
+        guard isNewsTransitionEnabled(), let collectionView else { return }
+
+        let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        guard let targetNormalizedOffset = NewsTransitionHeaderCell.UX.snappedTransitionOffset(for: normalizedOffset)
+        else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x,
+                                   y: targetNormalizedOffset - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(targetOffset, animated: true)
+        updateNewsTransitionHeaderProgress()
     }
 
     // MARK: - Screenshotable
