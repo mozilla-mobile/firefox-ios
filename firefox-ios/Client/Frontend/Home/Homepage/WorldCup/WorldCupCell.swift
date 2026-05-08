@@ -128,6 +128,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var pageControlTopConstraint: NSLayoutConstraint?
     private var currentState: WorldCupSectionState?
     private var onHeightChange: (() -> Void)?
+    private var lastScrollViewWidth: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -187,6 +188,20 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateScrollViewHeight(for: pageControl.currentPage, animated: true)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // If the content view has changed width (i.e during rotation) then we need to sync the scrollView content offset
+        // to the proper location, otherwise it will look of centered.
+        // We get the width on the content view because the scrollView width is the same and it gets updated
+        // in delay.
+        guard lastScrollViewWidth != contentView.frame.width else { return }
+        lastScrollViewWidth = contentView.frame.width
+        scrollView.setContentOffset(
+            CGPoint(x: CGFloat(pageControl.currentPage) * lastScrollViewWidth, y: 0.0),
+            animated: false
+        )
     }
 
     func configure(
