@@ -1417,6 +1417,8 @@
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		AA02D5EB2EB3D83200814F4C /* TranslationsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */; };
+		D4AFE9E1E5BD48AA832CDA68 /* TranslationFeatureGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82326CE4C7004543BDB5FE91 /* TranslationFeatureGate.swift */; };
+		A6389BA289C84E0B88817899 /* TranslationFeatureGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0954151A3822424D9DFCE8ED /* TranslationFeatureGateTests.swift */; };
 		AA24AD302E7C37C6008659A3 /* TrendingSearchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD2F2E7C37BF008659A3 /* TrendingSearchClient.swift */; };
 		AA24AD322E7C3A8F008659A3 /* TrendingSearchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD312E7C3A85008659A3 /* TrendingSearchClientTests.swift */; };
 		AA24AD342E7C3AD2008659A3 /* MockTrendingSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24AD332E7C3ACC008659A3 /* MockTrendingSearchEngine.swift */; };
@@ -10055,6 +10057,8 @@
 		A99A45579536045560D367CE /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Storage.strings; sourceTree = "<group>"; };
 		A9B04AA7B21B939545F42DDF /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsAction.swift; sourceTree = "<group>"; };
+		82326CE4C7004543BDB5FE91 /* TranslationFeatureGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFeatureGate.swift; sourceTree = "<group>"; };
+		0954151A3822424D9DFCE8ED /* TranslationFeatureGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationFeatureGateTests.swift; sourceTree = "<group>"; };
 		AA0B46CCA57F0E0997CC0AEA /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Intro.strings; sourceTree = "<group>"; };
 		AA0B47C6B76C81D58AD910F1 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		AA244A28A4D501F91E5C0FF2 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -14770,6 +14774,7 @@
 				AA02D5EA2EB3D82F00814F4C /* TranslationsAction.swift */,
 				AA5E81462EB12BD800919E60 /* TranslationsMiddleware.swift */,
 				AA5E81492EF5000000000001 /* PreferredTranslationLanguagesManager.swift */,
+				82326CE4C7004543BDB5FE91 /* TranslationFeatureGate.swift */,
 			);
 			path = Translations;
 			sourceTree = "<group>";
@@ -14816,6 +14821,7 @@
 				AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */,
 				8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */,
 				8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */,
+				0954151A3822424D9DFCE8ED /* TranslationFeatureGateTests.swift */,
 			);
 			path = TranslationsTests;
 			sourceTree = "<group>";
@@ -19075,6 +19081,7 @@
 				C80E1A102A0943640025B9E1 /* UIFont+Extension.swift in Sources */,
 				C8680C5728BFDF7F00BC902A /* WallpaperThumbnailUtility.swift in Sources */,
 				AA5E81472EB12BDC00919E60 /* TranslationsMiddleware.swift in Sources */,
+				D4AFE9E1E5BD48AA832CDA68 /* TranslationFeatureGate.swift in Sources */,
 				AA5E81482EF5000000000001 /* PreferredTranslationLanguagesManager.swift in Sources */,
 				C23889DF2A4EFCE500429673 /* ShareSheetCoordinator.swift in Sources */,
 				E153FBAA2DD47C9B0040CE37 /* SearchBarLocationSaver.swift in Sources */,
@@ -20270,6 +20277,7 @@
 				399BA8002F901D9200CCC502 /* UserFeaturePreferenceManagerTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
 				AAD9D64B2EB25B3500BFECAF /* TranslationsMiddlewareTests.swift in Sources */,
+				A6389BA289C84E0B88817899 /* TranslationFeatureGateTests.swift in Sources */,
 				C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */,
 				0B7B05432D64C08F007FD7AC /* MockURLProtocol.swift in Sources */,
 				8C61A2812F3371330021C88D /* BrowserViewControllerKVOTests.swift in Sources */,

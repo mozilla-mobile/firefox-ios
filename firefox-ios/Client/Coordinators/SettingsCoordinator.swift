@@ -485,7 +485,7 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     private func translationSettingsViewController() -> UIViewController {
-        if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
+        if translationFeatureGate.shouldUsePickerUI {
             let viewController = TranslationPickerSettingsViewController(windowUUID: windowUUID)
             viewController.coordinator = self
             return viewController
