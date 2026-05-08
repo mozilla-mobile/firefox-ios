@@ -365,6 +365,9 @@ final class TranslationsMiddleware: FeatureFlaggable {
         return true
     }
 
+    /// Returns the list of target languages to check for translation eligibility.
+    /// When the language picker flag is ON, returns the user's full preferred list.
+    /// When OFF, returns only the primary device language (preserving legacy behavior).
     private func targetLanguagesForEligibilityCheck() async -> [String] {
         if translationFeatureGate.isLanguagePickerEnabled {
             let supported = await translationsService.fetchSupportedTargetLanguages()
