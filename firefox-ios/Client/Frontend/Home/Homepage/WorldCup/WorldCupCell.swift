@@ -33,7 +33,7 @@ private final class PageContainer: UIView, ThemeApplicable {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
         content.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +44,7 @@ private final class PageContainer: UIView, ThemeApplicable {
             content.leadingAnchor.constraint(equalTo: leadingAnchor),
             content.trailingAnchor.constraint(equalTo: trailingAnchor),
             content.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             loadingImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             loadingImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             loadingImageView.widthAnchor.constraint(equalToConstant: UX.loadingImageSize),
@@ -52,7 +52,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         ])
         startSpinning()
     }
-    
+
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
     func setContentVisibility(_ isVisible: Bool) {
         content.alpha = isVisible ? UX.visibleAlpha : UX.hiddenAlpha
@@ -77,7 +77,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         rotation.repeatCount = .infinity
         loadingImageView.layer.add(rotation, forKey: UX.rotationKey)
     }
-    
+
     private func stopSpinning() {
         loadingImageView.layer.removeAnimation(forKey: UX.rotationKey)
     }
@@ -189,7 +189,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         super.traitCollectionDidChange(previousTraitCollection)
         updateScrollViewHeight(for: pageControl.currentPage, animated: true)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         // If the content view has changed width (i.e during rotation) then we need to sync the scrollView content offset

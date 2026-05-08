@@ -16,7 +16,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         static let headerInnerSpacing: CGFloat = 8
         static let moreOptionButtonIconSize: CGFloat = 24
         static let horizontalPadding: CGFloat = 16.0
-        
+
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
         static let featuredColumnWidth: CGFloat = 104
         static let featuredColumnHeight: CGFloat = 60
@@ -69,7 +69,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
-    
+
     private lazy var dateLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
@@ -89,7 +89,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
                 StandardImageIdentifiers.Medium.cross
             ),
             attributes: .destructive,
-            handler: { _ in}
+            handler: { _ in }
         )
         let menu = UIMenu(children: [changeTeamAction, removeAction])
         button.menu = menu
@@ -157,16 +157,16 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         liveLabelContainer.addSubview(liveLabel)
-        
+
         headerStack.addArrangedSubview(titleLabel)
         headerStack.addArrangedSubview(dateLabel)
         headerStack.addArrangedSubview(liveLabelContainer)
         // spacer view
         headerStack.addArrangedSubview(UIView())
         headerStack.addArrangedSubview(moreOptionsButton)
-        
+
         addSubviews(headerStack, featuredMatchesStack, upcomingStack)
-        
+
         let featuredMatchesTopConstraint = featuredMatchesStack.topAnchor.constraint(equalTo: headerStack.bottomAnchor,
                                                                                      constant: UX.sectionSpacing)
         self.featuredMatchesTopConstraint = featuredMatchesTopConstraint
@@ -174,7 +174,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             headerStack.topAnchor.constraint(equalTo: topAnchor),
             headerStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
             headerStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
-            
+
             featuredMatchesTopConstraint,
             featuredMatchesStack.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                           constant: UX.featuredMatchesStackHorizontalPadding),
@@ -186,7 +186,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
             upcomingStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalPadding),
             upcomingStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
             upcomingStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             liveLabel.leadingAnchor.constraint(equalTo: liveLabelContainer.leadingAnchor,
                                                constant: UX.liveLabelHorizontalPadding),
             liveLabel.trailingAnchor.constraint(equalTo: liveLabelContainer.trailingAnchor,
@@ -226,7 +226,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         featuredDividers.forEach { $0.removeFromSuperview() }
         featuredDividers.removeAll()
-        
+
         if matches.isEmpty {
             upcomingStackDivider.isHidden = true
             featuredMatchesTopConstraint?.constant = 0.0
@@ -250,11 +250,11 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     private func rebuildUpcomingRows(matches: [Match]) {
         upcomingStack.isHidden = matches.isEmpty
         upcomingStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
+
         if !matches.isEmpty {
             upcomingStack.addArrangedSubview(upcomingStackDivider)
         }
-        
+
         for match in matches {
             let row: UpcomingMatchRow = .build()
             row.configure(with: match)
@@ -310,9 +310,9 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
-    
+
     private lazy var scoreContainer: UIView = .build()
-    
+
     private lazy var clockLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.adjustsFontForContentSizeCategory = true
@@ -363,13 +363,13 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
     private func setupLayout() {
         scoreContainer.addSubview(scoreLabel)
         addSubview(horizontalStack)
-        
+
         NSLayoutConstraint.activate([
             horizontalStack.topAnchor.constraint(equalTo: topAnchor),
             horizontalStack.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalStack.trailingAnchor.constraint(equalTo: trailingAnchor),
             horizontalStack.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             scoreLabel.leadingAnchor.constraint(equalTo: scoreContainer.leadingAnchor,
                                                 constant: UX.scoreLabelHorizontalPadding),
             scoreLabel.trailingAnchor.constraint(equalTo: scoreContainer.trailingAnchor,
@@ -380,7 +380,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
                                                constant: -UX.scoreLabelVerticalPadding)
         ])
     }
-    
+
     private func makeFeaturedColumn() -> FeaturedColumn {
         let flagView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFill
@@ -413,7 +413,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
         return FeaturedColumn(container: stack, flagView: flagView, codeLabel: codeLabel)
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         scoreContainer.layoutIfNeeded()
@@ -437,15 +437,15 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
             dateLabel.text = match.date
         }
     }
-    
+
     // MARK: - ThemeApplicable
-    
+
     func applyTheme(theme: Theme) {
         dateLabel.textColor = theme.colors.textSecondary
         clockLabel.textColor = theme.colors.textSecondary
         scoreLabel.textColor = theme.colors.textPrimary
         scoreContainer.backgroundColor = theme.colors.layer3
-        
+
         homeColumn.codeLabel.textColor = theme.colors.textPrimary
         homeColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
         awayColumn.codeLabel.textColor = theme.colors.textPrimary
@@ -575,7 +575,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    
+
     func applyTheme(theme: Theme) {
         homeCodeLabel.textColor = theme.colors.textPrimary
         awayCodeLabel.textColor = theme.colors.textPrimary
@@ -659,14 +659,12 @@ extension WorldCupInfoCardView.Model {
             ),
         ]
     )
-    
+
     static let placeholderNoUpcoming = WorldCupInfoCardView.Model(
         phaseTitle: "Group stage",
         phaseDate: "Jun 11",
         isLive: true,
-        featuredMatch: [
-            
-        ],
+        featuredMatch: [],
         upcomingMatches: [WorldCupInfoCardView.Match(
             homeFlagAssetName: "us",
             homeCode: "USA",
@@ -682,6 +680,6 @@ extension WorldCupInfoCardView.Model {
             awayCode: "AUS",
             date: "Jun 19",
             score: nil
-        ),]
+        ), ]
     )
 }
