@@ -9,7 +9,7 @@ import Shared
 import UIKit
 
 @MainActor
-final class TranslationsMiddleware: FeatureFlaggable {
+final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -35,7 +35,6 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// the active translation is discarded, tryAutoTranslate picks this up and translates to the
     /// requested language instead of the user's top preferred language.
     private var pendingLanguageSwitchTargets: [WindowUUID: String] = [:]
-    private var didBecomeActiveObserver: NSObjectProtocol?
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
@@ -52,15 +51,11 @@ final class TranslationsMiddleware: FeatureFlaggable {
         self.translationsTelemetry = translationsTelemetry
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
-        didBecomeActiveObserver = NotificationCenter.default.addObserver(
-            forName: UIApplication.didBecomeActiveNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            Task { @MainActor [weak self] in
-                self?.clearStuckLoadingState()
-            }
-        }
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UIApplication.didBecomeActiveNotification]
+        )
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -627,5 +622,18 @@ final class TranslationsMiddleware: FeatureFlaggable {
         )
 
         return UUID()
+    }
+
+    // MARK: - Notifiable
+
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            Task { @MainActor [weak self] in
+                self?.clearStuckLoadingState()
+            }
+        default:
+            break
+        }
     }
 }
