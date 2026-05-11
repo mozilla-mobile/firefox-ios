@@ -1151,6 +1151,7 @@
 		8A9D31642D1355EE00171502 /* MockFxBookmarkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */; };
 		8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */; };
 		8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */; };
+		F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */; };
 		8A9D316A2D135EB000171502 /* EditBookmarkViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */; };
 		8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E041A2D4D08350022ED90 /* BookmarkConfiguration.swift */; };
 		8A9E041D2D4D09240022ED90 /* BookmarksSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E041C2D4D09230022ED90 /* BookmarksSectionState.swift */; };
@@ -1628,6 +1629,13 @@
 		C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */; };
 		C29B64EE2AD937D500F3244B /* QRCodeNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29B64ED2AD937D400F3244B /* QRCodeNavigationHandler.swift */; };
 		C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A057E22FA8C32200100C24 /* WorldCupCell.swift */; };
+		F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */; };
+		F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000008 /* WorldCupAPIClient.swift */; };
+		F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */; };
+		F00CA4012F0000000000000F /* WorldCupFetchStrategyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000010 /* WorldCupFetchStrategyProtocol.swift */; };
+		F00CA4012F00000000000011 /* WorldCupNormalFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000012 /* WorldCupNormalFetchStrategy.swift */; };
+		F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */; };
+		F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */; };
 		C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A662A76938C002ACCE2 /* DownloadsCoordinator.swift */; };
 		C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */; };
 		C2A72A6B2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */; };
@@ -9566,6 +9574,7 @@
 		8A9D31632D1355E900171502 /* MockFxBookmarkNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxBookmarkNode.swift; sourceTree = "<group>"; };
 		8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
 		8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksSaver.swift; sourceTree = "<group>"; };
+		F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupAPIClient.swift; sourceTree = "<group>"; };
 		8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModelTests.swift; sourceTree = "<group>"; };
 		8A9E041A2D4D08350022ED90 /* BookmarkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkConfiguration.swift; sourceTree = "<group>"; };
 		8A9E041C2D4D09230022ED90 /* BookmarksSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSectionState.swift; sourceTree = "<group>"; };
@@ -10420,6 +10429,13 @@
 		C29B64862AD69D0200F3244B /* QRCodeCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeCoordinatorTests.swift; sourceTree = "<group>"; };
 		C29B64ED2AD937D400F3244B /* QRCodeNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeNavigationHandler.swift; sourceTree = "<group>"; };
 		C2A057E22FA8C32200100C24 /* WorldCupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCell.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesResponse.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000008 /* WorldCupAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupAPIClient.swift; sourceTree = "<group>"; };
+		F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupAPIClientProtocol.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000010 /* WorldCupFetchStrategyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFetchStrategyProtocol.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000012 /* WorldCupNormalFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupNormalFetchStrategy.swift; sourceTree = "<group>"; };
+		F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesResponseTests.swift; sourceTree = "<group>"; };
+		F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFetchStrategyTests.swift; sourceTree = "<group>"; };
 		C2A72A662A76938C002ACCE2 /* DownloadsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsCoordinator.swift; sourceTree = "<group>"; };
 		C2A72A682A769460002ACCE2 /* ReadingListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinator.swift; sourceTree = "<group>"; };
 		C2A72A6A2A77AC10002ACCE2 /* ReadingListCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -15120,6 +15136,11 @@
 			children = (
 				C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */,
 				C2A057E22FA8C32200100C24 /* WorldCupCell.swift */,
+				F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */,
+				F00CA4012F00000000000008 /* WorldCupAPIClient.swift */,
+				F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */,
+				F00CA4012F00000000000010 /* WorldCupFetchStrategyProtocol.swift */,
+				F00CA4012F00000000000012 /* WorldCupNormalFetchStrategy.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
 				C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */,
@@ -15454,6 +15475,7 @@
 				0B7B05402D64C087007FD7AC /* MockURLResponse.swift */,
 				0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */,
 				8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */,
+				F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */,
 				8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */,
 				45D5EDBF292D619000311934 /* MockablePinnedSites.swift */,
 				434CD57729F6FC4500A0D04B /* MockAppAuthenticator.swift */,
@@ -16870,6 +16892,8 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */,
+				F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */,
+				F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */,
 				C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
@@ -19528,6 +19552,11 @@
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */,
+				F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */,
+				F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */,
+				F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */,
+				F00CA4012F0000000000000F /* WorldCupFetchStrategyProtocol.swift in Sources */,
+				F00CA4012F00000000000011 /* WorldCupNormalFetchStrategy.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
@@ -20070,6 +20099,8 @@
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				C28EA9812FA2554800AEC3AD /* WorldCupCountdownModelTests.swift in Sources */,
+				F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */,
+				F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */,
 				C28EA9822FA2554900AEC3AE /* WorldCupTelemetryTests.swift in Sources */,
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
@@ -20244,6 +20275,7 @@
 				C869915728917809007ACC5C /* NetworkingMock.swift in Sources */,
 				ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */,
 				8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */,
+				F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */,
 				C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */,

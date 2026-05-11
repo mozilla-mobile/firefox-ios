@@ -40,14 +40,14 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     /// High-level async loader: delegates to the strategy configured for the
     /// given query (live vs non-live). The strategy decides how to call `fetch`
-    /// (single attempt, retry, etc.) and builds the `WorldCupMatches` view-model.
-    func loadMatches(query: WorldCupQuery,
-                     phase: WorldCupMatches.Phase) async -> WorldCupMatches? {
+    /// (single attempt, retry, etc.) and returns the decoded merino response.
+    /// Callers transform the response into a view-model.
+    func loadMatches(query: WorldCupQuery) async -> WorldCupMatchesResponse? {
         let strategy: WorldCupFetchStrategyProtocol = switch query {
         case .matches: matchesStrategy
         case .live:    liveStrategy
         }
-        return await strategy.loadMatches(using: self, query: query, phase: phase)
+        return await strategy.loadMatches(using: self, query: query)
     }
 
     private func decode(_ json: String?) throws -> WorldCupMatchesResponse? {
