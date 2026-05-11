@@ -214,12 +214,12 @@ final class BookmarksViewController: SiteTableViewController,
         if tableView.isEditing {
             // This happens if we navigate back to the panel either from the bookmark/folder detail screen during "Edit" mode
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+        } else if viewModel.isShowingSearchResults {
+            updatePanelState(newState: .bookmarks(state: .search))
+        } else if viewModel.isRootNode {
+            updatePanelState(newState: .bookmarks(state: .mainView))
         } else {
-            if viewModel.isRootNode {
-                updatePanelState(newState: .bookmarks(state: .mainView))
-            } else {
-                updatePanelState(newState: .bookmarks(state: .inFolder))
-            }
+            updatePanelState(newState: .bookmarks(state: .inFolder))
         }
 
         sendPanelChangeNotification()
@@ -236,7 +236,7 @@ final class BookmarksViewController: SiteTableViewController,
         super.viewDidDisappear(animated)
 
         // If needed, exit the search when the view disappears
-        if state == .bookmarks(state: .search) {
+        if state == .bookmarks(state: .search) && (isMovingFromParent || isBeingDismissed) {
             exitSearchState()
         }
     }
@@ -541,6 +541,10 @@ final class BookmarksViewController: SiteTableViewController,
         if let itemData = bookmarkCell as? BookmarkItemData,
            let url = URL(string: itemData.url) {
             // Navigate to a webpage when tapping a bookmark
+            // Exit search first
+            if state == .bookmarks(state: .search) {
+                exitSearchState()
+            }
             libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: .bookmark)
         } else {
             // Drill deeper into a bookmark folder
