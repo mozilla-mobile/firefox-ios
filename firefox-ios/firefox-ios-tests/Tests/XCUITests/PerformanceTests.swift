@@ -21,6 +21,9 @@ class PerformanceTests: BaseTestCase {
                     "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-places.db",
                     "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-places.db"]
 
+    private var homePageScreen: HomePageScreen!
+    private var libraryScreen: LibraryScreen!
+
     override func setUp() async throws {
         // Test name looks like: "[Class testFunc]", parse out function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -40,6 +43,8 @@ class PerformanceTests: BaseTestCase {
             launchArguments.append(LaunchArguments.LoadDatabasePrefix + fixtures[functionName]!)
         }
         try await super.setUp()
+        homePageScreen = HomePageScreen(app: app)
+        libraryScreen = LibraryScreen(app: app)
     }
 
     // This test run first to install the app in the device
@@ -55,8 +60,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
@@ -71,8 +76,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // activity measurement here
             app.launch()
@@ -97,8 +102,8 @@ class PerformanceTests: BaseTestCase {
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // go to tab tray
             tabsButton.waitAndTap()
@@ -123,8 +128,8 @@ class PerformanceTests: BaseTestCase {
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
             // go to tab tray
             tabsButton.waitAndTap()
@@ -135,20 +140,18 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory1startUp() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
         app.terminate()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton)
+                homePageScreen.assertTabsButtonExists()
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -156,9 +159,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory1openMenu() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
 
         navigator.goto(LibraryPanel_History)
 
@@ -170,8 +171,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
@@ -196,20 +197,18 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory100startUp() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
         app.terminate()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton)
+                homePageScreen.assertTabsButtonExists()
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -217,9 +216,7 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfHistory100openMenu() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
 
         navigator.goto(LibraryPanel_History)
 
@@ -231,8 +228,8 @@ class PerformanceTests: BaseTestCase {
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
@@ -257,20 +254,18 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1startUp() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
         app.terminate()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton)
+                homePageScreen.assertTabsButtonExists()
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -278,22 +273,20 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1openMenu() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList)
+        libraryScreen.assertBookmarkList()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
@@ -313,20 +306,18 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks100startUp() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
         app.terminate()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton)
+                homePageScreen.assertTabsButtonExists()
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -334,22 +325,20 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks100openMenu() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList)
+        libraryScreen.assertBookmarkList()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
@@ -369,20 +358,18 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1000startUp() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
         app.terminate()
 
         measure(metrics: [
             XCTMemoryMetric(),
             XCTClockMetric(), // to measure timeClock Mon
-            XCTCPUMetric(), // to measure cpu cycles
-            XCTStorageMetric(), // to measure storage consuming
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton)
+                homePageScreen.assertTabsButtonExists()
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -390,16 +377,14 @@ class PerformanceTests: BaseTestCase {
     }
 
     func testPerfBookmarks1000openMenu() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
+        homePageScreen.assertTabsButtonExists()
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList)
+        libraryScreen.assertBookmarkList()
 
         measure(metrics: [
             XCTMemoryMetric(),
