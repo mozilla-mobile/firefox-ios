@@ -969,6 +969,7 @@
 		8A3FD2902FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */; };
 		8A3FD2912FABB9BA001F5DE9 /* TabManagerGetTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */; };
 		8A3FD2922FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */; };
+		8A3FDEB82FAE5A4E001F5DE9 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */; };
 		8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */; };
 		8A4490922BF3BC2700E7E682 /* MicrosurveyPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */; };
 		8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */; };
@@ -9372,6 +9373,7 @@
 		8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerClearHistoryTests.swift; sourceTree = "<group>"; };
 		8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerGetTabTests.swift; sourceTree = "<group>"; };
 		8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerReorderTabsTests.swift; sourceTree = "<group>"; };
+		8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
 		8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlayTests.swift; sourceTree = "<group>"; };
 		8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptView.swift; sourceTree = "<group>"; };
 		8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyConfirmationView.swift; sourceTree = "<group>"; };
@@ -13609,6 +13611,7 @@
 				8A13FA882AD82BC8007527AB /* AppSendTabDelegateTests.swift */,
 				5AD3B6772CF650D000AFA1FE /* DefaultBrowserUtilityTests.swift */,
 				5AD3B67F2CF6674B00AFA1FE /* MockUIApplication.swift */,
+				8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -20285,6 +20288,7 @@
 				C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */,
 				C25017362ECBAD0A0071506F /* MockRemoteSettingsClient.swift in Sources */,
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
+				8A3FDEB82FAE5A4E001F5DE9 /* SceneDelegateTests.swift in Sources */,
 				EDD3348E2D109458004516D0 /* ShareTelemetryTests.swift in Sources */,
 				0EC57CE32CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
