@@ -55,4 +55,3 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         return try decoder.decode(WorldCupMatchesResponse.self, from: data)
     }
 }
-
