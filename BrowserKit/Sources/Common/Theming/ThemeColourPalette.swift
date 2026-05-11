@@ -85,6 +85,7 @@ public protocol ThemeColourPalette {
 
     // MARK: - Border
     var borderPrimary: UIColor { get }
+    var borderSecondary: UIColor { get }
     var borderAccent: UIColor { get }
     var borderAccentNonOpaque: UIColor { get }
     var borderAccentPrivate: UIColor { get }

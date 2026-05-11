@@ -1584,6 +1584,7 @@
 		C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
+		C250A6902FAC875200BFB1AD /* WorldCupMatchCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */; };
 		C26B96D72F29188100D4B140 /* TestKit in Frameworks */ = {isa = PBXBuildFile; productRef = C26B96D62F29188100D4B140 /* TestKit */; };
 		C27470A22F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */; };
 		C27470A42F4C8EBB00920313 /* PickerSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */; };
@@ -10374,6 +10375,7 @@
 		C25020832ECDE7550071506F /* MockTranslationsSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTranslationsSchemeHandler.swift; sourceTree = "<group>"; };
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
+		C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchCardView.swift; sourceTree = "<group>"; };
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		C27470A12F4C6BB900920313 /* SummarizerLanguageExpansionConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarizerLanguageExpansionConfigurationTests.swift; sourceTree = "<group>"; };
 		C27470A32F4C8EBB00920313 /* PickerSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerSettingTests.swift; sourceTree = "<group>"; };
@@ -15116,6 +15118,7 @@
 		C2D7AC3B2F9B5D750090EC28 /* WorldCup */ = {
 			isa = PBXGroup;
 			children = (
+				C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */,
 				C2A057E22FA8C32200100C24 /* WorldCupCell.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
@@ -19865,6 +19868,7 @@
 				43D16B8029831DC5009F8279 /* CreditCardInputView.swift in Sources */,
 				8AB893A32C73AF5200DAEED7 /* MockCreditCardProvider.swift in Sources */,
 				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
+				C250A6902FAC875200BFB1AD /* WorldCupMatchCardView.swift in Sources */,
 				B2FEA68B2B460D1D0058E616 /* AddressAutofillSettingsView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				61DD72D12F5936C4002BFEA6 /* AIControlsSetting.swift in Sources */,

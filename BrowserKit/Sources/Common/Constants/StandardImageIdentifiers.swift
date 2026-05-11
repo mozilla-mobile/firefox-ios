@@ -114,6 +114,7 @@ public struct StandardImageIdentifiers {
         public static let shield = "shieldLarge"
         public static let shieldCheckmark = "shieldCheckmarkLarge"
         public static let shieldSlash = "shieldSlashLarge"
+        public static let soccerBall = "soccerBallLarge"
         public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let summarizer = "summarizerLarge"
