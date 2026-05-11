@@ -16,6 +16,7 @@ final class HomepageViewController: UIViewController,
                                     ContentContainable,
                                     Screenshotable,
                                     Themeable,
+                                    FeatureFlaggable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -57,6 +58,7 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
+    private var collectionViewTopContentInset: CGFloat = 0
 
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
@@ -273,6 +275,33 @@ final class HomepageViewController: UIViewController,
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
+    }
+
+    func updateTopContentInset(_ topInset: CGFloat) {
+        // Pinned header mode lets BVC represent its status bar overlay as homepage content inset.
+        // When disabled, use the legacy zero-inset layout so collection view offsets are not adjusted.
+        let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
+                                  && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+        let effectiveTopInset = shouldPinNewsHeader ? topInset : 0
+        guard collectionViewTopContentInset != effectiveTopInset else { return }
+        let previousAdjustedTopInset = collectionView?.adjustedContentInset.top ?? collectionViewTopContentInset
+        let wasScrolledToTop = collectionView.map { $0.contentOffset.y <= 0 } ?? true
+        collectionViewTopContentInset = effectiveTopInset
+        updateCollectionViewContentInset()
+
+        guard let collectionView else { return }
+
+        if wasScrolledToTop {
+            // Top of scrollable content is always -topInset, e.g. a 54pt top inset means y = -54.
+            collectionView.contentOffset.y = -collectionView.adjustedContentInset.top
+        } else {
+            // Preserve the visible content when BVC chrome changes the collection view's top inset.
+            // Example: offset 120 + inset 0 shows normalized y = 120. If inset becomes 54,
+            // move offset to 66 so 66 + 54 still shows normalized y = 120.
+            let adjustedTopInsetDelta = collectionView.adjustedContentInset.top - previousAdjustedTopInset
+            collectionView.contentOffset.y -= adjustedTopInsetDelta
+        }
+        handleScroll(collectionView, isUserInteraction: false)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -500,17 +529,22 @@ final class HomepageViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.delegate = self
-        // Per design requirement, set spacing on top. We may want to revisit this spacing when implement liquid glass.
+        self.collectionView = collectionView
+        updateCollectionViewContentInset()
+
+        view.addSubview(collectionView)
+    }
+
+    private func updateCollectionViewContentInset() {
+        guard let collectionView else { return }
+
         collectionView.contentInset = UIEdgeInsets(
-            top: HomepageSectionLayoutProvider.UX.topSpacing,
+            top: collectionViewTopContentInset,
             left: 0,
             bottom: 0,
             right: 0
         )
         collectionView.scrollIndicatorInsets = collectionView.contentInset
-        self.collectionView = collectionView
-
-        view.addSubview(collectionView)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -532,10 +566,11 @@ final class HomepageViewController: UIViewController,
                 return sectionProvider.makeEmptyLayoutSection()
             }
 
-            return sectionProvider.createLayoutSection(
+            let layoutSection = sectionProvider.createLayoutSection(
                 for: section,
                 with: environment
             )
+            return layoutSection
         }
         return layout
     }
@@ -743,6 +778,9 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
             onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onNewsAffordanceTap: { [weak self] in
+                self?.scrollNewsfeedToTop(onlyIfScrolledPastHeader: false, animated: true)
+            },
             onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
@@ -799,13 +837,14 @@ final class HomepageViewController: UIViewController,
 
     /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
-        guard let headerView = getNewsTransitionHeader()  else { return }
-
         // We only want the stories header to transition if there is enough empty space on the homepage,
         // which is denoted by the existence of the spacer
         let transitionEnabled = isNewsTransitionEnabled()
+        let transitionProgress = newsTransitionProgress()
+
+        guard let headerView = getNewsTransitionHeader()  else { return }
         headerView.setTransitionEnabled(transitionEnabled)
-        headerView.setTransitionProgress(newsTransitionProgress())
+        headerView.setTransitionProgress(transitionProgress)
     }
 
     /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
@@ -1059,6 +1098,11 @@ final class HomepageViewController: UIViewController,
 
     private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
         guard let activeTabUUID else { return }
+
+        // If the user switches categories while scrolled through the newsfeed, jump back to the
+        // offset where the pinned news header sits at the top before replacing the story items.
+        scrollNewsfeedToTop()
+
         homepageTabStateStore.updateState(for: activeTabUUID) { state in
             state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
         }
@@ -1091,6 +1135,50 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX
         )
+    }
+
+    private func scrollNewsfeedToTop(onlyIfScrolledPastHeader: Bool = true, animated: Bool = false) {
+        guard let activeTabUUID,
+              let collectionView,
+              let targetOffsetY = newsfeedHeaderPinnedOffsetY()
+        else { return }
+
+        guard !onlyIfScrolledPastHeader || collectionView.contentOffset.y > targetOffsetY else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x, y: targetOffsetY)
+        collectionView.setContentOffset(targetOffset, animated: animated)
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.scrollOffsetY = targetOffsetY
+        }
+    }
+
+    private func newsfeedHeaderPinnedOffsetY() -> CGFloat? {
+        guard let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 { return true }
+                  return false
+              })
+        else {
+            return nil
+        }
+
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        let firstStoryIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        guard let firstStoryAttributes = collectionView.layoutAttributesForItem(at: firstStoryIndexPath),
+              let headerAttributes = collectionView.collectionViewLayout.layoutAttributesForSupplementaryView(
+                  ofKind: UICollectionView.elementKindSectionHeader,
+                  at: headerIndexPath
+              )
+        else {
+            return nil
+        }
+
+        // The pinned position is the header's natural minY adjusted for the collection view's top inset.
+        // Derive it from the first story cell so the calculation stays aligned with compositional layout spacing.
+        let naturalHeaderMinY = firstStoryAttributes.frame.minY
+            - HomepageSectionLayoutProvider.UX.headerSectionSpacing
+            - headerAttributes.frame.height
+        return naturalHeaderMinY - collectionView.adjustedContentInset.top
     }
 
     private func getNewsTransitionHeader() -> NewsTransitionHeaderCell? {

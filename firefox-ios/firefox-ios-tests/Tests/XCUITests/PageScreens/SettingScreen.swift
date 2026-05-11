@@ -323,4 +323,10 @@ final class SettingScreen {
             switchElement.waitAndTap()
         }
     }
+
+    func navigateToSearchSettings() {
+        let searchCell = sel.SEARCH_CELL.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(searchCell)
+        searchCell.waitAndTap()
+    }
 }

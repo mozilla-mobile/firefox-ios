@@ -122,13 +122,13 @@
 "WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "მიჰყევით თქვენს გუნდს";
 
 /* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "იხილეთ მიმდინარე შეხვედრების სიახლეები და სხვ.";
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "მიმდინარე შეხვედრების სიახლეები და სხვ.";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "თვალი მიადევნეთ მსოფლიო თასს";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "თვალი ადევნეთ მსოფლიო თასს";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
-"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "გუნდისთვის მიდევნება";
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "გუნდის მიყოლა";
 
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(დასრულებული)";

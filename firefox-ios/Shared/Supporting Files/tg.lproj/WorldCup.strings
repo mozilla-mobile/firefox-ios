@@ -1,0 +1,51 @@
+/* The title of the Group A group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupA.Title.v151" = "Гурӯҳи «A»";
+
+/* The title of the Group B group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupB.Title.v151" = "Гурӯҳи «B»";
+
+/* The title of the Group C group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupC.Title.v151" = "Гурӯҳи «C»";
+
+/* The title of the Group D group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupD.Title.v151" = "Гурӯҳи «D»";
+
+/* The title of the Group E group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupE.Title.v151" = "Гурӯҳи «E»";
+
+/* The title of the Group F group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupF.Title.v151" = "Гурӯҳи «F»";
+
+/* The title of the Group G group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupG.Title.v151" = "Гурӯҳи «G»";
+
+/* The title of the Group H group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupH.Title.v151" = "Гурӯҳи «H»";
+
+/* The title of the Group I group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupI.Title.v151" = "Гурӯҳи «I»";
+
+/* The title of the Group J group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupJ.Title.v151" = "Гурӯҳи «J»";
+
+/* The title of the Group K group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupK.Title.v151" = "Гурӯҳи «K»";
+
+/* The title of the Group L group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupL.Title.v151" = "Гурӯҳи «L»";
+
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Марҳилаи гурӯҳӣ";
+
+/* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "Д";
+
+/* H is short for Hours. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. St for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.HourLabel.v151" = "Ч";
+
+/* M is short for Minutes. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. Mi for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
+"WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "М";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Имконоти бештар";
+

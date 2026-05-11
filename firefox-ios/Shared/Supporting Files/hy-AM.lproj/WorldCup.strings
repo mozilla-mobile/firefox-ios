@@ -76,6 +76,9 @@
 /* The title of the Group L group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupL.Title.v151" = "Խումբ L";
 
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Խմբային փուլ";
+
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Փոխել թիմը";
 
@@ -114,6 +117,9 @@
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
 "WorldCup.HomepageWidget.ErrorLabel.v151" = "Մենք չկարողացանք բեռնել համընկնման տվյալները։ Խնդրում ենք թարմացնել էջը։";
+
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Առաջին խաղակես";
 
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Թաքցնել Աշխարհի գավաթի թարմացումները";
@@ -154,6 +160,9 @@
 /* Message shown in the World Cup widget when the device has no internet connection. */
 "WorldCup.HomepageWidget.OfflineLabel.v151" = "Դուք, կարծես, անցանց եք։ Ստուգեք ձեր ինտերնետային կապը և փորձեք կրկին։";
 
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Տասնմեկ մետրանոցներ (%@)";
+
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Հեռակա";
 
@@ -192,6 +201,9 @@
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 թվականի աշխարհի առաջնության չեմպիոններ";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Երկրորդ խաղակես";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Լրացուցիչ ընտրանքներ";

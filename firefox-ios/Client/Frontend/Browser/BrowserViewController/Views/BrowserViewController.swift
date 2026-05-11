@@ -159,6 +159,8 @@ class BrowserViewController: UIViewController,
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+    private var contentContainerTopConstraint: NSLayoutConstraint?
+    private var isContentContainerPinnedToScreenTop: Bool?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -342,6 +344,16 @@ class BrowserViewController: UIViewController,
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
+    }
+
+    private var isHomepagePinnedHeaderEnabled: Bool {
+        featureFlagsProvider.isEnabled(.homepagePinnedHeader) && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+    }
+
+    private var shouldPinContentContainerToScreenTop: Bool {
+        isHomepagePinnedHeaderEnabled
+        && contentContainer.hasHomepage
+        && header.arrangedSubviews.isEmpty
     }
 
     // MARK: Data management
@@ -546,6 +558,7 @@ class BrowserViewController: UIViewController,
             readerModeBar.addToParent(parent: newParent, addToTop: isBottomSearchBar)
         }
 
+        updateContentContainerTopConstraint()
         updateViewConstraints()
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
@@ -1429,6 +1442,7 @@ class BrowserViewController: UIViewController,
         // toolbar translucency needs to be updated
         // This also required for iPad rotation
         addOrUpdateMaskViewIfNeeded()
+        updateContentContainerTopConstraint()
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1546,9 +1560,9 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Constraints
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
@@ -1589,6 +1603,7 @@ class BrowserViewController: UIViewController,
             updateHeaderConstraints()
         }
         setupBlurViews()
+        updateContentContainerTopConstraint()
     }
 
     private func setupBlurViews() {
@@ -1614,6 +1629,60 @@ class BrowserViewController: UIViewController,
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+
+    func updateContentContainerTopConstraint() {
+        guard isHomepagePinnedHeaderEnabled else {
+            activateDefaultContentContainerTopConstraint()
+            return
+        }
+
+        guard isViewLoaded else { return }
+
+        // Rebuild the top constraint and z-order only when the homepage pinning state changes,
+        // or when the constraint has not been created yet. When homepage content has a pinned header,
+        // we move the content to the front so the pinned section header can sit above the other views.
+        // Otherwise, the other views stays in front of the content container.
+        if isContentContainerPinnedToScreenTop != shouldPinContentContainerToScreenTop
+           || contentContainerTopConstraint == nil {
+            isContentContainerPinnedToScreenTop = shouldPinContentContainerToScreenTop
+            contentContainerTopConstraint?.isActive = false
+            contentContainerTopConstraint = contentContainer.topAnchor.constraint(
+                equalTo: shouldPinContentContainerToScreenTop ? view.topAnchor : header.bottomAnchor
+            )
+            contentContainerTopConstraint?.isActive = true
+
+            let frontViews = shouldPinContentContainerToScreenTop
+                ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+                : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
+                   bottomContentStackView, bottomContainer, overKeyboardContainer]
+            frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+        }
+
+        guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
+
+        // When the homepage is pinned to the top of the screen, BVC needs to account for
+        // the status bar overlay height (safe area insets).
+        // Otherwise, the homepage remains pinned to header.bottomAnchor and no extra inset is needed.
+        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        homepageViewController.updateTopContentInset(homepageTopContentInset)
+    }
+
+    /// Keeps the original content container top constraint in place when homepage pinned header is disabled,
+    /// pinning the content container top to the header bottom.
+    private func activateDefaultContentContainerTopConstraint() {
+        let hasActiveLegacyConstraint = isContentContainerPinnedToScreenTop == false
+            && contentContainerTopConstraint?.isActive == true
+        guard !hasActiveLegacyConstraint else { return }
+
+        contentContainerTopConstraint?.isActive = false
+        contentContainerTopConstraint = contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor)
+        isContentContainerPinnedToScreenTop = false
+
+        guard contentContainer.superview != nil,
+              header.superview != nil else { return }
+
+        contentContainerTopConstraint?.isActive = true
     }
 
     // MARK: - Snapkit related
@@ -1858,6 +1927,7 @@ class BrowserViewController: UIViewController,
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         // FXIOS-11036 - Investigate improvement to JavaScript alert dequeueing
@@ -1875,6 +1945,7 @@ class BrowserViewController: UIViewController,
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than a web view
@@ -3160,6 +3231,10 @@ class BrowserViewController: UIViewController,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
+        // Account for the status bar overlay so spacer layout and scroll-view geometry describe
+        // the same visible viewport.
+        // Example: if the visible viewport is 800pt high and BVC contributes a 54pt overlay,
+        // spacer calculations should use 746pt of usable homepage content height.
         let availableContentHeight = getAvailableHomepageContentHeight()
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
@@ -3194,7 +3269,7 @@ class BrowserViewController: UIViewController,
             addressBarHeight -= keyboardSpacerHeight
         }
 
-        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage.
         return view.frame.height - statusBarOverlay.frame.height
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
@@ -3204,12 +3279,17 @@ class BrowserViewController: UIViewController,
     private func getAvailableHomepageWallpaperHeight(availableContentHeight: CGFloat) -> CGFloat {
         guard let window = view.window else {
             // Fallback before window attachment, this gets corrected on the next layout/state update.
-            return availableContentHeight + contentContainer.frame.origin.y
+            let topOffset = shouldPinContentContainerToScreenTop
+                ? statusBarOverlay.frame.height
+                : contentContainer.frame.origin.y
+            return availableContentHeight + topOffset
         }
 
-        // Homepage pins wallpaper to window top, so include the content container's window Y offset.
-        let contentTopOffset = contentContainer.convert(CGPoint.zero, to: window).y
-        return availableContentHeight + contentTopOffset
+        // Homepage pins wallpaper to window top, so add back the top space excluded from content height.
+        let topOffset = shouldPinContentContainerToScreenTop
+            ? statusBarOverlay.frame.height
+            : contentContainer.convert(CGPoint.zero, to: window).y
+        return availableContentHeight + topOffset
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,

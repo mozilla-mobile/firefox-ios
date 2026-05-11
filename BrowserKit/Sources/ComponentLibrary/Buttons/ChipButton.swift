@@ -21,6 +21,10 @@ public final class ChipButton: UIButton, ThemeApplicable {
     private var disabledBackgroundColor: UIColor = .clear
     private var disabledForegroundColor: UIColor = .clear
 
+    // Some pinned collection view headers use a system backdrop that can be visually disturbed
+    // by UIKit text in scrolling chips, so this mode draws title text in a layer.
+    private let titleTextLayer = CATextLayer()
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -29,6 +33,14 @@ public final class ChipButton: UIButton, ThemeApplicable {
         configuration?.background.backgroundColorTransformer = nil
         configuration?.titleLineBreakMode = .byTruncatingTail
         layer.masksToBounds = false
+        titleTextLayer.alignmentMode = .center
+        titleTextLayer.truncationMode = .end
+        titleTextLayer.actions = [
+            "bounds": NSNull(),
+            "position": NSNull(),
+            "contents": NSNull()
+        ]
+        layer.addSublayer(titleTextLayer)
 
         addTarget(self, action: #selector(tapped), for: .touchUpInside)
     }
@@ -38,7 +50,7 @@ public final class ChipButton: UIButton, ThemeApplicable {
     }
 
     override public var intrinsicContentSize: CGSize {
-        guard let title = configuration?.title, !title.isEmpty else {
+        guard let title = viewModel?.title, !title.isEmpty else {
             return super.intrinsicContentSize
         }
 
@@ -60,6 +72,9 @@ public final class ChipButton: UIButton, ThemeApplicable {
     override public func layoutSubviews() {
         super.layoutSubviews()
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: bounds.height / 2).cgPath
+        performWithoutLayerAnimation {
+            titleTextLayer.frame = bounds.insetBy(dx: UX.horizontalInset, dy: UX.verticalInset)
+        }
     }
 
     override public func updateConfiguration() {
@@ -67,25 +82,33 @@ public final class ChipButton: UIButton, ThemeApplicable {
 
         let foregroundColor: UIColor
         let backgroundColor: UIColor
+        let font: UIFont
 
         if !isEnabled {
             foregroundColor = disabledForegroundColor
             backgroundColor = disabledBackgroundColor
+            font = FXFontStyles.Regular.body.scaledFont()
         } else if isSelected {
             foregroundColor = selectedForegroundColor
             backgroundColor = selectedBackgroundColor
+            font = FXFontStyles.Bold.body.scaledFont()
         } else {
             foregroundColor = normalForegroundColor
             backgroundColor = normalBackgroundColor
+            font = FXFontStyles.Regular.body.scaledFont()
         }
 
-        updatedConfiguration.baseForegroundColor = foregroundColor
         updatedConfiguration.background.backgroundColor = backgroundColor
-        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = self.isSelected ? FXFontStyles.Bold.body.scaledFont() : FXFontStyles.Regular.body.scaledFont()
-            outgoing.foregroundColor = foregroundColor
-            return outgoing
+        if viewModel?.titleRendering == .coreAnimationLayer {
+            updateTitleTextLayer(font: font, foregroundColor: foregroundColor)
+        } else {
+            updatedConfiguration.baseForegroundColor = foregroundColor
+            updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = font
+                outgoing.foregroundColor = foregroundColor
+                return outgoing
+            }
         }
 
         configuration = updatedConfiguration
@@ -100,13 +123,26 @@ public final class ChipButton: UIButton, ThemeApplicable {
         }
     }
 
+    override public func didMoveToWindow() {
+        super.didMoveToWindow()
+        if viewModel?.titleRendering == .coreAnimationLayer {
+            titleTextLayer.contentsScale = window?.windowScene?.screen.scale ?? 1
+        }
+    }
+
     public func configure(viewModel: ChipButtonViewModel) {
         self.viewModel = viewModel
         accessibilityIdentifier = viewModel.a11yIdentifier
         isSelected = viewModel.isSelected
 
         guard var updatedConfiguration = configuration else { return }
-        updatedConfiguration.title = viewModel.title
+        if viewModel.titleRendering == .coreAnimationLayer {
+            accessibilityLabel = viewModel.title
+            titleTextLayer.isHidden = false
+        } else {
+            titleTextLayer.isHidden = true
+            updatedConfiguration.title = viewModel.title
+        }
         updatedConfiguration.contentInsets = NSDirectionalEdgeInsets(
             top: UX.verticalInset,
             leading: UX.horizontalInset,
@@ -125,6 +161,30 @@ public final class ChipButton: UIButton, ThemeApplicable {
         disabledForegroundColor = theme.colors.textDisabled
         applyShadow(FxShadow.shadow200, theme: theme)
         setNeedsUpdateConfiguration()
+    }
+
+    private func updateTitleTextLayer(font: UIFont, foregroundColor: UIColor) {
+        guard let title = viewModel?.title else {
+            titleTextLayer.string = nil
+            return
+        }
+
+        titleTextLayer.string = NSAttributedString(
+            string: title,
+            attributes: [
+                .font: font,
+                .foregroundColor: foregroundColor
+            ]
+        )
+    }
+
+    /// CATextLayer updates implicitly animate by default; disable actions so dynamic type
+    /// changes update the chip title immediately like UIKit button titles.
+    private func performWithoutLayerAnimation(_ updates: () -> Void) {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        updates()
+        CATransaction.commit()
     }
 
     @objc

@@ -336,4 +336,72 @@ final class TabManagerTests: TabManagerTestsBase {
             "Should choose the second private tab as the nearest neighbour on the right"
         )
     }
+
+    // MARK: - Offload Background WebViews
+
+    @MainActor
+    func testOffloadBackgroundWebViews_tabCountUnchanged() async throws {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://firefox.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+
+        await subject.offloadBackgroundWebViews()
+
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testOffloadBackgroundWebViews_backgroundTabWebViewsAreNil() async throws {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        let tab2 = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        let tab3 = subject.addTab(URLRequest(url: URL(string: "https://firefox.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab2)
+        subject.selectTab(tab3)
+        subject.selectTab(tab1)
+
+        await subject.offloadBackgroundWebViews()
+
+        XCTAssertNil(tab2.webView)
+        XCTAssertNil(tab3.webView)
+    }
+
+    @MainActor
+    func testOffloadBackgroundWebViews_selectedTabWebViewPreserved() async throws {
+        let subject = createSubject()
+        let tab1 = subject.addTab(URLRequest(url: URL(string: "https://mozilla.com")!), afterTab: nil, isPrivate: false)
+        _ = subject.addTab(URLRequest(url: URL(string: "https://example.com")!), afterTab: nil, isPrivate: false)
+        subject.selectTab(tab1)
+
+        XCTAssertNotNil(tab1.webView)
+
+        await subject.offloadBackgroundWebViews()
+
+        XCTAssertNotNil(tab1.webView, "The selected tab's WebView should not be offloaded")
+    }
+
+    @MainActor
+    func testOffloadBackgroundWebViews_zombieTabsUnaffected() async throws {
+        let tabs = generateTabs(count: 3)
+        let subject = createSubject(tabs: tabs)
+        subject.selectTab(tabs[0])
+
+        XCTAssertNil(tabs[1].webView)
+        XCTAssertNil(tabs[2].webView)
+
+        await subject.offloadBackgroundWebViews()
+
+        XCTAssertNil(tabs[1].webView)
+        XCTAssertNil(tabs[2].webView)
+        XCTAssertEqual(subject.tabs.count, 3)
+    }
+
+    @MainActor
+    func testOffloadBackgroundWebViews_emptyTabList_doesNotCrash() async {
+        let subject = createSubject()
+        await subject.offloadBackgroundWebViews()
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
 }

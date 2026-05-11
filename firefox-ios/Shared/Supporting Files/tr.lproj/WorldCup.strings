@@ -136,6 +136,9 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Maç sonu";
 
+/* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Kişisel duvar kâğıdını indir";
+
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "İlgili maçlar";
 
