@@ -97,6 +97,12 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
         if action.translationConfiguration?.isTranslationFeatureEnabled == false {
             for uuid in translationFlowIds.keys {
+                let translationState = store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: uuid
+                )?.addressToolbar.translationConfiguration?.state
+                guard translationState == .active || translationState == .loading else { continue }
                 store.dispatch(GeneralBrowserAction(
                     windowUUID: uuid,
                     actionType: GeneralBrowserActionType.reloadWebsite
