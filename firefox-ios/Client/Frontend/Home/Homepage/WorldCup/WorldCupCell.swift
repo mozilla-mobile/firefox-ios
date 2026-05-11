@@ -239,11 +239,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
 
-        scrollView.contentOffset = .zero
-        pageControl.currentPage = 0
-
-        updateScrollViewHeight(for: 0, animated: false)
-        updatePageAccessibility()
+        goToPage(0)
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
