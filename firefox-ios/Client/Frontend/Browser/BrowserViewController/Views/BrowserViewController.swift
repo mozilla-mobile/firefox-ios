@@ -3033,7 +3033,9 @@ class BrowserViewController: UIViewController,
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
-        if let popover = alert.popoverPresentationController {
+        let setupPopover = { [weak self] in
+            guard let self, let popover = alert.popoverPresentationController else { return }
+            popover.delegate = self
             if let sourceButton {
                 popover.sourceView = sourceButton
                 popover.sourceRect = sourceButton.bounds
@@ -3043,6 +3045,13 @@ class BrowserViewController: UIViewController,
                 popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
                 popover.permittedArrowDirections = []
             }
+        }
+
+        setupPopover()
+
+        if alert.popoverPresentationController != nil {
+            displayedPopoverController = alert
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         present(alert, animated: true)
