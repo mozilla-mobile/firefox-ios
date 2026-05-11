@@ -6,6 +6,9 @@ import Common
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
+    private var toolbarScreen: ToolbarScreen!
+    private var mainMenuScreen: MainMenuScreen!
+
     let fixtures = [
         "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-places.db",
         "testHistoryDatabaseFixture": "testHistoryDatabase100-places.db"
@@ -22,15 +25,15 @@ class DatabaseFixtureTest: BaseTestCase {
                            LaunchArguments.SkipContextualHints,
                            LaunchArguments.DisableAnimations]
         try await super.setUp()
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2458579
     func testBookmarksDatabaseFixture() {
-        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton)
-
-        navigator.goto(LibraryPanel_Bookmarks)
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapBookmarks()
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
@@ -52,10 +55,9 @@ class DatabaseFixtureTest: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2459133
    func testHistoryDatabaseFixture() throws {
-       let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-       mozWaitForElementToExist(tabsButton)
-
-       navigator.goto(LibraryPanel_History)
+       toolbarScreen.assertTabsButtonExists()
+       toolbarScreen.tapSettingsMenuButton()
+       mainMenuScreen.tapHistory()
 
        let historyList = app.tables["History List"].firstMatch
        mozWaitForElementToExist(historyList)
