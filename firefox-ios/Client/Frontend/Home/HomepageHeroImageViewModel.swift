@@ -13,6 +13,7 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
     let faviconBorderWidth: CGFloat
     let heroImageSize: CGSize
     let fallbackFaviconSize: CGSize
+    let ignoresAspectRatio: Bool
 
     init(
         urlStringRequest: String,
@@ -21,7 +22,8 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
         faviconCornerRadius: CGFloat = HomepageUX.generalCornerRadius,
         faviconBorderWidth: CGFloat = HomepageUX.generalBorderWidth,
         heroImageSize: CGSize,
-        fallbackFaviconSize: CGSize = HomepageUX.fallbackFaviconSize
+        fallbackFaviconSize: CGSize = HomepageUX.fallbackFaviconSize,
+        ignoresAspectRatio: Bool = false
     ) {
         self.urlStringRequest = urlStringRequest
         self.type = type
@@ -30,5 +32,6 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
         self.faviconBorderWidth = faviconBorderWidth
         self.heroImageSize = heroImageSize
         self.fallbackFaviconSize = fallbackFaviconSize
+        self.ignoresAspectRatio = ignoresAspectRatio
     }
 }
