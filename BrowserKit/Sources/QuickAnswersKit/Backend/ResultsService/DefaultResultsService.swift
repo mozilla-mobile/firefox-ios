@@ -22,12 +22,14 @@ final class DefaultResultsService: ResultsService {
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
         let message: QuickAnswersMessage = LiteLLMMessage(role: .user, content: transcription)
-        // TODO: FXIOS-15198 - Handle mapping errors from request
-        let fullResponse = try await requestChatCompletion(for: message)
 
-        let citations = fullResponse.providerSpecificFields?.citations ?? []
-
-        return try formatResult(from: fullResponse.content, and: citations)
+        do {
+            let fullResponse = try await requestChatCompletion(for: message)
+            let citations = fullResponse.providerSpecificFields?.citations ?? []
+            return formatResult(from: fullResponse.content, and: citations)
+        } catch {
+            throw mapError(error)
+        }
     }
 
     private func requestChatCompletion(for message: QuickAnswersMessage) async throws -> QuickAnswersMessage {
@@ -40,7 +42,7 @@ final class DefaultResultsService: ResultsService {
         )
     }
 
-    private func formatResult(from answer: String, and citations: [Citation]) throws -> SearchResult {
+    private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
         let sources = citations.map { citation in
             SearchResult.Source(
                 title: citation.title ?? "",
@@ -49,5 +51,25 @@ final class DefaultResultsService: ResultsService {
             )
         }
         return SearchResult(resultText: answer, sources: sources)
+    }
+
+    /// Maps underlying errors to `ResultsServiceError` types.
+    private func mapError(_ error: Error) -> ResultsServiceError {
+        switch error {
+        case LiteLLMClientError.requestCreationFailed:
+            return .requestCreationFailed
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 429:
+            return .rateLimited
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 403:
+            return .maxUsers
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 413:
+            return .payloadTooLarge
+        case LiteLLMClientError.invalidResponse(let statusCode):
+            return .invalidResponse(statusCode: statusCode)
+        case LiteLLMClientError.noContent:
+            return .noMessage
+        case let e as LiteLLMClientError: return .unknown(e.localizedDescription)
+        default: return .unknown(error.localizedDescription)
+        }
     }
 }
