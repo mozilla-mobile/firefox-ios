@@ -1,44 +1,44 @@
 /* Accessibility label for the close button on the country picker for the World Cup widget. This allows users to close the country picker. */
-"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Fechar seletor de países da Copa do Mundo";
+"WorldCup.CountryPicker.Close.AccessibilityLabel.v151" = "Fermi la elektilon de teamo por la futbala mondpokalo";
 
 /* Section header for the Africa region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Africa.v151" = "África";
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "Afriko";
 
 /* Section header for the Asia region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Asia.v151" = "Ásia";
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "Azio";
 
 /* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
-"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "América Central";
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "Centra Ameriko";
 
 /* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
 "WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "CONCACAF";
 
 /* Section header for the Europe region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Europe.v151" = "Europa";
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "Eŭropo";
 
 /* Section header for the North America region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "América do Norte";
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "Nordameriko";
 
 /* Section header for the Oceania region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Oceania";
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "Oceanio";
 
 /* Section header for the South America region in the World Cup country picker. */
-"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "América do Sul";
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "Sudameriko";
 
 /* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
-"WorldCup.CountryPicker.Country.England.v151" = "Inglaterra";
+"WorldCup.CountryPicker.Country.England.v151" = "Anglio";
 
 /* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
-"WorldCup.CountryPicker.Country.Scotland.v151" = "Escócia";
+"WorldCup.CountryPicker.Country.Scotland.v151" = "Skotlando";
 
 /* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Pronto";
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "Farita";
 
 /* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
-"WorldCup.CountryPicker.SkipButton.Title.v151" = "Pular";
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "Ignori";
 
 /* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.CountryPicker.Title.v151" = "Siga seu time";
+"WorldCup.CountryPicker.Title.v151" = "Sekvu vian teamon";
 
 /* The title of the Group A group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupA.Title.v151" = "Grupo A";
@@ -77,10 +77,10 @@
 "WorldCup.GroupPhase.GroupL.Title.v151" = "Grupo L";
 
 /* The generic label indicating the Group Stage phase in the World Cup widget. */
-"WorldCup.GroupPhase.GroupStageLabel.v151" = "Fase de grupos";
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Grupa fazo";
 
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Mudar time";
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Ŝanĝi teamon";
 
 /* D is short for Days. The layout only allows for 1–2 characters: if there is an equivalent single character for your language, use that (e.g. T for German). Your translation will be automatically truncated at 2 characters to avoid layout issues. */
 "WorldCup.HomepageWidget.CountDown.DayLabel.v151" = "D";
@@ -92,83 +92,134 @@
 "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "M";
 
 /* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
-"WorldCup.HomepageWidget.CountDown.Title.v151" = "Contagem regressiva para a Copa do Mundo";
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "Retronombrado ĝis la futbala mondpokalo";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
-"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Ver calendário";
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Vidi kalendaron";
 
 /* The accessibility labels for the button that allow to disable World Cup notifications. */
-"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Desativar notificações";
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "Malaktivigi sciigojn";
 
 /* The label for the button in the eliminated section that takes the user back to the team selection screen. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Escolher time";
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Elekti teamon";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Escolha outro time para acompanhar a Copa do Mundo.";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Elektu alian teamon por sekvi dum la futbala mondpokalo.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Remover o widget da Copa do Mundo";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Forigi la komponanton de la futbala mondpokalo";
 
 /* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Remover";
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "Forigi";
 
 /* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Ainda quer acompanhar?";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "Ĉu vi plu volas sekvi la pokalon?";
 
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
-"WorldCup.HomepageWidget.ErrorLabel.v151" = "Não foi possível carregar os dados do jogo. Atualize.";
+"WorldCup.HomepageWidget.ErrorLabel.v151" = "Ne eblis ŝargi informojn pri ludoj. Bonvolu refreŝigi.";
 
 /* The label indicating that the displaying match is in the extra time part of the game. */
-"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Prorrogação";
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Ekstra tempo";
 
 /* The label indicating that the displaying match is in the first half. */
-"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Primeiro tempo";
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Unua duono";
 
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Ocultar notícias da Copa do Mundo";
+"WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Kaŝi informojn pri la futbala mondpokalo";
 
 /* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Siga seu time";
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "Sekvu vian teamon";
 
 /* Description for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
-"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Receba notícias em tempo real sobre os jogos e muito mais.";
+"WorldCup.HomepageWidget.FollowTeamCard.Description.v151" = "Ricevu informojn pri ludoj kaj pli.";
 
 /* Title for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. 'Keep Tabs On' is an informal expression meaning to stay updated on or regularly follow something (in this case, World Cup matches and updates). It’s playfully related to Firefox in that “tabs” are a browser feature. It suggests ongoing awareness rather than active monitoring or control. Not to be translated literally as physical 'tabs' or tracking in a technical sense. the meaning is about staying informed. */
-"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Acompanhe a Copa do Mundo";
+"WorldCup.HomepageWidget.FollowTeamCard.Title.v151" = "Akompanu la futbalan mondpokalon";
 
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
-"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Seguir time";
+"WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Sekvi teamon";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTLabel.v151" = "(tempo regulamentar)";
+"WorldCup.HomepageWidget.FTLabel.v151" = "(Ludo finita)";
 
 /* The label indicating that the displaying match has ended. */
-"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Tempo regulamentar";
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Ludo finita";
+
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Ludo finita • Penaloj (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Obter fundo de tela personalizado";
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Ricevi personecigitan ekranfonon";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
-"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Jogos relacionados";
+"WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Rilatitaj ludoj";
+
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Intertempa paŭzo";
 
 /* The label that appears for live World Cup matches. */
-"WorldCup.HomepageWidget.LiveLabel.v151" = "AO VIVO";
+"WorldCup.HomepageWidget.LiveLabel.v151" = "REKTE";
 
 /* Message shown in the World Cup widget when match data is temporarily unavailable. */
-"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "As informações do jogo não estão disponíveis no momento. Experimente atualizar daqui a alguns minutos.";
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "Informoj pri ludo ne haveblas en tiu ĉi momento. Provu refreŝigi post kelkaj minutoj.";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Refreŝigi";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Ŝajne vi ne estas konektita. Kontrolu vian retaliron kaj provu denove.";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Penaloj (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
-"WorldCup.HomepageWidget.RemoveLabel.v151" = "Remover";
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "Forigi";
 
 /* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
-"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Atualizar";
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "Refreŝigi";
 
 /* The label for the 'Bronze final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "FINAL DO BRONZE";
+"WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel.v151" = "BRONZA FINALO";
 
 /* The label for the 'Final' match in the World Cup widget. */
-"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINAL";
+"WorldCup.HomepageWidget.RoundPhase.FinalLabel.v151" = "FINALO";
 
 /* The label indicating the displaying match has ended after penalties. */
-"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Tempo regulamentar • Pênaltis";
+"WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Ludo finita • Penaloj";
+
+/* The label for the 'Quarter-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "KVARONFINALOJ";
+
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "RONDO DE 16";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "RONDO DE 32";
+
+/* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Rulumu por vidi antaŭajn aŭ venontajn ludojn";
+
+/* The label for the 'Semi-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "DUOFINALOJ";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "TRIA LOKO";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Venontaj";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "ĈAMPIONOJ DE LA FUTBALA MONDPOKALO 2026";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Dua duono";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Pli da ebloj";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Dividi";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Dum la mondpokalo alproksimiĝas, ni informos vin";
 

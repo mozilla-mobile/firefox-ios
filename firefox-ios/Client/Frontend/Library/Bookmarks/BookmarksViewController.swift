@@ -53,7 +53,10 @@ final class BookmarksViewController: SiteTableViewController,
               viewModel.bookmarkFolderGUID != LocalDesktopFolder.localDesktopFolderGuid
         else { return [] }
 
-        return toolbarButtonItems
+        let items = toolbarButtonItems
+        applyThemeToButtons()
+
+        return items
     }
 
     private var isBookmarksSearchEnabled: Bool {
@@ -70,30 +73,18 @@ final class BookmarksViewController: SiteTableViewController,
         case .bookmarks(state: .mainView),
              .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
-            if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = currentTheme().colors.textPrimary
-            }
             return searchItems + [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .search):
             return searchItems + [flexibleSpace]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = currentTheme().colors.textAccent
-            }
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = currentTheme().colors.textAccent
-            }
             bottomRightButton.isEnabled = true
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditModeInvalidField):
             bottomRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                bottomRightButton.tintColor = currentTheme().colors.textAccent
-            }
             bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
@@ -682,9 +673,28 @@ final class BookmarksViewController: SiteTableViewController,
         bottomStackView.applyTheme(theme: currentTheme())
     }
 
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        switch state {
+        case .bookmarks(state: .mainView),
+             .bookmarks(state: .inFolder):
+            bottomRightButton.tintColor = currentTheme().colors.textPrimary
+        case .bookmarks(state: .inFolderEditMode):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditMode):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            bottomRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            return
+        }
+    }
+
     override func applyTheme() {
         super.applyTheme()
         applyThemeToSearchBar()
+        applyThemeToButtons()
     }
 
     // MARK: - UITableViewDragDelegate | UITableViewDropDelegate

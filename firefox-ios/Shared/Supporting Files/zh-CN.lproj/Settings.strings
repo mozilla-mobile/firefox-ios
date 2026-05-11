@@ -80,7 +80,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**屏蔽**：功能将不会出现，也无法使用。对于端侧 AI，所有已下载的模型都将移除。";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
-"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "页面和摘要内容始终不会被保存。";
+"Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "页面和摘要内容永远不会被存储。";
 
 /* In the AI Controls settings, in the AI powered features section, this is the title that describes the page summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title.v151" = "页面摘要";
