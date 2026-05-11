@@ -8,7 +8,7 @@ import Shared
 import UIKit
 
 /// State for the World Cup promo card displayed on the homepage.
-struct WorldcupSectionState: StateType, Equatable, Hashable {
+struct WorldCupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
 
@@ -25,18 +25,18 @@ struct WorldcupSectionState: StateType, Equatable, Hashable {
     static let reducer: Reducer<Self> = { state, action in
         switch action.actionType {
         case WorldCupActionType.closedCard:
-            return WorldcupSectionState(windowUUID: state.windowUUID, shouldShowSection: false)
+            return WorldCupSectionState(windowUUID: state.windowUUID, shouldShowSection: false)
         case WorldCupActionType.didChangeHomepageSettings:
             guard let show = (action as? WorldCupAction)?.shouldShowHomepageWorldCupSection else {
                 return state
             }
-            return WorldcupSectionState(windowUUID: state.windowUUID, shouldShowSection: show)
+            return WorldCupSectionState(windowUUID: state.windowUUID, shouldShowSection: show)
         default:
             return state
         }
     }
 
-    static func defaultState(from state: WorldcupSectionState) -> WorldcupSectionState {
+    static func defaultState(from state: WorldCupSectionState) -> WorldCupSectionState {
         return state
     }
 }

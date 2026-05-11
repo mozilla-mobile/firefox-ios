@@ -24,7 +24,7 @@ final class LabelButtonHeaderViewTests: XCTestCase {
         let view = createSubject()
         view.configure(sectionHeaderConfiguration: sectionHeaderConfiguration, textColor: nil, theme: theme)
 
-        XCTAssertEqual(view.titleLabel.textColor, theme.colors.textPrimary)
+        XCTAssertEqual(view.titleLabel.textColor, .adaptiveTextPrimary)
         XCTAssertEqual(view.moreButton.foregroundColorNormal, theme.colors.textAccent)
     }
 

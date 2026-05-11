@@ -89,7 +89,7 @@
 "WorldCup.HomepageWidget.CountDown.MinuteLabel.v151" = "Х";
 
 /* Title for the countdown section of the World Cup widget showing the time remaining until the World Cup event. */
-"WorldCup.HomepageWidget.CountDown.Title.v151" = "Зворотний відлік до ЧС";
+"WorldCup.HomepageWidget.CountDown.Title.v151" = "Зворотний відлік до Чемпіонату світу";
 
 /* Label for the button that takes users to the World Cup schedule website on the countdown section. */
 "WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "Переглянути розклад";
@@ -101,7 +101,7 @@
 "WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "Вибрати команду";
 
 /* The description of the section in the World Cup widget that shows when the selected team was eliminated. */
-"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Виберіть іншу команду, щоб стежити за Чемпіонату світу.";
+"WorldCup.HomepageWidget.EliminatedTeamSection.Description.v151" = "Виберіть іншу команду, щоб стежити за Чемпіонатом світу.";
 
 /* The accessibility label for the button in the eliminated section that removes the World Cup widget from the homepage. */
 "WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonAccessibilityLabel.v151" = "Вилучити віджет Чемпіонату світу";
@@ -130,8 +130,11 @@
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Стежити за командою";
 
-/* The label indicating that the displaying match as ended. */
+/* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Повний час)";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Повний час";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Отримати власні шпалери";
@@ -140,7 +143,16 @@
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Пов'язані матчі";
 
 /* The label that appears for live World Cup matches. */
-"WorldCup.HomepageWidget.LiveLabel.v151" = "РЕАЛЬНИЙ ЧАС";
+"WorldCup.HomepageWidget.LiveLabel.v151" = "ЕФІР";
+
+/* Message shown in the World Cup widget when match data is temporarily unavailable. */
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "Інформація про матч зараз недоступна. Спробуйте оновити сторінку через кілька хвилин.";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Оновити";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Здається, ви офлайн. Перевірте інтернет-з’єднання і повторіть спробу.";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Вилучити";

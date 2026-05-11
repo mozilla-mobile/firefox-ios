@@ -405,6 +405,16 @@ class Tab: NSObject,
 
     var contentBlocker: FirefoxTabContentBlocker?
 
+    /// Per-tab translation state. Mirrors the Redux `AddressBarState.translationConfiguration` so the
+    /// toolbar/menu can be re-synced with the WKWebView's translated DOM after a tab switch.
+    /// Cleared on real navigation in `webView(_:didCommit:)`.
+    var translationConfiguration: TranslationConfiguration?
+
+    /// One-shot closure registered by a feature before a navigation it owns. `webView(_:didCommit:)`
+    /// calls and clears it on the next commit; if nil the commit is treated as a regular navigation
+    /// and any feature-owned state (e.g. `translationConfiguration`) is cleared.
+    var onNextCommit: (() -> Void)?
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
@@ -577,11 +587,9 @@ class Tab: NSObject,
         }
     }
 
+    /// Keep final cleanup in deinit as a safety net, but add call in close() explicitly
+    /// because retained tabs may delay deinit and keep resources alive.
     deinit {
-        webViewLoadingObserver?.invalidate()
-
-        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
-
 #if DEBUG
         debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -614,9 +622,10 @@ class Tab: NSObject,
         }
     }
 
+    /// Performs cleanup because deinit may be delayed by retain cycles or long-lived references.
     func close() async {
         await webView?.pauseAllMediaPlayback()
-        await webView?.closeAllMediaPresentations()
+
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -627,10 +636,19 @@ class Tab: NSObject,
         }
 
         webView?.addUITestMemoryLeakDetectionUIElement()
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
+
+        webViewLoadingObserver?.invalidate()
+        webViewLoadingObserver = nil
         webView = nil
+
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
+    }
+
+    func offloadWebView() async {
+        guard webView != nil else { return }
+        await close()
     }
 
     func goBack() {

@@ -523,8 +523,8 @@ class TabTests: XCTestCase {
     }
 
     @MainActor
-    func testDeinit_removesAllDocumentInSession() {
-        var subject: Tab? = createSubject()
+    func testTaClose_removesAllDocumentInSession() async {
+        let subject: Tab? = createSubject()
         let session = [
             URL(string: "file://local.pdf")!: URL(string: "https://www.example.com")!,
             URL(string: "file://local2.pdf")!: URL(string: "https://www.example2.com")!,
@@ -532,9 +532,7 @@ class TabTests: XCTestCase {
         ]
 
         subject?.restoreTemporaryDocumentSession(session)
-
-        // deallocate object
-        subject = nil
+        await subject?.close()
 
         XCTAssertEqual(mockFileManager.removeItemAtURLCalled, session.count)
     }

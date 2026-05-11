@@ -9,6 +9,16 @@ import Shared
 @testable import Client
 
 final class ErrorPageHandlerTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        await DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try super.tearDownWithError()
+    }
+
     @MainActor
     func testResponseForErrorWebPage_withCertificateErrorWithoutCertErrorQuery_usesFallbackAndDoesNotCrash() {
         assertErrorPageContainsCertError(

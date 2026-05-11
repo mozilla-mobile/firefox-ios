@@ -278,7 +278,7 @@ let package = Package(
         ),
         .testTarget(
             name: "QuickAnswersKitTests",
-            dependencies: ["QuickAnswersKit", "TestKit"]
+            dependencies: ["QuickAnswersKit", "Shared", "TestKit"]
         ),
         .target(
             name: "ContentBlockingGenerator",

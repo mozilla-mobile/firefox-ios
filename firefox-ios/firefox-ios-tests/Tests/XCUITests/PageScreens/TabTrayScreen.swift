@@ -90,6 +90,12 @@ final class TabTrayScreen {
         tabCell.waitAndTap()
     }
 
+    func switchToPrivateBrowsing() {
+        let privateModeButton = sel.tabSelectorButton(at: 0).element(in: app)
+        BaseTestCase().mozWaitForElementToExist(privateModeButton)
+        privateModeButton.waitAndTap()
+    }
+
     func assertTabButtonEnabled(at index: Int) {
         let tabButton = sel.tabSelectorButton(at: index).element(in: app)
         BaseTestCase().mozWaitForElementToExist(tabButton)

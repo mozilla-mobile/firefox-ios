@@ -14,11 +14,11 @@ struct SFSpeechRecognizerEngineTests {
     let audioManager = MockAudioManager()
 
     @Test
-    func test_prepare_microphoneDenied_speechDenied_throwsError() async {
+    func test_prepare_microphoneDenied_speechDenied_throwsMicrophoneError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 
@@ -26,11 +26,23 @@ struct SFSpeechRecognizerEngineTests {
     }
 
     @Test
-    func test_prepare_microphoneDenied_speechGranted_throwsError() async {
+    func test_prepare_microphoneDenied_firstTime_throwsMicrophoneFirstTimeError() async {
+        let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false, micUndetermined: true)
+        let subject = createSubject(authorizer: authorizer)
+
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: true)) {
+            try await subject.prepare()
+        }
+
+        #expect(audioManager.configureAudioSessionCallCount == 0)
+    }
+
+    @Test
+    func test_prepare_microphoneDenied_speechGranted_throwsMicrophoneError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 
@@ -38,11 +50,23 @@ struct SFSpeechRecognizerEngineTests {
     }
 
     @Test
-    func test_prepare_microphoneGranted_speechDenied_throwsError() async {
+    func test_prepare_microphoneGranted_speechDenied_throwsSpeechError() async {
         let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.speechRecognitionPermissionDenied(isFirstTime: false)) {
+            try await subject.prepare()
+        }
+
+        #expect(audioManager.configureAudioSessionCallCount == 0)
+    }
+
+    @Test
+    func test_prepare_speechDenied_firstTime_throwsSpeechFirstTimeError() async {
+        let authorizer = MockAuthorizer(micAuthorized: true, speechAuthorized: false, speechUndetermined: true)
+        let subject = createSubject(authorizer: authorizer)
+
+        await #expect(throws: SpeechError.speechRecognitionPermissionDenied(isFirstTime: true)) {
             try await subject.prepare()
         }
 

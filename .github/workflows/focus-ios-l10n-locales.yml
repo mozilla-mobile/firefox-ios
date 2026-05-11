@@ -49,7 +49,9 @@ jobs:
         continue-on-error: true
         id: screenshots
         run: |
-          focus-ios/l10n-screenshots.sh --test-without-building ${{ inputs.locale }}
+          focus-ios/l10n-screenshots.sh --test-without-building ${LOCALE}
+        env:
+          LOCALE: ${{ inputs.locale }}
       - name: Upload screenshots
         uses: actions/upload-artifact@v4.6.0
         with:

@@ -11,7 +11,6 @@ import PDFKit
 
 import enum MozillaAppServices.OAuthScope
 import struct MozillaAppServices.FxaAuthData
-import struct MozillaAppServices.UserData
 
 enum FxAPageType: Equatable {
     case emailLoginFlow
@@ -278,18 +277,10 @@ extension FxAWebViewModel {
             )
         case .login:
             guard let data = data as? [String: Any],
-                let sessionToken = data["sessionToken"] as? String,
-                let email = data["email"] as? String,
-                let uid = data["uid"] as? String,
-                let verified = data["verified"] as? Bool
+                  let jsonData = try? JSONSerialization.data(withJSONObject: data),
+                  let jsonString = String(data: jsonData, encoding: .utf8)
             else { return }
-            let userData = UserData(
-                sessionToken: sessionToken,
-                uid: uid,
-                email: email,
-                verified: verified
-            )
-            profile.rustFxA.accountManager?.setUserData(userData: userData) {}
+            profile.rustFxA.accountManager?.handleWebChannelLogin(jsonPayload: jsonString) {}
         case .canLinkAccount:
             if let id = id {
                 onCanLinkAccount(msgId: id, webView: webView)
@@ -333,19 +324,11 @@ extension FxAWebViewModel {
         let data: String
         switch pageType {
         case .settingsPage:
-            // Both email and uid are required at this time to properly link the FxA settings session
-            let email = fxa.accountProfile()?.email ?? ""
-            let uid = fxa.accountProfile()?.uid ?? ""
-            let token = (try? fxa.getSessionToken().get()) ?? ""
+            let signedInUserJson = fxa.getSignedInUserForWebChannel() ?? "null"
             data = """
                 {
                     capabilities: {},
-                    signedInUser: {
-                        sessionToken: "\(token)",
-                        email: "\(email)",
-                        uid: "\(uid)",
-                        verified: true,
-                    }
+                    signedInUser: \(signedInUserJson),
                 }
                 """
         case .emailLoginFlow, .qrCode:
@@ -405,10 +388,11 @@ extension FxAWebViewModel {
 
     private func onPasswordChange(data: Any, webView: WKWebView) {
         guard let data = data as? [String: Any],
-              let sessionToken = data["sessionToken"] as? String
+              let jsonData = try? JSONSerialization.data(withJSONObject: data),
+              let jsonString = String(data: jsonData, encoding: .utf8)
         else { return }
 
-        profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) { [weak self] in
+        profile.rustFxA.accountManager?.handlePasswordChanged(jsonPayload: jsonString) { [weak self] in
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             self?.profile.syncManager?.syncEverything(why: .enabledChange)
         }

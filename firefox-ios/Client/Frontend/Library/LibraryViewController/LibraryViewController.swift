@@ -302,26 +302,18 @@ class LibraryViewController: UIViewController, Themeable {
             navigationItem.rightBarButtonItem = nil
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textAccent
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
-            if #available(iOS 26.0, *) {
-                topRightButton.tintColor = currentTheme().colors.textPrimary
-            }
             navigationItem.rightBarButtonItem = topRightButton
             navigationItem.rightBarButtonItem?.isEnabled = true
         }
+        applyThemeToButtons()
     }
 
     // MARK: - Toolbar Button Actions
@@ -426,6 +418,21 @@ class LibraryViewController: UIViewController, Themeable {
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+        applyThemeToButtons()
+    }
+
+    private func applyThemeToButtons() {
+        guard #available(iOS 26.0, *) else { return }
+
+        let panelState = getCurrentPanelState()
+        switch panelState {
+        case .bookmarks(state: .itemEditMode):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        case .bookmarks(state: .itemEditModeInvalidField):
+            topRightButton.tintColor = currentTheme().colors.textAccent
+        default:
+            topRightButton.tintColor = currentTheme().colors.textPrimary
+        }
     }
 
     func setNavigationBarHidden(_ value: Bool) {

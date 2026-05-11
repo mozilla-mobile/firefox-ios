@@ -10,26 +10,36 @@ import Foundation
 /// Mock implementation of LiteLLMClient for testing.
 final class MockLiteLLMClient: LiteLLMClientProtocol, @unchecked Sendable {
     var respondWith: [String] = [""]
+    var respondWithCitations: [Citation]?
     var respondWithError: Error?
     var requestChatCompletionCallCount = 0
     var requestChatCompletionStreamedCallCount = 0
-    var lastMessages: [LiteLLMMessage]?
+    var lastMessages: [Any] = []
     var lastConfig: LLMConfig?
 
-    func requestChatCompletion(
-        messages: [LiteLLMMessage],
+    func requestChatCompletion<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
-    ) async throws -> String {
+    ) async throws -> LiteLLMMessage<ProviderFields> {
         requestChatCompletionCallCount += 1
         lastMessages = messages
         lastConfig = config
 
         if let error = respondWithError { throw error }
-        return respondWith.joined(separator: " ")
+
+        let content = respondWith.joined(separator: " ")
+
+        // For QuickAnswersProviderFields, include citations
+        if ProviderFields.self == QuickAnswersProviderFields.self {
+            let providerFields = respondWithCitations.map { QuickAnswersProviderFields(citations: $0) } as? ProviderFields
+            return LiteLLMMessage(role: .assistant, content: content, providerSpecificFields: providerFields)
+        } else {
+            return LiteLLMMessage(role: .assistant, content: content, providerSpecificFields: nil)
+        }
     }
 
-    func requestChatCompletionStreamed(
-        messages: [LiteLLMMessage],
+    func requestChatCompletionStreamed<ProviderFields: Codable & Sendable>(
+        messages: [LiteLLMMessage<ProviderFields>],
         config: LLMConfig
     ) -> AsyncThrowingStream<String, Error> {
         requestChatCompletionStreamedCallCount += 1

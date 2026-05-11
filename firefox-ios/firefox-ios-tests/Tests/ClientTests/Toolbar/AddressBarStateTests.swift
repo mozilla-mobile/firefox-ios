@@ -563,7 +563,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.leadingPageActions[0].actionType, .share)
     }
 
-    func test_urlDidChangeAction_withNilIconState_preservesExistingTranslationConfig() {
+    /// urlDidChange with `.active` config overrides existing Redux state.
+    func test_urlDidChangeAction_withActiveState_overridesExisting() {
         setTranslationsFeatureEnabled(enabled: true)
         setupStore()
         let initialState = createSubject()
@@ -582,15 +583,77 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             stateWithInactiveIcon,
             ToolbarAction(
                 url: URL(string: "http://mozilla.com"),
-                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .active),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.translationConfiguration?.state, .active)
+    }
+
+    /// urlDidChange with nil config preserves existing Redux state.
+    func test_urlDidChangeAction_withNilActionConfig_preservesExistingTranslationConfig() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let stateWithInactiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.receivedTranslationLanguage
+            )
+        )
+
+        let newState = reducer(
+            stateWithInactiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
         )
 
         XCTAssertEqual(newState.translationConfiguration?.state, .inactive)
-        XCTAssertEqual(newState.leadingPageActions.count, 2)
-        XCTAssertEqual(newState.leadingPageActions[1].actionType, .translate)
+    }
+
+    /// urlDidChange with default config (non-nil, state=nil) clears previous tab's Redux state.
+    func test_urlDidChangeAction_withDefaultActionConfig_clearsPreviousTabState() {
+        setTranslationsFeatureEnabled(enabled: true)
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        // Simulate the previous tab's `.active` state still in Redux at the moment of switch.
+        let stateWithActiveIcon = reducer(
+            initialState,
+            ToolbarAction(
+                translationConfiguration: TranslationConfiguration(
+                    prefs: mockProfile.prefs,
+                    state: .active,
+                    translatedToLanguage: "fr"
+                ),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.translationCompleted
+            )
+        )
+
+        // Switching to a fresh tab dispatches urlDidChange with a default config (no state).
+        let newState = reducer(
+            stateWithActiveIcon,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com"),
+                translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertNil(newState.translationConfiguration?.state)
+        XCTAssertNil(newState.translationConfiguration?.translatedToLanguage)
     }
 
     func test_traitCollectionDidChangedAction_returnsExpectedState() {

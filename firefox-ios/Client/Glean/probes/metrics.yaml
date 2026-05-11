@@ -2715,6 +2715,28 @@ webview:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  memory_warning_offload:
+    type: event
+    extra_keys:
+      tab_count:
+        type: quantity
+        description: |
+          The total number of open tabs at the time of the memory warning.
+      webview_count:
+        type: quantity
+        description: |
+          The number of living WKWebViews at the time of the memory warning.
+    description: |
+      Recorded when a memory warning is received and background WebViews are offloaded.
+      Captures living WKWebView count vs total tab count to understand memory pressure
+      patterns leading to WatchdogTermination crashes.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/33562
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33563
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2027-01-01"
 
 fx_suggest:
   ping_type:

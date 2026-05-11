@@ -146,7 +146,7 @@ class LabelButtonHeaderView: UIView, ThemeApplicable, Notifiable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
+        titleLabel.textColor = .adaptiveTextPrimary
         moreButton.foregroundColorNormal = theme.colors.textAccent
     }
 

@@ -110,7 +110,7 @@
 "Settings.AIControls.HeaderCard.Link.v151" = "ვრცლად";
 
 /* This is the message for the Header Card under the AI Controls settings section. */
-"Settings.AIControls.HeaderCard.Message.v151" = "იგულისხმება, იყენებდეს თუ არა ხელგონის შესაძლებლობებს.";
+"Settings.AIControls.HeaderCard.Message.v151" = "იგულისხმება, გამოიყენებოდეს თუ არა ხელგონის შესაძლებლობები.";
 
 /* This is the title for the Header Card under the AI Controls settings section. %@ is the app name (e.g. Firefox). */
 "Settings.AIControls.HeaderCard.Title.v151" = "არჩევანის უფლებას ყოველთვის მოგცემთ %@";
