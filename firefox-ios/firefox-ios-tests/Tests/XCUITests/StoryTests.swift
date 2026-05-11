@@ -6,6 +6,13 @@ import XCTest
 import Common
 
 class StoryTests: FeatureFlaggedTestBase {
+    private var newsScreen: NewsScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        newsScreen = NewsScreen(app: app)
+    }
+
     enum SwipeDirection {
         case up, down, left, right
     }
@@ -92,35 +99,21 @@ class StoryTests: FeatureFlaggedTestBase {
         )
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/XXXXXXX
     func testNewsStoryCategoriesFilterStories() {
         addLaunchArgument(jsonFileName: "homepageStoryCategoriesOn", featureName: "homepage-redesign-feature")
         app.launch()
 
-        navigator.goto(NewTabScreen)
-        app.partialSwipeUp(distance: 0.2)
+        newsScreen.scrollToNewsSection()
+        newsScreen.assertNewsSectionExists()
+        newsScreen.assertAllCategoryButtonExists()
+        newsScreen.assertCategoryCount(minimum: 2)
 
-        let allCategoryButton = app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory]
-        mozWaitForElementToExist(app.otherElements["News"])
-        mozWaitForElementToExist(allCategoryButton)
-
-        let categoryButtons = app.buttons.matching(
-            NSPredicate(
-                format: "identifier BEGINSWITH %@ AND identifier != %@",
-                AccessibilityIdentifiers.FirefoxHomepage.Pocket.category + ".",
-                AccessibilityIdentifiers.FirefoxHomepage.Pocket.allCategory
-            )
-        )
-        XCTAssertGreaterThanOrEqual(categoryButtons.count, 2, "Expected at least two story category buttons.")
-
-        let firstStoryCell = app.collectionViews
-            .cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell)
-            .firstMatch
-
-        categoryButtons.element(boundBy: 0).waitAndTap()
-        mozWaitForElementToExist(firstStoryCell)
-        categoryButtons.element(boundBy: 1).waitAndTap()
-        mozWaitForElementToExist(firstStoryCell)
-        allCategoryButton.waitAndTap()
-        mozWaitForElementToExist(firstStoryCell)
+        newsScreen.tapCategoryButton(at: 0)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapCategoryButton(at: 1)
+        newsScreen.assertFirstStoryCellExists()
+        newsScreen.tapAllCategoryButton()
+        newsScreen.assertFirstStoryCellExists()
     }
 }
