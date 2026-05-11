@@ -53,7 +53,7 @@ final class ErrorHandler {
     }
 
     // MARK: - Search Errors
-    func handleSearchError(_ error: SearchResultError) {
+    func handleSearchError(_ error: ResultsServiceError) {
         // TODO: - FXIOS-15573 Handle Search errors
     }
 

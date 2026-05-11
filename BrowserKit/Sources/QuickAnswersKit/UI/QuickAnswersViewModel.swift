@@ -11,7 +11,7 @@ final class QuickAnswersViewModel {
         case initializationFailed
         case recordVoice(SpeechResult, SpeechError?)
         case loadingSearchResult
-        case showSearchResult(SearchResult, SearchResultError?)
+        case showSearchResult(SearchResult, ResultsServiceError?)
     }
 
     private let service: QuickAnswersService?
@@ -60,9 +60,8 @@ final class QuickAnswersViewModel {
                 break
             }
         } catch {
-            guard let error = error as? SpeechError else {
-                return
-            }
+            let error = (error as? SpeechError) ?? SpeechError.unknown(error.localizedDescription)
+            // TODO: FXIOS-15579 Possibly add telemetry
             onStateChange?(.recordVoice(.empty(), error))
         }
     }

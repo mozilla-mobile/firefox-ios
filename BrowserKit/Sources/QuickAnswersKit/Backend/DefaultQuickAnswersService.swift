@@ -61,13 +61,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     }
 
     /// Performs a search for the given transcription using the ResultsService.
-    func search(text: String) async -> Result<SearchResult, SearchResultError> {
+    func search(text: String) async -> Result<SearchResult, ResultsServiceError> {
         do {
             let result = try await resultsService.fetchResults(for: text)
             return .success(result)
         } catch {
-            // TODO: FXIOS-15198 Handle errors appropriately
-            return .failure(.unknown)
+            let error = (error as? ResultsServiceError) ?? ResultsServiceError.unknown(error.localizedDescription)
+            // TODO: FXIOS-15579 Possibly add telemetry
+            return .failure(error)
         }
     }
 
