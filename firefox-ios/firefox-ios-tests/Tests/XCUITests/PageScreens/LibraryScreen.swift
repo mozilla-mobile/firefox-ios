@@ -22,6 +22,7 @@ final class LibraryScreen {
     private var bookmarkFolderCell: XCUIElement { sel.BOOKMARKS_FOLDER.element(in: app) }
     private var deleteButton: XCUIElement { sel.DELETE_BUTTON.element(in: app) }
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
+    private var backButtoniOS18: XCUIElement { sel.BACK_BUTTON_iOS18.element(in: app) }
 
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
@@ -130,7 +131,11 @@ final class LibraryScreen {
     }
 
     func tapBackButton() {
-        backButton.waitAndTap()
+        if #available(iOS 26, *) {
+            backButton.waitAndTap()
+        } else {
+            backButtoniOS18.firstMatch.waitAndTap()
+        }
     }
 
     func longPressAndSelectContextMenuOption(option: String) {
