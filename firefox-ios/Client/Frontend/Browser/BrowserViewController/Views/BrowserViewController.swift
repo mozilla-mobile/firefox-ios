@@ -3033,8 +3033,8 @@ class BrowserViewController: UIViewController,
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
-        let setupPopover = { [unowned self] in
-            guard let popover = alert.popoverPresentationController else { return }
+        let setupPopover = { [weak self] in
+            guard let self, let popover = alert.popoverPresentationController else { return }
             popover.delegate = self
             if let sourceButton {
                 popover.sourceView = sourceButton
