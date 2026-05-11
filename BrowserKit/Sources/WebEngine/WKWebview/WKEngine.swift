@@ -88,6 +88,9 @@ public final class WKEngine: Engine {
     }
 
     public func clearCookies() {
+        // Include localStorage; some sites store authentication/session
+        // state there in addition to cookies. Clearing cookies should remove
+        // login state, not just WK cookie records.
         let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage])
         WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
     }
