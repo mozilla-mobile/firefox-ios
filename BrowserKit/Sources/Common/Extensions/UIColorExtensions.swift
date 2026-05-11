@@ -64,4 +64,15 @@ extension UIColor {
             with: UITraitCollection(userInterfaceStyle: .dark)
         )
     }
+
+    /// Dynamic text color that resolves to primary text color for the current interface style.
+    /// Use this when text needs to transition with UIKit's adaptive color resolution, such as labels in pinned
+    /// headers moving over system material or changing backdrop content.
+    public static let adaptiveTextPrimary = UIColor { traitCollection in
+        if traitCollection.userInterfaceStyle == .dark {
+            return DarkTheme().colors.textPrimary
+        } else {
+            return LightTheme().colors.textPrimary
+        }
+    }
 }

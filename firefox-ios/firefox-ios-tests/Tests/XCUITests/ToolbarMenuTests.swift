@@ -6,6 +6,17 @@ import Foundation
 import XCTest
 
 class ToolbarMenuTests: BaseTestCase {
+	private var browserScreen: BrowserScreen!
+	private var toolbarScreen: ToolbarScreen!
+	private var mainMenuScreen: MainMenuScreen!
+
+	override func setUp() async throws {
+		try await super.setUp()
+		browserScreen = BrowserScreen(app: app)
+		toolbarScreen = ToolbarScreen(app: app)
+		mainMenuScreen = MainMenuScreen(app: app)
+	}
+
     override func tearDown() async throws {
         XCUIDevice.shared.orientation = .portrait
         try await super.tearDown()
@@ -13,22 +24,11 @@ class ToolbarMenuTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306840
     func testToolbarMenu() {
-        let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
-        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
-        let forwardButton = app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
-        let searchField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
-        waitForElementsToExist(
-            [
-                hamburgerMenu,
-                backButton,
-                forwardButton,
-                searchField,
-                tabsButton
-            ]
-        )
-        mozWaitForElementToExist(tabsButton)
-        XCTAssertTrue(
+        let hamburgerMenu = toolbarScreen.getToolbarSettingsMenuButtonElement()
+        let tabsButton = toolbarScreen.getTabsButtonElement()
+        let forwardButton = toolbarScreen.getForwardButtonElement()
+		assertToolbarMenusAndAddressBarExist()
+		XCTAssertTrue(
             hamburgerMenu.isLeftOf(rightElement: tabsButton),
             "Menu button is not on the left side of tabs button"
         )
@@ -36,26 +36,19 @@ class ToolbarMenuTests: BaseTestCase {
             hamburgerMenu.isRightOf(rightElement: forwardButton),
             "Menu button is not below the pocket cells area"
         )
-        navigator.goto(BrowserTabMenu)
+
+		toolbarScreen.tapSettingsMenuButton()
         // issue 28625: iOS 15 may not open the menu fully.
         if #unavailable(iOS 16) {
             app.swipeUp()
         }
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
-        validateMenuOptions()
+		mainMenuScreen.assertMenuOptionsExist()
+
         // issue 28629: menu not available in landscape mode (iOS 15 only)
         if #available(iOS 16, *) {
-            app.otherElements["PopoverDismissRegion"].firstMatch.tap()
+			mainMenuScreen.dismissMenu()
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForElementsToExist(
-                [
-                    hamburgerMenu,
-                    backButton,
-                    forwardButton,
-                    searchField,
-                    tabsButton
-                ]
-            )
+			assertToolbarMenusAndAddressBarExist()
             XCTAssertTrue(
                 hamburgerMenu.isLeftOf(rightElement: tabsButton),
                 "Menu button is not on the left side of tabs button"
@@ -64,23 +57,20 @@ class ToolbarMenuTests: BaseTestCase {
                 hamburgerMenu.isRightOf(rightElement: forwardButton),
                 "Menu button is not below the pocket cells area"
             )
-            hamburgerMenu.waitAndTap()
-            mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
-            validateMenuOptions()
-            app.otherElements["PopoverDismissRegion"].firstMatch.tap()
-            mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings])
+
+			toolbarScreen.tapSettingsMenuButton()
+			mainMenuScreen.assertMenuOptionsExist()
+
+			mainMenuScreen.dismissMenu()
+			mainMenuScreen.assertMenuIsDismissed()
         }
     }
 
-    private func validateMenuOptions() {
-        waitForElementsToExist(
-            [
-                app.tables.cells[AccessibilityIdentifiers.MainMenu.settings],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.bookmarks],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.history],
-                app.tables.cells.buttons[AccessibilityIdentifiers.MainMenu.downloads],
-                app.cells[AccessibilityIdentifiers.MainMenu.signIn]
-            ]
-        )
-    }
+	private func assertToolbarMenusAndAddressBarExist() {
+		toolbarScreen.assertSettingsButtonExists()
+		toolbarScreen.assertTabsButtonExists()
+		toolbarScreen.assertForwardButtonExists()
+		toolbarScreen.assertBackButtonExists()
+		browserScreen.assertAddressBarExists()
+	}
 }

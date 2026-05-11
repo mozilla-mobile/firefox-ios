@@ -158,11 +158,14 @@ class ToolbarButton: UIButton,
             updatedConfiguration.baseForegroundColor = isTextButton ?
                                                         foregroundTitleColorHighlighted :
                                                         foregroundColorHighlighted
+            bottomBadgeImageView?.tintColor = isTextButton ? foregroundTitleColorHighlighted : foregroundColorHighlighted
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
+            bottomBadgeImageView?.tintColor = foregroundColorDisabled
         default:
             let iconButtonColor = isSelected ? foregroundColorHighlighted : foregroundColorNormal
             let textButtonColor = isSelected ? foregroundTitleColorHighlighted : foregroundTitleColorNormal
+            bottomBadgeImageView?.tintColor = isTextButton ? textButtonColor : iconButtonColor
             updatedConfiguration.baseForegroundColor = isTextButton ? textButtonColor : iconButtonColor
         }
 

@@ -12,66 +12,65 @@ import TestKit
 
 struct ResultsServiceFactoryTests {
     @Test
-    func test_make_withValidConfig_returnsConfiguredService() {
+    func test_make_withValidConfig_returnsConfiguredService() throws {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
         let config = QuickAnswersConfig(options: ["model": "test-model"])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator, config: config)
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = subject.make(prefs: prefs, config: config)
+        let result = try subject.make(prefs: prefs, config: config)
 
-        #expect(result != nil, "Factory should return configured service when LLM client is available")
+        #expect(result is DefaultResultsService, "Factory should return configured service when LLM client is available")
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should call createAppAttestLiteLLM once")
     }
 
     @Test
-    func test_make_withNoModelOption_returnsNil() {
+    func test_make_withNoModelOption_throwsError() {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
         let config = QuickAnswersConfig(options: [:])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator, config: config)
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = subject.make(prefs: prefs, config: config)
-
-        #expect(result == nil, "Factory should return nil when config is missing model options")
+        #expect(throws: ResultsServiceError.unableToCreateService) {
+            try subject.make(prefs: prefs, config: config)
+        }
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 0, "Should not call when model is missing")
     }
 
     @Test
-    func test_make_withEmptyModel_returnsNil() {
+    func test_make_withEmptyModel_throwsError() {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.clientToReturn = MockLiteLLMClient()
         let prefs = MockProfilePrefs()
         let config = QuickAnswersConfig(options: ["model": ""])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator, config: config)
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = subject.make(prefs: prefs, config: config)
-
-        #expect(result == nil, "Factory should return nil when model is empty")
+        #expect(throws: ResultsServiceError.unableToCreateService) {
+            try subject.make(prefs: prefs, config: config)
+        }
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 0, "Should not call when model is empty")
     }
 
     @Test
-    func test_make_withNilLLMClient_returnsNil() {
+    func test_make_withNilLLMClient_throwsError() {
         let mockLLMCreator = MockLLMClientCreator()
         mockLLMCreator.shouldReturnNil = true
         let prefs = MockProfilePrefs()
         let config = QuickAnswersConfig(options: ["model": "test-model"])
-        let subject = createSubject(liteLLMCreator: mockLLMCreator, config: config)
+        let subject = createSubject(liteLLMCreator: mockLLMCreator)
 
-        let result = subject.make(prefs: prefs, config: config)
-
-        #expect(result == nil, "Factory should return nil when LLM client creation fails")
+        #expect(throws: ResultsServiceError.unableToCreateService) {
+            try subject.make(prefs: prefs, config: config)
+        }
         #expect(mockLLMCreator.createAppAttestLiteLLMCallCount == 1, "Should attempt to create LLM client")
     }
 
     // MARK: - Helper
     private func createSubject(
         liteLLMCreator: LiteLLMCreating = MockLLMClientCreator(),
-        config: QuickAnswersConfig = QuickAnswersConfig()
     ) -> DefaultResultsServiceFactory {
-        return DefaultResultsServiceFactory(config: config, liteLLMCreator: liteLLMCreator)
+        return DefaultResultsServiceFactory(liteLLMCreator: liteLLMCreator)
     }
 }

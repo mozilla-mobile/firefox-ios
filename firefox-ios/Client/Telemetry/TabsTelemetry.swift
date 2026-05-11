@@ -31,4 +31,12 @@ final class TabsTelemetry {
         gleanWrapper.recordEvent(for: GleanMetrics.Webview.processDidTerminate,
                                  extras: extras)
     }
+
+    func trackMemoryWarningOffload(tabCount: Int, webViewCount: Int) {
+        let extras = GleanMetrics.Webview.MemoryWarningOffloadExtra(
+            tabCount: Int32(tabCount),
+            webviewCount: Int32(webViewCount)
+        )
+        gleanWrapper.recordEvent(for: GleanMetrics.Webview.memoryWarningOffload, extras: extras)
+    }
 }

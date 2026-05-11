@@ -105,7 +105,8 @@ function readerize() {
   // when summarizing a reader view web page. 
   const recipeJSON = findRecipeJSONLD();
   if (readabilityResult) {
-    readabilityResult.jsonld = JSON.stringify(recipeJSON ?? "");
+    const serializedJSONLD = JSON.stringify(recipeJSON ?? "");
+    readabilityResult.jsonld = escapeForScriptBlock(serializedJSONLD);
   }
   return readabilityResult;
 }
@@ -196,6 +197,14 @@ function escapeHTML(string) {
     .replace(/\>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/\'/g, "&#039;");
+}
+
+function escapeForScriptBlock(jsonString) {
+  if (typeof jsonString !== "string") { return ""; }
+  return jsonString
+    .replace(/\//g, "\\/") 
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e");
 }
 
 Object.defineProperty(window.__firefox__, "reader", {

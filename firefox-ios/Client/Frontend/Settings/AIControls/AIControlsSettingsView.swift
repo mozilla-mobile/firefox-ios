@@ -57,15 +57,6 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             }.padding(.horizontal, UX.padding)
         }
         .background(themeColors.layer1.color)
-        .onChange(of: aiControlsModel.killSwitchIsOn, perform: { newValue in
-            aiControlsModel.toggleKillSwitch(to: newValue)
-        })
-        .onChange(of: aiControlsModel.translationEnabled, perform: { newValue in
-            aiControlsModel.toggleTranslationsFeature(to: newValue)
-        })
-        .onChange(of: aiControlsModel.pageSummariesEnabled, perform: { newValue in
-            aiControlsModel.togglePageSummariesFeature(to: newValue)
-        })
         .onAppear {
             applyTheme(theme: themeManager.getCurrentTheme(for: aiControlsModel.windowUUID))
         }
@@ -113,7 +104,10 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             cornerRadius: UX.cornerRadius,
             padding: UX.padding
         ) {
-            Toggle(isOn: $aiControlsModel.killSwitchIsOn) {
+            Toggle(isOn: Binding(
+                get: { aiControlsModel.killSwitchIsOn },
+                set: { aiControlsModel.toggleKillSwitch(to: $0) }
+            )) {
                 Text(verbatim: .Settings.AIControls.BlockAIEnhancementsTitle)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textPrimary.color)
@@ -151,36 +145,52 @@ struct AIControlsSettingsView: View, ThemeApplicable {
         ) {
             VStack(alignment: .leading) {
                 if aiControlsModel.translationsVisible {
-                    Toggle(isOn: $aiControlsModel.translationEnabled) {
-                        VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
-                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title)
-                                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                                .foregroundStyle(themeColors.textPrimary.color)
-                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message)
-                                .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
-                                .foregroundStyle(themeColors.textSecondary.color)
-                            aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
-                        }
-                    }.tint(themeColors.actionPrimary.color)
+                    translationsToggle
                 }
                 if aiControlsModel.translationsVisible && aiControlsModel.pageSummariesVisible {
                     Divider().foregroundStyle(themeColors.textSecondary.color)
                 }
                 if aiControlsModel.pageSummariesVisible {
-                    Toggle(isOn: $aiControlsModel.pageSummariesEnabled) {
-                        VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
-                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title)
-                                .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
-                                .foregroundStyle(themeColors.textPrimary.color)
-                            Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message)
-                                .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
-                                .foregroundStyle(themeColors.textSecondary.color)
-                            aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
-                        }
-                    }.tint(themeColors.actionPrimary.color)
+                    pageSummariesToggle
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    var translationsToggle: some View {
+        Toggle(isOn: Binding(
+            get: { aiControlsModel.translationEnabled },
+            set: { aiControlsModel.toggleTranslationsFeature(to: $0) }
+        )) {
+            VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Title)
+                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textPrimary.color)
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.TranslationSection.Message)
+                    .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+                aiFeatureToggleStatus(isEnabled: aiControlsModel.translationEnabled)
+            }
+        }.tint(themeColors.actionPrimary.color)
+    }
+
+    @ViewBuilder
+    var pageSummariesToggle: some View {
+        Toggle(isOn: Binding(
+            get: { aiControlsModel.pageSummariesEnabled },
+            set: { aiControlsModel.togglePageSummariesFeature(to: $0) }
+        )) {
+            VStack(alignment: .leading, spacing: UX.infoCardTextSpacing) {
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Title)
+                    .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textPrimary.color)
+                Text(verbatim: .Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message)
+                    .font(FXFontStyles.Regular.footnote.scaledSwiftUIFont())
+                    .foregroundStyle(themeColors.textSecondary.color)
+                aiFeatureToggleStatus(isEnabled: aiControlsModel.pageSummariesEnabled)
+            }
+        }.tint(themeColors.actionPrimary.color)
     }
 
     @ViewBuilder

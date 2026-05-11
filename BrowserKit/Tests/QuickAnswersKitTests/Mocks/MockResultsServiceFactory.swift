@@ -7,13 +7,13 @@ import Shared
 
 final class MockResultsServiceFactory: ResultsServiceFactory {
     var makeCallCount = 0
-    var shouldReturnNil = false
+    var shouldThrow = false
 
-    func make(prefs: Prefs, config: QuickAnswersConfig) -> ResultsService? {
+    func make(prefs: Prefs, config: QuickAnswersConfig) throws -> ResultsService {
         makeCallCount += 1
 
-        if shouldReturnNil {
-            return nil
+        if shouldThrow {
+            throw ResultsServiceError.unableToCreateService
         }
 
         return MockResultsService()

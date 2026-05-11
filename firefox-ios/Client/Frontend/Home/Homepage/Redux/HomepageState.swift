@@ -17,7 +17,7 @@ struct HomepageState: ScreenState, Equatable {
     let searchState: SearchBarState
     let jumpBackInState: JumpBackInSectionState
     let bookmarkState: BookmarksSectionState
-    let worldcupState: WorldcupSectionState
+    let worldcupState: WorldCupSectionState
     let merinoState: MerinoState
     let wallpaperState: WallpaperState
 
@@ -69,7 +69,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState(windowUUID: windowUUID),
             jumpBackInState: JumpBackInSectionState(windowUUID: windowUUID),
             bookmarkState: BookmarksSectionState(windowUUID: windowUUID),
-            worldcupState: WorldcupSectionState(windowUUID: windowUUID),
+            worldcupState: WorldCupSectionState(windowUUID: windowUUID),
             merinoState: MerinoState(windowUUID: windowUUID),
             wallpaperState: WallpaperState(windowUUID: windowUUID),
             isZeroSearch: false,
@@ -88,7 +88,7 @@ struct HomepageState: ScreenState, Equatable {
         searchState: SearchBarState,
         jumpBackInState: JumpBackInSectionState,
         bookmarkState: BookmarksSectionState,
-        worldcupState: WorldcupSectionState,
+        worldcupState: WorldCupSectionState,
         merinoState: MerinoState,
         wallpaperState: WallpaperState,
         isZeroSearch: Bool,
@@ -151,7 +151,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: false
@@ -169,7 +169,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             isZeroSearch: isZeroSearch,
@@ -194,7 +194,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: false,
@@ -212,7 +212,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: false,
@@ -229,7 +229,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: true
@@ -245,7 +245,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: false,
@@ -262,7 +262,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.reducer(state.searchState, action),
             jumpBackInState: JumpBackInSectionState.reducer(state.jumpBackInState, action),
             bookmarkState: BookmarksSectionState.reducer(state.bookmarkState, action),
-            worldcupState: WorldcupSectionState.reducer(state.worldcupState, action),
+            worldcupState: WorldCupSectionState.reducer(state.worldcupState, action),
             merinoState: MerinoState.reducer(state.merinoState, action),
             wallpaperState: WallpaperState.reducer(state.wallpaperState, action),
             shouldTriggerImpression: false
@@ -276,7 +276,7 @@ struct HomepageState: ScreenState, Equatable {
             searchState: SearchBarState.defaultState(from: state.searchState),
             jumpBackInState: JumpBackInSectionState.defaultState(from: state.jumpBackInState),
             bookmarkState: BookmarksSectionState.defaultState(from: state.bookmarkState),
-            worldcupState: WorldcupSectionState.defaultState(from: state.worldcupState),
+            worldcupState: WorldCupSectionState.defaultState(from: state.worldcupState),
             merinoState: MerinoState.defaultState(from: state.merinoState),
             wallpaperState: WallpaperState.defaultState(from: state.wallpaperState),
             shouldTriggerImpression: false

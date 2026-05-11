@@ -10,11 +10,12 @@ import Shared
 class AIControlsModelTests: XCTestCase, StoreTestUtility {
     private var mockStore: MockStoreForMiddleware<AppState>!
     var mockPrefs: MockProfilePrefs!
+    var mockProfile: MockProfile!
+    var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
-        setupStore()
-        let mockProfile = MockProfile(databasePrefix: "test")
+        mockProfile = MockProfile(databasePrefix: "test")
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
             PrefsKeys.Settings.translationsFeature: false,
@@ -22,10 +23,13 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         ], prefix: "")
         mockProfile.prefs = mockPrefs
         DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+        mockGleanWrapper = MockGleanWrapper()
+        setupStore()
     }
 
     override func tearDown() async throws {
         resetStore()
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -89,14 +93,14 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testToggleKillSwitchOn() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
         mockPrefs = MockProfilePrefs(things: [
             PrefsKeys.Summarizer.summarizeContentFeature: true,
-            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.translationsFeature: true,
             PrefsKeys.Settings.aiKillSwitchFeature: false
         ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: true)
 
@@ -106,24 +110,71 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertTrue(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    @MainActor
+    func testToggleKillSwitchOnWithFeaturesOffLeavesThemOff() throws {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: false,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.aiKillSwitchFeature: false
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleKillSwitch(to: true)
+
+        XCTAssertFalse(aiControlsModel.pageSummariesEnabled)
+        XCTAssertFalse(aiControlsModel.translationEnabled)
     }
 
     @MainActor
     func testToggleKillSwitchOff() throws {
-        let expectation = XCTestExpectation(description: "toggleTranslationsEnabled dispatched")
-        expectation.expectedFulfillmentCount = 1
-        mockStore.dispatchCalled = { expectation.fulfill() }
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: false,
+            PrefsKeys.Settings.translationsFeature: false,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
 
         let aiControlsModel = createSubject(prefs: mockPrefs)
         aiControlsModel.toggleKillSwitch(to: false)
 
+        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+        XCTAssertTrue(aiControlsModel.translationEnabled)
+
         if let prefVal = mockPrefs.boolForKey(PrefsKeys.Settings.aiKillSwitchFeature) {
             XCTAssertFalse(prefVal)
         } else {
-            XCTFail("No pref value for ai kill switch feature")
+            XCTFail("No pref value for AI kill switch feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
+    }
+
+    @MainActor
+    func testToggleKillSwitchOffWithFeaturesOnLeavesThemOn() throws {
+        mockPrefs = MockProfilePrefs(things: [
+            PrefsKeys.Summarizer.summarizeContentFeature: true,
+            PrefsKeys.Settings.translationsFeature: true,
+            PrefsKeys.Settings.aiKillSwitchFeature: true
+        ], prefix: "")
+        mockProfile.prefs = mockPrefs
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: mockProfile)
+
+        let aiControlsModel = createSubject(prefs: mockPrefs)
+        aiControlsModel.toggleKillSwitch(to: false)
+
+        XCTAssertTrue(aiControlsModel.pageSummariesEnabled)
+        XCTAssertTrue(aiControlsModel.translationEnabled)
     }
 
     @MainActor
@@ -137,6 +188,10 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         wait(for: [expectation], timeout: 1.0)
         let action = try XCTUnwrap(mockStore.dispatchedActions.last as? TranslationSettingsViewAction)
         XCTAssertTrue(try XCTUnwrap(action.newSettingValue))
+        XCTAssertTrue(try XCTUnwrap(action.toggledViaAIControls))
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
     @MainActor
@@ -149,6 +204,9 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
     @MainActor
@@ -161,6 +219,9 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
         } else {
             XCTFail("No pref value for translations feature")
         }
+
+        // Each settings event gets called twice for the legacy and new change event
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 2)
     }
 
     private func setupNimbusSentFromFirefoxTesting(isTranslationsEnabled: Bool, isSummariesEnabled: Bool) {
@@ -175,7 +236,11 @@ class AIControlsModelTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     private func createSubject(prefs: Prefs) -> AIControlsModel {
-        let subject = AIControlsModel(prefs: prefs, windowUUID: .XCTestDefaultUUID)
+        let subject = AIControlsModel(
+            prefs: prefs,
+            windowUUID: .XCTestDefaultUUID,
+            settingsTelemetry: SettingsTelemetry(gleanWrapper: mockGleanWrapper)
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

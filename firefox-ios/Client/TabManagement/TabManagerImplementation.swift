@@ -672,15 +672,16 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task {
+        Task { [weak tab, weak self] in
+            guard let tab else { return }
             do {
-                let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
+                let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
             } catch {
-                logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
+                self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            await MainActor.run { dispatchDidSetScreenshotAction(for: tab) }
+            await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
         }
     }
 
@@ -926,9 +927,10 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func storeScreenshot(tab: Tab) {
         guard let screenshot = tab.screenshot else { return }
 
+        let tabUUID = tab.tabUUID
         Task {
             do {
-                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+                try await imageStore?.saveImageForKey(tabUUID, image: screenshot)
             } catch {
                 logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
             }
@@ -936,8 +938,9 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func removeScreenshot(tab: Tab) {
+        let tabUUID = tab.tabUUID
         Task {
-            await imageStore?.deleteImageForKey(tab.tabUUID)
+            await imageStore?.deleteImageForKey(tabUUID)
         }
     }
 
@@ -946,6 +949,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
+        let imageStore = imageStore
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
@@ -953,6 +957,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func cleanUpTabSessionData() {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
@@ -976,6 +981,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
@@ -1004,6 +1010,21 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func expireLoginAlerts() {
         for tab in tabs {
             tab.expireLoginAlert()
+        }
+    }
+
+    func offloadBackgroundWebViews() async {
+        let backgroundTabsWithWebViews = tabs.filter { $0.webView != nil && $0 !== selectedTab }
+        logger.log("Offloading WebViews for \(backgroundTabsWithWebViews.count) background tabs",
+                   level: .info,
+                   category: .tabs)
+        // Sending telemetry for all webviews alive, even the selected tab one
+        tabsTelemetry.trackMemoryWarningOffload(
+            tabCount: tabs.count,
+            webViewCount: backgroundTabsWithWebViews.count + 1
+        )
+        for tab in backgroundTabsWithWebViews {
+            await tab.offloadWebView()
         }
     }
 

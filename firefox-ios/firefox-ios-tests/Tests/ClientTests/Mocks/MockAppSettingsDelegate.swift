@@ -41,4 +41,6 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
     func askedToReload() {
         askedToReloadCalled += 1
     }
+
+    func pressedOffloadBackgroundWebViews() {}
 }

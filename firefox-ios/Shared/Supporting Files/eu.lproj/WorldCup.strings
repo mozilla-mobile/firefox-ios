@@ -130,7 +130,7 @@
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Jarraitu taldea";
 
-/* The label indicating that the displaying match as ended. */
+/* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Partidaren amaiera)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */

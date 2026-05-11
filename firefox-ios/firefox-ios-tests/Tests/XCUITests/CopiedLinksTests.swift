@@ -5,30 +5,40 @@
 import XCTest
 
 class CopiedLinksTests: BaseTestCase {
+    private var settingScreen: SettingScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var mainMenuScreen: MainMenuScreen!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        settingScreen = SettingScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        mainMenuScreen = MainMenuScreen(app: app)
+    }
+
     // This test is enable Offer to open copied links, when opening firefox
     func testCopiedLinks() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.openBrowsingSettings()
 
         // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
-        XCTAssertEqual(value as? String, "0")
+        settingScreen.assertCopiedLinksToggleIsOff()
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].tap()
+        settingScreen.tapCopiedLinksToggle()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
-        XCTAssertEqual(value2 as? String, "1")
+        settingScreen.assertCopiedLinksToggleIsOn()
 
-        app.navigationBars["Settings"].buttons["Done"].tap()
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
 
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        let settingsmenuitemCell = app.tables.otherElements["Settings"]
-        settingsmenuitemCell.tap()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenuScreen.tapSettings()
+        settingScreen.openBrowsingSettings()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
-        XCTAssertEqual(value3 as? String, "1")
+        settingScreen.assertCopiedLinksToggleIsOn()
     }
 }

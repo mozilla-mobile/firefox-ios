@@ -734,7 +734,7 @@ struct BrowserViewControllerState: ScreenState {
             browserViewType: state.browserViewType,
             displayView: .translationLanguagePicker(TranslationLanguagePickerData(
                 languages: action.translationLanguages ?? [],
-                isTranslated: action.isPageTranslated ?? false,
+                isTranslated: action.isPageTranslated,
                 translatedToLanguage: action.translatedToLanguage
             )),
             buttonTapped: action.buttonTapped,

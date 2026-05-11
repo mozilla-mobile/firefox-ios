@@ -22,6 +22,7 @@ enum FeatureFlagID: String, CaseIterable {
     case hntSponsoredShortcuts
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
+    case homepagePinnedHeader
     case homepageSearchBar
     case homepageStoryCategories
     case hostedSummarizer
@@ -93,6 +94,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,
                 .hostedSummarizer,

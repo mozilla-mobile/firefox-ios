@@ -28,18 +28,14 @@ final class DefaultQuickAnswersService: QuickAnswersService {
     /// Creates a new service with a platform-appropriate transcription engine and results service.
     init(
         engine: TranscriptionEngine? = nil,
+        config: QuickAnswersConfig = QuickAnswersConfig(),
         resultsServiceFactory: ResultsServiceFactory = DefaultResultsServiceFactory(
-            config: QuickAnswersConfig(),
             liteLLMCreator: LiteLLMCreator()
         ),
         prefs: Prefs
     ) throws {
         self.engine = engine ?? Self.makeDefaultEngine()
-        let config = QuickAnswersConfig()
-        guard let resultsService = resultsServiceFactory.make(prefs: prefs, config: config) else {
-            throw ResultsServiceError.unableToCreateService
-        }
-        self.resultsService = resultsService
+        self.resultsService = try resultsServiceFactory.make(prefs: prefs, config: config)
     }
 
     // MARK: Speech Service
@@ -63,10 +59,6 @@ final class DefaultQuickAnswersService: QuickAnswersService {
         try await engine.stop()
         state = .idle
     }
-
-    // MARK: Results Service
-    // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-    // also remove search terminology while we are here
 
     /// Performs a search for the given transcription using the ResultsService.
     func search(text: String) async -> Result<SearchResult, SearchResultError> {

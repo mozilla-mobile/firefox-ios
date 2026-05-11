@@ -4,14 +4,14 @@
 
 import Foundation
 
-struct LiteLLMResponse: Codable {
+struct LiteLLMResponse<ProviderFields: Codable & Sendable>: Codable {
     let id: String
-    let choices: [LiteLLMChoice]
+    let choices: [LiteLLMChoice<ProviderFields>]
 }
 
-struct LiteLLMChoice: Codable {
+struct LiteLLMChoice<ProviderFields: Codable & Sendable>: Codable {
     let index: Int
-    let message: LiteLLMMessage?
-    let delta: LiteLLMMessage?
+    let message: LiteLLMMessage<ProviderFields>?
+    let delta: LiteLLMMessage<ProviderFields>?
     let finishReason: String?
 }

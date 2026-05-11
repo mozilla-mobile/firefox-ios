@@ -76,6 +76,9 @@
 /* The title of the Group L group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupL.Title.v151" = "L тобы";
 
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Топтық кезең";
+
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Команданы ауыстыру";
 
@@ -115,6 +118,12 @@
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
 "WorldCup.HomepageWidget.ErrorLabel.v151" = "Матч деректерін жүктей алмадық. Жаңартыңыз.";
 
+/* The label indicating that the displaying match is in the extra time part of the game. */
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Қосымша уақыт";
+
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Бірінші тайм";
+
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Әлем чемпионатының жаңартуларын жасыру";
 
@@ -130,8 +139,14 @@
 /* The label for the button that allows to follow a team displayed in the World Cup widget more options panel when no previous team was selected. */
 "WorldCup.HomepageWidget.FollowTeamLabel.v151" = "Командаға жазылу";
 
-/* The label indicating that the displaying match as ended. */
+/* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTLabel.v151" = "(Толық уақыт)";
+
+/* The label indicating that the displaying match has ended. */
+"WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Толық уақыт";
+
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Толық уақыт • Пенальти (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Таңдауыңызша тұсқағаз алу";
@@ -139,8 +154,23 @@
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Байланысқан матчтар";
 
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Жарты уақыт үзілісі";
+
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "ТІКЕЛЕЙ ЭФИР";
+
+/* Message shown in the World Cup widget when match data is temporarily unavailable. */
+"WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "Матч ақпараты қазір қолжетімді емес. Бірнеше минуттан кейін жаңартып көріңіз.";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Жаңарту";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Сіз желіде емес сияқтысыз. Интернет байланысын тексеріп, қайталап көріңіз.";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Пенальти (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Өшіру";
@@ -180,6 +210,9 @@
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 ӘЧ ЧЕМПИОНДАРЫ";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Екінші тайм";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Көбірек опциялар";

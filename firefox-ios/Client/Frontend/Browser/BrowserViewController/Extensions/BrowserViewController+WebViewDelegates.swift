@@ -1174,6 +1174,12 @@ extension BrowserViewController: WKNavigationDelegate {
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
+        if let handler = tab.onNextCommit {
+            tab.onNextCommit = nil
+            handler()
+        } else {
+            tab.translationConfiguration = nil
+        }
 
         if !tab.adsTelemetryRedirectUrlList.isEmpty,
            !tab.adsProviderName.isEmpty,

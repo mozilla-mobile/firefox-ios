@@ -95,6 +95,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepagePinnedHeader,
+                titleText: format(string: "Homepage Pinned Header"),
+                statusText: format(string: "Toggle to enable the pinned homepage newsfeed header")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepageSearchBar,
                 titleText: format(string: "Homepage Search Bar"),
                 statusText: format(string: "Toggle to enable homepage search bar for redesign")

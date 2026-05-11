@@ -102,7 +102,7 @@ public struct DefaultSummarizerServiceFactory: SummarizerServiceFactory {
         }
 
         if isAppAttestAuthEnabled {
-            return LiteLLMCreator().createAppAttestLiteLLM(using: prefs)
+            return LiteLLMCreator().createAppAttestLiteLLM(using: prefs, serviceType: .s2s)
         } else {
             guard let endPoint = URL(string: LiteLLMConfig.apiEndpoint ?? ""),
                   let key = LiteLLMConfig.apiKey else {
