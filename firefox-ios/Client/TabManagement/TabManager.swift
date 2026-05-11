@@ -120,6 +120,13 @@ protocol TabManager: AnyObject {
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func tabDidSetScreenshot(_ tab: Tab)
     func offloadBackgroundWebViews() async
+
+    /// Discards every background webview and rebuilds the selected tab's webview against a
+    /// fresh `WKWebViewConfiguration`. Used after the underlying `WKWebsiteDataStore` has
+    /// been swapped (e.g. on VPN toggle) so existing webviews — which still point at the
+    /// old store — are torn down and the visible tab reloads from origin through the new
+    /// store/proxy.
+    func rebuildWebViewsForProxyChange() async
 }
 
 extension TabManager {
