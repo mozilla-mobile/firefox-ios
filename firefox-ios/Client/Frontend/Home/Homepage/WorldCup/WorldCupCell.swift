@@ -10,7 +10,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         static let loadingImageSize: CGFloat = 24
         static let rotationKey = "worldCupPageSpinnerRotation"
         static let loadingImage = "ball"
-        static let rotationAnimationDuration: CFTimeInterval = 0.8
+        static let rotationAnimationDuration: CFTimeInterval = 1.0
         static let rotationAnimationFromValue: CGFloat = 0
         static let rotationAnimationToValue: CGFloat = .pi * 2
         static let visibleAlpha: CGFloat = 1.0
@@ -64,6 +64,10 @@ private final class PageContainer: UIView, ThemeApplicable {
         }
     }
 
+    func setAccessibilityEnabled(_ isEnabled: Bool) {
+        accessibilityElementsHidden = !isEnabled
+    }
+
     func applyTheme(theme: Theme) {
         (content as? ThemeApplicable)?.applyTheme(theme: theme)
     }
@@ -90,7 +94,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         static let pageControlHeight: CGFloat = 6.0
         static let pageControlTopPadding: CGFloat = 16.0
         static let heightChangeAnimationDuration: TimeInterval = 0.1
-        static let contentFadeInDuration: TimeInterval = 0.1
+        static let contentFadeInDuration: TimeInterval = 0.05
         static let initialScrollViewHeight: CGFloat = 0
         static let animationDelay: TimeInterval = 0.0
     }
@@ -239,25 +243,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         pageControl.currentPage = 0
 
         updateScrollViewHeight(for: 0, animated: false)
+        updatePageAccessibility()
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
-        let live = WorldCupInfoCardView(windowUUID: state.windowUUID)
-        live.configure(with: .placeholderLive, theme: LightTheme())
-        let schedule = WorldCupInfoCardView(windowUUID: state.windowUUID)
-        schedule.configure(with: .placeholder, theme: LightTheme())
-        let noUpcoming = WorldCupInfoCardView(windowUUID: state.windowUUID)
-        noUpcoming.configure(with: .placeholderNoUpcoming, theme: LightTheme())
-        let noF = WorldCupInfoCardView(windowUUID: state.windowUUID)
-        noF.configure(with: .placeholderNoFeautred, theme: LightTheme())
-        let contents: [UIView] = [
-            WorldCupTimerView(windowUUID: state.windowUUID),
-            live,
-            schedule,
-            noUpcoming,
-            noF
-        ]
-        return contents.map { PageContainer(content: $0) }
+        return [PageContainer(content: WorldCupTimerView(windowUUID: state.windowUUID))]
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {
@@ -316,24 +306,54 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         let pageWidth = scrollView.frame.width
         guard pageWidth > 0 else { return }
         let newPage = Int(round(scrollView.contentOffset.x / pageWidth))
-        let oldPage = pageControl.currentPage
+        guard newPage != pageControl.currentPage else { return }
+        goToPage(newPage)
+    }
 
-        for (index, page) in pagesStack.arrangedSubviews.enumerated() {
-            guard index != newPage else { continue }
-            (page as? PageContainer)?.setContentVisibility(true)
+    // MARK: - Accessibility
+
+    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        let total = pagesStack.arrangedSubviews.count
+        let pageWidth = scrollView.frame.width
+        guard total > 1, pageWidth > 0 else { return false }
+
+        let current = pageControl.currentPage
+        let next: Int
+        switch direction {
+        case .left:
+            next = current + 1
+        case .right:
+            next = current - 1
+        default:
+            return false
         }
 
-        guard newPage != oldPage else { return }
-        pageControl.currentPage = newPage
+        scrollView.setContentOffset(CGPoint(x: CGFloat(next) * pageWidth, y: 0), animated: true)
+        goToPage(next)
+        return true
+    }
 
-        updateScrollViewHeight(for: newPage, animated: true) { [weak self] in
-            guard let container = self?.pagesStack.arrangedSubviews[safe: newPage] as? PageContainer else { return }
+    private func goToPage(_ page: Int) {
+        pageControl.currentPage = page
+        updatePageAccessibility()
+        updateScrollViewHeight(for: page, animated: true) { [weak self] in
+            guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
             UIView.animate(
                 withDuration: UX.contentFadeInDuration,
                 delay: UX.animationDelay,
                 options: [.allowUserInteraction],
-                animations: { container.setContentVisibility(true) }
+                animations: { container.setContentVisibility(true) },
+                completion: { _ in
+                    UIAccessibility.post(notification: .screenChanged, argument: container)
+                }
             )
+        }
+    }
+
+    private func updatePageAccessibility() {
+        let current = pageControl.currentPage
+        for (index, page) in pagesStack.arrangedSubviews.enumerated() {
+            (page as? PageContainer)?.setAccessibilityEnabled(index == current)
         }
     }
 

@@ -6,29 +6,18 @@ import Common
 import Shared
 import UIKit
 
-/// Sub-view of the World Cup homepage card shown after the user has selected a team to follow.
-/// It surfaces the upcoming games for the followed team: one or two featured matches plus a short
-/// list of the games that come after them.
-final class WorldCupInfoCardView: UIView, ThemeApplicable {
+final class WorldCupMatchCardView: UIView, ThemeApplicable {
     private struct UX {
         static let sectionSpacing: CGFloat = 16
         static let headerSpacing: CGFloat = 6
-        static let headerInnerSpacing: CGFloat = 8
         static let moreOptionButtonIconSize: CGFloat = 24
         static let horizontalPadding: CGFloat = 16.0
 
         static let featuredMatchesStackHorizontalPadding: CGFloat = 41.0
-        static let featuredColumnWidth: CGFloat = 104
-        static let featuredColumnHeight: CGFloat = 60
-        static let featuredFlagSize = CGSize(width: 60, height: 40)
-        static let featuredFlagCornerRadius: CGFloat = 7
-        static let featuredFlagToCodeSpacing: CGFloat = 4
         static let featuredMatchesSpacing: CGFloat = 16
 
         static let dividerHeight: CGFloat = 1
         static let upcomingRowSpacing: CGFloat = 8
-
-        static let separatorBullet = "  •  "
 
         static let liveLabelCornerRadius: CGFloat = 5
         static let liveLabelHorizontalPadding: CGFloat = 6
@@ -99,7 +88,6 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         )
         button.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
         button.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
-        button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
@@ -107,6 +95,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.text = "\(UX.liveLabelDotText) \(String.WorldCup.HomepageWidget.LiveLabel)"
+        label.accessibilityLabel = .WorldCup.HomepageWidget.LiveLabel
         label.textAlignment = .center
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
@@ -146,6 +135,7 @@ final class WorldCupInfoCardView: UIView, ThemeApplicable {
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(frame: .zero)
+        shouldGroupAccessibilityChildren = true
         setupLayout()
     }
 
@@ -355,6 +345,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.accessibilityElements = [homeColumn.container, centerStack, awayColumn.container]
         return stack
     }()
 
@@ -427,7 +418,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         scoreContainer.layer.cornerRadius = scoreContainer.frame.height / 2
     }
 
-    func configure(with match: WorldCupInfoCardView.Match) {
+    func configure(with match: WorldCupMatchCardView.Match) {
         homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName)
         homeColumn.codeLabel.text = match.homeCode
         awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
@@ -566,7 +557,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         }
     }
 
-    func configure(with match: WorldCupInfoCardView.Match) {
+    func configure(with match: WorldCupMatchCardView.Match) {
         homeFlagView.image = UIImage(named: match.homeFlagAssetName)
         homeCodeLabel.text = match.homeCode
         awayFlagView.image = UIImage(named: match.awayFlagAssetName)
@@ -587,130 +578,4 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         homeFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
         awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
     }
-}
-
-// MARK: - Placeholder data
-
-extension WorldCupInfoCardView.Model {
-    /// Default placeholder content matching the original Figma reference: a single upcoming
-    /// featured match with two follow-up games.
-    static let placeholder = WorldCupInfoCardView.Model(
-        phaseTitle: "Group Stage",
-        phaseDate: "Jun 11",
-        isLive: false,
-        featuredMatch: [
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "py",
-                awayCode: "PAR",
-                date: "Jun 13",
-                score: nil
-            ),
-        ],
-        upcomingMatches: [
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "au",
-                awayCode: "AUS",
-                date: "Jun 19",
-                score: nil
-            ),
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "tr",
-                homeCode: "TUR",
-                awayFlagAssetName: "us",
-                awayCode: "USA",
-                date: "Jun 25",
-                score: nil
-            ),
-        ]
-    )
-
-    /// Placeholder showing the live state: a match in progress (with score), a follow-up featured
-    /// match below a divider, and the rest of the schedule in the upcoming list.
-    static let placeholderLive = WorldCupInfoCardView.Model(
-        phaseTitle: "Group stage",
-        phaseDate: "Jun 11",
-        isLive: true,
-        featuredMatch: [
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "py",
-                awayCode: "PAR",
-                date: "Jun 13",
-                score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
-            ),
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "au",
-                awayCode: "AUS",
-                date: "Jun 19",
-                score: nil
-            ),
-        ],
-        upcomingMatches: [
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "tr",
-                homeCode: "TUR",
-                awayFlagAssetName: "us",
-                awayCode: "USA",
-                date: "Jun 25",
-                score: nil
-            ),
-        ]
-    )
-
-    static let placeholderNoUpcoming = WorldCupInfoCardView.Model(
-        phaseTitle: "Group stage",
-        phaseDate: "Jun 11",
-        isLive: false,
-        featuredMatch: [],
-        upcomingMatches: [
-            WorldCupInfoCardView
-                .Match(
-                    homeFlagAssetName: "us",
-                    homeCode: "USA",
-                    awayFlagAssetName: "py",
-                    awayCode: "PAR",
-                    date: "Jun 13",
-                    score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
-                ),
-            WorldCupInfoCardView.Match(
-                homeFlagAssetName: "us",
-                homeCode: "USA",
-                awayFlagAssetName: "au",
-                awayCode: "AUS",
-                date: "Jun 19",
-                score: nil
-            ),
-            WorldCupInfoCardView
-                .Match(
-                    homeFlagAssetName: "us",
-                    homeCode: "USA",
-                    awayFlagAssetName: "au",
-                    awayCode: "AUS",
-                    date: "Jun 19",
-                    score: nil
-                ),
-        ]
-    )
-
-    static let placeholderNoFeautred = WorldCupInfoCardView.Model(
-        phaseTitle: "Group stage",
-        phaseDate: "Jun 11",
-        isLive: false,
-        featuredMatch: [WorldCupInfoCardView.Match(
-            homeFlagAssetName: "us",
-            homeCode: "USA",
-            awayFlagAssetName: "py",
-            awayCode: "PAR",
-            date: "Jun 13",
-            score: WorldCupInfoCardView.Match.Score(score: "2 - 2", clock: "103’")
-        )],
-        upcomingMatches: [    ]
-    )
 }
