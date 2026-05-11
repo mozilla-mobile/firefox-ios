@@ -135,7 +135,6 @@ final class TabScrollHandler: NSObject,
 
     // TODO: FXIOS-13340 Update to private in the future for now we need to keep support for Legacy protocol
     func showToolbars(animated: Bool) {
-        guard let tabProvider, !tabProvider.isFindInPageMode else { return }
         toolbarDisplayState.update(displayState: .expanded)
         delegate?.showToolbar()
     }
@@ -279,7 +278,9 @@ final class TabScrollHandler: NSObject,
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        if toolbarDisplayState.isCollapsed { showToolbars(animated: true) }
+        if toolbarDisplayState.isCollapsed, let tabProvider, !tabProvider.isFindInPageMode {
+            showToolbars(animated: true)
+        }
 
         isStatusBarScrollToTop = !didTapChangePreventScrollToTop
         didTapChangePreventScrollToTop = false
@@ -292,7 +293,7 @@ final class TabScrollHandler: NSObject,
 
     func createToolbarTapHandler() -> (() -> Void) {
         return { [unowned self] in
-            guard toolbarDisplayState.isCollapsed  else { return }
+            guard toolbarDisplayState.isCollapsed, let tabProvider, !tabProvider.isFindInPageMode  else { return }
             showToolbars(animated: true)
         }
     }

@@ -287,7 +287,7 @@ final class LegacyTabScrollController: NSObject,
 
     func createToolbarTapHandler() -> (() -> Void) {
         return { [unowned self] in
-            guard toolbarState == .collapsed else { return }
+            guard toolbarState == .collapsed, let tab, !tab.isFindInPageMode else { return }
             showToolbars(animated: true)
         }
     }
@@ -353,7 +353,7 @@ final class LegacyTabScrollController: NSObject,
     }
 
     func showToolbars(animated: Bool) {
-        guard toolbarState != .visible, let tab, !tab.isFindInPageMode else { return }
+        guard toolbarState != .visible else { return }
 
         toolbarState = .visible
 
@@ -422,7 +422,10 @@ final class LegacyTabScrollController: NSObject,
     ) {
         if keyPath == "contentSize" {
             ensureMainThread { [weak self] in
-                guard let self, self.shouldUpdateUIWhenScrolling, self.toolbarsShowing else { return }
+                guard let self, self.shouldUpdateUIWhenScrolling,
+                      self.toolbarsShowing,
+                      let tab,
+                      !tab.isFindInPageMode else { return }
 
                 self.showToolbars(animated: true)
             }
@@ -815,7 +818,7 @@ extension LegacyTabScrollController: UIScrollViewDelegate {
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        if toolbarState == .collapsed {
+        if toolbarState == .collapsed, let tab, !tab.isFindInPageMode {
             showToolbars(animated: true)
             return false
         }

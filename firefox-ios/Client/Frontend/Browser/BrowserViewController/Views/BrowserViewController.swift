@@ -785,7 +785,9 @@ class BrowserViewController: UIViewController,
 
     @objc
     func tappedTopArea() {
-        scrollController.showToolbars(animated: true)
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            scrollController.showToolbars(animated: true)
+        }
     }
 
     func sceneDidEnterBackgroundNotification(windowScene: UIWindowScene?) {
@@ -2612,8 +2614,9 @@ class BrowserViewController: UIViewController,
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab, focusUrlBar: Bool = false) {
         updateURLBarDisplayURL(tab)
-        scrollController.showToolbars(animated: false)
-
+        if !tab.isFindInPageMode {
+            scrollController.showToolbars(animated: false)
+        }
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
