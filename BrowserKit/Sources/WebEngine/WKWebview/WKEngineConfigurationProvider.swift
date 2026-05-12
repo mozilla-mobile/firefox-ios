@@ -106,14 +106,22 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         return DefaultEngineConfiguration(webViewConfiguration: configuration)
     }
 
-    /// Replaces the active website data stores with fresh ones that have the given proxy
-    /// configurations applied, copying cookies forward so users stay signed in. Returning a
-    /// new store is the only way to guarantee WebKit's network process abandons the existing
-    /// connection pool — assigning `proxyConfigurations` on a live store does not.
+    /// Replaces the active website data stores with ones that have the given proxy
+    /// configurations applied. Returning a new store is the only way to guarantee WebKit's
+    /// network process abandons the existing connection pool — assigning
+    /// `proxyConfigurations` on a live store does not.
     ///
-    /// - Returns: Identifiers of persistent stores that were displaced and are safe to clean
-    ///   up via `removeDataStores(forIdentifiers:)` once all webviews using them have been
-    ///   torn down.
+    /// The normal (persistent) store is handled asymmetrically:
+    /// - VPN-on (non-empty configs): we mint a fresh `WKWebsiteDataStore(forIdentifier:)`
+    ///   and copy cookies forward so the user stays signed in.
+    /// - VPN-off (empty configs): we swap back to `WKWebsiteDataStore.default()` so the
+    ///   user's full persistent state (localStorage, IndexedDB, etc.) is preserved, and
+    ///   we deliberately do NOT copy cookies back — VPN-session identity should not leak
+    ///   into the user's normal browsing.
+    ///
+    /// - Returns: Identifiers of persistent stores that were displaced and are safe to
+    ///   clean up via `removeDataStores(forIdentifiers:)` once all webviews referencing
+    ///   them have been torn down.
     @available(iOS 17.0, *)
     @discardableResult
     public static func applyProxyConfigurations(
@@ -124,13 +132,27 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
 
         if scope.contains(.normal) {
             let oldStore = defaultStore
-            let newIdentifier = UUID()
-            let newStore = WKWebsiteDataStore(forIdentifier: newIdentifier)
-            newStore.proxyConfigurations = configs
-            await copyCookies(from: oldStore, to: newStore)
+            let newStore: WKWebsiteDataStore
+            let newIdentifier: UUID?
+            if configs.isEmpty {
+                // VPN off: return to the original .default() store with its untouched
+                // persistent state, and do not carry VPN-session cookies back.
+                newStore = WKWebsiteDataStore.default()
+                newIdentifier = nil
+            } else {
+                // VPN on: isolate the session in a fresh identifier-based store so it has
+                // its own connection pool and disk footprint we can clean up later.
+                let identifier = UUID()
+                newStore = WKWebsiteDataStore(forIdentifier: identifier)
+                newIdentifier = identifier
+                newStore.proxyConfigurations = configs
+                await copyCookies(from: oldStore, to: newStore)
+            }
+
             if let oldIdentifier = defaultStoreIdentifier {
                 staleIdentifiers.append(oldIdentifier)
             }
+
             defaultStore = newStore
             defaultStoreIdentifier = newIdentifier
         }
