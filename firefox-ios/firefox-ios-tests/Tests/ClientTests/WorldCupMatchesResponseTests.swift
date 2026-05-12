@@ -87,6 +87,125 @@ struct WorldCupMatchesResponseTests {
         #expect(scheduled.awayTeam.iconUrl == nil)
     }
 
+    @Test
+    func test_decodesPreviousSection_withPenaltyShootout() throws {
+        let json = """
+        {
+          "previous": [{
+            "date": "2026-04-29T18:00:00+00:00",
+            "global_event_id": 999,
+            "home_team": {
+              "key": "GER", "name": "Germany",
+              "icon_url": null, "group": "Group A", "eliminated": false
+            },
+            "away_team": {
+              "key": "FRA", "name": "France",
+              "icon_url": null, "group": "Group A", "eliminated": false
+            },
+            "period": "FT(P)",
+            "home_score": 1, "away_score": 1,
+            "home_extra": 1, "away_extra": 1,
+            "home_penalty": 5, "away_penalty": 4,
+            "clock": "120", "status_type": "past"
+          }]
+        }
+        """
+        let response = try decode(json)
+        let past = try #require(response.previous?.first)
+
+        #expect(response.previous?.count == 1)
+        #expect(response.current == nil)
+        #expect(response.next == nil)
+        #expect(past.homeExtra == 1)
+        #expect(past.awayExtra == 1)
+        #expect(past.homePenalty == 5)
+        #expect(past.awayPenalty == 4)
+        #expect(past.period == "FT(P)")
+        #expect(past.statusType == "past")
+        #expect(past.homeTeam.group == "Group A")
+        #expect(past.awayTeam.eliminated == false)
+    }
+
+    @Test
+    func test_decodesEmptyTopLevelObject() throws {
+        let response = try decode("{}")
+        #expect(response.previous == nil)
+        #expect(response.current == nil)
+        #expect(response.next == nil)
+    }
+
+    @Test
+    func test_decodesEmptyArrays() throws {
+        let response = try decode(#"{ "previous": [], "current": [], "next": [] }"#)
+        #expect(response.previous?.isEmpty == true)
+        #expect(response.current?.isEmpty == true)
+        #expect(response.next?.isEmpty == true)
+    }
+
+    @Test
+    func test_decodesIgnoresUnknownTopLevelKeys() throws {
+        let response = try decode(#"{ "current": [], "unknown_field": "ignored", "extra": 42 }"#)
+        #expect(response.current?.isEmpty == true)
+    }
+
+    @Test
+    func test_responseEquality_sameContent() {
+        let responseA = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
+        let responseB = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
+        #expect(responseA == responseB)
+    }
+
+    @Test
+    func test_responseEquality_differentBuckets() {
+        let responseA = WorldCupMatchesResponse(previous: nil, current: nil, next: nil)
+        let responseB = WorldCupMatchesResponse(previous: nil, current: [], next: nil)
+        #expect(responseA != responseB)
+    }
+
+    @Test
+    func test_matchEquality() {
+        let team = WorldCupMatchesResponse.Team(
+            key: "ENG",
+            name: "England",
+            iconUrl: nil,
+            group: nil,
+            eliminated: false
+        )
+        let matchA = WorldCupMatchesResponse.Match(
+            date: "2026-05-11T14:00:00+00:00",
+            globalEventId: 1,
+            homeTeam: team,
+            awayTeam: team,
+            period: nil,
+            homeScore: nil,
+            awayScore: nil,
+            homeExtra: nil,
+            awayExtra: nil,
+            homePenalty: nil,
+            awayPenalty: nil,
+            clock: nil,
+            statusType: nil
+        )
+        let matchB = matchA
+        let matchC = WorldCupMatchesResponse.Match(
+            date: "2026-05-11T14:00:00+00:00",
+            globalEventId: 2,
+            homeTeam: team,
+            awayTeam: team,
+            period: nil,
+            homeScore: nil,
+            awayScore: nil,
+            homeExtra: nil,
+            awayExtra: nil,
+            homePenalty: nil,
+            awayPenalty: nil,
+            clock: nil,
+            statusType: nil
+        )
+        #expect(matchA == matchB)
+        #expect(matchA != matchC)
+    }
+
     private func decode(_ json: String) throws -> WorldCupMatchesResponse {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

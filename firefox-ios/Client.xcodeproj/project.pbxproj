@@ -1152,6 +1152,8 @@
 		8A9D31662D13586500171502 /* MockFolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */; };
 		8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */; };
 		F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */; };
+		F00CA4022F00000000000009 /* WorldCupAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */; };
+		F00CA4022F0000000000000B /* MockWorldCupFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */; };
 		8A9D316A2D135EB000171502 /* EditBookmarkViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */; };
 		8A9E041B2D4D08350022ED90 /* BookmarkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E041A2D4D08350022ED90 /* BookmarkConfiguration.swift */; };
 		8A9E041D2D4D09240022ED90 /* BookmarksSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9E041C2D4D09230022ED90 /* BookmarksSectionState.swift */; };
@@ -9575,6 +9577,8 @@
 		8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFolderHierarchyFetcher.swift; sourceTree = "<group>"; };
 		8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBookmarksSaver.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupAPIClient.swift; sourceTree = "<group>"; };
+		F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupAPIClientTests.swift; sourceTree = "<group>"; };
+		F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupFetchStrategy.swift; sourceTree = "<group>"; };
 		8A9D31692D135EB000171502 /* EditBookmarkViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModelTests.swift; sourceTree = "<group>"; };
 		8A9E041A2D4D08350022ED90 /* BookmarkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkConfiguration.swift; sourceTree = "<group>"; };
 		8A9E041C2D4D09230022ED90 /* BookmarksSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSectionState.swift; sourceTree = "<group>"; };
@@ -15476,6 +15480,7 @@
 				0B7B053E2D64C022007FD7AC /* MockTabWebView.swift */,
 				8A9D31672D135A1300171502 /* MockBookmarksSaver.swift */,
 				F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */,
+				F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */,
 				8A9D31652D13586100171502 /* MockFolderHierarchyFetcher.swift */,
 				45D5EDBF292D619000311934 /* MockablePinnedSites.swift */,
 				434CD57729F6FC4500A0D04B /* MockAppAuthenticator.swift */,
@@ -16894,6 +16899,7 @@
 				C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */,
 				F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */,
 				F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */,
+				F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */,
 				C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
@@ -20276,6 +20282,8 @@
 				ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */,
 				8A9D31682D135A1300171502 /* MockBookmarksSaver.swift in Sources */,
 				F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */,
+				F00CA4022F0000000000000B /* MockWorldCupFetchStrategy.swift in Sources */,
+				F00CA4022F00000000000009 /* WorldCupAPIClientTests.swift in Sources */,
 				C2886BB22EC4AB58007AE6C3 /* TinyRouterTests.swift in Sources */,
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C2500D7C2ECB4A600071506F /* MockTranslationModelsFetcher.swift in Sources */,
