@@ -21,5 +21,8 @@ index_exclude:
 - "../BrowserKit/Tests/*"
 - "../MozillaRustComponents/Tests/MozillaRustComponentsTests/*.swift"
 
+# WebEngine project
+- "../BrowserKit/Sources/WebEngine/*"
+
 report_exclude:
 - "../BrowserKit/Sources/Common/Theming/FxColors.swift"
