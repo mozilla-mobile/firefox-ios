@@ -93,7 +93,6 @@ struct AccessibilityIdentifiers {
         }
 
         struct HeaderView {
-            static let mainButton = "MainMenu.MainButton"
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
@@ -112,7 +111,6 @@ struct AccessibilityIdentifiers {
         static let whatsNew = "MainMenu.WhatsNew"
         static let saveToReadingList = "MainMenu.SaveToReadingList"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
-        static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
         static let bookmarkPage = "MainMenu.BookmarkPage"
         static let print = "MainMenu.Print"
         static let share = "MainMenu.Share"
@@ -300,12 +298,6 @@ struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
-    struct SaveCardPrompt {
-        struct Prompt {
-            static let closeButton = "a11yCloseButton"
-        }
-    }
-
     struct Microsurvey {
         struct Prompt {
             static let firefoxLogo = "Microsurvey.Prompt.FirefoxLogo"
@@ -481,7 +473,6 @@ struct AccessibilityIdentifiers {
     }
 
     struct Upgrade {
-        static let backgroundImage = "Upgrade.BackgroundImage"
         static let upgrade = "upgrade."
         static let closeButton = "Upgrade.CloseButton"
         static let pageControl = "Upgrade.PageControl"
@@ -888,7 +879,6 @@ struct AccessibilityIdentifiers {
         static let rememberCreditCardHeader = "RememberCreditCard.Header"
         static let yesButton = "RememberCreditCard.yesButton"
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
-        static let notNowButton = "RememberCreditCard.notNowButton"
     }
 
     enum Autofill {
