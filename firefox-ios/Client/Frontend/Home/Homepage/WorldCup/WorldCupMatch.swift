@@ -62,15 +62,19 @@ struct WorldCupMatch: Equatable {
     private static func score(from match: WorldCupMatchesResponse.Match) -> Score? {
         guard let home = match.homeScore, let away = match.awayScore else { return nil }
         return Score(
-            score: scoreText(home: home, away: away,
-                             homePenalty: match.homePenalty,
-                             awayPenalty: match.awayPenalty),
+            score: scoreText(
+                    home: home,
+                    away: away,
+                    homePenalty: match.homePenalty,
+                    awayPenalty: match.awayPenalty),
             clock: clockText(match.clock)
         )
     }
 
-    private static func scoreText(home: Int, away: Int,
-                                  homePenalty: Int?, awayPenalty: Int?) -> String {
+    private static func scoreText(home: Int,
+                                  away: Int,
+                                  homePenalty: Int?,
+                                  awayPenalty: Int?) -> String {
         if let homePK = homePenalty, let awayPK = awayPenalty {
             return "\(home) (\(homePK)) – \(away) (\(awayPK))"
         }
