@@ -14,7 +14,7 @@ jobs:
     runs-on: macos-26
     strategy:
       matrix:
-        xcode: ["26.5"]
+        xcode: ["26.3"]
         python-version: ["3.12"]
     steps:
     - uses: actions/checkout@v6
