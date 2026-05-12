@@ -484,22 +484,25 @@ final class URLExtensionTests: XCTestCase {
     }
 
     // MARK: normalizedHostWithLRI
-    func testNormalizedHostWithLRIHandlesRTLDomainAppropriately() {
+    func testNormalizedHostWithLRIHandlesRTLDomainAppropriately() throws {
         let testURL = "https://xn--mgb.google.com.xn--mgb.suspicious-domain.abc/download.apk"
-        let url = URL(string: testURL)!
+        let url = try XCTUnwrap(URL(string: testURL))
         let displayDomain = url.normalizedHostWithLRI ?? url.absoluteString
-        XCTAssertEqual(displayDomain, "\u{202A}ا.google.com.ا.suspicious-domain.abc\u{202C}")
+        XCTAssertEqual(displayDomain, "\u{2066}ا.google.com.ا.suspicious-domain.abc\u{2069}")
     }
 
-    func testNormalizedHostWithLRIPreservesSubdomainsAndStripsMobile() {
-        // LRE+PDF doesn't hurt regular LTR domains (just harmless wrapping)
+    func testNormalizedHostWithLRIPreservesSubdomainsAndStripsMobile() throws {
+        // LRI+PDI doesn't hurt regular LTR domains (just harmless wrapping)
         let testCases: [(String, String)] = [
-            ("https://www.example.com/path", "\u{202A}example.com\u{202C}"),
-            ("https://m.example.com/path", "\u{202A}example.com\u{202C}"),
-            ("https://mobile.example.com/path", "\u{202A}example.com\u{202C}"),
-            ("https://www.news.example.com/path", "\u{202A}news.example.com\u{202C}")
+            ("https://www.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://m.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://mobile.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://www.news.example.com/path", "\u{2066}news.example.com\u{2069}")
         ]
 
-        testCases.forEach { XCTAssertEqual(URL(string: $0.0)!.normalizedHostWithLRI, $0.1) }
+        try testCases.forEach {
+            let url = try XCTUnwrap(URL(string: $0.0))
+            XCTAssertEqual(url.normalizedHostWithLRI, $0.1)
+        }
     }
 }
