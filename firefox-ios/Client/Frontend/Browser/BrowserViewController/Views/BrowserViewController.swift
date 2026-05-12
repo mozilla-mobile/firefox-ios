@@ -1859,6 +1859,12 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
+        if tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false {
+            overKeyboardContainer.removeKeyboardSpacer()
+            return
+        }
+
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else { return }
