@@ -243,7 +243,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
-        return [PageContainer(content: WorldCupTimerView(windowUUID: state.windowUUID))]
+        let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
+        timerView.configure(state: state)
+        return [PageContainer(content: timerView)]
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {

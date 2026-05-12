@@ -2802,6 +2802,8 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .worldCupCountryPicker:
+            navigationHandler?.showWorldCupCountryPicker()
         case .quickAnswers:
             navigationHandler?.showQuickAnswers()
         case .privacyNoticeLink(let url):

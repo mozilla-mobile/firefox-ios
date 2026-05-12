@@ -3,21 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Redux
 import SwiftUI
-
-private extension View {
-    @ViewBuilder
-    func skipButtonStyle(theme: Theme) -> some View {
-        if #available(iOS 26.0, *) {
-            self.buttonStyle(.glassProminent)
-                .tint(theme.colors.actionPrimary.color)
-                .foregroundStyle(theme.colors.textInverted.color)
-        } else {
-            self.buttonStyle(.borderless)
-                .foregroundStyle(theme.colors.actionPrimary.color)
-        }
-    }
-}
 
 struct WorldCupCountryPickerView: View, ThemeableView {
     private struct UX {
@@ -33,21 +20,36 @@ struct WorldCupCountryPickerView: View, ThemeableView {
         static let gridSpacing: CGFloat = 6
         static let gridRowSpacing: CGFloat = 16
         static let flagSize = CGSize(width: 60, height: 40)
+        static let flagCornerRadius: CGFloat = 7
         static let flagToLabelSpacing: CGFloat = 10
+        static let selectedBorderOutset: CGFloat = 2
+        static let selectedBorderWidth: CGFloat = 2
+        static let selectedBadgeSize: CGFloat = 20
+        static let selectedBadgeBorderWidth: CGFloat = 2
+        static let selectedBadgeOffset: CGFloat = 10
+        static let selectedCheckmarkSize: CGFloat = 12
     }
 
     let windowUUID: WindowUUID
     var themeManager: ThemeManager
     @State var theme: Theme
+    @Environment(\.dismiss) private var dismissAction
+
+    @State var selectedTeam: String?
     private let regions = WorldCupCountryData.regions
     private var gridColumns: [GridItem] {
         [GridItem(.adaptive(minimum: UX.gridMinTileWidth), spacing: UX.gridSpacing)]
     }
 
-    init(windowUUID: WindowUUID, themeManager: ThemeManager) {
+    init(
+        windowUUID: WindowUUID,
+        themeManager: ThemeManager,
+        selectedTeam: String? = nil
+    ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.theme = themeManager.getCurrentTheme(for: windowUUID)
+        self._selectedTeam = State(initialValue: selectedTeam)
     }
 
     var body: some View {
@@ -65,18 +67,16 @@ struct WorldCupCountryPickerView: View, ThemeableView {
             .navigationTitle(Text(String.WorldCup.CountryPicker.Title))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {}
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        dismissAction()
+                    }
                     label: {
                         Image(StandardImageIdentifiers.Large.cross)
                             .renderingMode(.template)
                     }
                     .foregroundStyle(theme.colors.iconPrimary.color)
                     .accessibilityLabel(Text(String.WorldCup.CountryPicker.CloseButtonAccessibilityLabel))
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(String.WorldCup.CountryPicker.SkipButtonTitle) {}
-                    .skipButtonStyle(theme: theme)
                 }
             }
         }
@@ -113,25 +113,90 @@ struct WorldCupCountryPickerView: View, ThemeableView {
 
     private func countryTile(_ country: WorldCupCountry) -> some View {
         let shadow = FxShadow.shadow200
-        return VStack(spacing: UX.flagToLabelSpacing) {
-            Image(country.id.lowercased())
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: UX.flagSize.width, height: UX.flagSize.height)
-                .shadow(
-                    color: shadow.colorProvider(theme).color,
-                    radius: shadow.blurRadius,
-                    x: shadow.offset.width,
-                    y: shadow.offset.height
-                )
-                .accessibilityHidden(true)
+        let isSelected = selectedTeam == country.id
+        return Button {
+            dispatchSelectTeam(country)
+        } label: {
+            VStack(spacing: UX.flagToLabelSpacing) {
+                flagImage(for: country, shadow: shadow, isSelected: isSelected)
 
-            Text(country.name)
-                .font(FXFontStyles.Bold.caption1.scaledSwiftUIFont())
-                .foregroundColor(Color(theme.colors.textPrimary))
-                .lineLimit(nil)
-                .multilineTextAlignment(.center)
+                Text(country.name)
+                    .font(FXFontStyles.Bold.caption1.scaledSwiftUIFont())
+                    .foregroundColor(Color(theme.colors.textPrimary))
+                    .lineLimit(nil)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
         }
-        .frame(maxHeight: .infinity, alignment: .top)
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text(country.name))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    private func flagImage(
+        for country: WorldCupCountry,
+        shadow: FxShadow,
+        isSelected: Bool
+    ) -> some View {
+        Image(country.id.lowercased())
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: UX.flagSize.width, height: UX.flagSize.height)
+            .clipShape(RoundedRectangle(cornerRadius: UX.flagCornerRadius, style: .continuous))
+            .shadow(
+                color: shadow.colorProvider(theme).color,
+                radius: shadow.blurRadius,
+                x: shadow.offset.width,
+                y: shadow.offset.height
+            )
+            .accessibilityHidden(true)
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: UX.flagCornerRadius, style: .continuous)
+                        .inset(by: -UX.selectedBorderOutset)
+                        .stroke(
+                            theme.colors.borderAccent.color,
+                            lineWidth: UX.selectedBorderWidth
+                        )
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                if isSelected {
+                    selectedBadge
+                        .offset(x: UX.selectedBadgeOffset, y: UX.selectedBadgeOffset)
+                }
+            }
+    }
+
+    private var selectedBadge: some View {
+        ZStack {
+            Circle()
+                .fill(theme.colors.iconAccent.color)
+                .overlay(
+                    Circle()
+                        .stroke(theme.colors.layer5.color, lineWidth: UX.selectedBadgeBorderWidth)
+                )
+
+            Image(StandardImageIdentifiers.Large.checkmark)
+                .renderingMode(.template)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: UX.selectedCheckmarkSize, height: UX.selectedCheckmarkSize)
+                .foregroundStyle(theme.colors.layer5.color)
+        }
+        .frame(width: UX.selectedBadgeSize, height: UX.selectedBadgeSize)
+    }
+
+    // MARK: - Action Dispatch
+
+    private func dispatchSelectTeam(_ country: WorldCupCountry) {
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.selectTeam,
+                selectedCountryId: country.id
+            )
+        )
+        dismissAction()
     }
 }

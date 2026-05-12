@@ -16,6 +16,7 @@ class HomePageSettingViewController: SettingsTableViewController,
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
+    private let worldCupStore: WorldCupStoreProtocol
 
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
@@ -29,9 +30,11 @@ class HomePageSettingViewController: SettingsTableViewController,
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
-         tabManager: TabManager) {
+         tabManager: TabManager,
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.worldCupStore = worldCupStore
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -164,7 +167,7 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(bookmarksSetting)
 
-            if featureFlagsProvider.isEnabled(.worldCupWidget) {
+            if worldCupStore.isFeatureEnabled {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(
                     prefs: profile.prefs,
@@ -172,12 +175,11 @@ class HomePageSettingViewController: SettingsTableViewController,
                     prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
                     defaultValue: true,
                     titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
-                ) { value in
+                ) { _ in
                     store.dispatch(
                         WorldCupAction(
                             windowUUID: windowUUID,
                             actionType: WorldCupActionType.didChangeHomepageSettings,
-                            shouldShowHomepageWorldCupSection: value
                         )
                     )
                 }

@@ -23,7 +23,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             return UICollectionViewCell()
         }
         DependencyHelperMock().bootstrapDependencies()
-        setIsWorldCupWidgetFeatureEnabled(true)
     }
 
     override func tearDown() async throws {
@@ -34,13 +33,28 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     // MARK: - applyInitialSnapshot
-    func test_updateSnapshot_hasCorrectData() throws {
+    func test_updateSnapshot_withDefaultState_doesNotIncludeWorldCupSection() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         dataSource.updateSnapshot(
             state: HomepageState(windowUUID: .XCTestDefaultUUID),
             jumpBackInDisplayConfig: mockSectionConfig
         )
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfSections, 2)
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .spacer])
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .header), 1)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .spacer), 1)
+    }
+
+    @MainActor
+    func test_updateSnapshot_withWorldCupSectionEnabled_includesWorldCupSection() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let state = stateWithWorldCupSectionEnabled()
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 3)
@@ -62,7 +76,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
@@ -100,7 +114,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             TopSitesAction(
                 topSites: createSites(),
                 windowUUID: .XCTestDefaultUUID,
@@ -138,7 +152,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let numberOfRows = 2
 
         let stateWithRows = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             TopSitesAction(
                 numberOfRows: numberOfRows,
                 windowUUID: .XCTestDefaultUUID,
@@ -175,7 +189,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             MerinoAction(
                 merinoStoryResponse: MerinoStoryResponse(stories: createStories()),
                 windowUUID: .XCTestDefaultUUID,
@@ -278,7 +292,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         )
 
         let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             MessageCardAction(
                 messageCardConfiguration: configuration,
                 windowUUID: .XCTestDefaultUUID,
@@ -305,7 +319,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         var state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             BookmarksAction(
                 bookmarks: [BookmarkConfiguration(
                     site: Site.createBasicSite(
@@ -345,7 +359,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         var state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             TabManagerAction(
                 recentTabs: [createTab(urlString: "www.mozilla.org")],
                 windowUUID: .XCTestDefaultUUID,
@@ -379,7 +393,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
         let state = HomepageState.reducer(
-            HomepageState(windowUUID: .XCTestDefaultUUID),
+            stateWithWorldCupSectionEnabled(),
             HomepageAction(
                 windowUUID: .XCTestDefaultUUID,
                 actionType: HomepageMiddlewareActionType.configuredPrivacyNotice
@@ -397,10 +411,16 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, expectedSections)
     }
 
-    private func setIsWorldCupWidgetFeatureEnabled(_ isEnabled: Bool) {
-        FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
-            return WorldCupWidgetFeature(enabled: isEnabled)
-        }
+    @MainActor
+    private func stateWithWorldCupSectionEnabled() -> HomepageState {
+        return HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            WorldCupAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WorldCupMiddlewareActionType.didUpdate,
+                shouldShowHomepageWorldCupSection: true
+            )
+        )
     }
 
     private func createSites(count: Int = 30) -> [TopSiteConfiguration] {

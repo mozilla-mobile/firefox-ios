@@ -1565,6 +1565,8 @@
 		C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */; };
 		C23889E32A50319A00429673 /* ShareSheetCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E22A50319A00429673 /* ShareSheetCoordinatorTests.swift */; };
 		C23889E52A50329200429673 /* MockParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinator.swift */; };
+		C23F08522FB37911009113BC /* WorldCupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23F08512FB37911009113BC /* WorldCupStore.swift */; };
+		C23F08542FB37A72009113BC /* WorldCupStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23F08532FB37A72009113BC /* WorldCupStoreTests.swift */; };
 		C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */; };
 		C24A0D2F2F3A7E7E00BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */; };
 		C24B31272E8686460049134A /* NavigationBarMiddleButtonSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */; };
@@ -2306,7 +2308,11 @@
 		FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
 		FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9293D31D6580E100AC8D33 /* QRCodeViewController.swift */; };
 		FF0001AA2F000007000AAAAA /* WorldCupSectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */; };
+		FF0001AB2F000007000AAAAA /* WorldCupMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */; };
 		FF0002AA2F000002000BBBBB /* ClearablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0002AA2F000001000BBBBB /* ClearablesTests.swift */; };
+		FF0003AB2F000002000BBBBB /* WorldCupMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0003AA2F000001000BBBBB /* WorldCupMiddlewareTests.swift */; };
+		FF0004AB2F000002000BBBBB /* WorldCupSectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0004AA2F000001000BBBBB /* WorldCupSectionStateTests.swift */; };
+		FF0005AB2F000002000BBBBB /* MockWorldCupStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -10356,6 +10362,8 @@
 		C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C23889E22A50319A00429673 /* ShareSheetCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetCoordinatorTests.swift; sourceTree = "<group>"; };
 		C23889E42A50329200429673 /* MockParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentCoordinator.swift; sourceTree = "<group>"; };
+		C23F08512FB37911009113BC /* WorldCupStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupStore.swift; sourceTree = "<group>"; };
+		C23F08532FB37A72009113BC /* WorldCupStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupStoreTests.swift; sourceTree = "<group>"; };
 		C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAppAttestKeyIDStoreTests.swift; sourceTree = "<group>"; };
 		C24B31262E8686220049134A /* NavigationBarMiddleButtonSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarMiddleButtonSelectionView.swift; sourceTree = "<group>"; };
@@ -11746,7 +11754,11 @@
 		FE864D8695CDDBFCA933AE76 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = "ko.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		FEBD422B91171A97887B19BC /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Shared.strings; sourceTree = "<group>"; };
 		FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupSectionState.swift; sourceTree = "<group>"; };
+		FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMiddleware.swift; sourceTree = "<group>"; };
 		FF0002AA2F000001000BBBBB /* ClearablesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearablesTests.swift; sourceTree = "<group>"; };
+		FF0003AA2F000001000BBBBB /* WorldCupMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMiddlewareTests.swift; sourceTree = "<group>"; };
+		FF0004AA2F000001000BBBBB /* WorldCupSectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupSectionStateTests.swift; sourceTree = "<group>"; };
+		FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupStore.swift; sourceTree = "<group>"; };
 		FF0C48F58DE0387A8E383D09 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		FF374BAA8FB31A2CE67D6C0A /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		FF5847B3BD6CDAFE8F96AE44 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
@@ -13576,6 +13588,10 @@
 				8A552AC22CB43A7000564C98 /* Redux */,
 				E571EE79287569960051D9AA /* StoryProviderTests.swift */,
 				8A6B79992CDBCE2E003C3077 /* TopSitesManagerTests.swift */,
+				C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */,
+				C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */,
+				FF0003AA2F000001000BBBBB /* WorldCupMiddlewareTests.swift */,
+				C23F08532FB37A72009113BC /* WorldCupStoreTests.swift */,
 				8AD8FDB72EBB017B00FDFD78 /* UnifiedAds */,
 				61A164442CE7BDEF001D6058 /* Wallpaper */,
 			);
@@ -13886,6 +13902,7 @@
 				8AED23072D4012B1000FF624 /* MessageCardStateTests.swift */,
 				8A6E63CA2D4A6F230040D355 /* JumpBackInSectionStateTests.swift */,
 				8A9E041E2D4D0B7A0022ED90 /* BookmarksSectionStateTests.swift */,
+				FF0004AA2F000001000BBBBB /* WorldCupSectionStateTests.swift */,
 				8A7835362D5107810052E328 /* BookmarksMiddlewareTests.swift */,
 				8A106D622D416F82009AD7E4 /* MessageCardMiddlewareTests.swift */,
 				8AEF41612D15EDBA0013925D /* TopSitesMiddlewareTests.swift */,
@@ -15118,12 +15135,14 @@
 		C2D7AC3B2F9B5D750090EC28 /* WorldCup */ = {
 			isa = PBXGroup;
 			children = (
+				C23F08512FB37911009113BC /* WorldCupStore.swift */,
 				C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */,
 				C2A057E22FA8C32200100C24 /* WorldCupCell.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
 				C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */,
 				FF0001AA2F000004000AAAAA /* WorldCupSectionState.swift */,
+				FF0001AB2F000004000AAAAA /* WorldCupMiddleware.swift */,
 				C2D7AC3C2F9B5DC30090EC28 /* WorldCupAction.swift */,
 				C27AB7062F9B85A50085439A /* WorldCupCountry.swift */,
 				C27AB7072F9B85A50085439A /* WorldCupCountryPickerView.swift */,
@@ -15447,6 +15466,7 @@
 				0B5CAF0C2E40DA89008B5D5A /* MockSummarizationChecker.swift */,
 				8A6CDB462DF9E78400F11139 /* MockTabDisplayViewDragAndDropInteraction.swift */,
 				8A01FE3F2DF0CE49002C483B /* MockDateProvider.swift */,
+				FF0005AA2F000001000BBBBB /* MockWorldCupStore.swift */,
 				8A9F4F042DC8F4ED004644B9 /* MockRemoteTabs.swift */,
 				8A9F4F022DC8F4E6004644B9 /* MockPlaces.swift */,
 				2199A1D32DB8389000DC84BD /* MockZoomStore.swift */,
@@ -16869,8 +16889,6 @@
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
-				C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */,
-				C28EA9832FA2554900AEC3AE /* WorldCupTelemetryTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
@@ -19271,6 +19289,7 @@
 				81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */,
 				8AED23062D400098000FF624 /* HomepageMessageCardCell.swift in Sources */,
 				FF0001AA2F000007000AAAAA /* WorldCupSectionState.swift in Sources */,
+				FF0001AB2F000007000AAAAA /* WorldCupMiddleware.swift in Sources */,
 				C2886E062EC5E010007AE6C3 /* ModelsRoute.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
 				8AA0A6652CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift in Sources */,
@@ -19533,6 +19552,7 @@
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				1D5A0F5C2EA2FB4E00DD27F7 /* RelayController.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
+				C23F08522FB37911009113BC /* WorldCupStore.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
 				210972702DCBA50F001162A2 /* GenericItemCellView.swift in Sources */,
 				ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */,
@@ -20071,6 +20091,9 @@
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				C28EA9812FA2554800AEC3AD /* WorldCupCountdownModelTests.swift in Sources */,
 				C28EA9822FA2554900AEC3AE /* WorldCupTelemetryTests.swift in Sources */,
+				FF0003AB2F000002000BBBBB /* WorldCupMiddlewareTests.swift in Sources */,
+				FF0004AB2F000002000BBBBB /* WorldCupSectionStateTests.swift in Sources */,
+				FF0005AB2F000002000BBBBB /* MockWorldCupStore.swift in Sources */,
 				EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */,
 				E571EE7E28756A130051D9AA /* StoryProviderTests.swift in Sources */,
 				21420EF92ABC75A400B28550 /* TabTrayCoordinatorTests.swift in Sources */,
@@ -20430,6 +20453,7 @@
 				0A5A3A142F9B776E0040C7B8 /* TabCellCustomImageViewTests.swift in Sources */,
 				C89C91AD2A1FE9E900BE57B1 /* OnboardingTelemetryDelegationTests.swift in Sources */,
 				8A36BE2C29EDE16C00AC1C5C /* ContentContainerTests.swift in Sources */,
+				C23F08542FB37A72009113BC /* WorldCupStoreTests.swift in Sources */,
 				401F68A52D84726700786D0C /* RemoteTabsPanelTests.swift in Sources */,
 				ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */,
 				D525DFB325FBE5E000B18763 /* TabTests.swift in Sources */,

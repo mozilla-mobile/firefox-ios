@@ -14,6 +14,13 @@ features:
           The ISO 8601 date string for the World Cup countdown target
         type: String
         default: "2026-06-11T19:00:00Z"
+      milestone-2-enable-date:
+        description: >
+          The ISO 8601 date string for when milestone 2 (country picker)
+          becomes available. Defaults to 10 days before the World Cup
+          countdown target date.
+        type: String
+        default: "2026-05-10T19:00:00Z"
     defaults:
       - channel: beta
         value:
