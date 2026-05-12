@@ -1972,7 +1972,7 @@ workflows:
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator18.6-arm64.xctestrun"
             cp "$SOURCE_FILE" "$BITRISE_TEST_BUNDLE_PATH/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
     - xcode-test-without-building@0.5.1:
-        title: "Unit Tests - iPhone 17 (iOS 26.2)"
+        title: "Unit Tests - iPhone 17 (iOS 26.5)"
         timeout: 6000
         is_always_run: true
         inputs:
