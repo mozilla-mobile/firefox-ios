@@ -156,10 +156,6 @@ workflows:
     - restore-spm-cache@3:
         is_always_run: true
     - activate-build-cache-for-xcode@0: {}
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Fennec
@@ -354,10 +350,6 @@ workflows:
             brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Firefox
@@ -454,10 +446,6 @@ workflows:
             brew tap mozilla-mobile/fxios
             brew install fxios
             fxios bootstrap
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: FirefoxBeta
@@ -981,7 +969,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.5.x-edge
+        stack: osx-xcode-26.5.x
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
@@ -1968,10 +1956,6 @@ workflows:
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         title: "Build for Testing"
         inputs:
@@ -2096,10 +2080,6 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Focus
@@ -2157,10 +2137,6 @@ workflows:
             #!/usr/bin/env bash
             set -x
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
-    - script@1.1:
-        title: Initialize CoreSimulator
-        inputs:
-        - content: xcrun simctl list
     - xcode-build-for-test@3:
         inputs:
         - scheme: Klar
@@ -2923,5 +2899,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-26.5.x-edge
+    stack: osx-xcode-26.5.x
     machine_type_id: g2.mac.4large
