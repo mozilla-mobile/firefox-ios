@@ -1806,9 +1806,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -4978,7 +4976,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
 
-        if !isSnapKitRemovalEnabled {
+        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
@@ -5015,7 +5013,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         keyboardState = nil
-        if !isSnapKitRemovalEnabled {
+        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
@@ -5055,7 +5053,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled {
+        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
             updateViewConstraints()
         } else {
             updateConstraintsForKeyboard()
@@ -5065,7 +5063,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled {
+        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
             updateViewConstraints()
         }
 
