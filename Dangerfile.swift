@@ -21,8 +21,8 @@ if releaseCheck.isReleaseBranch {
     checkForGleanFileChange()
     CodeUsageDetector().checkForCodeUsage()
     let coverageGate = CodeCoverageGate()
-    coverageGate.failOnNewFilesWithoutCoverage()
-    coverageGate.failOnModifiedFilesWithLowCoverage()
+    coverageGate.failOnFiles(type: .newFiles)
+    coverageGate.failOnFiles(type: .modifiedFiles)
     BrowserViewControllerChecker().failsOnAddedExtension()
     checkCodeCoverage()
 }
@@ -102,25 +102,87 @@ func checkCodeCoverage() {
 class CodeCoverageGate {
     private let coverageBypassLabel = "ignore-code-coverage"
     private let jsonPath = "coverage.json"
-    private let minimumAddedLines = 5
-    private let minimumModifiedLines = 20
 
-    func failOnNewFilesWithoutCoverage() {
+    enum CoverageType {
+        case newFiles
+        case modifiedFiles
+
+        var sourceFiles: [String] {
+            switch self {
+            case .newFiles: return danger.git.createdFiles
+            case .modifiedFiles: return danger.git.modifiedFiles
+            }
+        }
+
+        var minimumLines: Int {
+            switch self {
+            case .newFiles: return 5
+            case .modifiedFiles: return 20
+            }
+        }
+
+        var label: String {
+            switch self {
+            case .newFiles: return "New file"
+            case .modifiedFiles: return "Existing file"
+            }
+        }
+
+        var emptyMessage: String {
+            switch self {
+            case .newFiles: return "No new file detected so code coverage gate wasn't ran."
+            case .modifiedFiles: return "No modified file detected so code coverage gate wasn't ran."
+            }
+        }
+
+        var insufficientChangesMessage: String? {
+            switch self {
+            case .newFiles: return nil
+            case .modifiedFiles: return "No modified file had significant enough changes for the coverage gate to run."
+            }
+        }
+
+        var allPassMessage: String {
+            switch self {
+            case .newFiles: return "All new files meet their thresholds**."
+            case .modifiedFiles: return "All modified files meet their thresholds."
+            }
+        }
+
+        var thresholdRange: (min: Double, max: Double) {
+            switch self {
+            case .newFiles: return (min: 0.4, max: 0.7)
+            case .modifiedFiles: return (min: 0.10, max: 0.25)
+            }
+        }
+    }
+
+    func failOnFiles(type: CoverageType) {
         guard let coverageFiles = parseCoverageFiles() else { return }
 
-        // Consider created Swift files, excluding Tests & Generated
-        let candidates = swiftSourceCandidates(from: danger.git.createdFiles)
+        let candidates = swiftSourceCandidates(from: type.sourceFiles)
 
         guard !candidates.isEmpty else {
             markdown("""
-            ### ✅ New file code coverage
-            No new file detected so code coverage gate wasn't ran.
+            ### ✅ \(type.label) code coverage
+            \(type.emptyMessage)
             """)
             return
         }
 
-        // Ignore tiny edits: only gate files with at least `minimumAddedLines`
-        let gated = candidates.filter { addedLines(in: $0) >= minimumAddedLines }
+        // Ignore tiny edits: only gate files with at least `type.minimumLines`
+        let gated = candidates.filter { addedLines(in: $0) >= type.minimumLines }
+
+        if let msg = type.insufficientChangesMessage {
+            guard !gated.isEmpty else {
+                markdown("""
+                ### ✅ \(type.label) code coverage
+                \(msg)
+                """)
+                return
+            }
+        }
+
         // Collect failures
         var rows: [String] = []
         for file in gated {
@@ -135,7 +197,7 @@ class CodeCoverageGate {
 
             // Calculate threshold based on file length
             let lineCount = countLines(in: file)
-            let threshold = scaledPercentage(for: Double(lineCount)) * 100.0
+            let threshold = scaledPercentage(for: Double(lineCount), in: type.thresholdRange) * 100.0
 
             if percent + 0.0001 < threshold { // epsilon for float stability
                 rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
@@ -144,63 +206,13 @@ class CodeCoverageGate {
 
         guard !rows.isEmpty else {
             markdown("""
-            ### ✅ New file code coverage
-            All new files meet their thresholds**.
+            ### ✅ \(type.label) code coverage
+            \(type.allPassMessage)
             """)
             return
         }
 
-        reportCoverageFailure(rows: rows, label: "New file")
-    }
-
-    func failOnModifiedFilesWithLowCoverage() {
-        guard let coverageFiles = parseCoverageFiles() else { return }
-
-        let candidates = swiftSourceCandidates(from: danger.git.modifiedFiles)
-
-        guard !candidates.isEmpty else {
-            markdown("""
-            ### ✅ Existing file code coverage
-            No modified file detected so code coverage gate wasn't ran.
-            """)
-            return
-        }
-
-        let gated = candidates.filter { addedLines(in: $0) >= minimumModifiedLines }
-
-        guard !gated.isEmpty else {
-            markdown("""
-            ### ✅ Existing file code coverage
-            No modified file had significant enough changes for the coverage gate to run.
-            """)
-            return
-        }
-
-        var rows: [String] = []
-        for file in gated {
-            let entry = coverageMatch(repoPath: file, coverageFiles: coverageFiles)
-            let percent: Double = {
-                guard let entry, let raw = entry["lineCoverage"] as? Double else { return 0 }
-                return raw <= 1.000001 ? raw * 100.0 : raw
-            }()
-
-            let lineCount = countLines(in: file)
-            let threshold = scaledPercentageForOldFiles(for: Double(lineCount)) * 100.0
-
-            if percent + 0.0001 < threshold {
-                rows.append("| `\(file)` | \(formatPct(percent)) | \(formatPct(threshold)) |")
-            }
-        }
-
-        guard !rows.isEmpty else {
-            markdown("""
-            ### ✅ Existing file code coverage
-            All modified files meet their thresholds.
-            """)
-            return
-        }
-
-        reportCoverageFailure(rows: rows, label: "Existing file")
+        reportCoverageFailure(rows: rows, label: type.label)
     }
 
     private func swiftSourceCandidates(from files: [String]) -> [String] {
@@ -266,45 +278,24 @@ class CodeCoverageGate {
         }
     }
 
-    /// Maps an input value to a percentage using logarithmic scaling.
+    /// Maps an input value to a percentage using logarithmic scaling within the given range.
     /// - Parameter x: Input value (must be > 0)
-    /// - Returns: A value between 0.5 and 0.8 for inputs between 10 and 500
-    private func scaledPercentage(for x: Double) -> Double {
+    /// - Parameter range: The output min/max bounds for the scaling
+    /// - Returns: A scaled value within `range` for inputs between 10 and 500
+    private func scaledPercentage(for x: Double, in range: (min: Double, max: Double)) -> Double {
         precondition(x > 0, "Input must be greater than 0")
 
         let minX = 10.0
         let maxX = 500.0
-        let minY = 0.4
-        let maxY = 0.7
 
         // Clamp to min/max bounds
-        if x <= minX { return minY }
-        if x >= maxX { return maxY }
+        if x <= minX { return range.min }
+        if x >= maxX { return range.max }
 
         let numerator = log(x / minX)
         let denominator = log(maxX / minX)
 
-        return minY + (maxY - minY) * (numerator / denominator)
-    }
-
-    /// Maps an input value to a percentage using logarithmic scaling, with lower bounds for existing files.
-    /// - Parameter x: Input value (must be > 0)
-    /// - Returns: A value between 0.1 and 0.25 for inputs between 10 and 500
-    private func scaledPercentageForOldFiles(for x: Double) -> Double {
-        precondition(x > 0, "Input must be greater than 0")
-
-        let minX = 10.0
-        let maxX = 500.0
-        let minY = 0.10
-        let maxY = 0.25
-
-        if x <= minX { return minY }
-        if x >= maxX { return maxY }
-
-        let numerator = log(x / minX)
-        let denominator = log(maxX / minX)
-
-        return minY + (maxY - minY) * (numerator / denominator)
+        return range.min + (range.max - range.min) * (numerator / denominator)
     }
 
     /// Counts the number of lines in a file
