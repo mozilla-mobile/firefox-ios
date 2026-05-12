@@ -4976,8 +4976,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
 
-        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
-            updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            if #available(iOS 26.0, *) {
+                updateViewConstraints()
+            } else if tabManager.selectedTab?.isFindInPageMode == false {
+                updateViewConstraints()
+            }
         } else {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
@@ -5013,8 +5017,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         keyboardState = nil
-        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
-            updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            if #available(iOS 26.0, *) {
+                updateViewConstraints()
+            } else if tabManager.selectedTab?.isFindInPageMode == false {
+                updateViewConstraints()
+            }
         } else {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
@@ -5053,8 +5061,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
-            updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            if #available(iOS 26.0, *) {
+                updateViewConstraints()
+            } else if tabManager.selectedTab?.isFindInPageMode == false {
+                updateViewConstraints()
+            }
         } else {
             updateConstraintsForKeyboard()
             updateBottomContentStackViewConstraints()
@@ -5063,8 +5075,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
         keyboardState = state
-        if !isSnapKitRemovalEnabled, tabManager.selectedTab?.isFindInPageMode == false {
-            updateViewConstraints()
+        if !isSnapKitRemovalEnabled {
+            if #available(iOS 26.0, *) {
+                updateViewConstraints()
+            } else if tabManager.selectedTab?.isFindInPageMode == false {
+                updateViewConstraints()
+            }
         }
 
         UIView.animate(
