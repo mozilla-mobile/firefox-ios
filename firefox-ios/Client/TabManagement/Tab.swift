@@ -884,12 +884,12 @@ class Tab: NSObject,
     // MARK: - Temporary UI Workaround Hack/Fix (FXIOS-15487)
 
     func bug15487_isGoogleAIPage() -> Bool {
-        // This is a fragile hack. Implications have been discussed with Product team and we've decided
+        // Temporary UI workaround. Implications have been discussed with Product team and we've decided
         // to implement this for now to help alleviate difficulties for users using Google AI search.
         // We attempt to detect Google AI page here and if so this is used by the BVC to avoid presenting
         // our normal over-keyboard UI, which unfortunately causes the iOS keyboard to be dismissed due to
         // the size of Firefox's UI coupled with how we are resizing the WKWebView in our iOS browser.
-        // Longer-term fix is forthcoming.
+        // A longer-term fix is being discussed & is forthcoming.
         guard let url, let host = url.host else { return false }
         let hostLower = host.lowercased()
         guard hostLower.hasPrefix("www.google.") || hostLower.hasPrefix("google.") else { return false }

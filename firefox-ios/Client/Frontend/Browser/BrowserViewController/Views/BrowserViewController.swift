@@ -1860,7 +1860,9 @@ class BrowserViewController: UIViewController,
         }
 
         // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
-        if tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false {
+        if tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
+           traitCollection.verticalSizeClass != .compact,
+           traitCollection.horizontalSizeClass != .regular {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
