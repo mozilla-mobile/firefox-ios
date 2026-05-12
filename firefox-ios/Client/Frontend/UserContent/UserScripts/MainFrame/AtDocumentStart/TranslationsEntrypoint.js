@@ -44,6 +44,12 @@ window.receive = (message) => {
         isDoneReject = null;
     }
 
+    if (message.type === "TranslationsPort:GetEngineStatusResponse" && message.status === "error" && isDoneReject) {
+        isDoneReject(new Error("translation engine failed to load"));
+        isDoneReject = null;
+        isDoneResolve = null;
+    }
+
     if (message.type === "TranslationsPort:EngineTerminated"
         && message.innerWindowId === innerWindowId
         && isDoneReject) {
@@ -100,11 +106,17 @@ const discardTranslations = ({from, to}) => {
 /// This is used mainly to turn the translations button to the active state in the UI.
 /// This should be called from swift.
 /// Races against a 15-second timeout so the spinner never hangs indefinitely.
-const isDone = async () => {
-    const timeout = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("Translation timed out")), 15000);
-    });
-    return Promise.race([isDonePromise, timeout]);
+const isDone = () => {
+    let timeoutId;
+    return Promise.race([
+        isDonePromise,
+        new Promise((_, reject) => {
+            timeoutId = setTimeout(
+                () => reject(new Error("Translation timed out")),
+                15000
+            );
+        })
+    ]).finally(() => clearTimeout(timeoutId));
 };
 
 /// NOTE: Expose the Translations API to the privileged context.
