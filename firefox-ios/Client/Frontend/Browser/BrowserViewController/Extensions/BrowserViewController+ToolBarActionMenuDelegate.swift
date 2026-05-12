@@ -23,7 +23,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    func configureNavigationContextualHint(_ view: UIView, sourceRect: CGRect = .null) {
+    func configureNavigationContextualHint(_ view: UIView) {
         navigationContextHintVC.configure(
             anchor: view,
             withArrowDirection: toolbarHelper.shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
