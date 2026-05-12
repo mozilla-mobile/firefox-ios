@@ -212,4 +212,9 @@ final class TabTrayScreen {
         let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator]
         BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
     }
+
+    func assertNoTabLeakDetected(timeout: TimeInterval = TIMEOUT) {
+        let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.Tab.automationTestLeakIndicator]
+        BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
+    }
 }

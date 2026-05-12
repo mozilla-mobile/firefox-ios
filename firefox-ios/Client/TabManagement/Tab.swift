@@ -469,6 +469,9 @@ class Tab: NSObject,
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
 
+    // MARK: - Tab leaks detection view
+    private var uiTestLeakView: UIView?
+
     // MARK: - Dependencies
     var profile: Profile
     private let fileManager: FileManagerProtocol
@@ -590,6 +593,13 @@ class Tab: NSObject,
     /// Keep final cleanup in deinit as a safety net, but add call in close() explicitly
     /// because retained tabs may delay deinit and keep resources alive.
     deinit {
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                // Note: this has no effect in production. This view is only
+                // created during automation testing as a sentinel UI element.
+                uiTestLeakView?.removeFromSuperview()
+            }
+        }
 #if DEBUG
         debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -644,6 +654,7 @@ class Tab: NSObject,
         webView = nil
 
         deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
+        addUITestMemoryLeakDetectionUIElement()
     }
 
     func offloadWebView() async {
@@ -1042,5 +1053,30 @@ class Tab: NSObject,
 
     func imageContentBlockingEnabled() -> Bool {
         return noImageMode
+    }
+
+    // MARK: - Automation Support
+
+    /// No effect in production. This function creates a sentinel UI element which
+    /// can be detected by our automated tests if the Tab is leaked after it is closed.
+    private func addUITestMemoryLeakDetectionUIElement() {
+        guard AppConstants.isRunningUITests, let keyWindow = UIWindow.keyWindow else { return }
+
+        class TAB_LEAK_DETECTED: UIButton { }
+
+        guard let root = keyWindow.rootViewController else { fatalError() }
+        let uiTestScreen = UIScreen.main.bounds
+        let viewFrame = CGRect(x: uiTestScreen.width / 2.0,
+                               y: uiTestScreen.height / 2.0,
+                               width: 5,
+                               height: 5)
+        let leakIdentifierView = TAB_LEAK_DETECTED(frame: viewFrame)
+        leakIdentifierView.backgroundColor = UIColor.white
+        leakIdentifierView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.Tab.automationTestLeakIndicator
+        leakIdentifierView.isAccessibilityElement = true
+        leakIdentifierView.isUserInteractionEnabled = true
+        leakIdentifierView.accessibilityTraits = [.button]
+        root.view.addSubview(leakIdentifierView)
+        uiTestLeakView = leakIdentifierView
     }
 }
