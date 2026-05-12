@@ -135,9 +135,9 @@ class CodeCoverageGate {
             }
         }
 
-        var insufficientChangesMessage: String? {
+        var insufficientChangesMessage: String {
             switch self {
-            case .newFiles: return nil
+            case .newFiles: return "No new file had significant enough changes for the coverage gate to run."
             case .modifiedFiles: return "No modified file had significant enough changes for the coverage gate to run."
             }
         }
@@ -173,14 +173,12 @@ class CodeCoverageGate {
         // Ignore tiny edits: only gate files with at least `type.minimumLines`
         let gated = candidates.filter { addedLines(in: $0) >= type.minimumLines }
 
-        if let msg = type.insufficientChangesMessage {
-            guard !gated.isEmpty else {
-                markdown("""
-                ### ✅ \(type.label) code coverage
-                \(msg)
-                """)
-                return
-            }
+        guard !gated.isEmpty else {
+            markdown("""
+            ### ✅ \(type.label) code coverage
+            \(type.insufficientChangesMessage)
+            """)
+            return
         }
 
         // Collect failures
