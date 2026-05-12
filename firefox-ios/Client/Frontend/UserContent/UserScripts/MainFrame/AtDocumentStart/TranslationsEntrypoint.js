@@ -9,11 +9,13 @@ import "Assets/CC_Script/translations-engine.sys.mjs";
 /// In Gecko, we mark translations done when the engine is ready.
 /// In iOS, we will go a step further and wait for the first translation response to be received.
 let isDoneResolve;
+let isDoneReject;
 let isDonePromise;
 
 const resetIsDone = () => {
-    isDonePromise = new Promise(resolve => {
+    isDonePromise = new Promise((resolve, reject) => {
         isDoneResolve = resolve;
+        isDoneReject = reject;
     });
 };
 
@@ -32,6 +34,13 @@ const sendToEngine = (message) => {
 window.receive = (message) => {
     if (message.type === "TranslationsPort:TranslationResponse" && isDoneResolve) {
         isDoneResolve(true);
+        isDoneResolve = null;
+        isDoneReject = null;
+    }
+
+    if (message.type === "TranslationsPort:GetEngineStatusResponse" && message.status === "error" && isDoneReject) {
+        isDoneReject(new Error("translation engine failed to load"));
+        isDoneReject = null;
         isDoneResolve = null;
     }
 
@@ -83,10 +92,18 @@ const discardTranslations = ({from, to}) => {
 /// This is used mainly to turn the translations button to the active state in the UI.
 /// This should be called from swift.
 const TRANSLATION_TIMEOUT_MS = 15000;
-const isDone = () => Promise.race([
-    isDonePromise,
-    new Promise((_, reject) => setTimeout(() => reject(new Error("translation timed out")), TRANSLATION_TIMEOUT_MS))
-]);
+const isDone = () => {
+    let timeoutId;
+    return Promise.race([
+        isDonePromise,
+        new Promise((_, reject) => {
+            timeoutId = setTimeout(
+                () => reject(new Error("translation timed out")),
+                TRANSLATION_TIMEOUT_MS
+            );
+        })
+    ]).finally(() => clearTimeout(timeoutId));
+};
 
 /// NOTE: Expose the Translations API to the privileged context.
 /// Anything not exposed here will not be accessible outside this user script.
