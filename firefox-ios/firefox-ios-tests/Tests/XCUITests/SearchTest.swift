@@ -195,11 +195,6 @@ class SearchTests: FeatureFlaggedTestBase {
         let searchSettingsScreen = SearchSettingsScreen(app: app)
 
         toolbarScreen.assertSettingsButtonExists(timeout: TIMEOUT)
-        // issue 28625: iOS 15 may not open the menu fully.
-        if #unavailable(iOS 16) {
-            navigator.goto(BrowserTabMenu)
-            app.swipeUp()
-        }
         navigator.goto(SettingsScreen)
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
@@ -212,6 +207,7 @@ class SearchTests: FeatureFlaggedTestBase {
         navigator.goto(URLBarOpen)
         navigator.openURL("foo bar")
         browserScreen.addressToolbarContainValue(value: searchEngine.lowercased())
+        waitUntilPageLoad()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
