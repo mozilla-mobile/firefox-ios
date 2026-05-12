@@ -31,7 +31,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
             presentedUsing: { [weak self] in
                 self?.presentContextualHint(for: .navigation)
             },
-            sourceRect: sourceRect.isNull ? view.bounds : sourceRect,
+            sourceRect: UIDevice.current.userInterfaceIdiom == .pad ?
+                        view.bounds :
+                        CGRect.null,
             actionOnDismiss: {
                 let action = ToolbarAction(windowUUID: self.windowUUID,
                                            actionType: ToolbarActionType.navigationHintFinishedPresenting)
