@@ -221,7 +221,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 5
+        - shard_count: 6
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
@@ -381,7 +381,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 5
+        - shard_count: 6
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME
@@ -477,7 +477,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 5
+        - shard_count: 6
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME
