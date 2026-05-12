@@ -1806,7 +1806,11 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            if #available(iOS 26.0, *) {
+                scrollController.hideToolbars(animated: false)
+            }
+        } else {
             adjustBottomSearchBarForKeyboard()
         }
     }
