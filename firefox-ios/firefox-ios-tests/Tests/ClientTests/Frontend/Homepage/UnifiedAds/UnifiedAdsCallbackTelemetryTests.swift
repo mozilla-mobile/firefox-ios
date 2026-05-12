@@ -17,6 +17,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
     private var logger: MockLogger!
     private var gleanWrapper: MockGleanWrapper!
     private var mockAdsClient: MockMozAdsClient!
+    private var adsClientCallbackQueue: MockDispatchQueue!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -26,6 +27,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         logger = MockLogger()
         gleanWrapper = MockGleanWrapper()
         mockAdsClient = MockMozAdsClient()
+        adsClientCallbackQueue = MockDispatchQueue()
     }
 
     override func tearDown() async throws {
@@ -33,6 +35,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         logger = nil
         gleanWrapper = nil
         mockAdsClient = nil
+        adsClientCallbackQueue = nil
         DependencyHelperMock().reset()
         try await super.tearDown()
     }
@@ -141,6 +144,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         }
 
         subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 1)
         XCTAssertEqual(mockAdsClient.recordImpressionCalledWith, siteInfo.impressionURL)
         XCTAssertNil(mockAdsClient.recordClickCalledWith)
     }
@@ -155,6 +159,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         }
 
         subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 1)
         XCTAssertEqual(mockAdsClient.recordClickCalledWith, siteInfo.clickURL)
         XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
     }
@@ -163,6 +168,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 0)
         XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
     }
 
@@ -170,6 +176,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 0)
         XCTAssertNil(mockAdsClient.recordClickCalledWith)
     }
 
@@ -180,6 +187,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.sendImpressionTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 1)
         XCTAssertNil(mockAdsClient.recordImpressionCalledWith)
         XCTAssertEqual(networking.dataFromCalled, 1)
     }
@@ -191,6 +199,7 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         let subject = createSubject()
 
         subject.sendClickTelemetry(tileSite: tileSite, position: 1)
+        XCTAssertEqual(adsClientCallbackQueue.asyncCalled, 1)
         XCTAssertNil(mockAdsClient.recordClickCalledWith)
         XCTAssertEqual(networking.dataFromCalled, 1)
     }
@@ -203,7 +212,8 @@ final class UnifiedAdsCallbackTelemetryTests: XCTestCase {
             adsClientFactory: MockMozAdsClientFactory(mockClient: mockAdsClient),
             networking: networking,
             logger: logger,
-            sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry
+            sponsoredTileGleanTelemetry: sponsoredTileGleanTelemetry,
+            adsClientCallbackQueue: adsClientCallbackQueue
         )
 
         trackForMemoryLeaks(subject, file: file, line: line)
