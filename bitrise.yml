@@ -27,7 +27,7 @@ pipelines:
           expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
         depends_on:
         - firefox_configure_build
-        parallel: 6
+        parallel: 5
       focus_ui_test:
         run_if:
           expression: '{{ enveq "RUN_UI_TESTS" "Run_UI_Tests" }}'
@@ -48,11 +48,11 @@ pipelines:
       run_firefox_scheme_ui_tests:
         depends_on:
         - firefox_scheme_build_for_test
-        parallel: 6
+        parallel: 5
       run_firefox_beta_scheme_ui_tests:
         depends_on:
         - firefox_beta_scheme_build_for_test
-        parallel: 6
+        parallel: 5
 
 workflows:
   firefox_accessibility_test:
@@ -221,7 +221,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 6
+        - shard_count: 5
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX
@@ -381,7 +381,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 6
+        - shard_count: 5
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_SCHEME
@@ -477,7 +477,7 @@ workflows:
         run_if: '{{enveq "BITRISE_TEST_BUNDLE_PATH" "" | not}}'
         inputs:
         - product_path: $BITRISE_XCTESTRUN_SMOKE_TEST_FILE_PATH
-        - shard_count: 6
+        - shard_count: 5
         - destination: $BITRISE_DESTINATION
         outputs:
         - BITRISE_TEST_SHARDS_PATH: BITRISE_TEST_SHARDS_PATH_FIREFOX_BETA_SCHEME
