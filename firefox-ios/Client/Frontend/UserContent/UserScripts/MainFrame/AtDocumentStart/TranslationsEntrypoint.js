@@ -106,6 +106,7 @@ const discardTranslations = ({from, to}) => {
 /// This is used mainly to turn the translations button to the active state in the UI.
 /// This should be called from swift.
 /// Races against a 15-second timeout so the spinner never hangs indefinitely.
+// TODO: FXIOS-15246 Translation spinner gets stuck indefinitely
 const isDone = () => {
     let timeoutId;
     return Promise.race([
