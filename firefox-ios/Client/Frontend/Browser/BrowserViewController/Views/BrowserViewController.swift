@@ -1859,6 +1859,17 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let isEditing = toolbarState?.addressToolbar.isEditing == true
+        if !isEditing,
+           tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
+           traitCollection.verticalSizeClass != .compact,
+           traitCollection.horizontalSizeClass != .regular {
+            overKeyboardContainer.removeKeyboardSpacer()
+            return
+        }
+
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else { return }
