@@ -18,7 +18,7 @@ features:
     meta-bug: ~
     documentation:
       - name: User documentation
-        url:  https://experimenter.info/messaging/mobile-messaging
+        url: https://experimenter.info/messaging/mobile-messaging
     contacts:
       # Nimbus team
       - jhugman@mozilla.com
@@ -37,7 +37,6 @@ features:
     allow-coenrollment: true
 
     variables:
-
       messages:
         description: >
           A growable collection of messages, where the
@@ -89,8 +88,8 @@ features:
     defaults:
       - value:
           triggers:
-              ALWAYS: "true"
-              NEVER: "false"
+            ALWAYS: "true"
+            NEVER: "false"
 
 objects:
   MessageData:
@@ -130,6 +129,11 @@ objects:
           The text on the button. If no text
           is present, the whole message is clickable.
         default: null
+      should-randomize-options:
+        type: Boolean
+        description: >
+          Will randomize the provided MicrosurveyConfig options
+        default: false
       style:
         type: StyleName
         description: >
@@ -162,7 +166,7 @@ objects:
         type: Option<ExperimentSlug>
         description: The experiment slug that this message is involved in.
         default: null
-        
+
       microsurveyConfig:
         type: Option<MicrosurveyConfig>
         description: Optional configuration data for a microsurvey.
@@ -188,7 +192,7 @@ objects:
 
   MicrosurveyConfig:
     description: >
-        Attributes relating to microsurvey messaging.
+      Attributes relating to microsurvey messaging.
     fields:
       utm-content:
         description: The name used to provide as the utm_content parameter for the privacy notice.
