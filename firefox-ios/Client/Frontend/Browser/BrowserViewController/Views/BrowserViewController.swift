@@ -1625,7 +1625,7 @@ class BrowserViewController: UIViewController,
             contentContainerTopConstraint?.isActive = true
 
             let frontViews = shouldPinContentContainerToScreenTop
-                ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+                ? [contentContainer, bottomBlurView, bottomContentStackView, bottomContainer, overKeyboardContainer]
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
