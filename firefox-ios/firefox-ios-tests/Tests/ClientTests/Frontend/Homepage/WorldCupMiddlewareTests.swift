@@ -126,7 +126,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
         let actionType = try XCTUnwrap(dispatched.actionType as? WorldCupMiddlewareActionType)
-        
+
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 1)
         XCTAssertEqual(mockWorldCupStore.lastSetIsHomepageSectionEnabledValue, false)
         XCTAssertEqual(actionType, .didUpdate)
@@ -152,7 +152,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider(appState, action)
 
         wait(for: [expectation])
-        
+
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
 
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 1)

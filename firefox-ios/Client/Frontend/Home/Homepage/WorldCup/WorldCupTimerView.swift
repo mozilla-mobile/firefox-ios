@@ -246,9 +246,9 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         stack.isAccessibilityElement = false
         return stack
     }
-    
+
     // MARK: - Configure
-    
+
     func configure(state: WorldCupSectionState) {
         if state.isMilestone2 {
             configureMilestone2Actions()
@@ -256,7 +256,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
             configureMilestone1Actions()
         }
     }
-    
+
     private func configureMilestone2Actions() {
         ctaButton.configure(viewModel: .init(title: .WorldCup.HomepageWidget.FollowTeamCard.CTA, a11yIdentifier: ""))
         ctaButton.addAction(
@@ -294,7 +294,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         actionButton.accessibilityLabel = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
         actionButton.largeContentTitle = .WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel
     }
-    
+
     private func configureMilestone1Actions() {
         ctaButton.configure(
             viewModel: .init(
@@ -320,7 +320,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
             },
             for: .touchUpInside)
     }
-    
+
     // MARK: - Countdown
 
     private func startCountdown() {
@@ -363,7 +363,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     }
 
     // MARK: - Actions
-    
+
     private func navigateToTeamSelection() {
         store.dispatch(
             NavigationBrowserAction(

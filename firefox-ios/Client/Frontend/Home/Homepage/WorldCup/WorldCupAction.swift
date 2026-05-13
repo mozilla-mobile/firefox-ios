@@ -12,7 +12,7 @@ struct WorldCupAction: Action {
     let shouldShowHomepageWorldCupSection: Bool
     let shouldShowMilestone2: Bool
     let selectedCountryId: String?
-    
+
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,

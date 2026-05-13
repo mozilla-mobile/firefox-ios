@@ -12,7 +12,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
     var isMilestone2: Bool
-    
+
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         self.shouldShowSection = false

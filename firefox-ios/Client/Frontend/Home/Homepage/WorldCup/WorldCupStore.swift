@@ -20,10 +20,10 @@ protocol WorldCupStoreProtocol {
     /// Returns true when we are within the milestone 2 window — i.e. the
     /// milestone 2 enable date has been reached.
     var isMilestone2: Bool { get }
-    
+
     /// Saves the world cup section selection in the preference
     func setIsHomepageSectionEnabled(_ isEnabled: Bool)
-    
+
     /// Persists the user's selected team.
     func setSelectedTeam(countryId: String)
 }
@@ -57,7 +57,7 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     var isFeatureEnabledAndSectionEnabled: Bool {
         return isFeatureEnabled && isHomepageSectionEnabled
     }
-    
+
     private var isHomepageSectionEnabled: Bool {
         return profile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection) ?? true
     }
@@ -75,7 +75,7 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         let dateString = nimbusFeature.value().milestone2EnableDate
         return iso8601Formatter.date(from: dateString)
     }
-    
+
     func setIsHomepageSectionEnabled(_ isEnabled: Bool) {
         profile.prefs.setBool(isEnabled, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
     }

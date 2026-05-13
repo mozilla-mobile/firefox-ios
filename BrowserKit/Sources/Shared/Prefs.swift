@@ -115,7 +115,7 @@ public struct PrefsKeys {
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
         public static let WorldCupNowOverride = "worldCupNowOverrideKey"
     }
-    
+
     public struct Homepage {
         public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
     }

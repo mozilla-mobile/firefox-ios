@@ -32,7 +32,7 @@ final class WorldCupMiddleware {
             break
         }
     }
-    
+
     private func dispatchUpdate(windowUUID: WindowUUID) {
         store.dispatch(
             WorldCupAction(
