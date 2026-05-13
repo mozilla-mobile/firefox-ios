@@ -7,11 +7,12 @@ import Common
 import Shared
 
 /// Debug-menu setting that overrides the merino WCS base host (e.g. point at
-/// a local server). Dev/beta only — exposed via `HiddenSetting`, which is
-/// gated by the debug menu unlock.
+/// a local server). This is for dev/beta only and is exposed via `HiddenSetting`.
 final class WorldCupBaseHostOverrideSetting: HiddenSetting {
     private let prefsKey = PrefsKeys.HomepageSettings.WorldCupBaseHost
-    private let prefs: Prefs = { return (AppContainer.shared.resolve() as Profile).prefs }()
+    private let prefs: Prefs = { 
+        return (AppContainer.shared.resolve() as Profile).prefs 
+    }()
 
     private var override: String? { prefs.stringForKey(prefsKey) }
 
@@ -37,12 +38,12 @@ final class WorldCupBaseHostOverrideSetting: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let alert = UIAlertController(
             title: "Override merino host",
-            message: "Enter a host (e.g. `127.0.0.1:8000` or `https://my.dev`). Leave empty to use the default.",
+            message: "Enter a host (e.g. `https://127.0.0.1:8000/` or `https://my.dev`). Leave empty to use the default.",
             preferredStyle: .alert
         )
         alert.addTextField { textField in
             textField.text = self.override
-            textField.placeholder = "merino.services.mozilla.com"
+            textField.placeholder = "https://merino.services.mozilla.com/"
             textField.autocapitalizationType = .none
             textField.autocorrectionType = .no
             textField.keyboardType = .URL
