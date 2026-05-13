@@ -136,6 +136,7 @@ class PullRefreshView: UIView,
         if scrollView.contentOffset.y < -threshold {
             blinkBackgroundProgressViewIfNeeded()
             scheduleEasterEgg()
+            updateElementAlpha()
         } else if scrollView.contentOffset.y != 0.0 {
             easterEggTimer?.cancel()
             easterEggTimer = nil
