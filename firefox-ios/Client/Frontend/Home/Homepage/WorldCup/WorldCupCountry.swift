@@ -6,18 +6,9 @@ import Foundation
 import Shared
 
 struct WorldCupCountry: Identifiable, Hashable {
-    /// ISO 3166-1 alpha-2 region code (e.g. "CA", "FR") or a custom code for
-    /// sub-national teams (e.g. "ENG", "SCO").
+    /// Uppercase ISO 3166-1 alpha-3 region code (e.g. "CAN", "FRA") or the
+    /// FIFA-style code for sub-national teams (e.g. "ENG", "SCO").
     let id: String
-
-    var name: String {
-        switch id {
-        case "ENG": return .WorldCup.CountryPicker.CountryName.England
-        case "SCO": return .WorldCup.CountryPicker.CountryName.Scotland
-        default:
-            return Locale.current.localizedString(forRegionCode: id) ?? id
-        }
-    }
 }
 
 struct WorldCupRegion: Identifiable {
@@ -30,66 +21,66 @@ struct WorldCupRegion: Identifiable {
 enum WorldCupCountryData {
     static let regions: [WorldCupRegion] = [
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.NorthAmerica, countries: [
-            WorldCupCountry(id: "CA"),
-            WorldCupCountry(id: "MX"),
-            WorldCupCountry(id: "US"),
+            WorldCupCountry(id: "CAN"),
+            WorldCupCountry(id: "MEX"),
+            WorldCupCountry(id: "USA"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Asia, countries: [
-            WorldCupCountry(id: "AU"),
-            WorldCupCountry(id: "IR"),
-            WorldCupCountry(id: "IQ"),
-            WorldCupCountry(id: "JP"),
-            WorldCupCountry(id: "JO"),
-            WorldCupCountry(id: "KR"),
-            WorldCupCountry(id: "QA"),
-            WorldCupCountry(id: "SA"),
-            WorldCupCountry(id: "UZ"),
+            WorldCupCountry(id: "AUS"),
+            WorldCupCountry(id: "IRN"),
+            WorldCupCountry(id: "IRQ"),
+            WorldCupCountry(id: "JPN"),
+            WorldCupCountry(id: "JOR"),
+            WorldCupCountry(id: "KOR"),
+            WorldCupCountry(id: "QAT"),
+            WorldCupCountry(id: "SAU"),
+            WorldCupCountry(id: "UZB"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Africa, countries: [
-            WorldCupCountry(id: "DZ"),
-            WorldCupCountry(id: "CV"),
-            WorldCupCountry(id: "CD"),
-            WorldCupCountry(id: "EG"),
-            WorldCupCountry(id: "GH"),
-            WorldCupCountry(id: "CI"),
-            WorldCupCountry(id: "MA"),
-            WorldCupCountry(id: "SN"),
-            WorldCupCountry(id: "ZA"),
-            WorldCupCountry(id: "TN"),
+            WorldCupCountry(id: "DZA"),
+            WorldCupCountry(id: "CPV"),
+            WorldCupCountry(id: "COD"),
+            WorldCupCountry(id: "EGY"),
+            WorldCupCountry(id: "GHA"),
+            WorldCupCountry(id: "CIV"),
+            WorldCupCountry(id: "MAR"),
+            WorldCupCountry(id: "SEN"),
+            WorldCupCountry(id: "ZAF"),
+            WorldCupCountry(id: "TUN"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.CONCACAF, countries: [
-            WorldCupCountry(id: "CW"),
-            WorldCupCountry(id: "HT"),
-            WorldCupCountry(id: "PA"),
+            WorldCupCountry(id: "CUW"),
+            WorldCupCountry(id: "HTI"),
+            WorldCupCountry(id: "PAN"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.SouthAmerica, countries: [
-            WorldCupCountry(id: "AR"),
-            WorldCupCountry(id: "BR"),
-            WorldCupCountry(id: "CO"),
-            WorldCupCountry(id: "EC"),
-            WorldCupCountry(id: "PY"),
-            WorldCupCountry(id: "UY"),
+            WorldCupCountry(id: "ARG"),
+            WorldCupCountry(id: "BRA"),
+            WorldCupCountry(id: "COL"),
+            WorldCupCountry(id: "ECU"),
+            WorldCupCountry(id: "PRY"),
+            WorldCupCountry(id: "URY"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Oceania, countries: [
-            WorldCupCountry(id: "NZ"),
+            WorldCupCountry(id: "NZL"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Europe, countries: [
-            WorldCupCountry(id: "AT"),
-            WorldCupCountry(id: "BE"),
-            WorldCupCountry(id: "BA"),
-            WorldCupCountry(id: "HR"),
-            WorldCupCountry(id: "CZ"),
+            WorldCupCountry(id: "AUT"),
+            WorldCupCountry(id: "BEL"),
+            WorldCupCountry(id: "BIH"),
+            WorldCupCountry(id: "HRV"),
+            WorldCupCountry(id: "CZE"),
             WorldCupCountry(id: "ENG"),
-            WorldCupCountry(id: "FR"),
-            WorldCupCountry(id: "DE"),
-            WorldCupCountry(id: "NL"),
-            WorldCupCountry(id: "NO"),
-            WorldCupCountry(id: "PT"),
+            WorldCupCountry(id: "FRA"),
+            WorldCupCountry(id: "DEU"),
+            WorldCupCountry(id: "NLD"),
+            WorldCupCountry(id: "NOR"),
+            WorldCupCountry(id: "PRT"),
             WorldCupCountry(id: "SCO"),
-            WorldCupCountry(id: "ES"),
-            WorldCupCountry(id: "SE"),
-            WorldCupCountry(id: "CH"),
-            WorldCupCountry(id: "TR"),
+            WorldCupCountry(id: "ESP"),
+            WorldCupCountry(id: "SWE"),
+            WorldCupCountry(id: "CHE"),
+            WorldCupCountry(id: "TUR"),
         ]),
     ]
 }

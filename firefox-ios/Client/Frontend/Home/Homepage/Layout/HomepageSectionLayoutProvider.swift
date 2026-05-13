@@ -45,7 +45,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
         }
 
         struct WorldcupConstants {
-            static let maxWidth: CGFloat = 600
+            static let maxWidth: CGFloat = 500
         }
 
         struct PocketConstants {

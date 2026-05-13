@@ -166,7 +166,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     // MARK: - Configuration
 
-    func configure(with model: WorldCupMatches, theme: Theme) {
+    func configure(with model: WorldCupMatches) {
         guard model != self.model else { return }
         self.model = model
 
@@ -174,7 +174,6 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         rebuildUpcomingRows(matches: model.upcomingMatches)
         titleLabel.text = model.phaseTitle
         liveLabelContainer.isHidden = !model.isLive
-        applyTheme(theme: theme)
     }
 
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {

@@ -12,19 +12,22 @@ struct WorldCupAction: Action {
     let shouldShowHomepageWorldCupSection: Bool
     let shouldShowMilestone2: Bool
     let selectedCountryId: String?
+    let matches: [WorldCupMatches]
 
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,
         shouldShowHomepageWorldCupSection: Bool = false,
         shouldShowMilestone2: Bool = false,
-        selectedCountryId: String? = nil
+        selectedCountryId: String? = nil,
+        matches: [WorldCupMatches] = []
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
         self.shouldShowHomepageWorldCupSection = shouldShowHomepageWorldCupSection
         self.shouldShowMilestone2 = shouldShowMilestone2
         self.selectedCountryId = selectedCountryId
+        self.matches = matches
     }
 }
 
