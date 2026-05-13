@@ -42,6 +42,9 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func presentNavigationContextualHint() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            updateNavAnchor()
+        }
         // Only show the contextual hint if:
         // 1. The tab webpage is loaded OR we are on the home page, and the
         // 2. Microsurvey prompt is not being displayed
@@ -124,27 +127,25 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         switch hintType {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
         case .translation: presentTranslationContextualHint()
-        case .navigation:
-            updateNavigationContextualHintAnchorIfNeeded()
-            presentNavigationContextualHint()
+        case .navigation: presentNavigationContextualHint()
         default: break
         }
     }
 
-    private func updateNavigationContextualHintAnchorIfNeeded() {
-        guard UIDevice.current.userInterfaceIdiom == .pad,
-              let popover = navigationContextHintVC.popoverPresentationController,
-              let rootView = self.view
+    private func updateNavAnchor() {
+        guard let popover = navigationContextHintVC.popoverPresentationController,
+              let rootView = view
         else { return }
-        var viewsToSearch = [rootView]
-        while let candidateView = viewsToSearch.popLast() {
-            if candidateView.accessibilityIdentifier == AccessibilityIdentifiers.Toolbar.backButton,
-               candidateView.window != nil {
-                popover.sourceView = candidateView
-                popover.sourceRect = candidateView.bounds
+
+        let backButtonId = AccessibilityIdentifiers.Toolbar.backButton
+        var views = [rootView]
+        while let currentView = views.popLast() {
+            if currentView.accessibilityIdentifier == backButtonId, currentView.window != nil {
+                popover.sourceView = currentView
+                popover.sourceRect = currentView.bounds
                 return
             }
-            viewsToSearch.append(contentsOf: candidateView.subviews)
+            views.append(contentsOf: currentView.subviews)
         }
     }
 
