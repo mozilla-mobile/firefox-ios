@@ -19,6 +19,7 @@ public final class HeroImageView: UIView, SiteImageView {
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler
     var currentURLString: String?
+    private var ignoresAspectRatio = false
     private var completionHandler: (() -> Void)?
 
     private lazy var heroImageView: UIImageView = .build { imageView in
@@ -61,6 +62,7 @@ public final class HeroImageView: UIView, SiteImageView {
     // MARK: - Public
 
     public func setHeroImage(_ viewModel: HeroImageViewModel) {
+        ignoresAspectRatio = viewModel.ignoresAspectRatio
         setupHeroImageLayout(viewModel: viewModel)
         setURL(viewModel.urlStringRequest, type: viewModel.type)
     }
@@ -91,8 +93,8 @@ public final class HeroImageView: UIView, SiteImageView {
     }
 
     func setImage(image: UIImage) {
-        // If hero image is a square use it as a favicon
-        guard image.size.width == image.size.height else {
+        // Square hero images default to favicon presentation unless the caller opts into hero rendering.
+        guard !ignoresAspectRatio, image.size.width == image.size.height else {
             setHeroImage(image: image)
             return
         }
@@ -136,6 +138,8 @@ public final class HeroImageView: UIView, SiteImageView {
     private func setHeroImage(image: UIImage) {
         setFallBackFaviconVisibility(isHidden: true)
         heroImageView.image = image
+
+        completionHandler?()
     }
 
     private func setFallbackFavicon(image: UIImage) {
