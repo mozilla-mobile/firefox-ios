@@ -68,6 +68,11 @@ private let permanentURISchemes = [
     "pkcs11",
     "pop",
     "pres",
+    // TODO: remove once reader mode pages are surfaced as `about:reader?url=...`
+    // via the `displayURL` transform + `Tab.loadRequest` rewrite. Users will never
+    // type `readermode://` directly in production; this entry exists only so the
+    // URL bar accepts it during the GCDWebServer-to-WKURLSchemeHandler migration.
+    "readermode",
     "reload",
     "rtsp",
     "rtsps",

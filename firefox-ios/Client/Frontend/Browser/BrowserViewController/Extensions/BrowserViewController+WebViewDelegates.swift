@@ -534,6 +534,14 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // Allow our custom reader-mode scheme through so WebKit hands it to the
+        // registered WKURLSchemeHandler (ReaderModeSchemeHandler) instead of
+        // routing it to handleCustomSchemeURLNavigation as an external-app URL.
+        if url.scheme == ReaderModeSchemeHandler.scheme {
+            decisionHandler(.allow)
+            return
+        }
+
         // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
 //                if url.scheme == "javascript", navigationAction.request.isPrivileged {
 //                    decisionHandler(.cancel)

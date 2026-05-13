@@ -52,6 +52,17 @@ class TabConfigurationProvider {
             autoPlay: autoPlay,
             schemeHandler: InternalSchemeHandler()
         )
-        return configurationProvider.createConfiguration(parameters: parameters)
+        let engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
+
+        // Register the reader-mode scheme handler alongside the internal:// one.
+        // DefaultWKEngineConfigurationProvider only wires a single scheme handler today;
+        // this is the temporary additional registration until WKWebViewParameters supports
+        // multiple handlers.
+        let webViewConfig = engineConfiguration.webViewConfiguration
+        if webViewConfig.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) == nil {
+            webViewConfig.setURLSchemeHandler(ReaderModeSchemeHandler(),
+                                              forURLScheme: ReaderModeSchemeHandler.scheme)
+        }
+        return engineConfiguration
     }
 }
