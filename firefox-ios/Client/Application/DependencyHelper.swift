@@ -51,6 +51,8 @@ class DependencyHelper {
         appDelegate.gleanUsageReportingMetricsService
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
+        AppContainer.shared.register(service: appDelegate.shareTelemetry)
+
         let featureFlagsProvider = FeatureFlagsProvider(prefs: profile.prefs)
         AppContainer.shared.register(service: featureFlagsProvider as FeatureFlagProviding)
 
