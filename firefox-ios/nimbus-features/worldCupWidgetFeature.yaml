@@ -20,7 +20,7 @@ features:
           becomes available. Defaults to 10 days before the World Cup
           countdown target date.
         type: String
-        default: "2026-05-10T19:00:00Z"
+        default: "2026-05-22T19:00:00Z"
     defaults:
       - channel: beta
         value:

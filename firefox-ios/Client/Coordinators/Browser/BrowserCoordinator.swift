@@ -57,7 +57,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let worldCupStore: WorldCupStoreProtocol
-    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private var isSummarizerOn: Bool {

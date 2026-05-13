@@ -24,7 +24,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() async throws {
         mockWorldCupStore = nil
-        appState = nil 
+        appState = nil
         resetStore()
         try await super.tearDown()
     }
