@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 
 private final class PageContainer: UIView, ThemeApplicable {
     private struct UX {
@@ -136,7 +137,11 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var currentTheme: Theme?
     private weak var matchesCardView: WorldCupMatchCardView?
     private var matchesFetchTask: Task<Void, Never>?
-    private let apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
+    private let apiClient: WorldCupAPIClientProtocol? = {
+        let profile: Profile = AppContainer.shared.resolve()
+        let baseHost = profile.prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
+        return try? WorldCupAPIClient(baseHost: baseHost)
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)

@@ -30,6 +30,21 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         self.teamsStrategy = teamsStrategy
     }
 
+    /// Convenience init that points the FFI at a custom host. Pass `nil` or
+    /// an empty string to use the default merino host. Intended for local
+    /// dev/beta testing against a non-production merino instance. 
+    convenience init(baseHost: String?,
+                     matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
+        let trimmed = baseHost?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let host = (trimmed?.isEmpty == false) ? trimmed : nil
+        try self.init(config: WorldCupConfig(baseHost: host),
+                      matchesStrategy: matchesStrategy,
+                      liveStrategy: liveStrategy,
+                      teamsStrategy: teamsStrategy)
+    }
+
     /// Low-level sync matches fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
     func fetch(_ query: WorldCupQuery, team: String? = nil) throws -> WorldCupMatchesResponse? {

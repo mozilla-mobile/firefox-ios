@@ -114,6 +114,8 @@ public struct PrefsKeys {
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
         public static let WorldCupNowOverride = "worldCupNowOverrideKey"
+        /// Override for the merino WCS base host
+        public static let WorldCupBaseHost = "worldCupBaseHostKey"
     }
 
     public struct Homepage {
