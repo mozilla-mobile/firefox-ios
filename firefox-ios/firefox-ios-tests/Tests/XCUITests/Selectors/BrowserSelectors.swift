@@ -6,6 +6,7 @@ import XCTest
 
 protocol BrowserSelectorsSet {
     var ADDRESS_BAR: Selector { get }
+    var SEARCH_ENGINE_LOGO: Selector { get }
     var DOWNLOADS_TOAST_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
     var MENU_BUTTON: Selector { get }
@@ -34,6 +35,7 @@ protocol BrowserSelectorsSet {
 struct BrowserSelectors: BrowserSelectorsSet {
     private enum IDs {
         static let addressBar = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+        static let searchEngineLogo = AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine
         static let backButton = AccessibilityIdentifiers.Toolbar.backButton
         static let menuButton = "Menu"
         static let clearTextLabel = "Clear text"
@@ -54,6 +56,12 @@ struct BrowserSelectors: BrowserSelectorsSet {
     let ADDRESS_BAR = Selector.textFieldId(
         IDs.addressBar,
         description: "Browser address bar",
+        groups: ["browser"]
+    )
+
+    let SEARCH_ENGINE_LOGO = Selector.imageId(
+        IDs.searchEngineLogo,
+        description: "Search engine logo in the address toolbar",
         groups: ["browser"]
     )
 
@@ -195,7 +203,7 @@ struct BrowserSelectors: BrowserSelectorsSet {
         )
     }
 
-    var all: [Selector] { [ADDRESS_BAR, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
+    var all: [Selector] { [ADDRESS_BAR, SEARCH_ENGINE_LOGO, DOWNLOADS_TOAST_BUTTON, BACK_BUTTON,
                            MENU_BUTTON, STATIC_TEXT_MOZILLA, STATIC_TEXT_EXAMPLE_DOMAIN,
                            CLEAR_TEXT_BUTTON, CANCEL_BUTTON_URL_BAR, PRIVATE_BROWSING, CANCEL_BUTTON,
                            LINK_RFC_2606, BOOK_OF_MOZILLA_TEXT, ADDRESSTOOLBAR_LOCKICON, ADDRESSTOOLBAR_LOCKICON_OFF,
