@@ -16,6 +16,7 @@ final class VPNController: VPNControllerProtocol {
     private let accountManagerProvider: () -> FxAccountManager?
     private let guardian: VPNGuardian
     private let serverlist: VPNServerlist
+    private let windowManager: WindowManager
 
     private(set) var isRunning = false
 
@@ -25,7 +26,8 @@ final class VPNController: VPNControllerProtocol {
             RustFirefoxAccounts.shared.accountManager
         },
         rsService: RemoteSettingsService = (AppContainer.shared.resolve() as Profile).remoteSettingsService,
-        clientConfig: VPNGuardian.Configuration = .prod
+        clientConfig: VPNGuardian.Configuration = .prod,
+        windowManager: WindowManager = AppContainer.shared.resolve()
     ) {
         self.logger = logger
         self.accountManagerProvider = accountManager
@@ -38,6 +40,7 @@ final class VPNController: VPNControllerProtocol {
             logger: logger
         )
         self.serverlist = VPNServerlist(rsService: rsService, logger: logger)
+        self.windowManager = windowManager
     }
 
     func start(privateOnly: Bool = false, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -50,7 +53,7 @@ final class VPNController: VPNControllerProtocol {
                 // self.logger.log("Entitlement: \(String(describing: entitlement))",
                 //                level: .info,
                 //                category: .sync)
-                
+
                 guard let server = self.serverlist.selectServer() else {
                     throw VPNError.noServerFound
                 }
@@ -62,12 +65,7 @@ final class VPNController: VPNControllerProtocol {
                 )
                 let config = self.toProxyConf(server: server, pass: pass)
                 let scope: ProxyScope = privateOnly ? .private : .all
-                /**
-                TODO: Ask the ios team for help here.
-                 It seems webkit keeps a Connection Pool alive. So i.e if you load google.com, set the proxy and reload,
-                 you might still have a connection to that server, and it will be re-used for the http request. Might need to invalidate it.
-                 */
-                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: scope)
+                await self.applyProxyAndRebuildWebViews(configs: [config], scope: scope)
                 self.isRunning = true
                 // TODO: Start a watcher to re-fetch and rotate the token before the lifetime ends.
                 completion(.success(()))
@@ -79,8 +77,21 @@ final class VPNController: VPNControllerProtocol {
     }
 
     func stop() {
-        DefaultWKEngineConfigurationProvider.applyProxyConfigurations([], scope: .all)
-        isRunning = false
+        Task { [weak self] in
+            guard let self else { return }
+            await self.applyProxyAndRebuildWebViews(configs: [], scope: .all)
+            self.isRunning = false
+        }
+    }
+
+    private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration], scope: ProxyScope) async {
+        DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
+            configs,
+            scope: scope
+        )
+        for tabManager in windowManager.allWindowTabManagers() {
+            await tabManager.rebuildWebViewsForProxyChange()
+        }
     }
 
     private func toProxyConf(server: VPNGuardian.Server, pass: VPNGuardian.ProxyPass) -> ProxyConfiguration {

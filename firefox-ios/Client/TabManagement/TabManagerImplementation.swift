@@ -1028,6 +1028,23 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
     }
 
+    func rebuildWebViewsForProxyChange() async {
+        // Drop background webviews first — they hold references to the previous data store
+        // and will keep its connection pool alive otherwise.
+        await offloadBackgroundWebViews()
+
+        guard let selectedTab else { return }
+
+        // Tear down the selected tab's webview and rebuild it against a configuration that
+        // points at the freshly swapped-in data store.
+        await selectedTab.close()
+        let configuration = tabConfigurationProvider
+            .configuration(isPrivate: selectedTab.isPrivate)
+            .webViewConfiguration
+        selectedTab.createWebview(configuration: configuration)
+        selectedTab.reload(bypassCache: true)
+    }
+
     func switchPrivacyMode() -> SwitchPrivacyModeResult {
         assert(Thread.isMainThread)
         var result = SwitchPrivacyModeResult.usedExistingTab

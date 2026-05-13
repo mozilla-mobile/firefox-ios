@@ -106,7 +106,11 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         _ configs: [ProxyConfiguration],
         scope: ProxyScope = .all
     ) {
-        if scope.contains(.normal)  { defaultStore.proxyConfigurations = configs }
-        if scope.contains(.private) { nonPersistentStore.proxyConfigurations = configs }
+        if scope.contains(.normal) {
+            defaultStore.proxyConfigurations = configs
+        }
+        if scope.contains(.private) {
+            nonPersistentStore.proxyConfigurations = configs
+        }
     }
 }
