@@ -69,6 +69,76 @@ struct WorldCupTeamsResponseTests {
         #expect(response.teams.isEmpty)
     }
 
+    @Test
+    func test_responseEquality_sameContent() {
+        let responseA = WorldCupTeamsResponse(teams: [])
+        let responseB = WorldCupTeamsResponse(teams: [])
+        #expect(responseA == responseB)
+    }
+
+    @Test
+    func test_responseEquality_differentTeams() {
+        let responseA = WorldCupTeamsResponse(teams: [])
+        let responseB = WorldCupTeamsResponse(teams: [makeTeam(key: "BRA")])
+        #expect(responseA != responseB)
+    }
+
+    @Test
+    func test_teamEquality() {
+        let teamA = makeTeam(key: "BRA")
+        let teamB = makeTeam(key: "BRA")
+        let teamC = makeTeam(key: "USA")
+        #expect(teamA == teamB)
+        #expect(teamA != teamC)
+    }
+
+    @Test
+    func test_teamMemberwiseInit_preservesFields() {
+        let team = WorldCupTeamsResponse.Team(
+            key: "BRA",
+            globalTeamId: 42,
+            name: "Brazil",
+            region: "BRA",
+            colors: ["#009C3B"],
+            iconUrl: "https://example.com/bra.svg",
+            group: "Group A",
+            eliminated: false,
+            standing: WorldCupTeamsResponse.Standing(wins: 2, losses: 0, draws: 1, points: 7)
+        )
+        #expect(team.key == "BRA")
+        #expect(team.globalTeamId == 42)
+        #expect(team.name == "Brazil")
+        #expect(team.region == "BRA")
+        #expect(team.colors == ["#009C3B"])
+        #expect(team.iconUrl == "https://example.com/bra.svg")
+        #expect(team.group == "Group A")
+        #expect(team.eliminated == false)
+        #expect(team.standing?.points == 7)
+    }
+
+    @Test
+    func test_standingEquality() {
+        let a = WorldCupTeamsResponse.Standing(wins: 1, losses: 2, draws: 0, points: 3)
+        let b = WorldCupTeamsResponse.Standing(wins: 1, losses: 2, draws: 0, points: 3)
+        let c = WorldCupTeamsResponse.Standing(wins: 0, losses: 0, draws: 0, points: 0)
+        #expect(a == b)
+        #expect(a != c)
+    }
+
+    private func makeTeam(key: String) -> WorldCupTeamsResponse.Team {
+        WorldCupTeamsResponse.Team(
+            key: key,
+            globalTeamId: nil,
+            name: key,
+            region: nil,
+            colors: nil,
+            iconUrl: nil,
+            group: nil,
+            eliminated: nil,
+            standing: nil
+        )
+    }
+
     private func decode(_ json: String) throws -> WorldCupTeamsResponse {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
