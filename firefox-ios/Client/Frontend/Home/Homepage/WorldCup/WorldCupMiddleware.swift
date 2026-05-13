@@ -12,23 +12,31 @@ import Redux
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
+    private let apiClient: WorldCupAPIClientProtocol?
+    private var matchesFetchTask: Task<Void, Never>?
+    private var matches: [WorldCupMatches] = []
 
-    init(worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
+    init(
+        worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
+        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
+    ) {
         self.worldCupStore = worldCupStore
+        self.apiClient = apiClient
     }
 
     lazy var worldCupProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case HomepageActionType.initialize,
-             WorldCupActionType.didChangeHomepageSettings:
+        case HomepageActionType.initialize:
+            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+        case WorldCupActionType.didChangeHomepageSettings:
             self.dispatchUpdate(windowUUID: action.windowUUID)
         case WorldCupActionType.removeHomepageCard:
             self.worldCupStore.setIsHomepageSectionEnabled(false)
             self.dispatchUpdate(windowUUID: action.windowUUID)
         case WorldCupActionType.selectTeam:
-            guard let countryId = (action as? WorldCupAction)?.selectedCountryId else { return }
+            let countryId = (action as? WorldCupAction)?.selectedCountryId
             self.worldCupStore.setSelectedTeam(countryId: countryId)
-            self.dispatchUpdate(windowUUID: action.windowUUID)
+            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
         default:
             break
         }
@@ -41,8 +49,26 @@ final class WorldCupMiddleware {
                 actionType: WorldCupMiddlewareActionType.didUpdate,
                 shouldShowHomepageWorldCupSection: worldCupStore.isFeatureEnabledAndSectionEnabled,
                 shouldShowMilestone2: worldCupStore.isMilestone2,
-                selectedCountryId: worldCupStore.selectedTeam
+                selectedCountryId: worldCupStore.selectedTeam,
+                matches: matches
             )
         )
+    }
+
+    private func scheduleMatchesFetch(windowUUID: WindowUUID) {
+        guard worldCupStore.isMilestone2, let apiClient else {
+            dispatchUpdate(windowUUID: windowUUID)
+            return
+        }
+        matchesFetchTask?.cancel()
+        matchesFetchTask = Task { [apiClient, weak self] in
+            let result = await apiClient.loadMatches(query: .matches, team: nil)
+            guard case .success(let response) = result,
+                  let response,
+                  !Task.isCancelled else { return }
+            let matches = WorldCupMatches(response: response)
+            self?.matches = [matches]
+            self?.dispatchUpdate(windowUUID: windowUUID)
+        }
     }
 }

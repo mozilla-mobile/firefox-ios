@@ -25,7 +25,7 @@ protocol WorldCupStoreProtocol {
     func setIsHomepageSectionEnabled(_ isEnabled: Bool)
 
     /// Persists the user's selected team.
-    func setSelectedTeam(countryId: String)
+    func setSelectedTeam(countryId: String?)
 }
 
 /// A Store for all the preferences and feature flags related to the WorldCup feature.
@@ -80,7 +80,7 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         profile.prefs.setBool(isEnabled, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
     }
 
-    func setSelectedTeam(countryId: String) {
-        profile.prefs.setString(countryId, forKey: PrefsKeys.Homepage.WorldCupSelectedCountry)
+    func setSelectedTeam(countryId: String?) {
+        profile.prefs.setObject(countryId, forKey: PrefsKeys.Homepage.WorldCupSelectedCountry)
     }
 }

@@ -5,12 +5,10 @@
 import Foundation
 import Shared
 
-struct WorldCupMatches: Equatable {
+struct WorldCupMatches: Equatable, Hashable {
     let phaseTitle: String
     let isLive: Bool
-    /// One or two featured matches. When two are provided, a divider is rendered between them.
     let featuredMatch: [WorldCupMatch]
-    /// The next two games after `featuredMatch`. Anything beyond two entries is ignored.
     let upcomingMatches: [WorldCupMatch]
 
     init(phaseTitle: String,

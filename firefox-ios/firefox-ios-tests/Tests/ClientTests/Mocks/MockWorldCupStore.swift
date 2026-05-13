@@ -28,7 +28,7 @@ final class MockWorldCupStore: WorldCupStoreProtocol {
         isHomepageSectionEnabled = isEnabled
     }
 
-    func setSelectedTeam(countryId: String) {
+    func setSelectedTeam(countryId: String?) {
         setSelectedTeamCalled += 1
         lastSetSelectedTeamCountryId = countryId
         selectedTeam = countryId

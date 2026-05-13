@@ -12,21 +12,25 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
     var isMilestone2: Bool
+    var matches: [WorldCupMatches]
 
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         self.shouldShowSection = false
         self.isMilestone2 = false
+        self.matches = []
     }
 
     private init(
         windowUUID: WindowUUID,
         shouldShowSection: Bool,
         isMilestone2: Bool,
+        matches: [WorldCupMatches]
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
         self.isMilestone2 = isMilestone2
+        self.matches = matches
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -39,6 +43,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 windowUUID: action.windowUUID,
                 shouldShowSection: action.shouldShowHomepageWorldCupSection,
                 isMilestone2: action.shouldShowMilestone2,
+                matches: action.matches
             )
         default:
             return state

@@ -120,7 +120,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
             VStack(spacing: UX.flagToLabelSpacing) {
                 flagImage(for: country, shadow: shadow, isSelected: isSelected)
 
-                Text(country.name)
+                Text(country.id)
                     .font(FXFontStyles.Bold.caption1.scaledSwiftUIFont())
                     .foregroundColor(Color(theme.colors.textPrimary))
                     .lineLimit(nil)
@@ -129,7 +129,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
             .frame(maxHeight: .infinity, alignment: .top)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(Text(country.name))
+        .accessibilityLabel(Text(country.id))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
@@ -138,7 +138,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
         shadow: FxShadow,
         isSelected: Bool
     ) -> some View {
-        Image(country.id.lowercased())
+        Image(country.id)
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: UX.flagSize.width, height: UX.flagSize.height)
@@ -190,6 +190,17 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     // MARK: - Action Dispatch
 
     private func dispatchSelectTeam(_ country: WorldCupCountry) {
+        guard country.id != selectedTeam else {
+            selectedTeam = nil
+            store.dispatch(
+                WorldCupAction(
+                    windowUUID: windowUUID,
+                    actionType: WorldCupActionType.selectTeam,
+                    selectedCountryId: nil
+                )
+            )
+            return
+        }
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
