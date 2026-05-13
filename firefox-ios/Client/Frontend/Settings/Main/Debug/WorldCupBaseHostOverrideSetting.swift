@@ -10,8 +10,8 @@ import Shared
 /// a local server). This is for dev/beta only and is exposed via `HiddenSetting`.
 final class WorldCupBaseHostOverrideSetting: HiddenSetting {
     private let prefsKey = PrefsKeys.HomepageSettings.WorldCupBaseHost
-    private let prefs: Prefs = { 
-        return (AppContainer.shared.resolve() as Profile).prefs 
+    private let prefs: Prefs = {
+        return (AppContainer.shared.resolve() as Profile).prefs
     }()
 
     private var override: String? { prefs.stringForKey(prefsKey) }
