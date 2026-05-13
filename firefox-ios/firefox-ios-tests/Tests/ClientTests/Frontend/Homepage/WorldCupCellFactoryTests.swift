@@ -10,6 +10,16 @@ import XCTest
 
 @MainActor
 final class WorldCupCellFactoryTests: XCTestCase {
+    override func setUp() async throws {
+        try await super.setUp()
+        DependencyHelperMock().bootstrapDependencies(injectedProfile: MockProfile())
+    }
+
+    override func tearDown() async throws {
+        DependencyHelperMock().reset()
+        try await super.tearDown()
+    }
+
     func test_makePages_whenNotMilestone2_returnsOnlyTimer() {
         var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
         state.isMilestone2 = false

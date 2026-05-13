@@ -38,16 +38,21 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
         return try teamsResult.get()
     }
 
-    /// Not exercised by current callers — strategies call `fetch` directly.
-    /// Provided to satisfy the protocol.
     func loadMatches(query: WorldCupQuery,
                      team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        .success(nil)
+        lastQuery = query
+        lastTeam = team
+        switch result {
+        case .success(let response): return .success(response)
+        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
     }
 
-    /// Not exercised by current callers — strategies call `fetchTeams` directly.
-    /// Provided to satisfy the protocol.
     func loadTeams(team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
-        .success(nil)
+        lastTeamsTeam = team
+        switch teamsResult {
+        case .success(let response): return .success(response)
+        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
     }
 }
