@@ -11,11 +11,11 @@ struct WorldCupCellFactory {
     static func makePages(from state: WorldCupSectionState) -> [UIView] {
         let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
         timerView.configure(state: state)
-    
+
         guard state.isMilestone2 else {
             return [timerView]
         }
-    
+
         let matchesViews = state.matches.map {
             let view = WorldCupMatchCardView(windowUUID: state.windowUUID)
             view.configure(with: $0)
