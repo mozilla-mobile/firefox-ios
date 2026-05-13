@@ -966,6 +966,9 @@
 		8A3EF8132A2FD07A00796E3A /* ResetContextualHints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */; };
 		8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */; };
 		8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */; };
+		8A3F08AC2FB40B8B001F5DE9 /* TabRestorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F08AB2FB40B8B001F5DE9 /* TabRestorer.swift */; };
+		8A3F08AE2FB40BD0001F5DE9 /* TabRestorerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */; };
+		8A3F08B02FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F08AF2FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift */; };
 		8A3FD2902FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */; };
 		8A3FD2912FABB9BA001F5DE9 /* TabManagerGetTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */; };
 		8A3FD2922FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */; };
@@ -9384,6 +9387,9 @@
 		8A3EF8122A2FD07A00796E3A /* ResetContextualHints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetContextualHints.swift; sourceTree = "<group>"; };
 		8A3EF8142A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenFiftyTabsDebugOption.swift; sourceTree = "<group>"; };
 		8A3EF8162A2FD2B900796E3A /* AdvancedAccountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedAccountSettings.swift; sourceTree = "<group>"; };
+		8A3F08AB2FB40B8B001F5DE9 /* TabRestorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRestorer.swift; sourceTree = "<group>"; };
+		8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRestorerTests.swift; sourceTree = "<group>"; };
+		8A3F08AF2FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabRestorerDelegate.swift; sourceTree = "<group>"; };
 		8A3FD28D2FABB9BA001F5DE9 /* TabManagerClearHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerClearHistoryTests.swift; sourceTree = "<group>"; };
 		8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerGetTabTests.swift; sourceTree = "<group>"; };
 		8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerReorderTabsTests.swift; sourceTree = "<group>"; };
@@ -13289,6 +13295,7 @@
 			children = (
 				5A475E9029DB8AA7009C13FD /* MockDiskImageStore.swift */,
 				5A475E8C29DB888E009C13FD /* MockTabDataStore.swift */,
+				8A3F08AF2FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift */,
 				5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */,
 			);
 			path = Mocks;
@@ -13940,12 +13947,10 @@
 		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
-				8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */,
-				8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */,
-				8A9BA6BC2F7C4CDF00D892C4 /* RemoteTabCreator.swift */,
 				0B1278DF2DDB1D6E00406656 /* BackForwardList.swift */,
 				0B7B957B2DCA305D007DC749 /* Document */,
 				39F819C51FD70F5D009E31E4 /* GlobalTabEventHandlers.swift */,
+				8A9BA6BC2F7C4CDF00D892C4 /* RemoteTabCreator.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				61C92A002DEF39F9004ACF49 /* TabConfigurationProvider.swift */,
@@ -13954,6 +13959,9 @@
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				5A64225029CB506500EEC3E5 /* TabManagerDelegate.swift */,
 				5A8017DF29CE15D90047120D /* TabManagerImplementation.swift */,
+				8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */,
+				8A3F08AB2FB40B8B001F5DE9 /* TabRestorer.swift */,
+				8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */,
 				8A0A7C3F2F61F03200D00820 /* TabWebView.swift */,
 				BD0D40792D83124E00C38511 /* TabWebViewPreview.swift */,
 				BDE2DB322DB1024E002FAE26 /* TabWebViewPreviewAppearanceConfiguration.swift */,
@@ -14582,6 +14590,7 @@
 				8AFC09552FA54A240070CA11 /* TabManagerRestoreTabsTests.swift */,
 				5A475E8929DB87F2009C13FD /* TabManagerTests.swift */,
 				8AFC09562FA54A240070CA11 /* TabManagerTestsBase.swift */,
+				8A3F08AD2FB40BD0001F5DE9 /* TabRestorerTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */,
 			);
 			path = TabManagement;
@@ -19348,6 +19357,7 @@
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				8AC0B1C02D1D935C004237FD /* ContextMenuConfiguration.swift in Sources */,
+				8A3F08AC2FB40B8B001F5DE9 /* TabRestorer.swift in Sources */,
 				8A0A7C2D2F61E3E600D00820 /* TabContentScriptManager.swift in Sources */,
 				BCB769192E4F80650046AA37 /* StylingViewModifiers.swift in Sources */,
 				BD011FB82D89B0D400FE1A32 /* AddressBarPanGestureHandler.swift in Sources */,
@@ -20282,6 +20292,7 @@
 				03D9946A2EE821190081D209 /* TermsOfUseLinkTypeTests.swift in Sources */,
 				ED7A08E12CF679CE0035EC8F /* MockShareTab.swift in Sources */,
 				1D4D79462BF2F4E7007C6796 /* SimpleTab.swift in Sources */,
+				8A3F08B02FB40BDC001F5DE9 /* MockTabRestorerDelegate.swift in Sources */,
 				21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */,
 				C27EF6152EBA2EE500BED719 /* LanguageDetectorTests.swift in Sources */,
 				81DAB2F92C8901AC00F4BE98 /* MainMenuStateTests.swift in Sources */,
@@ -20571,6 +20582,7 @@
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				8A552AC82CB43AB400564C98 /* HeaderStateTests.swift in Sources */,
 				8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */,
+				8A3F08AE2FB40BD0001F5DE9 /* TabRestorerTests.swift in Sources */,
 				8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */,
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
 				EDADF77F2D70D35B00C39295 /* AppIconSelectionTelemetryTests.swift in Sources */,
