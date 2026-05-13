@@ -421,9 +421,13 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
+            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
-            refreshHomepageDataSourceSnapshot(animatingDifferences: animatingDifferences) { [weak self] in
+            refreshHomepageDataSourceSnapshot(
+                reconfigureHeader: shouldReconfigureHeader,
+                animatingDifferences: animatingDifferences
+            ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -1134,15 +1138,23 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
+                                                   animatingDifferences: Bool = true,
+                                                   completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
+            reconfigureHeader: reconfigureHeader,
             animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
+    }
+
+    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
+        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
+            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.

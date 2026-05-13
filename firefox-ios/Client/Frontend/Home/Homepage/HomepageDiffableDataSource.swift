@@ -99,15 +99,21 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        reconfigureHeader: Bool = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+        let headerItem = HomeItem.header(state.headerState)
 
         snapshot.appendSections([.header])
-        snapshot.appendItems([.header(state.headerState)], toSection: .header)
+        snapshot.appendItems([headerItem], toSection: .header)
+
+        if reconfigureHeader {
+            snapshot.reconfigureItems([headerItem])
+        }
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
