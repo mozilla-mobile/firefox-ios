@@ -381,9 +381,16 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        Task {
-            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
 
+        // Translation requires a live HTML DOM. PDFs and images have no translatable
+        // text structure, so suppress the icon without running language detection.
+        if let mimeType = originatingTab?.mimeType, mimeType != MIMEType.HTML {
+            dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+            return
+        }
+
+        Task {
             do {
                 let preferredLanguages = await targetLanguagesForEligibilityCheck()
                 let isEligible = try await translationsService.shouldOfferTranslation(
