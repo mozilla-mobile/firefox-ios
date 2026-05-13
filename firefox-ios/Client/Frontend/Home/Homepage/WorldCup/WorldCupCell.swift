@@ -281,8 +281,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         matchesFetchTask?.cancel()
         guard let apiClient = self.apiClient else { return }
         matchesFetchTask = Task { [weak self, apiClient] in
-            let response = await apiClient.loadMatches(query: .matches)
-            guard let response,
+            let result = await apiClient.loadMatches(query: .matches, team: nil)
+            guard case .success(let response) = result,
+                  let response,
                   !Task.isCancelled,
                   let self,
                   let card = self.matchesCardView else { return }
