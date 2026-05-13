@@ -123,7 +123,7 @@ struct AIControlsSettingsView: View, ThemeApplicable {
             padding: UX.padding
         ) {
             HStack(alignment: .top) {
-                Image(ImageIdentifiers.information)
+                Image(StandardImageIdentifiers.Large.information)
                 Text(verbatim: .Settings.AIControls.BlockedInformation)
                     .font(FXFontStyles.Regular.body.scaledSwiftUIFont())
                     .foregroundStyle(themeColors.textPrimary.color)
