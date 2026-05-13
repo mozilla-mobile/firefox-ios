@@ -9,7 +9,7 @@ import MozillaAppServices
 /// Exposes the merino WCS endpoints as parsed Swift values, isolating callers from
 /// raw JSON strings and from the FFI surface itself (which simplifies mocking in tests).
 final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
-    static let emptyOptions = WorldCupOptions(limit: nil, teams: nil, acceptLanguage: nil)
+    static let emptyOptions = WorldCupOptions(limit: nil, teams: nil, acceptLanguage: nil, date: nil)
     static let emptyConfig = WorldCupConfig(baseHost: nil)
 
     private let client: WorldCupClient
