@@ -970,6 +970,8 @@
 		8A3FD2912FABB9BA001F5DE9 /* TabManagerGetTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */; };
 		8A3FD2922FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */; };
 		8A3FDEB82FAE5A4E001F5DE9 /* SceneDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */; };
+		8A3FF9CD2FB408A1001F5DE9 /* TabRestorationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */; };
+		8A3FF9CE2FB408A1001F5DE9 /* TabRestorerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */; };
 		8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */; };
 		8A4490922BF3BC2700E7E682 /* MicrosurveyPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */; };
 		8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */; };
@@ -9386,6 +9388,8 @@
 		8A3FD28E2FABB9BA001F5DE9 /* TabManagerGetTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerGetTabTests.swift; sourceTree = "<group>"; };
 		8A3FD28F2FABB9BA001F5DE9 /* TabManagerReorderTabsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerReorderTabsTests.swift; sourceTree = "<group>"; };
 		8A3FDEB72FAE5A4E001F5DE9 /* SceneDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegateTests.swift; sourceTree = "<group>"; };
+		8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRestorationResult.swift; sourceTree = "<group>"; };
+		8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRestorerDelegate.swift; sourceTree = "<group>"; };
 		8A4190D02A6B0843001E8401 /* StatusBarOverlayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarOverlayTests.swift; sourceTree = "<group>"; };
 		8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptView.swift; sourceTree = "<group>"; };
 		8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyConfirmationView.swift; sourceTree = "<group>"; };
@@ -13936,6 +13940,8 @@
 		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
+				8A3FF9CB2FB408A1001F5DE9 /* TabRestorationResult.swift */,
+				8A3FF9CC2FB408A1001F5DE9 /* TabRestorerDelegate.swift */,
 				8A9BA6BC2F7C4CDF00D892C4 /* RemoteTabCreator.swift */,
 				0B1278DF2DDB1D6E00406656 /* BackForwardList.swift */,
 				0B7B957B2DCA305D007DC749 /* Document */,
@@ -19567,6 +19573,8 @@
 				C2A057E32FA8C32200100C24 /* WorldCupCell.swift in Sources */,
 				F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */,
 				F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */,
+				8A3FF9CD2FB408A1001F5DE9 /* TabRestorationResult.swift in Sources */,
+				8A3FF9CE2FB408A1001F5DE9 /* TabRestorerDelegate.swift in Sources */,
 				F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */,
 				F00CA4012F0000000000000F /* WorldCupFetchStrategyProtocol.swift in Sources */,
 				F00CA4012F00000000000011 /* WorldCupNormalFetchStrategy.swift in Sources */,
