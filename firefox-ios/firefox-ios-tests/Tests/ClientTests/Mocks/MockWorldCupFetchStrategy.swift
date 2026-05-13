@@ -7,18 +7,33 @@
 import Foundation
 
 final class MockWorldCupFetchStrategy: WorldCupFetchStrategyProtocol, @unchecked Sendable {
-    private let result: WorldCupMatchesResponse?
+    private let matchesResult: Result<WorldCupMatchesResponse?, WorldCupLoadError>
+    private let teamsResult: Result<WorldCupTeamsResponse?, WorldCupLoadError>
     private(set) var callCount = 0
     private(set) var lastQuery: WorldCupQuery?
+    private(set) var lastTeam: String?
+    private(set) var teamsCallCount = 0
+    private(set) var lastTeamsTeam: String?
 
-    init(result: WorldCupMatchesResponse? = nil) {
-        self.result = result
+    init(result: Result<WorldCupMatchesResponse?, WorldCupLoadError> = .success(nil),
+         teamsResult: Result<WorldCupTeamsResponse?, WorldCupLoadError> = .success(nil)) {
+        self.matchesResult = result
+        self.teamsResult = teamsResult
     }
 
     func loadMatches(using client: WorldCupAPIClientProtocol,
-                     query: WorldCupQuery) async -> WorldCupMatchesResponse? {
+                     query: WorldCupQuery,
+                     team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
         callCount += 1
         lastQuery = query
-        return result
+        lastTeam = team
+        return matchesResult
+    }
+
+    func loadTeams(using client: WorldCupAPIClientProtocol,
+                   team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
+        teamsCallCount += 1
+        lastTeamsTeam = team
+        return teamsResult
     }
 }

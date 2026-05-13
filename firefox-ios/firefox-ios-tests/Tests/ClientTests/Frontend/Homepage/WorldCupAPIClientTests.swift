@@ -4,7 +4,6 @@
 
 import Testing
 import Foundation
-import MozillaAppServices
 @testable import Client
 
 @Suite("WorldCupAPIClient")
@@ -16,7 +15,7 @@ struct WorldCupAPIClientTests {
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadMatches(query: .matches)
+        _ = await client.loadMatches(query: .matches, team: nil)
 
         #expect(matchesStrategy.callCount == 1)
         #expect(matchesStrategy.lastQuery == .matches)
@@ -30,7 +29,7 @@ struct WorldCupAPIClientTests {
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadMatches(query: .live)
+        _ = await client.loadMatches(query: .live, team: nil)
 
         #expect(liveStrategy.callCount == 1)
         #expect(liveStrategy.lastQuery == .live)
@@ -40,30 +39,88 @@ struct WorldCupAPIClientTests {
     @Test
     func test_loadMatches_returnsStrategyResult() async throws {
         let response = makeResponse()
-        let strategy = MockWorldCupFetchStrategy(result: response)
+        let strategy = MockWorldCupFetchStrategy(result: .success(response))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(query: .matches)
+        let result = await client.loadMatches(query: .matches, team: nil)
 
-        #expect(result == response)
+        #expect(result == .success(response))
     }
 
     @Test
-    func test_loadMatches_returnsNil_whenStrategyReturnsNil() async throws {
-        let strategy = MockWorldCupFetchStrategy(result: nil)
+    func test_loadMatches_returnsNil_whenStrategyReturnsNilSuccess() async throws {
+        let strategy = MockWorldCupFetchStrategy(result: .success(nil))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(query: .matches)
+        let result = await client.loadMatches(query: .matches, team: nil)
 
-        #expect(result == nil)
+        #expect(result == .success(nil))
     }
 
     @Test
-    func test_emptyOptions_hasAllNilFields() {
-        let options = WorldCupAPIClient.emptyOptions
-        #expect(options.limit == nil)
-        #expect(options.teams == nil)
-        #expect(options.acceptLanguage == nil)
+    func test_loadMatches_propagatesStrategyFailure() async throws {
+        let failure = WorldCupLoadError.network(reason: "offline")
+        let strategy = MockWorldCupFetchStrategy(result: .failure(failure))
+        let client = try WorldCupAPIClient(matchesStrategy: strategy)
+
+        let result = await client.loadMatches(query: .matches, team: nil)
+
+        #expect(result == .failure(failure))
+    }
+
+    @Test
+    func test_loadMatches_forwardsTeam_toStrategy() async throws {
+        let strategy = MockWorldCupFetchStrategy()
+        let client = try WorldCupAPIClient(matchesStrategy: strategy)
+
+        _ = await client.loadMatches(query: .matches, team: "BRA")
+
+        #expect(strategy.lastTeam == "BRA")
+    }
+
+    @Test
+    func test_loadTeams_usesTeamsStrategy() async throws {
+        let teamsStrategy = MockWorldCupFetchStrategy()
+        let matchesStrategy = MockWorldCupFetchStrategy()
+        let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
+                                           teamsStrategy: teamsStrategy)
+
+        _ = await client.loadTeams(team: nil)
+
+        #expect(teamsStrategy.teamsCallCount == 1)
+        #expect(matchesStrategy.callCount == 0)
+    }
+
+    @Test
+    func test_loadTeams_returnsStrategyResult() async throws {
+        let response = makeTeamsResponse()
+        let strategy = MockWorldCupFetchStrategy(teamsResult: .success(response))
+        let client = try WorldCupAPIClient(teamsStrategy: strategy)
+
+        let result = await client.loadTeams(team: nil)
+
+        #expect(result == .success(response))
+    }
+
+    @Test
+    func test_loadTeams_propagatesStrategyFailure() async throws {
+        let failure = WorldCupLoadError.other(code: 500, reason: "server")
+        let strategy = MockWorldCupFetchStrategy(teamsResult: .failure(failure))
+        let client = try WorldCupAPIClient(teamsStrategy: strategy)
+
+        let result = await client.loadTeams(team: nil)
+
+        #expect(result == .failure(failure))
+    }
+
+    @Test
+    func test_loadTeams_forwardsTeam_toStrategy() async throws {
+        let strategy = MockWorldCupFetchStrategy()
+        let client = try WorldCupAPIClient(teamsStrategy: strategy)
+
+        _ = await client.loadTeams(team: "BRA")
+
+        #expect(strategy.lastTeamsTeam == "BRA")
     }
 
     private func makeResponse() -> WorldCupMatchesResponse {
@@ -97,5 +154,21 @@ struct WorldCupAPIClientTests {
             statusType: "live"
         )
         return WorldCupMatchesResponse(previous: nil, current: [match], next: nil)
+    }
+
+    private func makeTeamsResponse() -> WorldCupTeamsResponse {
+        WorldCupTeamsResponse(teams: [
+            WorldCupTeamsResponse.Team(
+                key: "BRA",
+                globalTeamId: 1,
+                name: "Brazil",
+                region: "BRA",
+                colors: nil,
+                iconUrl: nil,
+                group: "Group A",
+                eliminated: false,
+                standing: nil
+            )
+        ])
     }
 }
