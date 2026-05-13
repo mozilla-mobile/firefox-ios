@@ -6,9 +6,11 @@ import Common
 import TabDataStore
 
 protocol TabRestorerDelegate: AnyObject {
+    /// Creates and configures a `Tab` from persisted `TabData`, without loading its web content.
     @MainActor
     func createTab(with tabData: TabData) -> Tab
 
+    /// Asynchronously loads a tab's screenshot from disk and sets it on the tab.
     @MainActor
     func restoreScreenshot(for tab: Tab)
 }
