@@ -1860,7 +1860,10 @@ class BrowserViewController: UIViewController,
         }
 
         // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
-        if tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let isEditing = toolbarState?.addressToolbar.isEditing == true
+        if !isEditing,
+           tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
            traitCollection.verticalSizeClass != .compact,
            traitCollection.horizontalSizeClass != .regular {
             overKeyboardContainer.removeKeyboardSpacer()
