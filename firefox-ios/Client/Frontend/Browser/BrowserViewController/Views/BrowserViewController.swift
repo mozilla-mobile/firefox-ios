@@ -3278,6 +3278,7 @@ class BrowserViewController: UIViewController,
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(isVisible: false)
+        (contentContainer.contentController as? HomepageViewController)?.stopScrollingAndSaveVerticalScrollOffset()
 
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)

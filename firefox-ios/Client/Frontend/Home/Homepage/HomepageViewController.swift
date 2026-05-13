@@ -258,8 +258,11 @@ final class HomepageViewController: UIViewController,
 
     // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
     // If no scroll position exists for tab, scroll the homepage to the top
-    func restoreVerticalScrollOffset() {
-        activeTabUUID = tabManager.selectedTab?.tabUUID
+    func restoreVerticalScrollOffset(force: Bool = true) {
+        let selectedTabUUID = tabManager.selectedTab?.tabUUID
+        guard force || activeTabUUID != selectedTabUUID else { return }
+
+        activeTabUUID = selectedTabUUID
         guard let activeTabUUID,
               let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
@@ -275,6 +278,12 @@ final class HomepageViewController: UIViewController,
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
+    }
+
+    func stopScrollingAndSaveVerticalScrollOffset() {
+        guard let collectionView else { return }
+        collectionView.setContentOffset(collectionView.contentOffset, animated: false)
+        saveVerticalScrollOffset()
     }
 
     func updateTopContentInset(_ topInset: CGFloat) {
