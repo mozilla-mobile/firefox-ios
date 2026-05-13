@@ -179,6 +179,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslate = "settings.translationAutoTranslate"
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
+        public static let quickAnswersFeature = "settings.quickAnswersFeature"
     }
 
     // Activity Stream

@@ -400,6 +400,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlagsProvider.isEnabled(.quickAnswers) {
+            generalSettings.append(QuickAnswersSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         if featureFlagsProvider.isEnabled(.translation) {
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }

@@ -472,6 +472,14 @@ final class SettingsCoordinator: BaseCoordinator,
         router.push(viewController)
     }
 
+    func pressedQuickAnswers() {
+        let viewController = QuickAnswersSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID
+        )
+        router.push(viewController)
+    }
+
     func pressedSummarize() {
         let viewController = SummarizeSettingsViewController(
             prefs: profile.prefs,
