@@ -43,5 +43,5 @@ features:
           search-bar: false
           bookmarks-section-default: false
           jbi-section-default: false
-          categories-enabled: false
-          pinned-header-enabled: false
+          categories-enabled: true
+          pinned-header-enabled: true
