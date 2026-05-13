@@ -10,6 +10,7 @@ protocol MessageDataProtocol {
     var title: String? { get }
     var text: String { get }
     var buttonLabel: String? { get }
+    var shouldRandomizeOptions: Bool { get }
     var experiment: String? { get }
     var actionParams: [String: String] { get }
     var microsurveyConfig: MicrosurveyConfig? { get }
@@ -88,6 +89,13 @@ struct GleanPlumbMessage {
     /// Embedding apps should not read from this directly.
     var options: [String] {
         return data.microsurveyConfig?.options ?? []
+    }
+
+    /// Should the message randomize the options presented.
+    ///
+    /// Embedding apps should not read from this directly.
+    var shouldRandomizeOptions: Bool {
+        data.shouldRandomizeOptions
     }
 
     /// The icon for this message if it has a microsurvey configuration.

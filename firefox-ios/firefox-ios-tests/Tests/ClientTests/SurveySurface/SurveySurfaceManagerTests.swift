@@ -150,6 +150,7 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var title: String? = "title label test"
     var text = "text label test"
     var buttonLabel: String? = "button label test"
+    var shouldRandomizeOptions = false
     var experiment: String?
     var actionParams: [String: String] = [:]
     var microsurveyConfig: MicrosurveyConfig?

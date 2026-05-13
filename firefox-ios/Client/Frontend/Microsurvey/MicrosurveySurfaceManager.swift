@@ -41,6 +41,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
         )
         let promptButtonLabel = message.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
         let options = !message.options.isEmpty ? message.options : defaultSurveyOptions
+        let shouldRandomizeOptions = message.shouldRandomizeOptions
         let icon = message.icon
         let utmContent = message.utmContent
 
@@ -49,7 +50,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
             promptTitle: promptTitle,
             promptButtonLabel: promptButtonLabel,
             surveyQuestion: surveyQuestion,
-            surveyOptions: options,
+            surveyOptions: shouldRandomizeOptions ? options.shuffled() : options,
             icon: icon,
             utmContent: utmContent
         )
