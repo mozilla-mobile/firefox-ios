@@ -58,6 +58,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(dispatched.shouldShowHomepageWorldCupSection)
         XCTAssertTrue(dispatched.shouldShowMilestone2)
         XCTAssertEqual(dispatched.selectedCountryId, "BRA")
+        subject.worldCupProvider = { _,_ in }
     }
 
     func test_homepageInitialize_whenFeatureDisabled_dispatchesShouldShowFalse() throws {
@@ -78,6 +79,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
+        subject.worldCupProvider = { _,_ in }
     }
 
     // MARK: - WorldCupActionType.didChangeHomepageSettings
@@ -104,6 +106,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
+        subject.worldCupProvider = { _,_ in }
     }
 
     // MARK: - WorldCupActionType.removeHomepageCard
@@ -132,6 +135,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .didUpdate)
         // Section was just disabled, so `isFeatureEnabledAndSectionEnabled` should be false.
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
+        subject.worldCupProvider = { _,_ in }
     }
 
     // MARK: - WorldCupActionType.selectTeam
@@ -158,6 +162,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 1)
         XCTAssertEqual(mockWorldCupStore.lastSetSelectedTeamCountryId, "ARG")
         XCTAssertEqual(dispatched.selectedCountryId, "ARG")
+        subject.worldCupProvider = { _,_ in }
     }
 
     func test_selectTeam_withoutCountryId_doesNothing() {
@@ -172,6 +177,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 0)
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        subject.worldCupProvider = { _,_ in }
     }
 
     // MARK: - Unhandled actions
@@ -188,12 +194,15 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 0)
+        subject.worldCupProvider = { _,_ in }
     }
 
     // MARK: - Helpers
 
     private func createSubject() -> WorldCupMiddleware {
-        return WorldCupMiddleware(worldCupStore: mockWorldCupStore)
+        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore)
+        trackForMemoryLeaks(subject)
+        return subject
     }
 
     // MARK: - StoreTestUtility

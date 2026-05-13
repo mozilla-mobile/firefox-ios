@@ -676,30 +676,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         )
     }
 
-    func testShowWorldCupCountryPicker_withSelectedTeam_passesSelectedTeamToPicker() throws {
-        mockWorldCupStore.selectedTeam = "ARG"
-        let subject = createSubject()
-
-        subject.showWorldCupCountryPicker()
-
-        let hostingController = try XCTUnwrap(
-            mockRouter.presentedViewController as? UIHostingController<WorldCupCountryPickerView>
-        )
-        XCTAssertEqual(hostingController.rootView.selectedTeam, "ARG")
-    }
-
-    func testShowWorldCupCountryPicker_withoutSelectedTeam_passesNilToPicker() throws {
-        mockWorldCupStore.selectedTeam = nil
-        let subject = createSubject()
-
-        subject.showWorldCupCountryPicker()
-
-        let hostingController = try XCTUnwrap(
-            mockRouter.presentedViewController as? UIHostingController<WorldCupCountryPickerView>
-        )
-        XCTAssertNil(hostingController.rootView.selectedTeam)
-    }
-
     func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
         let subject = createSubject()
 
