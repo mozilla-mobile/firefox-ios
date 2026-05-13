@@ -215,8 +215,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
         browserScreen.longPressLink(named: website_2["link"]!)
-        let expectedTitle = "\u{2066}\(website_2["moreLinkLongPressUrl"]!)\u{2069}"
-        browserScreen.waitForLinkPreview(named: expectedTitle)
+        browserScreen.waitForLinkPreview(named: website_2["moreLinkLongPressUrl"]!)
 
         contextMenuScreen.assertPrivateModeOptionsVisible()
     }

@@ -239,7 +239,9 @@ final class BrowserScreen {
     }
 
     func waitForLinkPreview(named preview: String) {
-        let previewLabel = sel.linkPreview(named: preview).element(in: app)
+        // iOS wraps URL preview labels with LRI/PDI bidi isolates.
+        let isolated = "\u{2066}\(preview)\u{2069}"
+        let previewLabel = sel.linkPreview(named: isolated).element(in: app)
         BaseTestCase().mozWaitForElementToExist(previewLabel)
     }
 
