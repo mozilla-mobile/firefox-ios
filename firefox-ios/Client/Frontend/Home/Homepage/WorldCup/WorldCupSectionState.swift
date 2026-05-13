@@ -11,26 +11,35 @@ import UIKit
 struct WorldCupSectionState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var shouldShowSection: Bool
+    var isMilestone2: Bool
 
-    init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
-        let shouldShowSection = profile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection) ?? true
-        self.init(windowUUID: windowUUID, shouldShowSection: shouldShowSection)
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+        self.shouldShowSection = false
+        self.isMilestone2 = false
     }
 
-    private init(windowUUID: WindowUUID, shouldShowSection: Bool) {
+    private init(
+        windowUUID: WindowUUID,
+        shouldShowSection: Bool,
+        isMilestone2: Bool,
+    ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
+        self.isMilestone2 = isMilestone2
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        guard let action = action as? WorldCupAction else {
+            return state
+        }
         switch action.actionType {
-        case WorldCupActionType.closedCard:
-            return WorldCupSectionState(windowUUID: state.windowUUID, shouldShowSection: false)
-        case WorldCupActionType.didChangeHomepageSettings:
-            guard let show = (action as? WorldCupAction)?.shouldShowHomepageWorldCupSection else {
-                return state
-            }
-            return WorldCupSectionState(windowUUID: state.windowUUID, shouldShowSection: show)
+        case WorldCupMiddlewareActionType.didUpdate:
+            return WorldCupSectionState(
+                windowUUID: action.windowUUID,
+                shouldShowSection: action.shouldShowHomepageWorldCupSection,
+                isMilestone2: action.shouldShowMilestone2,
+            )
         default:
             return state
         }

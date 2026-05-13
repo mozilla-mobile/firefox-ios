@@ -861,8 +861,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// Returns the estimated height of the World Cup section when it is visible, or 0 when hidden.
     private func getWorldcupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
-              state.worldcupState.shouldShowSection,
-              featureFlagsProvider.isEnabled(.worldCupWidget) else { return 0 }
+              state.worldcupState.shouldShowSection else { return 0 }
 
         let containerWidth = normalizedDimension(environment.container.contentSize.width)
         let cell = WorldCupCell()

@@ -54,9 +54,6 @@ final class HomepageMiddleware: FeatureFlaggable, Notifiable {
             }
             self.homepageTelemetry.sendItemTappedTelemetryEvent(for: type)
 
-        case WorldCupActionType.closedCard:
-            self.profile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
-
         case HomepageActionType.sectionSeen:
             self.handleSectionSeenAction(action: action)
 

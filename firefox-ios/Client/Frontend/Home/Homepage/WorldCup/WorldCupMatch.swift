@@ -45,11 +45,11 @@ struct WorldCupMatch: Equatable {
         self.score = Self.score(from: match)
     }
 
-    nonisolated(unsafe) private static let isoFormatter: ISO8601DateFormatter = {
+    private static var isoFormatter: ISO8601DateFormatter {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
-    }()
+    }
 
     private static func formattedDate(_ iso: String, locale: Locale) -> String {
         guard let date = isoFormatter.date(from: iso) else { return iso }

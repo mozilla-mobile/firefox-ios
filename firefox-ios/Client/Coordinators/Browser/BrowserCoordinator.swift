@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import SwiftUI
 import UIKit
 import WebKit
 import Shared
@@ -55,6 +56,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    private let worldCupStore: WorldCupStoreProtocol
     private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
@@ -73,7 +75,8 @@ final class BrowserCoordinator: BaseCoordinator,
          windowManager: WindowManager = AppContainer.shared.resolve(),
          summarizerNimbusUtils: SummarizerNimbusUtils = DefaultSummarizerNimbusUtils(),
          glean: GleanWrapper = DefaultGleanWrapper(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.summarizerNimbusUtils = summarizerNimbusUtils
         self.screenshotService = screenshotService
         self.profile = profile
@@ -85,6 +88,7 @@ final class BrowserCoordinator: BaseCoordinator,
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         self.applicationHelper = applicationHelper
         self.glean = glean
+        self.worldCupStore = worldCupStore
         super.init(router: router)
 
         browserViewController.browserDelegate = self
@@ -1083,6 +1087,17 @@ final class BrowserCoordinator: BaseCoordinator,
     func showShortcutsLibrary() {
         let shortcutsLibraryViewController = ShortcutsLibraryViewController(windowUUID: windowUUID)
         router.push(shortcutsLibraryViewController)
+    }
+
+    func showWorldCupCountryPicker() {
+        let selectedTeam = worldCupStore.selectedTeam
+        let pickerView = WorldCupCountryPickerView(
+            windowUUID: windowUUID,
+            themeManager: themeManager,
+            selectedTeam: selectedTeam
+        )
+        let viewController = UIHostingController(rootView: pickerView)
+        present(viewController)
     }
 
     func showQuickAnswers() {

@@ -248,13 +248,19 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
+        guard state.isMilestone2 else {
+            let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
+            timerView.configure(state: state)
+            return [PageContainer(content: timerView)]
+        }
         let card = WorldCupMatchCardView(windowUUID: state.windowUUID)
         card.configure(with: Self.emptyMatches, theme: currentTheme ?? LightTheme())
         matchesCardView = card
         scheduleMatchesFetch()
-
+        let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
+        timerView.configure(state: state)
         let contents: [UIView] = [
-            WorldCupTimerView(windowUUID: state.windowUUID),
+            timerView,
             card
         ]
         return contents.map { PageContainer(content: $0) }
