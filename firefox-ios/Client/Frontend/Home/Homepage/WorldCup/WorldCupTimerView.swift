@@ -412,7 +412,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         [dayUnitLabel, hourUnitLabel, minuteUnitLabel].forEach {
             $0.textColor = theme.colors.textPrimary
         }
-        actionButton.imageView?.tintColor = theme.colors.textPrimary
+        actionButton.tintColor = theme.colors.iconSecondary
         ctaButton.applyTheme(theme: theme)
         timerContainer.backgroundColor = theme.colors.layer3
     }
