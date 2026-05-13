@@ -11,7 +11,7 @@ import { findRecipeJSONLD } from "./JSONLD.js";
 const DEBUG = false;
 
 var readabilityResult = null;
-const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+const readerModeURL = /^readermode:\/\/app\/page/;
 
 const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +

@@ -2262,7 +2262,6 @@
 		EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = EDFEE3F32DE670B8005ADE03 /* gleanProbes.xcfilelist */; };
 		EEB94FB62FB4BA6B00D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB94FB42FB4BA6B00D6C232 /* ReaderModeSchemeHandler.swift */; };
 		EEB94FB72FB4BA6B00D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB94FB32FB4BA6B00D6C232 /* PageRoute.swift */; };
-		EEB94FBB2FB4C43700D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB94FB82FB4C43700D6C232 /* ReaderModeSchemeHandlerTests.swift */; };
 		F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */; };
 		F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000008 /* WorldCupAPIClient.swift */; };
 		F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */; };
@@ -11632,7 +11631,6 @@
 		EEAB4DF28099E1BEA98A0B00 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		EEB94FB32FB4BA6B00D6C232 /* PageRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRoute.swift; sourceTree = "<group>"; };
 		EEB94FB42FB4BA6B00D6C232 /* ReaderModeSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandler.swift; sourceTree = "<group>"; };
-		EEB94FB82FB4C43700D6C232 /* ReaderModeSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandlerTests.swift; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEF342E5A045117853806115 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
@@ -16775,22 +16773,6 @@
 			path = SchemeHandler;
 			sourceTree = "<group>";
 		};
-		EEB94FB92FB4C43700D6C232 /* SchemeHandler */ = {
-			isa = PBXGroup;
-			children = (
-				EEB94FB82FB4C43700D6C232 /* ReaderModeSchemeHandlerTests.swift */,
-			);
-			path = SchemeHandler;
-			sourceTree = "<group>";
-		};
-		EEB94FBA2FB4C43700D6C232 /* ReaderTests */ = {
-			isa = PBXGroup;
-			children = (
-				EEB94FB92FB4C43700D6C232 /* SchemeHandler */,
-			);
-			path = ReaderTests;
-			sourceTree = "<group>";
-		};
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
 			isa = PBXGroup;
 			children = (
@@ -16908,7 +16890,6 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				EEB94FBA2FB4C43700D6C232 /* ReaderTests */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
 				2151EF582F2AB962007B67A6 /* BrowserViewController */,
 				218457C42F22A3FA00B4FF23 /* Downloads */,
@@ -20533,7 +20514,6 @@
 				C8610DA82A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift in Sources */,
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
 				8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */,
-				EEB94FBB2FB4C43700D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				BCBE09BF2E3BAE2A004B6039 /* SummarizeSettingsViewControllerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,

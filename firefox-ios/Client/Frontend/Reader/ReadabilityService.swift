@@ -142,6 +142,11 @@ extension ReadabilityOperation: ReaderModeDelegate {
     }
 }
 
+enum ReadabilityServiceError: Error {
+    case timeout
+    case noResult
+}
+
 class ReadabilityService {
     private let ReadabilityServiceDefaultConcurrency = 1
 
@@ -158,5 +163,27 @@ class ReadabilityService {
                                                         profile: profile)
 
         queue.addOperation(readabilityOperation)
+    }
+
+    /// Async wrapper around `ReadabilityOperation`. Returns the parsed result when
+    /// extraction completes, or throws on timeout / nav failure. The operation still
+    /// writes successful results to the supplied cache as its existing side-effect.
+    func extract(_ url: URL,
+                 cache: ReaderModeCache,
+                 with profile: Profile) async throws -> ReadabilityResult {
+        try await withCheckedThrowingContinuation { continuation in
+            let op = ReadabilityOperation(url: url,
+                                          readerModeCache: cache,
+                                          profile: profile)
+            op.completionBlock = {
+                switch op.result {
+                case .success(let result): continuation.resume(returning: result)
+                case .error(let nsError):  continuation.resume(throwing: nsError)
+                case .timeout:             continuation.resume(throwing: ReadabilityServiceError.timeout)
+                case .none:                continuation.resume(throwing: ReadabilityServiceError.noResult)
+                }
+            }
+            queue.addOperation(op)
+        }
     }
 }

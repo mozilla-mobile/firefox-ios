@@ -4,6 +4,8 @@
 
 import Common
 import Foundation
+import Shared
+import WebEngine
 import WebKit
 
 /// `ReaderModeSchemeHandler` defines a custom URL scheme handler for a `WKWebView` that
@@ -35,24 +37,45 @@ import WebKit
 ///
 /// 7. WebKit renders the response in the tab.
 final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
+    // These are plain string constants and need to be readable from non-MainActor contexts
+    // (e.g. `PageRoute.buildReply`, which constructs the CSP off the main actor). The class
+    // itself is @MainActor by virtue of conforming to `WKURLSchemeHandler`, which would
+    // otherwise propagate isolation to these statics.
+
     /// The custom scheme this handler is responsible for.
-    static let scheme = "readermode"
+    nonisolated static let scheme = "readermode"
 
     /// The host this handler expects for all reader-mode requests.
-    static let host = "app"
+    nonisolated static let host = "app"
 
-    private static let defaultRouter: TinyRouter = {
-        TinyRouter()
-            .register("page", PageRoute())
-    }()
+    /// Canonical base URL for the reader page. Callers that need to construct a reader-mode
+    /// URL (e.g. `URL.encodeReaderModeURL(_:)`) pass this in place of the legacy
+    /// `WebServer.sharedInstance.baseReaderModeURL()`.
+    nonisolated static let baseURL = "readermode://app/page"
 
-    private let router: TinyRouter
+    private let normalRouter: TinyRouter
+    private let privateRouter: TinyRouter
     private let logger: Logger
     private var requestTasks = [ObjectIdentifier: Task<Void, Never>]()
 
-    init(router: TinyRouter = ReaderModeSchemeHandler.defaultRouter,
+    init(profile: Profile,
          logger: Logger = DefaultLogger.shared) {
-        self.router = router
+        // Two routers, picked per request based on the WKWebView's data store (see
+        // `webView(_:start:)`). This ensures private-mode tabs never read from or write
+        // to the disk cache, even though BrowserKit's `DefaultWKEngineConfigurationProvider`
+        // shares one `WKWebViewConfiguration` between normal and private modes.
+        //
+        // `StaticFileRoute` is the same one Translations uses — given the path it strips
+        // the leading slash, separates the resource name + extension, and looks the file up
+        // via `Bundle.main.url(forResource:withExtension:)`. That covers the legacy paths
+        // `Reader.html` already references (`/reader-mode/styles/Reader.css` and
+        // `/reader-mode/fonts/*.otf`) without any template edits.
+        self.normalRouter = TinyRouter()
+            .register("page", PageRoute(cache: DiskReaderModeCache.shared, profile: profile))
+            .setDefault(StaticFileRoute())
+        self.privateRouter = TinyRouter()
+            .register("page", PageRoute(cache: MemoryReaderModeCache.shared, profile: profile))
+            .setDefault(StaticFileRoute())
         self.logger = logger
         super.init()
     }
@@ -60,6 +83,8 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let id = ObjectIdentifier(urlSchemeTask)
+        let isPrivate = !webView.configuration.websiteDataStore.isPersistent
+        let router = isPrivate ? privateRouter : normalRouter
         let requestTask = Task { @MainActor in
             defer { requestTasks[id] = nil }
             do {
