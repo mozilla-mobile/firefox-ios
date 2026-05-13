@@ -16,6 +16,7 @@ protocol LibrarySelectorsSet {
     var BOOKMARKS_FOLDER: Selector { get }
     var SAVE_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
+    var BACK_BUTTON_iOS18: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -32,7 +33,8 @@ struct LibrarySelectors: LibrarySelectorsSet {
         static let titleTextFields = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
         static let bookmarksFolder = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.bookmarksFolder
         static let saveButton = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
-        static let backButton = AccessibilityIdentifiers.Settings.Search.backButtoniOS26
+        static let backButtoniOS26 = AccessibilityIdentifiers.Settings.Search.backButtoniOS26
+        static let backButtoniOS18 = "Bookmarks"
     }
 
     let BOOKMARKS_LIST = Selector.tableIdOrLabel(
@@ -54,8 +56,14 @@ struct LibrarySelectors: LibrarySelectorsSet {
     )
 
     let BACK_BUTTON = Selector.buttonId(
-        IDs.backButton,
-        description: "Boomark new folder back button",
+        IDs.backButtoniOS26,
+        description: "Boomark new folder back button for iOS 26",
+        groups: ["bookmark", "search"]
+    )
+
+    let BACK_BUTTON_iOS18 = Selector.buttonId(
+        IDs.backButtoniOS18,
+        description: "Boomark new folder back button for iOS 18 and lower",
         groups: ["bookmark", "search"]
     )
 
@@ -103,5 +111,5 @@ struct LibrarySelectors: LibrarySelectorsSet {
 
     var all: [Selector] { [BOOKMARKS_LIST, DELETE_BUTTON, SIGN_IN_BUTTON, BOOKMARK_EMPTY_STATE,
                            EDIT_BUTTON, BOTTOM_LEFT_BUTTON, TITLE_TEXT_FIELD, BOOKMARKS_FOLDER,
-                           DONE_BUTTON, BACK_BUTTON] }
+                           DONE_BUTTON, BACK_BUTTON, BACK_BUTTON_iOS18] }
 }

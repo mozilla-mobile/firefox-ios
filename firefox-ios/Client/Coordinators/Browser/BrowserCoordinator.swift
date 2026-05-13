@@ -55,7 +55,7 @@ final class BrowserCoordinator: BaseCoordinator,
     private let homepageTabStateStore: HomepageTabStateStore
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
-    private var isDeeplinkOptimiziationRefactorEnabled: Bool {
+    private var isDeeplinkOptimizationRefactorEnabled: Bool {
         return featureFlagsProvider.isEnabled(.deeplinkOptimizationRefactor)
     }
     private var isSummarizerOn: Bool {
@@ -269,16 +269,14 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func browserHasLoaded() {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            browserIsReady = true
-            logger.log("Browser has loaded", level: .info, category: .coordinator)
+        browserIsReady = true
+        logger.log("Browser has loaded", level: .info, category: .coordinator)
 
-            if let savedRoute {
-                logger.log("Find and handle route called after browserHasLoaded",
-                           level: .info,
-                           category: .coordinator)
-                findAndHandle(route: savedRoute)
-            }
+        if let savedRoute {
+            logger.log("Find and handle route called after browserHasLoaded",
+                       level: .info,
+                       category: .coordinator)
+            findAndHandle(route: savedRoute)
         }
     }
 
@@ -291,16 +289,7 @@ final class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                let readyMessage = "browser is ready? \(browserIsReady)"
-                let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
-                logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                           level: .info,
-                           category: .coordinator)
-                return false
-            }
-        }
+        guard checkBrowserIsReady() else { return false }
 
         switch route {
         case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
@@ -311,14 +300,7 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     override func handle(route: Route) {
-        if !isDeeplinkOptimiziationRefactorEnabled {
-            guard browserIsReady, !tabManager.isRestoringTabs else {
-                logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
-                           level: .info,
-                           category: .coordinator)
-                return
-            }
-        }
+        guard checkBrowserIsReady() else { return }
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
@@ -362,6 +344,30 @@ final class BrowserCoordinator: BaseCoordinator,
                 startLaunch(with: .defaultBrowser)
             }
         }
+    }
+
+    /// Depending if we're using the deeplink refactor path or not, there's different checks to ensure we're properly
+    /// setup before we handle routes / deeplinks. `browserIsReady` can maybe be removed at a later point after the deeplink
+    /// refactor is shipped, but this will be a subsequent initiative just in case.
+    private func checkBrowserIsReady() -> Bool {
+        let isReady = isDeeplinkOptimizationRefactorEnabled
+        ? browserIsReady
+        : browserIsReady && !tabManager.isRestoringTabs
+
+        guard isReady else {
+            logger.log(
+            """
+            Not handling route. Browser ready: \(browserIsReady), \
+            restoring tabs: \(tabManager.isRestoringTabs) \
+            with refactor \(isDeeplinkOptimizationRefactorEnabled)
+            """,
+            level: .info,
+            category: .coordinator
+            )
+            return false
+        }
+
+        return true
     }
 
     private func showIntroOnboarding() {

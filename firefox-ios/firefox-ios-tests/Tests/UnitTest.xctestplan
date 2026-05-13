@@ -127,7 +127,9 @@
           "name" : "QuickAnswersKit"
         }
       ]
-    }
+    },
+    "language" : "en-US",
+    "region" : "US"
   },
   "testTargets" : [
     {
