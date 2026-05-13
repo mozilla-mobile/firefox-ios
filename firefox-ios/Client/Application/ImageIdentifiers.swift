@@ -17,7 +17,6 @@ struct ImageIdentifiers {
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
-    public static let information = "information"
     public static let logo = "splash"
     public static let logoAmex = "logo_amex"
     public static let logoDiners = "logo_diners"
