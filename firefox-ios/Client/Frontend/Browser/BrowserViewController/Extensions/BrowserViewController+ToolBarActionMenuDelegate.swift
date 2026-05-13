@@ -125,36 +125,27 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         case .summarizeToolbarEntry: presentSummarizeToolbarEntryContextualHint()
         case .translation: presentTranslationContextualHint()
         case .navigation:
-            reanchorNavigationContextualHintIfPad()
+            updateNavigationContextualHintAnchorIfNeeded()
             presentNavigationContextualHint()
         default: break
         }
     }
 
-    private func reanchorNavigationContextualHintIfPad() {
+    private func updateNavigationContextualHintAnchorIfNeeded() {
         guard UIDevice.current.userInterfaceIdiom == .pad,
-              let popover = navigationContextHintVC.popoverPresentationController
+              let popover = navigationContextHintVC.popoverPresentationController,
+              let rootView = self.view
         else { return }
-
-        func visibleView(withA11yId id: String, under root: UIView) -> UIView? {
-            for subview in root.subviews {
-                if let found = visibleView(withA11yId: id, under: subview) { return found }
+        var viewsToSearch = [rootView]
+        while let candidateView = viewsToSearch.popLast() {
+            if candidateView.accessibilityIdentifier == AccessibilityIdentifiers.Toolbar.backButton,
+               candidateView.window != nil {
+                popover.sourceView = candidateView
+                popover.sourceRect = candidateView.bounds
+                return
             }
-            guard root.accessibilityIdentifier == id, root.window != nil else { return nil }
-
-            var current: UIView? = root
-            while let view = current {
-                if view.isHidden || view.alpha <= 0.01 {
-                    return nil
-                }
-                current = view.superview
-            }
-            return root
+            viewsToSearch.append(contentsOf: candidateView.subviews)
         }
-
-        guard let anchor = visibleView(withA11yId: AccessibilityIdentifiers.Toolbar.backButton, under: view) else { return }
-        popover.sourceView = anchor
-        popover.sourceRect = anchor.bounds
     }
 
     func dismissToolbarCFRs(with windowUUID: WindowUUID) {
