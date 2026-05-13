@@ -26,6 +26,7 @@ enum SelectorStrategy {
     case otherElementsButtonStaticTextByLabel(String)
     case collectionViewLinkById(String)
     case cellButtonById(String)
+    case navigationBarButtonById(String)
 }
 
 // Selector model (with metadata)
@@ -97,6 +98,8 @@ extension Selector {
             return app.collectionViews.links[id]
         case .cellButtonById(let id):
             return app.cells.buttons[id]
+        case .navigationBarButtonById(let id):
+            return app.navigationBars.buttons[id]
         }
     }
 
@@ -148,6 +151,8 @@ extension Selector {
             return app.collectionViews.links.matching(identifier: id)
         case .cellButtonById(let id):
             return app.cells.buttons.matching(identifier: id)
+        case .navigationBarButtonById(let id):
+            return app.navigationBars.buttons.matching(identifier: id)
         }
     }
 

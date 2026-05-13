@@ -298,24 +298,45 @@ class BookmarksTests: FeatureFlaggedTestBase {
         checkItemInBookmarkList(oneItemBookmarked: false)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306866
-    func testEditBookmark() {
+    // https://mozilla.testrail.io/index.php?/cases/view/3168623
+    func testEditBookmarkLocation() {
         app.launch()
+        let testFolder = "Test folder"
+        let rootFolder = "Bookmarks"
+
+        // Precondition: create "Test folder" so it becomes the latest "Save in" location
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.addFreshNewFolder(text: testFolder)
+        libraryScreen.tapDoneButton()
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(HomePanelsScreen)
+        navigator.goto(URLBarOpen)
+
+        // Bookmark a page — it is saved by default in "Test folder"
         navigator.openURL(path(forTestPage: url_2["url"]!))
-        waitForTabsButton()
+        toolbarScreen.assertTabsButtonExists()
         navigator.nowAt(BrowserTab)
+
+        // Step 1: open the bookmark in edit mode
         bookmarkPageAndTapEdit()
-        app.buttons["Save"].waitAndTap()
-        waitForTabsButton()
-        unbookmark(url: url_2["bookmarkLabel"]!)
-        app.buttons["Done"].waitAndTap()
-        navigator.nowAt(BrowserTab)
-        bookmarkPageAndTapEdit()
-        app.buttons["Save"].waitAndTap()
-        waitForTabsButton()
+
+        // Step 2: change the location to the root "Bookmarks" folder and save
+        libraryScreen.assertSavedFolder(folderName: testFolder)
+        libraryScreen.tapOnFolder(folderName: testFolder)
+        libraryScreen.tapOnFolder(folderName: rootFolder)
+        libraryScreen.tapSaveButton()
+        toolbarScreen.assertTabsButtonExists()
+
+        // The bookmark is correctly saved in the new location (root Bookmarks),
+        // and is no longer inside "Test folder".
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Bookmarks)
-        checkItemInBookmarkList(oneItemBookmarked: true)
+        libraryScreen.assertSelectedFolderOpens(folderName: rootFolder)
+        libraryScreen.assertBookmarkExists(named: url_2["bookmarkLabel"]!)
+
+        libraryScreen.tapOnFolder(folderName: testFolder)
+        libraryScreen.assertSelectedFolderOpens(folderName: testFolder)
+        libraryScreen.assertBookmarkEmptyStateTextExists()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
@@ -453,6 +474,72 @@ class BookmarksTests: FeatureFlaggedTestBase {
         libraryScreen.addFreshNewFolder(text: folderName)
         libraryScreen.assertNewFreshFolderCreated(folderName: folderName)
         libraryScreen.assertIdenticalFoldersNamesCreated(identifier: folderName, nrOfFolders: 2)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168590
+    func testUserRedirectToMostRecentlyAccessedFolder() {
+        app.launch()
+        let secondFolder = "Folder2"
+        // Make sure you already have a structure of bookmarks folders created
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.addFreshNewFolder(text: "Folder1")
+        libraryScreen.tapDoneButton()
+        libraryScreen.addFreshNewFolder(text: secondFolder)
+        libraryScreen.tapDoneButton()
+        // Access a specific folder
+        libraryScreen.tapOnFolder(folderName: secondFolder)
+        // Close the Bookmark Panel using Done button and reopen it
+        libraryScreen.tapDoneButton()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // User is redirected to the specific folder
+        libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
+        // Close the Bookmark Panel by swiping it down and reopen it
+        app.swipeDown()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // User is redirected to the specific folder
+        libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
+        // Switch to edit mode and close the panel by swiping it down and reopen it
+        libraryScreen.tapEditButton()
+        app.swipeDown()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // User is redirected to the specific folder
+        libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
+        // Choose to add a new folder and close the panel by swiping it down and reopen it
+        libraryScreen.tapBottomLeftButton()
+        app.swipeDown()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        // Panel opens with the folder creation screen
+        libraryScreen.assertSelectedFolderOpens(folderName: "New Folder")
+        // Tapping back button user is redirected the to specific folder
+        libraryScreen.tapBackButton(isInsideFolder: true)
+        libraryScreen.assertSelectedFolderOpens(folderName: secondFolder)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/3168630
+    func testNewFolderLocationInParentFolder() {
+        app.launch()
+        let parentFolder = "Parent Folder"
+        let subFolder1 = "Subfolder1"
+        let subFolder2 = "Subfolder2"
+        navigator.goto(LibraryPanel_Bookmarks)
+        libraryScreen.addFreshNewFolder(text: parentFolder)
+        addNewFolderUnderParentFolder(parentFolder: parentFolder, subFolder: subFolder1)
+        addNewFolderUnderParentFolder(parentFolder: subFolder1, subFolder: subFolder2)
+    }
+
+    private func addNewFolderUnderParentFolder(parentFolder: String, subFolder: String) {
+        libraryScreen.tapDoneButton()
+        libraryScreen.tapOnFolder(folderName: parentFolder)
+        libraryScreen.tapEditButton()
+        libraryScreen.tapBottomLeftButton()
+        libraryScreen.assertNewFolderScreen()
+        libraryScreen.assertParentFolder(parentFolderName: parentFolder)
+        libraryScreen.addNewFolder(text: subFolder)
+        libraryScreen.assertSelectedFolderOpens(folderName: parentFolder)
     }
 
     private func validateLongTapOptionsFromBookmarkLink() {
