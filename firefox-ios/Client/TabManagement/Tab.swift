@@ -890,9 +890,8 @@ class Tab: NSObject,
         // our normal over-keyboard UI, which unfortunately causes the iOS keyboard to be dismissed due to
         // the size of Firefox's UI coupled with how we are resizing the WKWebView in our iOS browser.
         // A longer-term fix is being discussed & is forthcoming.
-        guard let url, let host = url.host else { return false }
-        let hostLower = host.lowercased()
-        guard hostLower.hasPrefix("www.google.") || hostLower.hasPrefix("google.") else { return false }
+        guard let url, let domain = url.shortDomain else { return false }
+        guard domain == "google" else { return false }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let queryItems = components.queryItems else { return false }
         return queryItems.contains(where: { $0.name == "udm" && $0.value == "50" })
