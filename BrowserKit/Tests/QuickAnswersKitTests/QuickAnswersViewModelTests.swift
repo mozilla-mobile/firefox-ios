@@ -70,12 +70,17 @@ final class QuickAnswersViewModelTests: XCTestCase {
         wait(for: [expectation])
 
         XCTAssertEqual(mockService.recordVoiceCalledCount, 1)
-        XCTAssertEqual(state, .recordVoice(.empty(), SpeechError.unknown))
+        guard case .recordVoice(let result, let error) = state else {
+            XCTFail("Expected recordVoice state")
+            return
+        }
+        XCTAssertEqual(result, .empty())
+        XCTAssertEqual(error, .unknown("Unknown error occurred"))
     }
 
     func testStartRecordingVoice_withSearchError_receivesError() {
         let speechResult = SpeechResult(text: "Hello", isFinal: true)
-        let searchError = SearchResultError.unknown
+        let searchError = ResultsServiceError.unknown("Test error")
         mockService.speechResults = [speechResult]
         mockService.searchResult = .failure(searchError)
         var states = [QuickAnswersViewModel.State]()
@@ -94,6 +99,7 @@ final class QuickAnswersViewModelTests: XCTestCase {
         XCTAssertEqual(states[0], .recordVoice(speechResult, nil))
         XCTAssertEqual(states[1], .loadingSearchResult)
         XCTAssertEqual(states[2], .showSearchResult(.empty(), searchError))
+        XCTAssertEqual(searchError, .unknown("Test error"))
     }
 
     // MARK: - Stop Recording Tests

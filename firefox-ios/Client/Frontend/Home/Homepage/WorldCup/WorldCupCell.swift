@@ -133,6 +133,10 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var currentState: WorldCupSectionState?
     private var onHeightChange: (() -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
+    private var currentTheme: Theme?
+    private weak var matchesCardView: WorldCupMatchCardView?
+    private var matchesFetchTask: Task<Void, Never>?
+    private let apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -214,6 +218,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         onHeightChange: @escaping () -> Void
     ) {
         self.onHeightChange = onHeightChange
+        self.currentTheme = theme
         if currentState != state {
             currentState = state
             rebuildPages(for: state)
@@ -243,9 +248,41 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     }
 
     private func makePages(for state: WorldCupSectionState) -> [UIView] {
-        let timerView = WorldCupTimerView(windowUUID: state.windowUUID)
-        timerView.configure(state: state)
-        return [PageContainer(content: timerView)]
+        let card = WorldCupMatchCardView(windowUUID: state.windowUUID)
+        card.configure(with: Self.emptyMatches, theme: currentTheme ?? LightTheme())
+        matchesCardView = card
+        scheduleMatchesFetch()
+
+        let contents: [UIView] = [
+            WorldCupTimerView(windowUUID: state.windowUUID),
+            card
+        ]
+        return contents.map { PageContainer(content: $0) }
+    }
+
+    /// Empty state shown while the merino fetch is in flight — no live pill,
+    /// no matches. Replaced on first successful fetch.
+    private static let emptyMatches = WorldCupMatches(
+        phaseTitle: String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel,
+        isLive: false,
+        featuredMatch: [],
+        upcomingMatches: []
+    )
+
+    /// Kicks off a real merino fetch via `WorldCupAPIClient` and reconfigures the
+    /// matches card when there is data. 
+    private func scheduleMatchesFetch() {
+        matchesFetchTask?.cancel()
+        guard let apiClient = self.apiClient else { return }
+        matchesFetchTask = Task { [weak self, apiClient] in
+            let response = await apiClient.loadMatches(query: .matches)
+            guard let response,
+                  !Task.isCancelled,
+                  let self,
+                  let card = self.matchesCardView else { return }
+            let matches = WorldCupMatches(response: response)
+            card.configure(with: matches, theme: self.currentTheme ?? LightTheme())
+        }
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {

@@ -28,10 +28,6 @@ struct SearchResult: Equatable {
     }
 }
 
-enum SearchResultError: Error, Equatable {
-    case unknown
-}
-
 protocol QuickAnswersService: Sendable {
     /// Starts the voice record operation and return a stream with the accumulated results from the speech.
     func record() async throws -> AsyncThrowingStream<SpeechResult, Error>
@@ -39,5 +35,5 @@ protocol QuickAnswersService: Sendable {
     func stopRecording() async throws
 
     /// Performs a search with the provided query text parameter.
-    func search(text: String) async -> Result<SearchResult, SearchResultError>
+    func search(text: String) async -> Result<SearchResult, ResultsServiceError>
 }

@@ -58,6 +58,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
     private let profile: Profile
     private let model: SearchEnginesManager
     private let logger: Logger
+    let featureFlagsProvider: FeatureFlagProviding
+    let userPreferences: UserFeaturePreferring
 
     var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
         return !model.shouldShowBookmarksSuggestions &&
@@ -72,6 +74,11 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
 
     var isRecentSearchesEnabled: Bool {
         return featureFlagsProvider.isEnabled(.recentSearches)
+    }
+
+    private var isFirefoxSuggestFeatureEnabled: Bool {
+        featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+        && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
     }
 
     // Determines how to display the pre search settings based on the feature flags
@@ -125,10 +132,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
 
     init(profile: Profile,
          searchEnginesManager: SearchEnginesManager = AppContainer.shared.resolve(),
+         featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve(),
+         userPreferences: UserFeaturePreferring = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
+        self.featureFlagsProvider = featureFlagsProvider
+        self.userPreferences = userPreferences
         model = searchEnginesManager
 
         super.init(windowUUID: windowUUID)
@@ -492,9 +503,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController,
         case .searchEnginesSuggestions:
             return SearchSuggestItem.allCases.count
         case .firefoxSuggestSettings:
-            return featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
-            && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
-            ? FirefoxSuggestItem.allCases.count : 3
+            return isFirefoxSuggestFeatureEnabled ? FirefoxSuggestItem.allCases.count : 3
         }
     }
 

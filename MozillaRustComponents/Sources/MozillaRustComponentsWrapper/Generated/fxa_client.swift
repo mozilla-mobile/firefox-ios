@@ -753,9 +753,13 @@ public protocol FirefoxAccountProtocol: AnyObject, Sendable {
      *
      * # Arguments
      *
-     *    - `scope` - the OAuth scope to be granted by the token.
-     *        - This must be one of the scopes requested during the signin flow.
-     *        - Only a single scope is supported; for multiple scopes request multiple tokens.
+     *    - `scope` - space-separated list of OAuth scopes to be granted by the token.
+     *        - Each scope must have been requested during the signin flow, or be a scope
+     *          which the server might offer automatically in some account-specific cases.
+     *        - Scope order is not significant; `"a b"` and `"b a"` are equivalent.
+     *        - When a single scope is requested and it has an associated scoped key
+     *          (e.g. `https://identity.mozilla.com/apps/oldsync`), the returned
+     *          `AccessTokenInfo.key` will be populated; for multi-scope requests it is `null`.
      *    - `use_cache` - optionally set to false to force a new token request.  The fetched
      *       token will still be cached for later `get_access_token` calls.
      *
@@ -1508,9 +1512,13 @@ open func gatherTelemetry()throws  -> String  {
      *
      * # Arguments
      *
-     *    - `scope` - the OAuth scope to be granted by the token.
-     *        - This must be one of the scopes requested during the signin flow.
-     *        - Only a single scope is supported; for multiple scopes request multiple tokens.
+     *    - `scope` - space-separated list of OAuth scopes to be granted by the token.
+     *        - Each scope must have been requested during the signin flow, or be a scope
+     *          which the server might offer automatically in some account-specific cases.
+     *        - Scope order is not significant; `"a b"` and `"b a"` are equivalent.
+     *        - When a single scope is requested and it has an associated scoped key
+     *          (e.g. `https://identity.mozilla.com/apps/oldsync`), the returned
+     *          `AccessTokenInfo.key` will be populated; for multi-scope requests it is `null`.
      *    - `use_cache` - optionally set to false to force a new token request.  The fetched
      *       token will still be cached for later `get_access_token` calls.
      *

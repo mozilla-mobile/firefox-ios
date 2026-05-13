@@ -1009,7 +1009,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
-        enqueueTabRestoration()
+        tabManager.restoreTabs()
         updateAddressToolbarContainerPosition(for: traitCollection)
         if isTabScrollRefactoringEnabled {
             setupToolbarAnimator()
@@ -1323,32 +1323,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func enqueueTabRestoration() {
-        guard isDeeplinkOptimizationRefactorEnabled else {
-            tabManager.restoreTabs()
-            return
-        }
-        // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
-        // has ended. If there is no deeplink then restore when the startup time record cancellation has been
-        // signaled.
-
-        // Enqueues the actions only if the opposite action where not signaled, this happen when the app
-        // handles a deeplink when was already opened
-        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        }
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -1365,9 +1339,7 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        if !isDeeplinkOptimizationRefactorEnabled {
-            browserDelegate?.browserHasLoaded()
-        }
+        browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
 
         logCurrentNimbusExperimentsState()
@@ -3035,7 +3007,9 @@ class BrowserViewController: UIViewController,
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
-        if let popover = alert.popoverPresentationController {
+        let setupPopover = { [weak self] in
+            guard let self, let popover = alert.popoverPresentationController else { return }
+            popover.delegate = self
             if let sourceButton {
                 popover.sourceView = sourceButton
                 popover.sourceRect = sourceButton.bounds
@@ -3045,6 +3019,13 @@ class BrowserViewController: UIViewController,
                 popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
                 popover.permittedArrowDirections = []
             }
+        }
+
+        setupPopover()
+
+        if alert.popoverPresentationController != nil {
+            displayedPopoverController = alert
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         present(alert, animated: true)

@@ -25,42 +25,12 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         static let liveLabelDotText = "•"
     }
 
-    /// A single match displayed in the card (either as a featured match or in the
-    /// upcoming-matches list below).
-    struct Match: Equatable {
-        struct Score: Equatable {
-            let score: String
-            let clock: String
-        }
-        let homeFlagAssetName: String
-        let homeCode: String
-        let awayFlagAssetName: String
-        let awayCode: String
-        let date: String
-        let score: Score?
-    }
-
-    struct Model: Equatable {
-        let phaseTitle: String
-        let phaseDate: String
-        let isLive: Bool
-        let featuredMatch: [Match]
-        let upcomingMatches: [Match]
-    }
-
     // MARK: - UI
 
     private lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
-        label.adjustsFontForContentSizeCategory = true
-    }
-
-    private lazy var dateLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
-        label.lineBreakMode = .byWordWrapping
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -127,7 +97,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     // MARK: - State
 
     private let windowUUID: WindowUUID
-    private var model: Model?
+    private var model: WorldCupMatches?
     private var featuredDividers: [UIView] = []
 
     // MARK: - Init
@@ -149,7 +119,6 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.addSubview(liveLabel)
 
         headerStack.addArrangedSubview(titleLabel)
-        headerStack.addArrangedSubview(dateLabel)
         headerStack.addArrangedSubview(liveLabelContainer)
         // spacer view
         headerStack.addArrangedSubview(UIView())
@@ -197,24 +166,18 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     // MARK: - Configuration
 
-    func configure(with model: Model, theme: Theme) {
+    func configure(with model: WorldCupMatches, theme: Theme) {
         guard model != self.model else { return }
         self.model = model
 
         rebuildFeaturedMatches(matches: model.featuredMatch)
         rebuildUpcomingRows(matches: model.upcomingMatches)
-        refreshHeader(model: model)
+        titleLabel.text = model.phaseTitle
+        liveLabelContainer.isHidden = !model.isLive
         applyTheme(theme: theme)
     }
 
-    private func refreshHeader(model: Model) {
-        titleLabel.text = model.phaseTitle
-        dateLabel.text = model.phaseDate
-        liveLabelContainer.isHidden = !model.isLive
-        dateLabel.isHidden = model.isLive
-    }
-
-    private func rebuildFeaturedMatches(matches: [Match]) {
+    private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
         featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         featuredDividers.forEach { $0.removeFromSuperview() }
         featuredDividers.removeAll()
@@ -239,7 +202,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         }
     }
 
-    private func rebuildUpcomingRows(matches: [Match]) {
+    private func rebuildUpcomingRows(matches: [WorldCupMatch]) {
         upcomingStack.isHidden = matches.isEmpty
         upcomingStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
@@ -261,7 +224,6 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
-        dateLabel.textColor = theme.colors.textSecondary
         moreOptionsButton.tintColor = theme.colors.iconSecondary
         upcomingStackDivider.backgroundColor = theme.colors.borderSecondary
         liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
@@ -418,7 +380,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         scoreContainer.layer.cornerRadius = scoreContainer.frame.height / 2
     }
 
-    func configure(with match: WorldCupMatchCardView.Match) {
+    func configure(with match: WorldCupMatch) {
         homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName)
         homeColumn.codeLabel.text = match.homeCode
         awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
@@ -557,7 +519,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         }
     }
 
-    func configure(with match: WorldCupMatchCardView.Match) {
+    func configure(with match: WorldCupMatch) {
         homeFlagView.image = UIImage(named: match.homeFlagAssetName)
         homeCodeLabel.text = match.homeCode
         awayFlagView.image = UIImage(named: match.awayFlagAssetName)

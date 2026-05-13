@@ -17,6 +17,14 @@ final class NewsTransitionHeaderCell: UICollectionReusableView,
         static let pickerTranslationStartProgress: CGFloat = 0.2
         static let transitioningZPosition: CGFloat = -1
         static let pinnedZPosition: CGFloat = 1
+
+        static func snappedTransitionOffset(for normalizedOffset: CGFloat) -> CGFloat? {
+            guard normalizedOffset > 0,
+                  normalizedOffset < transitionDistance
+            else { return nil }
+
+            return normalizedOffset < transitionDistance / 2 ? 0 : transitionDistance
+        }
     }
 
     private lazy var newsAffordanceHeaderView: NewsAffordanceHeaderView = .build()

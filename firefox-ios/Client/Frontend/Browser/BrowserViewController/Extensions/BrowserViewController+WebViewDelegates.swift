@@ -340,10 +340,10 @@ extension BrowserViewController: WKUIDelegate {
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: self.currentTheme(),
-                                completion: { buttonPressed in
-            if buttonPressed {
-                self.tabManager.selectTab(tab)
-                self.overlayManager.switchTab(shouldCancelLoading: true)
+                                completion: { [weak self, weak tab] buttonPressed in
+            if buttonPressed, let tab {
+                self?.tabManager.selectTab(tab)
+                self?.overlayManager.switchTab(shouldCancelLoading: true)
             }
         })
         show(toast: toast)
