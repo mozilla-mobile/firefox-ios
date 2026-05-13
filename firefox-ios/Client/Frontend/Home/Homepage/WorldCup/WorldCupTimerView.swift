@@ -97,7 +97,8 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         button.titleLabel?.numberOfLines = 0
     }
 
-    /// The action button can represent either a close button with `X` icon for milestone 1 or a an option button with `...` icon for milestone2 and more.
+    /// The action button can represent either a close button with `X` icon for milestone 1
+    /// or a an option button with `...` icon for milestone2 and more.
     private lazy var actionButton: UIButton = .build { button in
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }

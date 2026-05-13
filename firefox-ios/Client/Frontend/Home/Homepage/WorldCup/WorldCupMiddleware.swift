@@ -7,7 +7,8 @@ import Common
 import Redux
 
 /// The middleware responsible for all the actions related to the `WorldCup` feature.
-/// To keep it simple it dispatches only `WorldCupMiddlewareActionType.didUpdate` that is only reduced by `WorldCupSectionState`.
+/// To keep it simple it dispatches only `WorldCupMiddlewareActionType.didUpdate`
+/// that is only reduced by `WorldCupSectionState`.
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
