@@ -4,8 +4,11 @@
 
 import Common
 
+/// The output of a tab restoration pass, consumed by `TabManagerImplementation.applyRestorationResult(_:)`.
 struct TabRestorationResult {
+    /// The tabs built from persisted data, in the order they were stored.
     let restoredTabs: [Tab]
+    /// The UUID of the tab that was active at the time of the last save, or `nil` if it did not survive filtering.
     let selectedTabUUID: TabUUID?
     let windowUUID: WindowUUID
 }
