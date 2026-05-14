@@ -9,6 +9,7 @@ class TabTrayiPadSelectorView: TabTraySelectorView {
     private struct iPadUX {
         static let stackViewHorizontalSpacing: CGFloat = 80
         static let verticalSpacing: CGFloat = 8
+        static let buttonHorizontalInsets: CGFloat = 16
     }
 
     private var selectionBackgroundConstraints: [NSLayoutConstraint] = []
@@ -18,6 +19,8 @@ class TabTrayiPadSelectorView: TabTraySelectorView {
         selectionBackgroundView.layer.cornerRadius = selectionBackgroundView.frame.height / 2
         if #available(iOS 26, *) {
             visualEffectView.layer.cornerRadius = containerView.bounds.height / 2
+        } else {
+            containerView.layer.cornerRadius = containerView.bounds.height / 2
         }
     }
 
@@ -33,6 +36,15 @@ class TabTrayiPadSelectorView: TabTraySelectorView {
     }
 
     override func setupConstraints() {
+        // On iOS 26 the outer pill is the visualEffectView — inset the stack so the
+        // selection pill sits inside it with breathing room. On iOS 18 the containerView itself
+        // is the outer pill, so the stack hugs its edges and the container hugs the buttons.
+        let stackVerticalInset: CGFloat = if #available(iOS 26, *) {
+            iPadUX.verticalSpacing
+        } else {
+            0
+        }
+
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor, constant: iPadUX.verticalSpacing),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -iPadUX.verticalSpacing),
@@ -41,11 +53,10 @@ class TabTrayiPadSelectorView: TabTraySelectorView {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                     constant: -UX.containerHorizontalSpacing),
 
-            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: iPadUX.verticalSpacing),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: stackVerticalInset),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: iPadUX.stackViewHorizontalSpacing),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                              constant: -iPadUX.verticalSpacing),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -stackVerticalInset),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
                                                 constant: -iPadUX.stackViewHorizontalSpacing),
         ])
@@ -100,5 +111,27 @@ class TabTrayiPadSelectorView: TabTraySelectorView {
             selectionBackgroundView.trailingAnchor.constraint(equalTo: selectedButton.trailingAnchor)
         ]
         NSLayoutConstraint.activate(selectionBackgroundConstraints)
+    }
+
+    override func applyButtonWidthAnchor(on button: UIButton, with title: NSString) {
+        if let existingConstraint = button.constraints.first(where: { $0.firstAttribute == .width }) {
+            existingConstraint.isActive = false
+        }
+
+        let boldFont = FXFontStyles.Bold.body.systemFont()
+        let boldWidth = ceil(title.size(withAttributes: [.font: boldFont]).width)
+        let horizontalInsets = iPadUX.buttonHorizontalInsets * 2
+        button.widthAnchor.constraint(equalToConstant: boldWidth + horizontalInsets).isActive = true
+    }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+
+        if #unavailable(iOS 26) {
+            // The parent applies a translucent layer1 background on `self`, which is fine on iPhone
+            // where the bar is full width but on iPad it leaves a visible rectangle around the pill
+            // in private mode where the nav-bar tint and `layer1` differ.
+            backgroundColor = .clear
+        }
     }
 }
