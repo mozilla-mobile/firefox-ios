@@ -13,6 +13,10 @@ struct WorldCupAction: Action {
     let shouldShowMilestone2: Bool
     let selectedCountryId: String?
     let matches: [WorldCupMatches]
+    /// Index into `matches` of the card the swipe view should land on by
+    /// default (closest upcoming match). 0 when irrelevant (single card or
+    /// empty).
+    let defaultMatchIndex: Int
 
     init(
         windowUUID: WindowUUID,
@@ -20,7 +24,8 @@ struct WorldCupAction: Action {
         shouldShowHomepageWorldCupSection: Bool = false,
         shouldShowMilestone2: Bool = false,
         selectedCountryId: String? = nil,
-        matches: [WorldCupMatches] = []
+        matches: [WorldCupMatches] = [],
+        defaultMatchIndex: Int = 0
     ) {
         self.windowUUID = windowUUID
         self.actionType = actionType
@@ -28,6 +33,7 @@ struct WorldCupAction: Action {
         self.shouldShowMilestone2 = shouldShowMilestone2
         self.selectedCountryId = selectedCountryId
         self.matches = matches
+        self.defaultMatchIndex = defaultMatchIndex
     }
 }
 

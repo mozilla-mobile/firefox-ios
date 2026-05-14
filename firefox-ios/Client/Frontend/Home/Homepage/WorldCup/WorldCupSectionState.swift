@@ -13,24 +13,31 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var shouldShowSection: Bool
     var isMilestone2: Bool
     var matches: [WorldCupMatches]
+    /// Index into `matches` of the card that should be visible first. Used by
+    /// the swipe view so that with no team selected we land on the closest
+    /// upcoming match rather than the chronologically latest one.
+    var defaultMatchIndex: Int
 
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         self.shouldShowSection = false
         self.isMilestone2 = false
         self.matches = []
+        self.defaultMatchIndex = 0
     }
 
     private init(
         windowUUID: WindowUUID,
         shouldShowSection: Bool,
         isMilestone2: Bool,
-        matches: [WorldCupMatches]
+        matches: [WorldCupMatches],
+        defaultMatchIndex: Int
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
         self.isMilestone2 = isMilestone2
         self.matches = matches
+        self.defaultMatchIndex = defaultMatchIndex
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -43,7 +50,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 windowUUID: action.windowUUID,
                 shouldShowSection: action.shouldShowHomepageWorldCupSection,
                 isMilestone2: action.shouldShowMilestone2,
-                matches: action.matches
+                matches: action.matches,
+                defaultMatchIndex: action.defaultMatchIndex
             )
         default:
             return state

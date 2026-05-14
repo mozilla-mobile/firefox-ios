@@ -84,12 +84,32 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         await teamsStrategy.loadTeams(using: self, team: team)
     }
 
+    /// Anchored at June 18, 2026 so that the merino ±10-day response window
+    /// [Jun 8–Jun 28] fully covers the group stage (Jun 11–27)ner
+    /// in a single fetch, with one day of slack on each side.
+    private static let queryDateFloor: Date = {
+        var components = DateComponents()
+        components.calendar = Calendar(identifier: .gregorian)
+        components.timeZone = TimeZone(identifier: "UTC")
+        components.year = 2026
+        components.month = 6
+        components.day = 18
+        return components.date!
+    }()
+
+    private static var queryDateFormatter: ISO8601DateFormatter {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        return formatter
+    }
+
     private static func options(forTeam team: String?) -> WorldCupOptions {
         WorldCupOptions(
             limit: nil,
             teams: team.map { [$0] },
             acceptLanguage: nil,
-            date: nil
+            date: queryDateFormatter.string(from: max(Date(), queryDateFloor))
         )
     }
 

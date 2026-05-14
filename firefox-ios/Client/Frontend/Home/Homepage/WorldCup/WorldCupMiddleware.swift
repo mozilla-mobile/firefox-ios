@@ -15,6 +15,7 @@ final class WorldCupMiddleware {
     private let apiClient: WorldCupAPIClientProtocol?
     private var matchesFetchTask: Task<Void, Never>?
     private var matches: [WorldCupMatches] = []
+    private var defaultMatchIndex = 0
 
     init(
         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
@@ -50,7 +51,8 @@ final class WorldCupMiddleware {
                 shouldShowHomepageWorldCupSection: worldCupStore.isFeatureEnabledAndSectionEnabled,
                 shouldShowMilestone2: worldCupStore.isMilestone2,
                 selectedCountryId: worldCupStore.selectedTeam,
-                matches: matches
+                matches: matches,
+                defaultMatchIndex: defaultMatchIndex
             )
         )
     }
@@ -60,14 +62,23 @@ final class WorldCupMiddleware {
             dispatchUpdate(windowUUID: windowUUID)
             return
         }
+        let selectedTeam = worldCupStore.selectedTeam
         matchesFetchTask?.cancel()
         matchesFetchTask = Task { [apiClient, weak self] in
-            let result = await apiClient.loadMatches(query: .matches, team: nil)
+            let result = await apiClient.loadMatches(query: .matches, team: selectedTeam)
             guard case .success(let response) = result,
                   let response,
                   !Task.isCancelled else { return }
-            let matches = WorldCupMatches(response: response)
-            self?.matches = [matches]
+            if selectedTeam != nil {
+                self?.matches = [WorldCupMatches(response: response)]
+                self?.defaultMatchIndex = 0
+            } else {
+                let flattened = WorldCupMatches.flattened(response: response)
+                self?.matches = flattened
+                let previousCount = response.previous?.count ?? 0
+                let liveCount = response.current?.count ?? 0
+                self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
+            }
             self?.dispatchUpdate(windowUUID: windowUUID)
         }
     }
