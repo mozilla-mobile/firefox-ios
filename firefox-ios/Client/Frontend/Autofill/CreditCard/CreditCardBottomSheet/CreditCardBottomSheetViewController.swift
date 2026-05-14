@@ -176,19 +176,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     }
 
     func setupView() {
-        let headerHeight = cardTableView.estimatedSectionHeaderHeight
-        let estimatedFooterHeight = cardTableView.estimatedSectionFooterHeight
-        let estimatedCellHeight = cardTableView.estimatedRowHeight
-
-        let UXSpacing = UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
-        var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UXSpacing
-
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            estimatedContentHeight += UX.yesButtonHeight
-        }
-
         contentViewHeightConstraint = contentView.heightAnchor.constraint(
-            greaterThanOrEqualToConstant: estimatedContentHeight
+            greaterThanOrEqualToConstant: estimatedContentHeight()
         )
         contentViewHeightConstraint?.priority = UILayoutPriority(999)
         contentViewHeightConstraint?.isActive = true
@@ -232,6 +221,29 @@ class CreditCardBottomSheetViewController: UIViewController,
                 yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
             ]
         )
+    }
+
+    func estimatedContentHeight() -> CGFloat {
+        let headerHeight = cardTableView.estimatedSectionHeaderHeight
+        let estimatedFooterHeight = cardTableView.estimatedSectionFooterHeight
+        let estimatedCellHeight = cardTableView.estimatedRowHeight
+
+        if viewModel.state == .selectSavedCard {
+            return headerHeight +
+                CGFloat(numberOfCards) * estimatedCellHeight +
+                estimatedFooterHeight +
+                UX.bottomSpacing +
+                UX.distanceBetweenHeaderAndTop
+        }
+
+        let UXSpacing = UX.yesButtonHeight + UX.bottomSpacing + UX.buttonsSpacing
+        var estimatedContentHeight = headerHeight + estimatedCellHeight + estimatedFooterHeight + UXSpacing
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            estimatedContentHeight += UX.yesButtonHeight
+        }
+
+        return estimatedContentHeight
     }
 
     private func updateContentHeight() {
