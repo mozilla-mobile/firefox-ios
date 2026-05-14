@@ -894,6 +894,59 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
     }
 
+    func test_didTranslationSettingsChange_withFeatureDisabled_andActivePage_reloadsPage() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+        mockStore.state = setupAppState(translationState: .active)
+
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+
+        let expectation = XCTestExpectation(description: "reloadWebsite dispatched when disabling translations")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 0.5)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? GeneralBrowserAction)
+        let dispatchedActionType = try XCTUnwrap(dispatchedAction.actionType as? GeneralBrowserActionType)
+        XCTAssertEqual(dispatchedActionType, GeneralBrowserActionType.reloadWebsite)
+    }
+
+    func test_didTranslationSettingsChange_withFeatureDisabled_andInactivePage_doesNotReloadPage() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
+        let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+        mockStore.state = setupAppState(translationState: .inactive)
+
+        let action = ToolbarAction(
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.didTranslationSettingsChange
+        )
+
+        let expectation = XCTestExpectation(description: "no reload dispatched for inactive translation")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+    }
+
     func test_didTranslationSettingsChange_clearsStoredTargetLanguageForRetry() throws {
         setTranslationsFeatureEnabled(enabled: true)
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
@@ -907,6 +960,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
         subject.translationsProvider(mockStore.state, toggleAction)
+        mockStore.dispatchedActions.removeAll()
 
         let retryAction = TranslationsAction(
             windowUUID: .XCTestDefaultUUID,
@@ -1416,6 +1470,37 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
+        return setupAppState(translationState: nil)
+    }
+
+    private func setupAppState(translationState: TranslationConfiguration.IconState?) -> AppState {
+        let translationConfiguration = translationState.map {
+            TranslationConfiguration(prefs: mockProfile.prefs, state: $0)
+        }
+        let addressToolbar = AddressBarState(
+            windowUUID: .XCTestDefaultUUID,
+            navigationActions: [],
+            leadingPageActions: [],
+            trailingPageActions: [],
+            browserActions: [],
+            borderPosition: nil,
+            url: nil,
+            searchTerm: nil,
+            lockIconButtonA11yId: nil,
+            lockIconImageName: nil,
+            lockIconNeedsTheming: true,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            shouldShowKeyboard: false,
+            shouldSelectSearchTerm: false,
+            isLoading: false,
+            readerModeState: nil,
+            canSummarize: false,
+            translationConfiguration: translationConfiguration,
+            didStartTyping: false,
+            isEmptySearch: true,
+            alternativeSearchEngine: nil
+        )
         return AppState(
             presentedComponents: PresentedComponentsState(
                 components: [
@@ -1426,7 +1511,25 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
                     ),
                     .toolbar(
                         ToolbarState(
-                            windowUUID: .XCTestDefaultUUID
+                            windowUUID: .XCTestDefaultUUID,
+                            toolbarPosition: .top,
+                            toolbarLayout: .version1,
+                            tabTrayButtonStyle: .number,
+                            isPrivateMode: false,
+                            addressToolbar: addressToolbar,
+                            navigationToolbar: NavigationBarState(windowUUID: .XCTestDefaultUUID),
+                            isShowingNavigationToolbar: true,
+                            isShowingTopTabs: false,
+                            canGoBack: false,
+                            canGoForward: false,
+                            numberOfTabs: 1,
+                            scrollAlpha: 1,
+                            showMenuWarningBadge: false,
+                            canShowNavigationHint: false,
+                            shouldAnimate: true,
+                            isTranslucent: false,
+                            previousTabScreenshot: nil,
+                            nextTabScreenshot: nil
                         )
                     )
                 ]
