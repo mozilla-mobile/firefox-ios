@@ -2261,6 +2261,11 @@
 		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
 		EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EDF567A12C8B51E100FDB09D /* Kingfisher */; };
 		EDFEE3F42DE670B8005ADE03 /* gleanProbes.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = EDFEE3F32DE670B8005ADE03 /* gleanProbes.xcfilelist */; };
+		EEB951022FB60B3D00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB950FF2FB60B3D00D6C232 /* ReaderModeSchemeHandlerTests.swift */; };
+		EEB951032FB60B3D00D6C232 /* MockReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB950FD2FB60B3D00D6C232 /* MockReaderModeCache.swift */; };
+		EEB951042FB60B3D00D6C232 /* PageRouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB950FE2FB60B3D00D6C232 /* PageRouteTests.swift */; };
+		EEB951082FB60B7500D6C232 /* PageRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB951052FB60B7500D6C232 /* PageRoute.swift */; };
+		EEB951092FB60B7500D6C232 /* ReaderModeSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB951062FB60B7500D6C232 /* ReaderModeSchemeHandler.swift */; };
 		F00CA4012F00000000000003 /* WorldCupMatchesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000004 /* WorldCupMatchesResponse.swift */; };
 		F00CA4012F00000000000007 /* WorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000008 /* WorldCupAPIClient.swift */; };
 		F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */; };
@@ -2270,12 +2275,12 @@
 		F00CA4012F00000000000015 /* WorldCupLoadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000016 /* WorldCupLoadError.swift */; };
 		F00CA4012F00000000000017 /* WorldCupBaseHostOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */; };
 		F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */; };
-		F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */; };
-		F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */; };
 		F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */; };
 		F00CA4022F00000000000007 /* MockWorldCupAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */; };
 		F00CA4022F00000000000009 /* WorldCupAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */; };
 		F00CA4022F0000000000000B /* MockWorldCupFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */; };
+		F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */; };
+		F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */; };
 		F00CA4032F00000000000001 /* WorldCupMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000002 /* WorldCupMatch.swift */; };
 		F00CA4032F00000000000003 /* WorldCupMatches.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000004 /* WorldCupMatches.swift */; };
 		F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000008 /* WorldCupMatchesTests.swift */; };
@@ -11635,6 +11640,11 @@
 		EE994F2590D706FC0ADD4B42 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		EEA34C528147F2E7C3AB52C8 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEAB4DF28099E1BEA98A0B00 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
+		EEB950FD2FB60B3D00D6C232 /* MockReaderModeCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockReaderModeCache.swift; sourceTree = "<group>"; };
+		EEB950FE2FB60B3D00D6C232 /* PageRouteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRouteTests.swift; sourceTree = "<group>"; };
+		EEB950FF2FB60B3D00D6C232 /* ReaderModeSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandlerTests.swift; sourceTree = "<group>"; };
+		EEB951052FB60B7500D6C232 /* PageRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRoute.swift; sourceTree = "<group>"; };
+		EEB951062FB60B7500D6C232 /* ReaderModeSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeSchemeHandler.swift; sourceTree = "<group>"; };
 		EEE8476797612D908D23E6BC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEF342E5A045117853806115 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF0444EEBEA6A45A3E0F654C /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
@@ -11655,12 +11665,12 @@
 		F00CA4012F00000000000016 /* WorldCupLoadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadError.swift; sourceTree = "<group>"; };
 		F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupBaseHostOverrideSetting.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesResponseTests.swift; sourceTree = "<group>"; };
-		F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTeamsResponseTests.swift; sourceTree = "<group>"; };
-		F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadErrorTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFetchStrategyTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000008 /* MockWorldCupAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupAPIClient.swift; sourceTree = "<group>"; };
 		F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupAPIClientTests.swift; sourceTree = "<group>"; };
 		F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupFetchStrategy.swift; sourceTree = "<group>"; };
+		F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTeamsResponseTests.swift; sourceTree = "<group>"; };
+		F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadErrorTests.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000002 /* WorldCupMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatch.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000004 /* WorldCupMatches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatches.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000008 /* WorldCupMatchesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesTests.swift; sourceTree = "<group>"; };
@@ -16781,6 +16791,33 @@
 			path = Sharing;
 			sourceTree = "<group>";
 		};
+		EEB951002FB60B3D00D6C232 /* SchemeHandler */ = {
+			isa = PBXGroup;
+			children = (
+				EEB950FD2FB60B3D00D6C232 /* MockReaderModeCache.swift */,
+				EEB950FE2FB60B3D00D6C232 /* PageRouteTests.swift */,
+				EEB950FF2FB60B3D00D6C232 /* ReaderModeSchemeHandlerTests.swift */,
+			);
+			path = SchemeHandler;
+			sourceTree = "<group>";
+		};
+		EEB951012FB60B3D00D6C232 /* ReaderTests */ = {
+			isa = PBXGroup;
+			children = (
+				EEB951002FB60B3D00D6C232 /* SchemeHandler */,
+			);
+			path = ReaderTests;
+			sourceTree = "<group>";
+		};
+		EEB951072FB60B7500D6C232 /* SchemeHandler */ = {
+			isa = PBXGroup;
+			children = (
+				EEB951052FB60B7500D6C232 /* PageRoute.swift */,
+				EEB951062FB60B7500D6C232 /* ReaderModeSchemeHandler.swift */,
+			);
+			path = SchemeHandler;
+			sourceTree = "<group>";
+		};
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
 			isa = PBXGroup;
 			children = (
@@ -16898,6 +16935,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				EEB951012FB60B3D00D6C232 /* ReaderTests */,
 				C24A0D2E2F3A7E7200BF08B7 /* KeyChainAppAttestKeyIDStoreTests.swift */,
 				2151EF582F2AB962007B67A6 /* BrowserViewController */,
 				218457C42F22A3FA00B4FF23 /* Downloads */,
@@ -17120,6 +17158,7 @@
 		F84B21F51A0910F600AAB793 /* Reader */ = {
 			isa = PBXGroup;
 			children = (
+				EEB951072FB60B7500D6C232 /* SchemeHandler */,
 				2178A69E2914546D002EC290 /* Resources */,
 				2178A69D291453CC002EC290 /* View */,
 				E4CD9E901A6897FB00318571 /* ReaderMode.swift */,
@@ -19609,6 +19648,8 @@
 				962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */,
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
 				8C2937712BF79F0300146613 /* EditAddressViewController.swift in Sources */,
+				EEB951082FB60B7500D6C232 /* PageRoute.swift in Sources */,
+				EEB951092FB60B7500D6C232 /* ReaderModeSchemeHandler.swift in Sources */,
 				0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */,
 				8A093D7D2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift in Sources */,
 				1DC372022B23C80F000F96C8 /* WindowManager.swift in Sources */,
@@ -20362,6 +20403,9 @@
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
 				8A454D372CB86B86009436D9 /* MerinoStateTests.swift in Sources */,
 				ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */,
+				EEB951022FB60B3D00D6C232 /* ReaderModeSchemeHandlerTests.swift in Sources */,
+				EEB951032FB60B3D00D6C232 /* MockReaderModeCache.swift in Sources */,
+				EEB951042FB60B3D00D6C232 /* PageRouteTests.swift in Sources */,
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
 				8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */,
