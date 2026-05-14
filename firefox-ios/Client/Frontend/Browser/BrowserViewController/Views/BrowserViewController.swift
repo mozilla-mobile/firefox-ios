@@ -4997,15 +4997,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        if #available(iOS 26.0, *), isBottomSearchBar {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
