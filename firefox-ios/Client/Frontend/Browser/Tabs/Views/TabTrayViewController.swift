@@ -153,6 +153,10 @@ final class TabTrayViewController: UIViewController,
         return selector
     }()
 
+    private var activeExperimentSegmentControl: TabTraySelectorView {
+        shouldUseiPadSetup() ? experimentiPadSegmentControl : experimentSegmentControl
+    }
+
     private func experimentConvertSelectedIndex() -> Int {
         // Temporary offset of numbers to account for the different order in the experiment - tabTrayUIExperiments
         // Order can be updated in TabTrayPanelType once the experiment is done
@@ -458,7 +462,7 @@ final class TabTrayViewController: UIViewController,
         panelContainer.backgroundColor = theme.colors.layer3
 
         if shouldUsePrivateOverride {
-            experimentSegmentControl.applyTheme(theme: theme)
+            activeExperimentSegmentControl.applyTheme(theme: theme)
 
             let userInterfaceStyle = tabTrayState.isPrivateMode ? .dark : theme.type.getInterfaceStyle()
             navigationController?.overrideUserInterfaceStyle = userInterfaceStyle
@@ -483,8 +487,7 @@ final class TabTrayViewController: UIViewController,
         syncTabButton.tintColor = swipeTheme.colors.iconPrimary
         panelContainer.backgroundColor = swipeTheme.colors.layer3
 
-        experimentSegmentControl.applyTheme(theme: swipeTheme)
-        experimentiPadSegmentControl.applyTheme(theme: swipeTheme)
+        activeExperimentSegmentControl.applyTheme(theme: swipeTheme)
         setupToolBarAppearance(theme: swipeTheme)
         setupNavigationBarAppearance(theme: swipeTheme)
     }
