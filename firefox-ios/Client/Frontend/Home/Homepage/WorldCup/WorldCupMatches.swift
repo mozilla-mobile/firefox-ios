@@ -26,11 +26,11 @@ struct WorldCupMatches: Equatable, Hashable {
     }
 
     /// Single-card view used when a team is selected: the merino response is
-    /// already scoped to that team, so we surface everything from it on one
-    /// card — past + live as `featuredMatch` (the prominent top section),
-    /// scheduled as `upcomingMatches` (the compact bottom list). If nothing
-    /// has happened yet, the first scheduled match is promoted to featured so
-    /// the card never opens empty.
+    /// already scoped to that team, so we put any past results plus the live
+    /// match (if any) into `featuredMatch` (the prominent top section), and
+    /// the next two scheduled matches into `upcomingMatches` (the compact
+    /// bottom list). If nothing has happened yet, the first scheduled match
+    /// is promoted to featured so the card never opens empty.
     init(response: WorldCupMatchesResponse,
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
         let previous = response.previous ?? []
@@ -43,6 +43,7 @@ struct WorldCupMatches: Equatable, Hashable {
             featured = [firstScheduled]
             upcoming = Array(upcoming.dropFirst())
         }
+        upcoming = Array(upcoming.prefix(2))
 
         self.phaseTitle = Self.phaseTitle(from: response)
         self.isLive = !live.isEmpty
