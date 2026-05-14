@@ -15,6 +15,12 @@ struct WorldCupCellFactory {
         guard state.isMilestone2 else {
             return [timerView]
         }
+    
+        if state.apiError != nil {
+            let errorView = WorldCupErrorView(windowUUID: state.windowUUID)
+            errorView.configure(state: state)
+            return [errorView]
+        }
 
         let matchesViews = state.matches.map {
             let view = WorldCupMatchCardView(windowUUID: state.windowUUID)

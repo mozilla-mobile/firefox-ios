@@ -13,24 +13,28 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var shouldShowSection: Bool
     var isMilestone2: Bool
     var matches: [WorldCupMatches]
+    var apiError: WorldCupLoadError?
 
     init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         self.shouldShowSection = false
         self.isMilestone2 = false
         self.matches = []
+        self.apiError = nil
     }
 
     private init(
         windowUUID: WindowUUID,
         shouldShowSection: Bool,
         isMilestone2: Bool,
-        matches: [WorldCupMatches]
+        matches: [WorldCupMatches],
+        apiError: WorldCupLoadError?
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
         self.isMilestone2 = isMilestone2
         self.matches = matches
+        self.apiError = apiError
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -43,7 +47,8 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 windowUUID: action.windowUUID,
                 shouldShowSection: action.shouldShowHomepageWorldCupSection,
                 isMilestone2: action.shouldShowMilestone2,
-                matches: action.matches
+                matches: action.matches,
+                apiError: action.apiError
             )
         default:
             return state

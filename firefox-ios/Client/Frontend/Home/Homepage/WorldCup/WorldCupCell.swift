@@ -257,7 +257,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
 
         let targetHeight = view.systemLayoutSizeFitting(
-            CGSize(width: scrollView.frame.width > 0 ? scrollView.frame.width : bounds.width,
+            CGSize(width: bounds.width,
                    height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
@@ -328,21 +328,26 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return false
         }
 
-        scrollView.setContentOffset(CGPoint(x: CGFloat(next) * pageWidth, y: 0), animated: true)
         goToPage(next)
         return true
     }
 
     private func goToPage(_ page: Int) {
         pageControl.currentPage = page
+    
         updatePageAccessibility()
+        // it is safe to use bounds.width cause the scrollView has the same width of the parent view
+        // the bounds gets updated before the subviews so with this we can avoid relayout of the scrollView.
+        scrollView.setContentOffset(CGPoint(x: CGFloat(page) * bounds.width, y: 0), animated: false)
         updateScrollViewHeight(for: page, animated: true) { [weak self] in
             guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
             UIView.animate(
                 withDuration: UX.contentFadeInDuration,
                 delay: UX.animationDelay,
                 options: [.allowUserInteraction],
-                animations: { container.setContentVisibility(true) },
+                animations: {
+                    container.setContentVisibility(true)
+                },
                 completion: { _ in
                     UIAccessibility.post(notification: .screenChanged, argument: container)
                 }
