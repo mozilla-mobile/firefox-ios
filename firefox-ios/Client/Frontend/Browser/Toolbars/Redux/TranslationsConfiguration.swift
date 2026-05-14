@@ -52,6 +52,7 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     }
 
     let prefs: Prefs
+    let isUserSettingEnabled: Bool
     let state: IconState?
     /// The language code the page was translated to, if in the active state (e.g. "en", "fr").
     let translatedToLanguage: String?
@@ -61,8 +62,15 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
     // We initially set icon state as nil until we can detect the
     // web page and determine if we should show the translation icon
     // and set the icon to .inactive state.
-    init(prefs: Prefs, state: IconState? = nil, translatedToLanguage: String? = nil, sourceLanguage: String? = nil) {
+    init(
+        prefs: Prefs,
+        isUserSettingEnabled: Bool = true,
+        state: IconState? = nil,
+        translatedToLanguage: String? = nil,
+        sourceLanguage: String? = nil
+    ) {
         self.prefs = prefs
+        self.isUserSettingEnabled = isUserSettingEnabled
         self.state = state
         self.translatedToLanguage = translatedToLanguage
         self.sourceLanguage = sourceLanguage
@@ -75,17 +83,14 @@ struct TranslationConfiguration: Equatable, FeatureFlaggable {
         return stored.components(separatedBy: ",").count != 1
     }
 
-    /// Determines whether to show the translate icon on the toolbar
-    /// The experiment needs to be turned on and the user settings needs to be enabled
-    /// If user has not toggled the settings, then we enable the feature by default
+    /// Determines whether to show the translate icon on the toolbar.
+    /// The experiment needs to be turned on and the user setting needs to be enabled.
     var isTranslationFeatureEnabled: Bool {
-        let isExperimentOn = featureFlagsProvider.isEnabled(.translation)
-        let isSettingsEnabled = prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
-        return isExperimentOn && isSettingsEnabled
+        return featureFlagsProvider.isEnabled(.translation) && isUserSettingEnabled
     }
 
     static func == (lhs: TranslationConfiguration, rhs: TranslationConfiguration) -> Bool {
-        return lhs.isTranslationFeatureEnabled == rhs.isTranslationFeatureEnabled
+        return lhs.isUserSettingEnabled == rhs.isUserSettingEnabled
             && lhs.state == rhs.state
             && lhs.translatedToLanguage == rhs.translatedToLanguage
             && lhs.sourceLanguage == rhs.sourceLanguage

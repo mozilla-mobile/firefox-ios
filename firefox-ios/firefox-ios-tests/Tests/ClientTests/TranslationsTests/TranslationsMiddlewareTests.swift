@@ -875,11 +875,11 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_didTranslationSettingsChange_withFeatureDisabled_doesNotDispatchAction() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
         let mockTranslationService = MockTranslationsService(shouldOfferTranslationResult: .success(true))
         let subject = createSubject(translationsService: mockTranslationService)
         let action = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            isTranslationsEnabled: false,
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
@@ -949,13 +949,13 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
     func test_didTranslationSettingsChange_clearsStoredTargetLanguageForRetry() throws {
         setTranslationsFeatureEnabled(enabled: true)
-        mockProfile.prefs.setBool(false, forKey: PrefsKeys.Settings.translationsFeature)
         let subject = createSubject()
 
         seedTargetLanguage(in: subject, successDispatchCount: 2)
 
         let toggleAction = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            isTranslationsEnabled: false,
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
