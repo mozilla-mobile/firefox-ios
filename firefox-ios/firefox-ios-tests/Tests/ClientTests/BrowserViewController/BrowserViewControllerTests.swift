@@ -671,7 +671,10 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
 
     @MainActor
     func testStartNavigationButtonDoubleTapTimer_singleTap_doesNotDispatchDoubleTap() {
-        createSubject().startNavigationButtonDoubleTapTimer()
+        let subject = createSubject()
+        defer { subject.navigationHintDoubleTapTimer?.invalidate() }
+
+        subject.startNavigationButtonDoubleTapTimer()
 
         XCTAssertNil(
             mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
@@ -684,7 +687,9 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
     func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
         let subject = createSubject()
         subject.startNavigationButtonDoubleTapTimer()
+        let firstScheduledTimer = subject.navigationHintDoubleTapTimer
         subject.startNavigationButtonDoubleTapTimer()
+        firstScheduledTimer?.invalidate()
 
         let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
         let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)

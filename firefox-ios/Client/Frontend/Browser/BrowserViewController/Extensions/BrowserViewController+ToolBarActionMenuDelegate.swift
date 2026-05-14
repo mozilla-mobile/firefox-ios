@@ -11,13 +11,12 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     @MainActor
     func startNavigationButtonDoubleTapTimer() {
         if navigationHintDoubleTapTimer == nil {
-            navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { [weak self] _ in
+            navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
                 ensureMainThread {
-                    self?.navigationHintDoubleTapTimer = nil
+                    self.navigationHintDoubleTapTimer = nil
                 }
             }
         } else {
-            navigationHintDoubleTapTimer?.invalidate()
             navigationHintDoubleTapTimer = nil
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
             store.dispatch(action)
