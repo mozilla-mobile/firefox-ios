@@ -5,6 +5,12 @@
 import Common
 import Foundation
 
+struct LockIconState: Equatable {
+    let imageName: String?
+    let a11yId: String?
+    let needsTheming: Bool
+}
+
 protocol ToolbarHelperInterface {
     var isSwipingTabsEnabled: Bool { get }
     var userInterfaceIdiom: UIUserInterfaceIdiom { get }
@@ -20,6 +26,8 @@ protocol ToolbarHelperInterface {
 
     @MainActor
     func shouldBlur() -> Bool
+
+    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState
 }
 
 final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
@@ -63,5 +71,20 @@ final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
     @MainActor
     init(userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         self.userInterfaceIdiom = userInterfaceIdiom
+    }
+
+    func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
+        let lockIconImageName = hasOnlySecureContent ?
+            StandardImageIdentifiers.Small.shieldCheckmarkFill :
+            StandardImageIdentifiers.Small.shieldSlashFillMulticolor
+        let lockIconButtonA11yId = hasOnlySecureContent ?
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
+            AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
+
+        return LockIconState(
+            imageName: isWebsiteMode ? lockIconImageName : nil,
+            a11yId: lockIconButtonA11yId,
+            needsTheming: hasOnlySecureContent
+        )
     }
 }
