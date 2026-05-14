@@ -77,7 +77,10 @@ class AIControlsModel: ObservableObject,
     ) {
         self.prefs = prefs
         self.windowUUID = windowUUID
-        self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(prefs: prefs)
+        self.translationConfiguration = translationConfiguration ?? TranslationConfiguration(
+            prefs: prefs,
+            isUserSettingEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true
+        )
         self.summarizerConfiguration = summarizerConfiguration
         self.settingsTelemetry = settingsTelemetry
         self.logger = logger

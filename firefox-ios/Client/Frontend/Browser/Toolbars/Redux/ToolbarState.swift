@@ -24,6 +24,7 @@ struct ToolbarState: ScreenState, Sendable {
     var canShowNavigationHint: Bool
     var shouldAnimate: Bool
     var isTranslucent: Bool
+    var isTranslationsEnabled: Bool
     var previousTabScreenshot: UIImage?
     var nextTabScreenshot: UIImage?
 
@@ -54,6 +55,7 @@ struct ToolbarState: ScreenState, Sendable {
                   canShowNavigationHint: toolbarState.canShowNavigationHint,
                   shouldAnimate: toolbarState.shouldAnimate,
                   isTranslucent: toolbarState.isTranslucent,
+                  isTranslationsEnabled: toolbarState.isTranslationsEnabled,
                   previousTabScreenshot: toolbarState.previousTabScreenshot,
                   nextTabScreenshot: toolbarState.nextTabScreenshot
         )
@@ -78,6 +80,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: false,
             shouldAnimate: true,
             isTranslucent: false,
+            isTranslationsEnabled: true,
             previousTabScreenshot: nil,
             nextTabScreenshot: nil
         )
@@ -101,6 +104,7 @@ struct ToolbarState: ScreenState, Sendable {
         canShowNavigationHint: Bool,
         shouldAnimate: Bool,
         isTranslucent: Bool,
+        isTranslationsEnabled: Bool = true,
         previousTabScreenshot: UIImage?,
         nextTabScreenshot: UIImage?
     ) {
@@ -121,6 +125,7 @@ struct ToolbarState: ScreenState, Sendable {
         self.canShowNavigationHint = canShowNavigationHint
         self.shouldAnimate = shouldAnimate
         self.isTranslucent = isTranslucent
+        self.isTranslationsEnabled = isTranslationsEnabled
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
     }
@@ -221,6 +226,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: isTranslucent,
+            isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -248,6 +254,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: toolbarAction.shouldAnimate ?? state.shouldAnimate,
             isTranslucent: toolbarAction.isTranslucent ?? state.isTranslucent,
+            isTranslationsEnabled: toolbarAction.isTranslationsEnabled ?? state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -274,6 +281,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -300,6 +308,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -326,6 +335,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: toolbarAction.previousTabScreenshot,
             nextTabScreenshot: toolbarAction.nextTabScreenshot
         )
@@ -357,6 +367,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -383,6 +394,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -409,6 +421,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -435,6 +448,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: true,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -461,6 +475,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: false,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -490,6 +505,7 @@ struct ToolbarState: ScreenState, Sendable {
             canShowNavigationHint: state.canShowNavigationHint,
             shouldAnimate: state.shouldAnimate,
             isTranslucent: state.isTranslucent,
+            isTranslationsEnabled: state.isTranslationsEnabled,
             previousTabScreenshot: state.previousTabScreenshot,
             nextTabScreenshot: state.nextTabScreenshot
         )
@@ -521,6 +537,7 @@ struct ToolbarState: ScreenState, Sendable {
                             canShowNavigationHint: state.canShowNavigationHint,
                             shouldAnimate: state.shouldAnimate,
                             isTranslucent: state.isTranslucent,
+                            isTranslationsEnabled: state.isTranslationsEnabled,
                             previousTabScreenshot: state.previousTabScreenshot,
                             nextTabScreenshot: state.nextTabScreenshot)
     }
