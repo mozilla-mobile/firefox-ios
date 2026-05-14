@@ -12,7 +12,6 @@ enum FeatureFlagID: String, CaseIterable {
     case adsClient
     case aiKillSwitch
     case appearanceMenu
-    case appIconSelection
     case badCertDomainErrorPage
     case bookmarksSearchFeature
     case deeplinkOptimizationRefactor
@@ -89,7 +88,6 @@ enum FeatureFlagID: String, CaseIterable {
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
-                .appIconSelection,
                 .badCertDomainErrorPage,
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
