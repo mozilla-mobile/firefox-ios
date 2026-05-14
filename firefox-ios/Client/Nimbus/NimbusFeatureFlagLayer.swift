@@ -36,9 +36,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .appearanceMenu:
             return checkAppearanceMenuFeature()
 
-        case .appIconSelection:
-            return checkAppIconSelectionSetting()
-
         case .badCertDomainErrorPage:
             return checkBadCertDomainErrorPageFeature()
 
@@ -328,11 +325,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     private func checkAppearanceMenuFeature() -> Bool {
         let config = nimbus.features.appearanceMenuFeature.value()
         return config.status
-    }
-
-    private func checkAppIconSelectionSetting() -> Bool {
-        let config = nimbus.features.appIconSelectionFeature.value()
-        return config.funIconsEnabled
     }
 
     private func checkAddressBarMenuFeature() -> Bool {
