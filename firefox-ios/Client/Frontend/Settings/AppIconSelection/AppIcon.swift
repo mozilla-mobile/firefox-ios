@@ -287,16 +287,6 @@ enum AppIcon: String, CaseIterable {
         }
     }
 
-    /// Determines whether the icon belongs to the fun icon set behind a feature flag.
-    var isFunIcon: Bool {
-        switch self {
-        case .cool, .cuddling, .flaming:
-            return true
-        default:
-            return false
-        }
-    }
-
     /// Initialize an `AppIcon` from the current `UIApplication.shared.alternateIconName` setting. If the icon cannot be
     /// identified, returns `nil`. This might happen if an old asset is renamed or removed from the asset catalog.
     @MainActor
