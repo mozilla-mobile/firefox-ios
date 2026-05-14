@@ -75,6 +75,15 @@ extension URL {
         return normalizedHost.flatMap { $0 + self.path }
     }
 
+    // Isolates the domain in a left-to-right context
+    // by using Left-to-Right Isolate (U+2066) to prevent RTL characters from reordering the display url.
+    // We use Pop Directional Isolate (U+2069) to close the range.
+    // (Bugzilla #2029371)
+    public var normalizedHostWithLRI: String? {
+        guard let normalizedHost else { return nil }
+        return "\u{2066}\(normalizedHost)\u{2069}"
+    }
+
     /// Extracts the subdomain and host from a given URL string and appends a dot to the subdomain.
     ///
     /// This function takes a URL string as input and returns a tuple containing the subdomain and the normalized host.

@@ -381,6 +381,70 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNil(tab.translationConfiguration)
     }
 
+    /// PDF MIME type suppresses the translate icon without calling language detection.
+    func test_urlDidChangeAction_withPDFMimeType_dispatchesClearAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.mimeType = MIMEType.PDF
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        mockTabManager.selectedTab = tab
+
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com/document.pdf"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "receivedTranslationLanguage clear dispatched for PDF")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertNil(actionCalled.translationConfiguration)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarActionType, .receivedTranslationLanguage)
+        XCTAssertNil(tab.translationConfiguration)
+    }
+
+    /// Image MIME type suppresses the translate icon without calling language detection.
+    func test_urlDidChangeAction_withImageMimeType_dispatchesClearAction() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.mimeType = MIMEType.JPEG
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .inactive)
+        mockTabManager.selectedTab = tab
+
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com/photo.jpg"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "receivedTranslationLanguage clear dispatched for image")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        XCTAssertNil(actionCalled.translationConfiguration)
+        XCTAssertEqual(actionCalled.actionType as? ToolbarActionType, .receivedTranslationLanguage)
+        XCTAssertNil(tab.translationConfiguration)
+    }
+
     /// Mid-eligibility tab switch: result lands on the originating tab, not the new active tab.
     func test_urlDidChangeAction_tabSwitchMidEligibility_persistsOnOriginatingTab() throws {
         setTranslationsFeatureEnabled(enabled: true)

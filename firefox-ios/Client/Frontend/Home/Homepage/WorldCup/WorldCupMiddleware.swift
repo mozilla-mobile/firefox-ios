@@ -15,6 +15,7 @@ final class WorldCupMiddleware {
     private let apiClient: WorldCupAPIClientProtocol?
     private var matchesFetchTask: Task<Void, Never>?
     private var matches: [WorldCupMatches] = []
+    private var defaultMatchIndex = 0
 
     init(
         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
@@ -56,7 +57,8 @@ final class WorldCupMiddleware {
                 shouldShowMilestone2: worldCupStore.isMilestone2,
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: matches,
-                apiError: apiError
+                apiError: apiError,
+                defaultMatchIndex: defaultMatchIndex
             )
         )
     }
@@ -80,6 +82,20 @@ final class WorldCupMiddleware {
             case .failure(let error):
                 self?.dispatchUpdate(windowUUID: windowUUID, apiError: error)
             }
+            guard case .success(let response) = result,
+                  let response,
+                  !Task.isCancelled else { return }
+            if selectedTeam != nil {
+                self?.matches = [WorldCupMatches(response: response)]
+                self?.defaultMatchIndex = 0
+            } else {
+                let flattened = WorldCupMatches.flattened(response: response)
+                self?.matches = flattened
+                let previousCount = response.previous?.count ?? 0
+                let liveCount = response.current?.count ?? 0
+                self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
+            }
+            self?.dispatchUpdate(windowUUID: windowUUID)
         }
     }
 }
