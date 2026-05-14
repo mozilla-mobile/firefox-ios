@@ -43,7 +43,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
 
     private func presentNavigationContextualHint() {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            updateNavAnchor()
+            updateNavCFRAnchor()
         }
         // Only show the contextual hint if:
         // 1. The tab webpage is loaded OR we are on the home page, and the
@@ -132,7 +132,7 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    private func updateNavAnchor() {
+    private func updateNavCFRAnchor() {
         guard let popover = navigationContextHintVC.popoverPresentationController,
               let rootView = view
         else { return }
