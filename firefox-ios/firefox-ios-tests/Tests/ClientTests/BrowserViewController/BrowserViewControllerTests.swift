@@ -617,6 +617,80 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(dispatchActionType, GeneralBrowserActionType.didTapReaderModeBarSummarizerButton)
     }
 
+    // MARK: - Toolbar
+
+    func testToolbarLongPressMenu_rowsTitlesAndIcons() {
+        let subject = createSubject()
+        let nav = subject.getNavigationToolbarLongPressActions()
+        XCTAssertEqual([nav.count, nav[0].count, nav[1].count], [2, 2, 1])
+
+        let newTabOnly = subject.getNewTabLongPressActions()
+        XCTAssertEqual([newTabOnly.count, newTabOnly[0].count], [1, 2])
+
+        for index in 0..<2 {
+            let navigationItem = nav[0][index].items[0]
+            let newTabItem = newTabOnly[0][index].items[0]
+            XCTAssertEqual(navigationItem.title, newTabItem.title)
+            XCTAssertEqual(navigationItem.iconString, newTabItem.iconString)
+        }
+
+        let close = nav[1][0].items[0]
+        XCTAssertEqual(close.title, String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton)
+        XCTAssertEqual(close.iconString, StandardImageIdentifiers.Large.cross)
+    }
+
+    func testDismissToolbarCFRs_mismatchedWindowUUID() {
+        let toolbarWindow = WindowUUID.XCTestDefaultUUID
+        let mismatchedWindow = WindowUUID.DefaultUITestingUUID
+
+        let state = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(BrowserViewControllerState(windowUUID: toolbarWindow)),
+            .toolbar(ToolbarState(windowUUID: toolbarWindow)),
+        ]))
+        mockStore = MockStoreForMiddleware(state: state)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        createSubject().dismissToolbarCFRs(with: mismatchedWindow)
+    }
+
+    func testDismissToolbarCFRs_ToolbarAddedForWindow() {
+        let window = WindowUUID.XCTestDefaultUUID
+
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+        createSubject().dismissToolbarCFRs(with: window)
+
+        let state = AppState(presentedComponents: PresentedComponentsState(components: [
+            .browserViewController(BrowserViewControllerState(windowUUID: window)),
+            .toolbar(ToolbarState(windowUUID: window)),
+        ]))
+        mockStore = MockStoreForMiddleware(state: state)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+        createSubject().dismissToolbarCFRs(with: window)
+    }
+
+    @MainActor
+    func testStartNavigationButtonDoubleTapTimer_singleTap_doesNotDispatchDoubleTap() {
+        createSubject().startNavigationButtonDoubleTapTimer()
+
+        XCTAssertNil(
+            mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.first {
+                ($0.actionType as? ToolbarActionType) == .navigationButtonDoubleTapped
+            }
+        )
+    }
+
+    @MainActor
+    func testStartNavigationButtonDoubleTapTimer_doubleTap_dispatchesDoubleTap() throws {
+        let subject = createSubject()
+        subject.startNavigationButtonDoubleTapTimer()
+        subject.startNavigationButtonDoubleTapTimer()
+
+        let action = try XCTUnwrap(mockStore.dispatchedActions.compactMap { $0 as? ToolbarAction }.last)
+        let actionType = try XCTUnwrap(action.actionType as? ToolbarActionType)
+        XCTAssertEqual(actionType, .navigationButtonDoubleTapped)
+    }
+
     // MARK: - Private
 
     private func createSubject(file: StaticString = #filePath,
