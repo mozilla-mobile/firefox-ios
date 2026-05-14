@@ -149,7 +149,7 @@
 "WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Partido terminado • Penales (%@)";
 
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
-"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Obtener un fondo de pantalla personalizado";
+"WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Conseguir un fondo de pantalla personalizado";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Partidos relacionados";
