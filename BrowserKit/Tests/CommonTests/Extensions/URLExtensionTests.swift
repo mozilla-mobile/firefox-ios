@@ -113,6 +113,18 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(host, "mobile.co.uk")
     }
 
+    func testNormalizedHostReturnsOriginalHostWithSubdomain() {
+        let url = URL(string: "http://abc.test.com")!
+        let host = url.normalizedHost
+        XCTAssertEqual(host, "abc.test.com")
+    }
+
+    func testNormalizedHostForUTF8UrlReturnsNil() {
+        let url = URL(string: "https://😊.com")!
+        let host = url.normalizedHost
+        XCTAssertNil(host)
+    }
+
     func testIPv6Domain() {
         let url = URL(string: "http://[::1]/foo/bar")!
         XCTAssertTrue(url.isIPv6)
