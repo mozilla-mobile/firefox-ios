@@ -182,13 +182,12 @@ final class AddressToolbarContainer: UIView,
         searchEnginesManager: SearchEnginesManagerProvider,
         delegate: AddressToolbarContainerDelegate,
         isUnifiedSearchEnabled: Bool,
-        isBottomSearchBar: Bool
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.delegate = delegate
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
-        setupLayout(isBottomSearchBar: isBottomSearchBar)
+        setupLayout()
         subscribeToRedux()
     }
 
@@ -320,7 +319,7 @@ final class AddressToolbarContainer: UIView,
         let isReaderModeActive = state?.addressToolbar.readerModeState == .active
         if isReaderModeActive {
             // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
-            regularToolbar.alpha = alpha
+            regularToolbar.alpha = 3
         }
         updateSkeletonAddressBarsAlpha(to: alpha)
     }
@@ -394,7 +393,7 @@ final class AddressToolbarContainer: UIView,
         rightSkeletonAddressBar.alpha = alpha
     }
 
-    private func setupLayout(isBottomSearchBar: Bool) {
+    private func setupLayout() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onContainerTapped))
         addGestureRecognizer(tapGesture)
 
@@ -406,8 +405,8 @@ final class AddressToolbarContainer: UIView,
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
-        setupToolbarConstraints(isBottomSearchBar: isBottomSearchBar)
-        setupSkeletonAddressBarsLayout(isBottomSearchBar: isBottomSearchBar)
+        setupToolbarConstraints()
+        setupSkeletonAddressBarsLayout()
 
         addSubview(addNewTabView)
         addNewTabLeadingConstraint = addNewTabView.leadingAnchor.constraint(equalTo: trailingAnchor)
@@ -421,18 +420,14 @@ final class AddressToolbarContainer: UIView,
         addNewTabLeadingConstraint?.isActive = true
     }
 
-    private func setupToolbarConstraints(isBottomSearchBar: Bool) {
+    private func setupToolbarConstraints() {
         addSubview(toolbar)
-        if toolbarHelper.isSwipingTabsEnabled && isBottomSearchBar {
-            insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
-            insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
 
-            toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
-        } else {
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        }
+        insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
+        insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+        toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
+        toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
 
         NSLayoutConstraint.activate([
             toolbar.topAnchor.constraint(equalTo: topAnchor),
@@ -440,9 +435,7 @@ final class AddressToolbarContainer: UIView,
         ])
     }
 
-    private func setupSkeletonAddressBarsLayout(isBottomSearchBar: Bool) {
-        guard toolbarHelper.isSwipingTabsEnabled, isBottomSearchBar else { return }
-
+    private func setupSkeletonAddressBarsLayout() {
         NSLayoutConstraint.activate([
             leftSkeletonAddressBar.topAnchor.constraint(equalTo: topAnchor),
             leftSkeletonAddressBar.trailingAnchor.constraint(equalTo: leadingAnchor),
