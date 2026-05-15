@@ -42,7 +42,6 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
-
         case .customReaderModeScheme:
             return checkCustomReaderModeSchemeFeature()
         case .deeplinkOptimizationRefactor:
