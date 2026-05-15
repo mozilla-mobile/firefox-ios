@@ -348,6 +348,7 @@
 		217C6A792F3A7A370085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C6A782F3A7A090085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift */; };
 		217C6F312F3BD5E00085D9B9 /* BrowserViewControllerConstraintTestsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C6F302F3BD5D20085D9B9 /* BrowserViewControllerConstraintTestsBase.swift */; };
 		217C7C2D2F4507170085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217C7C2C2F4507000085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift */; };
+		218208DC2F9C0D1D00A899D1 /* TabTrayIpadSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218208DB2F9C0D1300A899D1 /* TabTrayIpadSelectorView.swift */; };
 		218457C62F22A4E800B4FF23 /* TabTrayStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218457C52F22A4E200B4FF23 /* TabTrayStateTests.swift */; };
 		21872A232E3CFEA500241A8A /* TabScrollHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */; };
 		2191D4472DC3BC1200E1A839 /* ZoomTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2191D4462DC3BC1200E1A839 /* ZoomTelemetry.swift */; };
@@ -3171,6 +3172,7 @@
 		217C6A782F3A7A090085D9B9 /* BrowserViewControllerDynamicViewConstraintsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerDynamicViewConstraintsTests.swift; sourceTree = "<group>"; };
 		217C6F302F3BD5D20085D9B9 /* BrowserViewControllerConstraintTestsBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerConstraintTestsBase.swift; sourceTree = "<group>"; };
 		217C7C2C2F4507000085D9B9 /* BrowserViewControllerKeyboardConstraintTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerKeyboardConstraintTests.swift; sourceTree = "<group>"; };
+		218208DB2F9C0D1300A899D1 /* TabTrayIpadSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayIpadSelectorView.swift; sourceTree = "<group>"; };
 		218457C52F22A4E200B4FF23 /* TabTrayStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayStateTests.swift; sourceTree = "<group>"; };
 		21872A222E3CFEA500241A8A /* TabScrollHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollHandlerTests.swift; sourceTree = "<group>"; };
 		2191D4462DC3BC1200E1A839 /* ZoomTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomTelemetry.swift; sourceTree = "<group>"; };
@@ -13354,6 +13356,7 @@
 		5A96FB602D97073C00917B12 /* CustomSelectorView */ = {
 			isa = PBXGroup;
 			children = (
+				218208DB2F9C0D1300A899D1 /* TabTrayIpadSelectorView.swift */,
 				8A0636F52DF0CDAD0076823A /* TabTraySelectorButtonModel.swift */,
 				5A96FB5E2D96DA9700917B12 /* TabTraySelectorView.swift */,
 			);
@@ -19227,6 +19230,7 @@
 				5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */,
 				8A7368AD27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift in Sources */,
 				39E186DD2F7D98B600FD3FFA /* MerinoCategoryConfiguration.swift in Sources */,
+				218208DC2F9C0D1D00A899D1 /* TabTrayIpadSelectorView.swift in Sources */,
 				C7F5331A2E5799AA0089DEC7 /* ShortcutsLibraryTelemetry.swift in Sources */,
 				C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */,
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
