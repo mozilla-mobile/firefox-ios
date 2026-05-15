@@ -13,4 +13,6 @@ public enum OAuthScope {
     public static let session: String = "https://identity.mozilla.com/tokens/session"
     // Necessary for Relay email masking support.
     public static let relay: String = "https://identity.mozilla.com/apps/relay"
+    // Necessary to mint access tokens for Mozilla VPN.
+    public static let vpn: String = "https://identity.mozilla.com/apps/vpn"
 }

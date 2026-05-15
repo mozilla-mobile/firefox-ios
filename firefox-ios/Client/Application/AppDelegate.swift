@@ -39,6 +39,13 @@ class AppDelegate: UIResponder,
     lazy var tabDataStore = DefaultTabDataStore()
     lazy var windowManager = WindowManagerImplementation()
     lazy var relayController: RelayControllerProtocol = RelayController()
+    lazy var vpnController: VPNControllerProtocol = {
+        if #available(iOS 17.0, *) {
+            return VPNController()
+        } else {
+            return StubVPNController()
+        }
+    }()
     lazy var backgroundTabLoader: BackgroundTabLoader = {
         return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
     }()

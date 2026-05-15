@@ -180,7 +180,7 @@ public final class RustFirefoxAccounts: @unchecked Sendable {
         return FxAccountManager(
             config: config,
             deviceConfig: deviceConfig,
-            applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session],
+            applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session, OAuthScope.vpn],
             keychainAccessGroup: accessGroupIdentifier
         )
     }

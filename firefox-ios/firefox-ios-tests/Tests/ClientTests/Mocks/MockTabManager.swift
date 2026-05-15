@@ -156,4 +156,5 @@ class MockTabManager: TabManager {
 
     func tabDidSetScreenshot(_ tab: Client.Tab) {}
     func offloadBackgroundWebViews() async {}
+    func rebuildWebViewsForProxyChange() async {}
 }
