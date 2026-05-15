@@ -11,6 +11,7 @@ public struct StandardImageIdentifiers {
     // Icon size 8x8
     public struct ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
+        public static let pin = "pinExtraSmall"
     }
 
     // Icon size 16x16
