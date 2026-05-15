@@ -529,7 +529,6 @@ class CodeUsageDetector {
         case notifiable
         case unsafe
         case cspHeader
-        case sha256
 
         var bundledHeader: String {
             switch self {
@@ -552,8 +551,6 @@ class CodeUsageDetector {
                 return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
             case .cspHeader:
                 return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
-            case .sha256:
-                return "### 🔒 Security: `sha256` hash changes detected\nPlease request a security review."
             }
         }
 
@@ -577,14 +574,12 @@ class CodeUsageDetector {
                 return "unsafe-"
             case .cspHeader:
                 return "Content-Security-Policy"
-            case .sha256:
-                return "sha256"
             }
         }
 
         func applies(to file: String) -> Bool {
             switch self {
-            case .unsafe, .cspHeader, .sha256:
+            case .unsafe, .cspHeader:
                 return file.hasSuffix(".swift") || file.hasSuffix(".js")
             default:
                 return file.contains(".swift")
@@ -611,18 +606,10 @@ class CodeUsageDetector {
             }
         }
 
-        // Default is true, expect for some additions that aren't worth flagging
-        var detectsAdditions: Bool {
-            switch self {
-            case .sha256: return false
-            default: return true
-            }
-        }
-
-        // Most code removals we don't want to flag, expect for some
+        // Default is false, expect for some code removals that we want to flag
         var detectsRemovals: Bool {
             switch self {
-            case .cspHeader, .sha256: return true
+            case .cspHeader: return true
             default: return false
             }
         }
@@ -711,7 +698,7 @@ class CodeUsageDetector {
                     // Context or added line: exists in both old and new file
                     newLineCount += 1
                     oldLineCount += 1
-                    if isAddedLine && keyword.detectsAdditions && lineStr.contains(keyword.keyword) {
+                    if isAddedLine && lineStr.contains(keyword.keyword) {
                         let lineNumber = hunk.newLineStart + newLineCount - 1
                         detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
                     }
@@ -727,7 +714,6 @@ class CodeUsageDetector {
 
     private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
         guard !shouldSkip(keyword, for: file) else { return [] }
-        guard keyword.detectsAdditions else { return [] }
         return lines.enumerated().compactMap { index, line in
             guard line.contains(keyword.keyword) else { return nil }
             return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
