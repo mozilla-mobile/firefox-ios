@@ -17,6 +17,7 @@ class CopiedLinksTests: BaseTestCase {
     }
 
     // This test is enable Offer to open copied links, when opening firefox
+    // https://mozilla.testrail.io/index.php?/cases/view/2334756
     func testCopiedLinks() {
         toolbarScreen.tapSettingsMenuButton()
         mainMenuScreen.tapSettings()

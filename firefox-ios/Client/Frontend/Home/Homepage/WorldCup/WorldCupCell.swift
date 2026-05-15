@@ -132,7 +132,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var pageControlHeightConstraint: NSLayoutConstraint?
     private var pageControlTopConstraint: NSLayoutConstraint?
     private var currentState: WorldCupSectionState?
-    private var onHeightChange: (() -> Void)?
+    private var onHeightChange: ((CGFloat) -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
     private var currentTheme: Theme?
 
@@ -213,7 +213,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     func configure(
         with state: WorldCupSectionState,
         theme: Theme,
-        onHeightChange: @escaping () -> Void
+        onHeightChange: @escaping (CGFloat) -> Void
     ) {
         self.onHeightChange = onHeightChange
         self.currentTheme = theme
@@ -270,7 +270,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
 
         let targetHeight = view.systemLayoutSizeFitting(
-            CGSize(width: scrollView.frame.width > 0 ? scrollView.frame.width : bounds.width,
+            CGSize(width: bounds.width,
                    height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
@@ -280,6 +280,10 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return
         }
 
+        let pageControlSpacing = pageControlTopConstraint?.constant ?? 0
+        let pageControlHeight = pageControlHeightConstraint?.constant ?? 0
+        let contentHeight = UX.padding + targetHeight + pageControlSpacing + pageControlHeight + UX.padding
+
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
@@ -288,13 +292,15 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 animations: {
                     self.scrollViewHeightConstraint?.constant = targetHeight
                     self.contentView.layoutIfNeeded()
-                    self.onHeightChange?()
+                    self.onHeightChange?(contentHeight)
                 },
-                completion: { _ in completion?() }
+                completion: { _ in
+                    completion?()
+                }
             )
         } else {
             scrollViewHeightConstraint?.constant = targetHeight
-            onHeightChange?()
+            onHeightChange?(contentHeight)
             completion?()
         }
     }
@@ -341,7 +347,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return false
         }
 
-        scrollView.setContentOffset(CGPoint(x: CGFloat(next) * pageWidth, y: 0), animated: true)
         goToPage(next)
         return true
     }
@@ -349,13 +354,18 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private func goToPage(_ page: Int) {
         pageControl.currentPage = page
         updatePageAccessibility()
+        // it is safe to use bounds.width cause the scrollView has the same width of the parent view
+        // the bounds gets updated before the subviews so with this we can avoid relayout of the scrollView.
+        scrollView.setContentOffset(CGPoint(x: CGFloat(page) * bounds.width, y: 0), animated: false)
         updateScrollViewHeight(for: page, animated: true) { [weak self] in
             guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
             UIView.animate(
                 withDuration: UX.contentFadeInDuration,
                 delay: UX.animationDelay,
                 options: [.allowUserInteraction],
-                animations: { container.setContentVisibility(true) },
+                animations: {
+                    container.setContentVisibility(true)
+                },
                 completion: { _ in
                     UIAccessibility.post(notification: .screenChanged, argument: container)
                 }

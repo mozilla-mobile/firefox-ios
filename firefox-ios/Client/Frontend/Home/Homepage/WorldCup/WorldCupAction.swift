@@ -13,6 +13,7 @@ struct WorldCupAction: Action {
     let shouldShowMilestone2: Bool
     let selectedCountryId: String?
     let matches: [WorldCupMatches]
+    let apiError: WorldCupLoadError?
     /// Index into `matches` of the card the swipe view should land on by
     /// default (closest upcoming match). 0 when irrelevant (single card or
     /// empty).
@@ -25,6 +26,7 @@ struct WorldCupAction: Action {
         shouldShowMilestone2: Bool = false,
         selectedCountryId: String? = nil,
         matches: [WorldCupMatches] = [],
+        apiError: WorldCupLoadError? = nil,
         defaultMatchIndex: Int = 0
     ) {
         self.windowUUID = windowUUID
@@ -33,6 +35,7 @@ struct WorldCupAction: Action {
         self.shouldShowMilestone2 = shouldShowMilestone2
         self.selectedCountryId = selectedCountryId
         self.matches = matches
+        self.apiError = apiError
         self.defaultMatchIndex = defaultMatchIndex
     }
 }
@@ -41,6 +44,7 @@ enum WorldCupActionType: ActionType {
     case didChangeHomepageSettings
     case removeHomepageCard
     case selectTeam
+    case retryMatchesFetch
 }
 
 enum WorldCupMiddlewareActionType: ActionType {

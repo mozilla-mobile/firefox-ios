@@ -1,3 +1,6 @@
+/* Button label on the auto-translate prompt that enables the auto-translate feature when tapped. */
+"Translations.AutoTranslatePrompt.EnableButton.v151" = "បើក";
+
 /* On top of the bottom toolbar, there can be a translations banner, this is the accessibility label for the close button that appears on the banner that allows the user to dismiss the translations banner. */
 "Translations.Banner.Close.Button.AccessibilityLabel.v145" = "បិទ​ផ្ទាំង​បកប្រែ";
 
@@ -21,6 +24,18 @@
 
 /* On top of the bottom toolbar, there can be a translations banner, this is the title for the button that appears on the banner that allows the user to tap on and translate the webpage. */
 "Translations.Banner.TranslateButton.v145" = "បកប្រែ";
+
+/* Title for the action sheet shown when the page has already been translated. %@ is replaced with the target language name (e.g. 'English'). */
+"Translations.LanguagePicker.PageTranslatedTitle.v151" = "ទំព័រ​ត្រូវ​បាន​បកប្រែជា %@";
+
+/* Menu item at the bottom of the translate language picker that navigates the user to the Translation Preferred Languages settings screen. */
+"Translations.LanguagePicker.PreferredLanguages.v151" = "ភាសា​ដែល​បាន​ជ្រើសរើស…";
+
+/* Button in the translation action sheet to restore the page to its original language. */
+"Translations.LanguagePicker.ShowOriginal.v151" = "បង្ហាញច្បាប់​​ដើម";
+
+/* Title for the action sheet that appears when the user taps the translate toolbar button. Lists the preferred target languages the user can translate the page into. */
+"Translations.LanguagePicker.Title.v151" = "បកប្រែទំព័រជា…";
 
 /* This is the text on the button used to translate a page from one language to another and the button is shown on the translation feature bottom sheet view. */
 "Translations.Sheet.Button.v145" = "បកប្រែ";

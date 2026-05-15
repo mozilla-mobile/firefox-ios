@@ -72,6 +72,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func pressedBrowsing() {}
 
+    func pressedQuickAnswers() {}
+
     func pressedSummarize() {}
 
     func pressedTranslation() {}

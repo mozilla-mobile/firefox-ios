@@ -13,6 +13,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
     var shouldShowSection: Bool
     var isMilestone2: Bool
     var matches: [WorldCupMatches]
+    var apiError: WorldCupLoadError?
     /// Index into `matches` of the card that should be visible first. Used by
     /// the swipe view so that with no team selected we land on the closest
     /// upcoming match rather than the chronologically latest one.
@@ -23,6 +24,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         self.shouldShowSection = false
         self.isMilestone2 = false
         self.matches = []
+        self.apiError = nil
         self.defaultMatchIndex = 0
     }
 
@@ -31,12 +33,14 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
         shouldShowSection: Bool,
         isMilestone2: Bool,
         matches: [WorldCupMatches],
+        apiError: WorldCupLoadError?,
         defaultMatchIndex: Int
     ) {
         self.windowUUID = windowUUID
         self.shouldShowSection = shouldShowSection
         self.isMilestone2 = isMilestone2
         self.matches = matches
+        self.apiError = apiError
         self.defaultMatchIndex = defaultMatchIndex
     }
 
@@ -51,6 +55,7 @@ struct WorldCupSectionState: StateType, Equatable, Hashable {
                 shouldShowSection: action.shouldShowHomepageWorldCupSection,
                 isMilestone2: action.shouldShowMilestone2,
                 matches: action.matches,
+                apiError: action.apiError,
                 defaultMatchIndex: action.defaultMatchIndex
             )
         default:

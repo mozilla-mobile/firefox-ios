@@ -87,17 +87,35 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
         case ToolbarActionType.didTranslationSettingsChange:
             guard let action = (action as? ToolbarAction) else { return }
-            // Clear stale per-window state so eligibility is re-evaluated from scratch
-            // rather than acting on cached flow data from before the settings change.
-            self.selectedTargetLanguages[windowUUID] = nil
-            self.translationFlowIds[windowUUID] = nil
-            self.restoringWindows.remove(windowUUID)
-            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
-            self.checkTranslationsAreEligible(for: action)
+            self.handleTranslationSettingsChange(action: action, windowUUID: windowUUID)
 
         default:
            break
         }
+    }
+
+    private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
+        if action.translationConfiguration?.isTranslationFeatureEnabled == false {
+            for uuid in translationFlowIds.keys {
+                let translationState = store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: uuid
+                )?.addressToolbar.translationConfiguration?.state
+                guard translationState == .active || translationState == .loading else { continue }
+                store.dispatch(GeneralBrowserAction(
+                    windowUUID: uuid,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                ))
+            }
+        }
+        // Clear stale per-window state so eligibility is re-evaluated from scratch
+        // rather than acting on cached flow data from before the settings change.
+        selectedTargetLanguages[windowUUID] = nil
+        translationFlowIds[windowUUID] = nil
+        restoringWindows.remove(windowUUID)
+        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        checkTranslationsAreEligible(for: action)
     }
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
