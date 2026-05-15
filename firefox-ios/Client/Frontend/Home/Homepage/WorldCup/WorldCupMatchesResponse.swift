@@ -24,6 +24,8 @@ struct WorldCupMatchesResponse: Decodable, Equatable {
         let awayExtra: Int?
         let homePenalty: Int?
         let awayPenalty: Int?
+        /// The stage of the Match i.e Group Stage, round of 16.
+        let stage: String?
         let clock: String?
         /// "past", "live", or "scheduled".
         /// Not typing this since we don't want to couple the client too tightly to the API's exact status values,

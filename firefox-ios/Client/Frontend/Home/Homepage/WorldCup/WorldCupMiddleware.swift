@@ -19,7 +19,7 @@ final class WorldCupMiddleware {
 
     init(
         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
-        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
+        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient(config: WorldCupAPIClient.emptyConfig)
     ) {
         self.worldCupStore = worldCupStore
         self.apiClient = apiClient

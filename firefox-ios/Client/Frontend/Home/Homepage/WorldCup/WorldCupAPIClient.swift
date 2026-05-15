@@ -2,8 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
+import Shared
 
 /// Thin Swift wrapper around the FFI-generated `MozillaAppServices.WorldCupClient`.
 /// Exposes the merino WCS endpoints as parsed Swift values, isolating callers from
@@ -17,7 +19,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private let liveStrategy: WorldCupFetchStrategyProtocol
     private let teamsStrategy: WorldCupFetchStrategyProtocol
 
-    init(config: WorldCupConfig = WorldCupAPIClient.emptyConfig,
+    init(config: WorldCupConfig,
          matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
          liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
          teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
@@ -30,9 +32,22 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         self.teamsStrategy = teamsStrategy
     }
 
+    /// Default init that resolves the merino base host from the
+    /// `WorldCupBaseHost` pref (set via the debug-menu override). A missing
+    /// or empty value falls back to the FFI default merino host.
+    convenience init(prefs: Prefs = (AppContainer.shared.resolve() as Profile).prefs,
+                     matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
+        try self.init(baseHost: "https://localhost:3002/", //prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost),
+                      matchesStrategy: matchesStrategy,
+                      liveStrategy: liveStrategy,
+                      teamsStrategy: teamsStrategy)
+    }
+
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
     /// an empty string to use the default merino host. Intended for local
-    /// dev/beta testing against a non-production merino instance. 
+    /// dev/beta testing against a non-production merino instance.
     convenience init(baseHost: String?,
                      matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
                      liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),

@@ -64,31 +64,65 @@ struct WorldCupMatches: Equatable, Hashable {
         let live = response.current ?? []
         let scheduled = response.next ?? []
         let title = Self.phaseTitle(from: response)
-        let liveIDs = Set(live.map(\.globalEventId))
         let ordered = previous + live + scheduled
         return ordered.prefix(limit).map { match in
             WorldCupMatches(
                 phaseTitle: title,
-                isLive: liveIDs.contains(match.globalEventId),
+                isLive: match.statusType == "live",
                 featuredMatch: [WorldCupMatch(match, localeProvider: localeProvider)],
                 upcomingMatches: []
             )
         }
     }
 
-    /// Maps the merino response to a localized phase label. Currently the only
-    /// reliable signal in the API is `team.group`. If any featured/upcoming
-    /// team carries a group assignment we're in group play. For knockout
-    /// rounds the merino payload doesn't yet carry a round identifier, so we
-    /// fall back to the generic "Upcoming" label until that exists upstream
-    /// or we count surviving teams from the response.
+    private static let groupTitles: [String: String] = [
+        "Group A": String.WorldCup.HomepageWidget.GroupPhase.GroupA,
+        "Group B": String.WorldCup.HomepageWidget.GroupPhase.GroupB,
+        "Group C": String.WorldCup.HomepageWidget.GroupPhase.GroupC,
+        "Group D": String.WorldCup.HomepageWidget.GroupPhase.GroupD,
+        "Group E": String.WorldCup.HomepageWidget.GroupPhase.GroupE,
+        "Group F": String.WorldCup.HomepageWidget.GroupPhase.GroupF,
+        "Group G": String.WorldCup.HomepageWidget.GroupPhase.GroupG,
+        "Group H": String.WorldCup.HomepageWidget.GroupPhase.GroupH,
+        "Group I": String.WorldCup.HomepageWidget.GroupPhase.GroupI,
+        "Group J": String.WorldCup.HomepageWidget.GroupPhase.GroupJ,
+        "Group K": String.WorldCup.HomepageWidget.GroupPhase.GroupK,
+        "Group L": String.WorldCup.HomepageWidget.GroupPhase.GroupL
+    ]
+
+    private static let roundTitles: [String: String] = [
+        "Round of 32": String.WorldCup.HomepageWidget.RoundPhase.Round32Label,
+        "Round of 16": String.WorldCup.HomepageWidget.RoundPhase.Round16Label,
+        "Quarter-finals": String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel,
+        "Semi-finals": String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel,
+        "Bronze Final": String.WorldCup.HomepageWidget.RoundPhase.BronzeFinalLabel,
+        "Third Place": String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel,
+        "Final": String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+    ]
+
+    /// Maps the merino response to a localized phase label. When the first
+    /// active match reports `stage == "Group Stage"`, we resolve the specific
+    /// group title (e.g. "Group A") via the team's `group` field. For any
+    /// other stage we look the stage string up directly in the round
+    /// dictionary. Unknown or missing stages fall back to "Upcoming".
     static func phaseTitle(from response: WorldCupMatchesResponse) -> String {
         let activeMatches = (response.current ?? []) + (response.next ?? [])
-        let isGroupStage = activeMatches.contains { match in
-            match.homeTeam.group != nil || match.awayTeam.group != nil
+        guard let match = activeMatches.first else {
+            return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
         }
-        return isGroupStage
-            ? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-            : String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
+
+        if match.stage == "Group Stage" {
+            let group = match.homeTeam.group ?? match.awayTeam.group
+            if let group, let title = groupTitles[group] {
+                return title
+            }
+            return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        }
+
+        if let stage = match.stage, let title = roundTitles[stage] {
+            return title
+        }
+
+        return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
     }
 }
