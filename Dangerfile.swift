@@ -526,6 +526,9 @@ class CodeUsageDetector {
         case swiftUIText
         case task
         case notifiable
+        case unsafe
+        case cspHeader
+        case sha256
 
         var bundledHeader: String {
             switch self {
@@ -544,6 +547,12 @@ class CodeUsageDetector {
                 return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
+            case .unsafe:
+                return "### 🔒 Security: `unsafe` keyword detected in JavaScript file\n. Please request a security review."
+            case .cspHeader:
+                return "### 🔒 Security: `Content-Security-Policy` header change detected\n. Please request a security review."
+            case .sha256:
+                return "### 🔒 Security: `SHA256` change detected\n. Please request a security review."
             }
         }
 
@@ -563,6 +572,21 @@ class CodeUsageDetector {
                 return " Task {"
             case .notifiable:
                 return "NotificationCenter.default.addObserver("
+            case .unsafe:
+                return "unsafe"
+            case .cspHeader:
+                return "Content-Security-Policy"
+            case .sha256:
+                return "sha256"
+            }
+        }
+
+        func applies(to file: String) -> Bool {
+            switch self {
+            case .unsafe, .cspHeader, .sha256:
+                return file.hasSuffix(".swift") || file.hasSuffix(".js")
+            default:
+                return file.contains(".swift")
             }
         }
 
@@ -597,9 +621,10 @@ class CodeUsageDetector {
     func checkForCodeUsage() {
         var detections: [Detection] = []
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-        // Iterate through each added and modified file, running the checks on swift files only
-        for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
-            // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
+        for file in editedFiles where !file.contains("Dangerfile") {
+            let applicable = Keywords.allCases.filter { $0.applies(to: file) }
+            guard !applicable.isEmpty else { continue }
+
             switch saferFileDiff(for: file) {
             case let .success(diff):
                 if file == BrowserViewControllerChecker.bvcPath {
@@ -607,9 +632,9 @@ class CodeUsageDetector {
                 }
                 switch diff.changes {
                 case let .modified(hunks), let .renamed(_, hunks):
-                    detections += collect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                    detections += collect(keywords: applicable, inHunks: hunks, file: file)
                 case let .created(newLines):
-                    detections += collect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                    detections += collect(keywords: applicable, inLines: newLines, file: file)
                 case .deleted:
                     break // do not warn on deleted lines
                 }
