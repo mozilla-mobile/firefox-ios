@@ -56,8 +56,11 @@ extension URL {
     public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
+        // Guard against non-ASCII hostnames (e.g. emoji domains) by rejecting any host
+        // whose decoded form differs from its percent-encoded representation.
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
               var host = components.host,
+              host == components.percentEncodedHost,
               !host.isEmpty
         else { return nil }
 
