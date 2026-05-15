@@ -136,6 +136,55 @@ final class CopyWithUpdatesTests: XCTestCase {
         #endif
     }
 
+    func testMacro_withComputedProperty() throws {
+        #if canImport(CopyWithUpdatesMacros)
+        // swiftlint:disable line_length
+        assertMacroExpansion(
+            """
+            @CopyWithUpdates
+            struct TestType {
+                let constantProperty: [Int]
+                var variableProperty: Int
+
+                var filteredArray: [Int] {
+                    return constantProperty.filter { value in
+                        value > 0
+                    }
+                }
+
+                let extraPropertyAfterComputedProperty: Int
+            }
+            """,
+            expandedSource: """
+            struct TestType {
+                let constantProperty: [Int]
+                var variableProperty: Int
+
+                var filteredArray: [Int] {
+                    return constantProperty.filter { value in
+                        value > 0
+                    }
+                }
+
+                let extraPropertyAfterComputedProperty: Int
+
+                public func copyWithUpdates(constantProperty: [Int]? = nil, variableProperty: Int? = nil, extraPropertyAfterComputedProperty: Int? = nil) -> Self {
+                    return Self (
+                    constantProperty: constantProperty ?? self.constantProperty,
+                        variableProperty: variableProperty ?? self.variableProperty,
+                        extraPropertyAfterComputedProperty: extraPropertyAfterComputedProperty ?? self.extraPropertyAfterComputedProperty
+                    )
+                }
+            }
+            """,
+            macros: testMacros
+        )
+        // swiftlint:enable line_length
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
     func testMacro_withPropertyAndTrailingLineComment() throws {
         #if canImport(CopyWithUpdatesMacros)
         assertMacroExpansion(

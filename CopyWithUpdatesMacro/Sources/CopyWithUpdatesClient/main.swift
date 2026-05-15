@@ -35,3 +35,17 @@ let r3 = r1.copyWithUpdates(
     complexStructure: [:],
     budget: 0
 )
+
+@CopyWithUpdates
+struct TestType {
+    let constantProperty: [Int]
+    var variableProperty: Int
+
+    var filteredArray: [Int] {
+        return constantProperty.filter { value in
+            value > 0
+        }
+    }
+
+    let extraPropertyAfterComputedProperty: Int
+}
