@@ -17,6 +17,7 @@ protocol LibrarySelectorsSet {
     var SAVE_BUTTON: Selector { get }
     var BACK_BUTTON: Selector { get }
     var BACK_BUTTON_iOS18: Selector { get }
+    var GENERAL_BACK_BUTTON: Selector { get }
     var all: [Selector] { get }
 }
 
@@ -35,6 +36,7 @@ struct LibrarySelectors: LibrarySelectorsSet {
         static let saveButton = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.saveButton
         static let backButtoniOS26 = AccessibilityIdentifiers.Settings.Search.backButtoniOS26
         static let backButtoniOS18 = "Bookmarks"
+        static let generalBackButton = AccessibilityIdentifiers.GeneralizedIdentifiers.back
     }
 
     let BOOKMARKS_LIST = Selector.tableIdOrLabel(
@@ -64,6 +66,12 @@ struct LibrarySelectors: LibrarySelectorsSet {
     let BACK_BUTTON_iOS18 = Selector.buttonId(
         IDs.backButtoniOS18,
         description: "Boomark new folder back button for iOS 18 and lower",
+        groups: ["bookmark", "search"]
+    )
+
+    let GENERAL_BACK_BUTTON = Selector.buttonInNavigationBarByLabel(
+        IDs.generalBackButton,
+        description: "Back button inside new folder for iOS 18 and lower",
         groups: ["bookmark", "search"]
     )
 

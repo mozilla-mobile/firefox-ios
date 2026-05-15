@@ -23,6 +23,7 @@ final class LibraryScreen {
     private var deleteButton: XCUIElement { sel.DELETE_BUTTON.element(in: app) }
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app) }
     private var backButtoniOS18: XCUIElement { sel.BACK_BUTTON_iOS18.element(in: app) }
+    private var generalBackButton: XCUIElement { sel.GENERAL_BACK_BUTTON.element(in: app) }
 
     func assertBookmarkExists(named name: String, timeout: TimeInterval = TIMEOUT_LONG) {
         let bookmarksTable = sel.BOOKMARKS_LIST.element(in: app)
@@ -80,6 +81,10 @@ final class LibraryScreen {
         XCTAssertEqual(elements.count, nrOfFolders, "Expected \(nrOfFolders) identical folder names")
     }
 
+    func tapSaveButton() {
+        saveButton.waitAndTap()
+    }
+
     func tapEditButton() {
         editButton.firstMatch.waitAndTap()
     }
@@ -115,7 +120,12 @@ final class LibraryScreen {
                        "Bookmarks",
                        "The first folder should be the default Bookmarks folder")
         XCTAssertEqual(app.tables.cells.staticTexts.count, 1, "Folder structure should contain only the Bookmarks folder")
-        saveButton.waitAndTap()
+        tapSaveButton()
+    }
+
+    func addNewFolder(text: String) {
+        titleTextField.typeText(text)
+        tapSaveButton()
     }
 
     func assertNewFreshFolderCreated(folderName: String) {
@@ -125,16 +135,41 @@ final class LibraryScreen {
         BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
     }
 
+    func tapOnFolder(folderName: String) {
+        app.staticTexts[folderName].waitAndTap()
+    }
+
+    func assertSavedFolder(folderName: String) {
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts[folderName])
+    }
+
+    func assertSelectedFolderOpens(folderName: String) {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars[folderName])
+    }
+
     func deleteFolder(folderName: String) {
         app.tables.cells.buttons["Remove \(folderName)"].waitAndTap()
         deleteButton.waitAndTap()
     }
 
-    func tapBackButton() {
+    func assertNewFolderScreen() {
+        BaseTestCase().mozWaitForElementToExist(app.navigationBars["New Folder"])
+    }
+
+    func assertParentFolder(parentFolderName: String) {
+        BaseTestCase().mozWaitForElementToExist(bookmarkFolderCell)
+        BaseTestCase().mozWaitForElementToExist(app.staticTexts[parentFolderName])
+    }
+
+    func tapBackButton(isInsideFolder: Bool = false) {
         if #available(iOS 26, *) {
             backButton.waitAndTap()
         } else {
-            backButtoniOS18.firstMatch.waitAndTap()
+            if !isInsideFolder {
+                backButtoniOS18.firstMatch.waitAndTap()
+            } else {
+                generalBackButton.waitAndTap()
+            }
         }
     }
 
