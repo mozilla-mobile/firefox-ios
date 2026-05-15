@@ -10,6 +10,8 @@ class PerformanceTests: BaseTestCase {
                     "testPerfTabs_3_20tabTray": "tabsState20.archive",
                     "testPerfTabs_2_1280startup": "tabsState1280.archive",
                     "testPerfTabs_4_1280tabTray": "tabsState1280.archive",
+                    "testPerfTabs_5_20openCloseTab": "tabsState20.archive",
+                    "testPerfTabs_6_1280openCloseTab": "tabsState1280.archive",
                     "testPerfHistory1startUp": "testHistoryDatabase1-places.db",
                     "testPerfHistory1openMenu": "testHistoryDatabase1-places.db",
                     "testPerfHistory100startUp": "testHistoryDatabase100-places.db",
@@ -134,6 +136,69 @@ class PerformanceTests: BaseTestCase {
             // go to tab tray
             tabsButton.waitAndTap()
             doneButton.waitAndTap()
+        }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
+    }
+
+    // 1 perf test per tabsStateArchive of size: 20, 1280.
+    // Measures opening a new tab from the tab tray and closing it via the long-press
+    // menu on the tabs button. The +1/-1 keeps the tab count stable across iterations.
+    func testPerfTabs_5_20openCloseTab() {
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
+        let newTabButton = app.buttons[AccessibilityIdentifiers.TabTray.newTabButton]
+        let closeTabButton = app.buttons[StandardImageIdentifiers.Large.cross]
+
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
+
+        measure(metrics: [
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
+            XCTMemoryMetric()]) {
+            // Open a new tab from the tab tray
+            tabsButton.waitAndTap()
+            newTabButton.waitAndTap()
+            // Close the newly opened tab via the long-press menu on the tabs button
+            tabsButton.press(forDuration: 1)
+            closeTabButton.waitAndTap()
+        }
+        // Handle termination ourselves as it sometimes hangs when given to xctrunner
+        app.terminate()
+    }
+
+    func testPerfTabs_6_1280openCloseTab() {
+        // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
+        let newTabButton = app.buttons[AccessibilityIdentifiers.TabTray.newTabButton]
+        let closeTabButton = app.buttons[StandardImageIdentifiers.Large.cross]
+
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
+
+        measure(metrics: [
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure CPU cycles
+            XCTStorageMetric(), // to measure storage consumption
+            XCTMemoryMetric()]) {
+            // Open a new tab from the tab tray
+            tabsButton.waitAndTap()
+            newTabButton.waitAndTap()
+            // Close the newly opened tab via the long-press menu on the tabs button
+            tabsButton.press(forDuration: 1)
+            closeTabButton.waitAndTap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
