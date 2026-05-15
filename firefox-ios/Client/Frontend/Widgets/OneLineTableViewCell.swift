@@ -64,8 +64,6 @@ class OneLineTableViewCell: UITableViewCell,
     lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .natural
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
     }
 
     private lazy var bottomSeparatorView: UIView = .build { separatorLine in
