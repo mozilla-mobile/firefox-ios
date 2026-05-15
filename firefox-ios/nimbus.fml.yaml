@@ -15,10 +15,12 @@ channels:
 include:
 
 
+
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/adsClient.yaml
   - nimbus-features/aiKillSwitchFeature.yaml
   - nimbus-features/bookmarksSearchFeature.yaml
+  - nimbus-features/customReaderModeSchemeFeature.yaml
   - nimbus-features/deeplinkOptimizationRefactorFeature.yaml
   - nimbus-features/downloadLiveActivitiesFeature.yaml
   - nimbus-features/firefoxJpGuideDefaultSite.yaml

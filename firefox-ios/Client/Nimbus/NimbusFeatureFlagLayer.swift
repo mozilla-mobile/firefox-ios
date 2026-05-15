@@ -42,6 +42,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .bookmarksSearchFeature:
             return checkBookmarksSearchFeature()
 
+
+        case .customReaderModeScheme:
+            return checkCustomReaderModeSchemeFeature()
         case .deeplinkOptimizationRefactor:
             return checkDeeplinkOptimizationRefactorFeature()
 
@@ -439,5 +442,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     func checkStartAtHomeConfiguration() -> StartAtHome {
         return nimbus.features.startAtHomeFeature.value().setting
+    }
+
+    private func checkCustomReaderModeSchemeFeature() -> Bool {
+        return nimbus.features.customReaderModeSchemeFeature.value().enabled
     }
 }
