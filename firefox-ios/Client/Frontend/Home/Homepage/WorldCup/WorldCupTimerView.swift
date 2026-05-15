@@ -36,7 +36,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
 
     // MARK: - UI
 
-    private lazy var heroImageView: UIImageView = .build { [weak self] imageView in
+    private lazy var heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = false
         guard let gifImage = UIImage.gifFromBundle(named: UX.heroGifName,
