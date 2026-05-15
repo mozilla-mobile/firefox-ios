@@ -321,7 +321,15 @@ extension URL {
 
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+        // Accept both the legacy localhost form (still produced by `enableReaderMode`,
+        // `Tab.loadRequest`'s sync rewrite, and `ReaderPanel.didSelectRowAt`) and the
+        // new custom-scheme form (served by `ReaderModeSchemeHandler`). The two are
+        // expected to coexist while the scheme migration is rolled out; once the
+        // call sites flip to the new form in a follow-up, the legacy branch can be
+        // removed.
+        let isLegacy = scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+        let isNewScheme = scheme == "readermode" && host == "app" && path == "/page"
+        return isLegacy || isNewScheme
     }
 
     public var decodeReaderModeURL: URL? {

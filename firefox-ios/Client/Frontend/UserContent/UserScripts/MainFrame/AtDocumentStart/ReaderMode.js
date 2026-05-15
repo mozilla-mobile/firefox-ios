@@ -11,7 +11,11 @@ import { findRecipeJSONLD } from "./JSONLD.js";
 const DEBUG = false;
 
 var readabilityResult = null;
-const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+// Matches both the legacy localhost form (still produced by the Swift call sites)
+// and the new custom-scheme form (served by ReaderModeSchemeHandler). The two
+// coexist while the migration is rolled out; once Swift flips to the new form
+// the legacy branch of this regex can be dropped.
+const readerModeURL = /^(http:\/\/localhost:\d+\/reader-mode\/page|readermode:\/\/app\/page)/;
 
 const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +

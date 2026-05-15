@@ -260,7 +260,7 @@ extension BrowserViewController: WKUIDelegate {
                                         image: elements.image,
                                         currentTab: currentTab,
                                         webView: webView)
-            return UIMenu(title: url.normalizedHostWithLRI ?? url.absoluteString, children: actions)
+            return UIMenu(title: url.normalizedHost ?? url.absoluteString, children: actions)
         }
     }
 
@@ -530,6 +530,14 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if url.scheme == "about" {
+            decisionHandler(.allow)
+            return
+        }
+
+        // Allow our custom reader-mode scheme through so WebKit hands it to the
+        // registered WKURLSchemeHandler (ReaderModeSchemeHandler) instead of
+        // routing it to handleCustomSchemeURLNavigation as an external-app URL.
+        if url.scheme == ReaderModeSchemeHandler.scheme {
             decisionHandler(.allow)
             return
         }
