@@ -143,7 +143,7 @@
 "Edit" = "Szerkesztés";
 
 /* Button label to reload the error page */
-"Error.tryAgainButton" = "Próbálja újra";
+"Error.tryAgainButton" = "Újrapróbálkozás";
 
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "Mégse";
@@ -185,7 +185,7 @@
 "Network.Offline.ErrorMessage" = "Úgy tűnik, hogy az internetkapcsolat nem érhető el.";
 
 /* Button text for retrying network connection */
-"Network.Offline.RetryButton" = "Próbálja újra";
+"Network.Offline.RetryButton" = "Újrapróbálkozás";
 
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Kezdő lépések";

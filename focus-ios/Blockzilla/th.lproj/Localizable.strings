@@ -110,7 +110,7 @@
 "BiometricAuthentication.UnlockButton.Title" = "ปลดล็อก";
 
 /* Create a new session after failing a biometric check */
-"BiometricPrompt.newSession" = "วาระใหม่";
+"BiometricPrompt.newSession" = "เซสชันใหม่";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
@@ -608,7 +608,7 @@
 "Tip.SiriErase.Description" = "เพิ่มคำสั่งลัด Siri";
 
 /* Text for a label that indicates the title for siri erase tip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
-"Tip.SiriErase.Title" = "“Siri ลบวาระ %@ ของฉัน”";
+"Tip.SiriErase.Title" = "“Siri ลบเซสชัน %@ ของฉัน”";
 
 /* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
 "Tip.SiriFavorite.Description" = "เพิ่มคำสั่งลัด Siri";
@@ -632,7 +632,7 @@
 "TooltipBodyText.Privacy" = "การตั้งค่าเริ่มต้นเหล่านี้ให้การปกป้องที่แข็งแกร่ง แต่คุณสามารถปรับแต่งการตั้งค่าให้ตรงกับความต้องการของคุณได้อย่างง่ายดาย";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
-"TooltipBodyText.SearchBar" = "เริ่มวาระการท่องเว็บแบบส่วนตัว แล้วเราจะปิดกั้นตัวติดตามและสิ่งไม่พึงประสงค์ในขณะที่คุณใช้งาน";
+"TooltipBodyText.SearchBar" = "เริ่มเซสชันการท่องเว็บแบบส่วนตัว แล้วเราจะปิดกั้นตัวติดตามและสิ่งไม่พึงประสงค์ในขณะที่คุณใช้งาน";
 
 /* This is the body text that is displayed for the Shield icon tooltip. %@ is the app name (for example “Firefox Focus” or ”Firefox Klar”). */
 "TooltipBodyText.ShieldIcon" = "%@ หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เราปิดกั้น";
@@ -641,7 +641,7 @@
 "TooltipBodyText.ShieldIconTrackerBlocked.V2" = "จับได้แล้ว! เราได้หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เรากำลังปิดกั้น";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "แตะที่ถังขยะเมื่อใดก็ได้เพื่อลบร่องรอยการใช้งานทั้งหมดในวาระปัจจุบันของคุณออก";
+"TooltipBodyText.TrashIcon" = "แตะที่ถังขยะเมื่อใดก็ได้เพื่อลบร่องรอยการใช้งานทั้งหมดในเซสชันปัจจุบันของคุณออก";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon.V2" = "แตะที่นี่เพื่อทิ้งทุกอย่าง — ประวัติ คุกกี้ ทุกอย่าง — และเริ่มต้นใหม่ในแท็บใหม่";
@@ -659,10 +659,10 @@
 "trackingProtection.label" = "การป้องกันการติดตาม";
 
 /* Text for the status off from Tracking Protection. */
-"trackingProtection.statusOff" = "การป้องกันถูก ปิด สำหรับวาระนี้";
+"trackingProtection.statusOff" = "การป้องกันถูก ปิด สำหรับเซสชันนี้";
 
 /* Text for the status on from Tracking Protection. */
-"trackingProtection.statusOn" = "การป้องกันถูก เปิด สำหรับวาระนี้";
+"trackingProtection.statusOn" = "การป้องกันถูก เปิด สำหรับเซสชันนี้";
 
 /* Text for the toggle that enables/disables tracking protection. */
 "trackingProtection.toggleLabel2" = "การป้องกันการติดตามแบบพิเศษ";
