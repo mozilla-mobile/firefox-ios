@@ -165,6 +165,9 @@ struct AddressBarState: StateType, Sendable, Equatable {
         case ToolbarActionType.urlDidChange:
             return handleUrlDidChangeAction(state: state, action: action)
 
+        case ToolbarActionType.lockIconChanged:
+            return handleLockIconChangedAction(state: state, action: action)
+
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
@@ -503,6 +506,17 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // (see `Tab.translationConfiguration`). Inheriting the existing Redux state here would leak
         // the previous tab's icon onto a new tab whose own state is nil (FXIOS-15606).
         return action.translationConfiguration ?? existingConfig
+    }
+
+    @MainActor
+    private static func handleLockIconChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return state.copyWithUpdates(
+            lockIconButtonA11yId: toolbarAction.lockIconButtonA11yId.map { Optional($0) } ?? .some(nil),
+            lockIconImageName: toolbarAction.lockIconImageName.map { Optional($0) } ?? .some(nil),
+            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming
+        )
     }
 
     @MainActor

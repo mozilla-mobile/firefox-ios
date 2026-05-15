@@ -846,6 +846,28 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.isEmptySearch)
     }
 
+    func test_lockIconChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                lockIconButtonA11yId: "test_lock_icon_a11y_id",
+                lockIconImageName: "test_lock_icon_image",
+                lockIconNeedsTheming: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.lockIconChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.lockIconButtonA11yId, "test_lock_icon_a11y_id")
+        XCTAssertEqual(newState.lockIconImageName, "test_lock_icon_image")
+        XCTAssertEqual(newState.lockIconNeedsTheming, true)
+    }
+
     func test_scrollAlphaNeedsUpdateAction_returnsExpectedState() {
         setupStore()
         let initialState = ToolbarState(windowUUID: windowUUID)

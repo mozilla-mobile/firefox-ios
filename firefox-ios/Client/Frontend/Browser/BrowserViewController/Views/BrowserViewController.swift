@@ -2589,6 +2589,20 @@ class BrowserViewController: UIViewController,
         guard let selectedTabURL = tabManager.selectedTab?.url,
               let webViewURL = webView.url,
               selectedTabURL == webViewURL else { return }
+
+        let hasSecureContent = webView.hasOnlySecureContent
+        let lockIconState = toolbarHelper.getLockIconState(
+            hasOnlySecureContent: hasSecureContent,
+            isWebsiteMode: tabManager.selectedTab?.url?.isReaderModeURL == false
+        )
+
+        let action = ToolbarAction(
+            lockIconButtonA11yId: lockIconState.a11yId,
+            lockIconImageName: lockIconState.imageName,
+            lockIconNeedsTheming: lockIconState.needsTheming,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.lockIconChanged)
+        store.dispatch(action)
     }
 
     // MARK: - Update UI
@@ -2637,15 +2651,13 @@ class BrowserViewController: UIViewController,
         var lockIconNeedsTheming = true
 
         if let hasSecureContent = tab.webView?.hasOnlySecureContent {
-            lockIconImageName = hasSecureContent ?
-                StandardImageIdentifiers.Small.shieldCheckmarkFill :
-                StandardImageIdentifiers.Small.shieldSlashFillMulticolor
-            lockIconButtonA11yId = hasSecureContent ?
-                AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon :
-                AccessibilityIdentifiers.Browser.AddressToolbar.lockIconOff
-            lockIconNeedsTheming = hasSecureContent
-            let isWebsiteMode = tab.url?.isReaderModeURL == false
-            lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+            let lockIconState = toolbarHelper.getLockIconState(
+                hasOnlySecureContent: hasSecureContent,
+                isWebsiteMode: tab.url?.isReaderModeURL == false
+            )
+            lockIconImageName = lockIconState.imageName
+            lockIconButtonA11yId = lockIconState.a11yId
+            lockIconNeedsTheming = lockIconState.needsTheming
         }
 
         let action = ToolbarAction(
