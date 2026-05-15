@@ -55,7 +55,7 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages[2] is WorldCupMatchCardView)
     }
 
-    func test_makePages_whenMilestone2_withApiErrorAndNoMatches_returnsTimerFollowedByErrorView() {
+    func test_makePages_whenMilestone2_withApiErrorAndNoMatches_returnsOnlyErrorView() {
         var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
         state.isMilestone2 = true
         state.matches = []
@@ -67,7 +67,7 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages[0] is WorldCupErrorView)
     }
 
-    func test_makePages_whenMilestone2_withApiErrorAndMatches_prefersMatchesOverErrorView() {
+    func test_makePages_whenMilestone2_withApiErrorAndMatches_returnsOnlyErrorView() {
         var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
         state.isMilestone2 = true
         state.matches = [makeMatches()]
@@ -75,9 +75,8 @@ final class WorldCupCellFactoryTests: XCTestCase {
 
         let pages = WorldCupCellFactory.makePages(from: state)
 
-        XCTAssertEqual(pages.count, 2)
-        XCTAssertTrue(pages[0] is WorldCupTimerView)
-        XCTAssertTrue(pages[1] is WorldCupMatchCardView)
+        XCTAssertEqual(pages.count, 1)
+        XCTAssertTrue(pages[0] is WorldCupErrorView)
     }
 
     func test_makePages_whenNotMilestone2_withApiError_returnsOnlyTimer() {

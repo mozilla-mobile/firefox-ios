@@ -53,7 +53,7 @@ struct WorldCupMatch: Equatable, Hashable {
         guard let date = isoFormatter.date(from: iso) else { return iso }
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.setLocalizedDateFormatFromTemplate("EEEMMMdjmm")
+        formatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
         return formatter.string(from: date)
     }
 

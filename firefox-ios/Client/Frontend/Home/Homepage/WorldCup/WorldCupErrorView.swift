@@ -6,7 +6,6 @@ import Common
 import Shared
 import UIKit
 
-
 final class WorldCupErrorView: UIView, ThemeApplicable {
     private struct UX {
         static let horizontalPadding: CGFloat = 16
@@ -95,7 +94,7 @@ final class WorldCupErrorView: UIView, ThemeApplicable {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UX.titleLabelLeadingPadding),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalPadding),
-            
+
             refreshButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.refreshButtonTopPadding),
             refreshButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             refreshButton.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -103,13 +102,13 @@ final class WorldCupErrorView: UIView, ThemeApplicable {
             refreshButton.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalPadding),
         ])
     }
-    
+
     func configure(state: WorldCupSectionState) {
         guard let error = state.apiError else { return }
         switch error {
-        case .network(_):
+        case .network:
             titleLabel.text = .WorldCup.HomepageWidget.OfflineLabel
-        case .other(_, _):
+        case .other:
             titleLabel.text = .WorldCup.HomepageWidget.MatchUnavailableLabel
         }
     }

@@ -99,7 +99,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     private var upcomingMatchesTopConstraint: NSLayoutConstraint?
 
     // MARK: - State
-    
+
     private let telemetry = WorldCupTelemetry()
     private let windowUUID: WindowUUID
     private var model: WorldCupMatches?
@@ -223,9 +223,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
             upcomingStack.addArrangedSubview(row)
         }
     }
-    
+
     // MARK: - Actions
-    
+
     private func navigateToTeamSelection() {
         store.dispatch(
             NavigationBrowserAction(
@@ -518,7 +518,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
             rightStack.topAnchor.constraint(equalTo: topAnchor),
             rightStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             rightStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
+
             infoLabel.topAnchor.constraint(equalTo: topAnchor),
             infoLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
             infoLabel.centerXAnchor.constraint(equalTo: centerXAnchor),

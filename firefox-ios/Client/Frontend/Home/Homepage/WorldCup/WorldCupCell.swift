@@ -132,7 +132,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var pageControlHeightConstraint: NSLayoutConstraint?
     private var pageControlTopConstraint: NSLayoutConstraint?
     private var currentState: WorldCupSectionState?
-    private var onHeightChange: (() -> Void)?
+    private var onHeightChange: ((CGFloat) -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
     private var currentTheme: Theme?
 
@@ -213,7 +213,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     func configure(
         with state: WorldCupSectionState,
         theme: Theme,
-        onHeightChange: @escaping () -> Void
+        onHeightChange: @escaping (CGFloat) -> Void
     ) {
         self.onHeightChange = onHeightChange
         self.currentTheme = theme
@@ -280,6 +280,10 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return
         }
 
+        let pageControlSpacing = pageControlTopConstraint?.constant ?? 0
+        let pageControlHeight = pageControlHeightConstraint?.constant ?? 0
+        let contentHeight = UX.padding + targetHeight + pageControlSpacing + pageControlHeight + UX.padding
+
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
@@ -288,13 +292,15 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 animations: {
                     self.scrollViewHeightConstraint?.constant = targetHeight
                     self.contentView.layoutIfNeeded()
-                    self.onHeightChange?()
+                    self.onHeightChange?(contentHeight)
                 },
-                completion: { _ in completion?() }
+                completion: { _ in
+                    completion?()
+                }
             )
         } else {
             scrollViewHeightConstraint?.constant = targetHeight
-            onHeightChange?()
+            onHeightChange?(contentHeight)
             completion?()
         }
     }
@@ -347,7 +353,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
 
     private func goToPage(_ page: Int) {
         pageControl.currentPage = page
-    
         updatePageAccessibility()
         // it is safe to use bounds.width cause the scrollView has the same width of the parent view
         // the bounds gets updated before the subviews so with this we can avoid relayout of the scrollView.

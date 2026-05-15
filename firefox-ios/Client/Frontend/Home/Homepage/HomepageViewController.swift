@@ -46,6 +46,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    private lazy var sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
     // Tracks which tab the shared homepage instance is currently representing.
     private var activeTabUUID: TabUUID?
 
@@ -565,8 +566,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+        let layout = UICollectionViewCompositionalLayout { [weak self, sectionProvider] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
@@ -662,7 +662,8 @@ final class HomepageViewController: UIViewController,
             return configureMerinoCell(story, at: indexPath)
         case .worldcupCard(let state):
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] in
+                cell.configure(with: state, theme: currentTheme) { [weak self] height in
+                    self?.sectionProvider.setWorldCupCellHeight(height)
                     self?.relayoutForCellHeightChange()
                 }
             }
