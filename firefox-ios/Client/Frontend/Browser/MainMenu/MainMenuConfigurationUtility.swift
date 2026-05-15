@@ -83,6 +83,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             menuSections.append(getHorizontalTabsSection(with: uuid, tabInfo: tabInfo))
             menuSections.append(getAccountSection(with: uuid, tabInfo: tabInfo, profileImage: profileImage))
         }
+        menuSections.append(MenuSection(options: [configureVPNItem(with: uuid)]))
 
         return menuSections
     }
@@ -403,6 +404,30 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                                                      hasChangedUserAgent: tabInfo.hasChangedUserAgent)
                     )
                 )
+            }
+        )
+    }
+
+    @MainActor
+    private func configureVPNItem(with uuid: WindowUUID) -> MenuElement {
+        let vpn = (UIApplication.shared.delegate as? AppDelegate)?.vpnController
+        let isOn = vpn?.isRunning ?? false
+        return MenuElement(
+            title: "VPN",
+            iconName: "",
+            isEnabled: true,
+            isActive: isOn,
+            a11yLabel: "VPN",
+            a11yHint: "Toggle Mozilla VPN",
+            a11yId: "VPNMenuItem",
+            infoTitle: isOn ? "On" : "Off",
+            action: {
+                guard let vpn = (UIApplication.shared.delegate as? AppDelegate)?.vpnController else { return }
+                if vpn.isRunning {
+                    vpn.stop()
+                } else {
+                    vpn.start(privateOnly: false) { _ in }
+                }
             }
         )
     }
