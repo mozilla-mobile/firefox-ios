@@ -1272,8 +1272,7 @@ class BrowserViewController: UIViewController,
             profile: profile,
             searchEnginesManager: searchEnginesManager,
             delegate: self,
-            isUnifiedSearchEnabled: isUnifiedSearchEnabled,
-            isBottomSearchBar: isBottomSearchBar
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
         )
         addressToolbarContainer.applyTheme(theme: currentTheme())
         addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
