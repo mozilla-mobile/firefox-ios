@@ -970,17 +970,16 @@ extension BrowserViewController: WKNavigationDelegate {
 
     private func showErrorPage(webView: WKWebView, error: Error) {
         guard let url = webView.url else { return }
+        let nsError = error as NSError
         if isNativeErrorPageEnabled {
-            let action = NativeErrorPageAction(networkError: error as NSError,
-                                               windowUUID: windowUUID,
-                                               actionType: NativeErrorPageActionType.receivedError
-            )
-            store.dispatch(action)
+            store.dispatch(NativeErrorPageAction(
+                networkError: nsError,
+                windowUUID: windowUUID,
+                actionType: NativeErrorPageActionType.receivedError
+            ))
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         } else {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error as NSError,
-                                                                   forUrl: url,
-                                                                   inWebView: webView)
+            ErrorPageHelper(certStore: profile.certStore).loadPage(nsError, forUrl: url, inWebView: webView)
         }
     }
 
@@ -1084,7 +1083,10 @@ extension BrowserViewController: WKNavigationDelegate {
                     CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
                 )
                 let isNoInternetError = isNICErrorPageEnabled && error.code == noInternetErrorCode
-                let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(error.code)
+                let isCertificateError = NativeErrorPageHelper.shouldShowNativeBadCertDomainErrorPage(
+                    for: error,
+                    isOtherErrorPagesEnabled: isBadCertDomainErrorPageEnabled
+                )
 
                 if isNoInternetError || isCertificateError {
                     if isCertificateError {
@@ -1095,6 +1097,7 @@ extension BrowserViewController: WKNavigationDelegate {
                             logger: logger
                         )
                     }
+                    // TODO: FXIOS-15800 Move error type determination to NativeErrorPageMiddleware
                     let action = NativeErrorPageAction(
                         networkError: error,
                         windowUUID: windowUUID,

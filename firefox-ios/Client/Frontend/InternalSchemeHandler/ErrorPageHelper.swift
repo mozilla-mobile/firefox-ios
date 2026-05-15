@@ -212,7 +212,8 @@ final class ErrorPageHandler: InternalSchemeResponse {
         )
 
         let isNoInternetError = isNICErrorPageEnabled && (errCode == noInternetErrorCode) && !useOldErrorPage
-        let isCertificateError = isBadCertDomainErrorPageEnabled && CertErrors.contains(errCode) && !useOldErrorPage
+        let isBadCertDomainURL = NativeErrorPageHelper.isBadCertDomainErrorURL(url)
+        let isCertificateError = isBadCertDomainErrorPageEnabled && isBadCertDomainURL && !useOldErrorPage
 
         // Handle No internet access or certificate errors with native error page
         if isNoInternetError || isCertificateError {
