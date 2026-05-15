@@ -669,7 +669,6 @@ class CodeUsageDetector {
     }
 
     private func emitBundled(keyword: Keywords, detections: [Detection]) {
-        // You can add the `danger-bypass` label with a justification to bypass this check.
         let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) | \($0.isRemoval ? "Removed" : "Added") |" }.joined(separator: "\n")
         let fullMessage = """
         \(keyword.bundledHeader)
@@ -677,7 +676,6 @@ class CodeUsageDetector {
         | File | Line | Change |
         |---|---|---|
         \(rows)
-        \nYou can add the `danger-bypass` label with a justification to bypass those checks.\nPlease add a comment explaining why the checks are by-passed.
         """
 
         if keyword.shouldComment {
@@ -769,7 +767,10 @@ private func failOrWarn(_ message: String) {
         Since bypass label \(bypassLabel) detected we are reporting as warning only for this PR.
         """)
     } else {
-        fail(message)
+        fail("""
+        \(message)
+        You can add the \(bypassLabel) label on the PR to by-pass the checks.\nIf you use it, please add a comment explaining why.
+        """)
     }
 }
 
