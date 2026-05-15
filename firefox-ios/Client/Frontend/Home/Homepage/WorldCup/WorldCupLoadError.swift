@@ -9,7 +9,7 @@ import MozillaAppServices
 /// FFI `MerinoWorldCupApiError` (plus any decode / unexpected error) into a
 /// small Swift-side enum so UI code can switch on the failure type without
 /// importing `MozillaAppServices`.
-enum WorldCupLoadError: Error, Equatable {
+enum WorldCupLoadError: Error, Equatable, Hashable {
     /// Transport-level failure (no connectivity, DNS, TLS, etc.). UI should
     /// hint the user to check connectivity.
     case network(reason: String)

@@ -6,8 +6,10 @@ import Foundation
 import Shared
 
 struct WorldCupCountry: Identifiable, Hashable {
-    /// Uppercase ISO 3166-1 alpha-3 region code (e.g. "CAN", "FRA") or the
-    /// FIFA-style code for sub-national teams (e.g. "ENG", "SCO").
+    /// Uppercase 3-letter team code matching the World Cup teams API
+    /// (e.g. "CAN", "FRA", "GER", "ENG"). Mostly aligned with FIFA codes,
+    /// with a few API-specific overrides (e.g. "CDR" for DR Congo,
+    /// "CVI" for Cabo Verde).
     let id: String
 }
 
@@ -33,24 +35,24 @@ enum WorldCupCountryData {
             WorldCupCountry(id: "JOR"),
             WorldCupCountry(id: "KOR"),
             WorldCupCountry(id: "QAT"),
-            WorldCupCountry(id: "SAU"),
+            WorldCupCountry(id: "KSA"),
             WorldCupCountry(id: "UZB"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Africa, countries: [
-            WorldCupCountry(id: "DZA"),
-            WorldCupCountry(id: "CPV"),
-            WorldCupCountry(id: "COD"),
+            WorldCupCountry(id: "ALG"),
+            WorldCupCountry(id: "CVI"),
+            WorldCupCountry(id: "CDR"),
             WorldCupCountry(id: "EGY"),
             WorldCupCountry(id: "GHA"),
             WorldCupCountry(id: "CIV"),
             WorldCupCountry(id: "MAR"),
             WorldCupCountry(id: "SEN"),
-            WorldCupCountry(id: "ZAF"),
+            WorldCupCountry(id: "RSA"),
             WorldCupCountry(id: "TUN"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.CONCACAF, countries: [
             WorldCupCountry(id: "CUW"),
-            WorldCupCountry(id: "HTI"),
+            WorldCupCountry(id: "HAI"),
             WorldCupCountry(id: "PAN"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.SouthAmerica, countries: [
@@ -58,7 +60,7 @@ enum WorldCupCountryData {
             WorldCupCountry(id: "BRA"),
             WorldCupCountry(id: "COL"),
             WorldCupCountry(id: "ECU"),
-            WorldCupCountry(id: "PRY"),
+            WorldCupCountry(id: "PAR"),
             WorldCupCountry(id: "URY"),
         ]),
         WorldCupRegion(name: .WorldCup.CountryPicker.Confederation.Oceania, countries: [
@@ -72,7 +74,7 @@ enum WorldCupCountryData {
             WorldCupCountry(id: "CZE"),
             WorldCupCountry(id: "ENG"),
             WorldCupCountry(id: "FRA"),
-            WorldCupCountry(id: "DEU"),
+            WorldCupCountry(id: "GER"),
             WorldCupCountry(id: "NLD"),
             WorldCupCountry(id: "NOR"),
             WorldCupCountry(id: "PRT"),
