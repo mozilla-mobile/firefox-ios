@@ -55,9 +55,7 @@ class TabConfigurationProvider {
         let engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
 
         // Register the reader-mode scheme handler alongside the internal:// one.
-        // DefaultWKEngineConfigurationProvider only wires a single scheme handler,
-        // this is the temporary additional registration until WKWebViewParameters supports
-        // multiple handlers. The handler picks disk vs memory cache per request based on
+        // The handler picks disk vs memory cache per request based on
         // the WKWebView's data store, so a single handler instance is correct for both
         // normal and private tabs.
         let webViewConfig = engineConfiguration.webViewConfiguration
