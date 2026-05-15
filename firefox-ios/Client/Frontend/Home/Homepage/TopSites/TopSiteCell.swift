@@ -149,6 +149,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         self.theme = theme
         homeTopSite = topSite
         titleLabel.text = topSite.title
+        selectedOverlay.isHidden = true
         accessibilityLabel = topSite.accessibilityLabel
         accessibilityTraits = .link
 
