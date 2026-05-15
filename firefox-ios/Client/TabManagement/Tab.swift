@@ -689,7 +689,7 @@ class Tab: NSObject,
             if let url = request.url,
                let syncedReaderModeURL = url.decodeReaderModeURL,
                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(
-                WebServer.sharedInstance.baseReaderModeURL()
+                ReaderModeSchemeHandler.baseURL
                ) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
