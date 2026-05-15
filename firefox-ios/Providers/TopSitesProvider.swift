@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import UIKit
@@ -36,9 +37,10 @@ extension TopSitesProvider {
     }
 }
 
-final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
+final class TopSitesProviderImplementation: TopSitesProvider {
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
+    let featureFlagsProvider: FeatureFlagProviding
     private let prefs: Prefs
 
     @MainActor
@@ -60,11 +62,13 @@ final class TopSitesProviderImplementation: TopSitesProvider, FeatureFlaggable {
     init(
         placesFetcher: RustPlaces,
         pinnedSiteFetcher: PinnedSites,
-        prefs: Prefs
+        prefs: Prefs,
+        featureFlagsProvider: FeatureFlagProviding = AppContainer.shared.resolve()
     ) {
         self.placesFetcher = placesFetcher
         self.pinnedSiteFetcher = pinnedSiteFetcher
         self.prefs = prefs
+        self.featureFlagsProvider = featureFlagsProvider
     }
 
     func getTopSites(numberOfMaxItems: Int,
