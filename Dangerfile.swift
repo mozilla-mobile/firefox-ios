@@ -514,6 +514,7 @@ class CodeUsageDetector {
         let keyword: Keywords
         let file: String
         let lineNumber: Int
+        let isRemoval: Bool
     }
 
     private enum Keywords: CaseIterable {
@@ -548,11 +549,11 @@ class CodeUsageDetector {
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
             case .unsafe:
-                return "### 🔒 Security: `unsafe` keyword detected in JavaScript file\n. Please request a security review."
+                return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
             case .cspHeader:
-                return "### 🔒 Security: `Content-Security-Policy` header change detected\n. Please request a security review."
+                return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
             case .sha256:
-                return "### 🔒 Security: `SHA256` change detected\n. Please request a security review."
+                return "### 🔒 Security: `sha256` hash changes detected\nPlease request a security review."
             }
         }
 
@@ -573,7 +574,7 @@ class CodeUsageDetector {
             case .notifiable:
                 return "NotificationCenter.default.addObserver("
             case .unsafe:
-                return "unsafe"
+                return "unsafe-"
             case .cspHeader:
                 return "Content-Security-Policy"
             case .sha256:
@@ -607,6 +608,22 @@ class CodeUsageDetector {
                 return true
             default:
                 return false
+            }
+        }
+
+        // Default is true, expect for some additions that aren't worth flagging
+        var detectsAdditions: Bool {
+            switch self {
+            case .sha256: return false
+            default: return true
+            }
+        }
+
+        // Most code removals we don't want to flag, expect for some
+        var detectsRemovals: Bool {
+            switch self {
+            case .cspHeader, .sha256: return true
+            default: return false
             }
         }
     }
@@ -652,14 +669,17 @@ class CodeUsageDetector {
     }
 
     private func emitBundled(keyword: Keywords, detections: [Detection]) {
-        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) |" }.joined(separator: "\n")
+        // You can add the `danger-bypass` label with a justification to bypass this check.
+        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) | \($0.isRemoval ? "Removed" : "Added") |" }.joined(separator: "\n")
         let fullMessage = """
         \(keyword.bundledHeader)
 
-        | File | Line |
-        |---|---|
+        | File | Line | Change |
+        |---|---|---|
         \(rows)
+        \nYou can add the `danger-bypass` label with a justification to bypass those checks.\nPlease add a comment explaining why the checks are by-passed.
         """
+
         if keyword.shouldComment {
             markdown(fullMessage)
         } else if keyword.shouldWarn {
@@ -678,16 +698,26 @@ class CodeUsageDetector {
         var detections: [Detection] = []
         for hunk in hunks {
             var newLineCount = 0
+            var oldLineCount = 0
             for line in hunk.lines {
-                let isAddedLine = "\(line)".starts(with: "+")
-                let isRemovedLine = "\(line)".starts(with: "-")
-                // Make sure our newLineCount is proper to fail on correct line number
-                guard isAddedLine || !isRemovedLine else { continue }
-                newLineCount += 1
-                // Collect only added lines having the particular keyword
-                guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
-                let lineNumber = hunk.newLineStart + newLineCount - 1
-                detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber))
+                let lineStr = String(describing: line)
+                let isAddedLine = lineStr.starts(with: "+")
+                let isRemovedLine = lineStr.starts(with: "-")
+                if isRemovedLine {
+                    oldLineCount += 1
+                    if keyword.detectsRemovals && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.oldLineStart + oldLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: true))
+                    }
+                } else {
+                    // Context or added line: exists in both old and new file
+                    newLineCount += 1
+                    oldLineCount += 1
+                    if isAddedLine && keyword.detectsAdditions && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.newLineStart + newLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
+                    }
+                }
             }
         }
         return detections
@@ -699,9 +729,10 @@ class CodeUsageDetector {
 
     private func collect(keyword: Keywords, inLines lines: [String], file: String) -> [Detection] {
         guard !shouldSkip(keyword, for: file) else { return [] }
+        guard keyword.detectsAdditions else { return [] }
         return lines.enumerated().compactMap { index, line in
             guard line.contains(keyword.keyword) else { return nil }
-            return Detection(keyword: keyword, file: file, lineNumber: index + 1)
+            return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
         }
     }
 }
