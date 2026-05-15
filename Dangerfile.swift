@@ -514,6 +514,7 @@ class CodeUsageDetector {
         let keyword: Keywords
         let file: String
         let lineNumber: Int
+        let isRemoval: Bool
     }
 
     private enum Keywords: CaseIterable {
@@ -526,6 +527,8 @@ class CodeUsageDetector {
         case swiftUIText
         case task
         case notifiable
+        case unsafe
+        case cspHeader
 
         var bundledHeader: String {
             switch self {
@@ -544,6 +547,10 @@ class CodeUsageDetector {
                 return "### 🧑‍💻 New `Task {}` detected\nNew `Task {}` added. Please add a concurrency reviewer on your PR: \(contacts)"
             case .notifiable:
                 return "### ⚠️ `NotificationCenter.default.addObserver` detected\nPlease prefer Notifiable over `NotificationCenter` unless specific circumstances."
+            case .unsafe:
+                return "### 🔒 Security: CSP `unsafe-` detected\nPlease request a security review."
+            case .cspHeader:
+                return "### 🔒 Security: `Content-Security-Policy` change detected\nPlease request a security review."
             }
         }
 
@@ -563,6 +570,19 @@ class CodeUsageDetector {
                 return " Task {"
             case .notifiable:
                 return "NotificationCenter.default.addObserver("
+            case .unsafe:
+                return "unsafe-"
+            case .cspHeader:
+                return "Content-Security-Policy"
+            }
+        }
+
+        func applies(to file: String) -> Bool {
+            switch self {
+            case .unsafe, .cspHeader:
+                return file.hasSuffix(".swift") || file.hasSuffix(".js")
+            default:
+                return file.contains(".swift")
             }
         }
 
@@ -585,6 +605,14 @@ class CodeUsageDetector {
                 return false
             }
         }
+
+        // Default is false, expect for some code removals that we want to flag
+        var detectsRemovals: Bool {
+            switch self {
+            case .cspHeader: return true
+            default: return false
+            }
+        }
     }
     // swiftlint:enable line_length
 
@@ -597,9 +625,10 @@ class CodeUsageDetector {
     func checkForCodeUsage() {
         var detections: [Detection] = []
         let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-        // Iterate through each added and modified file, running the checks on swift files only
-        for file in editedFiles where file.contains(".swift") && !file.contains("Dangerfile") {
-            // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
+        for file in editedFiles where !file.contains("Dangerfile") {
+            let applicable = Keywords.allCases.filter { $0.applies(to: file) }
+            guard !applicable.isEmpty else { continue }
+
             switch saferFileDiff(for: file) {
             case let .success(diff):
                 if file == BrowserViewControllerChecker.bvcPath {
@@ -607,9 +636,9 @@ class CodeUsageDetector {
                 }
                 switch diff.changes {
                 case let .modified(hunks), let .renamed(_, hunks):
-                    detections += collect(keywords: Keywords.allCases, inHunks: hunks, file: file)
+                    detections += collect(keywords: applicable, inHunks: hunks, file: file)
                 case let .created(newLines):
-                    detections += collect(keywords: Keywords.allCases, inLines: newLines, file: file)
+                    detections += collect(keywords: applicable, inLines: newLines, file: file)
                 case .deleted:
                     break // do not warn on deleted lines
                 }
@@ -627,14 +656,15 @@ class CodeUsageDetector {
     }
 
     private func emitBundled(keyword: Keywords, detections: [Detection]) {
-        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) |" }.joined(separator: "\n")
+        let rows = detections.map { "| `\($0.file)` | \($0.lineNumber) | \($0.isRemoval ? "Removed" : "Added") |" }.joined(separator: "\n")
         let fullMessage = """
         \(keyword.bundledHeader)
 
-        | File | Line |
-        |---|---|
+        | File | Line | Change |
+        |---|---|---|
         \(rows)
         """
+
         if keyword.shouldComment {
             markdown(fullMessage)
         } else if keyword.shouldWarn {
@@ -653,16 +683,26 @@ class CodeUsageDetector {
         var detections: [Detection] = []
         for hunk in hunks {
             var newLineCount = 0
+            var oldLineCount = 0
             for line in hunk.lines {
-                let isAddedLine = "\(line)".starts(with: "+")
-                let isRemovedLine = "\(line)".starts(with: "-")
-                // Make sure our newLineCount is proper to fail on correct line number
-                guard isAddedLine || !isRemovedLine else { continue }
-                newLineCount += 1
-                // Collect only added lines having the particular keyword
-                guard isAddedLine && String(describing: line).contains(keyword.keyword) else { continue }
-                let lineNumber = hunk.newLineStart + newLineCount - 1
-                detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber))
+                let lineStr = String(describing: line)
+                let isAddedLine = lineStr.starts(with: "+")
+                let isRemovedLine = lineStr.starts(with: "-")
+                if isRemovedLine {
+                    oldLineCount += 1
+                    if keyword.detectsRemovals && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.oldLineStart + oldLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: true))
+                    }
+                } else {
+                    // Context or added line: exists in both old and new file
+                    newLineCount += 1
+                    oldLineCount += 1
+                    if isAddedLine && lineStr.contains(keyword.keyword) {
+                        let lineNumber = hunk.newLineStart + newLineCount - 1
+                        detections.append(Detection(keyword: keyword, file: file, lineNumber: lineNumber, isRemoval: false))
+                    }
+                }
             }
         }
         return detections
@@ -676,7 +716,7 @@ class CodeUsageDetector {
         guard !shouldSkip(keyword, for: file) else { return [] }
         return lines.enumerated().compactMap { index, line in
             guard line.contains(keyword.keyword) else { return nil }
-            return Detection(keyword: keyword, file: file, lineNumber: index + 1)
+            return Detection(keyword: keyword, file: file, lineNumber: index + 1, isRemoval: false)
         }
     }
 }
@@ -713,7 +753,10 @@ private func failOrWarn(_ message: String) {
         Since bypass label \(bypassLabel) detected we are reporting as warning only for this PR.
         """)
     } else {
-        fail(message)
+        fail("""
+        \(message)
+        You can add the \(bypassLabel) label on the PR to by-pass the checks.\nIf you use it, please add a comment explaining why.
+        """)
     }
 }
 
