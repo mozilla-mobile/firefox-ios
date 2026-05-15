@@ -53,6 +53,16 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// `WebServer.sharedInstance.baseReaderModeURL()`.
     nonisolated static let baseURL = "readermode://app/page"
 
+    /// Base URL for URL-producing call sites. Returns the new scheme or the legacy
+    /// localhost form depending on the `customReaderModeScheme` Nimbus flag.
+    @MainActor
+    static var currentBaseURL: String {
+        let provider: FeatureFlagProviding = AppContainer.shared.resolve()
+        return provider.isEnabled(.customReaderModeScheme)
+            ? baseURL
+            : WebServer.sharedInstance.baseReaderModeURL()
+    }
+
     private let normalRouter: TinyRouter
     private let privateRouter: TinyRouter
     private let logger: Logger

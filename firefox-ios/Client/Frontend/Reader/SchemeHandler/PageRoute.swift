@@ -147,7 +147,7 @@ final class PageRoute: TinyRoute {
         let safeHref = Self.htmlEscape(originalURL.absoluteString)
         let failureMessage = Self.htmlEscape(String.ReaderModeHandlerPageCantDisplay)
         let loadOriginalLabel = Self.htmlEscape(String.ReaderModeHandlerLoadOriginalPage)
-
+        // swiftlint:disable line_length
         let html = """
         <!DOCTYPE html>
         <html>
@@ -171,7 +171,7 @@ final class PageRoute: TinyRoute {
         </body>
         </html>
         """
-
+        // swiftlint:enable line_length
         guard let body = html.data(using: .utf8) else {
             throw TinyRouterError.badResponse
         }
