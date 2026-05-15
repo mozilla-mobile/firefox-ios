@@ -10,19 +10,19 @@ import WebKit
 class TabConfigurationProvider {
     // A WKWebViewConfiguration used for normal tabs
     var configuration: WKEngineConfiguration {
-        configuration(from: prefs, isPrivate: false)
+        configuration(from: profile, isPrivate: false)
     }
 
     // A WKWebViewConfiguration used for private mode tabs
     var privateConfiguration: WKEngineConfiguration {
-        configuration(from: prefs, isPrivate: true)
+        configuration(from: profile, isPrivate: true)
     }
 
     private let configurationProvider = DefaultWKEngineConfigurationProvider()
-    private let prefs: Prefs
+    private let profile: Profile
 
-    init(prefs: Prefs) {
-        self.prefs = prefs
+    init(profile: Profile) {
+        self.profile = profile
     }
 
     func configuration(isPrivate: Bool) -> WKEngineConfiguration {
@@ -43,15 +43,28 @@ class TabConfigurationProvider {
         privateConfiguration.webViewConfiguration.mediaTypesRequiringUserActionForPlayback = mediaType
     }
 
-    private func configuration(from prefs: Prefs, isPrivate: Bool) -> WKEngineConfiguration {
-        let blockPopups = prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
-        let autoPlay = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(prefs)
+    private func configuration(from profile: Profile, isPrivate: Bool) -> WKEngineConfiguration {
+        let blockPopups = profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
+        let autoPlay = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(profile.prefs)
         let parameters = WKWebViewParameters(
             blockPopups: blockPopups,
             isPrivate: isPrivate,
             autoPlay: autoPlay,
             schemeHandler: InternalSchemeHandler()
         )
-        return configurationProvider.createConfiguration(parameters: parameters)
+        let engineConfiguration = configurationProvider.createConfiguration(parameters: parameters)
+
+        // Register the reader-mode scheme handler alongside the internal:// one.
+        // The handler picks disk vs memory cache per request based on
+        // the WKWebView's data store, so a single handler instance is correct for both
+        // normal and private tabs.
+        let webViewConfig = engineConfiguration.webViewConfiguration
+        if webViewConfig.urlSchemeHandler(forURLScheme: ReaderModeSchemeHandler.scheme) == nil {
+            webViewConfig.setURLSchemeHandler(
+                ReaderModeSchemeHandler(profile: profile),
+                forURLScheme: ReaderModeSchemeHandler.scheme
+            )
+        }
+        return engineConfiguration
     }
 }

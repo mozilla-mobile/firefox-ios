@@ -11,7 +11,8 @@ import { findRecipeJSONLD } from "./JSONLD.js";
 const DEBUG = false;
 
 var readabilityResult = null;
-const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+// Matches both the legacy localhost form and the new custom-scheme form
+const readerModeURL = /^(http:\/\/localhost:\d+\/reader-mode\/page|readermode:\/\/app\/page)/;
 
 const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +
