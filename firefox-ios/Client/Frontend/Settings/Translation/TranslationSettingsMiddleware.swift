@@ -75,7 +75,8 @@ final class TranslationSettingsMiddleware {
                 )
             }
             store.dispatch(ToolbarAction(
-                translationConfiguration: TranslationConfiguration(prefs: prefs),
+                isTranslationsEnabled: newValue,
+                translationConfiguration: TranslationConfiguration(prefs: prefs, isUserSettingEnabled: newValue),
                 windowUUID: action.windowUUID,
                 actionType: ToolbarActionType.didTranslationSettingsChange
             ))

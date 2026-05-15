@@ -35,6 +35,7 @@ struct ToolbarAction: Action {
     let shouldShowKeyboard: Bool?
     let shouldAnimate: Bool?
     let middleButton: NavigationBarMiddleButtonType?
+    let isTranslationsEnabled: Bool?
     let translationConfiguration: TranslationConfiguration?
     let previousTabScreenshot: UIImage?
     let nextTabScreenshot: UIImage?
@@ -65,6 +66,7 @@ struct ToolbarAction: Action {
          shouldShowKeyboard: Bool? = nil,
          shouldAnimate: Bool? = nil,
          middleButton: NavigationBarMiddleButtonType? = nil,
+         isTranslationsEnabled: Bool? = nil,
          translationConfiguration: TranslationConfiguration? = nil,
          previousTabScreenshot: UIImage? = nil,
          nextTabScreenshot: UIImage? = nil,
@@ -98,6 +100,7 @@ struct ToolbarAction: Action {
         self.shouldAnimate = shouldAnimate
         self.canSummarize = canSummarize
         self.middleButton = middleButton
+        self.isTranslationsEnabled = isTranslationsEnabled
         self.translationConfiguration = translationConfiguration
         self.previousTabScreenshot = previousTabScreenshot
         self.nextTabScreenshot = nextTabScreenshot
