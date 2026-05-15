@@ -1726,14 +1726,14 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitOverKeyboardContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
+        let existingOffset = overKeyboardContainerConstraint?.layoutConstraint?.constant ?? 0
+
         overKeyboardContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
-            } else {
-                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
-            }
+            // Apply same constraints update we do in native path we 
+            let constraint = make.bottom.equalTo(bottomContainer.snp.top).offset(existingOffset).constraint
+            let reference = ConstraintReference(snapKit: constraint)
+            overKeyboardContainerConstraint = reference
+            (scrollController as? LegacyTabScrollProvider)?.overKeyboardContainerConstraint = reference
 
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
@@ -1748,15 +1748,13 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitBottomContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        bottomContainer.snp.remakeConstraints { make in
-            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
-            let constraintReference = ConstraintReference(snapKit: constraint)
+        let existingOffset = bottomContainerConstraint?.layoutConstraint?.constant ?? 0
 
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = constraintReference
-            } else {
-                bottomContainerConstraint = constraintReference
-            }
+        bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).offset(existingOffset).constraint
+            let reference = ConstraintReference(snapKit: constraint)
+            bottomContainerConstraint = reference
+            (scrollController as? LegacyTabScrollProvider)?.bottomContainerConstraint = reference
             make.leading.trailing.equalTo(view)
         }
     }
@@ -1776,9 +1774,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
+        if tabManager.selectedTab?.isFindInPageMode == false {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -4997,15 +4993,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        if #available(iOS 26.0, *), isBottomSearchBar {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
