@@ -76,7 +76,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             FeatureFlagsBoolSetting(
                 with: .customReaderModeScheme,
                 titleText: format(string: "Custom Reader Mode Scheme"),
-                statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler instead of the legacy localhost web server")
+                statusText: format(string: "Toggle to serve reader mode via the readermode:// scheme handler")
             ) { [weak self] _ in
                 self?.reloadView()
             },
