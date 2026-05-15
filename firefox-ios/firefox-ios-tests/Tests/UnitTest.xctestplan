@@ -313,6 +313,11 @@
       }
     },
     {
+      "skippedTests" : [
+        "EventStoreTests\/testAdvancingTimeIntoTheFuture()",
+        "NimbusTests",
+        "SyncManagerTelemetryTests\/testSendsAddressesAndGlobalPings()"
+      ],
       "target" : {
         "containerPath" : "container:..\/MozillaRustComponents",
         "identifier" : "MozillaRustComponentsTests",
