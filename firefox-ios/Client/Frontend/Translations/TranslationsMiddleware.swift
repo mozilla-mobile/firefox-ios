@@ -6,9 +6,10 @@ import Foundation
 import Redux
 import Common
 import Shared
+import UIKit
 
 @MainActor
-final class TranslationsMiddleware: FeatureFlaggable {
+final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private let profile: Profile
     private let logger: Logger
     private let windowManager: WindowManager
@@ -50,6 +51,11 @@ final class TranslationsMiddleware: FeatureFlaggable {
         self.translationsTelemetry = translationsTelemetry
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
+        startObservingNotifications(
+            withNotificationCenter: NotificationCenter.default,
+            forObserver: self,
+            observing: [UIApplication.didBecomeActiveNotification]
+        )
     }
 
     lazy var translationsProvider: Middleware<AppState> = { state, action in
@@ -344,6 +350,24 @@ final class TranslationsMiddleware: FeatureFlaggable {
         windowManager.tabManager(for: windowUUID).selectedTab
     }
 
+    private func clearStuckLoadingState() {
+        for tabManager in windowManager.allWindowTabManagers() {
+            guard let tab = tabManager.selectedTab,
+                  tab.translationConfiguration?.state == .loading else { continue }
+            let windowUUID = tabManager.windowUUID
+            translationFlowIds[windowUUID] = nil
+            selectedTargetLanguages[windowUUID] = nil
+            dispatchClearTranslationIcon(windowUUID: windowUUID, on: tab)
+            let action = ToolbarAction(
+                url: tab.url,
+                translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+            checkTranslationsAreEligible(for: action)
+        }
+    }
+
     /// If auto-translate is enabled, triggers translation to the user's top preferred language.
     /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
     private func tryAutoTranslate(for action: ToolbarAction, on tab: Tab?) async -> Bool {
@@ -623,5 +647,18 @@ final class TranslationsMiddleware: FeatureFlaggable {
         )
 
         return UUID()
+    }
+
+    // MARK: - Notifiable
+
+    nonisolated func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            Task { @MainActor [weak self] in
+                self?.clearStuckLoadingState()
+            }
+        default:
+            break
+        }
     }
 }

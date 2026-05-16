@@ -847,6 +847,64 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertNotNil(tab.onNextCommit)
     }
 
+    // MARK: - App foreground tests
+
+    func test_appForeground_withLoadingTab_clearsStateAndRerunsEligibility() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(shouldOfferTranslationResult: .success(true))
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .loading)
+        mockTabManager.selectedTab = tab
+        mockWindowManager.newBrowserWindowConfigured(
+            AppWindowInfo(tabManager: mockTabManager, sceneCoordinator: nil),
+            uuid: .XCTestDefaultUUID
+        )
+
+        let subject = createSubject(translationsService: mockTranslationService)
+        // Dispatch clear + eligibility result: two receivedTranslationLanguage actions.
+        let expectation = XCTestExpectation(description: "clear + eligibility dispatched after foreground")
+        expectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .receivedTranslationLanguage {
+                expectation.fulfill()
+            }
+        }
+
+        NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+
+        wait(for: [expectation], timeout: 2.0)
+        XCTAssertEqual(tab.translationConfiguration?.state, .inactive)
+        withExtendedLifetime(subject) {}
+    }
+
+    func test_appForeground_withNonLoadingTab_doesNotClearState() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tab.translationConfiguration = TranslationConfiguration(prefs: mockProfile.prefs, state: .active)
+        mockTabManager.selectedTab = tab
+        mockWindowManager.newBrowserWindowConfigured(
+            AppWindowInfo(tabManager: mockTabManager, sceneCoordinator: nil),
+            uuid: .XCTestDefaultUUID
+        )
+
+        let subject = createSubject()
+        let expectation = XCTestExpectation(description: "no dispatch for non-loading tab")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .receivedTranslationLanguage {
+                expectation.fulfill()
+            }
+        }
+
+        NotificationCenter.default.post(name: UIApplication.didBecomeActiveNotification, object: nil)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        withExtendedLifetime(subject) {}
+    }
+
     // MARK: - didTranslationSettingsChange tests
 
     func test_didTranslationSettingsChange_featureEnabled_eligiblePage_dispatchesReceivedTranslationLanguage() throws {
