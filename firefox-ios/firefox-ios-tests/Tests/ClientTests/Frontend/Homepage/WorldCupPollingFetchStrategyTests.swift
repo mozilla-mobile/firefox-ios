@@ -27,7 +27,7 @@ final class WorldCupPollingFetchStrategyTests: XCTestCase {
     func test_consecutiveEmpty_doublesAndCaps() async {
         let (_, scheduled) = await drive(
             config: config(base: 60, empty: 100, cap: 250),
-            scriptedResults: Array(repeating: .success(nil), count: 5),
+            scriptedResults: Array(repeating: .success(.empty), count: 5),
             collectCycles: 5
         )
 
