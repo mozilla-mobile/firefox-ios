@@ -406,10 +406,154 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - Dev server timeline
+
+    func test_initialize_whenDevTimelineEnabledAndServerNowAdvanced_bucketsAsPast() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let match1 = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-12T18:00:00+00:00")
+        let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-01T00:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [match1, match2]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        let card = try XCTUnwrap(dispatched.matches.first)
+        XCTAssertEqual(card.featuredMatch.count, 2)
+        XCTAssertTrue(card.upcomingMatches.isEmpty)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_initialize_whenDevTimelineDisabled_ignoresResponseNow() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let match1 = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-12T18:00:00+00:00")
+        let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
+        let response = WorldCupMatchesResponse(
+            now: "2026-07-01T00:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [match1, match2]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: false)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        let card = try XCTUnwrap(dispatched.matches.first)
+        XCTAssertEqual(card.featuredMatch.count, 1)
+        XCTAssertEqual(card.upcomingMatches.count, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_initialize_whenDevTimelineEnabledButServerNowMalformed_fallsBackToDate() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let match1 = makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-12T18:00:00+00:00")
+        let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
+        let response = WorldCupMatchesResponse(
+            now: "not-a-date",
+            previous: nil,
+            current: nil,
+            next: [match1, match2]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        let card = try XCTUnwrap(dispatched.matches.first)
+        XCTAssertEqual(card.featuredMatch.count, 1)
+        XCTAssertEqual(card.upcomingMatches.count, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_initialize_noTeam_whenDevTimelineEnabled_defaultIndexUsesServerNow() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = nil
+        let match1 = makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-10T18:00:00+00:00")
+        let match2 = makeMatch(id: 2, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
+        let response = WorldCupMatchesResponse(
+            now: "2026-06-12T00:00:00+00:00",
+            previous: nil,
+            current: nil,
+            next: [match1, match2]
+        )
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(response))
+        let subject = createSubject(apiClient: apiClient, usesDevServerTimeline: true)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertEqual(dispatched.matches.count, 2)
+        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - Helpers
 
-    private func createSubject(apiClient: WorldCupAPIClientProtocol?) -> WorldCupMiddleware {
-        let subject = WorldCupMiddleware(worldCupStore: mockWorldCupStore, apiClient: apiClient)
+    private func createSubject(
+        apiClient: WorldCupAPIClientProtocol?,
+        usesDevServerTimeline: Bool = false
+    ) -> WorldCupMiddleware {
+        let subject = WorldCupMiddleware(
+            worldCupStore: mockWorldCupStore,
+            apiClient: apiClient,
+            usesDevServerTimeline: usesDevServerTimeline
+        )
         trackForMemoryLeaks(subject)
         return subject
     }

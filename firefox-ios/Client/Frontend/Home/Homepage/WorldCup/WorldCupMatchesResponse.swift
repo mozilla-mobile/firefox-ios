@@ -10,9 +10,25 @@ import Foundation
 /// `WorldCupLiveResponse` instead — don't confuse `current` here with "live".
 /// `current` just means "matches whose date equals the query `date=`".
 struct WorldCupMatchesResponse: Decodable, Equatable {
+    /// ISO8601 timestamp the server considers "now" for this response. Only
+    /// the dev/mock server populates this — prod merino omits the key so it
+    /// decodes as `nil`. Honored by `WorldCupMiddleware` only when the
+    /// `WorldCupBaseHost` pref is set, so a stray prod value can't shift
+    /// bucketing for real users.
+    let now: String?
     let previous: [Match]?
     let current: [Match]?
     let next: [Match]?
+
+    init(now: String? = nil,
+         previous: [Match]? = nil,
+         current: [Match]? = nil,
+         next: [Match]? = nil) {
+        self.now = now
+        self.previous = previous
+        self.current = current
+        self.next = next
+    }
 
     struct Match: Decodable, Equatable {
         let date: String
