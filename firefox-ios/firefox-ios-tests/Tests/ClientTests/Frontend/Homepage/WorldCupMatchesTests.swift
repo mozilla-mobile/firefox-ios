@@ -522,7 +522,7 @@ struct WorldCupMatchesTests {
                            awayPenalty: Int? = nil,
                            clock: String? = nil,
                            group: String? = nil,
-                           stage: String? = nil) -> WorldCupMatchesResponse.Match {
+                           stage: String? = "Group Stage") -> WorldCupMatchesResponse.Match {
         let homeTeam = WorldCupMatchesResponse.Team(
             key: home,
             name: home,

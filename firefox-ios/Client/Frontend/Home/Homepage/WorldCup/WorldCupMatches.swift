@@ -7,15 +7,18 @@ import Shared
 
 struct WorldCupMatches: Equatable, Hashable {
     let phaseTitle: String
+    let dateLabel: String?
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
 
     init(phaseTitle: String,
+         dateLabel: String? = nil,
          isLive: Bool,
          featuredMatch: [WorldCupMatch],
          upcomingMatches: [WorldCupMatch]) {
         self.phaseTitle = phaseTitle
+        self.dateLabel = dateLabel
         self.isLive = isLive
         self.featuredMatch = featuredMatch
         self.upcomingMatches = upcomingMatches
@@ -78,6 +81,7 @@ struct WorldCupMatches: Equatable, Hashable {
 
         let allIDs = allMatches.map(\.globalEventId)
         self.phaseTitle = Self.phaseTitle(from: featured.first)
+        self.dateLabel = nil
         self.isLive = allIDs.contains(where: { liveIDs.contains($0) })
         self.featuredMatch = featured.map { WorldCupMatch($0, localeProvider: localeProvider) }
         self.upcomingMatches = upcoming.map { WorldCupMatch($0, localeProvider: localeProvider) }
@@ -97,20 +101,20 @@ struct WorldCupMatches: Equatable, Hashable {
         calendar: Calendar = .current,
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
-        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        let allMatches = ((response.previous ?? []) + (response.current ?? []) + (response.next ?? []))
+            .filter { $0.stage == "Group Stage" }
         let groups = groupedByDay(allMatches, calendar: calendar)
-        // No team selected: cards can span days/stages, so we use the generic
-        // group-stage label across the board. Stage-specific labels are only
-        // meaningful in the team-selected single-card view.
         let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         let cards = groups.map { group -> WorldCupMatches in
             let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
             let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
             return WorldCupMatches(
                 phaseTitle: title,
+                // Day shown once at top; rows render time-only.
+                dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
                 isLive: !liveMatches.isEmpty,
-                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider) },
-                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider) }
+                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
+                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
             )
         }
         let today = calendar.startOfDay(for: now)
@@ -118,6 +122,13 @@ struct WorldCupMatches: Equatable, Hashable {
         let firstFutureIndex = groups.firstIndex(where: { $0.day >= today })
         let defaultIndex = liveCardIndex ?? firstFutureIndex ?? max(cards.count - 1, 0)
         return (cards, defaultIndex)
+    }
+
+    private static func dayLabel(for day: Date, locale: Locale) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate("MMMd")
+        return formatter.string(from: day)
     }
 
     /// Maps a featured match to a localized phase label. For group-stage

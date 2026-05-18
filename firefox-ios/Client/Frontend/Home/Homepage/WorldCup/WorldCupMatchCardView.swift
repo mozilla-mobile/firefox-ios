@@ -177,7 +177,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
         rebuildFeaturedMatches(matches: model.featuredMatch)
         rebuildUpcomingRows(matches: model.upcomingMatches)
-        titleLabel.text = model.phaseTitle
+        titleLabel.text = model.dateLabel.map { "\(model.phaseTitle) · \($0)" } ?? model.phaseTitle
         liveLabelContainer.isHidden = !model.isLive
     }
 

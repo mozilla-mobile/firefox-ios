@@ -34,12 +34,13 @@ struct WorldCupMatch: Equatable, Hashable {
     }
 
     init(_ match: WorldCupMatchesResponse.Match,
-         localeProvider: LocaleProvider = SystemLocaleProvider()) {
+         localeProvider: LocaleProvider = SystemLocaleProvider(),
+         timeOnly: Bool = false) {
         self.homeCode = match.homeTeam.key
         self.awayCode = match.awayTeam.key
         self.homeFlagAssetName = match.homeTeam.key
         self.awayFlagAssetName = match.awayTeam.key
-        self.date = Self.formattedDate(match.date, locale: localeProvider.current)
+        self.date = Self.formattedDate(match.date, locale: localeProvider.current, timeOnly: timeOnly)
         self.score = Self.score(from: match)
     }
 
@@ -56,11 +57,11 @@ struct WorldCupMatch: Equatable, Hashable {
         return frac.date(from: iso)
     }
 
-    private static func formattedDate(_ iso: String, locale: Locale) -> String {
+    private static func formattedDate(_ iso: String, locale: Locale, timeOnly: Bool = false) -> String {
         guard let date = parseDate(iso) else { return iso }
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
+        formatter.setLocalizedDateFormatFromTemplate(timeOnly ? "jmm" : "MMMdjmm")
         return formatter.string(from: date)
     }
 
