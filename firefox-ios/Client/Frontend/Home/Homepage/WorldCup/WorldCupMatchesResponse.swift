@@ -9,7 +9,7 @@ import Foundation
 /// endpoint emits a flat `{ matches: [...] }` shape and is decoded into
 /// `WorldCupLiveResponse` instead — don't confuse `current` here with "live".
 /// `current` just means "matches whose date equals the query `date=`".
-struct WorldCupMatchesResponse: Decodable, Equatable {
+struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
     /// ISO8601 timestamp the server considers "now" for this response. Only
     /// the dev/mock server populates this — prod merino omits the key so it
     /// decodes as `nil`. Honored by `WorldCupMiddleware` only when the
@@ -30,7 +30,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable {
         self.next = next
     }
 
-    struct Match: Decodable, Equatable {
+    struct Match: Decodable, Equatable, Sendable {
         let date: String
         let globalEventId: Int
         let homeTeam: Team
@@ -43,6 +43,11 @@ struct WorldCupMatchesResponse: Decodable, Equatable {
         let homePenalty: Int?
         let awayPenalty: Int?
         let clock: String?
+        /// Server-side last-updated timestamp for this match. Useful for
+        /// de-duping or short-circuiting "no change since last fetch" logic.
+        /// Type intentionally untyped (Int) — merino's docs show it but don't
+        /// nail down whether it's epoch seconds, millis, or a revision counter.
+        let updated: Int?
         /// "past", "live", or "scheduled".
         /// Not typing this since we don't want to couple the client too tightly to the API's exact status values,
         /// in case of future additions or changes.
@@ -66,6 +71,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable {
              homePenalty: Int? = nil,
              awayPenalty: Int? = nil,
              clock: String? = nil,
+             updated: Int? = nil,
              statusType: String? = nil,
              stage: String? = nil) {
             self.date = date
@@ -80,12 +86,13 @@ struct WorldCupMatchesResponse: Decodable, Equatable {
             self.homePenalty = homePenalty
             self.awayPenalty = awayPenalty
             self.clock = clock
+            self.updated = updated
             self.statusType = statusType
             self.stage = stage
         }
     }
 
-    struct Team: Decodable, Equatable {
+    struct Team: Decodable, Equatable, Sendable {
         /// 3-letter FIFA-style team key (e.g. `BRA`, `ENG`, `USA`).
         let key: String
         let name: String

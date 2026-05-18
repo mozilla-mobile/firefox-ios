@@ -10,7 +10,7 @@ import Foundation
 /// `{ matches: [...] }` shape rather than the previous/current/next buckets
 /// of `/matches`. Reuses `WorldCupMatchesResponse.Match` since merino emits
 /// the same per-match shape on both endpoints.
-struct WorldCupLiveResponse: Decodable, Equatable {
+struct WorldCupLiveResponse: Decodable, Equatable, Sendable {
     let matches: [WorldCupMatchesResponse.Match]?
 
     init(matches: [WorldCupMatchesResponse.Match]? = nil) {

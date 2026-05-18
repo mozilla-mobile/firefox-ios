@@ -47,21 +47,31 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
         return try teamsResult.get()
     }
 
-    func loadMatches(team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        matchesFetchCount += 1
+    /// Emits the canned matches result once and finishes. Tests that want
+    /// polling semantics should pass a real `WorldCupPollingFetchStrategy`
+    /// and wire the mock client into it.
+    func matchesStream(team: String?) -> WorldCupMatchesStream {
         lastMatchesTeam = team
-        switch matchesResult {
-        case .success(let response): return .success(response)
-        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        matchesFetchCount += 1
+        let captured = matchesResult
+        return AsyncStream { continuation in
+            Task {
+                continuation.yield(Self.mapped(captured))
+                continuation.finish()
+            }
         }
     }
 
-    func loadLive(team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
-        liveFetchCount += 1
+    /// Emits the canned live result once and finishes.
+    func liveStream(team: String?) -> WorldCupLiveStream {
         lastLiveTeam = team
-        switch liveResult {
-        case .success(let response): return .success(response)
-        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        liveFetchCount += 1
+        let captured = liveResult
+        return AsyncStream { continuation in
+            Task {
+                continuation.yield(Self.mapped(captured))
+                continuation.finish()
+            }
         }
     }
 
@@ -70,6 +80,15 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
         switch teamsResult {
         case .success(let response): return .success(response)
         case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
+    }
+
+    private static func mapped<Response>(
+        _ result: Result<Response?, Error>
+    ) -> Result<Response?, WorldCupLoadError> {
+        switch result {
+        case .success(let value): return .success(value)
+        case .failure(let error): return .failure(WorldCupLoadError.from(error))
         }
     }
 }

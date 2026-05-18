@@ -115,6 +115,11 @@ public struct PrefsKeys {
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
         /// Override for the merino WCS base host
         public static let WorldCupBaseHost = "worldCupBaseHostKey"
+        /// Dev-only override for the World Cup `/matches` and `/live` polling
+        /// cadence in seconds. When set, both streams fire on this interval
+        /// regardless of result type — used to test live behavior without
+        /// waiting for the production cadence.
+        public static let WorldCupPollInterval = "worldCupPollIntervalKey"
     }
 
     public struct Homepage {

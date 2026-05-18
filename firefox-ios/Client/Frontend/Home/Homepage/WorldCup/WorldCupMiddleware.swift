@@ -7,60 +7,62 @@ import Common
 import Redux
 import Shared
 
-/// The middleware responsible for all the actions related to the `WorldCup` feature.
-/// To keep it simple it dispatches only `WorldCupMiddlewareActionType.didUpdate`
-/// that is only reduced by `WorldCupSectionState`.
+/// Thin Redux adapter for the WorldCup feature. The polling lifecycle,
+/// `/matches` + `/live` plumbing, and view-model assembly live in
+/// `WorldCupFeed`. This middleware just routes Redux actions to the feed
+/// and dispatches the feed's `Snapshot` back into the store.
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
-    private let apiClient: WorldCupAPIClientProtocol?
-    /// When true, a parseable `response.now` overrides `Date()` for bucketing
-    /// so QA can advance the mock server's timeline without touching device
-    /// date. Gated on the `WorldCupBaseHost` pref, which only dev/internal
-    /// builds expose — prod stays on `Date()` even if a response carries `now`.
-    private let usesDevServerTimeline: Bool
-    private var matchesFetchTask: Task<Void, Never>?
-    private var matches: [WorldCupMatches] = []
-    private var defaultMatchIndex = 0
+    private let feed: WorldCupFeed?
+    private var lastWindowUUID: WindowUUID?
 
-    init(
-        worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
-        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient(
-            baseHost: (AppContainer.shared.resolve() as Profile)
-                .prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
-        ),
-        usesDevServerTimeline: Bool = (AppContainer.shared.resolve() as Profile)
-            .prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
-    ) {
+    convenience init() {
+        let store = WorldCupStore()
+        let feed = WorldCupMiddleware.makeDefaultFeed(store: store)
+        self.init(worldCupStore: store, feed: feed)
+    }
+
+    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeed?) {
         self.worldCupStore = worldCupStore
-        self.apiClient = apiClient
-        self.usesDevServerTimeline = usesDevServerTimeline
+        self.feed = feed
+        feed?.onUpdate = { [weak self] snapshot in
+            self?.dispatch(snapshot: snapshot)
+        }
     }
 
     lazy var worldCupProvider: Middleware<AppState> = { state, action in
+        self.lastWindowUUID = action.windowUUID
         switch action.actionType {
-        case HomepageActionType.initialize:
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+        case HomepageActionType.initialize,
+             HomepageMiddlewareActionType.enteredForeground,
+             WorldCupActionType.retryMatchesFetch:
+            self.startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.didChangeHomepageSettings:
-            self.dispatchUpdate(windowUUID: action.windowUUID)
+            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case WorldCupActionType.removeHomepageCard:
             self.worldCupStore.setIsHomepageSectionEnabled(false)
-            self.dispatchUpdate(windowUUID: action.windowUUID)
+            self.feed?.stop()
+            self.dispatch(snapshot: .empty)
         case WorldCupActionType.selectTeam:
             let countryId = (action as? WorldCupAction)?.selectedCountryId
             self.worldCupStore.setSelectedTeam(countryId: countryId)
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
-        case WorldCupActionType.retryMatchesFetch:
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+            self.startFeed(windowUUID: action.windowUUID)
         default:
             break
         }
     }
 
-    private func dispatchUpdate(
-        windowUUID: WindowUUID,
-        apiError: WorldCupLoadError? = nil
-    ) {
+    private func startFeed(windowUUID: WindowUUID) {
+        guard worldCupStore.isMilestone2, let feed else {
+            dispatch(snapshot: .empty)
+            return
+        }
+        feed.start()
+    }
+
+    private func dispatch(snapshot: WorldCupFeed.Snapshot) {
+        guard let windowUUID = lastWindowUUID else { return }
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
@@ -68,61 +70,21 @@ final class WorldCupMiddleware {
                 shouldShowHomepageWorldCupSection: worldCupStore.isFeatureEnabledAndSectionEnabled,
                 shouldShowMilestone2: worldCupStore.isMilestone2,
                 selectedCountryId: worldCupStore.selectedTeam,
-                matches: matches,
-                apiError: apiError,
-                defaultMatchIndex: defaultMatchIndex
+                matches: snapshot.matches,
+                apiError: snapshot.apiError,
+                defaultMatchIndex: snapshot.defaultMatchIndex
             )
         )
     }
 
-    private func scheduleMatchesFetch(windowUUID: WindowUUID) {
-        guard worldCupStore.isMilestone2, let apiClient else {
-            dispatchUpdate(windowUUID: windowUUID)
-            return
-        }
-        let selectedTeam = worldCupStore.selectedTeam
-        matchesFetchTask?.cancel()
-        matchesFetchTask = Task { [apiClient, weak self] in
-            async let matchesResult = apiClient.loadMatches(team: selectedTeam)
-            async let liveResult = apiClient.loadLive(team: selectedTeam)
-            let (matches, live) = await (matchesResult, liveResult)
-            guard !Task.isCancelled else { return }
-            switch matches {
-            case .success(let response):
-                guard let response else { return }
-                let liveIDs = Self.liveIDs(from: live)
-                let now = self?.effectiveNow(from: response) ?? Date()
-                if selectedTeam != nil {
-                    self?.matches = [WorldCupMatches(response: response, liveIDs: liveIDs, now: now)]
-                    self?.defaultMatchIndex = 0
-                } else {
-                    let flattened = WorldCupMatches.flattened(response: response, liveIDs: liveIDs, now: now)
-                    self?.matches = flattened.cards
-                    self?.defaultMatchIndex = flattened.defaultIndex
-                }
-                self?.dispatchUpdate(windowUUID: windowUUID)
-            case .failure(let error):
-                self?.dispatchUpdate(windowUUID: windowUUID, apiError: error)
-            }
-        }
-    }
-
-    /// Pulls the `globalEventId`s out of the `/live` endpoint response. A
-    /// failure on the live endpoint isn't fatal: the matches request already
-    /// gives us a usable view, we just lose the live badge for this refresh.
-    private static func liveIDs(
-        from result: Result<WorldCupLiveResponse?, WorldCupLoadError>
-    ) -> Set<Int> {
-        guard case let .success(response) = result,
-              let matches = response?.matches else { return [] }
-        return Set(matches.map(\.globalEventId))
-    }
-
-    /// Returns the response's `now` only when the dev pref is set and the
-    /// field parses. Any other combination returns `nil`, leaving callers to
-    /// fall back to `Date()` — which is what prod always does.
-    private func effectiveNow(from response: WorldCupMatchesResponse) -> Date? {
-        guard usesDevServerTimeline, let iso = response.now else { return nil }
-        return WorldCupMatch.parseDate(iso)
+    private static func makeDefaultFeed(store: WorldCupStoreProtocol) -> WorldCupFeed? {
+        guard let apiClient = WorldCupAPIClient.makeDefault() else { return nil }
+        let prefs = (AppContainer.shared.resolve() as Profile).prefs
+        let usesDevServerTimeline = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
+        return WorldCupFeed(
+            apiClient: apiClient,
+            usesDevServerTimeline: usesDevServerTimeline,
+            selectedTeamProvider: { store.selectedTeam }
+        )
     }
 }

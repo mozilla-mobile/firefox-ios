@@ -43,16 +43,17 @@ struct WorldCupMatch: Equatable, Hashable {
         self.score = Self.score(from: match)
     }
 
-    private static var isoFormatter: ISO8601DateFormatter {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter
-    }
-
-    /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`).
-    /// Returns `nil` if the string can't be parsed.
+    /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`
+    /// or `2026-06-12T18:00:00.000Z`). Returns `nil` if neither formatter
+    /// accepts the string.
     static func parseDate(_ iso: String) -> Date? {
-        return isoFormatter.date(from: iso)
+        let plain = ISO8601DateFormatter()
+        plain.formatOptions = [.withInternetDateTime]
+        if let date = plain.date(from: iso) { return date }
+
+        let frac = ISO8601DateFormatter()
+        frac.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return frac.date(from: iso)
     }
 
     private static func formattedDate(_ iso: String, locale: Locale) -> String {

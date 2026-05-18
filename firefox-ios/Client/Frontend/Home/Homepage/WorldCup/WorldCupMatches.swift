@@ -21,44 +21,60 @@ struct WorldCupMatches: Equatable, Hashable {
         self.upcomingMatches = upcomingMatches
     }
 
+    /// How long a match stays in the prominent "hero" slot after kickoff
+    /// before falling to the compact row. Covers the ~110-min live window
+    /// plus a bit of post-FT result-viewing so a just-finished match doesn't
+    /// vanish the second it ends, but doesn't keep an hours-old result
+    /// occupying the hero spot when an upcoming match is closer in time.
+    private static let featuredWindow: TimeInterval = 2 * 60 * 60
+
     /// Single-card view used when a team is selected: the merino response is
     /// already scoped to that team. We don't trust the server's
     /// `previous/current/next` labels for the featured/upcoming split — those
     /// are anchored to whatever fetch date we sent (which is pinned to the
     /// tournament-window floor so the API actually returns data
-    /// pre-tournament), not to the user's actual today. Instead we re-bucket
-    /// the flat list against `now`: past + today matches go to `featuredMatch`
-    /// (prominent top section), future matches go to `upcomingMatches` (the
-    /// compact bottom list, capped at two). If nothing has happened yet, the
-    /// first scheduled match is promoted to featured so the card never opens
-    /// empty. `liveIDs` is the set of `globalEventId`s reported by the `.live`
-    /// endpoint; `isLive` is set if any of this card's matches is in that set.
+    /// pre-tournament), not to the user's actual today.
+    ///
+    /// Bucketing rule: a match sits in `featuredMatch` (the hero) only while
+    /// `now ∈ [kickoff, kickoff + featuredWindow]`. Everything else lands in
+    /// `upcomingMatches` (the compact row) sorted chronologically and capped
+    /// at two. If nothing is currently in the featured window, the next
+    /// upcoming match is promoted so the hero never goes empty mid-tournament;
+    /// if everything is past, the most recent past is promoted instead.
+    ///
+    /// `liveIDs` is the set of `globalEventId`s reported by the `/live`
+    /// endpoint (after filtering to truly-live entries); `isLive` is set if
+    /// any of this card's matches is in that set.
     init(response: WorldCupMatchesResponse,
          liveIDs: Set<Int> = [],
          now: Date = Date(),
          calendar: Calendar = .current,
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
         let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
-        let today = calendar.startOfDay(for: now)
 
-        var pastOrToday: [WorldCupMatchesResponse.Match] = []
-        var future: [WorldCupMatchesResponse.Match] = []
+        var inFeaturedZone: [WorldCupMatchesResponse.Match] = []
+        var others: [(date: Date, match: WorldCupMatchesResponse.Match)] = []
         for match in allMatches {
-            guard let parsed = WorldCupMatch.parseDate(match.date) else { continue }
-            if calendar.startOfDay(for: parsed) <= today {
-                pastOrToday.append(match)
+            guard let kickoff = WorldCupMatch.parseDate(match.date) else { continue }
+            let windowEnd = kickoff.addingTimeInterval(Self.featuredWindow)
+            if now >= kickoff && now <= windowEnd {
+                inFeaturedZone.append(match)
             } else {
-                future.append(match)
+                others.append((kickoff, match))
             }
         }
+        others.sort { $0.date < $1.date }
 
-        var featured = pastOrToday
-        var upcoming = future
-        if featured.isEmpty, let firstScheduled = upcoming.first {
-            featured = [firstScheduled]
-            upcoming = Array(upcoming.dropFirst())
+        var featured = inFeaturedZone
+        if featured.isEmpty {
+            if let idx = others.firstIndex(where: { $0.date > now }) {
+                featured = [others.remove(at: idx).match]
+            } else if let last = others.last {
+                others.removeLast()
+                featured = [last.match]
+            }
         }
-        upcoming = Array(upcoming.prefix(2))
+        let upcoming = others.prefix(2).map(\.match)
 
         let allIDs = allMatches.map(\.globalEventId)
         self.phaseTitle = Self.phaseTitle(from: featured.first)
@@ -87,17 +103,20 @@ struct WorldCupMatches: Equatable, Hashable {
         // group-stage label across the board. Stage-specific labels are only
         // meaningful in the team-selected single-card view.
         let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-        let cards = groups.map { group in
-            WorldCupMatches(
+        let cards = groups.map { group -> WorldCupMatches in
+            let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
+            let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
+            return WorldCupMatches(
                 phaseTitle: title,
-                isLive: group.matches.contains { liveIDs.contains($0.globalEventId) },
-                featuredMatch: [],
-                upcomingMatches: group.matches.map { WorldCupMatch($0, localeProvider: localeProvider) }
+                isLive: !liveMatches.isEmpty,
+                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider) },
+                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider) }
             )
         }
         let today = calendar.startOfDay(for: now)
+        let liveCardIndex = cards.firstIndex(where: \.isLive)
         let firstFutureIndex = groups.firstIndex(where: { $0.day >= today })
-        let defaultIndex = firstFutureIndex ?? max(cards.count - 1, 0)
+        let defaultIndex = liveCardIndex ?? firstFutureIndex ?? max(cards.count - 1, 0)
         return (cards, defaultIndex)
     }
 
