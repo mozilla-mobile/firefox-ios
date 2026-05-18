@@ -3,7 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import MozillaAppServices
+import Shared
 
 /// Thin Swift wrapper around the FFI-generated `MozillaAppServices.WorldCupClient`.
 /// Exposes the merino WCS endpoints as parsed Swift values, isolating callers from
@@ -115,5 +117,29 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private func decode<T: Decodable>(_ json: String?, as type: T.Type) throws -> T? {
         guard let data = json?.data(using: .utf8) else { return nil }
         return try decoder.decode(type, from: data)
+    }
+
+    /// Builds the production-default client honoring two dev-only prefs:
+    /// `WorldCupBaseHost` (custom merino host) and `WorldCupPollInterval`
+    /// (override poll cadence in seconds). Returns `nil` if the FFI fails
+    /// to initialize.
+    static func makeDefault() -> WorldCupAPIClientProtocol? {
+        let prefs = (AppContainer.shared.resolve() as Profile).prefs
+        let baseHost = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
+        let pollSeconds = prefs.intForKey(PrefsKeys.HomepageSettings.WorldCupPollInterval)
+            .flatMap { $0 > 0 ? TimeInterval($0) : nil }
+        let matchesConfig = pollSeconds
+            .map { WorldCupPollingFetchStrategy.Config.matches.devOverridden(everySeconds: $0) }
+            ?? .matches
+        let liveConfig = pollSeconds
+            .map { WorldCupPollingFetchStrategy.Config.live.devOverridden(everySeconds: $0) }
+            ?? .live
+        return try? WorldCupAPIClient(
+            baseHost: baseHost,
+            matchesStrategy: WorldCupPollingFetchStrategy(matchesConfig: matchesConfig,
+                                                          liveConfig: liveConfig),
+            liveStrategy: WorldCupPollingFetchStrategy(matchesConfig: matchesConfig,
+                                                       liveConfig: liveConfig)
+        )
     }
 }

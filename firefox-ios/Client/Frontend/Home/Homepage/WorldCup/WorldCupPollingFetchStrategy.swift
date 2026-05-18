@@ -107,6 +107,25 @@ struct WorldCupPollingFetchStrategy: WorldCupFetchStrategyProtocol {
         await teamsStrategy.loadTeams(using: client, team: team)
     }
 
+    /// Whether `/live` is worth polling given a recent `/matches` payload.
+    /// True when either:
+    ///   - some fixture has `statusType == "live"` — merino is the source of
+    ///     truth for "the whistle has blown but FT hasn't", including ET / PK
+    ///     where a fixed tail wouldn't reach;
+    ///   - some fixture kicks off in the next 15 min — gives us lead time to
+    ///     subscribe before the first kick. After kickoff merino's status
+    ///     takes over.
+    static func shouldPollLive(matches response: WorldCupMatchesResponse, now: Date) -> Bool {
+        let leadTime: TimeInterval = 15 * 60
+        let all = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        return all.contains { match in
+            if match.statusType == "live" { return true }
+            guard let kickoff = WorldCupMatch.parseDate(match.date) else { return false }
+            let untilKickoff = kickoff.timeIntervalSince(now)
+            return untilKickoff >= 0 && untilKickoff <= leadTime
+        }
+    }
+
     private func makeStream<Response: Sendable>(
         config: Config,
         fetch: @escaping @Sendable () throws -> Response?
