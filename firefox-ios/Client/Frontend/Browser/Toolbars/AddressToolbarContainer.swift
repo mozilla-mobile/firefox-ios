@@ -592,7 +592,9 @@ final class AddressToolbarContainer: UIView,
               let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
-        if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
+        if contextualHintType == ContextualHintType.navigation.rawValue {
+            guard toolbarState.canShowNavigationHint, !toolbarState.isShowingNavigationToolbar else { return }
+        }
 
         delegate?.configureContextualHint(for: button, with: contextualHintType)
     }

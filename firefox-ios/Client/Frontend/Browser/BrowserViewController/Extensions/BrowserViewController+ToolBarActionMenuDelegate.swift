@@ -42,9 +42,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
     }
 
     private func presentNavigationContextualHint() {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            updateNavCFRAnchor()
-        }
         // Only show the contextual hint if:
         // 1. The tab webpage is loaded OR we are on the home page, and the
         // 2. Microsurvey prompt is not being displayed
@@ -132,22 +129,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-    private func updateNavCFRAnchor() {
-        guard let popover = navigationContextHintVC.popoverPresentationController,
-              let rootView = view
-        else { return }
-
-        let backButtonId = AccessibilityIdentifiers.Toolbar.backButton
-        var views = [rootView]
-        while let currentView = views.popLast() {
-            if currentView.accessibilityIdentifier == backButtonId, currentView.window != nil {
-                popover.sourceView = currentView
-                popover.sourceRect = currentView.bounds
-                return
-            }
-            views.append(contentsOf: currentView.subviews)
-        }
-    }
 
     func dismissToolbarCFRs(with windowUUID: WindowUUID) {
         guard let toolbarState = store.state.componentState(
