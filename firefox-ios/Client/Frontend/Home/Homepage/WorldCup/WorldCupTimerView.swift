@@ -325,7 +325,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     // MARK: - Countdown
 
     private func startCountdown() {
-        let model = WorldCupCountdownModel(prefs: profile.prefs)
+        let model = WorldCupCountdownModel()
         model.onCountdownUpdated = { [weak self] countdown in
             self?.apply(countdown: countdown)
         }

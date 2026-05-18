@@ -542,7 +542,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
             PopupHTMLSetting(settings: self),
             AddShortcutsSetting(settings: self, settingsDelegate: self),
             MerinoTestDataSetting(settings: self, settingsDelegate: self),
-            WorldCupNowOverrideSetting(settings: self),
             WorldCupResetDismissedSetting(settings: self)
         ]
 
