@@ -85,6 +85,7 @@ let middlewares = [
     BookmarksMiddleware().bookmarksProvider,
     WorldCupMiddleware().worldCupProvider,
     HomepageMiddleware(notificationCenter: NotificationCenter.default).homepageProvider,
+    QuickAnswersMiddleware().quickAnswersProvider,
     StartAtHomeMiddleware().startAtHomeProvider,
     ShortcutsLibraryMiddleware().shortcutsLibraryProvider,
     SummarizerMiddleware().summarizerProvider,

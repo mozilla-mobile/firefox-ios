@@ -34,8 +34,17 @@ final class QuickAnswersSettingsViewController: SettingsTableViewController {
             defaultValue: true,
             // TODO: - FXIOS-14720 Add Strings
             titleText: "Quick Answers"
-        ) { _ in
-            // TODO: FXIOS-15577 - Dispatch action to show or hide quick answers feature
+        ) { [weak self] _ in
+            guard let self else { return }
+            // Instead of passing the updated value here, we are using determining
+            // whether the feature should be shown in the middleware so that we use the userPreferencesProvider
+            // as the source of truth.
+            store.dispatch(
+                QuickAnswersAction(
+                    windowUUID: self.windowUUID,
+                    actionType: QuickAnswersActionType.didSettingsChange
+                )
+            )
         }
         return SettingSection(children: [enableFeatureSwitch])
     }

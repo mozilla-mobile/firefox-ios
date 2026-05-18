@@ -1445,6 +1445,9 @@
 		AAB434062E82F0600075E47F /* MockTrendingSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */; };
 		AAB5AF382EDDCF600051EF6E /* MockLocaleProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB5AF372EDDCF5A0051EF6E /* MockLocaleProvider.swift */; };
 		AAB5B7882EE077BB0051EF6E /* TranslationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB5B7872EE077BB0051EF6E /* TranslationTests.swift */; };
+		AAD00A772FBB412800123E8C /* QuickAnswersMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD00A752FBB412800123E8C /* QuickAnswersMiddleware.swift */; };
+		AAD00A792FBB412800123E8C /* QuickAnswersAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD00A742FBB412800123E8C /* QuickAnswersAction.swift */; };
+		AAD00A7C2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD00A7B2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift */; };
 		AAD1CD872EAABA8100BEC90A /* TranslationsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */; };
 		AAD861A82E9E748700F6E0E0 /* TranslationSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */; };
 		AAD861AB2E9E75AB00F6E0E0 /* TranslationSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */; };
@@ -10124,6 +10127,9 @@
 		AAB434052E82F05C0075E47F /* MockTrendingSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrendingSearchProvider.swift; sourceTree = "<group>"; };
 		AAB5AF372EDDCF5A0051EF6E /* MockLocaleProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocaleProvider.swift; sourceTree = "<group>"; };
 		AAB5B7872EE077BB0051EF6E /* TranslationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationTests.swift; sourceTree = "<group>"; };
+		AAD00A742FBB412800123E8C /* QuickAnswersAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersAction.swift; sourceTree = "<group>"; };
+		AAD00A752FBB412800123E8C /* QuickAnswersMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersMiddleware.swift; sourceTree = "<group>"; };
+		AAD00A7B2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAnswersMiddlewareTests.swift; sourceTree = "<group>"; };
 		AAD1CD862EAABA7C00BEC90A /* TranslationsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsConfiguration.swift; sourceTree = "<group>"; };
 		AAD861A72E9E748100F6E0E0 /* TranslationSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSetting.swift; sourceTree = "<group>"; };
 		AAD861AA2E9E75A100F6E0E0 /* TranslationSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSettingsViewController.swift; sourceTree = "<group>"; };
@@ -14885,6 +14891,23 @@
 			path = Translations;
 			sourceTree = "<group>";
 		};
+		AAD00A732FBB410000123E8C /* QuickAnswers */ = {
+			isa = PBXGroup;
+			children = (
+				AAD00A742FBB412800123E8C /* QuickAnswersAction.swift */,
+				AAD00A752FBB412800123E8C /* QuickAnswersMiddleware.swift */,
+			);
+			path = QuickAnswers;
+			sourceTree = "<group>";
+		};
+		AAD00A7A2FBB534500123E8C /* QuickAnswers */ = {
+			isa = PBXGroup;
+			children = (
+				AAD00A7B2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift */,
+			);
+			path = QuickAnswers;
+			sourceTree = "<group>";
+		};
 		AAD861A92E9E757D00F6E0E0 /* Translation */ = {
 			isa = PBXGroup;
 			children = (
@@ -16995,6 +17018,7 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				1D62C5262EE8E77C00C6BCB9 /* RelayControllerTests.swift */,
+				AAD00A7A2FBB534500123E8C /* QuickAnswers */,
 				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				615532D32D7AA5F30046347F /* ScreenshotHelperTests.swift */,
@@ -17137,6 +17161,7 @@
 				C8BD875D2A0C23F500CD803A /* Onboarding */,
 				0E456F132C541C8F00EE93BF /* PasswordGenerator */,
 				E63ED8DF1BFD254E0097D08E /* PasswordManagement */,
+				AAD00A732FBB410000123E8C /* QuickAnswers */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
@@ -19886,6 +19911,8 @@
 				ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */,
 				63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */,
 				8ADAE4222A33A113007BF926 /* SendDataSetting.swift in Sources */,
+				AAD00A772FBB412800123E8C /* QuickAnswersMiddleware.swift in Sources */,
+				AAD00A792FBB412800123E8C /* QuickAnswersAction.swift in Sources */,
 				C8EDDBF229DF1159003A4C07 /* URLScanner.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
@@ -20208,6 +20235,7 @@
 				C25020842ECDE75D0071506F /* MockTranslationsSchemeHandler.swift in Sources */,
 				8A7A26E829D4C0FE00EA76F1 /* IntroScreenManagerTests.swift in Sources */,
 				E1AEC17A286E0CF500062E29 /* WebViewNavigationHandlerTests.swift in Sources */,
+				AAD00A7C2FBB53EC00123E8C /* QuickAnswersMiddlewareTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				C28EA9812FA2554800AEC3AD /* WorldCupCountdownModelTests.swift in Sources */,
 				F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */,

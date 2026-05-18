@@ -13,6 +13,7 @@ struct HeaderState: StateType, Equatable, Hashable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
     var showiPadSetup: Bool
+    var showQuickAnswersButton: Bool
 
     init(
         windowUUID: WindowUUID,
@@ -21,18 +22,21 @@ struct HeaderState: StateType, Equatable, Hashable {
         self.init(
             windowUUID: windowUUID,
             isPrivate: isPrivate,
-            showiPadSetup: false
+            showiPadSetup: false,
+            showQuickAnswersButton: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
         isPrivate: Bool,
-        showiPadSetup: Bool
+        showiPadSetup: Bool,
+        showQuickAnswersButton: Bool
     ) {
         self.windowUUID = windowUUID
         self.isPrivate = isPrivate
         self.showiPadSetup = showiPadSetup
+        self.showQuickAnswersButton = showQuickAnswersButton
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -44,6 +48,8 @@ struct HeaderState: StateType, Equatable, Hashable {
         switch action.actionType {
         case HomepageActionType.initialize:
             return handleInitializeAction(for: state, with: action)
+        case QuickAnswersMiddlewareActionType.didInitialize, QuickAnswersMiddlewareActionType.didUpdateSettings:
+            return handleQuickAnswersAction(for: state, with: action)
         case HomepageActionType.traitCollectionDidChange,
              HomepageActionType.viewWillAppear:
             return handleTraitCollectionDidChangeAction(for: state, with: action)
@@ -60,7 +66,18 @@ struct HeaderState: StateType, Equatable, Hashable {
         }
         return state.copyWithUpdates(
             isPrivate: false,
-            showiPadSetup: showiPadSetup
+            showiPadSetup: showiPadSetup,
+        )
+    }
+
+    private static func handleQuickAnswersAction(for state: HeaderState, with action: Action) -> HeaderState {
+        guard let quickAnswersAction = action as? QuickAnswersMiddlewareAction,
+              let showQuickAnswers = quickAnswersAction.isQuickAnswersEnabled
+        else {
+            return defaultState(from: state)
+        }
+        return state.copyWithUpdates(
+            showQuickAnswersButton: showQuickAnswers,
         )
     }
 
