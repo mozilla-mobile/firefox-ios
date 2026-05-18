@@ -2274,6 +2274,9 @@
 		F00CA4012F00000000000013 /* WorldCupTeamsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000014 /* WorldCupTeamsResponse.swift */; };
 		F00CA4012F00000000000015 /* WorldCupLoadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000016 /* WorldCupLoadError.swift */; };
 		F00CA4012F00000000000017 /* WorldCupBaseHostOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */; };
+		F00CA4012F00000000000020 /* WorldCupFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000021 /* WorldCupFeed.swift */; };
+		F00CA4012F0000000000001E /* WorldCupPollIntervalOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */; };
+		F00CA4012F0000000000001C /* WorldCupPollingFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */; };
 		F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */; };
 		F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000004 /* WorldCupLiveResponseTests.swift */; };
 		F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */; };
@@ -2282,6 +2285,7 @@
 		F00CA4022F0000000000000B /* MockWorldCupFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */; };
 		F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */; };
 		F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */; };
+		F00CA4022F00000000000013 /* WorldCupPollingFetchStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000014 /* WorldCupPollingFetchStrategyTests.swift */; };
 		F00CA4032F00000000000001 /* WorldCupMatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000002 /* WorldCupMatch.swift */; };
 		F00CA4032F00000000000003 /* WorldCupMatches.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000004 /* WorldCupMatches.swift */; };
 		F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4032F00000000000008 /* WorldCupMatchesTests.swift */; };
@@ -11670,6 +11674,9 @@
 		F00CA4012F00000000000014 /* WorldCupTeamsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTeamsResponse.swift; sourceTree = "<group>"; };
 		F00CA4012F00000000000016 /* WorldCupLoadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadError.swift; sourceTree = "<group>"; };
 		F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupBaseHostOverrideSetting.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000021 /* WorldCupFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFeed.swift; sourceTree = "<group>"; };
+		F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollIntervalOverrideSetting.swift; sourceTree = "<group>"; };
+		F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollingFetchStrategy.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesResponseTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000004 /* WorldCupLiveResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLiveResponseTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFetchStrategyTests.swift; sourceTree = "<group>"; };
@@ -11678,6 +11685,7 @@
 		F00CA4022F0000000000000C /* MockWorldCupFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWorldCupFetchStrategy.swift; sourceTree = "<group>"; };
 		F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTeamsResponseTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadErrorTests.swift; sourceTree = "<group>"; };
+		F00CA4022F00000000000014 /* WorldCupPollingFetchStrategyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollingFetchStrategyTests.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000002 /* WorldCupMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatch.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000004 /* WorldCupMatches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatches.swift; sourceTree = "<group>"; };
 		F00CA4032F00000000000008 /* WorldCupMatchesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesTests.swift; sourceTree = "<group>"; };
@@ -13655,6 +13663,7 @@
 				F00CA4022F00000000000004 /* WorldCupLiveResponseTests.swift */,
 				F00CA4022F0000000000000E /* WorldCupTeamsResponseTests.swift */,
 				F00CA4022F00000000000010 /* WorldCupLoadErrorTests.swift */,
+				F00CA4022F00000000000014 /* WorldCupPollingFetchStrategyTests.swift */,
 				F00CA4032F00000000000008 /* WorldCupMatchesTests.swift */,
 				F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */,
 				F00CA4022F0000000000000A /* WorldCupAPIClientTests.swift */,
@@ -13869,6 +13878,7 @@
 				1D1418772DC92DFC004BBFAD /* ChangeRSServerSetting.swift */,
 				AA5001482F912F530065A279 /* ChangeMLPAEndpointSetting.swift */,
 				F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */,
+				F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */,
 				8A3EF7FE2A2FCFBB00796E3A /* ChangeToChinaSetting.swift */,
 				8A093D7C2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift */,
 				8A3EF7F12A2FCF4000796E3A /* DeleteExportedDataSetting.swift */,
@@ -15240,6 +15250,8 @@
 				F00CA4012F0000000000000E /* WorldCupAPIClientProtocol.swift */,
 				F00CA4012F00000000000010 /* WorldCupFetchStrategyProtocol.swift */,
 				F00CA4012F00000000000012 /* WorldCupNormalFetchStrategy.swift */,
+				F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */,
+				F00CA4012F00000000000021 /* WorldCupFeed.swift */,
 				C2EA234B2FA0B8AE004B6338 /* WorldCupTimerView.swift */,
 				C2EA23552FA1B8AE004B6340 /* WorldCupTelemetry.swift */,
 				C2EA23502FA1B8AE004B6339 /* WorldCupCountdownModel.swift */,
@@ -19221,6 +19233,7 @@
 				8CC617092C35463B001C7688 /* AddressModifiedStatus.swift in Sources */,
 				AA5001492F912F610065A279 /* ChangeMLPAEndpointSetting.swift in Sources */,
 				F00CA4012F00000000000017 /* WorldCupBaseHostOverrideSetting.swift in Sources */,
+				F00CA4012F0000000000001E /* WorldCupPollIntervalOverrideSetting.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
 				81020C922BB5AFA2007B8481 /* OnboardingMultipleChoiceButtonView.swift in Sources */,
 				96D95016270238500079D39D /* MainThreadThrottler.swift in Sources */,
@@ -19667,6 +19680,8 @@
 				F00CA4012F0000000000000D /* WorldCupAPIClientProtocol.swift in Sources */,
 				F00CA4012F0000000000000F /* WorldCupFetchStrategyProtocol.swift in Sources */,
 				F00CA4012F00000000000011 /* WorldCupNormalFetchStrategy.swift in Sources */,
+				F00CA4012F0000000000001C /* WorldCupPollingFetchStrategy.swift in Sources */,
+				F00CA4012F00000000000020 /* WorldCupFeed.swift in Sources */,
 				212985E42A6F078800546684 /* ScreenState.swift in Sources */,
 				D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */,
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
@@ -20214,6 +20229,7 @@
 				F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */,
 				F00CA4022F0000000000000D /* WorldCupTeamsResponseTests.swift in Sources */,
 				F00CA4022F0000000000000F /* WorldCupLoadErrorTests.swift in Sources */,
+				F00CA4022F00000000000013 /* WorldCupPollingFetchStrategyTests.swift in Sources */,
 				F00CA4032F00000000000007 /* WorldCupMatchesTests.swift in Sources */,
 				F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */,
 				C28EA9822FA2554900AEC3AE /* WorldCupTelemetryTests.swift in Sources */,
