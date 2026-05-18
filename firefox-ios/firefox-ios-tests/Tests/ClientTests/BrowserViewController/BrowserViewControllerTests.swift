@@ -187,6 +187,34 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(mockBVC.openBlankNewTabCalled)
     }
 
+    func testHandleQuery_opensBlankNewTab_byDefault() throws {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: false)
+
+        let selectedTab = try XCTUnwrap(tabManager.selectedTab)
+        XCTAssertTrue(tabManager.addTabWasCalled)
+        XCTAssertFalse(selectedTab.isPrivate)
+    }
+
+    func testHandleQuery_inPrivateMode_opensPrivateBlankNewTab() throws {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: true)
+
+        let selectedTab = try XCTUnwrap(tabManager.selectedTab)
+        XCTAssertTrue(tabManager.addTabWasCalled)
+        XCTAssertTrue(selectedTab.isPrivate)
+    }
+
+    func testHandleQuery_withShouldOpenNewTabFalse_doesNotOpenNewTab() {
+        let subject = createSubject()
+
+        subject.handle(query: "Test", isPrivate: false, shouldOpenNewTab: false)
+
+        XCTAssertFalse(tabManager.addTabWasCalled)
+    }
+
     func testHandle_withoutURL_withSelectedTab_notRestoring_opensBlankNewTab_ifPrivateDoesNotMatch() {
         let mockBVC = MockBrowserViewController(profile: profile, tabManager: tabManager)
         tabManager.selectedTab = MockTab(
