@@ -104,16 +104,13 @@ struct WorldCupMatches: Equatable, Hashable {
         // meaningful in the team-selected single-card view.
         let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         let cards = groups.map { group -> WorldCupMatches in
-            let live = group.matches.first(where: { liveIDs.contains($0.globalEventId) })
-            let featured = live.map { [WorldCupMatch($0, localeProvider: localeProvider)] } ?? []
-            let upcoming = group.matches
-                .filter { $0.globalEventId != live?.globalEventId }
-                .map { WorldCupMatch($0, localeProvider: localeProvider) }
+            let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
+            let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
             return WorldCupMatches(
                 phaseTitle: title,
-                isLive: live != nil,
-                featuredMatch: featured,
-                upcomingMatches: upcoming
+                isLive: !liveMatches.isEmpty,
+                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider) },
+                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider) }
             )
         }
         let today = calendar.startOfDay(for: now)

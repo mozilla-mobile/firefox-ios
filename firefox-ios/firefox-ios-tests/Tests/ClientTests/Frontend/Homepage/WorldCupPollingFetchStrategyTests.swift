@@ -216,19 +216,18 @@ private actor AsyncCollector<T: Sendable> {
 
     func append(_ value: T) {
         values.append(value)
-        let count = values.count
-        let snapshot = values
-        let ready = waiters.filter { $0.0 <= count }
-        waiters.removeAll { $0.0 <= count }
-        for (_, continuation) in ready {
-            continuation.resume(returning: snapshot)
+        let total = values.count
+        let ready = waiters.filter { $0.0 <= total }
+        waiters.removeAll { $0.0 <= total }
+        for (target, continuation) in ready {
+            continuation.resume(returning: Array(values.prefix(target)))
         }
     }
 
     func snapshot() -> [T] { values }
 
     func collect(count: Int) async -> [T] {
-        if values.count >= count { return values }
+        if values.count >= count { return Array(values.prefix(count)) }
         return await withCheckedContinuation { continuation in
             waiters.append((count, continuation))
         }

@@ -327,6 +327,73 @@ struct WorldCupMatchesTests {
     }
 
     @Test
+    func test_flattened_promotesLiveMatchToFeatured_andRestStaysInUpcoming() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: [
+                makeMatch(id: 10, home: "ARG", away: "BRA", date: "2026-06-12T18:00:00+00:00"),
+                makeMatch(id: 11, home: "ENG", away: "USA", date: "2026-06-12T21:00:00+00:00")
+            ],
+            next: nil
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: [11],
+            now: parse("2026-06-12T20:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards[0].featuredMatch.map(\.homeCode) == ["ENG"])
+        #expect(result.cards[0].upcomingMatches.map(\.homeCode) == ["ARG"])
+        #expect(result.defaultIndex == 0)
+    }
+
+    @Test
+    func test_flattened_promotesAllLiveMatchesToFeatured() {
+        // Two simultaneous lives on the same day, both get the hero spot.
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: [
+                makeMatch(id: 10, home: "ARG", away: "BRA", date: "2026-06-12T13:00:00+00:00"),
+                makeMatch(id: 11, home: "ENG", away: "USA", date: "2026-06-12T19:00:00+00:00")
+            ],
+            next: nil
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: [10, 11],
+            now: parse("2026-06-12T20:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.cards[0].featuredMatch.map(\.homeCode) == ["ARG", "ENG"])
+        #expect(result.cards[0].upcomingMatches.isEmpty)
+    }
+
+    @Test
+    func test_flattened_defaultIndex_prefersLiveCardOverToday() {
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T18:00:00+00:00"),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-13T18:00:00+00:00")
+            ]
+        )
+
+        let result = WorldCupMatches.flattened(
+            response: response,
+            liveIDs: [2],
+            now: parse("2026-06-12T09:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(result.defaultIndex == 1)
+    }
+
+    @Test
     func test_flattened_marksCardLive_whenAnyMatchInDayIsInLiveIDs() {
         let response = WorldCupMatchesResponse(
             previous: nil,

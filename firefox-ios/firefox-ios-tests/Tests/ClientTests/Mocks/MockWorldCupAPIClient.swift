@@ -51,14 +51,11 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
     /// polling semantics should pass a real `WorldCupPollingFetchStrategy`
     /// and wire the mock client into it.
     func matchesStream(team: String?) -> WorldCupMatchesStream {
+        lastMatchesTeam = team
+        matchesFetchCount += 1
         let captured = matchesResult
-        let recordTeam: @Sendable () -> Void = { [weak self] in
-            self?.lastMatchesTeam = team
-            self?.matchesFetchCount += 1
-        }
         return AsyncStream { continuation in
             Task {
-                recordTeam()
                 continuation.yield(Self.mapped(captured))
                 continuation.finish()
             }
@@ -67,14 +64,11 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
 
     /// Emits the canned live result once and finishes.
     func liveStream(team: String?) -> WorldCupLiveStream {
+        lastLiveTeam = team
+        liveFetchCount += 1
         let captured = liveResult
-        let recordTeam: @Sendable () -> Void = { [weak self] in
-            self?.lastLiveTeam = team
-            self?.liveFetchCount += 1
-        }
         return AsyncStream { continuation in
             Task {
-                recordTeam()
                 continuation.yield(Self.mapped(captured))
                 continuation.finish()
             }
