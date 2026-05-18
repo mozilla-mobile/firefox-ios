@@ -87,17 +87,36 @@ final class TranslationsMiddleware: FeatureFlaggable {
 
         case ToolbarActionType.didTranslationSettingsChange:
             guard let action = (action as? ToolbarAction) else { return }
-            // Clear stale per-window state so eligibility is re-evaluated from scratch
-            // rather than acting on cached flow data from before the settings change.
-            self.selectedTargetLanguages[windowUUID] = nil
-            self.translationFlowIds[windowUUID] = nil
-            self.restoringWindows.remove(windowUUID)
-            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
-            self.checkTranslationsAreEligible(for: action)
+            self.handleTranslationSettingsChange(action: action, windowUUID: windowUUID)
 
         default:
            break
         }
+    }
+
+    private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
+        if action.isTranslationsEnabled == false {
+            for uuid in translationFlowIds.keys {
+                let translationState = store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: uuid
+                )?.addressToolbar.translationConfiguration?.state
+                guard translationState == .active || translationState == .loading else { continue }
+                store.dispatch(GeneralBrowserAction(
+                    windowUUID: uuid,
+                    actionType: GeneralBrowserActionType.reloadWebsite
+                ))
+            }
+        }
+        // Clear stale per-window state so eligibility is re-evaluated from scratch
+        // rather than acting on cached flow data from before the settings change.
+        selectedTargetLanguages[windowUUID] = nil
+        translationFlowIds[windowUUID] = nil
+        restoringWindows.remove(windowUUID)
+        guard featureFlagsProvider.isEnabled(.translation),
+              action.isTranslationsEnabled ?? true else { return }
+        checkTranslationsAreEligible(for: action)
     }
 
     private func handleTappingOnTranslateButton(for action: ToolbarMiddlewareAction, and state: AppState) {
@@ -381,9 +400,28 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        Task {
-            guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        // action.isTranslationsEnabled carries the explicit new value for settings-change actions
+        // (where store.state hasn't been updated yet). For urlDidChange it is nil, so we fall back
+        // to ToolbarState which is always up-to-date by the time urlDidChange fires.
+        let translationsEnabled = action.isTranslationsEnabled ?? (store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        )?.isTranslationsEnabled ?? true)
 
+        guard featureFlagsProvider.isEnabled(.translation), translationsEnabled else {
+            dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+            return
+        }
+
+        // Translation requires a live HTML DOM. PDFs and images have no translatable
+        // text structure, so suppress the icon without running language detection.
+        if let mimeType = originatingTab?.mimeType, mimeType != MIMEType.HTML {
+            dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+            return
+        }
+
+        Task {
             do {
                 let preferredLanguages = await targetLanguagesForEligibilityCheck()
                 let isEligible = try await translationsService.shouldOfferTranslation(

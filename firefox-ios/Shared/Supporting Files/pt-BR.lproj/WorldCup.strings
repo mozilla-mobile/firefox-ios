@@ -145,17 +145,32 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Tempo regulamentar";
 
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Tempo regulamentar • Pênaltis (%@)";
+
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Obter fundo de tela personalizado";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Jogos relacionados";
 
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Intervalo";
+
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "AO VIVO";
 
 /* Message shown in the World Cup widget when match data is temporarily unavailable. */
 "WorldCup.HomepageWidget.MatchUnavailableLabel.v151" = "As informações do jogo não estão disponíveis no momento. Experimente atualizar daqui a alguns minutos.";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "Atualizar";
+
+/* Message shown in the World Cup widget when the device has no internet connection. */
+"WorldCup.HomepageWidget.OfflineLabel.v151" = "Parece que você está sem acesso à rede. Verifique sua conexão de internet e tente novamente.";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Pênaltis (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Remover";
@@ -171,4 +186,40 @@
 
 /* The label indicating the displaying match has ended after penalties. */
 "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151" = "Tempo regulamentar • Pênaltis";
+
+/* The label for the 'Quarter-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel.v151" = "QUARTAS DE FINAL";
+
+/* The label for the 'Round of 16' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round16Label.v151" = "OITAVAS-DE FINAL";
+
+/* The label for the 'Round of 32' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.Round32Label.v151" = "Fase dos 32";
+
+/* The accessibility label for the scroll indicator that lets users navigate through the matches in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ScrollIndicatorAccessibilityLabel.v151" = "Deslize para ver os jogos anteriores ou seguintes";
+
+/* The label for the 'Semi-finals' phase in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel.v151" = "SEMIFINAIS";
+
+/* The label for the 'Third place' winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel.v151" = "TERCEIRO LUGAR";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "Seguintes";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "CAMPEÕES DA COPA DO MUNDO DE 2026";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "Segundo tempo";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Mais opções";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "Compartilhar";
+
+/* The description for the temporary view in the World Cup widget showing the team that has been previously selected. */
+"WorldCup.HomepageWidget.TemporaryView.Description.v151" = "Manteremos você informado à medida que a Copa do Mundo se aproxima";
 

@@ -76,6 +76,9 @@
 /* The title of the Group L group in the World Cup Group Stage. */
 "WorldCup.GroupPhase.GroupL.Title.v151" = "L Grubu";
 
+/* The generic label indicating the Group Stage phase in the World Cup widget. */
+"WorldCup.GroupPhase.GroupStageLabel.v151" = "Grup maçı";
+
 /* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "Takım değiştir";
 
@@ -115,6 +118,12 @@
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
 "WorldCup.HomepageWidget.ErrorLabel.v151" = "Maç verilerini yükleyemedik. Lütfen tazeleyin.";
 
+/* The label indicating that the displaying match is in the extra time part of the game. */
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Uzatmalar";
+
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "İlk yarı";
+
 /* Accessibility label for the close button on the follow your team for the World Cup widget. This allows users to hide the widget from the Firefox homepage if they do not wish to see updates about the World Cup event. */
 "WorldCup.HomepageWidget.FollowTeamCard.Close.AccessibilityLabel.v151" = "Dünya Kupası gelişmelerini gizle";
 
@@ -136,11 +145,17 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Maç sonu";
 
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Maç sonu • Penaltılar (%@)";
+
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Kişisel duvar kâğıdını indir";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "İlgili maçlar";
+
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Devre arası";
 
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "CANLI";
@@ -153,6 +168,9 @@
 
 /* Message shown in the World Cup widget when the device has no internet connection. */
 "WorldCup.HomepageWidget.OfflineLabel.v151" = "Çevrimdışısınız. İnternet bağlantınızı kontrol edip yeniden deneyin.";
+
+/* The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.PenaltiesLabel.v151" = "Penaltılar (%@)";
 
 /* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
 "WorldCup.HomepageWidget.RemoveLabel.v151" = "Kaldır";
@@ -192,6 +210,9 @@
 
 /* The label for the World Cup championship winner in the World Cup widget. */
 "WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 DÜNYA KUPASI ŞAMPİYONU";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "İkinci yarı";
 
 /* The accessibility label for the button that allows to see more options related to World Cup widget. */
 "WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "Diğer seçenekler";

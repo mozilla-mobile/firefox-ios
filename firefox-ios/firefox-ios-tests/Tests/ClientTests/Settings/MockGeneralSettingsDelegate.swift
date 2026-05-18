@@ -5,6 +5,7 @@
 
 class MockGeneralSettingsDelegate: GeneralSettingsDelegate {
     var pressedAIControlsCalled = false
+    var pressedQuickAnswersCalled = false
 
     func pressedCustomizeAppIcon() {}
 
@@ -25,6 +26,10 @@ class MockGeneralSettingsDelegate: GeneralSettingsDelegate {
     func pressedTheme() {}
 
     func pressedBrowsing() {}
+
+    func pressedQuickAnswers() {
+        pressedQuickAnswersCalled = true
+    }
 
     func pressedSummarize() {}
 

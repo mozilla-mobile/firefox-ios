@@ -118,6 +118,9 @@
 /* A generic error message used in the World Cup widget when the match data could not be loaded. */
 "WorldCup.HomepageWidget.ErrorLabel.v151" = "Մենք չկարողացանք բեռնել համընկնման տվյալները։ Խնդրում ենք թարմացնել էջը։";
 
+/* The label indicating that the displaying match is in the extra time part of the game. */
+"WorldCup.HomepageWidget.ExtraTimeLabel.v151" = "Լրացուցիչ ժամանակ";
+
 /* The label indicating that the displaying match is in the first half. */
 "WorldCup.HomepageWidget.FirstHalfLabel.v151" = "Առաջին խաղակես";
 
@@ -142,11 +145,17 @@
 /* The label indicating that the displaying match has ended. */
 "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151" = "Հիմնական ժամանակը";
 
+/* The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties */
+"WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151" = "Լրիվ ժամանակ • Տուգանային հարվածներ (%@)";
+
 /* The label for the button that allows to select a custom wallpaper in the World Cup widget more options panel. */
 "WorldCup.HomepageWidget.GetCustomWallpaperLabel.v151" = "Ստացեք անհատականացված պաստառ";
 
 /* The label for the section in the World Cup widget showing the related matches of a team for the group phase. */
 "WorldCup.HomepageWidget.GroupPhase.RelatedMatchesLabel.v151" = "Առնչվող խաղեր";
+
+/* The label indicating that the displaying match is in the half time. */
+"WorldCup.HomepageWidget.HalfTimeLabel.v151" = "Խաղակես";
 
 /* The label that appears for live World Cup matches. */
 "WorldCup.HomepageWidget.LiveLabel.v151" = "ԿԵՆԴԱՆԻ";

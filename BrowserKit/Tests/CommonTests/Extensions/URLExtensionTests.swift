@@ -482,4 +482,27 @@ final class URLExtensionTests: XCTestCase {
         let favicon3 = url3?.faviconUrl()
         XCTAssertEqual(favicon3, URL(string: "scheme://another.website.net/favicon.ico")!)
     }
+
+    // MARK: normalizedHostWithLRI
+    func testNormalizedHostWithLRIHandlesRTLDomainAppropriately() throws {
+        let testURL = "https://xn--mgb.google.com.xn--mgb.suspicious-domain.abc/download.apk"
+        let url = try XCTUnwrap(URL(string: testURL))
+        let displayDomain = url.normalizedHostWithLRI ?? url.absoluteString
+        XCTAssertEqual(displayDomain, "\u{2066}ا.google.com.ا.suspicious-domain.abc\u{2069}")
+    }
+
+    func testNormalizedHostWithLRIPreservesSubdomainsAndStripsMobile() throws {
+        // LRI+PDI doesn't hurt regular LTR domains (just harmless wrapping)
+        let testCases: [(String, String)] = [
+            ("https://www.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://m.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://mobile.example.com/path", "\u{2066}example.com\u{2069}"),
+            ("https://www.news.example.com/path", "\u{2066}news.example.com\u{2069}")
+        ]
+
+        try testCases.forEach {
+            let url = try XCTUnwrap(URL(string: $0.0))
+            XCTAssertEqual(url.normalizedHostWithLRI, $0.1)
+        }
+    }
 }

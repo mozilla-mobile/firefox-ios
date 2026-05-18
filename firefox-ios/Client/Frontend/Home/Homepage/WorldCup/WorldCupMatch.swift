@@ -6,8 +6,8 @@ import Foundation
 
 /// View-ready single match, built from a `WorldCupMatchesResponse.Match`.
 /// Fields are pre-formatted for direct display by the homepage matches widget.
-struct WorldCupMatch: Equatable {
-    struct Score: Equatable {
+struct WorldCupMatch: Equatable, Hashable {
+    struct Score: Equatable, Hashable {
         let score: String
         let clock: String
     }
@@ -37,25 +37,29 @@ struct WorldCupMatch: Equatable {
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
         self.homeCode = match.homeTeam.key
         self.awayCode = match.awayTeam.key
-        // TODO: FXIOS-15778: Rename flag imageset names to 3-letter FIFA codes
-        // (br -> bra, us -> usa, etc.) so the team key can be used directly.
-        self.homeFlagAssetName = match.homeTeam.key.lowercased()
-        self.awayFlagAssetName = match.awayTeam.key.lowercased()
+        self.homeFlagAssetName = match.homeTeam.key
+        self.awayFlagAssetName = match.awayTeam.key
         self.date = Self.formattedDate(match.date, locale: localeProvider.current)
         self.score = Self.score(from: match)
     }
 
-    nonisolated(unsafe) private static let isoFormatter: ISO8601DateFormatter = {
+    private static var isoFormatter: ISO8601DateFormatter {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter
-    }()
+    }
+
+    /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`).
+    /// Returns `nil` if the string can't be parsed.
+    static func parseDate(_ iso: String) -> Date? {
+        return isoFormatter.date(from: iso)
+    }
 
     private static func formattedDate(_ iso: String, locale: Locale) -> String {
-        guard let date = isoFormatter.date(from: iso) else { return iso }
+        guard let date = parseDate(iso) else { return iso }
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.setLocalizedDateFormatFromTemplate("EEEMMMd")
+        formatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
         return formatter.string(from: date)
     }
 

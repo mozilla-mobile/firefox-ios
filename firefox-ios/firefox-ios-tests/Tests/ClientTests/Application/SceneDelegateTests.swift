@@ -9,17 +9,20 @@ import Common
 @MainActor
 final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
     private var mockSessionManager: MockAppSessionManager!
+    private var mockGleanWrapper: MockGleanWrapper!
 
     override func setUp() async throws {
         try await super.setUp()
         AppEventQueue.reset()
         DependencyHelperMock().bootstrapDependencies()
         mockSessionManager = MockAppSessionManager()
+        mockGleanWrapper = MockGleanWrapper()
         setIsDeeplinkOptimizationRefactorEnabled(false)
     }
 
     override func tearDown() async throws {
         mockSessionManager = nil
+        mockGleanWrapper = nil
         DependencyHelperMock().reset()
         AppEventQueue.reset()
         try await super.tearDown()
@@ -116,6 +119,31 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
                         "Route should dispatch once tabRestoration is signalled")
     }
 
+    // MARK: - Telemetry
+
+    func testHandleRoute_refactorEnabled_recordsDeeplinkTimeOnSuccess() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        AppEventQueue.signal(event: .startupFlowComplete)
+        let setup = try createSubjectWithCoordinator()
+        setup.delegate.shareTelemetry.recordOpenDeeplinkTime()
+
+        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+
+        XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
+    }
+
+    func testHandleRoute_refactorDisabled_recordsDeeplinkTimeOnSuccess() throws {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        AppEventQueue.signal(event: .startupFlowComplete)
+        let setup = try createSubjectWithCoordinator()
+        setup.delegate.shareTelemetry.recordOpenDeeplinkTime()
+        AppEventQueue.signal(event: .tabRestoration(setup.coordinator.windowUUID))
+
+        setup.delegate.scene(setup.scene, continue: makeSearchActivity())
+
+        XCTAssertEqual(mockGleanWrapper.stopAndAccumulateCalled, 1)
+    }
+
     // MARK: - Helpers
 
     private struct TestSubject {
@@ -131,6 +159,7 @@ final class SceneDelegateTests: XCTestCase, FeatureFlaggable {
         let delegate = SceneDelegate()
         delegate.sessionManager = mockSessionManager
         delegate.sceneCoordinator = coordinator
+        delegate.shareTelemetry = ShareTelemetry(gleanWrapper: mockGleanWrapper)
         return TestSubject(delegate: delegate, coordinator: coordinator, scene: windowScene)
     }
 

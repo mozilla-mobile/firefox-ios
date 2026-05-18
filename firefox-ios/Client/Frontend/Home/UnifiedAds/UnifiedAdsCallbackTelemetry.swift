@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import MozillaAppServices
 import Shared
 import Storage
@@ -19,17 +20,23 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
     private let networking: UnifiedTileNetworking
     private let logger: Logger
     private let sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry
+    private let adsClientCallbackQueue: DispatchQueueInterface
 
     init(
         adsClientFactory: MozAdsClientFactory = DefaultMozAdsClientFactory(),
         networking: UnifiedTileNetworking = DefaultUnifiedTileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared,
-        sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry()
+        sponsoredTileGleanTelemetry: SponsoredTileGleanTelemetry = DefaultSponsoredTileGleanTelemetry(),
+        adsClientCallbackQueue: DispatchQueueInterface = DispatchQueue(
+            label: "org.mozilla.ios.unified-ads-callback-telemetry",
+            qos: .utility
+        )
     ) {
         self.adsClient = adsClientFactory.createClient()
         self.networking = networking
         self.logger = logger
         self.sponsoredTileGleanTelemetry = sponsoredTileGleanTelemetry
+        self.adsClientCallbackQueue = adsClientCallbackQueue
     }
 
     private var isAdsClientEnabled: Bool {
@@ -44,13 +51,21 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
         }
 
         if isAdsClientEnabled {
-            do {
-                try adsClient.recordImpression(impressionUrl: siteInfo.impressionURL, options: nil)
-            } catch {
-                logger.log("Ads client recordImpression failed, falling back to legacy: \(error)",
-                           level: .warning,
-                           category: .homepage)
-                sendTelemetry(urlString: siteInfo.impressionURL, position: position)
+            let impressionURL = siteInfo.impressionURL
+            adsClientCallbackQueue.async { [adsClient, logger, networking] in
+                do {
+                    try adsClient.recordImpression(impressionUrl: impressionURL, options: nil)
+                } catch {
+                    logger.log("Ads client recordImpression failed, falling back to legacy: \(error)",
+                               level: .warning,
+                               category: .homepage)
+                    Self.sendTelemetry(
+                        urlString: impressionURL,
+                        position: position,
+                        networking: networking,
+                        logger: logger
+                    )
+                }
             }
         } else {
             sendTelemetry(urlString: siteInfo.impressionURL, position: position)
@@ -66,13 +81,21 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
         }
 
         if isAdsClientEnabled {
-            do {
-                try adsClient.recordClick(clickUrl: siteInfo.clickURL, options: nil)
-            } catch {
-                logger.log("Ads client recordClick failed, falling back to legacy: \(error)",
-                           level: .warning,
-                           category: .homepage)
-                sendTelemetry(urlString: siteInfo.clickURL, position: position)
+            let clickURL = siteInfo.clickURL
+            adsClientCallbackQueue.async { [adsClient, logger, networking] in
+                do {
+                    try adsClient.recordClick(clickUrl: clickURL, options: nil)
+                } catch {
+                    logger.log("Ads client recordClick failed, falling back to legacy: \(error)",
+                               level: .warning,
+                               category: .homepage)
+                    Self.sendTelemetry(
+                        urlString: clickURL,
+                        position: position,
+                        networking: networking,
+                        logger: logger
+                    )
+                }
             }
         } else {
             sendTelemetry(urlString: siteInfo.clickURL, position: position)
@@ -81,6 +104,15 @@ final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry, Fea
     }
 
     private func sendTelemetry(urlString: String, position: Int) {
+        Self.sendTelemetry(urlString: urlString, position: position, networking: networking, logger: logger)
+    }
+
+    private static func sendTelemetry(
+        urlString: String,
+        position: Int,
+        networking: UnifiedTileNetworking,
+        logger: Logger
+    ) {
         guard var urlComponents = URLComponents(string: urlString) else {
             logger.log("The provided URL is invalid: \(String(describing: urlString))",
                        level: .warning,

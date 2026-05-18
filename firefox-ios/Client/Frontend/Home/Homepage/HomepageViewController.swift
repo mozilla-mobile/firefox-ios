@@ -46,6 +46,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    private lazy var sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
     // Tracks which tab the shared homepage instance is currently representing.
     private var activeTabUUID: TabUUID?
 
@@ -258,8 +259,11 @@ final class HomepageViewController: UIViewController,
 
     // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
     // If no scroll position exists for tab, scroll the homepage to the top
-    func restoreVerticalScrollOffset() {
-        activeTabUUID = tabManager.selectedTab?.tabUUID
+    func restoreVerticalScrollOffset(force: Bool = true) {
+        let selectedTabUUID = tabManager.selectedTab?.tabUUID
+        guard force || activeTabUUID != selectedTabUUID else { return }
+
+        activeTabUUID = selectedTabUUID
         guard let activeTabUUID,
               let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
@@ -275,6 +279,12 @@ final class HomepageViewController: UIViewController,
             collectionView.setContentOffset(CGPoint(x: 0, y: -collectionView.adjustedContentInset.top), animated: animated)
             handleScroll(collectionView, isUserInteraction: false)
         }
+    }
+
+    func stopScrollingAndSaveVerticalScrollOffset() {
+        guard let collectionView else { return }
+        collectionView.setContentOffset(collectionView.contentOffset, animated: false)
+        saveVerticalScrollOffset()
     }
 
     func updateTopContentInset(_ topInset: CGFloat) {
@@ -421,9 +431,13 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
+            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
-            refreshHomepageDataSourceSnapshot(animatingDifferences: animatingDifferences) { [weak self] in
+            refreshHomepageDataSourceSnapshot(
+                reconfigureHeader: shouldReconfigureHeader,
+                animatingDifferences: animatingDifferences
+            ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -552,8 +566,7 @@ final class HomepageViewController: UIViewController,
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+        let layout = UICollectionViewCompositionalLayout { [weak self, sectionProvider] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
@@ -647,9 +660,10 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard(let state):
+        case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] in
+                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
+                    self?.sectionProvider.setWorldCupCellHeight(height)
                     self?.relayoutForCellHeightChange()
                 }
             }
@@ -1134,15 +1148,23 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
+                                                   animatingDifferences: Bool = true,
+                                                   completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
+            reconfigureHeader: reconfigureHeader,
             animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
+    }
+
+    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
+        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
+            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.

@@ -780,6 +780,10 @@ struct AccessibilityIdentifiers {
             static let languagePickerList = "Settings.Translation.LanguagePickerList"
         }
 
+        struct QuickAnswers {
+            static let title = "Settings.QuickAnswers.Title"
+        }
+
         struct BlockImages {
             static let title = "Block Images"
         }

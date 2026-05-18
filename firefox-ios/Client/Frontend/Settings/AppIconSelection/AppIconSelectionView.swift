@@ -36,10 +36,6 @@ struct AppIconSelectionView: View, ThemeApplicable, FeatureFlaggable {
     }
 
     var availableAppIcons: [AppIcon] {
-        guard featureFlagsProvider.isEnabled(.appIconSelection)
-        else {
-            return AppIcon.allCases.filter({ $0.isFunIcon == false })
-        }
         return AppIcon.allCases
     }
 

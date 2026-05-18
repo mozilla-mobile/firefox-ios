@@ -113,7 +113,12 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
-        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
+        /// Override for the merino WCS base host
+        public static let WorldCupBaseHost = "worldCupBaseHostKey"
+    }
+
+    public struct Homepage {
+        public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
     }
 
     public struct SearchSettings {
@@ -175,6 +180,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslate = "settings.translationAutoTranslate"
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
+        public static let quickAnswersFeature = "settings.quickAnswersFeature"
     }
 
     // Activity Stream

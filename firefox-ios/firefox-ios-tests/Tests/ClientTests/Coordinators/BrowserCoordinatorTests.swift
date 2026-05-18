@@ -6,6 +6,7 @@ import Common
 import ComponentLibrary
 import MozillaAppServices
 import Redux
+import SwiftUI
 import WebKit
 import XCTest
 import GCDWebServers
@@ -29,6 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var browserViewController: MockBrowserViewController!
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
+    private var mockWorldCupStore: MockWorldCupStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -47,6 +49,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
         homepageTabStateStore = HomepageTabStateStore()
+        mockWorldCupStore = MockWorldCupStore()
         setupStore()
     }
 
@@ -62,6 +65,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = nil
         browserViewController = nil
         homepageTabStateStore = nil
+        mockWorldCupStore = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -140,6 +144,36 @@ final class BrowserCoordinatorTests: XCTestCase,
                              toastContainer: UIView())
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
+    }
+
+    func testShowHomepage_whenAlreadyEmbedded_doesNotRestoreScrollOffset() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
+        let subject = createSubject()
+
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: true,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        let homepageViewController = try XCTUnwrap(subject.homepageViewController)
+        let collectionView = try XCTUnwrap(
+            homepageViewController.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView
+        )
+        collectionView.contentOffset = CGPoint(x: 0, y: 75)
+
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: true,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        XCTAssertEqual(collectionView.contentOffset.y, 75)
     }
 
     // MARK: - Show new homepage
@@ -657,6 +691,19 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    // MARK: - World Cup Country Picker
+
+    func testShowWorldCupCountryPicker_presentsHostingController() throws {
+        let subject = createSubject()
+
+        subject.showWorldCupCountryPicker()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(
+            mockRouter.presentedViewController is UIHostingController<WorldCupCountryPickerView>
+        )
     }
 
     func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
@@ -1569,7 +1616,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          homepageTabStateStore: homepageTabStateStore,
                                          profile: profile,
                                          glean: glean,
-                                         applicationHelper: applicationHelper)
+                                         applicationHelper: applicationHelper,
+                                         worldCupStore: mockWorldCupStore)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

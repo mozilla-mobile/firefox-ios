@@ -228,14 +228,6 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "eBay")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2353246
-    func testDefaultSearchEngine() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SearchSettings)
-        XCTAssert(app.tables.staticTexts["Google"].exists)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         app.launch()
@@ -548,6 +540,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753105
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)

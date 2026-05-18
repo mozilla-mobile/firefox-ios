@@ -5,30 +5,71 @@
 @testable import Client
 
 import Foundation
-import MozillaAppServices
 
 enum MockWorldCupClientError: Error {
     case network
 }
 
 final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
-    private let result: Result<WorldCupMatchesResponse?, Error>
-    private(set) var fetchCount = 0
-    private(set) var lastQuery: WorldCupQuery?
+    private let matchesResult: Result<WorldCupMatchesResponse?, Error>
+    private let liveResult: Result<WorldCupLiveResponse?, Error>
+    private let teamsResult: Result<WorldCupTeamsResponse?, Error>
+    private(set) var matchesFetchCount = 0
+    private(set) var liveFetchCount = 0
+    private(set) var fetchTeamsCount = 0
+    private(set) var lastMatchesTeam: String?
+    private(set) var lastLiveTeam: String?
+    private(set) var lastTeamsTeam: String?
 
-    init(result: Result<WorldCupMatchesResponse?, Error>) {
-        self.result = result
+    init(matchesResult: Result<WorldCupMatchesResponse?, Error>,
+         liveResult: Result<WorldCupLiveResponse?, Error> = .success(nil),
+         teamsResult: Result<WorldCupTeamsResponse?, Error> = .success(nil)) {
+        self.matchesResult = matchesResult
+        self.liveResult = liveResult
+        self.teamsResult = teamsResult
     }
 
-    func fetch(_ query: WorldCupQuery, options: WorldCupOptions) throws -> WorldCupMatchesResponse? {
-        fetchCount += 1
-        lastQuery = query
-        return try result.get()
+    func fetchMatches(team: String?) throws -> WorldCupMatchesResponse? {
+        matchesFetchCount += 1
+        lastMatchesTeam = team
+        return try matchesResult.get()
     }
 
-    /// Not exercised by current callers — strategies call `fetch` directly.
-    /// Provided to satisfy the protocol.
-    func loadMatches(query: WorldCupQuery) async -> WorldCupMatchesResponse? {
-        nil
+    func fetchLive(team: String?) throws -> WorldCupLiveResponse? {
+        liveFetchCount += 1
+        lastLiveTeam = team
+        return try liveResult.get()
+    }
+
+    func fetchTeams(team: String?) throws -> WorldCupTeamsResponse? {
+        fetchTeamsCount += 1
+        lastTeamsTeam = team
+        return try teamsResult.get()
+    }
+
+    func loadMatches(team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
+        matchesFetchCount += 1
+        lastMatchesTeam = team
+        switch matchesResult {
+        case .success(let response): return .success(response)
+        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
+    }
+
+    func loadLive(team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
+        liveFetchCount += 1
+        lastLiveTeam = team
+        switch liveResult {
+        case .success(let response): return .success(response)
+        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
+    }
+
+    func loadTeams(team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
+        lastTeamsTeam = team
+        switch teamsResult {
+        case .success(let response): return .success(response)
+        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
     }
 }

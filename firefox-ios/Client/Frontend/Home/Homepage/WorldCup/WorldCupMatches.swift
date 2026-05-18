@@ -5,12 +5,10 @@
 import Foundation
 import Shared
 
-struct WorldCupMatches: Equatable {
+struct WorldCupMatches: Equatable, Hashable {
     let phaseTitle: String
     let isLive: Bool
-    /// One or two featured matches. When two are provided, a divider is rendered between them.
     let featuredMatch: [WorldCupMatch]
-    /// The next two games after `featuredMatch`. Anything beyond two entries is ignored.
     let upcomingMatches: [WorldCupMatch]
 
     init(phaseTitle: String,
@@ -23,47 +21,151 @@ struct WorldCupMatches: Equatable {
         self.upcomingMatches = upcomingMatches
     }
 
-    /// Selection rule:
-    /// - If `current` (live) matches exist, those are featured (up to 2) and `isLive` is `true`;
-    ///   `upcomingMatches` is the first two of `next`.
-    /// - Otherwise the first scheduled match becomes featured, `isLive` is `false`, and the
-    ///   following two scheduled matches become `upcomingMatches`.
+    /// Single-card view used when a team is selected: the merino response is
+    /// already scoped to that team. We don't trust the server's
+    /// `previous/current/next` labels for the featured/upcoming split — those
+    /// are anchored to whatever fetch date we sent (which is pinned to the
+    /// tournament-window floor so the API actually returns data
+    /// pre-tournament), not to the user's actual today. Instead we re-bucket
+    /// the flat list against `now`: past + today matches go to `featuredMatch`
+    /// (prominent top section), future matches go to `upcomingMatches` (the
+    /// compact bottom list, capped at two). If nothing has happened yet, the
+    /// first scheduled match is promoted to featured so the card never opens
+    /// empty. `liveIDs` is the set of `globalEventId`s reported by the `.live`
+    /// endpoint; `isLive` is set if any of this card's matches is in that set.
     init(response: WorldCupMatchesResponse,
+         liveIDs: Set<Int> = [],
+         now: Date = Date(),
+         calendar: Calendar = .current,
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        let live = response.current ?? []
-        let scheduled = response.next ?? []
+        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        let today = calendar.startOfDay(for: now)
 
-        let featured: [WorldCupMatchesResponse.Match]
-        let upcoming: [WorldCupMatchesResponse.Match]
-
-        if live.isEmpty {
-            featured = Array(scheduled.prefix(1))
-            upcoming = Array(scheduled.dropFirst(1).prefix(2))
-            self.isLive = false
-        } else {
-            featured = Array(live.prefix(2))
-            upcoming = Array(scheduled.prefix(2))
-            self.isLive = true
+        var pastOrToday: [WorldCupMatchesResponse.Match] = []
+        var future: [WorldCupMatchesResponse.Match] = []
+        for match in allMatches {
+            guard let parsed = WorldCupMatch.parseDate(match.date) else { continue }
+            if calendar.startOfDay(for: parsed) <= today {
+                pastOrToday.append(match)
+            } else {
+                future.append(match)
+            }
         }
 
-        self.phaseTitle = Self.phaseTitle(from: response)
+        var featured = pastOrToday
+        var upcoming = future
+        if featured.isEmpty, let firstScheduled = upcoming.first {
+            featured = [firstScheduled]
+            upcoming = Array(upcoming.dropFirst())
+        }
+        upcoming = Array(upcoming.prefix(2))
+
+        let allIDs = allMatches.map(\.globalEventId)
+        self.phaseTitle = Self.phaseTitle(from: featured.first)
+        self.isLive = allIDs.contains(where: { liveIDs.contains($0) })
         self.featuredMatch = featured.map { WorldCupMatch($0, localeProvider: localeProvider) }
         self.upcomingMatches = upcoming.map { WorldCupMatch($0, localeProvider: localeProvider) }
     }
 
-    /// Maps the merino response to a localized phase label. Currently the only
-    /// reliable signal in the API is `team.group`. If any featured/upcoming
-    /// team carries a group assignment we're in group play. For knockout
-    /// rounds the merino payload doesn't yet carry a round identifier, so we
-    /// fall back to the generic "Upcoming" label until that exists upstream
-    /// or we count surviving teams from the response.
-    static func phaseTitle(from response: WorldCupMatchesResponse) -> String {
-        let activeMatches = (response.current ?? []) + (response.next ?? [])
-        let isGroupStage = activeMatches.contains { match in
-            match.homeTeam.group != nil || match.awayTeam.group != nil
+    /// Multi-card view used when no team is selected: groups every match in
+    /// the response by calendar day (in `calendar`'s timezone) so each card
+    /// holds all matches on the same date. Each day's matches render in the
+    /// compact `upcomingMatches` row — `featuredMatch` is left empty so a
+    /// crowded day doesn't blow the card up vertically. Cards are ordered
+    /// chronologically (earliest day first); `defaultIndex` points at today's
+    /// card, or the next future day if today has no matches.
+    static func flattened(
+        response: WorldCupMatchesResponse,
+        liveIDs: Set<Int> = [],
+        now: Date = Date(),
+        calendar: Calendar = .current,
+        localeProvider: LocaleProvider = SystemLocaleProvider()
+    ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
+        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
+        let groups = groupedByDay(allMatches, calendar: calendar)
+        // No team selected: cards can span days/stages, so we use the generic
+        // group-stage label across the board. Stage-specific labels are only
+        // meaningful in the team-selected single-card view.
+        let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        let cards = groups.map { group in
+            WorldCupMatches(
+                phaseTitle: title,
+                isLive: group.matches.contains { liveIDs.contains($0.globalEventId) },
+                featuredMatch: [],
+                upcomingMatches: group.matches.map { WorldCupMatch($0, localeProvider: localeProvider) }
+            )
         }
-        return isGroupStage
-            ? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-            : String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
+        let today = calendar.startOfDay(for: now)
+        let firstFutureIndex = groups.firstIndex(where: { $0.day >= today })
+        let defaultIndex = firstFutureIndex ?? max(cards.count - 1, 0)
+        return (cards, defaultIndex)
+    }
+
+    /// Maps a featured match to a localized phase label. For group-stage
+    /// matches we surface the group letter (e.g. "Group A") since both teams
+    /// in a group-stage fixture share a group. For knockout matches we use
+    /// the round label. Unknown or absent stages fall back to the generic
+    /// "Upcoming" label so a new merino stage string doesn't blank the title.
+    static func phaseTitle(from match: WorldCupMatchesResponse.Match?) -> String {
+        guard let match else {
+            return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        }
+        switch match.stage {
+        case "Group Stage":
+            let group = match.homeTeam.group ?? match.awayTeam.group
+            return Self.groupLabel(for: group)
+                ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        case "Round of 32":
+            return String.WorldCup.HomepageWidget.RoundPhase.Round32Label
+        case "Round of 16":
+            return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
+        case "Quarterfinals":
+            return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
+        case "Semifinals":
+            return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
+        case "Third Place":
+            return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        case "Final":
+            return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        default:
+            return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
+        }
+    }
+
+    private static func groupLabel(for group: String?) -> String? {
+        switch group {
+        case "Group A": return String.WorldCup.HomepageWidget.GroupPhase.GroupA
+        case "Group B": return String.WorldCup.HomepageWidget.GroupPhase.GroupB
+        case "Group C": return String.WorldCup.HomepageWidget.GroupPhase.GroupC
+        case "Group D": return String.WorldCup.HomepageWidget.GroupPhase.GroupD
+        case "Group E": return String.WorldCup.HomepageWidget.GroupPhase.GroupE
+        case "Group F": return String.WorldCup.HomepageWidget.GroupPhase.GroupF
+        case "Group G": return String.WorldCup.HomepageWidget.GroupPhase.GroupG
+        case "Group H": return String.WorldCup.HomepageWidget.GroupPhase.GroupH
+        case "Group I": return String.WorldCup.HomepageWidget.GroupPhase.GroupI
+        case "Group J": return String.WorldCup.HomepageWidget.GroupPhase.GroupJ
+        case "Group K": return String.WorldCup.HomepageWidget.GroupPhase.GroupK
+        case "Group L": return String.WorldCup.HomepageWidget.GroupPhase.GroupL
+        default: return nil
+        }
+    }
+
+    /// Groups `matches` by calendar day (using `calendar`'s timezone). Matches
+    /// whose ISO date fails to parse are skipped. Returned groups are sorted
+    /// by day in ascending order; within each group, matches keep their input
+    /// order so equal-day matches stay in the response's chronological order.
+    private static func groupedByDay(
+        _ matches: [WorldCupMatchesResponse.Match],
+        calendar: Calendar
+    ) -> [(day: Date, matches: [WorldCupMatchesResponse.Match])] {
+        var byDay: [Date: [WorldCupMatchesResponse.Match]] = [:]
+        var order: [Date] = []
+        for match in matches {
+            guard let parsed = WorldCupMatch.parseDate(match.date) else { continue }
+            let day = calendar.startOfDay(for: parsed)
+            if byDay[day] == nil { order.append(day) }
+            byDay[day, default: []].append(match)
+        }
+        return order.sorted().map { ($0, byDay[$0]!) }
     }
 }

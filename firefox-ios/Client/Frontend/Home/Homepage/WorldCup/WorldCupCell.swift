@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 
 private final class PageContainer: UIView, ThemeApplicable {
     private struct UX {
@@ -22,6 +23,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         image.image = UIImage(named: UX.loadingImage)
         image.isAccessibilityElement = false
         image.contentMode = .scaleAspectFit
+        image.alpha = 0.0
     }
 
     init(content: UIView) {
@@ -50,7 +52,6 @@ private final class PageContainer: UIView, ThemeApplicable {
             loadingImageView.widthAnchor.constraint(equalToConstant: UX.loadingImageSize),
             loadingImageView.heightAnchor.constraint(equalToConstant: UX.loadingImageSize),
         ])
-        startSpinning()
     }
 
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
@@ -131,12 +132,9 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private var pageControlHeightConstraint: NSLayoutConstraint?
     private var pageControlTopConstraint: NSLayoutConstraint?
     private var currentState: WorldCupSectionState?
-    private var onHeightChange: (() -> Void)?
+    private var onHeightChange: ((CGFloat) -> Void)?
     private var lastScrollViewWidth: CGFloat = 0
     private var currentTheme: Theme?
-    private weak var matchesCardView: WorldCupMatchCardView?
-    private var matchesFetchTask: Task<Void, Never>?
-    private let apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -215,7 +213,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     func configure(
         with state: WorldCupSectionState,
         theme: Theme,
-        onHeightChange: @escaping () -> Void
+        onHeightChange: @escaping (CGFloat) -> Void
     ) {
         self.onHeightChange = onHeightChange
         self.currentTheme = theme
@@ -244,45 +242,25 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         NSLayoutConstraint.activate(constraints)
         pageConstraints = constraints
 
-        goToPage(0)
+        goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
-    private func makePages(for state: WorldCupSectionState) -> [UIView] {
-        let card = WorldCupMatchCardView(windowUUID: state.windowUUID)
-        card.configure(with: Self.emptyMatches, theme: currentTheme ?? LightTheme())
-        matchesCardView = card
-        scheduleMatchesFetch()
-
-        let contents: [UIView] = [
-            WorldCupTimerView(windowUUID: state.windowUUID),
-            card
-        ]
-        return contents.map { PageContainer(content: $0) }
-    }
-
-    /// Empty state shown while the merino fetch is in flight — no live pill,
-    /// no matches. Replaced on first successful fetch.
-    private static let emptyMatches = WorldCupMatches(
-        phaseTitle: String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel,
-        isLive: false,
-        featuredMatch: [],
-        upcomingMatches: []
-    )
-
-    /// Kicks off a real merino fetch via `WorldCupAPIClient` and reconfigures the
-    /// matches card when there is data. 
-    private func scheduleMatchesFetch() {
-        matchesFetchTask?.cancel()
-        guard let apiClient = self.apiClient else { return }
-        matchesFetchTask = Task { [weak self, apiClient] in
-            let response = await apiClient.loadMatches(query: .matches)
-            guard let response,
-                  !Task.isCancelled,
-                  let self,
-                  let card = self.matchesCardView else { return }
-            let matches = WorldCupMatches(response: response)
-            card.configure(with: matches, theme: self.currentTheme ?? LightTheme())
+    /// Resolves which page the swipe view should display first. With no team
+    /// selected we land on the closest upcoming match (provided by the
+    /// middleware via `state.defaultMatchIndex`) rather than the
+    /// chronologically latest card. Page 0 is the timer view, so match cards
+    /// are offset by one.
+    private func initialPage(for state: WorldCupSectionState, pageCount: Int) -> Int {
+        guard state.isMilestone2, !state.matches.isEmpty, pageCount > 1 else {
+            return pageCount - 1
         }
+        let target = 1 + state.defaultMatchIndex
+        return min(max(target, 0), pageCount - 1)
+    }
+
+    private func makePages(for state: WorldCupSectionState) -> [PageContainer] {
+        let views = WorldCupCellFactory.makePages(from: state)
+        return views.map { PageContainer(content: $0) }
     }
 
     private func updateScrollViewHeight(for page: Int, animated: Bool, completion: (() -> Void)? = nil) {
@@ -292,7 +270,7 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         }
 
         let targetHeight = view.systemLayoutSizeFitting(
-            CGSize(width: scrollView.frame.width > 0 ? scrollView.frame.width : bounds.width,
+            CGSize(width: bounds.width,
                    height: UIView.layoutFittingCompressedSize.height),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
@@ -302,6 +280,10 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return
         }
 
+        let pageControlSpacing = pageControlTopConstraint?.constant ?? 0
+        let pageControlHeight = pageControlHeightConstraint?.constant ?? 0
+        let contentHeight = UX.padding + targetHeight + pageControlSpacing + pageControlHeight + UX.padding
+
         if animated {
             UIView.animate(
                 withDuration: UX.heightChangeAnimationDuration,
@@ -310,13 +292,15 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
                 animations: {
                     self.scrollViewHeightConstraint?.constant = targetHeight
                     self.contentView.layoutIfNeeded()
-                    self.onHeightChange?()
+                    self.onHeightChange?(contentHeight)
                 },
-                completion: { _ in completion?() }
+                completion: { _ in
+                    completion?()
+                }
             )
         } else {
             scrollViewHeightConstraint?.constant = targetHeight
-            onHeightChange?()
+            onHeightChange?(contentHeight)
             completion?()
         }
     }
@@ -363,7 +347,6 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
             return false
         }
 
-        scrollView.setContentOffset(CGPoint(x: CGFloat(next) * pageWidth, y: 0), animated: true)
         goToPage(next)
         return true
     }
@@ -371,13 +354,18 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
     private func goToPage(_ page: Int) {
         pageControl.currentPage = page
         updatePageAccessibility()
+        // it is safe to use bounds.width cause the scrollView has the same width of the parent view
+        // the bounds gets updated before the subviews so with this we can avoid relayout of the scrollView.
+        scrollView.setContentOffset(CGPoint(x: CGFloat(page) * bounds.width, y: 0), animated: false)
         updateScrollViewHeight(for: page, animated: true) { [weak self] in
             guard let container = self?.pagesStack.arrangedSubviews[safe: page] as? PageContainer else { return }
             UIView.animate(
                 withDuration: UX.contentFadeInDuration,
                 delay: UX.animationDelay,
                 options: [.allowUserInteraction],
-                animations: { container.setContentVisibility(true) },
+                animations: {
+                    container.setContentVisibility(true)
+                },
                 completion: { _ in
                     UIAccessibility.post(notification: .screenChanged, argument: container)
                 }

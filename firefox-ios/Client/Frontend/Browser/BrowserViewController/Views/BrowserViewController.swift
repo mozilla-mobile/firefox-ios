@@ -1625,7 +1625,7 @@ class BrowserViewController: UIViewController,
             contentContainerTopConstraint?.isActive = true
 
             let frontViews = shouldPinContentContainerToScreenTop
-                ? [contentContainer, bottomContentStackView, bottomContainer, overKeyboardContainer]
+                ? [contentContainer, bottomBlurView, bottomContentStackView, bottomContainer, overKeyboardContainer]
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
@@ -1855,6 +1855,17 @@ class BrowserViewController: UIViewController,
         let isKeyboardVisible = keyboardHeight > 0
 
         guard isBottomSearchBar, isKeyboardVisible else {
+            overKeyboardContainer.removeKeyboardSpacer()
+            return
+        }
+
+        // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let isEditing = toolbarState?.addressToolbar.isEditing == true
+        if !isEditing,
+           tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
+           traitCollection.verticalSizeClass != .compact,
+           traitCollection.horizontalSizeClass != .regular {
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -2647,7 +2658,14 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(
+                prefs: profile.prefs,
+                isUserSettingEnabled: store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: windowUUID
+                )?.isTranslationsEnabled ?? true
+            ),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
@@ -2774,6 +2792,8 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .worldCupCountryPicker:
+            navigationHandler?.showWorldCupCountryPicker()
         case .quickAnswers:
             navigationHandler?.showQuickAnswers()
         case .privacyNoticeLink(let url):
@@ -3276,6 +3296,7 @@ class BrowserViewController: UIViewController,
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(isVisible: false)
+        (contentContainer.contentController as? HomepageViewController)?.stopScrollingAndSaveVerticalScrollOffset()
 
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
