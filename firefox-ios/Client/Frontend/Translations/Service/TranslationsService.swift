@@ -88,7 +88,8 @@ final class TranslationsService: TranslationsServiceProtocol {
     /// Tells the engine to discard translations for a document.
     func discardTranslations(for windowUUID: WindowUUID) async throws {
         let pageLanguage = try await detectPageLanguage(for: windowUUID)
-        guard let deviceLanguage = deviceLanguageCode() else {
+        let supported = await fetchSupportedTargetLanguages()
+        guard let deviceLanguage = deviceLanguageCode(supportedTargetLanguages: supported) else {
             throw TranslationsServiceError.deviceLanguageUnavailable
         }
 
@@ -168,8 +169,19 @@ final class TranslationsService: TranslationsServiceProtocol {
         return await modelsFetcher.fetchSupportedTargetLanguages()
     }
 
-    /// Returns the device language code for a given locale, if available.
-    private func deviceLanguageCode(using locale: Locale = .current) -> String? {
-        return locale.languageCode
+    /// Returns the best device-language code present in `supportedTargetLanguages`.
+    /// Walks `Locale.preferredLanguages` so script subtags (e.g. `zh-Hans`) are preserved
+    /// when they appear in the supported set.
+    private func deviceLanguageCode(supportedTargetLanguages: [String]) -> String? {
+        let supportedSet = Set(supportedTargetLanguages)
+        for tag in Locale.preferredLanguages {
+            if let match = PreferredTranslationLanguagesManager.matchingSupportedCode(
+                for: tag,
+                in: supportedSet
+            ) {
+                return match
+            }
+        }
+        return nil
     }
 }
