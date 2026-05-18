@@ -61,8 +61,11 @@ final class WorldCupPollingFetchStrategyTests: XCTestCase {
 
     func test_inBurstRetry_recoversAndDeliversOneSuccess() async {
         let (results, allDelays) = await driveCollectingAllDelays(
-            config: config(base: 100, empty: 600, cap: 1200,
-                           errorRetries: 2, inBurstDelay: 1),
+            config: config(base: 100,
+                           empty: 600,
+                           cap: 1200,
+                           errorRetries: 2,
+                           inBurstDelay: 1),
             scriptedResults: [.failure, .failure, .success(.populated)],
             collectCycles: 1
         )
@@ -74,8 +77,11 @@ final class WorldCupPollingFetchStrategyTests: XCTestCase {
 
     func test_inBurstRetry_exhaustsAndDeliversFailure() async {
         let (results, allDelays) = await driveCollectingAllDelays(
-            config: config(base: 100, empty: 600, cap: 1200,
-                           errorRetries: 2, inBurstDelay: 1),
+            config: config(base: 100,
+                           empty: 600,
+                           cap: 1200,
+                           errorRetries: 2,
+                           inBurstDelay: 1),
             scriptedResults: [.failure, .failure, .failure],
             collectCycles: 1
         )

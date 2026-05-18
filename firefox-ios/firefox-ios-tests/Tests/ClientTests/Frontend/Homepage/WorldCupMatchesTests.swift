@@ -91,10 +91,18 @@ struct WorldCupMatchesTests {
     func test_init_whenAllMatchesArePast_promotesMostRecentToHero() {
         let response = WorldCupMatchesResponse(
             previous: [
-                makeMatch(id: 1, home: "ENG", away: "USA", date: "2026-06-11T18:00:00+00:00",
-                          homeScore: 1, awayScore: 0),
-                makeMatch(id: 2, home: "ARG", away: "BRA", date: "2026-06-14T18:00:00+00:00",
-                          homeScore: 2, awayScore: 1)
+                makeMatch(id: 1,
+                          home: "ENG",
+                          away: "USA",
+                          date: "2026-06-11T18:00:00+00:00",
+                          homeScore: 1,
+                          awayScore: 0),
+                makeMatch(id: 2,
+                          home: "ARG",
+                          away: "BRA",
+                          date: "2026-06-14T18:00:00+00:00",
+                          homeScore: 2,
+                          awayScore: 1)
             ],
             current: nil,
             next: nil

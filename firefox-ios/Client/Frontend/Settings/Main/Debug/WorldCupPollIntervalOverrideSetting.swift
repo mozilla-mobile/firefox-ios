@@ -44,7 +44,7 @@ final class WorldCupPollIntervalOverrideSetting: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let alert = UIAlertController(
             title: "Override poll interval",
-            message: "Enter seconds (e.g. `10`). Both /matches and /live will fire on this cadence. Leave empty to restore production defaults. App restart required.",
+            message: "Enter seconds (e.g. `10`). Leave empty to restore production defaults.",
             preferredStyle: .alert
         )
         alert.addTextField { textField in

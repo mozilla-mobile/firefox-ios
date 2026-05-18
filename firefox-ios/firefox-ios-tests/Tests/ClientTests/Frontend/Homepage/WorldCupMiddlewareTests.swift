@@ -520,10 +520,14 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
         mockWorldCupStore.selectedTeam = "BRA"
-        let liveMatch = makeMatch(id: 1, home: "BRA", away: "ARG",
+        let liveMatch = makeMatch(id: 1,
+                                  home: "BRA",
+                                  away: "ARG",
                                   date: "2026-06-11T19:00:00+00:00",
                                   statusType: "live")
-        let upcomingMatch = makeMatch(id: 2, home: "BRA", away: "GER",
+        let upcomingMatch = makeMatch(id: 2,
+                                      home: "BRA",
+                                      away: "GER",
                                       date: "2026-06-19T18:00:00+00:00")
         let response = WorldCupMatchesResponse(
             now: "2026-06-11T19:30:00.000Z",
@@ -705,7 +709,9 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         return WorldCupMatchesResponse(
             previous: nil,
             current: nil,
-            next: [makeMatch(id: 1, home: "ARG", away: "BRA",
+            next: [makeMatch(id: 1,
+                             home: "ARG",
+                             away: "BRA",
                              statusType: liveStatus ? "live" : "scheduled")]
         )
     }
