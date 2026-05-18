@@ -23,13 +23,12 @@ protocol WorldCupAPIClientProtocol: Sendable {
     /// Low-level sync teams fetch + decode. Throws on FFI error or decode failure.
     func fetchTeams(team: String?) throws -> WorldCupTeamsResponse?
 
-    /// High-level async loader for `/matches`. Dispatches through the configured
-    /// matches fetch strategy.
-    func loadMatches(team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError>
+    /// High-level stream of `/matches` results. Shape (single emission vs.
+    /// continuous polling with backoff) is decided by the configured strategy.
+    func matchesStream(team: String?) -> WorldCupMatchesStream
 
-    /// High-level async loader for `/live`. Dispatches through the configured
-    /// live fetch strategy.
-    func loadLive(team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError>
+    /// High-level stream of `/live` results, same shape as `matchesStream`.
+    func liveStream(team: String?) -> WorldCupLiveStream
 
     /// High-level async loader for the teams roster. Runs the blocking FFI
     /// call off-main and returns the decoded response or a `WorldCupLoadError`
