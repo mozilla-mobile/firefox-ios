@@ -9,10 +9,10 @@ import Foundation
 ///
 /// Returns the full team roster with standings — useful for inferring round
 /// from surviving (non-eliminated) team count, listing groups, etc.
-struct WorldCupTeamsResponse: Decodable, Equatable {
+struct WorldCupTeamsResponse: Decodable, Equatable, Sendable {
     let teams: [Team]
 
-    struct Team: Decodable, Equatable {
+    struct Team: Decodable, Equatable, Sendable {
         /// 3-letter FIFA-style team key (e.g. `BRA`, `ENG`, `USA`).
         let key: String
         let globalTeamId: Int?
@@ -27,7 +27,7 @@ struct WorldCupTeamsResponse: Decodable, Equatable {
         let standing: Standing?
     }
 
-    struct Standing: Decodable, Equatable {
+    struct Standing: Decodable, Equatable, Sendable {
         let wins: Int?
         let losses: Int?
         let draws: Int?
