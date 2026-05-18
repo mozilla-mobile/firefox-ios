@@ -55,6 +55,41 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages[2] is WorldCupMatchCardView)
     }
 
+    func test_makePages_whenMilestone2_withApiErrorAndNoMatches_returnsOnlyErrorView() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.matches = []
+        state.apiError = .network(reason: "offline")
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 1)
+        XCTAssertTrue(pages[0] is WorldCupErrorView)
+    }
+
+    func test_makePages_whenMilestone2_withApiErrorAndMatches_returnsOnlyErrorView() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.matches = [makeMatches()]
+        state.apiError = .other(code: 500, reason: "server error")
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 1)
+        XCTAssertTrue(pages[0] is WorldCupErrorView)
+    }
+
+    func test_makePages_whenNotMilestone2_withApiError_returnsOnlyTimer() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = false
+        state.apiError = .network(reason: "offline")
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 1)
+        XCTAssertTrue(pages.first is WorldCupTimerView)
+    }
+
     private func makeMatches() -> WorldCupMatches {
         return WorldCupMatches(
             phaseTitle: "Group Stage",

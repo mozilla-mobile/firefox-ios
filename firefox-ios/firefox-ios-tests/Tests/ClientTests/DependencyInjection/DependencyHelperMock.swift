@@ -70,6 +70,8 @@ final class DependencyHelperMock {
         MockGleanUsageReportingMetricsService(profile: profile)
         AppContainer.shared.register(service: gleanUsageReportingMetricsService)
 
+        AppContainer.shared.register(service: ShareTelemetry())
+
         let featureFlagProvider = injectedFeatureFlagProvider ?? FeatureFlagsProvider(prefs: profile.prefs)
         AppContainer.shared.register(service: featureFlagProvider as FeatureFlagProviding)
 

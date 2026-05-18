@@ -116,9 +116,18 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     /// of the inputs differ between layout passes.
     private var measurementsCache = HomepageLayoutMeasurementCache()
 
+    /// Most recent height reported by a live `WorldCupCell`. Used for the spacer calculation so that
+    /// the stories section lands exactly above the fold once the cell has measured itself.
+    private var lastKnownWorldCupCellHeight: CGFloat?
+
     init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
         self.logger = logger
+    }
+
+    /// Called by the homepage when a `WorldCupCell` finishes laying out and reports its true height.
+    func setWorldCupCellHeight(_ height: CGFloat) {
+        lastKnownWorldCupCellHeight = height
     }
 
     func createLayoutSection(
@@ -859,16 +868,16 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
     }
 
     /// Returns the estimated height of the World Cup section when it is visible, or 0 when hidden.
+    ///
+    /// Uses the most recent height pushed up by the live `WorldCupCell` via `setWorldCupCellHeight`.
+    /// Before the cell has measured itself (first render) we fall back to a sensible estimate that the
+    /// cell will correct via `relayoutForCellHeightChange` once it lays out.
     private func getWorldcupSectionHeight(environment: NSCollectionLayoutEnvironment) -> CGFloat {
         guard let state = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID),
               state.worldcupState.shouldShowSection else { return 0 }
 
-        let containerWidth = normalizedDimension(environment.container.contentSize.width)
-        let cell = WorldCupCell()
-        cell.configure(with: state.worldcupState, theme: LightTheme(), onHeightChange: {})
-        let cellHeight = HomepageDimensionCalculator.fittingHeight(for: cell, width: containerWidth)
-
-        return cellHeight + UX.spacingBetweenSections
+        let cellHeight = lastKnownWorldCupCellHeight ?? UX.MessageCardConstants.height
+        return cellHeight
     }
 
     /// Returns the height that the spacer should be, before accounting for vertical stories peeking above the fold.

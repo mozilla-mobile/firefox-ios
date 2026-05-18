@@ -34,11 +34,13 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private lazy var moreOptionsButton: UIButton = .build { [weak self] button in
+    private lazy var moreOptionsButton: UIButton = .build { button in
         let changeTeamAction = UIAction(
             title: .WorldCup.HomepageWidget.ChangeTeamLabel,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.soccerBall),
-            handler: { _ in }
+            handler: { [weak self] _ in
+                self?.navigateToTeamSelection()
+            }
         )
         let removeAction = UIAction(
             title: .WorldCup.HomepageWidget.RemoveLabel,
@@ -46,7 +48,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
                 StandardImageIdentifiers.Large.cross
             ),
             attributes: .destructive,
-            handler: { _ in }
+            handler: { [weak self] _ in
+                self?.dismiss()
+            }
         )
         let menu = UIMenu(children: [changeTeamAction, removeAction])
         button.menu = menu
@@ -96,6 +100,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     // MARK: - State
 
+    private let telemetry = WorldCupTelemetry()
     private let windowUUID: WindowUUID
     private var model: WorldCupMatches?
     private var featuredDividers: [UIView] = []
@@ -219,6 +224,28 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         }
     }
 
+    // MARK: - Actions
+
+    private func navigateToTeamSelection() {
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(.worldCupCountryPicker),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    private func dismiss() {
+        telemetry.closeButtonTapped()
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.removeHomepageCard,
+            )
+        )
+    }
+
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
@@ -238,6 +265,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
 private final class FeaturedMatchView: UIView, ThemeApplicable {
     private struct UX {
+        static let horizontalStackSpace: CGFloat = 4.0
         static let flagSize = CGSize(width: 60, height: 40)
         static let flagCornerRadius: CGFloat = 7
         static let flagToCodeSpacing: CGFloat = 4
@@ -306,6 +334,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.spacing = UX.horizontalStackSpace
         stack.accessibilityElements = [homeColumn.container, centerStack, awayColumn.container]
         return stack
     }()
@@ -490,6 +519,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
             rightStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             rightStack.trailingAnchor.constraint(equalTo: trailingAnchor),
 
+            infoLabel.topAnchor.constraint(equalTo: topAnchor),
+            infoLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
             infoLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             infoLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             infoLabel.leadingAnchor.constraint(

@@ -38,12 +38,17 @@ final class WorldCupMiddleware {
             let countryId = (action as? WorldCupAction)?.selectedCountryId
             self.worldCupStore.setSelectedTeam(countryId: countryId)
             self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+        case WorldCupActionType.retryMatchesFetch:
+            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
         default:
             break
         }
     }
 
-    private func dispatchUpdate(windowUUID: WindowUUID) {
+    private func dispatchUpdate(
+        windowUUID: WindowUUID,
+        apiError: WorldCupLoadError? = nil
+    ) {
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
@@ -52,6 +57,7 @@ final class WorldCupMiddleware {
                 shouldShowMilestone2: worldCupStore.isMilestone2,
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: matches,
+                apiError: apiError,
                 defaultMatchIndex: defaultMatchIndex
             )
         )
@@ -66,20 +72,24 @@ final class WorldCupMiddleware {
         matchesFetchTask?.cancel()
         matchesFetchTask = Task { [apiClient, weak self] in
             let result = await apiClient.loadMatches(query: .matches, team: selectedTeam)
-            guard case .success(let response) = result,
-                  let response,
-                  !Task.isCancelled else { return }
-            if selectedTeam != nil {
-                self?.matches = [WorldCupMatches(response: response)]
-                self?.defaultMatchIndex = 0
-            } else {
-                let flattened = WorldCupMatches.flattened(response: response)
-                self?.matches = flattened
-                let previousCount = response.previous?.count ?? 0
-                let liveCount = response.current?.count ?? 0
-                self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
+            guard !Task.isCancelled else { return }
+            switch result {
+            case .success(let response):
+                guard let response else { return }
+                if selectedTeam != nil {
+                    self?.matches = [WorldCupMatches(response: response)]
+                    self?.defaultMatchIndex = 0
+                } else {
+                    let flattened = WorldCupMatches.flattened(response: response)
+                    self?.matches = flattened
+                    let previousCount = response.previous?.count ?? 0
+                    let liveCount = response.current?.count ?? 0
+                    self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
+                }
+                self?.dispatchUpdate(windowUUID: windowUUID)
+            case .failure(let error):
+                self?.dispatchUpdate(windowUUID: windowUUID, apiError: error)
             }
-            self?.dispatchUpdate(windowUUID: windowUUID)
         }
     }
 }

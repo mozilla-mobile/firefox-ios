@@ -198,6 +198,57 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - WorldCupActionType.retryMatchesFetch
+
+    func test_retryMatchesFetch_whenMilestone2_fetchesAndDispatchesDidUpdate() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let subject = createSubject(apiClient: apiClient)
+        let action = WorldCupAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WorldCupActionType.retryMatchesFetch
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched after retry fetch")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertEqual(dispatched.matches.count, 1)
+        XCTAssertNil(dispatched.apiError)
+        XCTAssertEqual(apiClient.lastQuery, .matches)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_retryMatchesFetch_whenFetchFails_dispatchesDidUpdateWithApiError() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        let apiClient = MockWorldCupAPIClient(result: .failure(MockWorldCupClientError.network))
+        let subject = createSubject(apiClient: apiClient)
+        let action = WorldCupAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WorldCupActionType.retryMatchesFetch
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched after failed retry")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertTrue(dispatched.matches.isEmpty)
+        XCTAssertNotNil(dispatched.apiError)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - Unhandled actions
 
     func test_unhandledAction_doesNotDispatch() {

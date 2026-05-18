@@ -16,6 +16,7 @@ final class WorldCupSectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.shouldShowSection)
         XCTAssertFalse(initialState.isMilestone2)
+        XCTAssertNil(initialState.apiError)
     }
 
     func test_didUpdateAction_returnsExpectedState() {
@@ -35,6 +36,26 @@ final class WorldCupSectionStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertTrue(newState.shouldShowSection)
         XCTAssertTrue(newState.isMilestone2)
+        XCTAssertNil(newState.apiError)
+    }
+
+    func test_didUpdateAction_withApiError_propagatesErrorToState() {
+        let initialState = createSubject()
+        let reducer = WorldCupSectionState.reducer
+        let apiError = WorldCupLoadError.network(reason: "offline")
+
+        let newState = reducer(
+            initialState,
+            WorldCupAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WorldCupMiddlewareActionType.didUpdate,
+                shouldShowHomepageWorldCupSection: true,
+                shouldShowMilestone2: true,
+                apiError: apiError
+            )
+        )
+
+        XCTAssertEqual(newState.apiError, apiError)
     }
 
     func test_unhandledWorldCupActionType_returnsUnchangedState() {
