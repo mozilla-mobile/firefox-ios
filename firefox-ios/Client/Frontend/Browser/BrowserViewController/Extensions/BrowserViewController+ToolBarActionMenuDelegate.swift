@@ -129,7 +129,6 @@ extension BrowserViewController: PhotonActionSheetProtocol {
         }
     }
 
-
     func dismissToolbarCFRs(with windowUUID: WindowUUID) {
         guard let toolbarState = store.state.componentState(
             ToolbarState.self,
