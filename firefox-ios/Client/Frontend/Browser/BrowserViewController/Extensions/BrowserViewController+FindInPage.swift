@@ -34,19 +34,19 @@ extension BrowserViewController {
     // Used only on iOS 15
     private func useCustomFindInteraction(isVisible: Bool, tab: Tab? = nil) {
         if isVisible {
-            if findInPageBar == nil {
+            if iOS15FindInPageBar == nil {
                 setupFindInPage()
             }
 
-            self.findInPageBar?.becomeFirstResponder()
-        } else if let findInPageBar = self.findInPageBar {
+            self.iOS15FindInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.iOS15FindInPageBar {
             removeFindInPage(findInPageBar, tab: tab)
         }
     }
 
     private func setupFindInPage() {
         let findInPageBar = FindInPageBar()
-        self.findInPageBar = findInPageBar
+        self.iOS15FindInPageBar = findInPageBar
         findInPageBar.delegate = self
 
         bottomContentStackView.addArrangedViewToBottom(findInPageBar, animated: false, completion: {
@@ -74,7 +74,7 @@ extension BrowserViewController {
         guard let webView = tab?.webView else { return }
         webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
         bottomContentStackView.removeArrangedView(findInPageBar)
-        self.findInPageBar = nil
+        self.iOS15FindInPageBar = nil
         updateConstraintsForFindInPageChanges()
     }
 
@@ -93,12 +93,12 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     }
 
     func findInPage(didFindNextWithText text: String) {
-        findInPageBar?.endEditing(true)
+        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
 
     func findInPage(didFindPreviousWithText text: String) {
-        findInPageBar?.endEditing(true)
+        iOS15FindInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
 
@@ -113,10 +113,10 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     }
 
     func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
-        findInPageBar?.currentResult = currentResult
+        iOS15FindInPageBar?.currentResult = currentResult
     }
 
     func findInPageHelper(didUpdateTotalResults totalResults: Int) {
-        findInPageBar?.totalResults = totalResults
+        iOS15FindInPageBar?.totalResults = totalResults
     }
 }

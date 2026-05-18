@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController,
     var searchController: SearchViewController?
     var searchSessionState: SearchSessionState?
     var searchLoader: SearchLoader?
-    var findInPageBar: FindInPageBar?
+    var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
@@ -837,9 +837,20 @@ class BrowserViewController: UIViewController,
         processAppleIntelligenceState()
         privacyWindowHelper.removeWindow()
 
-        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
-            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-            scrollController.showToolbars(animated: false)
+        if let tab = tabManager.selectedTab {
+            if tab.isFindInPageMode {
+                if #available(iOS 16, *) {
+                    if tab.isPrivate, let webView = tab.webView, webView.isFindInteractionEnabled {
+                        // Ensure keyboard is available and Find In Page UI is refreshed in PBM
+                        let text = webView.findInteraction?.searchText
+                        updateFindInPageVisibility(isVisible: true)
+                        webView.findInteraction?.searchText = text ?? ""
+                    }
+                }
+            } else {
+                // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+                scrollController.showToolbars(animated: false)
+            }
         }
 
         navigationHandler?.showTermsOfUse(context: .appBecameActive)
@@ -4438,7 +4449,7 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(isVisible: true, withSearchText: selection)
-        findInPageBar?.text = selection
+        iOS15FindInPageBar?.text = selection
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
@@ -5051,7 +5062,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
-                                              doesFindInPageBarExist: findInPageBar != nil)
+                                              doesFindInPageBarExist: iOS15FindInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
