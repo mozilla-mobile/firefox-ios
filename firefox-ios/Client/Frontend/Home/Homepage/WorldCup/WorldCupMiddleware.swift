@@ -14,6 +14,11 @@ import Shared
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
     private let apiClient: WorldCupAPIClientProtocol?
+    /// When true, a parseable `response.now` overrides `Date()` for bucketing
+    /// so QA can advance the mock server's timeline without touching device
+    /// date. Gated on the `WorldCupBaseHost` pref, which only dev/internal
+    /// builds expose — prod stays on `Date()` even if a response carries `now`.
+    private let usesDevServerTimeline: Bool
     private var matchesFetchTask: Task<Void, Never>?
     private var matches: [WorldCupMatches] = []
     private var defaultMatchIndex = 0
@@ -23,10 +28,13 @@ final class WorldCupMiddleware {
         apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient(
             baseHost: (AppContainer.shared.resolve() as Profile)
                 .prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
-        )
+        ),
+        usesDevServerTimeline: Bool = (AppContainer.shared.resolve() as Profile)
+            .prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
     ) {
         self.worldCupStore = worldCupStore
         self.apiClient = apiClient
+        self.usesDevServerTimeline = usesDevServerTimeline
     }
 
     lazy var worldCupProvider: Middleware<AppState> = { state, action in
@@ -83,11 +91,12 @@ final class WorldCupMiddleware {
             case .success(let response):
                 guard let response else { return }
                 let liveIDs = Self.liveIDs(from: live)
+                let now = self?.effectiveNow(from: response) ?? Date()
                 if selectedTeam != nil {
-                    self?.matches = [WorldCupMatches(response: response, liveIDs: liveIDs)]
+                    self?.matches = [WorldCupMatches(response: response, liveIDs: liveIDs, now: now)]
                     self?.defaultMatchIndex = 0
                 } else {
-                    let flattened = WorldCupMatches.flattened(response: response, liveIDs: liveIDs)
+                    let flattened = WorldCupMatches.flattened(response: response, liveIDs: liveIDs, now: now)
                     self?.matches = flattened.cards
                     self?.defaultMatchIndex = flattened.defaultIndex
                 }
@@ -107,5 +116,13 @@ final class WorldCupMiddleware {
         guard case let .success(response) = result,
               let matches = response?.matches else { return [] }
         return Set(matches.map(\.globalEventId))
+    }
+
+    /// Returns the response's `now` only when the dev pref is set and the
+    /// field parses. Any other combination returns `nil`, leaving callers to
+    /// fall back to `Date()` — which is what prod always does.
+    private func effectiveNow(from response: WorldCupMatchesResponse) -> Date? {
+        guard usesDevServerTimeline, let iso = response.now else { return nil }
+        return WorldCupMatch.parseDate(iso)
     }
 }
