@@ -34,6 +34,12 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    private lazy var dateLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
     private lazy var moreOptionsButton: UIButton = .build { button in
         let changeTeamAction = UIAction(
             title: .WorldCup.HomepageWidget.ChangeTeamLabel,
@@ -124,6 +130,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.addSubview(liveLabel)
 
         headerStack.addArrangedSubview(titleLabel)
+        headerStack.addArrangedSubview(dateLabel)
         headerStack.addArrangedSubview(liveLabelContainer)
         // spacer view
         headerStack.addArrangedSubview(UIView())
@@ -177,7 +184,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
         rebuildFeaturedMatches(matches: model.featuredMatch)
         rebuildUpcomingRows(matches: model.upcomingMatches)
-        titleLabel.text = model.dateLabel.map { "\(model.phaseTitle) · \($0)" } ?? model.phaseTitle
+        titleLabel.text = model.phaseTitle
+        dateLabel.text = model.dateLabel.map { "\(UX.liveLabelDotText) \($0)" }
+        dateLabel.isHidden = model.isLive
         liveLabelContainer.isHidden = !model.isLive
     }
 
@@ -250,6 +259,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
+        dateLabel.textColor = theme.colors.textSecondary
         moreOptionsButton.tintColor = theme.colors.iconSecondary
         upcomingStackDivider.backgroundColor = theme.colors.borderSecondary
         liveLabelContainer.backgroundColor = theme.colors.gradientAIStrongStop1
