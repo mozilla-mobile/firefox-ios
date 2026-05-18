@@ -9,50 +9,50 @@ import Foundation
 @Suite("WorldCupAPIClient")
 struct WorldCupAPIClientTests {
     @Test
-    func test_loadMatches_withMatchesQuery_usesMatchesStrategy() async throws {
+    func test_loadMatches_usesMatchesStrategy() async throws {
         let matchesStrategy = MockWorldCupFetchStrategy()
         let liveStrategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadMatches(query: .matches, team: nil)
+        _ = await client.loadMatches(team: nil)
 
-        #expect(matchesStrategy.callCount == 1)
-        #expect(matchesStrategy.lastQuery == .matches)
-        #expect(liveStrategy.callCount == 0)
+        #expect(matchesStrategy.matchesCallCount == 1)
+        #expect(liveStrategy.matchesCallCount == 0)
+        #expect(liveStrategy.liveCallCount == 0)
     }
 
     @Test
-    func test_loadMatches_withLiveQuery_usesLiveStrategy() async throws {
+    func test_loadLive_usesLiveStrategy() async throws {
         let matchesStrategy = MockWorldCupFetchStrategy()
         let liveStrategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadMatches(query: .live, team: nil)
+        _ = await client.loadLive(team: nil)
 
-        #expect(liveStrategy.callCount == 1)
-        #expect(liveStrategy.lastQuery == .live)
-        #expect(matchesStrategy.callCount == 0)
+        #expect(liveStrategy.liveCallCount == 1)
+        #expect(matchesStrategy.liveCallCount == 0)
+        #expect(matchesStrategy.matchesCallCount == 0)
     }
 
     @Test
     func test_loadMatches_returnsStrategyResult() async throws {
-        let response = makeResponse()
-        let strategy = MockWorldCupFetchStrategy(result: .success(response))
+        let response = makeMatchesResponse()
+        let strategy = MockWorldCupFetchStrategy(matchesResult: .success(response))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(query: .matches, team: nil)
+        let result = await client.loadMatches(team: nil)
 
         #expect(result == .success(response))
     }
 
     @Test
     func test_loadMatches_returnsNil_whenStrategyReturnsNilSuccess() async throws {
-        let strategy = MockWorldCupFetchStrategy(result: .success(nil))
+        let strategy = MockWorldCupFetchStrategy(matchesResult: .success(nil))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(query: .matches, team: nil)
+        let result = await client.loadMatches(team: nil)
 
         #expect(result == .success(nil))
     }
@@ -60,10 +60,10 @@ struct WorldCupAPIClientTests {
     @Test
     func test_loadMatches_propagatesStrategyFailure() async throws {
         let failure = WorldCupLoadError.network(reason: "offline")
-        let strategy = MockWorldCupFetchStrategy(result: .failure(failure))
+        let strategy = MockWorldCupFetchStrategy(matchesResult: .failure(failure))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(query: .matches, team: nil)
+        let result = await client.loadMatches(team: nil)
 
         #expect(result == .failure(failure))
     }
@@ -73,9 +73,30 @@ struct WorldCupAPIClientTests {
         let strategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        _ = await client.loadMatches(query: .matches, team: "BRA")
+        _ = await client.loadMatches(team: "BRA")
 
-        #expect(strategy.lastTeam == "BRA")
+        #expect(strategy.lastMatchesTeam == "BRA")
+    }
+
+    @Test
+    func test_loadLive_returnsStrategyResult() async throws {
+        let response = makeLiveResponse()
+        let strategy = MockWorldCupFetchStrategy(liveResult: .success(response))
+        let client = try WorldCupAPIClient(liveStrategy: strategy)
+
+        let result = await client.loadLive(team: nil)
+
+        #expect(result == .success(response))
+    }
+
+    @Test
+    func test_loadLive_forwardsTeam_toStrategy() async throws {
+        let strategy = MockWorldCupFetchStrategy()
+        let client = try WorldCupAPIClient(liveStrategy: strategy)
+
+        _ = await client.loadLive(team: "BRA")
+
+        #expect(strategy.lastLiveTeam == "BRA")
     }
 
     @Test
@@ -88,7 +109,7 @@ struct WorldCupAPIClientTests {
         _ = await client.loadTeams(team: nil)
 
         #expect(teamsStrategy.teamsCallCount == 1)
-        #expect(matchesStrategy.callCount == 0)
+        #expect(matchesStrategy.matchesCallCount == 0)
     }
 
     @Test
@@ -123,7 +144,7 @@ struct WorldCupAPIClientTests {
         #expect(strategy.lastTeamsTeam == "BRA")
     }
 
-    private func makeResponse() -> WorldCupMatchesResponse {
+    private func makeMatch() -> WorldCupMatchesResponse.Match {
         let homeTeam = WorldCupMatchesResponse.Team(
             key: "ENG",
             name: "England",
@@ -138,7 +159,7 @@ struct WorldCupAPIClientTests {
             group: nil,
             eliminated: false
         )
-        let match = WorldCupMatchesResponse.Match(
+        return WorldCupMatchesResponse.Match(
             date: "2026-05-11T14:00:00+00:00",
             globalEventId: 1,
             homeTeam: homeTeam,
@@ -153,7 +174,14 @@ struct WorldCupAPIClientTests {
             clock: "67",
             statusType: "live"
         )
-        return WorldCupMatchesResponse(previous: nil, current: [match], next: nil)
+    }
+
+    private func makeMatchesResponse() -> WorldCupMatchesResponse {
+        return WorldCupMatchesResponse(previous: nil, current: [makeMatch()], next: nil)
+    }
+
+    private func makeLiveResponse() -> WorldCupLiveResponse {
+        return WorldCupLiveResponse(matches: [makeMatch()])
     }
 
     private func makeTeamsResponse() -> WorldCupTeamsResponse {

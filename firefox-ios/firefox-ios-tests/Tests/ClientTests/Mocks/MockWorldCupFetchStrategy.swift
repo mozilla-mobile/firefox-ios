@@ -8,26 +8,35 @@ import Foundation
 
 final class MockWorldCupFetchStrategy: WorldCupFetchStrategyProtocol, @unchecked Sendable {
     private let matchesResult: Result<WorldCupMatchesResponse?, WorldCupLoadError>
+    private let liveResult: Result<WorldCupLiveResponse?, WorldCupLoadError>
     private let teamsResult: Result<WorldCupTeamsResponse?, WorldCupLoadError>
-    private(set) var callCount = 0
-    private(set) var lastQuery: WorldCupQuery?
-    private(set) var lastTeam: String?
+    private(set) var matchesCallCount = 0
+    private(set) var liveCallCount = 0
     private(set) var teamsCallCount = 0
+    private(set) var lastMatchesTeam: String?
+    private(set) var lastLiveTeam: String?
     private(set) var lastTeamsTeam: String?
 
-    init(result: Result<WorldCupMatchesResponse?, WorldCupLoadError> = .success(nil),
+    init(matchesResult: Result<WorldCupMatchesResponse?, WorldCupLoadError> = .success(nil),
+         liveResult: Result<WorldCupLiveResponse?, WorldCupLoadError> = .success(nil),
          teamsResult: Result<WorldCupTeamsResponse?, WorldCupLoadError> = .success(nil)) {
-        self.matchesResult = result
+        self.matchesResult = matchesResult
+        self.liveResult = liveResult
         self.teamsResult = teamsResult
     }
 
     func loadMatches(using client: WorldCupAPIClientProtocol,
-                     query: WorldCupQuery,
                      team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        callCount += 1
-        lastQuery = query
-        lastTeam = team
+        matchesCallCount += 1
+        lastMatchesTeam = team
         return matchesResult
+    }
+
+    func loadLive(using client: WorldCupAPIClientProtocol,
+                  team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
+        liveCallCount += 1
+        lastLiveTeam = team
+        return liveResult
     }
 
     func loadTeams(using client: WorldCupAPIClientProtocol,

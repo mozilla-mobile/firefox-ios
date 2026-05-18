@@ -9,80 +9,99 @@ import Foundation
 @Suite("WorldCupNormalFetchStrategy")
 struct WorldCupFetchStrategyTests {
     @Test
-    func test_returnsSuccess_whenClientReturnsResponse() async {
-        let fixture = makeResponse()
-        let stub = MockWorldCupAPIClient(result: .success(fixture))
+    func test_loadMatches_returnsSuccess_whenClientReturnsResponse() async {
+        let fixture = makeMatchesResponse()
+        let stub = MockWorldCupAPIClient(matchesResult: .success(fixture))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, query: .matches, team: nil)
+        let result = await strategy.loadMatches(using: stub, team: nil)
 
         #expect(result == .success(fixture))
     }
 
     @Test
-    func test_returnsSuccessNil_whenClientReturnsNil() async {
-        let stub = MockWorldCupAPIClient(result: .success(nil))
+    func test_loadMatches_returnsSuccessNil_whenClientReturnsNil() async {
+        let stub = MockWorldCupAPIClient(matchesResult: .success(nil))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, query: .matches, team: nil)
+        let result = await strategy.loadMatches(using: stub, team: nil)
 
         #expect(result == .success(nil))
     }
 
     @Test
-    func test_returnsFailure_whenClientThrows() async {
-        let stub = MockWorldCupAPIClient(result: .failure(MockWorldCupClientError.network))
+    func test_loadMatches_returnsFailure_whenClientThrows() async {
+        let stub = MockWorldCupAPIClient(matchesResult: .failure(MockWorldCupClientError.network))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, query: .matches, team: nil)
+        let result = await strategy.loadMatches(using: stub, team: nil)
 
         #expect(result == .failure(.other(code: nil, reason: "network")))
     }
 
     @Test
-    func test_callsFetchExactlyOnce_onSuccess() async {
-        let stub = MockWorldCupAPIClient(result: .success(makeResponse()))
+    func test_loadMatches_callsFetchExactlyOnce_onSuccess() async {
+        let stub = MockWorldCupAPIClient(matchesResult: .success(makeMatchesResponse()))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, query: .matches, team: nil)
+        _ = await strategy.loadMatches(using: stub, team: nil)
 
-        #expect(stub.fetchCount == 1)
+        #expect(stub.matchesFetchCount == 1)
     }
 
     @Test
-    func test_doesNotRetry_onFailure() async {
-        let stub = MockWorldCupAPIClient(result: .failure(MockWorldCupClientError.network))
+    func test_loadMatches_doesNotRetry_onFailure() async {
+        let stub = MockWorldCupAPIClient(matchesResult: .failure(MockWorldCupClientError.network))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, query: .matches, team: nil)
+        _ = await strategy.loadMatches(using: stub, team: nil)
 
-        #expect(stub.fetchCount == 1)
+        #expect(stub.matchesFetchCount == 1)
     }
 
     @Test
-    func test_forwardsQuery_toClient() async {
-        let stub = MockWorldCupAPIClient(result: .success(makeResponse()))
+    func test_loadMatches_forwardsTeam_toClient() async {
+        let stub = MockWorldCupAPIClient(matchesResult: .success(makeMatchesResponse()))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, query: .live, team: nil)
+        _ = await strategy.loadMatches(using: stub, team: "BRA")
 
-        #expect(stub.lastQuery == .live)
+        #expect(stub.lastMatchesTeam == "BRA")
     }
 
     @Test
-    func test_forwardsTeam_toClient() async {
-        let stub = MockWorldCupAPIClient(result: .success(makeResponse()))
+    func test_loadLive_callsFetchLive_andReturnsResponse() async {
+        let fixture = makeLiveResponse()
+        let stub = MockWorldCupAPIClient(
+            matchesResult: .success(nil),
+            liveResult: .success(fixture)
+        )
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, query: .matches, team: "BRA")
+        let result = await strategy.loadLive(using: stub, team: nil)
 
-        #expect(stub.lastTeam == "BRA")
+        #expect(result == .success(fixture))
+        #expect(stub.liveFetchCount == 1)
+        #expect(stub.matchesFetchCount == 0)
+    }
+
+    @Test
+    func test_loadLive_forwardsTeam_toClient() async {
+        let stub = MockWorldCupAPIClient(
+            matchesResult: .success(nil),
+            liveResult: .success(makeLiveResponse())
+        )
+        let strategy = WorldCupNormalFetchStrategy()
+
+        _ = await strategy.loadLive(using: stub, team: "BRA")
+
+        #expect(stub.lastLiveTeam == "BRA")
     }
 
     @Test
     func test_loadTeams_returnsSuccess_whenClientReturnsResponse() async {
         let fixture = makeTeamsResponse()
-        let stub = MockWorldCupAPIClient(result: .success(nil), teamsResult: .success(fixture))
+        let stub = MockWorldCupAPIClient(matchesResult: .success(nil), teamsResult: .success(fixture))
         let strategy = WorldCupNormalFetchStrategy()
 
         let result = await strategy.loadTeams(using: stub, team: nil)
@@ -93,7 +112,7 @@ struct WorldCupFetchStrategyTests {
     @Test
     func test_loadTeams_returnsFailure_whenClientThrows() async {
         let stub = MockWorldCupAPIClient(
-            result: .success(nil),
+            matchesResult: .success(nil),
             teamsResult: .failure(MockWorldCupClientError.network)
         )
         let strategy = WorldCupNormalFetchStrategy()
@@ -106,7 +125,7 @@ struct WorldCupFetchStrategyTests {
     @Test
     func test_loadTeams_callsFetchTeamsExactlyOnce_onSuccess() async {
         let stub = MockWorldCupAPIClient(
-            result: .success(nil),
+            matchesResult: .success(nil),
             teamsResult: .success(makeTeamsResponse())
         )
         let strategy = WorldCupNormalFetchStrategy()
@@ -119,7 +138,7 @@ struct WorldCupFetchStrategyTests {
     @Test
     func test_loadTeams_forwardsTeam_toClient() async {
         let stub = MockWorldCupAPIClient(
-            result: .success(nil),
+            matchesResult: .success(nil),
             teamsResult: .success(makeTeamsResponse())
         )
         let strategy = WorldCupNormalFetchStrategy()
@@ -145,7 +164,7 @@ struct WorldCupFetchStrategyTests {
         ])
     }
 
-    private func makeResponse() -> WorldCupMatchesResponse {
+    private func makeMatch() -> WorldCupMatchesResponse.Match {
         let homeTeam = WorldCupMatchesResponse.Team(
             key: "ENG",
             name: "England",
@@ -153,7 +172,6 @@ struct WorldCupFetchStrategyTests {
             group: nil,
             eliminated: false
         )
-
         let awayTeam = WorldCupMatchesResponse.Team(
             key: "USA",
             name: "United States",
@@ -161,27 +179,28 @@ struct WorldCupFetchStrategyTests {
             group: nil,
             eliminated: false
         )
-
-        return WorldCupMatchesResponse(
-            previous: nil,
-            current: [
-                WorldCupMatchesResponse.Match(
-                    date: "2026-05-11T14:00:00+00:00",
-                    globalEventId: 1,
-                    homeTeam: homeTeam,
-                    awayTeam: awayTeam,
-                    period: "2",
-                    homeScore: 1,
-                    awayScore: 0,
-                    homeExtra: nil,
-                    awayExtra: nil,
-                    homePenalty: nil,
-                    awayPenalty: nil,
-                    clock: "67",
-                    statusType: "live"
-                )
-            ],
-            next: nil
+        return WorldCupMatchesResponse.Match(
+            date: "2026-05-11T14:00:00+00:00",
+            globalEventId: 1,
+            homeTeam: homeTeam,
+            awayTeam: awayTeam,
+            period: "2",
+            homeScore: 1,
+            awayScore: 0,
+            homeExtra: nil,
+            awayExtra: nil,
+            homePenalty: nil,
+            awayPenalty: nil,
+            clock: "67",
+            statusType: "live"
         )
+    }
+
+    private func makeMatchesResponse() -> WorldCupMatchesResponse {
+        WorldCupMatchesResponse(previous: nil, current: [makeMatch()], next: nil)
+    }
+
+    private func makeLiveResponse() -> WorldCupLiveResponse {
+        WorldCupLiveResponse(matches: [makeMatch()])
     }
 }
