@@ -9,12 +9,23 @@ import Foundation
 /// distinguish network failures from other failures.
 struct WorldCupNormalFetchStrategy: WorldCupFetchStrategyProtocol {
     func loadMatches(using client: WorldCupAPIClientProtocol,
-                     query: WorldCupQuery,
                      team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
         await Task.detached(priority: .userInitiated) {
             () -> Result<WorldCupMatchesResponse?, WorldCupLoadError> in
             do {
-                return .success(try client.fetch(query, team: team))
+                return .success(try client.fetchMatches(team: team))
+            } catch {
+                return .failure(WorldCupLoadError.from(error))
+            }
+        }.value
+    }
+
+    func loadLive(using client: WorldCupAPIClientProtocol,
+                  team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
+        await Task.detached(priority: .userInitiated) {
+            () -> Result<WorldCupLiveResponse?, WorldCupLoadError> in
+            do {
+                return .success(try client.fetchLive(team: team))
             } catch {
                 return .failure(WorldCupLoadError.from(error))
             }

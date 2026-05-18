@@ -49,8 +49,14 @@ struct WorldCupMatch: Equatable, Hashable {
         return formatter
     }
 
+    /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`).
+    /// Returns `nil` if the string can't be parsed.
+    static func parseDate(_ iso: String) -> Date? {
+        return isoFormatter.date(from: iso)
+    }
+
     private static func formattedDate(_ iso: String, locale: Locale) -> String {
-        guard let date = isoFormatter.date(from: iso) else { return iso }
+        guard let date = parseDate(iso) else { return iso }
         let formatter = DateFormatter()
         formatter.locale = locale
         formatter.setLocalizedDateFormatFromTemplate("MMMdjmm")

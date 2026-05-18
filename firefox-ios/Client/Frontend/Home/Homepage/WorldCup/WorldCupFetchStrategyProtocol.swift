@@ -12,8 +12,10 @@ import Foundation
 /// `WorldCupAPIClient.init(matchesStrategy:liveStrategy:teamsStrategy:)`.
 protocol WorldCupFetchStrategyProtocol: Sendable {
     func loadMatches(using client: WorldCupAPIClientProtocol,
-                     query: WorldCupQuery,
                      team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError>
+
+    func loadLive(using client: WorldCupAPIClientProtocol,
+                  team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError>
 
     func loadTeams(using client: WorldCupAPIClientProtocol,
                    team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError>

@@ -36,7 +36,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = false
         mockWorldCupStore.selectedTeam = "BRA"
-        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
         let subject = createSubject(apiClient: apiClient)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
@@ -59,7 +59,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(dispatched.shouldShowMilestone2)
         XCTAssertEqual(dispatched.selectedCountryId, "BRA")
         XCTAssertTrue(dispatched.matches.isEmpty)
-        XCTAssertEqual(apiClient.fetchCount, 0)
+        XCTAssertEqual(apiClient.matchesFetchCount, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -67,7 +67,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
-        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
         let subject = createSubject(apiClient: apiClient)
         let action = HomepageAction(
             windowUUID: .XCTestDefaultUUID,
@@ -87,7 +87,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertTrue(dispatched.shouldShowMilestone2)
         XCTAssertEqual(dispatched.matches.count, 1)
-        XCTAssertEqual(apiClient.lastQuery, .matches)
+        XCTAssertEqual(apiClient.matchesFetchCount, 1)
+        XCTAssertEqual(apiClient.liveFetchCount, 1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -96,7 +97,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     func test_didChangeHomepageSettings_dispatchesDidUpdate() throws {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = false
-        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
         let subject = createSubject(apiClient: apiClient)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
@@ -116,7 +117,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionType, .didUpdate)
         XCTAssertFalse(dispatched.shouldShowHomepageWorldCupSection)
         XCTAssertEqual(mockWorldCupStore.setIsHomepageSectionEnabledCalled, 0)
-        XCTAssertEqual(apiClient.fetchCount, 0)
+        XCTAssertEqual(apiClient.matchesFetchCount, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -154,7 +155,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
-        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
         let subject = createSubject(apiClient: apiClient)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
@@ -173,7 +174,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockWorldCupStore.setSelectedTeamCalled, 1)
         XCTAssertEqual(mockWorldCupStore.lastSetSelectedTeamCountryId, "ARG")
         XCTAssertEqual(dispatched.matches.count, 1)
-        XCTAssertEqual(apiClient.lastQuery, .matches)
+        XCTAssertEqual(apiClient.matchesFetchCount, 1)
+        XCTAssertEqual(apiClient.liveFetchCount, 1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -204,7 +206,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
-        let apiClient = MockWorldCupAPIClient(result: .success(makeResponse()))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .success(makeResponse()))
         let subject = createSubject(apiClient: apiClient)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
@@ -221,7 +223,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
         XCTAssertEqual(dispatched.matches.count, 1)
         XCTAssertNil(dispatched.apiError)
-        XCTAssertEqual(apiClient.lastQuery, .matches)
+        XCTAssertEqual(apiClient.matchesFetchCount, 1)
+        XCTAssertEqual(apiClient.liveFetchCount, 1)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -229,7 +232,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
-        let apiClient = MockWorldCupAPIClient(result: .failure(MockWorldCupClientError.network))
+        let apiClient = MockWorldCupAPIClient(matchesResult: .failure(MockWorldCupClientError.network))
         let subject = createSubject(apiClient: apiClient)
         let action = WorldCupAction(
             windowUUID: .XCTestDefaultUUID,
@@ -246,6 +249,143 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
         XCTAssertTrue(dispatched.matches.isEmpty)
         XCTAssertNotNil(dispatched.apiError)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    // MARK: - Live endpoint
+
+    func test_homepageInitialize_whenLiveEndpointReportsMatchAsLive_marksCardLive() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        let match = makeMatch(id: 42, home: "ARG", away: "BRA")
+        let matchesResponse = WorldCupMatchesResponse(previous: nil, current: [match], next: nil)
+        let liveResponse = WorldCupLiveResponse(matches: [match])
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(matchesResponse),
+            liveResult: .success(liveResponse)
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertEqual(dispatched.matches.count, 1)
+        XCTAssertTrue(dispatched.matches.first?.isLive ?? false)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_homepageInitialize_whenLiveEndpointEmpty_cardIsNotLive_evenWhenCurrentPopulated() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        let match = makeMatch(id: 42, home: "ARG", away: "BRA")
+        let matchesResponse = WorldCupMatchesResponse(previous: nil, current: [match], next: nil)
+        let liveResponse = WorldCupLiveResponse(matches: [])
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(matchesResponse),
+            liveResult: .success(liveResponse)
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertEqual(dispatched.matches.count, 1)
+        XCTAssertFalse(dispatched.matches.first?.isLive ?? true)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_homepageInitialize_whenLiveEndpointFails_stillReturnsMatchesAsNotLive() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "ARG"
+        let match = makeMatch(id: 42, home: "ARG", away: "BRA")
+        let matchesResponse = WorldCupMatchesResponse(previous: nil, current: [match], next: nil)
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(matchesResponse),
+            liveResult: .failure(MockWorldCupClientError.network)
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertNil(dispatched.apiError)
+        XCTAssertEqual(dispatched.matches.count, 1)
+        XCTAssertFalse(dispatched.matches.first?.isLive ?? true)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    // MARK: - Flattened grouping (no team selected)
+
+    func test_homepageInitialize_whenNoTeamSelected_groupsMatchesByDayIntoCards() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = nil
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "BRA", date: "2026-06-12T18:00:00+00:00"),
+                makeMatch(id: 2, home: "ENG", away: "USA", date: "2026-06-12T21:00:00+00:00"),
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-13T15:00:00+00:00")
+            ]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: []))
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        XCTAssertEqual(dispatched.matches.count, 2)
+        XCTAssertEqual(dispatched.matches[0].upcomingMatches.count, 2)
+        XCTAssertTrue(dispatched.matches[0].featuredMatch.isEmpty)
+        XCTAssertEqual(dispatched.matches[1].upcomingMatches.count, 1)
+        XCTAssertTrue(dispatched.matches[1].featuredMatch.isEmpty)
         subject.worldCupProvider = { _, _ in }
     }
 
@@ -275,15 +415,26 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     private func makeResponse() -> WorldCupMatchesResponse {
+        return WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [makeMatch(id: 1, home: "ARG", away: "BRA")]
+        )
+    }
+
+    private func makeMatch(id: Int,
+                           home: String,
+                           away: String,
+                           date: String = "2026-06-12T18:00:00+00:00") -> WorldCupMatchesResponse.Match {
         let homeTeam = WorldCupMatchesResponse.Team(
-            key: "ARG", name: "Argentina", iconUrl: nil, group: "Group A", eliminated: false
+            key: home, name: home, iconUrl: nil, group: "Group A", eliminated: false
         )
         let awayTeam = WorldCupMatchesResponse.Team(
-            key: "BRA", name: "Brazil", iconUrl: nil, group: "Group A", eliminated: false
+            key: away, name: away, iconUrl: nil, group: "Group A", eliminated: false
         )
-        let match = WorldCupMatchesResponse.Match(
-            date: "2026-06-12T18:00:00+00:00",
-            globalEventId: 1,
+        return WorldCupMatchesResponse.Match(
+            date: date,
+            globalEventId: id,
             homeTeam: homeTeam,
             awayTeam: awayTeam,
             period: nil,
@@ -296,7 +447,6 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
             clock: nil,
             statusType: "scheduled"
         )
-        return WorldCupMatchesResponse(previous: nil, current: nil, next: [match])
     }
 
     // MARK: - StoreTestUtility

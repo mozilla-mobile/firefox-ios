@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import Redux
+import Shared
 
 /// The middleware responsible for all the actions related to the `WorldCup` feature.
 /// To keep it simple it dispatches only `WorldCupMiddlewareActionType.didUpdate`
@@ -19,7 +20,10 @@ final class WorldCupMiddleware {
 
     init(
         worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
-        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
+        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient(
+            baseHost: (AppContainer.shared.resolve() as Profile)
+                .prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
+        )
     ) {
         self.worldCupStore = worldCupStore
         self.apiClient = apiClient
@@ -71,25 +75,37 @@ final class WorldCupMiddleware {
         let selectedTeam = worldCupStore.selectedTeam
         matchesFetchTask?.cancel()
         matchesFetchTask = Task { [apiClient, weak self] in
-            let result = await apiClient.loadMatches(query: .matches, team: selectedTeam)
+            async let matchesResult = apiClient.loadMatches(team: selectedTeam)
+            async let liveResult = apiClient.loadLive(team: selectedTeam)
+            let (matches, live) = await (matchesResult, liveResult)
             guard !Task.isCancelled else { return }
-            switch result {
+            switch matches {
             case .success(let response):
                 guard let response else { return }
+                let liveIDs = Self.liveIDs(from: live)
                 if selectedTeam != nil {
-                    self?.matches = [WorldCupMatches(response: response)]
+                    self?.matches = [WorldCupMatches(response: response, liveIDs: liveIDs)]
                     self?.defaultMatchIndex = 0
                 } else {
-                    let flattened = WorldCupMatches.flattened(response: response)
-                    self?.matches = flattened
-                    let previousCount = response.previous?.count ?? 0
-                    let liveCount = response.current?.count ?? 0
-                    self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
+                    let flattened = WorldCupMatches.flattened(response: response, liveIDs: liveIDs)
+                    self?.matches = flattened.cards
+                    self?.defaultMatchIndex = flattened.defaultIndex
                 }
                 self?.dispatchUpdate(windowUUID: windowUUID)
             case .failure(let error):
                 self?.dispatchUpdate(windowUUID: windowUUID, apiError: error)
             }
         }
+    }
+
+    /// Pulls the `globalEventId`s out of the `/live` endpoint response. A
+    /// failure on the live endpoint isn't fatal: the matches request already
+    /// gives us a usable view, we just lose the live badge for this refresh.
+    private static func liveIDs(
+        from result: Result<WorldCupLiveResponse?, WorldCupLoadError>
+    ) -> Set<Int> {
+        guard case let .success(response) = result,
+              let matches = response?.matches else { return [] }
+        return Set(matches.map(\.globalEventId))
     }
 }
