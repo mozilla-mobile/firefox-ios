@@ -9,7 +9,7 @@ typealias HomepageSection = HomepageDiffableDataSource.HomeSection
 typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem>, FeatureFlaggable {
+final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     typealias TextColor = UIColor
     typealias NumberOfTilesPerRow = Int
     typealias ShouldShowSectionHeader = Bool
@@ -99,15 +99,21 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
+        reconfigureHeader: Bool = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
+        let headerItem = HomeItem.header(state.headerState)
 
         snapshot.appendSections([.header])
-        snapshot.appendItems([.header(state.headerState)], toSection: .header)
+        snapshot.appendItems([headerItem], toSection: .header)
+
+        if reconfigureHeader {
+            snapshot.reconfigureItems([headerItem])
+        }
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
@@ -129,7 +135,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
             snapshot.appendItems(topSitesSnapshotData.items, toSection: topSitesSection)
         }
 
-        if state.worldcupState.shouldShowSection, featureFlagsProvider.isEnabled(.worldCupWidget) {
+        if state.worldcupState.shouldShowSection {
             snapshot.appendSections([.worldcup(textColor)])
             snapshot.appendItems(
                 [.worldcupCard(state.worldcupState)],

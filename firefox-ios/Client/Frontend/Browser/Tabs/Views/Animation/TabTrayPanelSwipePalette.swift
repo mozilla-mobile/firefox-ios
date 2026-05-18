@@ -140,6 +140,7 @@ struct TabTrayPanelSwipePalette: ThemeColourPalette {
     var iconAccentYellow: UIColor { base.iconAccentYellow }
     var iconRatingNeutral: UIColor { base.iconRatingNeutral }
 
+    var borderSecondary: UIColor { base.borderSecondary }
     var borderAccentNonOpaque: UIColor { base.borderAccentNonOpaque }
     var borderInverted: UIColor { base.borderInverted }
     var borderToolbarDivider: UIColor { base.borderToolbarDivider }

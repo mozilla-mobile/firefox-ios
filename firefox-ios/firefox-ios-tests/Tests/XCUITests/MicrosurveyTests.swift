@@ -6,6 +6,12 @@ import Common
 import XCTest
 
 final class MicrosurveyTests: BaseTestCase {
+    private var microsurveyScreen: MicrosurveyScreen!
+    private var browserScreen: BrowserScreen!
+    private var toolbarScreen: ToolbarScreen!
+    private var tabTrayScreen: TabTrayScreen!
+    private var settingScreen: SettingScreen!
+
     override func setUp() async throws {
         launchArguments = [
             LaunchArguments.SkipIntro,
@@ -13,46 +19,33 @@ final class MicrosurveyTests: BaseTestCase {
         ]
         try await super.setUp()
         app.launch()
+        microsurveyScreen = MicrosurveyScreen(app: app)
+        browserScreen = BrowserScreen(app: app)
+        toolbarScreen = ToolbarScreen(app: app)
+        tabTrayScreen = TabTrayScreen(app: app)
+        settingScreen = SettingScreen(app: app)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776931
     func testShowMicrosurvey() {
         generateTriggerForMicrosurvey()
-        let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
-        continueButton.waitAndTap()
+        microsurveyScreen.tapTakeSurveyButton()
 
-        waitForElementsToExist(
-            [
-                app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo],
-                app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton]
-            ]
-        )
-        let tablesQuery = app.scrollViews.otherElements.tables
-        let firstOption = tablesQuery.cells.firstMatch
-        firstOption.waitAndTap()
-        mozWaitForElementToExist(firstOption)
-        XCTAssertEqual(firstOption.label, "Very satisfied")
-        mozWaitForValueContains(firstOption, value: "1 out of 6")
-
-        let secondOption = tablesQuery.cells["Neutral"]
-        mozWaitForElementToExist(secondOption)
-        XCTAssertEqual(secondOption.label, "Neutral")
-        mozWaitForValueContains(secondOption, value: "Unselected, 3 out of 6")
+        microsurveyScreen.assertSurveyExists()
+        microsurveyScreen.tapFirstSurveyOption()
+        microsurveyScreen.assertFirstSurveyOptionSelected()
+        microsurveyScreen.assertSurveyOptionUnselected(label: "Neutral")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776934
     func testCloseButtonDismissesSurveyAndPrompt() {
         generateTriggerForMicrosurvey()
-        let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
-        continueButton.waitAndTap()
+        microsurveyScreen.tapTakeSurveyButton()
 
-        app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].waitAndTap()
+        microsurveyScreen.tapSurveyCloseButton()
 
-        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
-        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
-        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
+        microsurveyScreen.assertSurveyDismissed()
+        microsurveyScreen.assertPromptDismissed()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776933
@@ -64,17 +57,9 @@ final class MicrosurveyTests: BaseTestCase {
         app.terminate()
         app.launch()
         generateTriggerForMicrosurvey()
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton],
-                app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo],
-                app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton]
-            ]
-        )
-        app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
-        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
-        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
+        microsurveyScreen.assertPromptExists()
+        microsurveyScreen.tapPromptCloseButton()
+        microsurveyScreen.assertPromptDismissed()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2776932
@@ -83,28 +68,27 @@ final class MicrosurveyTests: BaseTestCase {
             throw XCTSkip("Toolbar option not available for iPad")
         }
         navigator.nowAt(NewTabScreen)
-        navigator.goto(ToolbarSettings)
-        navigator.performAction(Action.SelectToolbarBottom)
-        navigator.goto(HomePanelsScreen)
+        navigator.goto(SettingsScreen)
+        settingScreen.navigateToToolbarSettings()
+        settingScreen.selectBottomToolbar()
+        settingScreen.tapBackToSettings()
+        settingScreen.closeSettingsWithDoneButton()
         generateTriggerForMicrosurvey()
 
-        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.topBorder].exists)
+        microsurveyScreen.assertTopBorderHidden()
 
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
-        XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
-        app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+        microsurveyScreen.assertPromptExists()
+        microsurveyScreen.tapPromptCloseButton()
+        microsurveyScreen.assertPromptDismissed()
 
-        XCTAssertTrue(app.otherElements[AccessibilityIdentifiers.Toolbar.topBorder].exists)
+        microsurveyScreen.assertTopBorderVisible()
     }
 
     private func generateTriggerForMicrosurvey() {
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleExperimentPrivateMode)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(BrowserTab)
-        navigator.openURL(path(forTestPage: url_2["url"]!))
+        toolbarScreen.tapOnTabsButton()
+        tabTrayScreen.switchToPrivateMode()
+        tabTrayScreen.tapOnNewTabButton()
+        browserScreen.navigateToURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
     }
 }

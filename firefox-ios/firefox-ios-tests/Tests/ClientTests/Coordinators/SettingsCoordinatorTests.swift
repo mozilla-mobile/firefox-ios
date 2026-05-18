@@ -391,6 +391,15 @@ final class SettingsCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppearanceSettingsView>)
     }
 
+    func testGeneralSettingsDelegate_pushedQuickAnswersSettings() {
+        let subject = createSubject()
+
+        subject.pressedQuickAnswers()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is QuickAnswersSettingsViewController)
+    }
+
     func testGeneralSettingsDelegate_pushedSummarizeSettings() {
         let subject = createSubject()
 

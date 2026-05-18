@@ -60,17 +60,6 @@ jobs:
         echo "Next Firefox iOS version is: v${next_version}"
         echo "next_app_version=${next_version}" >> $GITHUB_ENV
 
-    - name: Stage updated files
-      if: env.BRANCH_CREATED == 'false' && env.kingfisher_version != ''
-      run: |-
-        git diff
-        git diff --quiet || (git add \
-          BrowserKit/Package.swift \
-          BrowserKit/Package.resolved \
-          firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved \
-          SampleComponentLibraryApp/SampleComponentLibraryApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved \
-          focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved)
-
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v6
       if: env.BRANCH_CREATED == 'false' && env.kingfisher_version != ''
@@ -81,6 +70,13 @@ jobs:
         title: Bump FXIOS [Dependency] Auto update SPM for v${{ env.next_app_version }} with latest Kingfisher ${{ env.kingfisher_version }}
         branch: update-spm-new-kingfisher-tag-${{ env.kingfisher_version }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        add-paths: |
+          BrowserKit/Package.swift
+          BrowserKit/Package.resolved
+          firefox-ios/Client.xcodeproj/project.pbxproj
+          firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          SampleComponentLibraryApp/SampleComponentLibraryApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+          focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
     - name: Set job log URL
       if: always()

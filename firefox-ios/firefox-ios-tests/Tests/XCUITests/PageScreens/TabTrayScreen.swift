@@ -79,6 +79,17 @@ final class TabTrayScreen {
         newTabButton.waitAndTap()
     }
 
+    func switchToPrivateMode() {
+        let privateModeButton: XCUIElement
+        if BaseTestCase().iPad() {
+            privateModeButton = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
+        } else {
+            privateModeButton = app.buttons["\(AccessibilityIdentifiers.TabTray.selectorCell)0"]
+        }
+        BaseTestCase().mozWaitForElementToExist(privateModeButton)
+        privateModeButton.waitAndTap()
+    }
+
     func assertNewTabButtonExist() {
         BaseTestCase().mozWaitForElementToExist(newTabButton)
     }
@@ -210,6 +221,11 @@ final class TabTrayScreen {
 
     func assertNoWebViewLeakDetected(timeout: TimeInterval = TIMEOUT) {
         let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.WebView.automationTestLeakIndicator]
+        BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
+    }
+
+    func assertNoTabLeakDetected(timeout: TimeInterval = TIMEOUT) {
+        let leakDetectionView = app.buttons[AccessibilityIdentifiers.Browser.Tab.automationTestLeakIndicator]
         BaseTestCase().mozWaitForElementToNotExist(leakDetectionView, timeout: timeout)
     }
 }

@@ -102,6 +102,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.Ink05
+    var borderSecondary: UIColor = FXColors.Ink10
     var borderAccent: UIColor = FXColors.Purple60
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60

@@ -2340,6 +2340,10 @@ public struct WorldCupOptions: Equatable, Hashable, Codable {
      * Language for results (e.g. `"en-US"`). (Not supported yet)
      */
     public var acceptLanguage: String?
+    /**
+     * ISO 8601 date string to filter matches by date (e.g. `"2026-06-14"`).
+     */
+    public var date: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
@@ -2352,10 +2356,14 @@ public struct WorldCupOptions: Equatable, Hashable, Codable {
          */teams: [String]?, 
         /**
          * Language for results (e.g. `"en-US"`). (Not supported yet)
-         */acceptLanguage: String?) {
+         */acceptLanguage: String?, 
+        /**
+         * ISO 8601 date string to filter matches by date (e.g. `"2026-06-14"`).
+         */date: String?) {
         self.limit = limit
         self.teams = teams
         self.acceptLanguage = acceptLanguage
+        self.date = date
     }
 
     
@@ -2376,7 +2384,8 @@ public struct FfiConverterTypeWorldCupOptions: FfiConverterRustBuffer {
             try WorldCupOptions(
                 limit: FfiConverterOptionUInt32.read(from: &buf), 
                 teams: FfiConverterOptionSequenceString.read(from: &buf), 
-                acceptLanguage: FfiConverterOptionString.read(from: &buf)
+                acceptLanguage: FfiConverterOptionString.read(from: &buf), 
+                date: FfiConverterOptionString.read(from: &buf)
         )
     }
 
@@ -2384,6 +2393,7 @@ public struct FfiConverterTypeWorldCupOptions: FfiConverterRustBuffer {
         FfiConverterOptionUInt32.write(value.limit, into: &buf)
         FfiConverterOptionSequenceString.write(value.teams, into: &buf)
         FfiConverterOptionString.write(value.acceptLanguage, into: &buf)
+        FfiConverterOptionString.write(value.date, into: &buf)
     }
 }
 

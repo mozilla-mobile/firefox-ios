@@ -400,6 +400,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             generalSettings.append(SummarizeSetting(settings: self, settingsDelegate: parentCoordinator))
         }
 
+        if featureFlagsProvider.isEnabled(.quickAnswers) {
+            generalSettings.append(QuickAnswersSetting(settings: self, settingsDelegate: parentCoordinator))
+        }
+
         if featureFlagsProvider.isEnabled(.translation) {
             generalSettings.append(TranslationSetting(settings: self, settingsDelegate: parentCoordinator))
         }
@@ -543,6 +547,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        hiddenDebugOptions.append(WorldCupBaseHostOverrideSetting(settings: self))
         hiddenDebugOptions.append(ChangeMLPAEndpointSetting(settings: self))
         hiddenDebugOptions.append(DeleteAppAttestKeySetting(settings: self))
         hiddenDebugOptions.append(PrivacyNoticeUpdate(settings: self))

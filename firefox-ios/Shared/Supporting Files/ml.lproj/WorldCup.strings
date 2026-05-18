@@ -1,0 +1,69 @@
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "ആഫ്രിക്ക";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "ഏഷ്യ";
+
+/* Section header for the Central America region in the World Cup country picker. Note: Central America falls under the CONCACAF confederation in FIFA. This string is included for completeness in case the UI groups countries by geographic region rather than confederation. */
+"WorldCup.CountryPicker.Confederation.CentralAmerica.v151" = "മധ്യാമേരിക്ക";
+
+/* Section header for the CONCACAF confederation group in the World Cup country picker. CONCACAF is the abbreviation for Confederation of North, Central America and Caribbean Association Football. This covers North America, Central America, and the Caribbean. */
+"WorldCup.CountryPicker.Confederation.CONCACAF.v151" = "കോൺകാഫ്";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "യൂറോപ്പ്";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "വടക്കേ അമേരിക്ക";
+
+/* Section header for the Oceania region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Oceania.v151" = "ഓഷ്യാനിയ";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "തെക്കേ അമേരിക്ക";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "ഇംഗ്ലണ്ട്";
+
+/* Country name for Scotland in the World Cup country picker. Scotland cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.Scotland.v151" = "സ്കോട്ലാണ്ട്";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "കഴിഞ്ഞു";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "ഒഴിവാക്കുക";
+
+/* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "മാറ്റുക";
+
+/* The label indicating that the displaying match is in the first half. */
+"WorldCup.HomepageWidget.FirstHalfLabel.v151" = "ഒന്നാമ്പകുതി";
+
+/* The label that appears for live World Cup matches. */
+"WorldCup.HomepageWidget.LiveLabel.v151" = "തത്സമയം";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "പുതുക്കുക";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "നീക്കുക";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "പുതുക്കുക";
+
+/* The label for an upcoming match in the World Cup widget round phase. */
+"WorldCup.HomepageWidget.RoundPhase.UpcomingLabel.v151" = "വരാനിരിക്കുന്നവ";
+
+/* The label for the World Cup championship winner in the World Cup widget. */
+"WorldCup.HomepageWidget.RoundPhase.WinWorldCupLabel.v151" = "2026 ലോക കപ്പ് വെന്നവർ";
+
+/* The label indicating that the displaying match is in the second half. */
+"WorldCup.HomepageWidget.SecondHalfLabel.v151" = "രണ്ടാമ്പകുതി";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "കൂടുതൽ സാധ്യതകൾ";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "പങ്കിടുക";
+

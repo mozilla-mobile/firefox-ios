@@ -363,7 +363,7 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(actionCalled.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_didTapButtonToolbarAction_withHomepageSearch_andNoSearchButtonType_triggersGeneralBrowserAction() {
+    func test_didTapButtonToolbarAction_withHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
         setupStoreForSearchBar()
         let subject = createSubject()
 
@@ -376,7 +376,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andSearchButtonType_doesNotTriggersGeneralBrowserAction() {
@@ -392,7 +401,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func test_didTapButtonToolbarAction_withoutHomepageSearch_andNoSearchButtonType_doesNotTriggersGeneralBrowserAction() {
@@ -407,7 +425,16 @@ class BrowserViewControllerTests: XCTestCase, StoreTestUtility {
         )
         subject.newState(state: newState)
 
-        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        let didEnteredZeroSearchScreenDispatched = mockStore.dispatchedActions.contains { action in
+            guard let action = action as? GeneralBrowserAction,
+                  let actionType = action.actionType as? GeneralBrowserActionType else { return false }
+            if case .enteredZeroSearchScreen = actionType {
+                XCTFail("Expected entered zero search screen to not dispatch")
+                return true
+            }
+            return false
+        }
+        XCTAssertFalse(didEnteredZeroSearchScreenDispatched)
     }
 
     func testNewState_whenSummarizeDisplayRequested() {

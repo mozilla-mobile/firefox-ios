@@ -11,5 +11,5 @@ enum SpeechError: Error, Equatable {
     case recognizerNotAvailable
     case speechRecognitionPermissionDenied(isFirstTime: Bool)
     case unableToSupportLocale
-    case unknown
+    case unknown(String)
 }

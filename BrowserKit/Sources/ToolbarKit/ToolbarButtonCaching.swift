@@ -26,12 +26,12 @@ protocol ToolbarButtonCaching: AnyObject {
 // MARK: - Default Implementation
 extension ToolbarButtonCaching {
     func hasCachedButton(for toolbarElement: ToolbarElement) -> Bool {
-        let cacheKey = toolbarElement.a11yId
+        let cacheKey = toolbarElement.cacheId ?? toolbarElement.a11yId
         return cachedButtonReferences[cacheKey] != nil
     }
 
     func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
-        let cacheKey = toolbarElement.a11yId
+        let cacheKey = toolbarElement.cacheId ?? toolbarElement.a11yId
         let button: ToolbarButton
 
         if let cachedButton = cachedButtonReferences[cacheKey] {

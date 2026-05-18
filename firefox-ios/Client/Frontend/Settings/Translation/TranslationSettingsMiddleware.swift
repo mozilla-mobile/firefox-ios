@@ -103,6 +103,13 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
+            if newValue {
+                store.dispatch(ToolbarAction(
+                    translationConfiguration: TranslationConfiguration(prefs: prefs),
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.didTranslationSettingsChange
+                ))
+            }
 
         case TranslationSettingsViewActionType.addLanguage:
             guard let code = action.languageCode else { break }
