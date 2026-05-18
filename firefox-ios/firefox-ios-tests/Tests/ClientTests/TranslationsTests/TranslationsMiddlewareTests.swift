@@ -904,7 +904,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockStore.state = setupAppState(translationState: .active)
 
         let action = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            isTranslationsEnabled: false,
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
@@ -932,7 +933,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockStore.state = setupAppState(translationState: .inactive)
 
         let action = ToolbarAction(
-            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            isTranslationsEnabled: false,
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs, isUserSettingEnabled: false),
             windowUUID: .XCTestDefaultUUID,
             actionType: ToolbarActionType.didTranslationSettingsChange
         )
