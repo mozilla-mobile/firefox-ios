@@ -93,6 +93,16 @@ struct TranslationSettingsState: ScreenState, Equatable {
         if let action = action as? TranslationSettingsViewAction {
             return reduceViewAction(state: state, action: action)
         }
+        if let action = action as? TranslationsAction,
+           action.actionType as? TranslationsActionType == .didTranslationSettingsChange {
+            // The settings middleware dispatches a single `TranslationsAction` for a toggle —
+            // both the toolbar reducer (icon visibility) and this reducer (settings UI toggle)
+            // read `isTranslationsEnabled` off the same dispatch instead of fanning out a second
+            // middleware-only update.
+            return state.copyWithUpdates(
+                isTranslationsEnabled: action.isTranslationsEnabled ?? state.isTranslationsEnabled
+            )
+        }
         return defaultState(from: state)
     }
 
