@@ -66,8 +66,9 @@ final class WorldCupFeed {
         cachedLiveIDs = []
         lastMatchesResponse = nil
         let team = selectedTeamProvider()
-        matchesTask = Task { @MainActor [weak self, apiClient] in
-            for await result in apiClient.matchesStream(team: team) {
+        let stream = apiClient.matchesStream(team: team)
+        matchesTask = Task { @MainActor [weak self] in
+            for await result in stream {
                 guard let self else { break }
                 self.handleMatchesResult(result)
             }
@@ -84,8 +85,9 @@ final class WorldCupFeed {
     }
 
     private func startLive(team: String?) {
-        liveTask = Task { @MainActor [weak self, apiClient] in
-            for await result in apiClient.liveStream(team: team) {
+        let stream = apiClient.liveStream(team: team)
+        liveTask = Task { @MainActor [weak self] in
+            for await result in stream {
                 guard let self else { break }
                 self.handleLiveResult(result)
             }
@@ -101,8 +103,11 @@ final class WorldCupFeed {
         case .success(let response):
             guard let response else { return }
             lastMatchesResponse = response
-            emit(buildSnapshot(from: response))
+            // Reconcile first so the live stream is opened before the
+            // matches snapshot is emitted. This keeps `liveFetchCount` and
+            // dispatch ordering deterministic for tests.
             reconcileLivePolling(against: response)
+            emit(buildSnapshot(from: response))
         case .failure(let error):
             emit(Snapshot(matches: latestSnapshot.matches,
                           defaultMatchIndex: latestSnapshot.defaultMatchIndex,

@@ -103,17 +103,23 @@ struct WorldCupMatches: Equatable, Hashable {
         // group-stage label across the board. Stage-specific labels are only
         // meaningful in the team-selected single-card view.
         let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-        let cards = groups.map { group in
-            WorldCupMatches(
+        let cards = groups.map { group -> WorldCupMatches in
+            let live = group.matches.first(where: { liveIDs.contains($0.globalEventId) })
+            let featured = live.map { [WorldCupMatch($0, localeProvider: localeProvider)] } ?? []
+            let upcoming = group.matches
+                .filter { $0.globalEventId != live?.globalEventId }
+                .map { WorldCupMatch($0, localeProvider: localeProvider) }
+            return WorldCupMatches(
                 phaseTitle: title,
-                isLive: group.matches.contains { liveIDs.contains($0.globalEventId) },
-                featuredMatch: [],
-                upcomingMatches: group.matches.map { WorldCupMatch($0, localeProvider: localeProvider) }
+                isLive: live != nil,
+                featuredMatch: featured,
+                upcomingMatches: upcoming
             )
         }
         let today = calendar.startOfDay(for: now)
+        let liveCardIndex = cards.firstIndex(where: \.isLive)
         let firstFutureIndex = groups.firstIndex(where: { $0.day >= today })
-        let defaultIndex = firstFutureIndex ?? max(cards.count - 1, 0)
+        let defaultIndex = liveCardIndex ?? firstFutureIndex ?? max(cards.count - 1, 0)
         return (cards, defaultIndex)
     }
 
