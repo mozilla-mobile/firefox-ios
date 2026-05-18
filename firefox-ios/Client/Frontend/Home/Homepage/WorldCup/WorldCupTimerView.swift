@@ -381,10 +381,9 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
-                    .newTab,
+                    .link,
                     url: url,
-                    isPrivate: false,
-                    selectNewTab: true
+                    visitType: .link
                 ),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell

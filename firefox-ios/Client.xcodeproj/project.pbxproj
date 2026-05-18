@@ -1593,6 +1593,7 @@
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
 		C250A6902FAC875200BFB1AD /* WorldCupMatchCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */; };
+		C25D03C12FBB65EB00CA9BDE /* kitHeroGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */; };
 		C263CD122FB4C6D8002AC656 /* WorldCupCellFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263CD112FB4C6D8002AC656 /* WorldCupCellFactory.swift */; };
 		C263CD142FB4C6D8002AC658 /* WorldCupErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263CD132FB4C6D8002AC658 /* WorldCupErrorView.swift */; };
 		C26B96D72F29188100D4B140 /* TestKit in Frameworks */ = {isa = PBXBuildFile; productRef = C26B96D62F29188100D4B140 /* TestKit */; };
@@ -1627,7 +1628,6 @@
 		C2886E082EC5E025007AE6C3 /* StaticFileRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886E072EC5E020007AE6C3 /* StaticFileRoute.swift */; };
 		C2886E0A2EC608F5007AE6C3 /* ModelsBufferRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886E092EC608F0007AE6C3 /* ModelsBufferRoute.swift */; };
 		C2886E0C2EC60E63007AE6C3 /* TranslationsSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2886E0B2EC60E59007AE6C3 /* TranslationsSchemeHandlerTests.swift */; };
-		C2894D5D2FA35B5F0037B820 /* kitHeroGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = C2894D5C2FA35B5F0037B820 /* kitHeroGif.gif */; };
 		C28CAABF2E5C8C660049D7C7 /* InsetUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */; };
 		C28D67832F4491180032D0B2 /* DeleteAppAttestKeySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */; };
 		C28EA9812FA2554800AEC3AD /* WorldCupCountdownModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */; };
@@ -10427,6 +10427,7 @@
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
 		C250A68F2FAC875200BFB1AD /* WorldCupMatchCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchCardView.swift; sourceTree = "<group>"; };
+		C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = kitHeroGif.gif; sourceTree = "<group>"; };
 		C263CD112FB4C6D8002AC656 /* WorldCupCellFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCellFactory.swift; sourceTree = "<group>"; };
 		C263CD132FB4C6D8002AC658 /* WorldCupErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupErrorView.swift; sourceTree = "<group>"; };
 		C26C4D1F8CFB13730BA74DF5 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -10461,7 +10462,6 @@
 		C2886E072EC5E020007AE6C3 /* StaticFileRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticFileRoute.swift; sourceTree = "<group>"; };
 		C2886E092EC608F0007AE6C3 /* ModelsBufferRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsBufferRoute.swift; sourceTree = "<group>"; };
 		C2886E0B2EC60E59007AE6C3 /* TranslationsSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationsSchemeHandlerTests.swift; sourceTree = "<group>"; };
-		C2894D5C2FA35B5F0037B820 /* kitHeroGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = kitHeroGif.gif; sourceTree = "<group>"; };
 		C28CAABE2E5C8C620049D7C7 /* InsetUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetUpdatable.swift; sourceTree = "<group>"; };
 		C28D67822F4491160032D0B2 /* DeleteAppAttestKeySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAppAttestKeySetting.swift; sourceTree = "<group>"; };
 		C28EA9802FA2554800AEC3AD /* WorldCupCountdownModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupCountdownModelTests.swift; sourceTree = "<group>"; };
@@ -17102,7 +17102,7 @@
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
 				0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */,
-				C2894D5C2FA35B5F0037B820 /* kitHeroGif.gif */,
+				C25D03C02FBB65EB00CA9BDE /* kitHeroGif.gif */,
 				43F92B3729E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js */,
 				BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */,
 				43879AFB287BDFB100B15D10 /* CC_Script */,
@@ -18295,6 +18295,7 @@
 				43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */,
 				8C29376A2BF79EE000146613 /* AddressFormManager.css in Resources */,
 				8C29376B2BF79EE000146613 /* AddressFormManager.html in Resources */,
+				C25D03C12FBB65EB00CA9BDE /* kitHeroGif.gif in Resources */,
 				39D056382665235700FBEE59 /* initial_experiments.json in Resources */,
 				ED26BFD72DE5260700FB2B3F /* glean_index.yaml in Resources */,
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
@@ -18352,7 +18353,6 @@
 				0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */,
 				1D91C1822CF11EA500B24960 /* disconnect-block-content.json in Resources */,
 				8A7D1AC52BA3542600162F4B /* splashScreen.json in Resources */,
-				C2894D5D2FA35B5F0037B820 /* kitHeroGif.gif in Resources */,
 				8AEE62C92756BA34003207D1 /* LoginsHelper.js in Resources */,
 				1D91C1812CF11EA500B24960 /* disconnect-block-advertising.json in Resources */,
 				8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */,

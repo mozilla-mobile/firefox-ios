@@ -115,16 +115,19 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         scrollView.bounces = false
         scrollView.clipsToBounds = true
         scrollView.delegate = self
+        scrollView.semanticContentAttribute = .forceLeftToRight
     }
 
     private let pagesStack: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.semanticContentAttribute = .forceLeftToRight
     }
 
     private let pageControl: UIPageControl = .build { control in
         control.hidesForSinglePage = true
         control.isUserInteractionEnabled = false
+        control.semanticContentAttribute = .forceLeftToRight
     }
 
     private var pageConstraints: [NSLayoutConstraint] = []

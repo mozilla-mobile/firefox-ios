@@ -2768,6 +2768,8 @@ class BrowserViewController: UIViewController,
                 return
             }
             navigationHandler?.openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        case .searchQuery(let query):
+            handle(query: query, isPrivate: type.isPrivate ?? false, shouldOpenNewTab: type.selectNewTab ?? true)
         case .shareSheet(let config):
             navigationHandler?.showShareSheet(
                 shareType: config.shareType,
@@ -3387,9 +3389,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Handle Deeplink open URL / query
 
-    func handle(query: String, isPrivate: Bool) {
+    func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
         cancelEditMode()
-        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        if shouldOpenNewTab {
+            openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        }
         openBrowser(searchTerm: query)
     }
 

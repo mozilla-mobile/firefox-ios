@@ -202,6 +202,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
             }
             let view: FeaturedMatchView = .build()
             view.configure(with: match)
+            view.onTap = { [weak self] in
+                self?.navigateToSERP(for: match)
+            }
             featuredMatchesStack.addArrangedSubview(view)
         }
     }
@@ -220,6 +223,9 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         for match in matches {
             let row: UpcomingMatchRow = .build()
             row.configure(with: match)
+            row.onTap = { [weak self] in
+                self?.navigateToSERP(for: match)
+            }
             upcomingStack.addArrangedSubview(row)
         }
     }
@@ -232,6 +238,22 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
                 navigationDestination: NavigationDestination(.worldCupCountryPicker),
                 windowUUID: windowUUID,
                 actionType: NavigationBrowserActionType.tapOnCell
+            )
+        )
+    }
+
+    private func navigateToSERP(for match: WorldCupMatch) {
+        let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode)
+        let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode)
+        let query = "\(homeTeamName) vs \(awayTeamName) \(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) 2026"
+        store.dispatch(
+            NavigationBrowserAction(
+                navigationDestination: NavigationDestination(
+                    .searchQuery(query),
+                    selectNewTab: false
+                ),
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCell,
             )
         )
     }
@@ -281,6 +303,8 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         let flagView: UIImageView
         let codeLabel: UILabel
     }
+
+    var onTap: (() -> Void)?
 
     private lazy var homeColumn = makeFeaturedColumn()
     private lazy var awayColumn = makeFeaturedColumn()
@@ -342,10 +366,17 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     private func setupLayout() {
@@ -452,6 +483,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         static let dateLabelInset: CGFloat = 8
     }
 
+    var onTap: (() -> Void)?
+
     private lazy var homeFlagView = makeFlagView()
     private lazy var awayFlagView = makeFlagView()
 
@@ -495,10 +528,17 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     init() {
         super.init(frame: .zero)
         setupLayout()
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc
+    private func handleTap() {
+        onTap?()
     }
 
     private func setupLayout() {
