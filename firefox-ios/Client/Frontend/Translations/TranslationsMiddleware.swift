@@ -95,7 +95,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     }
 
     private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
-        if action.translationConfiguration?.isTranslationFeatureEnabled == false {
+        if action.isTranslationsEnabled == false {
             for uuid in translationFlowIds.keys {
                 let translationState = store.state.componentState(
                     ToolbarState.self,
@@ -114,7 +114,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
         selectedTargetLanguages[windowUUID] = nil
         translationFlowIds[windowUUID] = nil
         restoringWindows.remove(windowUUID)
-        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        guard featureFlagsProvider.isEnabled(.translation),
+              action.isTranslationsEnabled ?? true else { return }
         checkTranslationsAreEligible(for: action)
     }
 
@@ -399,7 +400,19 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        // action.isTranslationsEnabled carries the explicit new value for settings-change actions
+        // (where store.state hasn't been updated yet). For urlDidChange it is nil, so we fall back
+        // to ToolbarState which is always up-to-date by the time urlDidChange fires.
+        let translationsEnabled = action.isTranslationsEnabled ?? (store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        )?.isTranslationsEnabled ?? true)
+
+        guard featureFlagsProvider.isEnabled(.translation), translationsEnabled else {
+            dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+            return
+        }
 
         // Translation requires a live HTML DOM. PDFs and images have no translatable
         // text structure, so suppress the icon without running language detection.
