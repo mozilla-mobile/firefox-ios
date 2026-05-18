@@ -32,7 +32,7 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
     /// an empty string to use the default merino host. Intended for local
-    /// dev/beta testing against a non-production merino instance. 
+    /// dev/beta testing against a non-production merino instance.
     convenience init(baseHost: String?,
                      matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
                      liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
@@ -47,39 +47,33 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     /// Low-level sync matches fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
-    func fetch(_ query: WorldCupQuery, team: String? = nil) throws -> WorldCupMatchesResponse? {
-        let options = Self.options(forTeam: team)
-        let json = switch query {
-        case .matches: try client.getMatches(options: options)
-        case .live:    try client.getLive(options: options)
-        }
-        return try decode(json)
+    func fetchMatches(team: String? = nil) throws -> WorldCupMatchesResponse? {
+        let json = try client.getMatches(options: Self.options(forTeam: team))
+        return try decode(json, as: WorldCupMatchesResponse.self)
+    }
+
+    /// Low-level sync live fetch + decode. Throws on FFI error or decode failure.
+    /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
+    func fetchLive(team: String? = nil) throws -> WorldCupLiveResponse? {
+        let json = try client.getLive(options: Self.options(forTeam: team))
+        return try decode(json, as: WorldCupLiveResponse.self)
     }
 
     /// Low-level sync teams fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to scope the roster response.
     func fetchTeams(team: String? = nil) throws -> WorldCupTeamsResponse? {
         let json = try client.getTeams(options: Self.options(forTeam: team))
-        return try decodeTeams(json)
+        return try decode(json, as: WorldCupTeamsResponse.self)
     }
 
-    /// High-level async loader: delegates to the strategy configured for the
-    /// given query (live vs non-live). The strategy decides how to call `fetch`
-    /// (single attempt, retry, etc.) and returns the decoded merino response
-    /// or a `WorldCupLoadError` the UI can pattern-match on.
-    /// Callers transform the success response into a view-model.
-    func loadMatches(query: WorldCupQuery,
-                     team: String? = nil) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        let strategy: WorldCupFetchStrategyProtocol = switch query {
-        case .matches: matchesStrategy
-        case .live:    liveStrategy
-        }
-        return await strategy.loadMatches(using: self, query: query, team: team)
+    func loadMatches(team: String? = nil) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
+        await matchesStrategy.loadMatches(using: self, team: team)
     }
 
-    /// High-level async teams loader. Delegates to the configured teams
-    /// strategy and returns either the decoded response or a
-    /// `WorldCupLoadError` the UI can pattern-match on.
+    func loadLive(team: String? = nil) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
+        await liveStrategy.loadLive(using: self, team: team)
+    }
+
     func loadTeams(team: String? = nil) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
         await teamsStrategy.loadTeams(using: self, team: team)
     }
@@ -113,13 +107,8 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         )
     }
 
-    private func decode(_ json: String?) throws -> WorldCupMatchesResponse? {
+    private func decode<T: Decodable>(_ json: String?, as type: T.Type) throws -> T? {
         guard let data = json?.data(using: .utf8) else { return nil }
-        return try decoder.decode(WorldCupMatchesResponse.self, from: data)
-    }
-
-    private func decodeTeams(_ json: String?) throws -> WorldCupTeamsResponse? {
-        guard let data = json?.data(using: .utf8) else { return nil }
-        return try decoder.decode(WorldCupTeamsResponse.self, from: data)
+        return try decoder.decode(type, from: data)
     }
 }
