@@ -19,7 +19,7 @@ struct DeleteUserRequest: Encodable {
     }
 }
 
-struct UnifiedAdsUserDataRemover: LegacyFeatureFlaggable {
+struct UnifiedAdsUserDataRemover {
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/delete_user"
     private static let stagingResourceEndpoint = "https://ads.allizom.org/v1/delete_user"
 

@@ -673,4 +673,32 @@ final class AddressToolbarContainer: UIView,
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         applyProgressBarTheme(isPrivateMode: isPrivate, theme: theme)
     }
+
+    // MARK: - Key Command Utilities
+
+    override var keyCommands: [UIKeyCommand]? {
+        let defaultCommands: [UIKeyCommand]? = super.keyCommands
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return defaultCommands }
+
+        return (defaultCommands ?? []) + [
+            UIKeyCommand(
+                action: #selector(escapeKeyCommand),
+                input: UIKeyCommand.inputEscape,
+                modifierFlags: []
+            )
+        ]
+    }
+
+    @objc
+    private func escapeKeyCommand() {
+        guard let windowUUID else { return }
+        guard state?.addressToolbar.isEditing ?? false else { return }
+
+        store.dispatch(ToolbarMiddlewareAction(
+            buttonType: .cancelEdit,
+            gestureType: .tap,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.didTapButton
+        ))
+    }
 }

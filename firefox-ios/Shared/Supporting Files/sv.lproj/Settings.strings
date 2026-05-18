@@ -77,7 +77,7 @@
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blockerad**: du ser inte och kan inte använda funktionen. För enhetsbaserad AI tas alla hämtade modeller bort.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
-"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blockerad**: Du kommer inte att se och kan inte använda funktionen. För enhetsbaserad AI tas alla hämtade modeller bort.";
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blockerad**: Du kommer inte att se och kan inte använda funktionen. För AI på enheten tas alla nedladdade modeller bort.";
 
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Sidor och sammanfattningar lagras aldrig.";

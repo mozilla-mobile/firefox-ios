@@ -22,7 +22,7 @@ class ShareTelemetryActivityItemProvider: UIActivityItemProvider,
 
     // FXIOS-9879 For the Sent from Firefox experiment
     private var isOptedInSentFromFirefox: Bool {
-        return userPreferences.isSentFromFirefoxEnabled
+        return userPreferences.getPreferenceFor(.sentFromFirefox)
     }
 
     init(

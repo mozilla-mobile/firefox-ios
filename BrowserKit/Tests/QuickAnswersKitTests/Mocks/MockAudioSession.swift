@@ -21,6 +21,9 @@ final class MockAudioSession: AudioSessionProvider, @unchecked Sendable {
 
     var setCategoryCalls: [CategoryCallParams] = []
     var setActiveCalls: [ActiveCallParams] = []
+    var recordPermission: AVAudioSession.RecordPermission {
+        return micPermission ? .granted : .denied
+    }
 
     func requestRecordPermission(_ response: @escaping (Bool) -> Void) {
         response(micPermission)

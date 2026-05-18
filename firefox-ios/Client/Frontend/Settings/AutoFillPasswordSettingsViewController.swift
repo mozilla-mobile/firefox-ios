@@ -6,7 +6,7 @@ import Common
 import Shared
 import Glean
 
-class AutoFillPasswordSettingsViewController: SettingsTableViewController, LegacyFeatureFlaggable {
+class AutoFillPasswordSettingsViewController: SettingsTableViewController {
     weak var parentCoordinator: PrivacySettingsDelegate?
     private let relayController: RelayControllerProtocol
 

@@ -80,7 +80,8 @@ class StoryCell: UICollectionViewCell,
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL?.absoluteString ?? "",
                                                             generalCornerRadius: UX.thumbnailCornerRadius,
                                                             faviconCornerRadius: UX.thumbnailCornerRadius,
-                                                            heroImageSize: UX.thumbnailSize)
+                                                            heroImageSize: UX.thumbnailSize,
+                                                            ignoresAspectRatio: true)
         thumbnailImageView.setHeroImage(heroImageViewModel)
 
         titleLabel.text = story.title

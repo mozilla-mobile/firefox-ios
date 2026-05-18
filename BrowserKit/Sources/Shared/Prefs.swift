@@ -113,6 +113,17 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
+        /// Override for the merino WCS base host
+        public static let WorldCupBaseHost = "worldCupBaseHostKey"
+        /// Dev-only override for the World Cup `/matches` and `/live` polling
+        /// cadence in seconds. When set, both streams fire on this interval
+        /// regardless of result type — used to test live behavior without
+        /// waiting for the production cadence.
+        public static let WorldCupPollInterval = "worldCupPollIntervalKey"
+    }
+
+    public struct Homepage {
+        public static let WorldCupSelectedCountry = "WorldCupSelectedCountryUserPrefsKey"
     }
 
     public struct SearchSettings {
@@ -160,7 +171,6 @@ public struct PrefsKeys {
         case mainMenuRedesignKey = "mainMenuRedesignHintKey"
         case navigationKey = "ContextualHintNavigation"
         case relayMaskKey = "ContextualHintRelayMaskKey"
-        case toolbarUpdateKey = "ContextualHintToolbarUpdate"
         case translationKey = "ContextualHintTranslationKey"
         case summarizerToolbarEntryKey = "summarizerToolbarEntryKey"
     }
@@ -175,6 +185,7 @@ public struct PrefsKeys {
         public static let translationAutoTranslate = "settings.translationAutoTranslate"
         public static let translationAutoTranslatePromptShown = "settings.translationAutoTranslatePromptShown"
         public static let aiKillSwitchFeature = "settings.aiKillSwitchFeature"
+        public static let quickAnswersFeature = "settings.quickAnswersFeature"
     }
 
     // Activity Stream
@@ -220,9 +231,6 @@ public struct PrefsKeys {
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"
-
-    // Only used in unit tests to override the user's setting for nimbus features
-    public static let NimbusUserEnabledFeatureTestsOverride = "NimbusUserEnabledFeatureTestsOverride"
 
     // Only used to force faster Terms of Use timeout for debugging purposes
     public static let FasterTermsOfUseTimeoutOverride = "FasterTermsOfUseTimeoutOverride"

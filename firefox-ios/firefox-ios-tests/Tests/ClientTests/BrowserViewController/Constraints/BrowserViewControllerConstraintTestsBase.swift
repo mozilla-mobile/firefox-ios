@@ -16,7 +16,6 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

@@ -6,9 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class UpdateViewModel: OnboardingViewModelProtocol,
-                       LegacyFeatureFlaggable,
-                       AppVersionUpdateCheckerProtocol {
+class UpdateViewModel: OnboardingViewModelProtocol, AppVersionUpdateCheckerProtocol {
     // MARK: - Properties
     var profile: Profile
     var hasSyncableAccount: Bool?

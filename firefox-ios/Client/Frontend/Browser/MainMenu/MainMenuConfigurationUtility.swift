@@ -448,7 +448,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: true,
             isActive: isActive,
             a11yLabel: a11yLabel,
-            a11yHint: nil,
+            a11yHint: infoTitle,
             a11yId: AccessibilityIdentifiers.MainMenu.translatePage,
             infoTitle: infoTitle,
             action: {

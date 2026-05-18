@@ -12,7 +12,7 @@ protocol AppearanceSettingsDelegate: AnyObject {
 }
 
 /// The main view displaying the settings for the appearance menu.
-struct AppearanceSettingsView: View, LegacyFeatureFlaggable {
+struct AppearanceSettingsView: View {
     let windowUUID: WindowUUID
     weak var delegate: AppearanceSettingsDelegate?
 

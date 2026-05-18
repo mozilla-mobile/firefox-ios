@@ -93,6 +93,34 @@ final class TranslationLanguagePickerViewControllerTests: XCTestCase, StoreTestU
         XCTAssertNotNil(dispatchedAction.languageCode)
     }
 
+    func test_didSelectRow_afterSearchFilter_dispatchesCorrectLanguageCode() throws {
+        let subject = createSubject(
+            preferredLanguages: [],
+            supportedLanguages: ["fr", "de", "es"]
+        )
+        subject.loadViewIfNeeded()
+
+        let searchController = UISearchController()
+        searchController.searchBar.text = "fr"
+        subject.updateSearchResults(for: searchController)
+
+        subject.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
+
+        let dispatchedAction = try XCTUnwrap(mockStore.dispatchedActions.first as? TranslationSettingsViewAction)
+        XCTAssertEqual(dispatchedAction.languageCode, "fr")
+    }
+
+    func test_didSelectRow_deactivatesPickerSearchController() {
+        let subject = createSubject(
+            preferredLanguages: [],
+            supportedLanguages: ["fr", "de"]
+        )
+        subject.loadViewIfNeeded()
+
+        subject.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
+        XCTAssertEqual(subject.navigationItem.searchController?.isActive, false)
+    }
+
     // MARK: - StoreTestUtility
 
     func setupAppState() -> AppState {

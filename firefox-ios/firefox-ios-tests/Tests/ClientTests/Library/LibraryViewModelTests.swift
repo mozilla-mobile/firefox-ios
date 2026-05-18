@@ -17,7 +17,6 @@ class LibraryViewModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "libraryViewModel_tests")
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {

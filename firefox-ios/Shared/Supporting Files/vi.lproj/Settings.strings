@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Đã chặn**: Bạn sẽ không thấy và không thể sử dụng tính năng này. Đối với AI trên thiết bị, mọi mô hình đã tải xuống sẽ bị xoá.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Đã chặn**: Bạn sẽ không thấy và không thể sử dụng tính năng này. Đối với AI trên thiết bị, mọi mô hình đã tải xuống sẽ bị xoá.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Các trang và bản tóm tắt sẽ không bao giờ được lưu trữ.";
 

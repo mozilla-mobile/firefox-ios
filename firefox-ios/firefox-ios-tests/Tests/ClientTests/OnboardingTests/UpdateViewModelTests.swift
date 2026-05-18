@@ -16,13 +16,13 @@ final class UpdateViewModelTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
-        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() async throws {
         profile = nil
-        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+        DependencyHelperMock().reset()
         try await super.tearDown()
     }
 
@@ -114,7 +114,6 @@ final class UpdateViewModelTests: XCTestCase {
     func testShouldNotShowCoverSheetForSameVersion() {
         let subject = createSubject()
         let currentTestAppVersion = "22.0"
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
 
         // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)

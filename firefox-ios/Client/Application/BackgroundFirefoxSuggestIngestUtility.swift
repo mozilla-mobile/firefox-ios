@@ -29,7 +29,8 @@ final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol,
 
     /// Schedules the ingestion task to run when the app is backgrounded.
     func scheduleTaskOnAppBackground() {
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
         else { return }
 
         logger.log("Scheduling background ingestion",
@@ -75,7 +76,8 @@ final class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol,
 
     /// Registers a launch handler for the background ingestion task.
     private func setUp() {
-        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled
+        guard featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                && userPreferences.getPreferenceFor(.firefoxSuggestFeature)
         else { return }
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.taskIdentifier, using: nil) { task in
             task.expirationHandler = {

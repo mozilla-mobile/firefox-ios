@@ -32,6 +32,7 @@ class SearchTests: FeatureFlaggedTestBase {
 
     private func typeOnSearchBar(text: String) {
         browserScreen.tapOnAddressBar()
+        browserScreen.tapClearButtonIfExists()
         browserScreen.getAddressBarElement().tapAndTypeText(text)
     }
 
@@ -225,14 +226,6 @@ class SearchTests: FeatureFlaggedTestBase {
         changeSearchEngine(searchEngine: "Perplexity")
         changeSearchEngine(searchEngine: "Wikipedia")
         changeSearchEngine(searchEngine: "eBay")
-    }
-
-    // https://mozilla.testrail.io/index.php?/cases/view/2353246
-    func testDefaultSearchEngine() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SearchSettings)
-        XCTAssert(app.tables.staticTexts["Google"].exists)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2436091
@@ -547,6 +540,7 @@ class SearchTests: FeatureFlaggedTestBase {
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2753105
     func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
         app.launch()
         navigator.goto(SearchSettings)

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class AutofillCreditCardSettings: Setting, LegacyFeatureFlaggable {
+class AutofillCreditCardSettings: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
     weak var settings: AppSettingsTableViewController?
 

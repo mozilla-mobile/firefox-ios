@@ -292,16 +292,6 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Tap and hold the arrows to jump between pages in this tab’s history.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
-            public static let ToolbarUpdateTitle = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Update.Title.v139",
-                tableName: "ToolbarLocation",
-                value: "We moved a few things",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
-            public static let ToolbarUpdateBody = MZLocalizedString(
-                key: "ContextualHints.Toolbar.Update.Description.v139",
-                tableName: "ToolbarLocation",
-                value: "Tabs and menu have switched places for easier access as you browse.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
 
         public struct Summarize {
@@ -1069,16 +1059,46 @@ extension String {
                 tableName: "WorldCup",
                 value: "Remove",
                 comment: "The label for the button that allows to remove the World Cup widget from the home screen in the more options panel.")
+            public static let FirstHalfLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FirstHalfLabel.v151",
+                tableName: "WorldCup",
+                value: "First half",
+                comment: "The label indicating that the displaying match is in the first half.")
+            public static let HalfTimeLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.HalfTimeLabel.v151",
+                tableName: "WorldCup",
+                value: "Half time",
+                comment: "The label indicating that the displaying match is in the half time.")
+            public static let SecondHalfLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.SecondHalfLabel.v151",
+                tableName: "WorldCup",
+                value: "Second half",
+                comment: "The label indicating that the displaying match is in the second half.")
+            public static let ExtraTimeLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.ExtraTimeLabel.v151",
+                tableName: "WorldCup",
+                value: "Extra time",
+                comment: "The label indicating that the displaying match is in the extra time part of the game.")
+            public static let PenaltiesLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.PenaltiesLabel.v151",
+                tableName: "WorldCup",
+                value: "Penalties (%@)",
+                comment: "The label indicating that the displaying match is in the penalties part of the game. %@ will be replaced by the score of the penalties")
+            public static let FullTimePenaltiesScoreLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FulltimePenaltiesScoreLabel.v151",
+                tableName: "WorldCup",
+                value: "Full time • Penalties (%@)",
+                comment: "The label indicating that the displaying match has ended with penalties. %@ will be replaced by the score of the penalties")
             public static let FullTimeLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.FTLabel.v151",
                 tableName: "WorldCup",
                 value: "(Full Time)",
-                comment: "The label indicating that the displaying match as ended.")
-            public static let FullTimePenaltiesLabel = MZLocalizedString(
-                key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
+                comment: "The label indicating that the displaying match has ended.")
+            public static let FullTimeNoParenthesisLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.FTNoParenthesisLabel.v151",
                 tableName: "WorldCup",
-                value: "Full time • Penalties",
-                comment: "The label indicating the displaying match has ended after penalties.")
+                value: "Full Time",
+                comment: "The label indicating that the displaying match has ended.")
             public static let ErrorLabel = MZLocalizedString(
                 key: "WorldCup.HomepageWidget.ErrorLabel.v151",
                 tableName: "WorldCup",
@@ -1089,6 +1109,21 @@ extension String {
                 tableName: "WorldCup",
                 value: "Refresh",
                 comment: "The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed.")
+            public static let MatchUnavailableLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableLabel.v151",
+                tableName: "WorldCup",
+                value: "Match info is not available right now. Try refreshing in a few minutes.",
+                comment: "Message shown in the World Cup widget when match data is temporarily unavailable.")
+            public static let MatchUnavailableRefreshButtonLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151",
+                tableName: "WorldCup",
+                value: "Refresh",
+                comment: "Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data.")
+            public static let OfflineLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.OfflineLabel.v151",
+                tableName: "WorldCup",
+                value: "Looks like you’re offline. Check your internet connection and try again.",
+                comment: "Message shown in the World Cup widget when the device has no internet connection.")
             public struct CountDown {
                 public static let Title = MZLocalizedString(
                     key: "WorldCup.HomepageWidget.CountDown.Title.v151",
@@ -1148,6 +1183,11 @@ extension String {
             }
 
             public struct GroupPhase {
+                public static let GroupStageLabel = MZLocalizedString(
+                    key: "WorldCup.GroupPhase.GroupStageLabel.v151",
+                    tableName: "WorldCup",
+                    value: "Group Stage",
+                    comment: "The generic label indicating the Group Stage phase in the World Cup widget.")
                 public static let GroupA = MZLocalizedString(
                     key: "WorldCup.GroupPhase.GroupA.Title.v151",
                     tableName: "WorldCup",
@@ -9015,6 +9055,16 @@ extension String {
                 tableName: "TabsTray",
                 value: "Tabs Closed: %d",
                 comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. %d is the number of tabs. ")
+            public static let ToolbarUpdateTitle = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Title.v139",
+                tableName: "ToolbarLocation",
+                value: "We moved a few things",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the title of one that points the user to the new toolbar layout.")
+            public static let ToolbarUpdateBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Update.Description.v139",
+                tableName: "ToolbarLocation",
+                value: "Tabs and menu have switched places for easier access as you browse.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is the description of one that points the user to the new toolbar layout.")
         }
         struct v151 {
             public static let BlockedStatusDescription = MZLocalizedString(
@@ -9028,6 +9078,11 @@ extension String {
                 tableName: "WorldCup",
                 value: "Done",
                 comment: "Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event.")
+            public static let FullTimePenaltiesLabel = MZLocalizedString(
+                key: "WorldCup.HomepageWidget.RoundPhase.FullTimePenaltiesLabel.v151",
+                tableName: "WorldCup",
+                value: "Full time • Penalties",
+                comment: "The label indicating the displaying match has ended after penalties.")
         }
     }
 }

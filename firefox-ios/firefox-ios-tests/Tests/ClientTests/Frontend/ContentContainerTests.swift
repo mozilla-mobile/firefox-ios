@@ -9,21 +9,17 @@ import XCTest
 
 @MainActor
 final class ContentContainerTests: XCTestCase {
-    private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
     private var tabManager: MockTabManager!
 
     override func setUp() async throws {
         try await super.setUp()
-        self.profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         self.overlayModeManager = MockOverlayModeManager()
         self.tabManager = MockTabManager()
     }
 
     override func tearDown() async throws {
-        self.profile = nil
         self.overlayModeManager = nil
         self.tabManager = nil
         DependencyHelperMock().reset()

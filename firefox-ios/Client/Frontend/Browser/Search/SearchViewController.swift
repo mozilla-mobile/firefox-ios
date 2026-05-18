@@ -629,7 +629,8 @@ class SearchViewController: SiteTableViewController,
                     }
                 }
             case .firefoxSuggestions:
-                if featureFlagsProvider.isEnabled(.firefoxSuggestFeature) && userPreferences.isFirefoxSuggestEnabled {
+                if featureFlagsProvider.isEnabled(.firefoxSuggestFeature)
+                    && userPreferences.getPreferenceFor(.firefoxSuggestFeature) {
                     let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
                     if searchTelemetry?.visibleFirefoxSuggestions
                         .contains(where: { $0.url == firefoxSuggestion.url }) == false {

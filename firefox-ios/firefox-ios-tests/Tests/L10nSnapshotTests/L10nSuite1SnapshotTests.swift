@@ -248,6 +248,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
 
         allSettingsScreens.forEach { nodeName in
+            self.navigator.goto(SettingsScreen)
             self.navigator.goto(nodeName)
             if nodeName == "DisplaySettings" {
                 snapshot("Settings-\(nodeName)")

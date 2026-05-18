@@ -15,7 +15,6 @@ class SearchBarLocationSaverTests: XCTestCase {
         try await super.setUp()
         profile = MockProfile()
         await DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() async throws {
@@ -92,6 +91,53 @@ class SearchBarLocationSaverTests: XCTestCase {
         subject.saveUserSearchBarLocation(profile: profile, userInterfaceIdiom: .pad)
         let searchBarPosition = profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition)
         XCTAssertEqual(searchBarPosition, SearchBarPosition.top.rawValue)
+    }
+
+    // MARK: - iPad bottom-bar migration (FXIOS-15653)
+
+    @MainActor
+    func test_migrateBottomBarPositionToTopOnIPad_resetsBottomToTop_onIPad() async throws {
+        let subject = createSubject()
+        profile.prefs.setString(SearchBarPosition.bottom.rawValue,
+                                forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        subject.migrateBottomBarPositionToTopOnIPad(profile: profile, userInterfaceIdiom: .pad)
+
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
+                       SearchBarPosition.top.rawValue)
+    }
+
+    @MainActor
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenAlreadyTop_onIPad() async throws {
+        let subject = createSubject()
+        profile.prefs.setString(SearchBarPosition.top.rawValue,
+                                forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        subject.migrateBottomBarPositionToTopOnIPad(profile: profile, userInterfaceIdiom: .pad)
+
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
+                       SearchBarPosition.top.rawValue)
+    }
+
+    @MainActor
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_whenNoPositionSaved_onIPad() async throws {
+        let subject = createSubject()
+
+        subject.migrateBottomBarPositionToTopOnIPad(profile: profile, userInterfaceIdiom: .pad)
+
+        XCTAssertNil(profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition))
+    }
+
+    @MainActor
+    func test_migrateBottomBarPositionToTopOnIPad_doesNothing_onIPhone_evenWhenBottom() async throws {
+        let subject = createSubject()
+        profile.prefs.setString(SearchBarPosition.bottom.rawValue,
+                                forKey: PrefsKeys.FeatureFlags.SearchBarPosition)
+
+        subject.migrateBottomBarPositionToTopOnIPad(profile: profile, userInterfaceIdiom: .phone)
+
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.FeatureFlags.SearchBarPosition),
+                       SearchBarPosition.bottom.rawValue)
     }
 
     // MARK: - Helper

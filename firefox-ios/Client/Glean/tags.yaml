@@ -134,5 +134,8 @@ TrendingSearches:
 User:
   description: Corresponds to user properties and settings.
 
+WorldCupWidget:
+  description: Corresponds to the World Cup widget shown on the homepage.
+
 ZoomBar:
   description: Corresponds to any event around zoom bar. Shown from the app menu.

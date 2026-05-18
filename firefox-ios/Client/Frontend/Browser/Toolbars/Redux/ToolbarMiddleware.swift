@@ -9,7 +9,7 @@ import SummarizeKit
 import Shared
 
 @MainActor
-final class ToolbarMiddleware: LegacyFeatureFlaggable {
+final class ToolbarMiddleware {
     private let manager: ToolbarManager
     private let toolbarHelper: ToolbarHelperInterface
     private let windowManager: WindowManager
@@ -96,6 +96,7 @@ final class ToolbarMiddleware: LegacyFeatureFlaggable {
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
+                isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)

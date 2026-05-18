@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Blokeatuta**: eginbidea ez duzu ikusiko eta ezingo duzu erabili. Gailu barruko AArako, deskargatutako modeloak kendu egingo dira.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Blokeatuta**: eginbidea ez duzu ikusiko eta ezingo duzu erabili. Gailu barruko AArako, deskargatutako modeloak kendu egingo dira.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Orriak eta laburpenak inoiz ez dira gordetzen.";
 

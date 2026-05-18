@@ -51,7 +51,7 @@ final class TopSitesSettingsViewController: SettingsTableViewController, UserFea
                     prefs: profile.prefs,
                     theme: themeManager.getCurrentTheme(for: windowUUID),
                     prefKey: PrefsKeys.FeatureFlags.SponsoredShortcuts,
-                    defaultValue: userPreferences.isSponsoredShortcutsEnabled,
+                    defaultValue: userPreferences.getPreferenceFor(.hntSponsoredShortcuts),
                     titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
                 ) { _ in
                     store.dispatch(

@@ -37,7 +37,6 @@ class BrowserViewController: UIViewController,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              BookmarksHandlerDelegate,
-                             LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
                              FeatureFlaggable,
                              CanRemoveQuickActionBookmark,
                              BrowserStatusBarScrollDelegate,
@@ -160,6 +159,8 @@ class BrowserViewController: UIViewController,
     var overKeyboardContainerConstraint: ConstraintReference?
     var bottomContainerConstraint: ConstraintReference?
     var topTouchAreaHeightConstraint: NSLayoutConstraint?
+    private var contentContainerTopConstraint: NSLayoutConstraint?
+    private var isContentContainerPinnedToScreenTop: Bool?
 
     // Overlay dimming view for private mode
     private lazy var privateModeDimmingView: UIView = .build { view in
@@ -246,11 +247,6 @@ class BrowserViewController: UIViewController,
         return ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
     }()
 
-    private(set) lazy var toolbarUpdateContextHintVC: ContextualHintViewController = {
-        let toolbarViewProvider = ContextualHintViewProvider(forHintType: .toolbarUpdate, with: profile)
-        return ContextualHintViewController(with: toolbarViewProvider, windowUUID: windowUUID)
-    }()
-
     private(set) lazy var translationContextHintVC: ContextualHintViewController = {
         let translationProvider = ContextualHintViewProvider(forHintType: .translation, with: profile)
         return ContextualHintViewController(with: translationProvider, windowUUID: windowUUID)
@@ -294,10 +290,6 @@ class BrowserViewController: UIViewController,
         return toolbarHelper.isSwipingTabsEnabled
     }
 
-    var isToolbarUpdateHintEnabled: Bool {
-        return featureFlagsProvider.isEnabled(.toolbarUpdateHint)
-    }
-
     var isNativeErrorPageEnabled: Bool {
         return NativeErrorPageFeatureFlag().isNativeErrorPageEnabled
     }
@@ -333,8 +325,7 @@ class BrowserViewController: UIViewController,
     }
 
     private var isRecentSearchEnabled: Bool {
-        let flagToCheck = FeatureFlagID.recentSearches
-        return featureFlags.isFeatureEnabled(flagToCheck, checking: .buildOnly)
+        return featureFlagsProvider.isEnabled(.recentSearches)
     }
 
     var isSnapKitRemovalEnabled: Bool {
@@ -353,6 +344,16 @@ class BrowserViewController: UIViewController,
 
     var topTabsVisible: Bool {
         return topTabsViewController != nil
+    }
+
+    private var isHomepagePinnedHeaderEnabled: Bool {
+        featureFlagsProvider.isEnabled(.homepagePinnedHeader) && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+    }
+
+    private var shouldPinContentContainerToScreenTop: Bool {
+        isHomepagePinnedHeaderEnabled
+        && contentContainer.hasHomepage
+        && header.arrangedSubviews.isEmpty
     }
 
     // MARK: Data management
@@ -557,6 +558,7 @@ class BrowserViewController: UIViewController,
             readerModeBar.addToParent(parent: newParent, addToTop: isBottomSearchBar)
         }
 
+        updateContentContainerTopConstraint()
         updateViewConstraints()
         updateHeaderConstraints()
         addressToolbarContainer.updateConstraints()
@@ -858,12 +860,12 @@ class BrowserViewController: UIViewController,
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
         let allWindowUUIDs = (AppContainer.shared.resolve() as WindowManager).windows.keys.map { $0.uuidString.prefix(4) }
-        logger.log("BrowserDidBecomeActive. UUID = \(windowUUID.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
+        logger.log("BrowserDidBecomeActive. UUID = \(uuid.uuidString.prefix(4)). All windows: \(allWindowUUIDs)",
                    level: .info,
                    category: .lifecycle)
 
         NightModeHelper.cleanNightModeDefaults()
-        dispatchStartAtHomeAction()
+        dispatchStartAtHomeAction(windowUUID: uuid)
     }
 
     // MARK: - Summarize
@@ -879,7 +881,7 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Start At Home
-    private func dispatchStartAtHomeAction() {
+    private func dispatchStartAtHomeAction(windowUUID: WindowUUID) {
         let startAtHomeAction = StartAtHomeAction(
             windowUUID: windowUUID,
             actionType: StartAtHomeActionType.didBrowserBecomeActive
@@ -1007,7 +1009,7 @@ class BrowserViewController: UIViewController,
 
         setupEssentialUI()
         subscribeToRedux()
-        enqueueTabRestoration()
+        tabManager.restoreTabs()
         updateAddressToolbarContainerPosition(for: traitCollection)
         if isTabScrollRefactoringEnabled {
             setupToolbarAnimator()
@@ -1321,32 +1323,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func enqueueTabRestoration() {
-        guard isDeeplinkOptimizationRefactorEnabled else {
-            tabManager.restoreTabs()
-            return
-        }
-        // Postpone tab restoration after the deeplink has been handled, that is after the start up time record
-        // has ended. If there is no deeplink then restore when the startup time record cancellation has been
-        // signaled.
-
-        // Enqueues the actions only if the opposite action where not signaled, this happen when the app
-        // handles a deeplink when was already opened
-        if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkCancelled) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkComplete]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        } else if !AppEventQueue.hasSignalled(.recordStartupTimeOpenDeeplinkComplete) {
-            AppEventQueue.wait(for: [.recordStartupTimeOpenDeeplinkCancelled]) { [weak self] in
-                ensureMainThread { [weak self] in
-                    self?.tabManager.restoreTabs()
-                }
-            }
-        }
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
@@ -1363,9 +1339,7 @@ class BrowserViewController: UIViewController,
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
 
-        if !isDeeplinkOptimizationRefactorEnabled {
-            browserDelegate?.browserHasLoaded()
-        }
+        browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
 
         logCurrentNimbusExperimentsState()
@@ -1440,6 +1414,7 @@ class BrowserViewController: UIViewController,
         // toolbar translucency needs to be updated
         // This also required for iPad rotation
         addOrUpdateMaskViewIfNeeded()
+        updateContentContainerTopConstraint()
 
         // Update available height for the homepage
         dispatchAvailableContentHeightChangedAction()
@@ -1502,19 +1477,20 @@ class BrowserViewController: UIViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
+        let popover = displayedPopoverController
         dismissVisibleMenus()
         let legacyScrollController = scrollController as? LegacyTabScrollProvider
 
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if let popover = displayedPopoverController {
-                updateDisplayedPopoverProperties?()
-                present(popover, animated: true, completion: nil)
-            }
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
+            guard let self, let popover else { return }
+            self.displayedPopoverController = popover
+            self.updateDisplayedPopoverProperties?()
+            self.present(popover, animated: false, completion: nil)
         })
         microsurvey?.setNeedsUpdateConstraints()
         webPagePreview.invalidateScreenshotData()
@@ -1553,22 +1529,12 @@ class BrowserViewController: UIViewController,
                 translationContextHintVC.dismiss(animated: true)
             }
         }
-
-        // Dismiss toolbar CFR on iPad when horizontal or vertical size class changes
-        // as this also could change if the navigation bar is shown or not
-        let sizeClassChanged = previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
-        previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
-
-        if toolbarUpdateContextHintVC.isPresenting,
-           UIDevice.current.userInterfaceIdiom == .pad && sizeClassChanged {
-            toolbarUpdateContextHintVC.dismiss(animated: true)
-        }
     }
 
     // MARK: - Constraints
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor),
             contentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentContainer.bottomAnchor.constraint(equalTo: overKeyboardContainer.topAnchor),
@@ -1609,6 +1575,7 @@ class BrowserViewController: UIViewController,
             updateHeaderConstraints()
         }
         setupBlurViews()
+        updateContentContainerTopConstraint()
     }
 
     private func setupBlurViews() {
@@ -1634,6 +1601,60 @@ class BrowserViewController: UIViewController,
             backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+    }
+
+    func updateContentContainerTopConstraint() {
+        guard isHomepagePinnedHeaderEnabled else {
+            activateDefaultContentContainerTopConstraint()
+            return
+        }
+
+        guard isViewLoaded else { return }
+
+        // Rebuild the top constraint and z-order only when the homepage pinning state changes,
+        // or when the constraint has not been created yet. When homepage content has a pinned header,
+        // we move the content to the front so the pinned section header can sit above the other views.
+        // Otherwise, the other views stays in front of the content container.
+        if isContentContainerPinnedToScreenTop != shouldPinContentContainerToScreenTop
+           || contentContainerTopConstraint == nil {
+            isContentContainerPinnedToScreenTop = shouldPinContentContainerToScreenTop
+            contentContainerTopConstraint?.isActive = false
+            contentContainerTopConstraint = contentContainer.topAnchor.constraint(
+                equalTo: shouldPinContentContainerToScreenTop ? view.topAnchor : header.bottomAnchor
+            )
+            contentContainerTopConstraint?.isActive = true
+
+            let frontViews = shouldPinContentContainerToScreenTop
+                ? [contentContainer, bottomBlurView, bottomContentStackView, bottomContainer, overKeyboardContainer]
+                : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
+                   bottomContentStackView, bottomContainer, overKeyboardContainer]
+            frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+        }
+
+        guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
+
+        // When the homepage is pinned to the top of the screen, BVC needs to account for
+        // the status bar overlay height (safe area insets).
+        // Otherwise, the homepage remains pinned to header.bottomAnchor and no extra inset is needed.
+        let homepageTopContentInset = shouldPinContentContainerToScreenTop ? statusBarOverlay.frame.height : 0
+        homepageViewController.updateTopContentInset(homepageTopContentInset)
+    }
+
+    /// Keeps the original content container top constraint in place when homepage pinned header is disabled,
+    /// pinning the content container top to the header bottom.
+    private func activateDefaultContentContainerTopConstraint() {
+        let hasActiveLegacyConstraint = isContentContainerPinnedToScreenTop == false
+            && contentContainerTopConstraint?.isActive == true
+        guard !hasActiveLegacyConstraint else { return }
+
+        contentContainerTopConstraint?.isActive = false
+        contentContainerTopConstraint = contentContainer.topAnchor.constraint(equalTo: header.bottomAnchor)
+        isContentContainerPinnedToScreenTop = false
+
+        guard contentContainer.superview != nil,
+              header.superview != nil else { return }
+
+        contentContainerTopConstraint?.isActive = true
     }
 
     // MARK: - Snapkit related
@@ -1838,6 +1859,17 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        // Temporary sitecompat workaround for FXIOS-15487. See comments in `bug15487_isGoogleAIPage()`.
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let isEditing = toolbarState?.addressToolbar.isEditing == true
+        if !isEditing,
+           tabManager.selectedTab?.bug15487_isGoogleAIPage() ?? false,
+           traitCollection.verticalSizeClass != .compact,
+           traitCollection.horizontalSizeClass != .regular {
+            overKeyboardContainer.removeKeyboardSpacer()
+            return
+        }
+
         // To avoid some UI glitches, when authentication is in progress
         // we don't need to update/change keyboard spacer
         guard !appAuthenticator.isAuthenticating else { return }
@@ -1878,6 +1910,7 @@ class BrowserViewController: UIViewController,
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // Documentation found in https://mozilla-hub.atlassian.net/browse/FXIOS-10952
         // FXIOS-11036 - Investigate improvement to JavaScript alert dequeueing
@@ -1895,6 +1928,7 @@ class BrowserViewController: UIViewController,
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        updateContentContainerTopConstraint()
 
         // To make sure the content views content is extending under the toolbars we disable clip to bounds
         // for the first two layers of views other than a web view
@@ -2636,7 +2670,14 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(
+                prefs: profile.prefs,
+                isUserSettingEnabled: store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: windowUUID
+                )?.isTranslationsEnabled ?? true
+            ),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
@@ -2647,9 +2688,6 @@ class BrowserViewController: UIViewController,
             windowUUID: windowUUID,
             actionType: ToolbarMiddlewareActionType.urlDidChange)
         store.dispatch(middlewareAction)
-
-        configureToolbarUpdateContextualHint(addressToolbarView: addressToolbarContainer,
-                                             navigationToolbarView: navigationToolbarContainer)
 
         // update the background view to ensure translucency is displayed correctly
         applyTheme()
@@ -2766,6 +2804,8 @@ class BrowserViewController: UIViewController,
             showZeroSearchView()
         case .shortcutsLibrary:
             navigationHandler?.showShortcutsLibrary()
+        case .worldCupCountryPicker:
+            navigationHandler?.showWorldCupCountryPicker()
         case .quickAnswers:
             navigationHandler?.showQuickAnswers()
         case .privacyNoticeLink(let url):
@@ -2967,8 +3007,8 @@ class BrowserViewController: UIViewController,
         }
 
         data.languages.forEach { code in
-            let native = Locale(identifier: code).localizedString(forLanguageCode: code) ?? code
-            let localized = Locale.current.localizedString(forLanguageCode: code) ?? code
+            let native = (Locale(identifier: code).localizedString(forLanguageCode: code) ?? code).localizedCapitalized
+            let localized = (Locale.current.localizedString(forLanguageCode: code) ?? code).localizedCapitalized
             let title = native == localized ? native : "\(native) (\(localized))"
             alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -2997,23 +3037,9 @@ class BrowserViewController: UIViewController,
             alert.addAction(UIAlertAction(title: .CancelString, style: .cancel))
         }
 
-        if let title = alert.title {
-            let attributedTitleKey = "attributedTitle"
-            alert.setValue(
-                NSAttributedString(
-                    string: title,
-                    attributes: [
-                        .font: DefaultDynamicFontHelper.preferredBoldFont(
-                            withTextStyle: .headline,
-                            size: UIFont.labelFontSize
-                        )
-                    ]
-                ),
-                forKey: attributedTitleKey
-            )
-        }
-
-        if let popover = alert.popoverPresentationController {
+        let setupPopover = { [weak self] in
+            guard let self, let popover = alert.popoverPresentationController else { return }
+            popover.delegate = self
             if let sourceButton {
                 popover.sourceView = sourceButton
                 popover.sourceRect = sourceButton.bounds
@@ -3023,6 +3049,13 @@ class BrowserViewController: UIViewController,
                 popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
                 popover.permittedArrowDirections = []
             }
+        }
+
+        setupPopover()
+
+        if alert.popoverPresentationController != nil {
+            displayedPopoverController = alert
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         present(alert, animated: true)
@@ -3211,6 +3244,10 @@ class BrowserViewController: UIViewController,
            let homepageState = store.state.componentState(HomepageState.self, for: .homepage, window: windowUUID)
         else { return }
 
+        // Account for the status bar overlay so spacer layout and scroll-view geometry describe
+        // the same visible viewport.
+        // Example: if the visible viewport is 800pt high and BVC contributes a 54pt overlay,
+        // spacer calculations should use 746pt of usable homepage content height.
         let availableContentHeight = getAvailableHomepageContentHeight()
         let availableWallpaperHeight = getAvailableHomepageWallpaperHeight(availableContentHeight: availableContentHeight)
 
@@ -3245,7 +3282,7 @@ class BrowserViewController: UIViewController,
             addressBarHeight -= keyboardSpacerHeight
         }
 
-        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage
+        // Subtracts all of BVC's immediate subviews to get the space left to allocate to the homepage.
         return view.frame.height - statusBarOverlay.frame.height
                                  - bottomContentStackView.frame.height
                                  - bottomContainer.frame.height
@@ -3255,17 +3292,23 @@ class BrowserViewController: UIViewController,
     private func getAvailableHomepageWallpaperHeight(availableContentHeight: CGFloat) -> CGFloat {
         guard let window = view.window else {
             // Fallback before window attachment, this gets corrected on the next layout/state update.
-            return availableContentHeight + contentContainer.frame.origin.y
+            let topOffset = shouldPinContentContainerToScreenTop
+                ? statusBarOverlay.frame.height
+                : contentContainer.frame.origin.y
+            return availableContentHeight + topOffset
         }
 
-        // Homepage pins wallpaper to window top, so include the content container's window Y offset.
-        let contentTopOffset = contentContainer.convert(CGPoint.zero, to: window).y
-        return availableContentHeight + contentTopOffset
+        // Homepage pins wallpaper to window top, so add back the top space excluded from content height.
+        let topOffset = shouldPinContentContainerToScreenTop
+            ? statusBarOverlay.frame.height
+            : contentContainer.convert(CGPoint.zero, to: window).y
+        return availableContentHeight + topOffset
     }
 
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(isVisible: false)
+        (contentContainer.contentController as? HomepageViewController)?.stopScrollingAndSaveVerticalScrollOffset()
 
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
@@ -3658,8 +3701,8 @@ class BrowserViewController: UIViewController,
         tab.addContentScript(formAutofillHelper, name: FormAutofillHelper.name())
 
         // Closure to handle found field values for credit card and address fields
-        formAutofillHelper.foundFieldValues = { [weak self] fieldValues, type, frame in
-            guard let self, let tabWebView = tab.webView else { return }
+        formAutofillHelper.foundFieldValues = { [weak self, weak tab, weak webView] fieldValues, type, frame in
+            guard let self, let tabWebView = tab?.webView else { return }
 
             // Handle different field types
             switch fieldValues.fieldValue {
@@ -3680,7 +3723,7 @@ class BrowserViewController: UIViewController,
 
     private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                               tabWebView: TabWebView,
-                                              webView: WKWebView,
+                                              webView: WKWebView?,
                                               frame: WKFrameInfo?,
                                               localeProvider: LocaleProvider = SystemLocaleProvider()) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
@@ -3701,7 +3744,7 @@ class BrowserViewController: UIViewController,
 
         tabWebView.accessoryView.savedAddressesClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
         }
@@ -3710,7 +3753,7 @@ class BrowserViewController: UIViewController,
     private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
                                                  type: FormAutofillPayloadType?,
                                                  tabWebView: TabWebView,
-                                                 webView: WKWebView,
+                                                 webView: WKWebView?,
                                                  frame: WKFrameInfo?) {
         guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
               let type = type,
@@ -3766,10 +3809,10 @@ class BrowserViewController: UIViewController,
     }
 
     /// Handles the action when the saved cards button is tapped on the tab web view.
-    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView, frame: WKFrameInfo?) {
+    private func handleSavedCardsButtonTap(tabWebView: TabWebView, webView: WKWebView?, frame: WKFrameInfo?) {
         tabWebView.accessoryView.savedCardsClosure = {
             DispatchQueue.main.async { [weak self] in
-                webView.resignFirstResponder()
+                webView?.resignFirstResponder()
                 self?.authenticateSelectCreditCardBottomSheet(frame: frame)
             }
         }
@@ -4897,7 +4940,6 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         _ popoverPresentationController: UIPopoverPresentationController
     ) {
         displayedPopoverController = nil
-        updateDisplayedPopoverProperties = nil
     }
 }
 

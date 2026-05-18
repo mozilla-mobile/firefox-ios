@@ -1,3 +1,6 @@
+/* On certificate error page, this is the text on a button that will show advanced information about the certificate error. */
+"NativeErrorPage.BadCertDomain.AdvancedButton.v149" = "Киңәйтелгән";
+
 /* On certificate error page, this is a link to learn more about certificate errors. */
 "NativeErrorPage.BadCertDomain.LearnMoreLink.v149" = "Күбрәк белү";
 
@@ -6,6 +9,9 @@
 
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Сак булыгыз. Нәрсәдер дөрес түгел монда.";
+
+/* On error page, this is the text on a button that will go back to the previous page. Recommended action. */
+"NativeErrorPage.GoBackButton.v149" = "Кире кайту (киңәш ителә)";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Интернетка бәйләнешегездә проблема бар кебек.";

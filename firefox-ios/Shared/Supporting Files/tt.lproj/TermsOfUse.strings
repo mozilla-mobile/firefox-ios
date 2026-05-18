@@ -1,5 +1,23 @@
+/* Label for the button that confirms user acceptance of the Terms of Use. */
+"TermsOfUse.AcceptButton.v142" = "Кабул итү";
+
+/* Label for the back button shown in the Terms of Use web view. */
+"TermsOfUse.BackButton.v142" = "Кире";
+
 /* Label for the close button shown in the Terms of Use web view. */
 "TermsOfUse.CloseButton.v150" = "Ябу";
+
+/* Link text for 'here' in the phrase 'You can learn more here.' shown in the Terms of Use sheet for variants 1 and 2. */
+"TermsOfUse.Link.HereText.v147" = "монда";
+
+/* Link shown in the Terms of Use sheet to direct users to more details about the update. */
+"TermsOfUse.Link.LearnMore.v142" = "Күбрәк белү";
+
+/* Hyperlink label pointing to the Privacy Notice document from the Terms of Use sheet. */
+"TermsOfUse.Link.PrivacyNotice.v142" = "Хосусыйлык аңлатмасы";
+
+/* Hyperlink label for the Terms of Use document. %@ is replaced with the app name (e.g., Firefox). */
+"TermsOfUse.Link.TermsOfUse.v142" = "%@-ның куллану шартлары";
 
 /* Title shown at the top of the Terms of Use bottom sheet for variant 1. */
 "TermsOfUse.TitleValue1.v147" = "Куллану шартлары";

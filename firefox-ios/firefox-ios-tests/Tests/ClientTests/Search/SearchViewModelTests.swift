@@ -18,7 +18,6 @@ final class SearchViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         profile = MockProfile(firefoxSuggest: MockRustFirefoxSuggest())
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()

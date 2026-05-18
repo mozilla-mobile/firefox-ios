@@ -457,17 +457,6 @@ class NavigationTest: FeatureFlaggedTestSuite {
         mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2307020
-    // Smoketest
-    func testVerifyBrowserTabMenu() {
-        let toolbarScreen = ToolbarScreen(app: app)
-        let mainMenuScreen = MainMenuScreen(app: app)
-        toolbarScreen.assertSettingsButtonExists()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
-        mainMenuScreen.waitForMenuOptionsToExist()
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {

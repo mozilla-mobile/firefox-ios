@@ -10,6 +10,9 @@
 /* The error message displayed when the summarizer encounters missing page content while summarizing a page (e.g the page is still loading). */
 "Summarizer.Error.MissingPageContent.Message.v142" = "Stran se še vedno nalaga. Počakajte, da se nalaganje konča, in nato pritisnite za povzetek.";
 
+/* The error message displayed when the summarizer encounters a rate limit while summarizing a page. */
+"Summarizer.Error.RateLimited.Message.v142" = "Tega trenutno ne morem narediti. Poskusite znova pozneje!";
+
 /* The error message displayed when the summarizer encounters an unknown error while summarizing a page. */
 "Summarizer.Error.Unknown.Message.v142" = "Napaka pri povzemanju vsebine strani. Poskusite znova pozneje.";
 

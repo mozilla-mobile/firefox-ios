@@ -13,10 +13,10 @@ final class HomepageViewController: UIViewController,
                                     UIGestureRecognizerDelegate,
                                     UIPopoverPresentationControllerDelegate,
                                     UIAdaptivePresentationControllerDelegate,
-                                    LegacyFeatureFlaggable,
                                     ContentContainable,
                                     Screenshotable,
                                     Themeable,
+                                    FeatureFlaggable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -46,6 +46,7 @@ final class HomepageViewController: UIViewController,
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    private lazy var sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
     // Tracks which tab the shared homepage instance is currently representing.
     private var activeTabUUID: TabUUID?
 
@@ -58,6 +59,7 @@ final class HomepageViewController: UIViewController,
     private var didFinishFirstLayout = false
     private var wallpaperTopConstraint: NSLayoutConstraint?
     private var wallpaperHeightConstraint: NSLayoutConstraint?
+    private var collectionViewTopContentInset: CGFloat = 0
 
     private var currentHomepageTabState: HomepageTabState {
         guard let activeTabUUID else { return HomepageTabState() }
@@ -257,8 +259,11 @@ final class HomepageViewController: UIViewController,
 
     // Called when the homepage is displayed to make sure it's vertical scroll position is persisted.
     // If no scroll position exists for tab, scroll the homepage to the top
-    func restoreVerticalScrollOffset() {
-        activeTabUUID = tabManager.selectedTab?.tabUUID
+    func restoreVerticalScrollOffset(force: Bool = true) {
+        let selectedTabUUID = tabManager.selectedTab?.tabUUID
+        guard force || activeTabUUID != selectedTabUUID else { return }
+
+        activeTabUUID = selectedTabUUID
         guard let activeTabUUID,
               let homepageScrollOffset = homepageTabStateStore.state(for: activeTabUUID).scrollOffsetY
         else {
@@ -276,6 +281,39 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    func stopScrollingAndSaveVerticalScrollOffset() {
+        guard let collectionView else { return }
+        collectionView.setContentOffset(collectionView.contentOffset, animated: false)
+        saveVerticalScrollOffset()
+    }
+
+    func updateTopContentInset(_ topInset: CGFloat) {
+        // Pinned header mode lets BVC represent its status bar overlay as homepage content inset.
+        // When disabled, use the legacy zero-inset layout so collection view offsets are not adjusted.
+        let shouldPinNewsHeader = featureFlagsProvider.isEnabled(.homepagePinnedHeader)
+                                  && featureFlagsProvider.isEnabled(.homepageStoryCategories)
+        let effectiveTopInset = shouldPinNewsHeader ? topInset : 0
+        guard collectionViewTopContentInset != effectiveTopInset else { return }
+        let previousAdjustedTopInset = collectionView?.adjustedContentInset.top ?? collectionViewTopContentInset
+        let wasScrolledToTop = collectionView.map { $0.contentOffset.y <= 0 } ?? true
+        collectionViewTopContentInset = effectiveTopInset
+        updateCollectionViewContentInset()
+
+        guard let collectionView else { return }
+
+        if wasScrolledToTop {
+            // Top of scrollable content is always -topInset, e.g. a 54pt top inset means y = -54.
+            collectionView.contentOffset.y = -collectionView.adjustedContentInset.top
+        } else {
+            // Preserve the visible content when BVC chrome changes the collection view's top inset.
+            // Example: offset 120 + inset 0 shows normalized y = 120. If inset becomes 54,
+            // move offset to 66 so 66 + 54 still shows normalized y = 120.
+            let adjustedTopInsetDelta = collectionView.adjustedContentInset.top - previousAdjustedTopInset
+            collectionView.contentOffset.y -= adjustedTopInsetDelta
+        }
+        handleScroll(collectionView, isUserInteraction: false)
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleScroll(scrollView, isUserInteraction: true)
     }
@@ -286,12 +324,16 @@ final class HomepageViewController: UIViewController,
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        snapNewsTransitionHeaderIfNeeded()
         saveVerticalScrollOffset()
         trackVisibleItemImpressions()
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        saveVerticalScrollOffset()
+        if !decelerate {
+            snapNewsTransitionHeaderIfNeeded()
+            saveVerticalScrollOffset()
+        }
         trackVisibleItemImpressions()
     }
 
@@ -388,9 +430,14 @@ final class HomepageViewController: UIViewController,
         // TODO: - FXIOS-13346 / FXIOS-13343 - fix collection view being reloaded all the time also when data don't change
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
+            let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
+            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
-            refreshHomepageDataSourceSnapshot { [weak self] in
+            refreshHomepageDataSourceSnapshot(
+                reconfigureHeader: shouldReconfigureHeader,
+                animatingDifferences: animatingDifferences
+            ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
                 self?.updateNewsTransitionHeaderProgress()
             }
@@ -500,22 +547,26 @@ final class HomepageViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.delegate = self
-        // Per design requirement, set spacing on top. We may want to revisit this spacing when implement liquid glass.
+        self.collectionView = collectionView
+        updateCollectionViewContentInset()
+
+        view.addSubview(collectionView)
+    }
+
+    private func updateCollectionViewContentInset() {
+        guard let collectionView else { return }
+
         collectionView.contentInset = UIEdgeInsets(
-            top: HomepageSectionLayoutProvider.UX.topSpacing,
+            top: collectionViewTopContentInset,
             left: 0,
             bottom: 0,
             right: 0
         )
         collectionView.scrollIndicatorInsets = collectionView.contentInset
-        self.collectionView = collectionView
-
-        view.addSubview(collectionView)
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let sectionProvider = HomepageSectionLayoutProvider(windowUUID: windowUUID)
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex, environment)
+        let layout = UICollectionViewCompositionalLayout { [weak self, sectionProvider] (sectionIndex, environment)
             -> NSCollectionLayoutSection? in
             guard let section = self?.dataSource?.snapshot().sectionIdentifiers[safe: sectionIndex] else {
                 self?.logger.log(
@@ -532,10 +583,11 @@ final class HomepageViewController: UIViewController,
                 return sectionProvider.makeEmptyLayoutSection()
             }
 
-            return sectionProvider.createLayoutSection(
+            let layoutSection = sectionProvider.createLayoutSection(
                 for: section,
                 with: environment
             )
+            return layoutSection
         }
         return layout
     }
@@ -608,6 +660,13 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
+        case .worldcupCard:
+            return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
+                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
+                    self?.sectionProvider.setWorldCupCellHeight(height)
+                    self?.relayoutForCellHeightChange()
+                }
+            }
         case .spacer:
             return configuredCell(cellType: HomepageSpacerCell.self, at: indexPath) { _ in }
         }
@@ -623,6 +682,11 @@ final class HomepageViewController: UIViewController,
         }
         configure(cell)
         return cell
+    }
+
+    private func relayoutForCellHeightChange() {
+        guard let collectionView else { return }
+        collectionView.performBatchUpdates(nil)
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
@@ -722,7 +786,7 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath,
         with newsTransitionHeaderCell: NewsTransitionHeaderCell
     ) -> NewsTransitionHeaderCell {
-        let transitionEnabled = isNewsTransitionEnabled(for: collectionView, at: indexPath)
+        let transitionEnabled = isNewsTransitionEnabled()
         newsTransitionHeaderCell.configure(
             sectionHeaderConfiguration: MerinoState.Constants.sectionHeaderConfiguration,
             textColor: homepageState.wallpaperState.wallpaperConfiguration.textColor,
@@ -732,6 +796,9 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX,
             onCategoryPickerScroll: updateNewsfeedCategoryPickerOffsetX,
+            onNewsAffordanceTap: { [weak self] in
+                self?.scrollNewsfeedToTop(onlyIfScrolledPastHeader: false, animated: true)
+            },
             onSelection: updatedSelectedNewsfeedCategory
         )
         newsTransitionHeaderCell.setTransitionProgress(newsTransitionProgress())
@@ -788,6 +855,19 @@ final class HomepageViewController: UIViewController,
 
     /// Updates the `NewsTransitionHeaderCell`s transition progress
     private func updateNewsTransitionHeaderProgress() {
+        // We only want the stories header to transition if there is enough empty space on the homepage,
+        // which is denoted by the existence of the spacer
+        let transitionEnabled = isNewsTransitionEnabled()
+        let transitionProgress = newsTransitionProgress()
+
+        guard let headerView = getNewsTransitionHeader()  else { return }
+        headerView.setTransitionEnabled(transitionEnabled)
+        headerView.setTransitionProgress(transitionProgress)
+    }
+
+    /// Returns whether there is enough room at the bottom of the unscrolled homepage for the header to transition.
+    /// This is determined by the existence of the spacer with a meaningful height
+    private func isNewsTransitionEnabled() -> Bool {
         guard MerinoState.Constants.sectionHeaderConfiguration.style == .newsAffordance,
               let collectionView,
               let spacerSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
@@ -797,30 +877,12 @@ final class HomepageViewController: UIViewController,
                   return false
               }),
               let spacerAttributes = collectionView.layoutAttributesForItem(at: IndexPath(item: 0,
-                                                                                          section: spacerSectionIndex)),
-              let headerView = getNewsTransitionHeader()
+                                                                                          section: spacerSectionIndex))
         else {
-            return
+            return true
         }
 
-        // We only want the stories header to transition if there is enough empty space on the homepage,
-        // which is denoted by the existence of the spacer
-        let transitionEnabled = spacerAttributes.size.height > 0.1
-        headerView.setTransitionEnabled(transitionEnabled)
-        headerView.setTransitionProgress(newsTransitionProgress())
-    }
-
-    /// Returns whether the pocket header is currently in the affordance-height layout state.
-    /// We use the header height as the source of truth for whether the news affordance transition should be active
-    /// since it is only active when there is room for the affordance at the bottom of the unscrolled homepage
-    private func isNewsTransitionEnabled(for collectionView: UICollectionView, at indexPath: IndexPath) -> Bool {
-        let headerHeight = collectionView.layoutAttributesForSupplementaryElement(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )?.size.height ?? 0
-        let expectedHeaderHeight = HomepageDimensionCalculator.fittingHeight(for: NewsTransitionHeaderCell(),
-                                                                             width: collectionView.bounds.width)
-        return headerHeight >= expectedHeaderHeight
+        return spacerAttributes.size.height > 0.1
     }
 
     /// Converts the homepage's vertical scroll offset into normalized transition progress for the
@@ -831,6 +893,20 @@ final class HomepageViewController: UIViewController,
         let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
         let progress = normalizedOffset / NewsTransitionHeaderCell.UX.transitionDistance
         return min(max(progress, 0), 1)
+    }
+
+    /// Snaps the news transition header to either the start or end of the transition when scrolling stops mid-transition.
+    private func snapNewsTransitionHeaderIfNeeded() {
+        guard isNewsTransitionEnabled(), let collectionView else { return }
+
+        let normalizedOffset = collectionView.contentOffset.y + collectionView.adjustedContentInset.top
+        guard let targetNormalizedOffset = NewsTransitionHeaderCell.UX.snappedTransitionOffset(for: normalizedOffset)
+        else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x,
+                                   y: targetNormalizedOffset - collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(targetOffset, animated: true)
+        updateNewsTransitionHeaderProgress()
     }
 
     // MARK: - Screenshotable
@@ -1054,6 +1130,11 @@ final class HomepageViewController: UIViewController,
 
     private func updatedSelectedNewsfeedCategory(selectedNewsfeedCategoryID: String?) {
         guard let activeTabUUID else { return }
+
+        // If the user switches categories while scrolled through the newsfeed, jump back to the
+        // offset where the pinned news header sits at the top before replacing the story items.
+        scrollNewsfeedToTop()
+
         homepageTabStateStore.updateState(for: activeTabUUID) { state in
             state.selectedNewsfeedCategoryID = selectedNewsfeedCategoryID
         }
@@ -1067,14 +1148,23 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(completion: (() -> Void)? = nil) {
+    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
+                                                   animatingDifferences: Bool = true,
+                                                   completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
-            jumpBackInDisplayConfig: getJumpBackInDisplayConfig()
+            jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
+            reconfigureHeader: reconfigureHeader,
+            animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
+    }
+
+    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
+        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
+            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
@@ -1085,6 +1175,50 @@ final class HomepageViewController: UIViewController,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             newsfeedCategoryPickerOffsetX: currentHomepageTabState.newsfeedCategoryPickerOffsetX
         )
+    }
+
+    private func scrollNewsfeedToTop(onlyIfScrolledPastHeader: Bool = true, animated: Bool = false) {
+        guard let activeTabUUID,
+              let collectionView,
+              let targetOffsetY = newsfeedHeaderPinnedOffsetY()
+        else { return }
+
+        guard !onlyIfScrolledPastHeader || collectionView.contentOffset.y > targetOffsetY else { return }
+
+        let targetOffset = CGPoint(x: collectionView.contentOffset.x, y: targetOffsetY)
+        collectionView.setContentOffset(targetOffset, animated: animated)
+        homepageTabStateStore.updateState(for: activeTabUUID) { state in
+            state.scrollOffsetY = targetOffsetY
+        }
+    }
+
+    private func newsfeedHeaderPinnedOffsetY() -> CGFloat? {
+        guard let collectionView,
+              let pocketSectionIndex = dataSource?.snapshot().sectionIdentifiers.firstIndex(where: {
+                  if case .pocket = $0 { return true }
+                  return false
+              })
+        else {
+            return nil
+        }
+
+        let headerIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        let firstStoryIndexPath = IndexPath(item: 0, section: pocketSectionIndex)
+        guard let firstStoryAttributes = collectionView.layoutAttributesForItem(at: firstStoryIndexPath),
+              let headerAttributes = collectionView.collectionViewLayout.layoutAttributesForSupplementaryView(
+                  ofKind: UICollectionView.elementKindSectionHeader,
+                  at: headerIndexPath
+              )
+        else {
+            return nil
+        }
+
+        // The pinned position is the header's natural minY adjusted for the collection view's top inset.
+        // Derive it from the first story cell so the calculation stays aligned with compositional layout spacing.
+        let naturalHeaderMinY = firstStoryAttributes.frame.minY
+            - HomepageSectionLayoutProvider.UX.headerSectionSpacing
+            - headerAttributes.frame.height
+        return naturalHeaderMinY - collectionView.adjustedContentInset.top
     }
 
     private func getNewsTransitionHeader() -> NewsTransitionHeaderCell? {

@@ -60,37 +60,6 @@ class SettingsTests: FeatureFlaggedTestBase {
         mozWaitForElementToExist(app.cells["SiriSettings"])
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2334756
-    func testCopiedLinks() {
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(BrowsingSettings)
-
-        // For iOS 15, we must scroll until the switch is visible.
-        if #unavailable(iOS 16) {
-            app.swipeUp()
-            mozWaitForElementToExist(app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"])
-        }
-        // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value as? String, "0")
-
-        // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].waitAndTap()
-
-        // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value2 as? String, "1")
-
-        navigator.nowAt(BrowsingSettings)
-        navigator.goto(NewTabScreen)
-        navigator.goto(BrowsingSettings)
-
-        // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
-        XCTAssertEqual(value3 as? String, "1")
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2307041
     func testOpenMailAppSettings() {
         app.launch()

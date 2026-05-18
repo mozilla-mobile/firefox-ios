@@ -46,6 +46,8 @@ final class WebServer: WebServerProtocol, @unchecked Sendable {
                 GCDWebServerOption_Port: AppInfo.webserverPort,
                 GCDWebServerOption_BindToLocalhost: true,
                 GCDWebServerOption_AutomaticallySuspendInBackground: false, // done by the app in AppDelegate
+                GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
+                GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
             ])
         }
         return server.isRunning

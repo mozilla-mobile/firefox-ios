@@ -78,8 +78,6 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     private weak var navigationDelegate: WKNavigationDelegate?
     private var tabsTelemetry = TabsTelemetry()
     private var delegates = [WeakTabManagerDelegate]()
-    // The only tab present before doing tab restoration, since deeplink happens before it
-    private var deeplinkTab: Tab?
     var tabRestoreHasFinished = false
     private(set) var selectedIndex: Int = -1
 
@@ -403,11 +401,6 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     func restoreTabs() {
         assert(Thread.isMainThread)
-        if isDeeplinkOptimizationRefactorEnabled {
-            // Deeplinks happens before tab restoration, so we should have a tab already present in the tabs list
-            // if the application was opened from a deeplink.
-            deeplinkTab = tabs.popLast()
-        }
 
         guard !isRestoringTabs, tabs.isEmpty else {
             logger.log("No restore tabs running",
@@ -564,14 +557,8 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
         for tabData in filteredTabs {
             let newTab = configureNewTab(with: tabData)
-            if isDeeplinkOptimizationRefactorEnabled {
-                if deeplinkTab == nil, windowData.activeTabId == tabData.id {
-                    tabToSelect = newTab
-                }
-            } else {
-                if windowData.activeTabId == tabData.id {
-                    tabToSelect = newTab
-                }
+            if windowData.activeTabId == tabData.id {
+                tabToSelect = newTab
             }
         }
 
@@ -583,27 +570,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func configureNewTab(with tabData: TabData) -> Tab? {
         let newTab: Tab
-
-        let isDeeplinkTabAlreadyAdded: Bool = if let deeplinkTab {
-            tabs.contains { $0.tabUUID == deeplinkTab.tabUUID }
-        } else {
-            false
-        }
-
-        if isDeeplinkOptimizationRefactorEnabled,
-           let deeplinkTab,
-           !isDeeplinkTabAlreadyAdded,
-           deeplinkTab.url?.absoluteString == tabData.siteUrl {
-            // if the deeplink tab has the same url of a tab data then use the deeplink tab for the restore
-            // in order to prevent a duplicate tab
-            newTab = deeplinkTab
-            let data = tabSessionStore.fetchTabSession(tabID: tabData.id)
-            newTab.webView?.interactionState = data
-            tabs.append(newTab)
-        } else {
-            newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
-        }
-
+        newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
         newTab.url = URL(string: tabData.siteUrl)
         newTab.lastTitle = tabData.title
         newTab.tabUUID = tabData.id.uuidString
@@ -632,18 +599,6 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func handleTabSelectionAfterRestore(tabToSelect: Tab?) {
         assert(Thread.isMainThread)
-        if isDeeplinkOptimizationRefactorEnabled, let deeplinkTab {
-            if let index = tabs.firstIndex(of: deeplinkTab) {
-                selectedIndex = index
-            } else {
-                // the deeplink tab has already been selected via `selectTab` before tab restoration so
-                // it just need to be appended to the tabs array
-                tabs.append(deeplinkTab)
-                selectedIndex = tabs.count - 1
-            }
-            self.deeplinkTab = nil
-            return
-        }
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
@@ -672,15 +627,16 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func restoreScreenshot(tab: Tab) {
-        Task {
+        Task { [weak tab, weak self] in
+            guard let tab else { return }
             do {
-                let screenshot = try await imageStore?.getImageForKey(tab.tabUUID)
+                let screenshot = try await self?.imageStore?.getImageForKey(tab.tabUUID)
                 tab.setScreenshot(screenshot)
             } catch {
-                logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
+                self?.logger.log("Failed to restore screenshot: \(error)", level: .warning, category: .tabs)
                 tab.setScreenshot(nil)
             }
-            await MainActor.run { dispatchDidSetScreenshotAction(for: tab) }
+            await MainActor.run { [weak self] in self?.dispatchDidSetScreenshotAction(for: tab) }
         }
     }
 
@@ -926,9 +882,10 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func storeScreenshot(tab: Tab) {
         guard let screenshot = tab.screenshot else { return }
 
+        let tabUUID = tab.tabUUID
         Task {
             do {
-                try await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+                try await imageStore?.saveImageForKey(tabUUID, image: screenshot)
             } catch {
                 logger.log("storing screenshot failed with error: \(error)", level: .warning, category: .redux)
             }
@@ -936,8 +893,9 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     }
 
     private func removeScreenshot(tab: Tab) {
+        let tabUUID = tab.tabUUID
         Task {
-            await imageStore?.deleteImageForKey(tab.tabUUID)
+            await imageStore?.deleteImageForKey(tabUUID)
         }
     }
 
@@ -946,6 +904,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         var savedUUIDs = Set<String>()
         tabs.forEach { savedUUIDs.insert($0.screenshotUUID?.uuidString ?? "") }
         let savedUUIDsCopy = savedUUIDs
+        let imageStore = imageStore
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
         }
@@ -953,6 +912,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
 
     private func cleanUpTabSessionData() {
         let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
@@ -976,6 +936,7 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
         }
         selectTab(tabToSelect)
         removeTab(selectedTab.tabUUID)
+        let tabSessionStore = tabSessionStore
         Task {
             await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
         }
@@ -1004,6 +965,21 @@ final class TabManagerImplementation: NSObject, TabManager, FeatureFlaggable {
     func expireLoginAlerts() {
         for tab in tabs {
             tab.expireLoginAlert()
+        }
+    }
+
+    func offloadBackgroundWebViews() async {
+        let backgroundTabsWithWebViews = tabs.filter { $0.webView != nil && $0 !== selectedTab }
+        logger.log("Offloading WebViews for \(backgroundTabsWithWebViews.count) background tabs",
+                   level: .info,
+                   category: .tabs)
+        // Sending telemetry for all webviews alive, even the selected tab one
+        tabsTelemetry.trackMemoryWarningOffload(
+            tabCount: tabs.count,
+            webViewCount: backgroundTabsWithWebViews.count + 1
+        )
+        for tab in backgroundTabsWithWebViews {
+            await tab.offloadWebView()
         }
     }
 

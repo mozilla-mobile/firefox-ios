@@ -13,6 +13,7 @@ protocol ToolbarSelectorsSet {
     var TABTOOLBAR_MENUBUTTON: Selector { get }
     var RELOAD_BUTTON: Selector { get }
     var SHARE_BUTTON: Selector { get }
+    var HOME_BUTTON: Selector { get }
     var TRANSLATE_BUTTON: Selector { get }
     var TRANSLATE_LOADING_BUTTON: Selector { get }
     var TRANSLATE_ACTIVE_BUTTON: Selector { get }
@@ -29,6 +30,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         static let tabToolbar_MenuButton = "TabToolbar.menuButton"
         static let reloadButton = AccessibilityIdentifiers.Toolbar.reloadButton
         static let shareButton = AccessibilityIdentifiers.Toolbar.shareButton
+        static let homeButton = AccessibilityIdentifiers.Toolbar.addNewTabButton
         static let translateButton = AccessibilityIdentifiers.Toolbar.translateButton
         static let translateLoadingButton = AccessibilityIdentifiers.Toolbar.translateLoadingButton
         static let translateActiveButton = AccessibilityIdentifiers.Toolbar.translateActiveButton
@@ -82,6 +84,12 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         groups: ["browser", "toolbar"]
     )
 
+    let HOME_BUTTON = Selector.buttonId(
+        IDs.homeButton,
+        description: "Home button in the toolbar",
+        groups: ["browser", "toolbar"]
+    )
+
     let TRANSLATE_BUTTON = Selector.buttonId(
         IDs.translateButton,
         description: "Translate button on browser toolbar",
@@ -109,6 +117,7 @@ struct ToolbarSelectors: ToolbarSelectorsSet {
         TABTOOLBAR_MENUBUTTON,
         RELOAD_BUTTON,
         SHARE_BUTTON,
+        HOME_BUTTON,
         TRANSLATE_BUTTON,
         TRANSLATE_LOADING_BUTTON,
         TRANSLATE_ACTIVE_BUTTON

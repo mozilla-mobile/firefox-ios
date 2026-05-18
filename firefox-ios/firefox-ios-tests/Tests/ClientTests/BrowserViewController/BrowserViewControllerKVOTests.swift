@@ -22,9 +22,8 @@ final class BrowserViewControllerKVOTests: XCTestCase, StoreTestUtility {
     override func setUp() async throws {
         try await super.setUp()
         tabManager = MockTabManager()
-        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         setupStore()
     }
 

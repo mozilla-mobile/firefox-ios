@@ -14,9 +14,8 @@ public struct QuickAnswersConfig: LLMConfig, Sendable {
     // TODO: FXIOS-15123 - need confirm we want to pass these options, follow similar to S2S for now
     /// Default initializer with production configuration
     public init(instructions: String = "", options: [String: AnyHashable] = [
-        "max_tokens": LiteLLMConfig.maxTokens,
-        "model": LiteLLMConfig.apiModel,
-        "stream": true
+        "model": "exa",
+        "stream": false
     ]) {
         self.instructions = instructions
         self.options = options

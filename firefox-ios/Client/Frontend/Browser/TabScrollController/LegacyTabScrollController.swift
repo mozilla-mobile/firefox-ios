@@ -677,6 +677,10 @@ private extension LegacyTabScrollController {
 
             zoomPageBar?.updateAlphaForSubviews(alpha)
             zoomPageBar?.superview?.layoutIfNeeded()
+
+            if isBottomSearchBar && overKeyboardOffset == 0 {
+                overKeyboardContainer?.updateAlphaForSubviews(alpha)
+            }
         }
     }
 

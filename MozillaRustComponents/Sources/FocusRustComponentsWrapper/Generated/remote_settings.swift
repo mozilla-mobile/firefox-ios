@@ -1409,6 +1409,122 @@ public func FfiConverterTypeRemoteSettingsRecord_lower(_ value: RemoteSettingsRe
 }
 
 
+public struct UptakeEventExtras: Equatable, Hashable {
+    /**
+     * Main sync status.
+     */
+    public var value: String?
+    /**
+     * Source of the sync (eg. "settings-changes-monitoring", "main/{collection}", ...)
+     */
+    public var source: String?
+    /**
+     * Age of the data in milliseconds, if available.
+     */
+    public var age: String?
+    /**
+     * Trigger that caused the sync (eg. "manual", "startup", "scheduled", ...) if available.
+     */
+    public var trigger: String?
+    /**
+     * Timestamp received from the server, if available.
+     */
+    public var timestamp: String?
+    /**
+     * Duration of the sync operation in milliseconds, if available.
+     */
+    public var duration: String?
+    /**
+     * The name of the error that occurred, if available.
+     */
+    public var errorName: String?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Main sync status.
+         */value: String?, 
+        /**
+         * Source of the sync (eg. "settings-changes-monitoring", "main/{collection}", ...)
+         */source: String?, 
+        /**
+         * Age of the data in milliseconds, if available.
+         */age: String?, 
+        /**
+         * Trigger that caused the sync (eg. "manual", "startup", "scheduled", ...) if available.
+         */trigger: String?, 
+        /**
+         * Timestamp received from the server, if available.
+         */timestamp: String?, 
+        /**
+         * Duration of the sync operation in milliseconds, if available.
+         */duration: String?, 
+        /**
+         * The name of the error that occurred, if available.
+         */errorName: String?) {
+        self.value = value
+        self.source = source
+        self.age = age
+        self.trigger = trigger
+        self.timestamp = timestamp
+        self.duration = duration
+        self.errorName = errorName
+    }
+
+    
+
+    
+}
+
+#if compiler(>=6)
+extension UptakeEventExtras: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeUptakeEventExtras: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UptakeEventExtras {
+        return
+            try UptakeEventExtras(
+                value: FfiConverterOptionString.read(from: &buf), 
+                source: FfiConverterOptionString.read(from: &buf), 
+                age: FfiConverterOptionString.read(from: &buf), 
+                trigger: FfiConverterOptionString.read(from: &buf), 
+                timestamp: FfiConverterOptionString.read(from: &buf), 
+                duration: FfiConverterOptionString.read(from: &buf), 
+                errorName: FfiConverterOptionString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: UptakeEventExtras, into buf: inout [UInt8]) {
+        FfiConverterOptionString.write(value.value, into: &buf)
+        FfiConverterOptionString.write(value.source, into: &buf)
+        FfiConverterOptionString.write(value.age, into: &buf)
+        FfiConverterOptionString.write(value.trigger, into: &buf)
+        FfiConverterOptionString.write(value.timestamp, into: &buf)
+        FfiConverterOptionString.write(value.duration, into: &buf)
+        FfiConverterOptionString.write(value.errorName, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUptakeEventExtras_lift(_ buf: RustBuffer) throws -> UptakeEventExtras {
+    return try FfiConverterTypeUptakeEventExtras.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeUptakeEventExtras_lower(_ value: UptakeEventExtras) -> RustBuffer {
+    return FfiConverterTypeUptakeEventExtras.lower(value)
+}
+
+
 /**
  * Public error class, this is what we return to consumers
  */
@@ -1520,8 +1636,11 @@ public func FfiConverterTypeRemoteSettingsError_lower(_ value: RemoteSettingsErr
 public enum RemoteSettingsServer: Equatable, Hashable {
     
     case prod
+    case prodV2
     case stage
+    case stageV2
     case dev
+    case devV2
     case custom(url: String
     )
 
@@ -1547,11 +1666,17 @@ public struct FfiConverterTypeRemoteSettingsServer: FfiConverterRustBuffer {
         
         case 1: return .prod
         
-        case 2: return .stage
+        case 2: return .prodV2
         
-        case 3: return .dev
+        case 3: return .stage
         
-        case 4: return .custom(url: try FfiConverterString.read(from: &buf)
+        case 4: return .stageV2
+        
+        case 5: return .dev
+        
+        case 6: return .devV2
+        
+        case 7: return .custom(url: try FfiConverterString.read(from: &buf)
         )
         
         default: throw UniffiInternalError.unexpectedEnumCase
@@ -1566,16 +1691,28 @@ public struct FfiConverterTypeRemoteSettingsServer: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         
         
-        case .stage:
+        case .prodV2:
             writeInt(&buf, Int32(2))
         
         
-        case .dev:
+        case .stage:
             writeInt(&buf, Int32(3))
         
         
-        case let .custom(url):
+        case .stageV2:
             writeInt(&buf, Int32(4))
+        
+        
+        case .dev:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .devV2:
+            writeInt(&buf, Int32(6))
+        
+        
+        case let .custom(url):
+            writeInt(&buf, Int32(7))
             FfiConverterString.write(url, into: &buf)
             
         }
@@ -1595,6 +1732,132 @@ public func FfiConverterTypeRemoteSettingsServer_lift(_ buf: RustBuffer) throws 
 #endif
 public func FfiConverterTypeRemoteSettingsServer_lower(_ value: RemoteSettingsServer) -> RustBuffer {
     return FfiConverterTypeRemoteSettingsServer.lower(value)
+}
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
+ * Remote Settings sync status.
+ */
+
+public enum SyncStatus: Equatable, Hashable {
+    
+    /**
+     * Sync completed and new data was stored.
+     */
+    case success
+    /**
+     * Local data is already up to date, no new data was stored.
+     */
+    case upToDate
+    /**
+     * A network-level error occurred (connection refused, timeout, bad HTTP status, ...)
+     */
+    case networkError
+    /**
+     * The server asked the client to back off.
+     */
+    case backoffError
+    /**
+     * Content signature verification failed.
+     */
+    case signatureError
+    /**
+     * Server error (5xx status)
+     */
+    case serverError
+    /**
+     * An unknown error occurred.
+     */
+    case unknownError
+
+
+
+
+
+}
+
+#if compiler(>=6)
+extension SyncStatus: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeSyncStatus: FfiConverterRustBuffer {
+    typealias SwiftType = SyncStatus
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SyncStatus {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .success
+        
+        case 2: return .upToDate
+        
+        case 3: return .networkError
+        
+        case 4: return .backoffError
+        
+        case 5: return .signatureError
+        
+        case 6: return .serverError
+        
+        case 7: return .unknownError
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: SyncStatus, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .success:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .upToDate:
+            writeInt(&buf, Int32(2))
+        
+        
+        case .networkError:
+            writeInt(&buf, Int32(3))
+        
+        
+        case .backoffError:
+            writeInt(&buf, Int32(4))
+        
+        
+        case .signatureError:
+            writeInt(&buf, Int32(5))
+        
+        
+        case .serverError:
+            writeInt(&buf, Int32(6))
+        
+        
+        case .unknownError:
+            writeInt(&buf, Int32(7))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSyncStatus_lift(_ buf: RustBuffer) throws -> SyncStatus {
+    return try FfiConverterTypeSyncStatus.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeSyncStatus_lower(_ value: SyncStatus) -> RustBuffer {
+    return FfiConverterTypeSyncStatus.lower(value)
 }
 
 

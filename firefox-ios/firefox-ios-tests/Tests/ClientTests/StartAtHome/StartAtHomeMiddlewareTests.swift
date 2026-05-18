@@ -25,13 +25,13 @@ final class StartAtHomeMiddlewareTests: XCTestCase, StoreTestUtility {
             wrappedManager: WindowManagerImplementation(),
             tabManager: mockTabManager
         )
+        mockWindowManager.overrideWindows = true
         // Inject the mock profile so that `UserFeaturePreferring` resolved from the
         // AppContainer reads from `mockProfile.prefs` (which the tests configure).
         DependencyHelperMock().bootstrapDependencies(
             injectedProfile: mockProfile,
             injectedWindowManager: mockWindowManager,
         )
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         setupStore()
         appState = setupAppState()
     }

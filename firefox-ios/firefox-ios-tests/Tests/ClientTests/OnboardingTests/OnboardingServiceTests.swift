@@ -84,9 +84,19 @@ class MockSearchBarLocationSaver: SearchBarLocationSaverProtocol {
     var saveUserSearchBarLocationCalled = false
     var savedProfile: Profile?
 
-    func saveUserSearchBarLocation(profile: Profile, userInterfaceIdiom: UIUserInterfaceIdiom) {
+    func saveUserSearchBarLocation(
+        profile: Profile,
+        userInterfaceIdiom: UIUserInterfaceIdiom
+    ) {
         saveUserSearchBarLocationCalled = true
         savedProfile = profile
+    }
+
+    func migrateBottomBarPositionToTopOnIPad(
+        profile: Profile,
+        userInterfaceIdiom: UIUserInterfaceIdiom
+    ) {
+        // no-op for now
     }
 }
 

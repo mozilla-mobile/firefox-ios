@@ -8,7 +8,7 @@ import Redux
 import Shared
 import UIKit
 
-final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
+final class AutoTranslatePromptView: UIView, AlphaDimmable, ThemeApplicable, Notifiable {
     private struct UX {
         static let borderThickness: CGFloat = 1.0
         static let contentPadding = NSDirectionalEdgeInsets(
@@ -149,6 +149,12 @@ final class AutoTranslatePromptView: UIView, ThemeApplicable, Notifiable {
             ensureMainThread { self.adjustLayout() }
         default: break
         }
+    }
+
+    // MARK: - AlphaDimmable
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        self.alpha = alpha
     }
 
     // MARK: - ThemeApplicable

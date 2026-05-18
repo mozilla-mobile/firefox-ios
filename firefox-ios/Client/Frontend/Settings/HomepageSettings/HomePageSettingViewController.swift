@@ -7,7 +7,7 @@ import Shared
 import Common
 
 class HomePageSettingViewController: SettingsTableViewController,
-                                     LegacyFeatureFlaggable, // TODO: ROUX remove with 15192
+                                     FeatureFlaggable,
                                      UserFeaturePreferenceProvider {
     // MARK: - Variables
     /* variables for checkmark settings */
@@ -16,6 +16,7 @@ class HomePageSettingViewController: SettingsTableViewController,
     var currentStartAtHomeSetting: StartAtHomeSetting?
     var hasHomePage = false
     var wallpaperManager: WallpaperManagerInterface
+    private let worldCupStore: WorldCupStoreProtocol
 
     var isWallpaperSectionEnabled: Bool {
         return wallpaperManager.canSettingsBeShown
@@ -29,9 +30,11 @@ class HomePageSettingViewController: SettingsTableViewController,
     init(prefs: Prefs,
          wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
          settingsDelegate: SettingsDelegate? = nil,
-         tabManager: TabManager) {
+         tabManager: TabManager,
+         worldCupStore: WorldCupStoreProtocol = WorldCupStore()) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.worldCupStore = worldCupStore
         super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
@@ -134,7 +137,7 @@ class HomePageSettingViewController: SettingsTableViewController,
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.JumpBackInSection,
-                defaultValue: userPreferences.isHomepageJumpBackInSectionEnabled,
+                defaultValue: userPreferences.getPreferenceFor(.homepageJumpBackinSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn
             ) { value in
                 store.dispatch(
@@ -151,7 +154,7 @@ class HomePageSettingViewController: SettingsTableViewController,
                 prefs: profile.prefs,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 prefKey: PrefsKeys.HomepageSettings.BookmarksSection,
-                defaultValue: userPreferences.isHomepageBookmarksSectionEnabled,
+                defaultValue: userPreferences.getPreferenceFor(.homepageBookmarksSectionDefault),
                 titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
             ) { value in
                 store.dispatch(
@@ -164,7 +167,7 @@ class HomePageSettingViewController: SettingsTableViewController,
             }
             sectionItems.append(bookmarksSetting)
 
-            if featureFlags.isFeatureEnabled(.worldCupWidget, checking: .buildOnly) {
+            if worldCupStore.isFeatureEnabled {
                 let windowUUID = self.windowUUID
                 let worldCupSetting = BoolSetting(
                     prefs: profile.prefs,
@@ -172,12 +175,11 @@ class HomePageSettingViewController: SettingsTableViewController,
                     prefKey: PrefsKeys.HomepageSettings.WorldCupSection,
                     defaultValue: true,
                     titleText: .Settings.Homepage.CustomizeFirefoxHome.WorldCup
-                ) { value in
+                ) { _ in
                     store.dispatch(
                         WorldCupAction(
                             windowUUID: windowUUID,
                             actionType: WorldCupActionType.didChangeHomepageSettings,
-                            shouldShowHomepageWorldCupSection: value
                         )
                     )
                 }
@@ -292,7 +294,7 @@ class HomePageSettingViewController: SettingsTableViewController,
 
 // MARK: - TopSitesSettings
 extension HomePageSettingViewController {
-    class TopSitesSettings: Setting, LegacyFeatureFlaggable {
+    class TopSitesSettings: Setting {
         var profile: Profile?
         let windowUUID: WindowUUID
 
@@ -326,7 +328,7 @@ extension HomePageSettingViewController {
 
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
-    class WallpaperSettings: Setting, LegacyFeatureFlaggable {
+    class WallpaperSettings: Setting {
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

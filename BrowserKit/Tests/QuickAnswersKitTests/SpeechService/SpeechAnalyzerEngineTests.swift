@@ -16,11 +16,11 @@ struct SpeechAnalyzerEngineTests {
 
     @available(iOS 26.0, *)
     @Test
-    func test_prepare_microphoneDenied_speechDenied_throwsError() async throws {
+    func test_prepare_microphoneDenied_speechDenied_throwsMicrophoneError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 
@@ -29,11 +29,24 @@ struct SpeechAnalyzerEngineTests {
 
     @available(iOS 26.0, *)
     @Test
-    func test_prepare_microphoneDenied_speechGranted_throwsError() async throws {
+    func test_prepare_microphoneDenied_firstTime_throwsMicrophoneFirstTimeError() async {
+        let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: false, micUndetermined: true)
+        let subject = createSubject(authorizer: authorizer)
+
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: true)) {
+            try await subject.prepare()
+        }
+
+        #expect(audioManager.configureAudioSessionCallCount == 0)
+    }
+
+    @available(iOS 26.0, *)
+    @Test
+    func test_prepare_microphoneDenied_speechGranted_throwsMicrophoneError() async {
         let authorizer = MockAuthorizer(micAuthorized: false, speechAuthorized: true)
         let subject = createSubject(authorizer: authorizer)
 
-        await #expect(throws: SpeechError.permissionDenied) {
+        await #expect(throws: SpeechError.microphonePermissionDenied(isFirstTime: false)) {
             try await subject.prepare()
         }
 

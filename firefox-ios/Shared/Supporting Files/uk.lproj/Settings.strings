@@ -76,6 +76,9 @@
 /* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
 "Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescription.v151" = "**Заблоковано**: ви не бачитимете й не зможете використовувати цю функцію. Для ШІ на пристрої всі завантажені моделі вилучаються.";
 
+/* In the AI Controls settings, in the AI powered features section, this is the text that what the blocked status means. The content between the ** ** is bolded. Please do not remove these in translation. */
+"Settings.AIControls.AIPoweredFeaturesSection.BlockedStatusDescriptionV2.v151" = "**Заблоковано**: ви не бачитимете й не зможете використовувати цю функцію. Для ШІ на пристрої всі завантажені моделі вилучаються.";
+
 /* In the AI Controls settings, in the AI powered features section, this is the message that describes the pages summaries feature */
 "Settings.AIControls.AIPoweredFeaturesSection.PageSummariesSection.Message.v151" = "Сторінки та підсумки ніколи не зберігаються.";
 
@@ -317,7 +320,7 @@
 "Settings.Summarize.GesturesSection.FooterTitle.v142" = "Потрусіть пристрій з боку в бік, щоб підсумувати вміст сторінки.";
 
 /* This is the title for the setting that toggles the Shake Gesture feature under the Summarize settings section. */
-"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Струснути, щоб підсумувати";
+"Settings.Summarize.GesturesSection.ShakeGestureTitle.v142" = "Потрусити, щоб підсумувати";
 
 /* This is the section title for the gestures features under the Summarize settings section. */
 "Settings.Summarize.GesturesSection.Title.v142" = "Жести";

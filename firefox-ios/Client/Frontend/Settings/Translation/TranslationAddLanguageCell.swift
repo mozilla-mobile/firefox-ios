@@ -12,6 +12,7 @@ final class TranslationAddLanguageCell: UICollectionViewListCell, ThemeApplicabl
         content.text = .Settings.Translation.PreferredLanguages.AddLanguage
         contentConfiguration = content
         accessories = []
+        accessibilityTraits = .button
         applyTheme(theme: theme)
     }
 

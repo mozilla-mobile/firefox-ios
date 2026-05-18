@@ -11,20 +11,34 @@ struct AuthorizationHandler: AuthorizeProvider {
         self.audioSession = audioSession
     }
 
-    func isMicrophonePermissionAuthorized() async -> Bool {
-        await withCheckedContinuation { continuation in
+    func requestMicrophonePermission() async throws {
+        let isFirstTimeRequest = isMicrophonePermissionUndetermined()
+        let isPermissionGranted = await withCheckedContinuation { continuation in
             audioSession.requestRecordPermission { granted in
                 continuation.resume(returning: granted)
             }
         }
+        guard !isPermissionGranted else { return }
+        throw SpeechError.microphonePermissionDenied(isFirstTime: isFirstTimeRequest)
     }
 
-    func isSpeechPermissionAuthorized() async -> Bool {
+    func requestSpeechPermission() async throws {
+        let isFirstTimeRequest = isSpeechPermissionUndetermined()
         let status = await withCheckedContinuation { continuation in
             SFSpeechRecognizer.requestAuthorization { status in
                 continuation.resume(returning: status)
             }
         }
-        return status == .authorized
+        let isPermissionGranted = status == .authorized
+        guard !isPermissionGranted else { return }
+        throw SpeechError.speechRecognitionPermissionDenied(isFirstTime: isFirstTimeRequest)
+    }
+
+    private func isMicrophonePermissionUndetermined() -> Bool {
+        return audioSession.recordPermission == .undetermined
+    }
+
+    private func isSpeechPermissionUndetermined() -> Bool {
+        return SFSpeechRecognizer.authorizationStatus() == .notDetermined
     }
 }

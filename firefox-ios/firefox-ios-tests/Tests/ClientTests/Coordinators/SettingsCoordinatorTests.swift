@@ -17,7 +17,6 @@ final class SettingsCoordinatorTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.wallpaperManager = WallpaperManagerMock()
         self.delegate = MockSettingsCoordinatorDelegate()
@@ -390,6 +389,15 @@ final class SettingsCoordinatorTests: XCTestCase {
 
         XCTAssertEqual(mockRouter.pushCalled, 1)
         XCTAssertTrue(mockRouter.pushedViewController is UIHostingController<AppearanceSettingsView>)
+    }
+
+    func testGeneralSettingsDelegate_pushedQuickAnswersSettings() {
+        let subject = createSubject()
+
+        subject.pressedQuickAnswers()
+
+        XCTAssertEqual(mockRouter.pushCalled, 1)
+        XCTAssertTrue(mockRouter.pushedViewController is QuickAnswersSettingsViewController)
     }
 
     func testGeneralSettingsDelegate_pushedSummarizeSettings() {

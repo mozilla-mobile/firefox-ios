@@ -1784,7 +1784,7 @@
 "Wallpaper.Error.Dismiss.v106" = "Mégse";
 
 /* Action displayed when changing wallpaper fails. */
-"Wallpaper.Error.TryAgain.v106" = "Próbálja újra";
+"Wallpaper.Error.TryAgain.v106" = "Újrapróbálkozás";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Webes tartalom";

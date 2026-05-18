@@ -4,11 +4,6 @@ features:
     description: >
       This feature is for managing the roll out of the Toolbar refactor feature
     variables:
-      toolbar_update_hint:
-        description: >
-          If true, enables the toolbar update contextual hint.
-        type: Boolean
-        default: false
       unified_search:
         description: >
           Enables the unified search feature.
@@ -29,13 +24,11 @@ features:
       - channel: beta
         value:
           unified_search: false
-          toolbar_update_hint: false
           layout: version1
           tab_tray_button_type: number
       - channel: developer
         value:
           unified_search: false
-          toolbar_update_hint: false
           layout: version1
           tab_tray_button_type: number
 

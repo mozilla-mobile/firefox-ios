@@ -22,7 +22,6 @@ final class StatusBarOverlayTests: XCTestCase {
         self.profile = MockProfile()
         self.wallpaperManager = WallpaperManagerMock()
         self.notificationCenter = MockNotificationCenter()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies(injectedProfile: profile)
     }
 

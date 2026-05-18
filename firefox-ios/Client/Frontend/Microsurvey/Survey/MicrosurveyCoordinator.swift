@@ -14,7 +14,7 @@ protocol MicrosurveyCoordinatorDelegate: AnyObject {
     func showPrivacy(with content: String?)
 }
 
-final class MicrosurveyCoordinator: BaseCoordinator, LegacyFeatureFlaggable, MicrosurveyCoordinatorDelegate {
+final class MicrosurveyCoordinator: BaseCoordinator, MicrosurveyCoordinatorDelegate {
     private struct UTMParams {
         static let source = "modal"
         static let campaign = "microsurvey"

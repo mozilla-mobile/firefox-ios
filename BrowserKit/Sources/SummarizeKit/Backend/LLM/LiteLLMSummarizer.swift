@@ -27,7 +27,8 @@ final class LiteLLMSummarizer: SummarizerProtocol {
         // System message is used for the `modelInstructions`, user message for the `contentToSummarize`.
         let messages = makeMessages(modelInstructions: config.instructions, contentToSummarize: contentToSummarize)
         do {
-            return try await client.requestChatCompletion(messages: messages, config: config)
+            let response = try await client.requestChatCompletion(messages: messages, config: config)
+            return response.content
         } catch {
             throw mapError(error)
         }
@@ -75,7 +76,7 @@ final class LiteLLMSummarizer: SummarizerProtocol {
     }
 
     /// Helper to build a typed message array from `modelInstructions and `contentToSummarize`.
-    private func makeMessages(modelInstructions: String, contentToSummarize: String) -> [LiteLLMMessage] {
+    private func makeMessages(modelInstructions: String, contentToSummarize: String) -> [StandardMessage] {
         return [
             LiteLLMMessage(role: .system, content: modelInstructions),
             LiteLLMMessage(role: .user, content: contentToSummarize)

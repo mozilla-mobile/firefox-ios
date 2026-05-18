@@ -66,13 +66,17 @@ final class TranslationSettingsMiddleware {
             // TODO: FXIOS-15421 Always configure new setting value instead of toggling pref
             let newValue = action.newSettingValue ?? !current
             prefs.setBool(newValue, forKey: PrefsKeys.Settings.translationsFeature)
-            SettingsTelemetry().changedSetting(
-                PrefsKeys.Settings.translationsFeature,
-                to: "\(newValue)",
-                from: "\(current)"
-            )
+            // If coming from AI Controls don't log telemetry, we are handling telemetry there
+            if !(action.toggledViaAIControls ?? false) {
+                SettingsTelemetry().changedSetting(
+                    PrefsKeys.Settings.translationsFeature,
+                    to: "\(newValue)",
+                    from: "\(current)"
+                )
+            }
             store.dispatch(ToolbarAction(
-                translationConfiguration: TranslationConfiguration(prefs: prefs),
+                isTranslationsEnabled: newValue,
+                translationConfiguration: TranslationConfiguration(prefs: prefs, isUserSettingEnabled: newValue),
                 windowUUID: action.windowUUID,
                 actionType: ToolbarActionType.didTranslationSettingsChange
             ))
@@ -100,6 +104,13 @@ final class TranslationSettingsMiddleware {
                 windowUUID: action.windowUUID,
                 actionType: TranslationSettingsMiddlewareActionType.didUpdateSettings
             ))
+            if newValue {
+                store.dispatch(ToolbarAction(
+                    translationConfiguration: TranslationConfiguration(prefs: prefs),
+                    windowUUID: action.windowUUID,
+                    actionType: ToolbarActionType.didTranslationSettingsChange
+                ))
+            }
 
         case TranslationSettingsViewActionType.addLanguage:
             guard let code = action.languageCode else { break }

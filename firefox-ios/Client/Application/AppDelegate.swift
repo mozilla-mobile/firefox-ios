@@ -63,7 +63,7 @@ class AppDelegate: UIResponder,
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        startRecordingStartupOpenURLTime()
+        shareTelemetry.recordOpenDeeplinkTime()
         // Configure app information for BrowserKit, needed for logger
         BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
                                                nightlyAppVersion: AppConstants.nightlyAppVersion,
@@ -86,11 +86,6 @@ class AppDelegate: UIResponder,
             .browserIsReady
         ])
 
-        // Initialize the feature flag subsystem.
-        // Among other things, it toggles on and off Nimbus, Unified ads, Adjust.
-        // i.e. this must be run before initializing those systems.
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-
         // Then setup dependency container as it's needed for everything else
         DependencyHelper().bootstrapDependencies()
 
@@ -112,28 +107,6 @@ class AppDelegate: UIResponder,
         Tab.ChangeUserAgent.performMigration()
 
         return true
-    }
-
-    private func startRecordingStartupOpenURLTime() {
-        shareTelemetry.recordOpenDeeplinkTime()
-        nonisolated(unsafe) var recordCompleteToken: ActionToken?
-        nonisolated(unsafe) var recordCancelledToken: ActionToken?
-        recordCompleteToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkComplete) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.sendOpenDeeplinkTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
-        recordCancelledToken = AppEventQueue.wait(for: .recordStartupTimeOpenDeeplinkCancelled) { [weak self] in
-            ensureMainThread { [weak self] in
-                self?.shareTelemetry.cancelOpenURLTimeRecord()
-                guard let recordCancelledToken, let recordCompleteToken  else { return }
-                AppEventQueue.cancelAction(token: recordCancelledToken)
-                AppEventQueue.cancelAction(token: recordCompleteToken)
-            }
-        }
     }
 
     func application(
@@ -269,6 +242,11 @@ class AppDelegate: UIResponder,
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         logger.log("Received memory warning", level: .info, category: .lifecycle)
+        Task {
+            for uuid in windowManager.allWindowUUIDs(includingReserved: false) {
+                await windowManager.tabManager(for: uuid).offloadBackgroundWebViews()
+            }
+        }
     }
 
     private func updateTopSitesWidget() {

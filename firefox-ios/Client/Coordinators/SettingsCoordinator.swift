@@ -201,6 +201,8 @@ final class SettingsCoordinator: BaseCoordinator,
             return BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
 
         case .toolbar:
+            // Toolbar position cannot be changed on iPad
+            guard UIDeviceDetails.userInterfaceIdiom != .pad else { return nil }
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
             return featureFlagsProvider.isEnabled(.addressBarMenu)
             ? UIHostingController(
@@ -430,6 +432,8 @@ final class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedToolbar() {
+        // Toolbar position cannot be changed on iPad
+        guard UIDeviceDetails.userInterfaceIdiom != .pad else { return }
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
         if featureFlagsProvider.isEnabled(.addressBarMenu) {
             let viewController = UIHostingController(
@@ -465,6 +469,14 @@ final class SettingsCoordinator: BaseCoordinator,
         let viewController = BrowsingSettingsViewController(profile: profile,
                                                             windowUUID: windowUUID)
         viewController.parentCoordinator = self
+        router.push(viewController)
+    }
+
+    func pressedQuickAnswers() {
+        let viewController = QuickAnswersSettingsViewController(
+            prefs: profile.prefs,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
     }
 

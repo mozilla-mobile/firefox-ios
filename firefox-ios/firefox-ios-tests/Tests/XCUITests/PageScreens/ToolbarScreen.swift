@@ -16,9 +16,11 @@ final class ToolbarScreen {
 
     private var tabsButton: XCUIElement { sel.TABS_BUTTON.element(in: app) }
     private var newTabButton: XCUIElement { sel.NEW_TAB_BUTTON.element(in: app)}
+    private var forwardButton: XCUIElement { sel.FORWARD_BUTTON.element(in: app)}
     private var backButton: XCUIElement { sel.BACK_BUTTON.element(in: app)}
     private var tabToolbarMenuButton: XCUIElement { sel.TABTOOLBAR_MENUBUTTON.element(in: app) }
     private var shareButton: XCUIElement { sel.SHARE_BUTTON.element(in: app) }
+    private var homeButton: XCUIElement { sel.HOME_BUTTON.element(in: app) }
     private var translateButton: XCUIElement { sel.TRANSLATE_BUTTON.element(in: app) }
     private var translateLoadingButton: XCUIElement { sel.TRANSLATE_LOADING_BUTTON.element(in: app) }
     private var translateActiveButton: XCUIElement { sel.TRANSLATE_ACTIVE_BUTTON.element(in: app) }
@@ -91,6 +93,10 @@ final class ToolbarScreen {
         BaseTestCase().mozWaitForElementToExist(backButton)
     }
 
+	func assertForwardButtonExists() {
+		BaseTestCase().mozWaitForElementToExist(forwardButton)
+	}
+
     func tapBackButton() {
         backButton.waitAndTap()
     }
@@ -131,12 +137,26 @@ final class ToolbarScreen {
         return settingMenuButton
     }
 
+    func getTabsButtonElement() -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(tabsButton)
+        return tabsButton
+    }
+
+    func getForwardButtonElement() -> XCUIElement {
+        BaseTestCase().mozWaitForElementToExist(forwardButton)
+        return forwardButton
+    }
+
     func tapShareButton() {
         shareButton.waitAndTap()
     }
 
     func tapOnNewTabButton() {
         newTabButton.waitAndTap()
+    }
+
+    func tapHomeButton() {
+        homeButton.waitAndTap()
     }
 
     // MARK: - Translate Button

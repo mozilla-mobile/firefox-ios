@@ -11,7 +11,7 @@ struct ZoomConstants {
     static let upperZoomLimit: CGFloat = ZoomLevel.threeHundredPercent.rawValue
 }
 
-class ZoomPageManager: TabEventHandler, LegacyFeatureFlaggable {
+class ZoomPageManager: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     let windowUUID: WindowUUID
@@ -26,7 +26,7 @@ class ZoomPageManager: TabEventHandler, LegacyFeatureFlaggable {
          zoomStore: ZoomLevelStorage = ZoomLevelStore.shared) {
         self.windowUUID = windowUUID
         self.zoomStore = zoomStore
-        register(self, forTabEvents: .didGainFocus, .didChangeURL)
+        register(self, forTabEvents: .didGainFocus, .didLoseFocus, .didClose, .didChangeURL)
     }
 
     @MainActor
@@ -150,6 +150,16 @@ class ZoomPageManager: TabEventHandler, LegacyFeatureFlaggable {
         if tab.pageZoom != getZoomLevel() {
             updatePageZoom()
         }
+    }
+
+    func tabDidLoseFocus(_ tab: Tab) {
+        guard tab == self.tab else { return }
+        self.tab = nil
+    }
+
+    func tabDidClose(_ tab: Tab) {
+        guard tab == self.tab else { return }
+        self.tab = nil
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {

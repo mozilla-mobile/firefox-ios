@@ -21,13 +21,18 @@ final class DefaultResultsService: ResultsService {
     }
 
     func fetchResults(for transcription: String) async throws -> SearchResult {
-        let message = LiteLLMMessage(role: .user, content: transcription)
-        // TODO: FXIOS-15198 - Handle mapping errors from request
-        let fullResponse = try await requestChatCompletion(for: message)
-        return try formatResult(from: fullResponse)
+        let message: QuickAnswersMessage = LiteLLMMessage(role: .user, content: transcription)
+
+        do {
+            let fullResponse = try await requestChatCompletion(for: message)
+            let citations = fullResponse.providerSpecificFields?.citations ?? []
+            return formatResult(from: fullResponse.content, and: citations)
+        } catch {
+            throw mapError(error)
+        }
     }
 
-    private func requestChatCompletion(for message: LiteLLMMessage) async throws -> String {
+    private func requestChatCompletion(for message: QuickAnswersMessage) async throws -> QuickAnswersMessage {
         // TODO: FXIOS-15198 Handle errors appropriately
         // and may need to change type and not use String,
         // but waiting for what we get on server side
@@ -37,15 +42,34 @@ final class DefaultResultsService: ResultsService {
         )
     }
 
-    private func formatResult(from response: String) throws -> SearchResult {
-        // TODO: FXIOS-15197 - Implement parsing logic based on response format and update Search Result
-        return SearchResult(
-            resultText: response,
-            sources: [SearchResult.Source(
-                title: "",
-                thumbnailURL: nil,
-                faviconURL: nil
-            )]
-        )
+    private func formatResult(from answer: String, and citations: [Citation]) -> SearchResult {
+        let sources = citations.map { citation in
+            SearchResult.Source(
+                title: citation.title ?? "",
+                thumbnailURL: URL(string: citation.image ?? ""),
+                faviconURL: URL(string: citation.favicon ?? "")
+            )
+        }
+        return SearchResult(resultText: answer, sources: sources)
+    }
+
+    /// Maps underlying errors to `ResultsServiceError` types.
+    private func mapError(_ error: Error) -> ResultsServiceError {
+        switch error {
+        case LiteLLMClientError.requestCreationFailed:
+            return .requestCreationFailed
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 429:
+            return .rateLimited
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 403:
+            return .maxUsers
+        case LiteLLMClientError.invalidResponse(let statusCode) where statusCode == 413:
+            return .payloadTooLarge
+        case LiteLLMClientError.invalidResponse(let statusCode):
+            return .invalidResponse(statusCode: statusCode)
+        case LiteLLMClientError.noContent:
+            return .noMessage
+        case let e as LiteLLMClientError: return .unknown(e.localizedDescription)
+        default: return .unknown(error.localizedDescription)
+        }
     }
 }

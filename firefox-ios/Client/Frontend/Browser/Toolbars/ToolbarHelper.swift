@@ -30,7 +30,7 @@ protocol ToolbarHelperInterface {
     func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState
 }
 
-final class ToolbarHelper: ToolbarHelperInterface, LegacyFeatureFlaggable {
+final class ToolbarHelper: ToolbarHelperInterface {
     private enum UX {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }

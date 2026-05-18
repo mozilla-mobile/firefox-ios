@@ -12,9 +12,9 @@ import MLPAKit
 final class LiteLLMClientTests: XCTestCase {
     private static let mockAPIEndpoint = "https://test-api-url.com"
     private static let mockAPIKey =  "test-api-key"
-    private static let mockMessages = [
-        LiteLLMMessage(role: .system, content: "Init chat"),
-        LiteLLMMessage(role: .user, content: "Hello")
+    private static let mockMessages: [StandardMessage] = [
+        StandardMessage(role: .system, content: "Init chat"),
+        StandardMessage(role: .user, content: "Hello")
     ]
 
     private static let liteLLMMessagePayload = """
@@ -60,13 +60,13 @@ final class LiteLLMClientTests: XCTestCase {
     """.data(using: .utf8)!
 
     func testLiteLLMMessageCodable() throws {
-        let msg = try JSONDecoder().decode(LiteLLMMessage.self, from: Self.liteLLMMessagePayload)
+        let msg = try JSONDecoder().decode(StandardMessage.self, from: Self.liteLLMMessagePayload)
         XCTAssertEqual(msg.role, .user)
         XCTAssertEqual(msg.content, "Hello !")
     }
 
     func testLiteLLMResponseCodable() throws {
-        let response = try JSONDecoder().decode(LiteLLMResponse.self, from: Self.liteLLMResponsePayload)
+        let response = try JSONDecoder().decode(LiteLLMResponse<EmptyProviderFields>.self, from: Self.liteLLMResponsePayload)
         XCTAssertEqual(response.id, "resp-1")
         let firstChoice = response.choices.first
         XCTAssertEqual(firstChoice?.message?.role, .assistant)
@@ -144,6 +144,56 @@ final class LiteLLMClientTests: XCTestCase {
         let json = try JSONSerialization.jsonObject(with: bodyData, options: [])
                     as? [String: Any]
         XCTAssertEqual(json?["stream"] as? Bool, true)
+    }
+
+    func testQuickAnswersMessageCodableWithCitations() throws {
+        let payload = """
+        {
+          "role": "assistant",
+          "content": "Quick answer here",
+          "provider_specific_fields": {
+            "citations": [
+              {
+                "id": "cite-1",
+                "title": "Source Title",
+                "url": "https://source.com",
+                "image": "https://source.com/image.png",
+                "favicon": "https://source.com/favicon.ico"
+              }
+            ]
+          }
+        }
+        """.data(using: .utf8)!
+
+        let message = try JSONDecoder().decode(QuickAnswersMessage.self, from: payload)
+        XCTAssertEqual(message.role, .assistant)
+        XCTAssertEqual(message.content, "Quick answer here")
+        XCTAssertEqual(message.providerSpecificFields?.citations?.count, 1)
+
+        let citation = try XCTUnwrap(message.providerSpecificFields?.citations?.first)
+        XCTAssertEqual(citation.id, "cite-1")
+        XCTAssertEqual(citation.title, "Source Title")
+        XCTAssertEqual(citation.url, "https://source.com")
+        XCTAssertEqual(citation.image, "https://source.com/image.png")
+        XCTAssertEqual(citation.favicon, "https://source.com/favicon.ico")
+    }
+
+    func testMakeRequestWithQuickAnswersMessages() async throws {
+        let subject = createSubject()
+        let messages: [QuickAnswersMessage] = [
+            QuickAnswersMessage(role: .user, content: "What is the weather?")
+        ]
+        let config = MockConfig(instructions: "", options: ["model": "exa"])
+
+        let urlRequest = try await subject.makeRequest(messages: messages, config: config)
+
+        let bodyData = try XCTUnwrap(urlRequest.httpBody)
+        let json = try JSONSerialization.jsonObject(with: bodyData) as? [String: Any]
+        let messagesArray = try XCTUnwrap(json?["messages"] as? [[String: Any]])
+
+        XCTAssertEqual(messagesArray.count, 1)
+        XCTAssertEqual(messagesArray[0]["role"] as? String, "user")
+        XCTAssertEqual(messagesArray[0]["content"] as? String, "What is the weather?")
     }
 
     private func createSubject() -> LiteLLMClient {

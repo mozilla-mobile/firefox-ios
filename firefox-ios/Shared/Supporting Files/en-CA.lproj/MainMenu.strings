@@ -421,11 +421,20 @@
 /* On the main menu, the accessibility label describing the language that the webpage was translated to. %@ is the language selected (e.g. English). */
 "MainMenu.ToolsSection.Translation.AccessibilityLabels.TranslatedPageLanguage.v145" = "Translated to %@";
 
+/* On the main menu, the badge shown on the Translate Page item when translation is inactive. */
+"MainMenu.ToolsSection.Translation.Off.v151" = "Off";
+
 /* On the main menu, the title for the action that will translate the content of the webpage. */
 "MainMenu.ToolsSection.Translation.Title.v145" = "Translate Page";
 
+/* On the main menu, in the multi-language translation flow, the title for the action that will open a language picker to choose a language and translate the content of the webpage. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Title.v151" = "Translate Page…";
+
 /* On the main menu, the title for the action that shows that the content of the webpage is already translated. */
 "MainMenu.ToolsSection.Translation.Translated.Title.v145" = "Translated";
+
+/* On the main menu, in the multi-language translation flow, the title for the action that shows the content of the webpage has been translated. Tapping opens a language picker to change the language. The ellipsis indicates that a language picker will open. */
+"MainMenu.ToolsSection.Translation.Translated.Title.v151" = "Translated…";
 
 /* On the main menu, a title for a label that indicate the Website Dark Mode option from menu, is OFF. */
 "MainMenu.WebsiteDarkModeOffV2.Title.v142" = "Off";

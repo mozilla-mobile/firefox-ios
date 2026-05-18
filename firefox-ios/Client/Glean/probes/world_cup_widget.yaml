@@ -1,0 +1,37 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Swift code at build time using the `glean_parser`
+# PyPI package.
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+$tags:
+  - WorldCupWidget
+
+world_cup_countdown_widget:
+  close_button:
+    type: event
+    description: |
+      Records when the user taps the close button on the World Cup countdown widget.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33671
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  view_schedule:
+    type: event
+    description: |
+      Records when the user taps the "View Schedule" button on the World Cup countdown widget.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15733
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33671
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

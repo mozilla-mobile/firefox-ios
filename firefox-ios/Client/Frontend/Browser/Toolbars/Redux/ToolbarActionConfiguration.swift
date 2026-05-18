@@ -5,7 +5,7 @@
 import Foundation
 import ToolbarKit
 
-struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
+struct ToolbarActionConfiguration: Equatable {
     enum ActionType {
         case back
         case forward
@@ -48,6 +48,7 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var cacheId: String?
     var a11yCustomActionName: String?
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
@@ -58,7 +59,7 @@ struct ToolbarActionConfiguration: Equatable, LegacyFeatureFlaggable {
                actionType == .readerMode ||
                actionType == .readerModeWithSummarizer ||
                actionType == .summarizer ||
-               (actionType == .translate && isSelected) ||
+               actionType == .translate ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

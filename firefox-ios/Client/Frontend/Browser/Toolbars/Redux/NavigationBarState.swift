@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
 import Redux
 
 enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
@@ -29,7 +28,6 @@ enum NavigationBarMiddleButtonType: String, Equatable, CaseIterable {
     }
 }
 
-@CopyWithUpdates
 struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var actions: [ToolbarActionConfiguration]
@@ -120,7 +118,8 @@ struct NavigationBarState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
             displayBorder: displayBorder,
             middleButton: middleButton
@@ -131,8 +130,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
-            actions: navigationActions(action: toolbarAction, navigationBarState: state)
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -140,8 +142,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
-            actions: navigationActions(action: toolbarAction, navigationBarState: state)
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -149,8 +154,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleDidSetTabScreenshotAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
-            actions: navigationActions(action: toolbarAction, navigationBarState: state)
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -158,8 +166,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
-            actions: navigationActions(action: toolbarAction, navigationBarState: state)
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -167,8 +178,11 @@ struct NavigationBarState: StateType, Equatable {
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
-            actions: navigationActions(action: toolbarAction, navigationBarState: state)
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -178,8 +192,11 @@ struct NavigationBarState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
-            displayBorder: displayBorder
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: displayBorder,
+            middleButton: state.middleButton
         )
     }
 
@@ -189,14 +206,21 @@ struct NavigationBarState: StateType, Equatable {
               let middleButton = toolbarAction.middleButton
         else { return defaultState(from: state) }
 
-        return state.copyWithUpdates(
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
             actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder,
             middleButton: middleButton
         )
     }
 
     static func defaultState(from state: NavigationBarState) -> NavigationBarState {
-        return state.copyWithUpdates()
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: state.displayBorder,
+            middleButton: state.middleButton
+        )
     }
 
     // MARK: - Navigation Toolbar Actions

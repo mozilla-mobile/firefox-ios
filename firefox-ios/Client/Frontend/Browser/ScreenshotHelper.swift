@@ -112,9 +112,9 @@ class ScreenshotHelper {
             }
             webView.setPullRefreshVisibility(isVisible: false)
 
-            webView.takeSnapshot(with: configuration) { image, error in
+            webView.takeSnapshot(with: configuration) { [weak tab] image, error in
                 webView.setPullRefreshVisibility(isVisible: true)
-                if let image {
+                if let image, let tab {
                     tab.hasHomeScreenshot = false
                     tab.setScreenshot(image)
                     store.dispatch(

@@ -134,10 +134,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         let key = 15
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.cells["Search"])
-        app.cells["Search"].swipeUp()
-        app.cells["AutofillsPasswordsSettings"].waitAndTap(timeout: 15)
-        app.cells["Logins"].waitAndTap(timeout: 15)
+        navigator.goto(LoginsSettings)
 
         // Press continue button on the password onboarding if it's shown
         if app.buttons[AccessibilityIdentifiers.Settings.Passwords.onboardingContinue].exists {
@@ -145,8 +142,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
 
         let passcodeInput = springboard.secureTextFields.firstMatch
-        passcodeInput.waitAndTap(timeout: 30)
-        passcodeInput.typeText("foo\n")
+        mozWaitForElementToExist(passcodeInput)
+        passcodeInput.tapAndTypeText("foo\n")
         mozWaitForElementToNotExist(passcodeInput)
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 25)
@@ -165,6 +162,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
         mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
         mozWaitForElementToExist(app.sheets.firstMatch)
+        mozWaitForElementToExist(app.sheets.firstMatch.staticTexts.firstMatch)
+        mozWaitForElementToExist(app.sheets.firstMatch.buttons.firstMatch)
         mozWaitForElementToExist(app.sheets.firstMatch.buttons.element(boundBy: 1))
         app.sheets.firstMatch.buttons.firstMatch.waitAndTap()
         mozWaitForElementToNotExist(app.sheets.firstMatch)

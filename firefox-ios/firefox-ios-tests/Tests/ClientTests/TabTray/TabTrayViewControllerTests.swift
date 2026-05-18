@@ -21,7 +21,6 @@ final class TabTrayViewControllerTests: XCTestCase {
         delegate = MockTabTrayViewControllerDelegate()
         navigationController = DismissableNavigationViewController()
         tabManager = mockTabManager
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
     override func tearDown() async throws {

@@ -46,9 +46,9 @@ class MockFxAccount: PersistedFirefoxAccount {
         case .initialize:
             return initializeResult
         case .beginOAuthFlow:
-            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo")
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case .beginPairingFlow:
-            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo")
+            return .authenticating(oauthUrl: "https://foo.bar/oauth?state=bobo", initialState: .disconnected)
         case let .completeOAuthFlow(_, state):
             // Simulate Rust's OAuth state validation
             return state == "bobo" ? .connected : .disconnected

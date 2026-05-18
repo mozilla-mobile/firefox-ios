@@ -18,9 +18,7 @@ protocol SearchEngineSelectionCoordinator: AnyObject {
     func dismissModal(animated: Bool)
 }
 
-class DefaultSearchEngineSelectionCoordinator: BaseCoordinator,
-                                               LegacyFeatureFlaggable,
-                                               SearchEngineSelectionCoordinator {
+class DefaultSearchEngineSelectionCoordinator: BaseCoordinator, SearchEngineSelectionCoordinator {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: SearchEngineSelectionCoordinatorDelegate?
 

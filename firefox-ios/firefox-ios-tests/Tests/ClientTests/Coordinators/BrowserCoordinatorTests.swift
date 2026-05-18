@@ -6,6 +6,7 @@ import Common
 import ComponentLibrary
 import MozillaAppServices
 import Redux
+import SwiftUI
 import WebKit
 import XCTest
 import GCDWebServers
@@ -29,6 +30,7 @@ final class BrowserCoordinatorTests: XCTestCase,
     private var browserViewController: MockBrowserViewController!
     private var mockStore: MockStoreForMiddleware<AppState>!
     private var homepageTabStateStore: HomepageTabStateStore!
+    private var mockWorldCupStore: MockWorldCupStore!
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() async throws {
@@ -37,7 +39,6 @@ final class BrowserCoordinatorTests: XCTestCase,
         self.tabManager = mockTabManager
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: mockTabManager)
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         setIsAppleSummarizerEnabled(false)
         setIsDeeplinkOptimizationRefactorEnabled(false)
         mockRouter = MockRouter(navigationController: MockNavigationController())
@@ -48,6 +49,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = MockStatusBarScrollDelegate()
         browserViewController = MockBrowserViewController(profile: profile, tabManager: tabManager)
         homepageTabStateStore = HomepageTabStateStore()
+        mockWorldCupStore = MockWorldCupStore()
         setupStore()
     }
 
@@ -63,6 +65,7 @@ final class BrowserCoordinatorTests: XCTestCase,
         scrollDelegate = nil
         browserViewController = nil
         homepageTabStateStore = nil
+        mockWorldCupStore = nil
         resetStore()
         DependencyHelperMock().reset()
         try await super.tearDown()
@@ -141,6 +144,36 @@ final class BrowserCoordinatorTests: XCTestCase,
                              toastContainer: UIView())
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
+    }
+
+    func testShowHomepage_whenAlreadyEmbedded_doesNotRestoreScrollOffset() throws {
+        let tab = MockTab(profile: profile, windowUUID: windowUUID)
+        tabManager.tabs = [tab]
+        tabManager.selectedTab = tab
+        homepageTabStateStore.updateState(for: tab.tabUUID) { $0.scrollOffsetY = 180 }
+        let subject = createSubject()
+
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: true,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        let homepageViewController = try XCTUnwrap(subject.homepageViewController)
+        let collectionView = try XCTUnwrap(
+            homepageViewController.view.subviews.first(where: { $0 is UICollectionView }) as? UICollectionView
+        )
+        collectionView.contentOffset = CGPoint(x: 0, y: 75)
+
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: true,
+            statusBarScrollDelegate: scrollDelegate,
+            toastContainer: UIView()
+        )
+
+        XCTAssertEqual(collectionView.contentOffset.y, 75)
     }
 
     // MARK: - Show new homepage
@@ -540,7 +573,11 @@ final class BrowserCoordinatorTests: XCTestCase,
 
     // MARK: - Summarize Panel
 
-    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async {
+    func testShowSummarizePanel_whenSummarizeFeatureEnabled_showsPanel() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -558,7 +595,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         await Task.yield()
     }
 
-    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() {
+    func testShowSummarizePanel_whenSelectedTabIsHomePage_doesntShowPanel() throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID, isHomePage: true)
@@ -583,7 +624,11 @@ final class BrowserCoordinatorTests: XCTestCase,
         }))
     }
 
-    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async {
+    func testShowSummarizePanel_whenSummarizeCoordinatorAlreadyPresent_doesntAddNewOne() async throws {
+        // Skip the entire test run if device < iOS 26 due to testing Apple Intelligence capabilities
+        guard #available(iOS 26, *) else {
+            throw XCTSkip("Skipping iOS 26-only tests on earlier OS versions")
+        }
         setIsAppleSummarizerEnabled(true)
         let subject = createSubject()
         let tab = MockTab(profile: profile, windowUUID: windowUUID)
@@ -646,6 +691,19 @@ final class BrowserCoordinatorTests: XCTestCase,
 
         XCTAssertNotNil(mockRouter.pushedViewController as? ShortcutsLibraryViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
+    }
+
+    // MARK: - World Cup Country Picker
+
+    func testShowWorldCupCountryPicker_presentsHostingController() throws {
+        let subject = createSubject()
+
+        subject.showWorldCupCountryPicker()
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(
+            mockRouter.presentedViewController is UIHostingController<WorldCupCountryPickerView>
+        )
     }
 
     func testShowPrivacyNoticeLink_showsTermsOfUseLinkView() throws {
@@ -1407,6 +1465,134 @@ final class BrowserCoordinatorTests: XCTestCase,
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Route handling
+
+    // MARK: canHandle(route:)
+
+    func testCanHandle_refactorEnabled_returnsFalse_beforeBrowserLoaded() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertFalse(result)
+    }
+
+    func testCanHandle_refactorEnabled_returnsTrue_afterBrowserLoaded() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertTrue(result)
+    }
+
+    func testCanHandle_refactorEnabled_returnsTrue_whenTabsAreRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertTrue(result, "With refactor enabled, isRestoringTabs should not block route handling")
+    }
+
+    func testCanHandle_refactorDisabled_returnsFalse_beforeBrowserLoaded() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        let subject = createSubject()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertFalse(result)
+    }
+
+    func testCanHandle_refactorDisabled_returnsFalse_whenTabsAreRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertFalse(result, "With refactor disabled, isRestoringTabs should block route handling")
+    }
+
+    func testCanHandle_refactorDisabled_returnsTrue_whenBrowserReadyAndNotRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        tabManager.isRestoringTabs = false
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        let result = subject.canHandle(route: .search(url: nil, isPrivate: false))
+
+        XCTAssertTrue(result)
+    }
+
+    // MARK: handle(route:)
+
+    func testHandle_refactorEnabled_executesRoute_whenBrowserReady() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
+
+        XCTAssertTrue(browserViewController.handleQueryCalled)
+        XCTAssertEqual(browserViewController.handleQuery, "firefox")
+    }
+
+    func testHandle_refactorEnabled_doesNotExecuteRoute_beforeBrowserLoaded() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+
+        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
+
+        XCTAssertFalse(browserViewController.handleQueryCalled)
+    }
+
+    func testHandle_refactorEnabled_executesRoute_whenTabsAreRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(true)
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
+
+        XCTAssertTrue(browserViewController.handleQueryCalled,
+                      "With refactor enabled, route should execute even while tabs are restoring")
+    }
+
+    func testHandle_refactorDisabled_doesNotExecuteRoute_whenTabsAreRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        tabManager.isRestoringTabs = true
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
+
+        XCTAssertFalse(browserViewController.handleQueryCalled,
+                       "With refactor disabled, route should not execute while tabs are restoring")
+    }
+
+    func testHandle_refactorDisabled_executesRoute_whenBrowserReadyAndNotRestoring() {
+        setIsDeeplinkOptimizationRefactorEnabled(false)
+        tabManager.isRestoringTabs = false
+        let subject = createSubject()
+        subject.browserViewController = browserViewController
+        subject.browserHasLoaded()
+
+        subject.handle(route: .searchQuery(query: "firefox", isPrivate: false))
+
+        XCTAssertTrue(browserViewController.handleQueryCalled)
+        XCTAssertEqual(browserViewController.handleQuery, "firefox")
+    }
+
     // MARK: - StoreTestUtility
     func setupAppState() -> AppState {
         return AppState()
@@ -1430,7 +1616,8 @@ final class BrowserCoordinatorTests: XCTestCase,
                                          homepageTabStateStore: homepageTabStateStore,
                                          profile: profile,
                                          glean: glean,
-                                         applicationHelper: applicationHelper)
+                                         applicationHelper: applicationHelper,
+                                         worldCupStore: mockWorldCupStore)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

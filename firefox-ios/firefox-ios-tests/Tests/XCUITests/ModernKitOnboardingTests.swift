@@ -177,7 +177,6 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         onboardingScreen.selectThemeButtons()
 
-        onboardingScreen.selectTheme("Automatic")
         onboardingScreen.goToNextScreenViaPrimary()
     }
 
@@ -205,7 +204,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
         // Screen 3: Choose theme - Continue (primary button)
         onboardingScreen.assertTitle()
-        onboardingScreen.selectTheme("Automatic")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         // Screen 4: Sign in to sync - Not now (secondary button)
@@ -232,7 +231,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
             onboardingScreen.currentScreen += 1
         }
 
-        onboardingScreen.selectTheme("Automatic")
+        onboardingScreen.selectThemeButtons()
         onboardingScreen.goToNextScreenViaPrimary()
 
         onboardingScreen.assertSyncScreen()

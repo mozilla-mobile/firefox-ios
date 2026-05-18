@@ -405,6 +405,16 @@ class Tab: NSObject,
 
     var contentBlocker: FirefoxTabContentBlocker?
 
+    /// Per-tab translation state. Mirrors the Redux `AddressBarState.translationConfiguration` so the
+    /// toolbar/menu can be re-synced with the WKWebView's translated DOM after a tab switch.
+    /// Cleared on real navigation in `webView(_:didCommit:)`.
+    var translationConfiguration: TranslationConfiguration?
+
+    /// One-shot closure registered by a feature before a navigation it owns. `webView(_:didCommit:)`
+    /// calls and clears it on the next commit; if nil the commit is treated as a regular navigation
+    /// and any feature-owned state (e.g. `translationConfiguration`) is cleared.
+    var onNextCommit: (() -> Void)?
+
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
@@ -458,6 +468,9 @@ class Tab: NSObject,
     private var webViewLoadingObserver: NSKeyValueObservation?
 
     private var temporaryDocumentsSession: TemporaryDocumentSession = [:]
+
+    // MARK: - Tab leaks detection view
+    private var uiTestLeakView: UIView?
 
     // MARK: - Dependencies
     var profile: Profile
@@ -577,11 +590,16 @@ class Tab: NSObject,
         }
     }
 
+    /// Keep final cleanup in deinit as a safety net, but add call in close() explicitly
+    /// because retained tabs may delay deinit and keep resources alive.
     deinit {
-        webViewLoadingObserver?.invalidate()
-
-        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
-
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                // Note: this has no effect in production. This view is only
+                // created during automation testing as a sentinel UI element.
+                uiTestLeakView?.removeFromSuperview()
+            }
+        }
 #if DEBUG
         debugTabCount -= 1
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -614,9 +632,10 @@ class Tab: NSObject,
         }
     }
 
+    /// Performs cleanup because deinit may be delayed by retain cycles or long-lived references.
     func close() async {
         await webView?.pauseAllMediaPlayback()
-        await webView?.closeAllMediaPresentations()
+
         webView?.stopLoading()
 
         contentScriptManager.uninstall(tab: self)
@@ -627,10 +646,20 @@ class Tab: NSObject,
         }
 
         webView?.addUITestMemoryLeakDetectionUIElement()
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
+
+        webViewLoadingObserver?.invalidate()
+        webViewLoadingObserver = nil
         webView = nil
+
+        deleteDownloadedDocuments(docsURL: temporaryDocumentsSession)
+        addUITestMemoryLeakDetectionUIElement()
+    }
+
+    func offloadWebView() async {
+        guard webView != nil else { return }
+        await close()
     }
 
     func goBack() {
@@ -852,6 +881,22 @@ class Tab: NSObject,
         }
     }
 
+    // MARK: - Temporary UI Workaround Hack/Fix (FXIOS-15487)
+
+    func bug15487_isGoogleAIPage() -> Bool {
+        // Temporary UI workaround. Implications have been discussed with Product team and we've decided
+        // to implement this for now to help alleviate difficulties for users using Google AI search.
+        // We attempt to detect Google AI page here and if so this is used by the BVC to avoid presenting
+        // our normal over-keyboard UI, which unfortunately causes the iOS keyboard to be dismissed due to
+        // the size of Firefox's UI coupled with how we are resizing the WKWebView in our iOS browser.
+        // A longer-term fix is being discussed & is forthcoming.
+        guard let url, let domain = url.shortDomain else { return false }
+        guard domain == "google" else { return false }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems else { return false }
+        return queryItems.contains(where: { $0.name == "udm" && $0.value == "50" })
+    }
+
     // MARK: - Temporary Document handling - PDF Refactor
 
     /// Retrieves the session cookies attached to the current `WKWebView` managed by the `Tab`
@@ -1024,5 +1069,30 @@ class Tab: NSObject,
 
     func imageContentBlockingEnabled() -> Bool {
         return noImageMode
+    }
+
+    // MARK: - Automation Support
+
+    /// No effect in production. This function creates a sentinel UI element which
+    /// can be detected by our automated tests if the Tab is leaked after it is closed.
+    private func addUITestMemoryLeakDetectionUIElement() {
+        guard AppConstants.isRunningUITests, let keyWindow = UIWindow.keyWindow else { return }
+
+        class TAB_LEAK_DETECTED: UIButton { }
+
+        guard let root = keyWindow.rootViewController else { fatalError() }
+        let uiTestScreen = UIScreen.main.bounds
+        let viewFrame = CGRect(x: uiTestScreen.width / 2.0,
+                               y: uiTestScreen.height / 2.0,
+                               width: 5,
+                               height: 5)
+        let leakIdentifierView = TAB_LEAK_DETECTED(frame: viewFrame)
+        leakIdentifierView.backgroundColor = UIColor.white
+        leakIdentifierView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.Tab.automationTestLeakIndicator
+        leakIdentifierView.isAccessibilityElement = true
+        leakIdentifierView.isUserInteractionEnabled = true
+        leakIdentifierView.accessibilityTraits = [.button]
+        root.view.addSubview(leakIdentifierView)
+        uiTestLeakView = leakIdentifierView
     }
 }

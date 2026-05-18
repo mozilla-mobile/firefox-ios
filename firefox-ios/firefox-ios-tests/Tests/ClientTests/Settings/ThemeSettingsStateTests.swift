@@ -26,7 +26,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let subject = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0.5,
             systemBrightness: 0.8
@@ -50,7 +50,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0.7,
             systemBrightness: 0.6
@@ -95,7 +95,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let initialState = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -105,7 +105,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -129,7 +129,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let initialState = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -139,7 +139,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -166,7 +166,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -190,7 +190,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let initialState = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -200,7 +200,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -227,7 +227,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -251,7 +251,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let initialState = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -261,7 +261,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -288,7 +288,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0.75,
             systemBrightness: 1
@@ -311,7 +311,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let initialState = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0.5,
             systemBrightness: 1
@@ -321,7 +321,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -348,7 +348,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 0.3
@@ -374,7 +374,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let newStateData = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1.0
@@ -397,7 +397,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state1 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0.5,
             systemBrightness: 0.8
@@ -406,7 +406,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state2 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0.5,
             systemBrightness: 0.8
@@ -420,7 +420,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state2 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: true,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -434,7 +434,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state2 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: true,
+            isAutomaticBrightnessEnable: true,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -448,7 +448,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state2 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .dark,
             userBrightnessThreshold: 0,
             systemBrightness: 1
@@ -462,7 +462,7 @@ final class ThemeSettingsStateTests: XCTestCase {
         let state2 = ThemeSettingsState(
             windowUUID: .XCTestDefaultUUID,
             useSystemAppearance: false,
-            isAutomaticBrightnessEnabled: false,
+            isAutomaticBrightnessEnable: false,
             manualThemeSelected: .light,
             userBrightnessThreshold: 0.5,
             systemBrightness: 1

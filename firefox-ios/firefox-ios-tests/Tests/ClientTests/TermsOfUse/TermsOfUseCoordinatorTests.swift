@@ -25,7 +25,6 @@ final class TermsOfUseCoordinatorTests: XCTestCase {
         try await super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         router = MockRouter(navigationController: MockNavigationController())
         notificationCenter = MockNotificationCenter()
         setupNimbusTouFeatureForTesting(isEnabled: true, maxRemindersCount: 5)
