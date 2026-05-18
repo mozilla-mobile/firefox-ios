@@ -13,12 +13,20 @@ struct WorldCupMatchesTests {
         let response = WorldCupMatchesResponse(
             previous: nil,
             current: [
-                makeMatch(id: 1, home: "ENG", away: "USA",
+                makeMatch(id: 1,
+                          home: "ENG",
+                          away: "USA",
                           date: "2026-06-11T18:00:00+00:00",
-                          homeScore: 1, awayScore: 0, clock: "67"),
-                makeMatch(id: 2, home: "BRA", away: "GER",
+                          homeScore: 1,
+                          awayScore: 0,
+                          clock: "67"),
+                makeMatch(id: 2,
+                          home: "BRA",
+                          away: "GER",
                           date: "2026-06-12T15:00:00+00:00",
-                          homeScore: 2, awayScore: 2, clock: "90+15")
+                          homeScore: 2,
+                          awayScore: 2,
+                          clock: "90+15")
             ],
             next: [
                 makeMatch(id: 3, home: "ARG", away: "ENG", date: "2026-06-13T18:00:00+00:00"),
@@ -43,9 +51,12 @@ struct WorldCupMatchesTests {
     func test_init_withoutLiveIDs_isNotLiveEvenIfTodayHasMatches() {
         let response = WorldCupMatchesResponse(
             previous: nil,
-            current: [makeMatch(id: 1, home: "ENG", away: "USA",
+            current: [makeMatch(id: 1,
+                                home: "ENG",
+                                away: "USA",
                                 date: "2026-06-12T18:00:00+00:00",
-                                homeScore: 1, awayScore: 0)],
+                                homeScore: 1,
+                                awayScore: 0)],
             next: nil
         )
 
