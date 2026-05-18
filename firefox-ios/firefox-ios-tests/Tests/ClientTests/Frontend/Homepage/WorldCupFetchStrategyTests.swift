@@ -9,68 +9,70 @@ import Foundation
 @Suite("WorldCupNormalFetchStrategy")
 struct WorldCupFetchStrategyTests {
     @Test
-    func test_loadMatches_returnsSuccess_whenClientReturnsResponse() async {
+    func test_matchesStream_emitsSuccess_whenClientReturnsResponse() async {
         let fixture = makeMatchesResponse()
         let stub = MockWorldCupAPIClient(matchesResult: .success(fixture))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, team: nil)
+        let result = await firstEmission(strategy.matchesStream(using: stub, team: nil))
 
         #expect(result == .success(fixture))
     }
 
     @Test
-    func test_loadMatches_returnsSuccessNil_whenClientReturnsNil() async {
+    func test_matchesStream_emitsSuccessNil_whenClientReturnsNil() async {
         let stub = MockWorldCupAPIClient(matchesResult: .success(nil))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, team: nil)
+        let result = await firstEmission(strategy.matchesStream(using: stub, team: nil))
 
         #expect(result == .success(nil))
     }
 
     @Test
-    func test_loadMatches_returnsFailure_whenClientThrows() async {
+    func test_matchesStream_emitsFailure_whenClientThrows() async {
         let stub = MockWorldCupAPIClient(matchesResult: .failure(MockWorldCupClientError.network))
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadMatches(using: stub, team: nil)
+        let result = await firstEmission(strategy.matchesStream(using: stub, team: nil))
 
         #expect(result == .failure(.other(code: nil, reason: "network")))
     }
 
     @Test
-    func test_loadMatches_callsFetchExactlyOnce_onSuccess() async {
+    func test_matchesStream_finishesAfterSingleEmission() async {
         let stub = MockWorldCupAPIClient(matchesResult: .success(makeMatchesResponse()))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, team: nil)
+        let emissions = await collectAll(strategy.matchesStream(using: stub, team: nil))
 
+        #expect(emissions.count == 1)
         #expect(stub.matchesFetchCount == 1)
     }
 
     @Test
-    func test_loadMatches_doesNotRetry_onFailure() async {
+    func test_matchesStream_doesNotRetry_onFailure() async {
         let stub = MockWorldCupAPIClient(matchesResult: .failure(MockWorldCupClientError.network))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, team: nil)
+        let emissions = await collectAll(strategy.matchesStream(using: stub, team: nil))
 
+        #expect(emissions.count == 1)
         #expect(stub.matchesFetchCount == 1)
     }
 
     @Test
-    func test_loadMatches_forwardsTeam_toClient() async {
+    func test_matchesStream_forwardsTeam_toClient() async {
         let stub = MockWorldCupAPIClient(matchesResult: .success(makeMatchesResponse()))
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadMatches(using: stub, team: "BRA")
+        _ = await firstEmission(strategy.matchesStream(using: stub, team: "BRA"))
 
         #expect(stub.lastMatchesTeam == "BRA")
     }
 
     @Test
-    func test_loadLive_callsFetchLive_andReturnsResponse() async {
+    func test_liveStream_callsFetchLive_andEmitsResponse() async {
         let fixture = makeLiveResponse()
         let stub = MockWorldCupAPIClient(
             matchesResult: .success(nil),
@@ -78,7 +80,7 @@ struct WorldCupFetchStrategyTests {
         )
         let strategy = WorldCupNormalFetchStrategy()
 
-        let result = await strategy.loadLive(using: stub, team: nil)
+        let result = await firstEmission(strategy.liveStream(using: stub, team: nil))
 
         #expect(result == .success(fixture))
         #expect(stub.liveFetchCount == 1)
@@ -86,14 +88,14 @@ struct WorldCupFetchStrategyTests {
     }
 
     @Test
-    func test_loadLive_forwardsTeam_toClient() async {
+    func test_liveStream_forwardsTeam_toClient() async {
         let stub = MockWorldCupAPIClient(
             matchesResult: .success(nil),
             liveResult: .success(makeLiveResponse())
         )
         let strategy = WorldCupNormalFetchStrategy()
 
-        _ = await strategy.loadLive(using: stub, team: "BRA")
+        _ = await firstEmission(strategy.liveStream(using: stub, team: "BRA"))
 
         #expect(stub.lastLiveTeam == "BRA")
     }
@@ -146,6 +148,23 @@ struct WorldCupFetchStrategyTests {
         _ = await strategy.loadTeams(using: stub, team: "BRA")
 
         #expect(stub.lastTeamsTeam == "BRA")
+    }
+
+    private func firstEmission<T: Sendable>(
+        _ stream: AsyncStream<Result<T?, WorldCupLoadError>>
+    ) async -> Result<T?, WorldCupLoadError>? {
+        var iterator = stream.makeAsyncIterator()
+        return await iterator.next()
+    }
+
+    private func collectAll<T: Sendable>(
+        _ stream: AsyncStream<Result<T?, WorldCupLoadError>>
+    ) async -> [Result<T?, WorldCupLoadError>] {
+        var results: [Result<T?, WorldCupLoadError>] = []
+        for await result in stream {
+            results.append(result)
+        }
+        return results
     }
 
     private func makeTeamsResponse() -> WorldCupTeamsResponse {

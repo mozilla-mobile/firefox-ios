@@ -6,6 +6,9 @@
 
 import Foundation
 
+/// Test double that yields the configured result once on each stream and
+/// finishes. Used by `WorldCupAPIClientTests` to verify call routing without
+/// running the real polling/backoff loop.
 final class MockWorldCupFetchStrategy: WorldCupFetchStrategyProtocol, @unchecked Sendable {
     private let matchesResult: Result<WorldCupMatchesResponse?, WorldCupLoadError>
     private let liveResult: Result<WorldCupLiveResponse?, WorldCupLoadError>
@@ -25,18 +28,24 @@ final class MockWorldCupFetchStrategy: WorldCupFetchStrategyProtocol, @unchecked
         self.teamsResult = teamsResult
     }
 
-    func loadMatches(using client: WorldCupAPIClientProtocol,
-                     team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
+    func matchesStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupMatchesStream {
         matchesCallCount += 1
         lastMatchesTeam = team
-        return matchesResult
+        let result = matchesResult
+        return AsyncStream { continuation in
+            continuation.yield(result)
+            continuation.finish()
+        }
     }
 
-    func loadLive(using client: WorldCupAPIClientProtocol,
-                  team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
+    func liveStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupLiveStream {
         liveCallCount += 1
         lastLiveTeam = team
-        return liveResult
+        let result = liveResult
+        return AsyncStream { continuation in
+            continuation.yield(result)
+            continuation.finish()
+        }
     }
 
     func loadTeams(using client: WorldCupAPIClientProtocol,

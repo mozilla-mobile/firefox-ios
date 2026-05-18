@@ -47,21 +47,37 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
         return try teamsResult.get()
     }
 
-    func loadMatches(team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        matchesFetchCount += 1
-        lastMatchesTeam = team
-        switch matchesResult {
-        case .success(let response): return .success(response)
-        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+    /// Emits the canned matches result once and finishes. Tests that want
+    /// polling semantics should pass a real `WorldCupPollingFetchStrategy`
+    /// and wire the mock client into it.
+    func matchesStream(team: String?) -> WorldCupMatchesStream {
+        let captured = matchesResult
+        let recordTeam: @Sendable () -> Void = { [weak self] in
+            self?.lastMatchesTeam = team
+            self?.matchesFetchCount += 1
+        }
+        return AsyncStream { continuation in
+            Task {
+                recordTeam()
+                continuation.yield(Self.mapped(captured))
+                continuation.finish()
+            }
         }
     }
 
-    func loadLive(team: String?) async -> Result<WorldCupLiveResponse?, WorldCupLoadError> {
-        liveFetchCount += 1
-        lastLiveTeam = team
-        switch liveResult {
-        case .success(let response): return .success(response)
-        case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+    /// Emits the canned live result once and finishes.
+    func liveStream(team: String?) -> WorldCupLiveStream {
+        let captured = liveResult
+        let recordTeam: @Sendable () -> Void = { [weak self] in
+            self?.lastLiveTeam = team
+            self?.liveFetchCount += 1
+        }
+        return AsyncStream { continuation in
+            Task {
+                recordTeam()
+                continuation.yield(Self.mapped(captured))
+                continuation.finish()
+            }
         }
     }
 
@@ -70,6 +86,15 @@ final class MockWorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendabl
         switch teamsResult {
         case .success(let response): return .success(response)
         case .failure(let error):    return .failure(WorldCupLoadError.from(error))
+        }
+    }
+
+    private static func mapped<Response>(
+        _ result: Result<Response?, Error>
+    ) -> Result<Response?, WorldCupLoadError> {
+        switch result {
+        case .success(let value): return .success(value)
+        case .failure(let error): return .failure(WorldCupLoadError.from(error))
         }
     }
 }

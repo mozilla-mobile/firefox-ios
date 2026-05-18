@@ -9,13 +9,13 @@ import Foundation
 @Suite("WorldCupAPIClient")
 struct WorldCupAPIClientTests {
     @Test
-    func test_loadMatches_usesMatchesStrategy() async throws {
+    func test_matchesStream_usesMatchesStrategy() async throws {
         let matchesStrategy = MockWorldCupFetchStrategy()
         let liveStrategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadMatches(team: nil)
+        _ = await firstEmission(client.matchesStream(team: nil))
 
         #expect(matchesStrategy.matchesCallCount == 1)
         #expect(liveStrategy.matchesCallCount == 0)
@@ -23,13 +23,13 @@ struct WorldCupAPIClientTests {
     }
 
     @Test
-    func test_loadLive_usesLiveStrategy() async throws {
+    func test_liveStream_usesLiveStrategy() async throws {
         let matchesStrategy = MockWorldCupFetchStrategy()
         let liveStrategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: matchesStrategy,
                                            liveStrategy: liveStrategy)
 
-        _ = await client.loadLive(team: nil)
+        _ = await firstEmission(client.liveStream(team: nil))
 
         #expect(liveStrategy.liveCallCount == 1)
         #expect(matchesStrategy.liveCallCount == 0)
@@ -37,64 +37,64 @@ struct WorldCupAPIClientTests {
     }
 
     @Test
-    func test_loadMatches_returnsStrategyResult() async throws {
+    func test_matchesStream_emitsStrategyResult() async throws {
         let response = makeMatchesResponse()
         let strategy = MockWorldCupFetchStrategy(matchesResult: .success(response))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(team: nil)
+        let result = await firstEmission(client.matchesStream(team: nil))
 
         #expect(result == .success(response))
     }
 
     @Test
-    func test_loadMatches_returnsNil_whenStrategyReturnsNilSuccess() async throws {
+    func test_matchesStream_emitsNil_whenStrategyReturnsNilSuccess() async throws {
         let strategy = MockWorldCupFetchStrategy(matchesResult: .success(nil))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(team: nil)
+        let result = await firstEmission(client.matchesStream(team: nil))
 
         #expect(result == .success(nil))
     }
 
     @Test
-    func test_loadMatches_propagatesStrategyFailure() async throws {
+    func test_matchesStream_propagatesStrategyFailure() async throws {
         let failure = WorldCupLoadError.network(reason: "offline")
         let strategy = MockWorldCupFetchStrategy(matchesResult: .failure(failure))
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        let result = await client.loadMatches(team: nil)
+        let result = await firstEmission(client.matchesStream(team: nil))
 
         #expect(result == .failure(failure))
     }
 
     @Test
-    func test_loadMatches_forwardsTeam_toStrategy() async throws {
+    func test_matchesStream_forwardsTeam_toStrategy() async throws {
         let strategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(matchesStrategy: strategy)
 
-        _ = await client.loadMatches(team: "BRA")
+        _ = await firstEmission(client.matchesStream(team: "BRA"))
 
         #expect(strategy.lastMatchesTeam == "BRA")
     }
 
     @Test
-    func test_loadLive_returnsStrategyResult() async throws {
+    func test_liveStream_emitsStrategyResult() async throws {
         let response = makeLiveResponse()
         let strategy = MockWorldCupFetchStrategy(liveResult: .success(response))
         let client = try WorldCupAPIClient(liveStrategy: strategy)
 
-        let result = await client.loadLive(team: nil)
+        let result = await firstEmission(client.liveStream(team: nil))
 
         #expect(result == .success(response))
     }
 
     @Test
-    func test_loadLive_forwardsTeam_toStrategy() async throws {
+    func test_liveStream_forwardsTeam_toStrategy() async throws {
         let strategy = MockWorldCupFetchStrategy()
         let client = try WorldCupAPIClient(liveStrategy: strategy)
 
-        _ = await client.loadLive(team: "BRA")
+        _ = await firstEmission(client.liveStream(team: "BRA"))
 
         #expect(strategy.lastLiveTeam == "BRA")
     }
@@ -142,6 +142,13 @@ struct WorldCupAPIClientTests {
         _ = await client.loadTeams(team: "BRA")
 
         #expect(strategy.lastTeamsTeam == "BRA")
+    }
+
+    private func firstEmission<T: Sendable>(
+        _ stream: AsyncStream<Result<T?, WorldCupLoadError>>
+    ) async -> Result<T?, WorldCupLoadError>? {
+        var iterator = stream.makeAsyncIterator()
+        return await iterator.next()
     }
 
     private func makeMatch() -> WorldCupMatchesResponse.Match {

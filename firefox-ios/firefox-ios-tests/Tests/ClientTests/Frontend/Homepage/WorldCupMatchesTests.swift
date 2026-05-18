@@ -9,42 +9,106 @@ import Foundation
 @Suite("WorldCupMatches view-model")
 struct WorldCupMatchesTests {
     @Test
-    func test_init_marksLive_andPutsPastAndTodayMatchesInFeatured() {
+    func test_init_matchInsideFeaturedWindow_isHero_othersGoToRow() {
+        // Now = Jun 12 20:00. BRA-GER kicked off at 18:30 (90 min ago, inside
+        // the 2h featured window) and is the hero. Everything else — older
+        // past + future — drops to the compact row, chronologically, capped
+        // at two.
         let response = WorldCupMatchesResponse(
-            previous: nil,
-            current: [
+            previous: [
                 makeMatch(id: 1,
                           home: "ENG",
                           away: "USA",
                           date: "2026-06-11T18:00:00+00:00",
                           homeScore: 1,
-                          awayScore: 0,
-                          clock: "67"),
+                          awayScore: 0)
+            ],
+            current: [
                 makeMatch(id: 2,
                           home: "BRA",
                           away: "GER",
-                          date: "2026-06-12T15:00:00+00:00",
-                          homeScore: 2,
-                          awayScore: 2,
-                          clock: "90+15")
+                          date: "2026-06-12T18:30:00+00:00",
+                          homeScore: 1,
+                          awayScore: 1,
+                          clock: "90")
             ],
             next: [
                 makeMatch(id: 3, home: "ARG", away: "ENG", date: "2026-06-13T18:00:00+00:00"),
-                makeMatch(id: 4, home: "FRA", away: "USA", date: "2026-06-14T18:00:00+00:00"),
-                makeMatch(id: 5, home: "BRA", away: "GER", date: "2026-06-15T18:00:00+00:00")
+                makeMatch(id: 4, home: "FRA", away: "USA", date: "2026-06-14T18:00:00+00:00")
             ]
         )
 
         let model = WorldCupMatches(
             response: response,
-            liveIDs: [1],
+            liveIDs: [2],
             now: parse("2026-06-12T20:00:00+00:00"),
             calendar: utcCalendar()
         )
 
         #expect(model.isLive)
-        #expect(model.featuredMatch.map(\.homeCode) == ["ENG", "BRA"])
-        #expect(model.upcomingMatches.map(\.homeCode) == ["ARG", "FRA"])
+        #expect(model.featuredMatch.map(\.homeCode) == ["BRA"])
+        #expect(model.upcomingMatches.map(\.homeCode) == ["ENG", "ARG"])
+    }
+
+    @Test
+    func test_init_pastFeaturedWindow_promotesNextUpcomingToHero() {
+        // Mock scenario: MEX-RSA kicked off at 19:00 and finished 4-0. Now =
+        // 22:00, three hours past kickoff — outside the 2h featured window.
+        // The user's expectation is that the just-played match drops to the
+        // row and the next upcoming (MEX-KOR) takes the hero slot.
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1,
+                          home: "MEX",
+                          away: "RSA",
+                          date: "2026-06-11T19:00:00+00:00",
+                          homeScore: 4,
+                          awayScore: 0)
+            ],
+            current: nil,
+            next: [
+                makeMatch(id: 2, home: "MEX", away: "KOR", date: "2026-06-19T03:00:00+00:00"),
+                makeMatch(id: 3, home: "CZE", away: "MEX", date: "2026-06-25T03:00:00+00:00")
+            ]
+        )
+
+        let model = WorldCupMatches(
+            response: response,
+            now: parse("2026-06-11T22:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(model.featuredMatch.map(\.homeCode) == ["MEX"])
+        #expect(model.featuredMatch.first?.awayCode == "KOR")
+        // Row holds the past result first (older) and the remaining future
+        // match second, both capped at two.
+        #expect(model.upcomingMatches.map(\.homeCode) == ["MEX", "CZE"])
+        #expect(model.upcomingMatches.first?.awayCode == "RSA")
+        #expect(model.upcomingMatches.last?.awayCode == "MEX")
+    }
+
+    @Test
+    func test_init_whenAllMatchesArePast_promotesMostRecentToHero() {
+        let response = WorldCupMatchesResponse(
+            previous: [
+                makeMatch(id: 1, home: "ENG", away: "USA", date: "2026-06-11T18:00:00+00:00",
+                          homeScore: 1, awayScore: 0),
+                makeMatch(id: 2, home: "ARG", away: "BRA", date: "2026-06-14T18:00:00+00:00",
+                          homeScore: 2, awayScore: 1)
+            ],
+            current: nil,
+            next: nil
+        )
+
+        // Two days past the latest match — well outside the featured window.
+        let model = WorldCupMatches(
+            response: response,
+            now: parse("2026-06-16T12:00:00+00:00"),
+            calendar: utcCalendar()
+        )
+
+        #expect(model.featuredMatch.map(\.homeCode) == ["ARG"])
+        #expect(model.upcomingMatches.map(\.homeCode) == ["ENG"])
     }
 
     @Test
