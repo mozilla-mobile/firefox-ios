@@ -57,7 +57,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
-        case worldcupCard(WorldCupSectionState)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -138,9 +138,10 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         if state.worldcupState.shouldShowSection {
             snapshot.appendSections([.worldcup(textColor)])
             snapshot.appendItems(
-                [.worldcupCard(state.worldcupState)],
+                [.worldcupCard],
                 toSection: .worldcup(textColor)
             )
+            snapshot.reconfigureItems([.worldcupCard])
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
