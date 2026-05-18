@@ -1164,9 +1164,14 @@ struct AddressBarState: StateType, Sendable, Equatable {
         // We need to do this check because of existing architecture
         // in which the state is updated after
         // we configure the button, so we need to check action too.
-        let isFeatureEnabledFromAction = action.translationConfiguration?.isTranslationFeatureEnabled ?? false
-        let isFeatureEnabledFromState = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
-        let shouldShowTranslationIcon = isFeatureEnabledFromAction || isFeatureEnabledFromState
+        // When the action explicitly provides a config, use it as the authority (e.g. settings toggle).
+        // Only fall back to state when the action carries no config.
+        let shouldShowTranslationIcon: Bool
+        if let actionConfig = action.translationConfiguration {
+            shouldShowTranslationIcon = actionConfig.isTranslationFeatureEnabled
+        } else {
+            shouldShowTranslationIcon = addressBarState.translationConfiguration?.isTranslationFeatureEnabled ?? false
+        }
         guard shouldShowTranslationIcon else { return nil }
         let iconState = action.translationConfiguration?.state ?? addressBarState.translationConfiguration?.state
         guard let iconState else { return nil }
