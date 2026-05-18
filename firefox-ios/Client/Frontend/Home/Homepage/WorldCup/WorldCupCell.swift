@@ -23,6 +23,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         image.image = UIImage(named: UX.loadingImage)
         image.isAccessibilityElement = false
         image.contentMode = .scaleAspectFit
+        image.alpha = 0.0
     }
 
     init(content: UIView) {
@@ -51,7 +52,6 @@ private final class PageContainer: UIView, ThemeApplicable {
             loadingImageView.widthAnchor.constraint(equalToConstant: UX.loadingImageSize),
             loadingImageView.heightAnchor.constraint(equalToConstant: UX.loadingImageSize),
         ])
-        startSpinning()
     }
 
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.

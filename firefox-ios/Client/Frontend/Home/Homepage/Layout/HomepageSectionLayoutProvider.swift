@@ -877,7 +877,7 @@ final class HomepageSectionLayoutProvider: FeatureFlaggable {
               state.worldcupState.shouldShowSection else { return 0 }
 
         let cellHeight = lastKnownWorldCupCellHeight ?? UX.MessageCardConstants.height
-        return cellHeight
+        return cellHeight + UX.spacingBetweenSections
     }
 
     /// Returns the height that the spacer should be, before accounting for vertical stories peeking above the fold.

@@ -660,9 +660,9 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard(let state):
+        case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] height in
+                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
                     self?.sectionProvider.setWorldCupCellHeight(height)
                     self?.relayoutForCellHeightChange()
                 }
