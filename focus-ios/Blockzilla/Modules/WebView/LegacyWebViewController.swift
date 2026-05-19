@@ -160,9 +160,9 @@ final class LegacyWebViewController: UIViewController, LegacyWebController {
         // Focus on iPad, which means there could be some edge cases right now.
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            configuration.applicationNameForUserAgent = "Version/18.6 Safari/605.1.15"
+            configuration.applicationNameForUserAgent = "Version/26.4 Safari/605.1.15"
         } else {
-            configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/18.6"
+            configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.majorVersion) Mobile/15E148 Version/26.4"
         }
 
         if #available(iOS 15.0, *) {
