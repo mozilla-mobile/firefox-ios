@@ -43,6 +43,9 @@ final class LocationView: UIView,
     private var scrollAlpha: CGFloat = 1
     private var hasAlternativeLocationColor = false
     private var config: LocationViewConfiguration?
+    private var isShrunk: Bool {
+        scrollAlpha.isZero
+    }
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -205,7 +208,8 @@ final class LocationView: UIView,
         formatAndTruncateURLTextField()
         updateIconContainer(isURLTextFieldCentered: isURLTextFieldCentered,
                             locationTextFieldTrailingPadding: uxConfig.locationTextFieldTrailingPadding)
-        handleGesture(&tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(becomeFirstResponder))
+        handleGesture(
+            &tapGestureRecognizer, type: UITapGestureRecognizer.self, action: #selector(handleTap))
         handleGesture(
             &longPressGestureRecognizer,
             type: UILongPressGestureRecognizer.self,
@@ -263,6 +267,20 @@ final class LocationView: UIView,
         // Updates the URL text field's leading constraint to ensure it reflects the current layout state
         // during layout passes, such as on screen size or orientation changes.
         updateURLTextFieldLeadingConstraintBasedOnState()
+    }
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        guard super.point(inside: point, with: event) else { return false }
+        guard isShrunk else { return true }
+
+        let visibleView: UIView
+        if #available(iOS 26.0, *) {
+            visibleView = effectView
+        } else {
+            visibleView = containerView
+        }
+
+        return visibleView.frame.contains(point)
     }
 
     private func setupLayout() {
@@ -456,7 +474,6 @@ final class LocationView: UIView,
                 self.transform = scaledTransformation
             }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = false
-                isUserInteractionEnabled = false
             })
     }
 
@@ -469,7 +486,6 @@ final class LocationView: UIView,
                 transform = .identity
             }, completion: { [unowned self] _ in
                 urlTextField.isUserInteractionEnabled = true
-                isUserInteractionEnabled = true
             }
         )
     }
@@ -663,6 +679,15 @@ final class LocationView: UIView,
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
+    }
+
+    @objc
+    private func handleTap() {
+        if isShrunk {
+            delegate?.locationViewDidTapWhileShrunk()
+        } else {
+            _ = becomeFirstResponder()
+        }
     }
 
     @objc
