@@ -50,6 +50,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
