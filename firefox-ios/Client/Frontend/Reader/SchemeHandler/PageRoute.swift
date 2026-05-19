@@ -30,9 +30,11 @@ final class PageRoute: TinyRoute {
         guard let raw = components.queryItems?.first(where: { $0.name == "url" })?.value else {
             throw TinyRouterError.missingParam("url")
         }
+        
         guard let parsed = URL(string: raw), parsed.isWebPage() else {
             throw TinyRouterError.invalidParam("url", raw)
         }
+        
         return parsed
     }
 }
