@@ -57,6 +57,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
 
+        case .homepageAddShortcutTile:
+            return checkHomepageAddShortcutTile()
+
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault()
 
@@ -207,6 +210,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHNTSponsoredShortcutsFeature() -> Bool {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
+    }
+
+    private func checkHomepageAddShortcutTile() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().addShortcutTile
     }
 
     private func checkHomepageBookmarksSectionDefault() -> Bool {
