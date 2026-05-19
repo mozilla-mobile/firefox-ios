@@ -45,6 +45,12 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
         case .addressBarGestureToOpenTabTraySwipe:
             return checkAddressBarGestureToOpenTabTraySwipeFeature()
 
+        case .addressBarMenu:
+            return false
+
+        case .adsClient:
+            return false
+
         case .aiKillSwitch:
             return checkAiKillSwitchFeature()
 
