@@ -33,6 +33,9 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func presentSiteProtections()
 
     @MainActor
+    func presentAdBlockerSettings()
+
+    @MainActor
     func showPrintSheet()
 
     @MainActor
@@ -158,7 +161,7 @@ class MainMenuCoordinator: BaseCoordinator {
             navigationHandler?.presentSiteProtections()
 
         case .adBlocker:
-            navigationHandler?.showSettings(at: .browser)
+            navigationHandler?.presentAdBlockerSettings()
 
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()

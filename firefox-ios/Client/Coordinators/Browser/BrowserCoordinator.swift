@@ -629,6 +629,14 @@ final class BrowserCoordinator: BaseCoordinator,
         showETPMenu(sourceView: browserViewController.addressToolbarContainer)
     }
 
+    func presentAdBlockerSettings() {
+        let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
+        let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
+        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        router.present(navigationController, animated: true)
+    }
+
     func presentSavePDFController() {
         guard let selectedTab = browserViewController.tabManager.selectedTab else { return }
 

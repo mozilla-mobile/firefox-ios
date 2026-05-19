@@ -14,6 +14,7 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
     private(set) var updateZoomPageBarVisibilityCalled = 0
     private(set) var presentSavePDFControllerCalled = 0
     private(set) var presentSiteProtectionsCalled = 0
+    private(set) var presentAdBlockerSettingsCalled = 0
     private(set) var showPrintSheetCalled = 0
     private(set) var showReaderModeCalled = 0
     private(set) var showShareSheetForCurrentlySelectedTabCalled = 0
@@ -50,6 +51,10 @@ class MockMainMenuCoordinatorDelegate: MainMenuCoordinatorDelegate {
 
     func presentSiteProtections() {
         presentSiteProtectionsCalled += 1
+    }
+
+    func presentAdBlockerSettings() {
+        presentAdBlockerSettingsCalled += 1
     }
 
     func showPrintSheet() {
