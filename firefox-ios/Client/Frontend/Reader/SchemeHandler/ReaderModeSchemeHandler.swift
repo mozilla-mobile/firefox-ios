@@ -61,11 +61,11 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         self.normalRouter = TinyRouter()
             .register("page", PageRoute(cache: DiskReaderModeCache.shared, profile: profile))
             .setDefault(StaticFileRoute())
-        
+
         self.privateRouter = TinyRouter()
             .register("page", PageRoute(cache: MemoryReaderModeCache.shared, profile: profile))
             .setDefault(StaticFileRoute())
-        
+
         self.logger = logger
         super.init()
     }
