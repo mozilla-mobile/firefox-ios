@@ -88,7 +88,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
             logoContainerView.addSubview(logoStackView)
             stackContainer.addArrangedSubview(logoContainerView)
-            if featureFlagsProvider.isEnabled(.quickAnswers), !headerState.isPrivate {
+            if headerState.showQuickAnswersButton, !headerState.isPrivate {
                 if headerState.showiPadSetup {
                     // On iPad, add button directly to contentView so logo remains centered
                     contentView.addSubview(quickAnswersButton)
