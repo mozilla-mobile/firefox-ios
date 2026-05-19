@@ -77,6 +77,10 @@ public class BrowserAddressToolbar: UIView,
         }
     }
 
+    private var isShrunk: Bool {
+        previousConfiguration?.uxConfiguration.scrollAlpha.isZero ?? false
+    }
+
     public var isUnifiedSearchEnabled = false {
         didSet {
             guard let previousConfiguration, oldValue != isUnifiedSearchEnabled else { return }
@@ -511,7 +515,8 @@ public class BrowserAddressToolbar: UIView,
     public func dragInteraction(_ interaction: UIDragInteraction,
                                 itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         let dragPoint = session.location(in: self)
-        guard let url = droppableUrl,
+        guard !isShrunk,
+              let url = droppableUrl,
               let itemProvider = NSItemProvider(contentsOf: url),
               // allow drag only on the location view frame in order to don't mess with long press gesture
               // on the address bar buttons.
