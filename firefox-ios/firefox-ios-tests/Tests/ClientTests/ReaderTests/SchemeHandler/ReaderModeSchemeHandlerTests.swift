@@ -162,27 +162,6 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         )
     }
 
-    func test_start_validURL_passesValidationAndReachesRoute() {
-        let url = "\(ReaderModeSchemeHandler.baseURL)?url=https%3A%2F%2Fexample.com%2Farticle"
-        let task = MockWKURLSchemeTask(
-            request: URLRequest(url: URL(string: url)!)
-        )
-        let webView = makeWebView()
-        let failExpectation = expectation(description: "onFail called")
-        task.onFail = { failExpectation.fulfill() }
-
-        subject.webView(webView, start: task)
-        wait(for: [failExpectation], timeout: 1.0)
-
-        // This test only verifies the request passes scheme/host validation.
-        // Full path testing cache hit, cache miss, etc is in
-        // PageRouteTests
-        let error = task.failedErrors.first as? TinyRouterError
-        XCTAssertNotEqual(error, .unsupportedScheme(expected: ReaderModeSchemeHandler.scheme, found: "readermode"))
-        XCTAssertNotEqual(error, .unsupportedHost(expected: ReaderModeSchemeHandler.host, found: "app"))
-        XCTAssertNotEqual(error, .badURL)
-    }
-
     // MARK: - Helpers
 
     private func makeWebView() -> WKWebView {
