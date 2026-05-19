@@ -632,9 +632,22 @@ final class BrowserCoordinator: BaseCoordinator,
     func presentAdBlockerSettings() {
         let browsingSettings = BrowsingSettingsViewController(profile: profile, windowUUID: windowUUID)
         let navigationController = DismissableNavigationViewController(rootViewController: browsingSettings)
-        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        setupAdBlockerSettingsDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         router.present(navigationController, animated: true)
+    }
+
+    private func setupAdBlockerSettingsDetents(for controller: UIViewController) {
+        if #available(iOS 16.0, *) {
+            let customDetent = UISheetPresentationController.Detent.custom(
+                identifier: .init("threeQuarter")
+            ) { context in
+                context.maximumDetentValue * 0.75
+            }
+            controller.sheetPresentationController?.detents = [customDetent, .large()]
+        } else {
+            controller.sheetPresentationController?.detents = [.medium(), .large()]
+        }
     }
 
     func presentSavePDFController() {
