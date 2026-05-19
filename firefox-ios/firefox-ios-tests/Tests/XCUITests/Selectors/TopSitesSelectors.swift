@@ -19,7 +19,7 @@ struct TopSitesSelectors: TopSitesSelectorsSet {
         static let collectionView = AccessibilityIdentifiers.FirefoxHomepage.collectionView
         static let itemCell = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         static let youtube = "YouTube"
-        static let pin = StandardImageIdentifiers.Large.pinFill
+        static let pin = StandardImageIdentifiers.ExtraSmall.pin
         static let pinSlash = StandardImageIdentifiers.Large.pinSlash
     }
 
