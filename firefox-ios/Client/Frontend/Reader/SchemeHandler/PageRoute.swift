@@ -18,7 +18,6 @@ final class PageRoute: TinyRoute {
     init(profile: Profile) {
         self.profile = profile
     }
-    
     // Always erros our for now, will actually handle in next PR
     func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         _ = try extractArticleURL(from: components)
