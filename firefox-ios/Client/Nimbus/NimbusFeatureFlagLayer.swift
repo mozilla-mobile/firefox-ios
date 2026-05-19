@@ -21,6 +21,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     public func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
         // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
+        case .adBlocker:
+            return checkAdBlockerFeature()
+
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
@@ -435,6 +438,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWorldCupWidgetFeature() -> Bool {
         return nimbus.features.worldCupWidgetFeature.value().enabled
+    }
+
+    private func checkAdBlockerFeature() -> Bool {
+        return nimbus.features.adBlockerFeature.value().enabled
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {

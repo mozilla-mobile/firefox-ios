@@ -32,6 +32,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         // order by titleText
         let children: [Setting] =  [
             FeatureFlagsBoolSetting(
+                with: .adBlocker,
+                titleText: format(string: "Ad Blocker"),
+                statusText: format(string: "Toggle to show the Ad Blocker feature.")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .adsClient,
                 titleText: format(string: "Ads Client"),
                 statusText: format(string: "Toggle to enable the rust ads client")
