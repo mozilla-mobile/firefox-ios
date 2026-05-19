@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import WebEngine
 
-/// Serves the reader-mode page document at `readermode://app/page?url=<encoded-article-url>`.
+/// Serves the readermode page document at `readermode://app/page?url=<encoded-article-url>`.
 ///
 /// This initial version validates the incoming URL parameters. Content rendering
 /// (cache integration, readability extraction, error pages) will be added in
@@ -18,7 +18,8 @@ final class PageRoute: TinyRoute {
     init(profile: Profile) {
         self.profile = profile
     }
-    // Always erros our for now, will actually handle in next PR
+
+    // Always erros out for now, will actually handle in next PR
     func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         _ = try extractArticleURL(from: components)
         throw TinyRouterError.badResponse
@@ -30,11 +31,11 @@ final class PageRoute: TinyRoute {
         guard let raw = components.queryItems?.first(where: { $0.name == "url" })?.value else {
             throw TinyRouterError.missingParam("url")
         }
-        
+
         guard let parsed = URL(string: raw), parsed.isWebPage() else {
             throw TinyRouterError.invalidParam("url", raw)
         }
-        
+
         return parsed
     }
 }

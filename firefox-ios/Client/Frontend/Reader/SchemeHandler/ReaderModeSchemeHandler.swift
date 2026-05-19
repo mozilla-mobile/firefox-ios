@@ -28,9 +28,6 @@ import WebKit
 /// 5. TinyRouter chooses a route handler based on the path. As the migration progresses
 ///    the registered routes will be:
 ///        - `/app/page`         -> `PageRoute`
-///        - `/app/page-exists`  -> (future)
-///        - `/app/styles/...`   -> (future, static)
-///        - `/app/fonts/...`    -> (future, static)
 ///
 /// 6. `send(_:for:to:)` converts the `TinyHTTPReply` into an `HTTPURLResponse` and body
 ///    and completes the `WKURLSchemeTask`.
@@ -74,13 +71,15 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     /// Validates incoming requests and forwards them to the router.
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
         let id = ObjectIdentifier(urlSchemeTask)
-        let requestTask = Task { @MainActor in
+        let requestTask = Task { // Closure gets implicit @MainActor since WKURLSchemeTask is annotated as such (cool!)
             defer { requestTasks[id] = nil }
             do {
                 let url = try validateRequest(urlSchemeTask)
                 try Task.checkCancellation()
+
                 let reply = try await router.route(url)
                 try Task.checkCancellation()
+
                 try send(reply, for: url, to: urlSchemeTask)
             } catch is CancellationError {
                 self.logger.log("Reader-mode scheme task cancelled.",
@@ -88,6 +87,9 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
                                 category: .library)
             } catch {
                 urlSchemeTask.didFailWithError(mapError(error))
+                self.logger.log("Reader-mode scheme task failed.",
+                                level: .debug,
+                                category: .library)
             }
         }
         requestTasks[id] = requestTask
