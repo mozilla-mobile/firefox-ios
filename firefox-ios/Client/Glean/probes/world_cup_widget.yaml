@@ -35,3 +35,79 @@ world_cup_countdown_widget:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2026-12-01"
+
+world_cup_widget:
+  country_selected:
+    type: event
+    description: |
+      Records when the user selects a country to follow in the country picker.
+    extra_keys:
+      fifa_code:
+        description: The FIFA code of the country selected by the user.
+        type: string
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  country_deselected:
+    type: event
+    description: |
+      Records when the user doesn't select a country or deselect a country in the country picker.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  widget_dismissed:
+    type: event
+    description: |
+      Records when the WorldCup widget is dismissed by the user.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  error_refresh_button:
+    type: event
+    description: |
+      Records when the user taps on the refresh button when an error is displayed on the WorldCup widget.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  match_clicked:
+    type: event
+    description: |
+      Records when the user taps on a match in the WorldCup widget.
+    extra_keys:
+      match:
+        description: The identifier of the match that was clicked i.e USA/MEX.
+        type: string
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"
+  country_selector_displayed:
+    type: event
+    description: |
+      Records when the country selector screen is displayed to the user.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-15836
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/33878
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-12-01"

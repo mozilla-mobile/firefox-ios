@@ -24,6 +24,7 @@ final class WorldCupErrorView: UIView, ThemeApplicable {
     }
 
     private let windowUUID: WindowUUID
+    private let telemetry = WorldCupTelemetry()
 
     // MARK: - UI
 
@@ -114,6 +115,7 @@ final class WorldCupErrorView: UIView, ThemeApplicable {
     }
 
     private func handleRefreshTap() {
+        telemetry.errorRefreshButtonTapped()
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,

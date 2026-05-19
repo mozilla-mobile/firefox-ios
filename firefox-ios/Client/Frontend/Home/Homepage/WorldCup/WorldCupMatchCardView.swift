@@ -242,6 +242,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     // MARK: - Actions
 
     private func navigateToTeamSelection() {
+        telemetry.countrySelectorDisplayed()
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.worldCupCountryPicker),
@@ -255,6 +256,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode)
         let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode)
         let query = "\(homeTeamName) vs \(awayTeamName) \(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) 2026"
+        telemetry.matchClicked(match: "\(match.homeCode)/\(match.awayCode)")
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(
@@ -268,7 +270,7 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     }
 
     private func dismiss() {
-        telemetry.closeButtonTapped()
+        telemetry.widgetDismissed()
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,

@@ -36,6 +36,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
     @Environment(\.dismiss) private var dismissAction
 
     @State var selectedTeam: String?
+    private let telemetry = WorldCupTelemetry()
     private let regions = WorldCupCountryData.regions
     private var gridColumns: [GridItem] {
         [GridItem(.adaptive(minimum: UX.gridMinTileWidth), spacing: UX.gridSpacing)]
@@ -69,7 +70,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        dismissAction()
+                        closeButtonTapped()
                     }
                     label: {
                         Image(StandardImageIdentifiers.Large.cross)
@@ -189,6 +190,13 @@ struct WorldCupCountryPickerView: View, ThemeableView {
 
     // MARK: - Action Dispatch
 
+    private func closeButtonTapped() {
+        if selectedTeam == nil {
+            telemetry.countryDeselected()
+        }
+        dismissAction()
+    }
+
     private func dispatchSelectTeam(_ country: WorldCupCountry) {
         guard country.id != selectedTeam else {
             selectedTeam = nil
@@ -201,6 +209,7 @@ struct WorldCupCountryPickerView: View, ThemeableView {
             )
             return
         }
+        telemetry.countrySelected(fifaCode: country.id)
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
