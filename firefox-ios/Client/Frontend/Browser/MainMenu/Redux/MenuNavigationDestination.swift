@@ -6,6 +6,7 @@ import Foundation
 import SummarizeKit
 
 enum MainMenuNavigationDestination: Equatable {
+    case adBlocker
     case bookmarks
     case defaultBrowser
     case downloads
@@ -31,6 +32,7 @@ enum MainMenuNavigationDestination: Equatable {
     /// revert to using CaseIterable on the enum.
     public static var allCasesForTests: [MainMenuNavigationDestination] {
         [
+            .adBlocker,
             .bookmarks,
             .defaultBrowser,
             .downloads,
