@@ -320,6 +320,27 @@ final class MainMenuMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(savedExtras.option, "site_protections")
     }
 
+    func test_tapNavigateToDestination_adBlockerAction_sendTelemetryData() throws {
+        let action = getNavigationDestinationAction(for: .adBlocker)
+        let subject = createSubject()
+
+        subject.mainMenuProvider(AppState(), action)
+
+        let savedMetric = try XCTUnwrap(
+            mockGleanWrapper.savedEvents.first as? EventMetricType<GleanMetrics.AppMenu.MainMenuOptionSelectedExtra>
+        )
+        let savedExtras = try XCTUnwrap(
+            mockGleanWrapper.savedExtras.first as? GleanMetrics.AppMenu.MainMenuOptionSelectedExtra
+        )
+        let expectedMetricType = type(of: GleanMetrics.AppMenu.mainMenuOptionSelected)
+        let resultMetricType = type(of: savedMetric)
+        let debugMessage = TelemetryDebugMessage(expectedMetric: expectedMetricType, resultMetric: resultMetricType)
+
+        XCTAssertEqual(mockGleanWrapper.recordEventCalled, 1)
+        XCTAssert(resultMetricType == expectedMetricType, debugMessage.text)
+        XCTAssertEqual(savedExtras.option, "ad_blocker")
+    }
+
     func test_tapNavigateToDestination_defaultBrowserAction_sendTelemetryData() throws {
         let action = getNavigationDestinationAction(for: .defaultBrowser)
         let subject = createSubject()
