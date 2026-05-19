@@ -332,6 +332,97 @@
       "firefoxLabsDescriptionLinks": null,
       "firefoxLabsGroup": null,
       "requiresRestart": false
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "shake-to-summarize-mistral-rollout-languages",
+      "id": "shake-to-summarize-mistral-rollout-languages",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "Shake to Summarize - Mistral Rollout Languages",
+      "userFacingDescription": "Summarizer",
+      "isEnrollmentPaused": false,
+      "isRollout": true,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-hosted-summarizer-feature-summarizer-app-attest-auth-feature-summarizer-language-expansion-feature-release-no_targeting-rollout-3",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "hosted-summarizer-feature",
+        "summarizer-app-attest-auth-feature",
+        "summarizer-language-expansion-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "hosted-summarizer-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "toolbarEntrypoint": true,
+                "shakeGesture": true
+              }
+            },
+            {
+              "featureId": "summarizer-app-attest-auth-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true
+              }
+            },
+            {
+              "featureId": "summarizer-language-expansion-feature",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "supportedLocales": [
+                  "ja",
+                  "jp",
+                  "en",
+                  "es",
+                  "de",
+                  "fr",
+                  "pt",
+                  "it"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((app_version|versionCompare('151.!') >= 0) && (language in ['de', 'en', 'es', 'fr', 'it', 'ja', 'pt']))) && (user_disabled_ai == false)",
+      "startDate": "2026-05-19",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2026-05-19T17:47:19.216360Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": "",
+      "firefoxLabsDescription": "",
+      "firefoxLabsDescriptionLinks": null,
+      "firefoxLabsGroup": "",
+      "requiresRestart": false
     }
   ]
 }
