@@ -7,24 +7,31 @@ import Common
 import SiteImageView
 import ComponentLibrary
 
+public struct MenuSiteAdBlockerBadgeData {
+    public let title: String
+    public let image: String
+    public let shouldUseRenderMode: Bool
+
+    public init(title: String, image: String, shouldUseRenderMode: Bool) {
+        self.title = title
+        self.image = image
+        self.shouldUseRenderMode = shouldUseRenderMode
+    }
+}
+
 public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
         static let contentLabelsSpacing: CGFloat = 1
         static let horizontalContentMargin: CGFloat = 16
         static let favIconSize: CGFloat = 40
-        static let siteProtectionsContentTopMargin: CGFloat = 4
-        static let siteProtectionsContentCornerRadius: CGFloat = 12
-        static let siteProtectionsContentBorderWidth: CGFloat = 1
-        static let siteProtectionsContentHorizontalPadding: CGFloat = 10
-        static let siteProtectionsContentVerticalPadding: CGFloat = 6
-        static let siteProtectionsIcon: CGFloat = 16
-        static let siteProtectionsMoreSettingsIcon: CGFloat = 20
-        static let siteProtectionsContentSpacing: CGFloat = 4
+        static let badgesTopMargin: CGFloat = 4
+        static let badgesSpacing: CGFloat = 8
     }
 
     public var closeButtonCallback: (() -> Void)?
     public var siteProtectionsButtonCallback: (() -> Void)?
+    public var adBlockerButtonCallback: (() -> Void)?
     public var mainMenuHelper: MainMenuInterface = MainMenuHelper()
 
     private var contentLabels: UIStackView = .build { stack in
@@ -57,42 +64,26 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate) ?? UIImage(), for: .normal)
     }
 
-    private lazy var siteProtectionsContent: UIStackView = .build { [weak self] stack in
-        guard let self else { return }
-        stack.isLayoutMarginsRelativeArrangement = true
-        stack.layoutMargins = UIEdgeInsets(top: UX.siteProtectionsContentVerticalPadding,
-                                           left: UX.siteProtectionsContentHorizontalPadding,
-                                           bottom: UX.siteProtectionsContentVerticalPadding,
-                                           right: UX.siteProtectionsContentHorizontalPadding)
-        stack.distribution = .fill
+    private lazy var badgesStack: UIStackView = .build { stack in
         stack.axis = .horizontal
-        stack.clipsToBounds = true
-        stack.spacing = UX.siteProtectionsContentSpacing
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(siteProtectionsTapped))
-        stack.isUserInteractionEnabled = true
-        stack.addGestureRecognizer(tapGesture)
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.spacing = UX.badgesSpacing
     }
 
-    private var siteProtectionsLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.footnote.scaledFont()
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityTraits = .button
-    }
+    private lazy var siteProtectionsBadge: MenuSiteBadge = {
+        let badge = MenuSiteBadge(mainMenuHelper: mainMenuHelper)
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.tapHandler = { [weak self] in self?.siteProtectionsButtonCallback?() }
+        return badge
+    }()
 
-    private var siteProtectionsIcon: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-    }
-
-    private var siteProtectionsMoreSettingsIcon: UIImageView = .build { imageView in
-        let imageName = StandardImageIdentifiers.Large.chevronRight
-        let image = UIImage(named: imageName)?
-            .withRenderingMode(.alwaysTemplate)
-            .imageFlippedForRightToLeftLayoutDirection() ?? UIImage()
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFit
-    }
+    private lazy var adBlockerBadge: MenuSiteBadge = {
+        let badge = MenuSiteBadge(mainMenuHelper: mainMenuHelper)
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        badge.tapHandler = { [weak self] in self?.adBlockerButtonCallback?() }
+        return badge
+    }()
 
     init() {
         super.init(frame: .zero)
@@ -103,34 +94,22 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        if #available(iOS 26.0, *) {
-            siteProtectionsContent.layer.cornerRadius = siteProtectionsContent.frame.height / 2
-        } else {
-            siteProtectionsContent.layer.cornerRadius = UX.siteProtectionsContentCornerRadius
-            siteProtectionsContent.layer.borderWidth = UX.siteProtectionsContentBorderWidth
-        }
-    }
-
     private func setupViews() {
         contentLabels.addArrangedSubview(titleLabel)
         contentLabels.addArrangedSubview(subtitleLabel)
-        addSubviews(contentLabels, favicon, closeButton, siteProtectionsContent)
-        siteProtectionsContent.addArrangedSubview(siteProtectionsIcon)
-        siteProtectionsContent.addArrangedSubview(siteProtectionsLabel)
-        siteProtectionsContent.addArrangedSubview(siteProtectionsMoreSettingsIcon)
+        addSubviews(contentLabels, favicon, closeButton, badgesStack)
+        badgesStack.addArrangedSubview(siteProtectionsBadge)
 
-        let siteProtectionsTopFromFavicon = siteProtectionsContent.topAnchor.constraint(
+        let badgesTopFromFavicon = badgesStack.topAnchor.constraint(
             greaterThanOrEqualTo: favicon.bottomAnchor,
-            constant: UX.siteProtectionsContentTopMargin
+            constant: UX.badgesTopMargin
         )
 
-        let siteProtectionsTopFromLabels = siteProtectionsContent.topAnchor.constraint(
+        let badgesTopFromLabels = badgesStack.topAnchor.constraint(
             equalTo: contentLabels.bottomAnchor,
-            constant: UX.siteProtectionsContentTopMargin
+            constant: UX.badgesTopMargin
         )
-        siteProtectionsTopFromLabels.priority = .defaultHigh
+        badgesTopFromLabels.priority = .defaultHigh
         NSLayoutConstraint.activate([
             contentLabels.topAnchor.constraint(equalTo: self.topAnchor),
             contentLabels.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
@@ -145,17 +124,14 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
             closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UX.horizontalContentMargin),
             closeButton.topAnchor.constraint(equalTo: self.topAnchor),
 
-            siteProtectionsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsIcon),
-            siteProtectionsMoreSettingsIcon.widthAnchor.constraint(equalToConstant: UX.siteProtectionsMoreSettingsIcon),
-
-            siteProtectionsTopFromLabels,
-            siteProtectionsTopFromFavicon,
-            siteProtectionsContent.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
-            siteProtectionsContent.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            badgesTopFromLabels,
+            badgesTopFromFavicon,
+            badgesStack.leadingAnchor.constraint(equalTo: favicon.leadingAnchor),
+            badgesStack.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
+            badgesStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
-            siteProtectionsContent.leadingAnchor.constraint(equalTo: favicon.leadingAnchor)
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize)
         ])
 
         closeButton.layer.cornerRadius = 0.5 * UX.closeButtonSize
@@ -167,17 +143,24 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         image: String?,
         state: String,
         stateImage: String,
-        shouldUseRenderMode: Bool
+        shouldUseRenderMode: Bool,
+        adBlocker: MenuSiteAdBlockerBadgeData? = nil
     ) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
-        siteProtectionsLabel.text = state
-        let siteProtectionsImage: UIImage = if shouldUseRenderMode {
-            UIImage(named: stateImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        siteProtectionsBadge.configure(text: state,
+                                       iconName: stateImage,
+                                       useTemplate: shouldUseRenderMode)
+        if let adBlocker {
+            if adBlockerBadge.superview == nil {
+                badgesStack.addArrangedSubview(adBlockerBadge)
+            }
+            adBlockerBadge.configure(text: adBlocker.title,
+                                     iconName: adBlocker.image,
+                                     useTemplate: adBlocker.shouldUseRenderMode)
         } else {
-            UIImage(named: stateImage) ?? UIImage()
+            adBlockerBadge.removeFromSuperview()
         }
-        siteProtectionsIcon.image = siteProtectionsImage
 
         let image = FaviconImageViewModel(siteURLString: image,
                                           faviconCornerRadius: UX.favIconSize / 2)
@@ -197,25 +180,12 @@ public final class MenuSiteProtectionsHeader: UIView, ThemeApplicable {
         closeButtonCallback?()
     }
 
-    @objc
-    func siteProtectionsTapped() {
-        siteProtectionsButtonCallback?()
-    }
-
     public func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         subtitleLabel.textColor = theme.colors.textSecondary
         closeButton.tintColor = theme.colors.iconSecondary
         closeButton.backgroundColor = theme.colors.actionCloseButton.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-        siteProtectionsLabel.textColor = theme.colors.textSecondary
-        siteProtectionsContent.layer.borderColor = theme.colors.actionSecondaryHover.cgColor
-        if #available(iOS 26.0, *) {
-            let backgroundColor = theme.colors.layerSurfaceMedium.withAlphaComponent(mainMenuHelper.backgroundAlpha())
-            siteProtectionsContent.backgroundColor = backgroundColor
-        } else {
-            siteProtectionsContent.backgroundColor = .clear
-        }
-        siteProtectionsIcon.tintColor = theme.colors.iconSecondary
-        siteProtectionsMoreSettingsIcon.tintColor = theme.colors.iconSecondary
+        siteProtectionsBadge.applyTheme(theme: theme)
+        adBlockerBadge.applyTheme(theme: theme)
     }
 }
