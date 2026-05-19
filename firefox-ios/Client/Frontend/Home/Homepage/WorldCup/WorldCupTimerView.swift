@@ -281,7 +281,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
             ),
             attributes: .destructive,
             handler: { [weak self] _ in
-                self?.dismiss()
+                self?.dismissWidget()
             }
         )
         let menu = UIMenu(children: [changeTeamAction, removeAction])
@@ -317,7 +317,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         actionButton.largeContentTitle = .WorldCup.HomepageWidget.FollowTeamCard.CloseButtonAccessibilityLabel
         actionButton.addAction(
             UIAction { [weak self] _ in
-                self?.dismiss()
+                self?.dismissCountdown()
             },
             for: .touchUpInside)
     }
@@ -366,6 +366,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
     // MARK: - Actions
 
     private func navigateToTeamSelection() {
+        telemetry.countrySelectorDisplayed()
         store.dispatch(
             NavigationBrowserAction(
                 navigationDestination: NavigationDestination(.worldCupCountryPicker),
@@ -391,8 +392,22 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         )
     }
 
-    private func dismiss() {
-        telemetry.closeButtonTapped()
+    /// Called on milestone1 when we only show the countdown card.
+    /// It records a different telemetry then `dismissWidget`.
+    private func dismissCountdown() {
+        telemetry.closeCountdownWidgetButtonTapped()
+        store.dispatch(
+            WorldCupAction(
+                windowUUID: windowUUID,
+                actionType: WorldCupActionType.removeHomepageCard,
+            )
+        )
+    }
+
+    /// Called on milestone2 and more when show the full match list.
+    /// It records a different telemetry then `dismissCountdown`
+    private func dismissWidget() {
+        telemetry.widgetDismissed()
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,

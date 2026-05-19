@@ -89,6 +89,8 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return .bookmark
             case .merino:
                 return .story
+            case .worldcupCard:
+                return .worldCupWidget
             default:
                 return nil
             }
