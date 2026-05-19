@@ -15,6 +15,7 @@ class MainMenuViewController: UIViewController,
                               UIScrollViewDelegate,
                               Themeable,
                               Notifiable,
+                              FeatureFlaggable,
                               StoreSubscriber {
     private struct UX {
         static let hintViewCornerRadius: CGFloat = 20
@@ -170,6 +171,10 @@ class MainMenuViewController: UIViewController,
 
         menuContent.siteProtectionHeader.siteProtectionsButtonCallback = { [weak self] in
             self?.dispatchSiteProtectionAction()
+        }
+
+        menuContent.siteProtectionHeader.adBlockerButtonCallback = { [weak self] in
+            self?.dispatchAdBlockerAction()
         }
 
         menuContent.closeButtonCallback = { [weak self] in
@@ -448,6 +453,17 @@ class MainMenuViewController: UIViewController,
         )
     }
 
+    private func dispatchAdBlockerAction() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.tapNavigateToDestination,
+                navigationDestination: MenuNavigationDestination(.adBlocker),
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
+    }
+
     private func dispatchDefaultBrowserAction() {
         store.dispatch(
             MainMenuAction(
@@ -467,20 +483,29 @@ class MainMenuViewController: UIViewController,
     }
 
     private func updateSiteProtectionsHeaderWith(siteProtectionsData: SiteProtectionsData) {
-        var state = String.MainMenu.SiteProtection.ProtectionsOn
+        let state = String.MainMenu.SiteProtection.Protections
         var stateImage = StandardImageIdentifiers.Small.shieldCheckmarkFill
         var shouldUseRenderMode = false
 
         switch siteProtectionsData.state {
         case .notSecure:
-            state = String.MainMenu.SiteProtection.ConnectionNotSecure
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         case .on:
             shouldUseRenderMode = true
         case .off:
-            state = String.MainMenu.SiteProtection.ProtectionsOff
             stateImage = StandardImageIdentifiers.Small.shieldSlashFillMulticolor
         }
+
+        let adBlocker: MenuSiteAdBlockerBadgeData? = {
+            guard featureFlagsProvider.isEnabled(.adBlocker) else { return nil }
+            let isAdBlockerOn = profile.prefs.boolForKey(PrefsKeys.BlockAds) ?? false
+            let adBlockerImage = isAdBlockerOn
+                ? StandardImageIdentifiers.Medium.adBlockerCheckmark
+                : StandardImageIdentifiers.Medium.adBlockerCross
+            return MenuSiteAdBlockerBadgeData(title: String.MainMenu.SiteProtection.AdBlocker,
+                                              image: adBlockerImage,
+                                              shouldUseRenderMode: true)
+        }()
 
         menuContent.siteProtectionHeader.setupDetails(
             title: siteProtectionsData.title,
@@ -488,7 +513,8 @@ class MainMenuViewController: UIViewController,
             image: siteProtectionsData.image,
             state: state,
             stateImage: stateImage,
-            shouldUseRenderMode: shouldUseRenderMode)
+            shouldUseRenderMode: shouldUseRenderMode,
+            adBlocker: adBlocker)
     }
 
     // MARK: - A11y

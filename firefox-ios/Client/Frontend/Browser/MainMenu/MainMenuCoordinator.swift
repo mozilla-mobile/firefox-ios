@@ -157,6 +157,9 @@ class MainMenuCoordinator: BaseCoordinator {
         case .siteProtections:
             navigationHandler?.presentSiteProtections()
 
+        case .adBlocker:
+            navigationHandler?.showSettings(at: .browser)
+
         case .defaultBrowser:
             DefaultApplicationHelper().openSettings()
 
