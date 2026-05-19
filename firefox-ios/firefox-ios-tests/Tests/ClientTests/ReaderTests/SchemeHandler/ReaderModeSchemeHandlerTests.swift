@@ -174,10 +174,9 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         subject.webView(webView, start: task)
         wait(for: [failExpectation], timeout: 1.0)
 
-        // PageRoute always throws an error in this PR,
-        // but if the request passed scheme/host validation then it wasn't rejected as
-        // unsupportedScheme, unsupportedHost, or badURL
-        // TODO: Update this test once PageRoute is properly implemented
+        // This test only verifies the request passes scheme/host validation.
+        // Full path testing cache hit, cache miss, etc is in
+        // PageRouteTests
         let error = task.failedErrors.first as? TinyRouterError
         XCTAssertNotEqual(error, .unsupportedScheme(expected: ReaderModeSchemeHandler.scheme, found: "readermode"))
         XCTAssertNotEqual(error, .unsupportedHost(expected: ReaderModeSchemeHandler.host, found: "app"))

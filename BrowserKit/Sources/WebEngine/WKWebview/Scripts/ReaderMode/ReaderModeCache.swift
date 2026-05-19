@@ -4,7 +4,7 @@
 
 import Foundation
 
-public protocol ReaderModeCache {
+public protocol ReaderModeCache: Sendable {
     func put(_ url: URL, _ readabilityResult: ReadabilityResult) throws
 
     func get(_ url: URL) throws -> ReadabilityResult
