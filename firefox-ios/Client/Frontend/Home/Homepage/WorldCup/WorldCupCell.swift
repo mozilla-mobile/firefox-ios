@@ -23,7 +23,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         image.image = UIImage(named: UX.loadingImage)
         image.isAccessibilityElement = false
         image.contentMode = .scaleAspectFit
-        image.alpha = 0.0
+        image.isHidden = true
     }
 
     init(content: UIView) {
@@ -57,7 +57,7 @@ private final class PageContainer: UIView, ThemeApplicable {
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
     func setContentVisibility(_ isVisible: Bool) {
         content.alpha = isVisible ? UX.visibleAlpha : UX.hiddenAlpha
-        loadingImageView.alpha = isVisible ? UX.hiddenAlpha : UX.visibleAlpha
+        loadingImageView.isHidden = isVisible
         if isVisible {
             stopSpinning()
         } else {
