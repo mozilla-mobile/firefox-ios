@@ -10,6 +10,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
     private var browserScreen: BrowserScreen!
     private var toolbarScreen: ToolbarScreen!
     private var tabTrayScreen: TabTrayScreen!
+    private var contextMenuScreen: ContextMenuScreen!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -17,6 +18,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         browserScreen = BrowserScreen(app: app)
         toolbarScreen = ToolbarScreen(app: app)
         tabTrayScreen = TabTrayScreen(app: app)
+        contextMenuScreen = ContextMenuScreen(app: app)
     }
 
     func prepareTest() {
@@ -153,7 +155,7 @@ class JumpBackInTests: FeatureFlaggedTestBase {
         browserScreen.navigateToURL(path(forTestPage: "test-example.html"))
         browserScreen.longPressLink(named: website_2["link"]!, duration: 2)
         mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
-        app.buttons["Open in New Tab"].waitAndTap()
+        contextMenuScreen.tapOpenInNewTab()
         waitUntilPageLoad()
         openNewTabFromTabTray()
         waitForTabsButton()
