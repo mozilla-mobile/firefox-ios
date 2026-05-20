@@ -1110,19 +1110,28 @@ struct AddressBarState: StateType, Sendable, Equatable {
     ) -> [ToolbarActionConfiguration] {
         var actions = [ToolbarActionConfiguration]()
 
+        guard action is ToolbarAction || action is TranslationsAction else { return actions }
+
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
               !isEditing
         else { return actions }
 
         let toolbarAction = action as? ToolbarAction
-        let actionTranslationConfiguration = translationConfiguration(from: action)
+        let actionTranslationConfiguration = TranslationConfiguration(from: action)
         let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar
             ?? toolbarState.isShowingNavigationToolbar
         let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isHomepage = (isURLDidChangeAction ? toolbarAction?.url : toolbarState.addressToolbar.url) == nil
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
-        let hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: action)
+        let hasAlternativeLocationColor: Bool
+        if let toolbarAction {
+            hasAlternativeLocationColor = shouldUseAlternativeLocationColor(action: toolbarAction)
+        } else {
+            hasAlternativeLocationColor = toolbarState.toolbarPosition == .top
+                && !toolbarState.isShowingTopTabs
+                && toolbarState.isShowingNavigationToolbar
+        }
 
         if !isHomepage, !isShowingNavigationToolbar {
             let shareAction = shareAction(enabled: isLoading == false,
@@ -1153,15 +1162,6 @@ struct AddressBarState: StateType, Sendable, Equatable {
         }
 
         return actions
-    }
-
-    // Pulls the `translationConfiguration` payload off whichever action carries it.
-    // Both `ToolbarAction` (e.g. urlDidChange) and `TranslationsAction` (e.g. didStartTranslatingPage)
-    // can drive the leading translate icon, so the reducer reads the field generically.
-    private static func translationConfiguration(from action: Action) -> TranslationConfiguration? {
-        if let toolbarAction = action as? ToolbarAction { return toolbarAction.translationConfiguration }
-        if let translationsAction = action as? TranslationsAction { return translationsAction.translationConfiguration }
-        return nil
     }
 
     // Checks whether we should show the translation icon based on the translation configuration
@@ -1324,12 +1324,12 @@ struct AddressBarState: StateType, Sendable, Equatable {
 
     // MARK: - Helper
     @MainActor
-    private static func toolbarPosition(action: Action) -> AddressToolbarPosition? {
+    private static func toolbarPosition(action: ToolbarAction) -> AddressToolbarPosition? {
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
         guard action.actionType as? ToolbarActionType == .toolbarPositionChanged,
-              let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
+              let toolbarPosition = action.toolbarPosition
         else {
             return toolbarState.toolbarPosition
         }
@@ -1341,19 +1341,18 @@ struct AddressBarState: StateType, Sendable, Equatable {
     }
 
     @MainActor
-    private static func shouldUseAlternativeLocationColor(action: Action) -> Bool {
+    private static func shouldUseAlternativeLocationColor(action: ToolbarAction) -> Bool {
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return false }
 
-        let toolbarAction = action as? ToolbarAction
         let isTraitCollectionDidChangeAction = action.actionType as? ToolbarActionType == .traitCollectionDidChange
         let isShowingNavigationToolbar = if isTraitCollectionDidChangeAction {
-            toolbarAction?.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+            action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         } else {
             toolbarState.isShowingNavigationToolbar
         }
         let isShowingTopTabs = if isTraitCollectionDidChangeAction {
-            toolbarAction?.isShowingTopTabs ?? toolbarState.isShowingTopTabs
+            action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
         } else {
             toolbarState.isShowingTopTabs
         }
