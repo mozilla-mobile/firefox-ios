@@ -1671,7 +1671,7 @@ workflows:
             GCLOUD_OUTPUT=$(gcloud beta firebase test ios run \
                 --type robo \
                 --app "$BITRISE_IPA_PATH" \
-                --device=model=iphone14pro,version=16.6 \
+                --device=model=iphone14pro,version=26.2 \
                 --results-bucket=firefox_ios_test_artifacts \
                 --no-record-video \
                 --timeout=10m \
@@ -1724,6 +1724,9 @@ workflows:
             App|${BITRISE_APP_URL}
             #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
             Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    meta:
+      bitrise.io:
+        stack: osx-xcode-26.2.x
   Firebase_Performance_Test:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1755,7 +1758,7 @@ workflows:
             PROJECT="/Users/vagrant/git/firefox-ios/Client.xcodeproj"
             SCHEME="Fennec_Enterprise"
             SDK="iphoneos"
-            IOS_VERSION="18.2"
+            IOS_VERSION="26.2"
             DESTINATION="generic/platform=iOS"
             PRODUCTS_DIR="${DERIVED_DATA_DIR}/Build/Products"
             TEST_PLAN="${SCHEME}_PerformanceTestPlan"
@@ -1856,7 +1859,7 @@ workflows:
             RESULTS_DIR="firefox_ios_performance_tests_${TIMESTAMP}"
             GOOGLE_CLOUD_BUCKET="firefox_ios_test_artifacts"
             DEVICE_MODEL="iphone15pro" # if updating device model and version, also update firebase-performance.kind
-            DEVICE_VERSION="18.0"
+            DEVICE_VERSION="26.2"
             XCRESULT_PATH="gs://${GOOGLE_CLOUD_BUCKET}/${RESULTS_DIR}/${DEVICE_MODEL}-${DEVICE_VERSION}-en-portrait/TestLogs/"
             TARGET_ARCHIVE="/Users/vagrant/git/Fennec_Enterprise.zip" # this should be the same as the artifact created in the previous step
 
@@ -1867,7 +1870,7 @@ workflows:
 
             FIREBASE_TEST_RESULT=$($HOME/google-cloud-sdk/bin/gcloud firebase test ios run \
                 --test "$TARGET_ARCHIVE" \
-                --xcode-version=16.2 \
+                --xcode-version=26.2 \
                 --device model="$DEVICE_MODEL",version="$DEVICE_VERSION" \
                 --client-details=matrixLabel="Bitrise" \
                 --num-flaky-test-attempts=2 \
@@ -1944,7 +1947,7 @@ workflows:
     - deploy-to-bitrise-io@2: {}
     meta:
       bitrise.io:
-        stack: osx-xcode-16.2.x
+        stack: osx-xcode-26.2.x
         machine_type_id: g2.mac.4large
 
   # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
