@@ -128,9 +128,12 @@ extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
         guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
-        if contextualHintType == ContextualHintType.navigation.rawValue {
-            guard toolbarState.canShowNavigationHint, toolbarState.isShowingNavigationToolbar else { return }
-        }
+        // On iPad the bottom navigation toolbar is hidden; the CFR must be anchored
+        // by AddressToolbarContainer in that case, not here.
+        guard contextualHintType != ContextualHintType.navigation.rawValue
+            || (toolbarState.canShowNavigationHint &&
+                toolbarState.isShowingNavigationToolbar)
+        else { return }
 
         toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
     }
