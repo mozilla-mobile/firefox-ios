@@ -1945,7 +1945,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-16.2.x
-        machine_type_id: g2.mac.4large
+        machine_type_id: g2.mac.large
 
   # Firefox_Unit_Tests_iOS_Versions ensures all unit tests pass on the supported iOS versions.
   # This workflow runs weekly on Tuesday.
@@ -2800,6 +2800,9 @@ workflows:
             #!/usr/bin/env bash
             python3 -m pip install --upgrade pip pyjwt cryptography requests
             python3 scripts/nightly_testflight_add_group.py
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
 
   release_promotion_push:
     before_run:
