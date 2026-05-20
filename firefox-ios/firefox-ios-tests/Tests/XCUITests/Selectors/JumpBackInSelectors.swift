@@ -9,7 +9,6 @@ protocol JumpBackInSelectorsSet {
     var SECTION_TITLE: Selector { get }
     var ITEM_CELL: Selector { get }
     var CONTEXT_MENU_TABLE: Selector { get }
-    func itemTitle(_ title: String) -> Selector
     var all: [Selector] { get }
 }
 
@@ -44,14 +43,6 @@ struct JumpBackInSelectors: JumpBackInSelectorsSet {
         description: "Jump Back In context menu table",
         groups: ["jumpBackIn", "contextMenu"]
     )
-
-    func itemTitle(_ title: String) -> Selector {
-        Selector.staticTextByExactLabel(
-            title,
-            description: "Jump Back In item titled \(title)",
-            groups: ["jumpBackIn"]
-        )
-    }
 
     var all: [Selector] { [COLLECTION_VIEW, SECTION_TITLE, ITEM_CELL, CONTEXT_MENU_TABLE] }
 }
