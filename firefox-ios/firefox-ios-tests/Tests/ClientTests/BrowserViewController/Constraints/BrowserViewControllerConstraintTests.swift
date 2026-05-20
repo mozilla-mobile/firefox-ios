@@ -225,6 +225,22 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
         XCTAssertNotNil(subject.bottomContentStackView.superview)
     }
 
+    func test_updateContentContainerTopConstraint_keepsSearchControllerAboveHomepage() throws {
+        let featureFlags = MockNimbusFeatureFlags()
+        featureFlags.enabledFlags = [.homepagePinnedHeader, .homepageStoryCategories]
+        let subject = createSubject(featureFlagProvider: featureFlags)
+        let homepage = MockHomepageContentViewController()
+
+        subject.showSearchController()
+        subject.contentContainer.update(content: homepage)
+        subject.updateContentContainerTopConstraint()
+
+        let searchView = try XCTUnwrap(subject.searchController?.view)
+        let searchIndex = try XCTUnwrap(subject.view.subviews.firstIndex(of: searchView))
+        let contentIndex = try XCTUnwrap(subject.view.subviews.firstIndex(of: subject.contentContainer))
+        XCTAssertGreaterThan(searchIndex, contentIndex)
+    }
+
     func test_readerModeBar_hasConstraintsWhenPresent() {
         let subject = createSubject()
 
@@ -300,4 +316,8 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
              constraint.secondAttribute == firstAttribute)
         }
     }
+}
+
+private final class MockHomepageContentViewController: UIViewController, ContentContainable {
+    var contentType: ContentType { .homepage }
 }

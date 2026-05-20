@@ -27,9 +27,20 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     // MARK: - Subject Creation
-    func createSubject(isFeatureFlagEnabled: Bool = false, isBottomSearchBar: Bool = true) -> BrowserViewController {
+    func createSubject(
+        isFeatureFlagEnabled: Bool = false,
+        isBottomSearchBar: Bool = true,
+        featureFlagProvider: FeatureFlagProviding? = nil
+    ) -> BrowserViewController {
         // Setup feature flag to disabled by default and override only in the test that need it
         setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
+        if let featureFlagProvider {
+            DependencyHelperMock().bootstrapDependencies(
+                injectedProfile: profile,
+                injectedTabManager: tabManager,
+                injectedFeatureFlagProvider: featureFlagProvider
+            )
+        }
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager)
         subject.isBottomSearchBar = isBottomSearchBar

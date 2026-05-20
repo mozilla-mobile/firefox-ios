@@ -1629,6 +1629,9 @@ class BrowserViewController: UIViewController,
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+            if let searchView = searchController?.view, searchView.superview === view {
+                view.bringSubviewToFront(searchView)
+            }
         }
 
         guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
