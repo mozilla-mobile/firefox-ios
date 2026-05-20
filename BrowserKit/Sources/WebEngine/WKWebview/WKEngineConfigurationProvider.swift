@@ -111,13 +111,24 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     /// new store is the only way to guarantee WebKit's network process abandons the existing
     /// connection pool — assigning `proxyConfigurations` on a live store does not.
     ///
-    /// - Returns: Identifiers of persistent stores that were displaced and are safe to clean
-    ///   up via `removeDataStores(forIdentifiers:)` once all webviews using them have been
-    ///   torn down.
-    @available(iOS 26.0, *)
+    /// The normal (persistent) store is handled asymmetrically:
+    /// - VPN-on (non-empty configs): we mint a fresh `WKWebsiteDataStore(forIdentifier:)`
+    ///   and copy cookies forward so the user stays signed in.
+    /// - VPN-off (empty configs): we swap back to `WKWebsiteDataStore.default()` so the
+    ///   user's full persistent state (localStorage, IndexedDB, etc.) is preserved, and
+    ///   we deliberately do NOT copy cookies back — VPN-session identity should not leak
+    ///   into the user's normal browsing.
+    ///
+    /// Use `applyProxyConfigurations` instead for token rotation, where the proxy
+    /// endpoint is unchanged and we want to keep the existing connection pool.
+    ///
+    /// - Returns: Identifiers of persistent stores that were displaced and are safe to
+    ///   clean up via `removeDataStores(forIdentifiers:)` once all webviews referencing
+    ///   them have been torn down.
     @discardableResult
-    public static func applyProxyConfigurations(
-        _ configs: [ProxyConfiguration],
+    @available(iOS 26.0, *)
+    public static func rebuildStores(
+        applyingProxy configs: [ProxyConfiguration],
         scope: ProxyScope = .all
     ) async -> [UUID] {
         var staleIdentifiers: [UUID] = []
@@ -152,9 +163,23 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
         return staleIdentifiers
     }
 
+    /// Assigns `proxyConfigurations` on the active stores without swapping them or copying
+    /// cookies. Use this for token rotation, where the proxy endpoint is unchanged and only
+    /// the auth header differs: WebKit keeps the existing connection pool so in-flight
+    /// requests get their grace period, and future requests are sent with the new header.
+    @available(iOS 17.0, *)
+    public static func applyProxyConfigurations(
+        _ configs: [ProxyConfiguration],
+        scope: ProxyScope = .all
+    ) {
+        if scope.contains(.normal)  { defaultStore.proxyConfigurations = configs }
+        if scope.contains(.private) { nonPersistentStore.proxyConfigurations = configs }
+    }
+
     /// Removes the on-disk footprint of persistent stores previously displaced by
-    /// `applyProxyConfigurations`. Call only after webviews referencing those stores have
-    /// been discarded — outstanding requests keep the store alive and removal will fail.
+    /// `rebuildStores(applyingProxy:scope:)`. Call only after webviews referencing those
+    /// stores have been discarded — outstanding requests keep the store alive and removal
+    /// will fail.
     @available(iOS 17.0, *)
     public static func removeDataStores(forIdentifiers identifiers: [UUID]) async {
         for identifier in identifiers {

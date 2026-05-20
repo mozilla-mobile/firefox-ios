@@ -19,6 +19,9 @@ final class VPNController: VPNControllerProtocol {
     private let windowManager: WindowManager
 
     private(set) var isRunning = false
+    private var activeServer: VPNGuardian.Server?
+    private var activeScope: ProxyScope?
+    private var rotationTask: Task<Void, Never>?
 
     init(
         logger: Logger = DefaultLogger.shared,
@@ -66,8 +69,10 @@ final class VPNController: VPNControllerProtocol {
                 let config = self.toProxyConf(server: server, pass: pass)
                 let scope: ProxyScope = privateOnly ? .private : .all
                 await self.applyProxyAndRebuildWebViews(configs: [config], scope: scope)
+                self.activeServer = server
+                self.activeScope = scope
                 self.isRunning = true
-                // TODO: Start a watcher to re-fetch and rotate the token before the lifetime ends.
+                self.startPassRotation(after: pass)
                 completion(.success(()))
             } catch {
                 self.logger.log("VPN start failed: \(error)", level: .warning, category: .sync)
@@ -79,8 +84,36 @@ final class VPNController: VPNControllerProtocol {
     func stop() {
         Task { [weak self] in
             guard let self else { return }
+            self.rotationTask?.cancel()
+            self.rotationTask = nil
             await self.applyProxyAndRebuildWebViews(configs: [], scope: .all)
+            self.activeServer = nil
+            self.activeScope = nil
             self.isRunning = false
+        }
+    }
+
+    /// Consumes `VPNGuardian.passRotation` and reapplies the proxy configuration with the
+    /// new bearer token. We use the lightweight `applyProxyConfigurations` (not
+    /// `rebuildStores`) here — the proxy endpoint is unchanged so we want to keep WebKit's
+    /// existing connection pool, letting in-flight requests finish under the proxy's grace
+    /// period while new requests pick up the rotated header.
+    private func startPassRotation(after initial: VPNGuardian.ProxyPass) {
+        rotationTask?.cancel()
+        rotationTask = Task { [weak self] in
+            guard let stream = self?.guardian.passRotation(after: initial) else { return }
+            for await new in stream {
+                guard let self,
+                      let server = self.activeServer,
+                      let scope = self.activeScope else { return }
+                let config = self.toProxyConf(server: server, pass: new)
+                DefaultWKEngineConfigurationProvider.applyProxyConfigurations([config], scope: scope)
+                self.logger.log(
+                    "Rotated VPN proxy pass — next expiry \(new.expiresAt)",
+                    level: .info,
+                    category: .sync
+                )
+            }
         }
     }
 
@@ -89,8 +122,8 @@ final class VPNController: VPNControllerProtocol {
     /// Assigning `proxyConfigurations` on an existing store does not invalidate WebKit's
     /// connection pool, so without a swap, in-flight or pooled connections bypass the proxy.
     private func applyProxyAndRebuildWebViews(configs: [ProxyConfiguration], scope: ProxyScope) async {
-        let staleIdentifiers = await DefaultWKEngineConfigurationProvider.applyProxyConfigurations(
-            configs,
+        let staleIdentifiers = await DefaultWKEngineConfigurationProvider.rebuildStores(
+            applyingProxy: configs,
             scope: scope
         )
         for tabManager in windowManager.allWindowTabManagers() {

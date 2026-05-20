@@ -68,7 +68,12 @@ final class VPNGuardian {
         case bodyInvalid
     }
 
-    static let rotateBeforeExpiry: TimeInterval = 120
+    /// How long before a pass's `expiresAt` we proactively rotate. The proxy pass has a
+    /// ~15 min lifetime; rotating 3 min early gives the round-trip headroom and avoids
+    /// brief windows where new requests would race the expiry.
+    static let rotateBeforeExpiry: TimeInterval = 180
+    /// Backoff delay after a failed rotation fetch.
+    static let rotationRetryDelay: TimeInterval = 30
 
     private let authHeaderProvider: AuthHeaderProvider
     private let configuration: Configuration
@@ -87,6 +92,48 @@ final class VPNGuardian {
     func getPass() async throws -> ProxyPass {
         let headers = try await authHeaderProvider()
         return try await fetchProxyPass(authHeaders: headers)
+    }
+
+    /// Emits a fresh `ProxyPass` shortly before the previous one expires, indefinitely.
+    /// Cancel the consuming task to stop rotation — the stream will tear down its
+    /// internal fetch loop via `onTermination`.
+    ///
+    /// In-flight WebKit requests continue with the old bearer token thanks to the proxy's
+    /// grace period; only new requests pick up the rotated header.
+    func passRotation(after initial: ProxyPass) -> AsyncStream<ProxyPass> {
+        AsyncStream { continuation in
+            let task = Task { [weak self] in
+                var current = initial
+                while !Task.isCancelled {
+                    let refreshAt = current.expiresAt.addingTimeInterval(-Self.rotateBeforeExpiry)
+                    let sleepInterval = max(0, refreshAt.timeIntervalSinceNow)
+                    do {
+                        try await Task.sleep(
+                            nanoseconds: UInt64(sleepInterval * Double(NSEC_PER_SEC))
+                        )
+                    } catch {
+                        break
+                    }
+                    guard let self, !Task.isCancelled else { break }
+                    do {
+                        let new = try await self.getPass()
+                        current = new
+                        continuation.yield(new)
+                    } catch {
+                        self.logger.log(
+                            "Pass rotation failed: \(error). Retrying in \(Self.rotationRetryDelay)s.",
+                            level: .warning,
+                            category: .sync
+                        )
+                        try? await Task.sleep(
+                            nanoseconds: UInt64(Self.rotationRetryDelay * Double(NSEC_PER_SEC))
+                        )
+                    }
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { @Sendable _ in task.cancel() }
+        }
     }
     /**
      * Tries to enroll the User Into Firefox-VPN using the Auth info from the authHeaderProvider.
