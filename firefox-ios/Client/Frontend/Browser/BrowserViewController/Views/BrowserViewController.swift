@@ -839,14 +839,7 @@ class BrowserViewController: UIViewController,
 
         if let tab = tabManager.selectedTab {
             if tab.isFindInPageMode {
-                if #available(iOS 16, *) {
-                    if tab.isPrivate, let webView = tab.webView, webView.isFindInteractionEnabled {
-                        // Ensure keyboard is available and Find In Page UI is refreshed in PBM
-                        let text = webView.findInteraction?.searchText
-                        updateFindInPageVisibility(isVisible: true)
-                        webView.findInteraction?.searchText = text ?? ""
-                    }
-                }
+                refreshFindInPageUI()
             } else {
                 // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
                 scrollController.showToolbars(animated: false)
@@ -1731,6 +1724,17 @@ class BrowserViewController: UIViewController,
 
         browserLayoutManager.updateOverKeyboardContainerConstraints(isBottomSearchBar: isBottomSearchBar,
                                                                     hasZoomPageBar: zoomPageBar != nil)
+    }
+
+    func refreshFindInPageUI() {
+        guard #available(iOS 16, *) else { return }
+        guard let tab =  tabManager.selectedTab else { return }
+        guard tab.isPrivate, let webView = tab.webView, webView.isFindInteractionEnabled else { return }
+
+        // Ensure keyboard is available and Find In Page UI is refreshed in PBM (FXIOS-13321)
+        let text = webView.findInteraction?.searchText
+        updateFindInPageVisibility(isVisible: true)
+        webView.findInteraction?.searchText = text ?? ""
     }
 
     // TODO: SnapKit removal clean up
