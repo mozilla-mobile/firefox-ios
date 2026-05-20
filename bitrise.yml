@@ -969,7 +969,7 @@ workflows:
     description: This Workflow is to build the app using latest xcode available in Bitrise
     meta:
       bitrise.io:
-        stack: osx-xcode-26.5.x
+        stack: osx-xcode-26.5.x-edge
         machine_type_id: g2.mac.4large
   L10nBuild:
     steps:
@@ -2012,7 +2012,7 @@ workflows:
         - content: |-
             #!/usr/bin/env bash
             set -e
-            
+
             # Get Xcode version and build version
             XCODE_VER=$(xcodebuild -version | head -n 1 | sed 's/Xcode //g')
             BUILD_VER=$(xcodebuild -version | grep "Build version" | sed 's/Build version //g')
