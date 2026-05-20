@@ -182,28 +182,6 @@ class ReadingListTests: FeatureFlaggedTestBase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2306999
-    func testAddToReadingListFromBrowserTabMenu() throws {
-        throw XCTSkip("Skipping. The option add to reading list is not available on the new menu")
-        /*
-        app.launch()
-        navigator.nowAt(NewTabScreen)
-        // First time Reading list is empty
-        navigator.goto(LibraryPanel_ReadingList)
-        checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].waitAndTap()
-        // Add item to Reading List from Page Options Menu
-        updateScreenGraph()
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        navigator.performAction(Action.AddToReadingListBrowserTabMenu)
-        // Now there should be an item on the list
-        navigator.nowAt(BrowserTab)
-        navigator.goto(LibraryPanel_ReadingList)
-        checkReadingListNumberOfItems(items: 1)
-         */
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
