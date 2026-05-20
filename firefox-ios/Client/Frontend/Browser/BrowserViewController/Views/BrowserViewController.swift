@@ -4997,6 +4997,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+<<<<<<< HEAD
         if #available(iOS 26.0, *), isBottomSearchBar {
             store.dispatch(
                 ToolbarAction(
@@ -5006,6 +5007,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 )
             )
         }
+=======
+        guard !isEditingBottomAddressBar else { return }
+
+>>>>>>> 318f61cd7 (Bugfix FXIOS-15837 Search bar not visible after rotation (#33913))
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5077,6 +5082,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
+    }
+
+    private var isEditingBottomAddressBar: Bool {
+        guard searchBarPosition == .bottom else { return false }
+        return store.state
+            .componentState(ToolbarState.self, for: .toolbar, window: windowUUID)?
+            .addressToolbar.isEditing ?? false
     }
 
     private var shouldCancelEditing: Bool {
