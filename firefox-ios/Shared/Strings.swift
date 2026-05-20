@@ -3363,13 +3363,13 @@ extension String {
                 comment: "This is the title for Media customization under the Browsing settings section."
             )
             public static let Content = MZLocalizedString(
-                key: "Settings.Browsing.Content.v152",
+                key: "Settings.Browsing.Content.v153",
                 tableName: "Settings",
                 value: "Content",
                 comment: "This is the title for the Content customization section under the Browsing settings page."
             )
             public static let BlockAds = MZLocalizedString(
-                key: "Settings.Browsing.BlockAds.Title.v152",
+                key: "Settings.Browsing.BlockAds.Title.v153",
                 tableName: "Settings",
                 value: "Block Ads",
                 comment: "Title for the Block Ads toggle in the Browsing settings page. When enabled, the app blocks advertisements."
@@ -5874,12 +5874,12 @@ extension String {
 
         public struct SiteProtection {
             public static let Protections = MZLocalizedString(
-                key: "MainMenu.SiteProtection.Protections.Title.v200",
+                key: "MainMenu.SiteProtection.Protections.Title.v153",
                 tableName: "MainMenu",
                 value: "Protections",
                 comment: "On the main menu, at the top, title for a badge that opens site protection settings.")
             public static let AdBlocker = MZLocalizedString(
-                key: "MainMenu.SiteProtection.AdBlocker.Title.v200",
+                key: "MainMenu.SiteProtection.AdBlocker.Title.v153",
                 tableName: "MainMenu",
                 value: "Ad Blocker",
                 comment: "On the main menu, at the top, title for a badge next to Protections that opens the ad blocker setting.")
