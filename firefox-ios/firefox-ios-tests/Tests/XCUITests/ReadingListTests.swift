@@ -18,7 +18,7 @@ class ReadingListTests: FeatureFlaggedTestBase {
         browserScreen = BrowserScreen(app: app)
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2287278f
+    // https://mozilla.testrail.io/index.php?/cases/view/2306994
     // Smoketest
     func testLoadReaderContent() {
         addLaunchArgument(jsonFileName: "defaultEnabledOff", featureName: "apple-summarizer-feature")
