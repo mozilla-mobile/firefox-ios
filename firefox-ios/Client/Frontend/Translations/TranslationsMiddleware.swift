@@ -287,7 +287,12 @@ final class TranslationsMiddleware: FeatureFlaggable {
         )?.isPrivateMode ?? false
         let originatingTab = selectedTab(for: action.windowUUID)
         self.handleUpdatingTranslationIcon(windowUUID: action.windowUUID, with: .loading, on: originatingTab)
-        retrieveTranslations(windowUUID: action.windowUUID, targetLanguage: language, isPrivate: isPrivate, on: originatingTab)
+        retrieveTranslations(
+            windowUUID: action.windowUUID,
+            targetLanguage: language,
+            isPrivate: isPrivate,
+            on: originatingTab
+        )
     }
 
     private func handleLanguageSelected(for action: TranslationLanguageSelectedAction, and state: AppState) {
@@ -387,7 +392,13 @@ final class TranslationsMiddleware: FeatureFlaggable {
         translationFlowIds[windowUUID] = newFlowId
         selectedTargetLanguages[windowUUID] = targetLanguage
         handleUpdatingTranslationIcon(windowUUID: windowUUID, with: .loading, on: tab)
-        retrieveTranslations(windowUUID: windowUUID, targetLanguage: targetLanguage, isPrivate: isPrivate, autoTranslate: true, on: tab)
+        retrieveTranslations(
+            windowUUID: windowUUID,
+            targetLanguage: targetLanguage,
+            isPrivate: isPrivate,
+            autoTranslate: true,
+            on: tab
+        )
         return true
     }
 
