@@ -16,11 +16,21 @@ final class ShortcutsLibraryDiffableDataSource:
 
     enum Item: Hashable {
         case shortcut(TopSiteConfiguration)
+        case addShortcutTile
 
         static var cellTypes: [ReusableCell.Type] {
             return [
                 TopSiteCell.self,
             ]
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            case .shortcut:
+                return true
+            }
         }
     }
 
@@ -39,8 +49,11 @@ final class ShortcutsLibraryDiffableDataSource:
     }
 
     private func getShortcuts(with state: ShortcutsLibraryState) -> [ShortcutsLibraryDiffableDataSource.Item]? {
-        let shortcuts: [Item] = state.shortcuts.compactMap { .shortcut($0) }
-        guard !shortcuts.isEmpty else { return nil }
-        return Array(shortcuts.prefix(maxShortcutsToShow))
+        let shouldShowAddShortcutTile = state.shouldShowAddShortcutTile
+        let numberOfShortcutsToShow = shouldShowAddShortcutTile ? max(maxShortcutsToShow - 1, 0) : maxShortcutsToShow
+        let visibleShortcuts: [Item] = state.shortcuts.prefix(numberOfShortcutsToShow).compactMap { .shortcut($0) }
+        let visibleItems = shouldShowAddShortcutTile ? visibleShortcuts + [.addShortcutTile] : visibleShortcuts
+        guard !visibleItems.isEmpty else { return nil }
+        return visibleItems
     }
 }

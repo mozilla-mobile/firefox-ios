@@ -10,6 +10,7 @@ import Redux
 struct ShortcutsLibraryState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     let shortcuts: [TopSiteConfiguration]
+    let shouldShowAddShortcutTile: Bool
     let shouldRecordImpressionTelemetry: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -29,6 +30,7 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             shortcuts: [],
+            shouldShowAddShortcutTile: false,
             shouldRecordImpressionTelemetry: false
         )
     }
@@ -36,10 +38,12 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         shortcuts: [TopSiteConfiguration],
+        shouldShowAddShortcutTile: Bool,
         shouldRecordImpressionTelemetry: Bool
     ) {
         self.windowUUID = windowUUID
         self.shortcuts = shortcuts
+        self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
         self.shouldRecordImpressionTelemetry = shouldRecordImpressionTelemetry
     }
 
@@ -81,7 +85,8 @@ struct ShortcutsLibraryState: ScreenState, Equatable {
         }
 
         return state.copyWithUpdates(
-            shortcuts: sites
+            shortcuts: sites,
+            shouldShowAddShortcutTile: topSitesAction.shouldShowAddShortcutTile ?? state.shouldShowAddShortcutTile
         )
     }
 
