@@ -142,7 +142,7 @@ struct WorldCupMatches: Equatable, Hashable {
         }
         switch match.stage {
         case "Group Stage":
-            let group = match.homeTeam.group ?? match.awayTeam.group
+            let group = match.homeTeam?.group ?? match.awayTeam?.group
             return Self.groupLabel(for: group)
                 ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         case "Round of 32":

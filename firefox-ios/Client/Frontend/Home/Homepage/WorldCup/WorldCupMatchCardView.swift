@@ -303,6 +303,7 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         static let flagSize = CGSize(width: 60, height: 40)
         static let flagCornerRadius: CGFloat = 7
         static let flagToCodeSpacing: CGFloat = 4
+        static let missingFlagAssetName = "missingFlag"
 
         static let scoreLabelHorizontalPadding: CGFloat = 16
         static let scoreLabelVerticalPadding: CGFloat = 8
@@ -452,9 +453,9 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
     }
 
     func configure(with match: WorldCupMatch) {
-        homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName)
+        homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
         homeColumn.codeLabel.text = match.homeCode
-        awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
+        awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
         awayColumn.codeLabel.text = match.awayCode
 
         if let score = match.score {
@@ -479,8 +480,10 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
 
         homeColumn.codeLabel.textColor = theme.colors.textPrimary
         homeColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        homeColumn.flagView.backgroundColor = theme.colors.borderSecondary
         awayColumn.codeLabel.textColor = theme.colors.textPrimary
         awayColumn.flagView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        awayColumn.flagView.backgroundColor = theme.colors.borderSecondary
     }
 }
 
@@ -492,6 +495,7 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         static let flagCornerRadius: CGFloat = 5
         static let flagBorderWidth: CGFloat = 1
         static let flagToCodeSpacing: CGFloat = 8
+        static let missingFlagAssetName = "missingFlag"
         static let dateLabelInset: CGFloat = 8
     }
 
@@ -602,9 +606,9 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     }
 
     func configure(with match: WorldCupMatch) {
-        homeFlagView.image = UIImage(named: match.homeFlagAssetName)
+        homeFlagView.image = UIImage(named: match.homeFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
         homeCodeLabel.text = match.homeCode
-        awayFlagView.image = UIImage(named: match.awayFlagAssetName)
+        awayFlagView.image = UIImage(named: match.awayFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
         awayCodeLabel.text = match.awayCode
         if let score = match.score {
             infoLabel.text = score.score
@@ -620,6 +624,8 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         awayCodeLabel.textColor = theme.colors.textPrimary
         infoLabel.textColor = theme.colors.textSecondary
         homeFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        homeFlagView.backgroundColor = theme.colors.borderSecondary
         awayFlagView.layer.borderColor = theme.colors.borderSecondary.cgColor
+        awayFlagView.backgroundColor = theme.colors.borderSecondary
     }
 }
