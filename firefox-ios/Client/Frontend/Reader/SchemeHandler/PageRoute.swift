@@ -32,7 +32,7 @@ final class PageRoute: TinyRoute {
             throw TinyRouterError.missingParam("url")
         }
 
-        guard let parsed = URL(string: raw), parsed.isWebPage() else {
+        guard let parsed = URL(string: raw), parsed.isWebPage(includeDataURIs: false) else {
             throw TinyRouterError.invalidParam("url", raw)
         }
 
