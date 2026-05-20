@@ -253,8 +253,8 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
     }
 
     private func navigateToSERP(for match: WorldCupMatch) {
-        let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode)
-        let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode)
+        guard let homeTeamName = WorldCupCountry.localizedName(forID: match.homeCode),
+              let awayTeamName = WorldCupCountry.localizedName(forID: match.awayCode) else { return }
         let query = "\(homeTeamName) vs \(awayTeamName) \(String.Settings.Homepage.CustomizeFirefoxHome.WorldCup) 2026"
         telemetry.matchClicked(match: "\(match.homeCode)/\(match.awayCode)")
         store.dispatch(
@@ -303,7 +303,6 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
         static let flagSize = CGSize(width: 60, height: 40)
         static let flagCornerRadius: CGFloat = 7
         static let flagToCodeSpacing: CGFloat = 4
-        static let missingFlagAssetName = "missingFlag"
 
         static let scoreLabelHorizontalPadding: CGFloat = 16
         static let scoreLabelVerticalPadding: CGFloat = 8
@@ -453,9 +452,9 @@ private final class FeaturedMatchView: UIView, ThemeApplicable {
     }
 
     func configure(with match: WorldCupMatch) {
-        homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
+        homeColumn.flagView.image = UIImage(named: match.homeFlagAssetName)
         homeColumn.codeLabel.text = match.homeCode
-        awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
+        awayColumn.flagView.image = UIImage(named: match.awayFlagAssetName)
         awayColumn.codeLabel.text = match.awayCode
 
         if let score = match.score {
@@ -495,7 +494,6 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
         static let flagCornerRadius: CGFloat = 5
         static let flagBorderWidth: CGFloat = 1
         static let flagToCodeSpacing: CGFloat = 8
-        static let missingFlagAssetName = "missingFlag"
         static let dateLabelInset: CGFloat = 8
     }
 
@@ -606,9 +604,9 @@ private final class UpcomingMatchRow: UIView, ThemeApplicable {
     }
 
     func configure(with match: WorldCupMatch) {
-        homeFlagView.image = UIImage(named: match.homeFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
+        homeFlagView.image = UIImage(named: match.homeFlagAssetName)
         homeCodeLabel.text = match.homeCode
-        awayFlagView.image = UIImage(named: match.awayFlagAssetName) ?? UIImage(named: UX.missingFlagAssetName)
+        awayFlagView.image = UIImage(named: match.awayFlagAssetName)
         awayCodeLabel.text = match.awayCode
         if let score = match.score {
             infoLabel.text = score.score

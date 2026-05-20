@@ -38,17 +38,14 @@ struct WorldCupMatch: Equatable, Hashable {
          timeOnly: Bool = false) {
         self.homeCode = match.homeTeam?.key ?? Self.missingTeamPlaceholder
         self.awayCode = match.awayTeam?.key ?? Self.missingTeamPlaceholder
-        self.homeFlagAssetName = match.homeTeam?.key ?? ""
-        self.awayFlagAssetName = match.awayTeam?.key ?? ""
+        self.homeFlagAssetName = match.homeTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
+        self.awayFlagAssetName = match.awayTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
         self.date = Self.formattedDate(match.date, locale: localeProvider.current, timeOnly: timeOnly)
         self.score = Self.score(from: match)
     }
 
-    /// Placeholder shown for team code and flag asset name when the merino
-    /// response omits a team (e.g. a knockout fixture whose participants
-    /// aren't decided yet). No asset matches this name so the flag view falls
-    /// back to its background color.
-    private static let missingTeamPlaceholder = "--"
+    static let missingTeamPlaceholder = "--"
+    static let missingTeamFlagAssetPlaceholder = "missingFlag"
 
     /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`
     /// or `2026-06-12T18:00:00.000Z`). Returns `nil` if neither formatter
