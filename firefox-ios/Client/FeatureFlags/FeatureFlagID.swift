@@ -7,6 +7,7 @@ import Shared
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
+    case adBlocker
     case addressAutofillEdit
     case addressBarMenu
     case adsClient
@@ -85,7 +86,8 @@ enum FeatureFlagID: String, CaseIterable {
     // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .addressBarMenu,
+        case    .adBlocker,
+                .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,

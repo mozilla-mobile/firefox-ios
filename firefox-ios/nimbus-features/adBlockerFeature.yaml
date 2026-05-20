@@ -1,0 +1,19 @@
+# The configuration for the adBlocker feature
+features:
+  ad-blocker-feature:
+    description: >
+      The feature flag to manage the roll out of the Ad Blocker badge in the
+      Site Menu and the corresponding Block Ads toggle in Browsing settings.
+    variables:
+      enabled:
+        description: >
+          Whether or not this feature is enabled
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: false
