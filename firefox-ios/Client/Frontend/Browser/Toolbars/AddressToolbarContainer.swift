@@ -123,6 +123,8 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
+    private var didAddSkeletons = false
+
     private func calculateToolbarTrailingSpace() -> CGFloat {
         if shouldDisplayCompact {
             return UX.toolbarHorizontalPadding
@@ -259,6 +261,10 @@ final class AddressToolbarContainer: UIView,
             return
         }
 
+        if !didAddSkeletons {
+            setupSkeletonsAfterStartup()
+        }
+
         let tabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let index = tabs.firstIndex(where: { $0 === selectedTab }) else { return }
 
@@ -268,6 +274,16 @@ final class AddressToolbarContainer: UIView,
         configureSkeletonAddressBars(previousTab: previousTab, forwardTab: forwardTab)
         leftSkeletonAddressBar.isHidden = previousTab == nil
         rightSkeletonAddressBar.isHidden = forwardTab == nil
+    }
+
+    private func setupSkeletonsAfterStartup() {
+        insertSubview(leftSkeletonAddressBar, aboveSubview: toolbar)
+        insertSubview(rightSkeletonAddressBar, aboveSubview: toolbar)
+
+        toolbar.leadingAnchor.constraint(equalTo: leftSkeletonAddressBar.trailingAnchor).isActive = true
+        toolbar.trailingAnchor.constraint(equalTo: rightSkeletonAddressBar.leadingAnchor).isActive = true
+
+        setupSkeletonAddressBarsLayout(isBottomSearchBar: true)
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -454,6 +470,8 @@ final class AddressToolbarContainer: UIView,
             rightSkeletonAddressBar.bottomAnchor.constraint(equalTo: bottomAnchor),
             rightSkeletonAddressBar.widthAnchor.constraint(equalTo: widthAnchor, constant: -UX.skeletonBarWidthOffset)
         ])
+
+        didAddSkeletons = true
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
