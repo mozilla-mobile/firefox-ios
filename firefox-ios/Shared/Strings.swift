@@ -1470,6 +1470,45 @@ extension String {
                 value: "Pinned: %@",
                 comment: "Accessibility label for shortcuts tile on the Firefox home page, indicating that the tile is a pinned tile. %@ is the title of the website."
             )
+
+            public struct AddShortcut {
+                public static let TileTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.TileTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Add Shortcut",
+                    comment: "The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut.")
+                public static let AlertTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Enter a Website URL",
+                    comment: "The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
+                public static let AlertDescription = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Enter the URL and name for the website.",
+                    comment: "The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
+                public static let URLTextFieldPlaceholder = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Website URL",
+                    comment: "The placeholder text for the URL text field in the add shortcut alert on the Firefox homepage shortcuts section.")
+                public static let InvalidURLErrorMessage = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.InvalidURLErrorMessage.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Enter a valid URL",
+                    comment: "The error message shown when a user enters an invalid website URL in the add shortcut alert on the Firefox homepage shortcuts section.")
+                public static let CancelButtonTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Cancel",
+                    comment: "The title for the button that cancels adding a new website shortcut to the Firefox homepage shortcuts section.")
+                public static let SaveButtonTitle = MZLocalizedString(
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle.v153",
+                    tableName: "FirefoxHomepage",
+                    value: "Save",
+                    comment: "The title for the button that saves a new website shortcut to the Firefox homepage shortcuts section.")
+            }
+
             public struct Library {
                 public static let Title = MZLocalizedString(
                     key: "FirefoxHomepage.Shortcuts.Library.Title.v143",
