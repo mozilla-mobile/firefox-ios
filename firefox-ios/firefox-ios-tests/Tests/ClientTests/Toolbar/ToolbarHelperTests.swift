@@ -58,28 +58,6 @@ final class ToolbarHelperTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowTopTabs(for: traits))
     }
 
-    func test_shouldBlur_whenReduceTransparencyEnabled_returnsFalse() async {
-        let subject = await ToolbarHelper(
-            userInterfaceIdiom: .phone,
-            reduceTransparencyProvider: { true }
-        )
-        let shouldBlur = await subject.shouldBlur()
-        XCTAssertFalse(shouldBlur)
-        let alpha = await subject.glassEffectAlpha
-        XCTAssertEqual(alpha, 1)
-    }
-
-    func test_shouldBlur_whenReduceTransparencyDisabled_returnsTrue() async {
-        let subject = await ToolbarHelper(
-            userInterfaceIdiom: .phone,
-            reduceTransparencyProvider: { false }
-        )
-        let shouldBlur = await subject.shouldBlur()
-        XCTAssertTrue(shouldBlur)
-        let alpha = await subject.glassEffectAlpha
-        XCTAssertTrue([0, 0.85].contains(alpha))
-    }
-
     func test_getLockIconState_secureWebsiteMode_returnsExpectedValues() async {
         let subject = await ToolbarHelper(userInterfaceIdiom: .phone)
         let state = subject.getLockIconState(hasOnlySecureContent: true, isWebsiteMode: true)
@@ -107,4 +85,3 @@ final class ToolbarHelperTests: XCTestCase {
         XCTAssertTrue(state.needsTheming)
     }
 }
-

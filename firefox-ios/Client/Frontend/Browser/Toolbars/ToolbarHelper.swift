@@ -35,8 +35,6 @@ final class ToolbarHelper: ToolbarHelperInterface {
         static let backgroundAlphaForBlur: CGFloat = 0.85
     }
 
-    private let reduceTransparencyProvider: @MainActor () -> Bool
-
     var isSwipingTabsEnabled: Bool {
         // Swipe is not enabled on iPads
         return userInterfaceIdiom != .pad
@@ -46,7 +44,7 @@ final class ToolbarHelper: ToolbarHelperInterface {
 
     @MainActor
     var isReduceTransparencyEnabled: Bool {
-        reduceTransparencyProvider()
+        UIAccessibility.isReduceTransparencyEnabled
     }
 
     @MainActor
@@ -67,16 +65,14 @@ final class ToolbarHelper: ToolbarHelperInterface {
 
     @MainActor
     func shouldBlur() -> Bool {
-		return !isReduceTransparencyEnabled
+        return !isReduceTransparencyEnabled
     }
 
     @MainActor
     init(
-        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
-        reduceTransparencyProvider: @escaping @MainActor () -> Bool = { UIAccessibility.isReduceTransparencyEnabled }
+        userInterfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     ) {
         self.userInterfaceIdiom = userInterfaceIdiom
-        self.reduceTransparencyProvider = reduceTransparencyProvider
     }
 
     func getLockIconState(hasOnlySecureContent: Bool, isWebsiteMode: Bool) -> LockIconState {
