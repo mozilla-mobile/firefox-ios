@@ -36,13 +36,16 @@ struct WorldCupMatch: Equatable, Hashable {
     init(_ match: WorldCupMatchesResponse.Match,
          localeProvider: LocaleProvider = SystemLocaleProvider(),
          timeOnly: Bool = false) {
-        self.homeCode = match.homeTeam.key
-        self.awayCode = match.awayTeam.key
-        self.homeFlagAssetName = match.homeTeam.key
-        self.awayFlagAssetName = match.awayTeam.key
+        self.homeCode = match.homeTeam?.key ?? Self.missingTeamPlaceholder
+        self.awayCode = match.awayTeam?.key ?? Self.missingTeamPlaceholder
+        self.homeFlagAssetName = match.homeTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
+        self.awayFlagAssetName = match.awayTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
         self.date = Self.formattedDate(match.date, locale: localeProvider.current, timeOnly: timeOnly)
         self.score = Self.score(from: match)
     }
+
+    static let missingTeamPlaceholder = "--"
+    static let missingTeamFlagAssetPlaceholder = "missingFlag"
 
     /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`
     /// or `2026-06-12T18:00:00.000Z`). Returns `nil` if neither formatter

@@ -33,8 +33,8 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
     struct Match: Decodable, Equatable, Sendable {
         let date: String
         let globalEventId: Int
-        let homeTeam: Team
-        let awayTeam: Team
+        let homeTeam: Team?
+        let awayTeam: Team?
         let period: String?
         let homeScore: Int?
         let awayScore: Int?
@@ -61,8 +61,8 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
 
         init(date: String,
              globalEventId: Int,
-             homeTeam: Team,
-             awayTeam: Team,
+             homeTeam: Team?,
+             awayTeam: Team?,
              period: String? = nil,
              homeScore: Int? = nil,
              awayScore: Int? = nil,
