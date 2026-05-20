@@ -878,8 +878,13 @@ extension BrowserViewController: WKNavigationDelegate {
         // NOTE: This should only happen if the request/response came from the main frame, otherwise
         // we may end up overriding the "Share Page With..." action to share a temp file that is not
         // representative of the contents of the web view.
+        // Validate pathExtension to avoid edge cases where the response MIME type is PDF but the URL
+        // actually serves HTML content
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
-            if response.mimeType == MIMEType.PDF, let request {
+            if response.mimeType == MIMEType.PDF,
+               let request,
+               let url = request.url,
+               url.pathExtension.lowercased() == "pdf" {
                 if !tab.shouldDownloadDocument(request) {
                     return .allow
                 }
