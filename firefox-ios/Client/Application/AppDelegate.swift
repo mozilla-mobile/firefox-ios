@@ -40,7 +40,7 @@ class AppDelegate: UIResponder,
     lazy var windowManager = WindowManagerImplementation()
     lazy var relayController: RelayControllerProtocol = RelayController()
     lazy var vpnController: VPNControllerProtocol = {
-        if #available(iOS 17.0, *) {
+        if #available(iOS 26.0, *) {
             return VPNController()
         } else {
             return StubVPNController()

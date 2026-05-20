@@ -9,7 +9,7 @@ import Network
 import WebEngine
 import Foundation
 
-@available(iOS 17.0, *)
+@available(iOS 26.0, *)
 @MainActor
 final class VPNController: VPNControllerProtocol {
     private let logger: Logger

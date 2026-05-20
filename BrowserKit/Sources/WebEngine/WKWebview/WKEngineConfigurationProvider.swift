@@ -114,7 +114,7 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
     /// - Returns: Identifiers of persistent stores that were displaced and are safe to clean
     ///   up via `removeDataStores(forIdentifiers:)` once all webviews using them have been
     ///   torn down.
-    @available(iOS 17.0, *)
+    @available(iOS 26.0, *)
     @discardableResult
     public static func applyProxyConfigurations(
         _ configs: [ProxyConfiguration],
@@ -127,6 +127,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
             let newIdentifier = UUID()
             let newStore = WKWebsiteDataStore(forIdentifier: newIdentifier)
             newStore.proxyConfigurations = configs
+//            print("🐆🐆🐆🐆🐆🐆 data store types \(WKWebsiteDataStore.allWebsiteDataTypes())")
+            let oldData = try? await oldStore.fetchData(of: WKWebsiteDataStore.allWebsiteDataTypes())
+            try? await newStore.restoreData(oldData ?? Data())
             await copyCookies(from: oldStore, to: newStore)
             if let oldIdentifier = defaultStoreIdentifier {
                 staleIdentifiers.append(oldIdentifier)
@@ -139,6 +142,9 @@ public struct DefaultWKEngineConfigurationProvider: WKEngineConfigurationProvide
             let oldStore = nonPersistentStore
             let newStore = WKWebsiteDataStore.nonPersistent()
             newStore.proxyConfigurations = configs
+            //            print("🐆🐆🐆🐆🐆🐆 data store types \(WKWebsiteDataStore.allWebsiteDataTypes())")
+            let oldData = try? await oldStore.fetchData(of: WKWebsiteDataStore.allWebsiteDataTypes())
+            try? await newStore.restoreData(oldData ?? Data())
             await copyCookies(from: oldStore, to: newStore)
             nonPersistentStore = newStore
         }
