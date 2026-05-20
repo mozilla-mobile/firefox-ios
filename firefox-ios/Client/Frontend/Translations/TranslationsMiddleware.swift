@@ -345,7 +345,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {
-        windowManager.tabManager(for: windowUUID).selectedTab
+        windowManager.tabManager(for: windowUUID)?.selectedTab
     }
 
     /// If auto-translate is enabled, triggers translation to the user's top preferred language.

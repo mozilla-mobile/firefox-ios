@@ -176,7 +176,7 @@ class SceneDelegate: UIResponder,
         // If so, we want to be sure that we select the tab in the correct iPad window.
         if shouldRerouteIncomingURLToSpecificWindow(url),
            let tabUUID = URLScanner(url: url)?.value(query: "uuid"),
-           let targetWindow = (AppContainer.shared.resolve() as WindowManager).window(for: tabUUID),
+           let targetWindow = (AppContainer.shared.resolve() as WindowManager).windowUUID(forTab: tabUUID),
            targetWindow != sceneCoordinator?.windowUUID {
             DefaultApplicationHelper().open(url, inWindow: targetWindow)
         } else {

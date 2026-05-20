@@ -30,7 +30,7 @@ protocol WindowManager {
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID)
 
     /// Convenience. Returns the TabManager for a specific window.
-    func tabManager(for windowUUID: WindowUUID) -> TabManager
+    func tabManager(for windowUUID: WindowUUID) -> TabManager?
 
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
@@ -73,11 +73,7 @@ protocol WindowManager {
     /// - Parameter tab: the UUID of the tab.
     /// - Returns: the UUID of the window hosting it (if available and open).
     @MainActor
-    func window(for tab: TabUUID) -> WindowUUID?
-
-    /// Convenience. Provides opportunity for safety checks or window validation.
-    @MainActor
-    func windowExists(uuid: WindowUUID) -> Bool
+    func windowUUID(forTab tab: TabUUID) -> WindowUUID?
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -135,25 +131,17 @@ final class WindowManagerImplementation: WindowManager {
         clearReservedUUID(uuid)
     }
 
-    func tabManager(for windowUUID: WindowUUID) -> TabManager {
-        func unsafeAnyTabManager() -> TabManager {
-            // This is unsafe, but is the best fallback we have to try to handle non-fatally (but may crash anyway)
-            if let tabManager = windows.first?.value.tabManager {
-                logger.log("Unsafe tab manager with windowUUID: \(tabManager.windowUUID)", level: .fatal, category: .window)
-            }
-            return windows.first!.value.tabManager!
-        }
-
+    func tabManager(for windowUUID: WindowUUID) -> TabManager? {
         guard let window = window(for: windowUUID) else {
-            assertionFailure("No window for UUID: \(windowUUID). This is a client error.")
+            assertionFailure("No window for UUID: \(windowUUID). This is a client error. It will return nil in production but querying a non-existent window is always indicative of a bug.")
             logger.log("No window for UUID: \(windowUUID)", level: .fatal, category: .window)
-            return unsafeAnyTabManager()
+            return nil
         }
 
         guard let manager = window.tabManager else {
-            assertionFailure("Window alive, but no TabManager for UUID: \(windowUUID). This is a client error.")
+            assertionFailure("Valid window but no TabManager for UUID: \(windowUUID). This is a client error. It will return nil in production but is indicative of a bug.")
             logger.log("Window alive, but no TabManager for UUID: \(windowUUID)", level: .fatal, category: .window)
-            return unsafeAnyTabManager()
+            return nil
         }
 
         return manager
@@ -285,13 +273,8 @@ final class WindowManagerImplementation: WindowManager {
         }
     }
 
-    func window(for tab: TabUUID) -> WindowUUID? {
+    func windowUUID(forTab tab: TabUUID) -> WindowUUID? {
         return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
-    }
-
-    func windowExists(uuid: WindowUUID) -> Bool {
-        guard uuid != .unavailable else { return false }
-        return windows[uuid] != nil
     }
 
     // MARK: - Internal Utilities
