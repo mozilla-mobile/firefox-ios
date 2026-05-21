@@ -1163,8 +1163,11 @@ final class HomepageViewController: UIViewController,
     }
 
     private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
-        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
-            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
+        let hasWallpaperChanged = state.wallpaperState.wallpaperConfiguration.logoTextColor !=
+        homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
+        let hasQuickAnswersChange = state.headerState.showQuickAnswersButton !=
+        homepageState.headerState.showQuickAnswersButton
+        return hasWallpaperChanged || hasQuickAnswersChange
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.

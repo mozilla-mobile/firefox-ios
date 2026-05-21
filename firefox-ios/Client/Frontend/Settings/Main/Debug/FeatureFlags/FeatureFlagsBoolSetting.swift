@@ -15,7 +15,9 @@ class FeatureFlagsBoolSetting: BoolSetting, FeatureFlaggable {
     }
 
     override func writeBool(_ control: UISwitch) {
+        print("Cyn feature flag has been set")
         if let featureFlagName = getFeatureFlagName() {
+            print("Cyn ffname \(featureFlagName)")
             featureFlagsProvider.setDebugOverride(featureFlagName, to: control.isOn)
         } else {
             guard let key = prefKey, let prefs else { return }

@@ -23,7 +23,7 @@ final class ChangeMLPAEndpointSetting: HiddenSetting {
         let message = """
         Current: \(currentEnvRaw.capitalized)
 
-        Note: App Attest key will be automatically reset when switching environments.
+        Note: App Attest key should be resetted when switching environments.
         """
         let alert = UIAlertController(title: "MLPA Endpoint",
                                       message: message,

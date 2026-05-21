@@ -24,7 +24,6 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         self.urlSession = urlSession
         self.bundleIdentifier = bundleIdentifier
         print("🌐 [MLPAServer] Initialized with environment: \(type.rawValue)")
-        print("🌐 [MLPAServer] Base URL: \(type.baseURL?.absoluteString ?? "nil")")
     }
 
     /// Fetches a random server-generated challenge for the given `keyId`.
@@ -70,7 +69,6 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
 
         print("🌐 [MLPAServer] Sending attestation to: \(attestEndpoint)")
         print("🌐 [MLPAServer] Environment: \(environmentType.rawValue)")
-        print("🌐 [MLPAServer] Bundle ID: \(bundleIdentifier)")
 
         let jwt = try MLPAJWTPayload(
             keyId: keyId,
@@ -99,7 +97,10 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         guard let http = response as? HTTPURLResponse else { return }
         guard (200..<300).contains(http.statusCode) else {
             let message = String(data: data, encoding: .utf8) ?? "Unknown server error"
+            print("🔐 [AppAttest] ❌ Attestation failed: \(message)")
             throw AppAttestServiceError.serverError(description: "\(http.statusCode): \(message)")
         }
+        print("🔐 [AppAttest] ✅ Attestation sent successfully!")
+
     }
 }

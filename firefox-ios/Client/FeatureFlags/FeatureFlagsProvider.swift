@@ -40,6 +40,7 @@ final class FeatureFlagsProvider: FeatureFlagProviding, @unchecked Sendable {
     func setDebugOverride(_ flag: FeatureFlagID, to value: Bool) {
         guard let debugKey = flag.debugKey else { return }
         prefs.setBool(value, forKey: debugKey)
+        print("Cyn \(value) for \(debugKey)")
     }
 }
 
