@@ -46,12 +46,20 @@ public struct AppAttestClient: Sendable {
     /// 4. Send the attestation to the server for validation and public key storage.
     /// 5. Persist the `keyId` locally so subsequent calls skip re-attestation.
     public func performAttestation() async throws -> String {
-        if let existingKey = keyStore.loadKeyID() {
+        let existingKey = keyStore.loadKeyID()
+        print("🔐 [AppAttest] performAttestation - Existing key: \(existingKey ?? "none")")
+
+        if let existingKey = existingKey {
+            print("🔐 [AppAttest] Using existing key, skipping attestation")
             return existingKey
         }
 
+        print("🔐 [AppAttest] No existing key, performing fresh attestation...")
         let keyID = try await appAttestService.generateKey()
+        print("🔐 [AppAttest] Generated new keyID: \(keyID.prefix(16))...")
+
         let challenge = try await remoteServer.fetchChallenge(for: keyID)
+        print("🔐 [AppAttest] Received challenge from server: \(challenge.prefix(20))...")
 
         guard let challengeData = challenge.data(using: .utf8) else {
             throw AppAttestServiceError.invalidChallenge
@@ -60,14 +68,22 @@ public struct AppAttestClient: Sendable {
         // Apple requires a SHA-256 hash of the client data, not the raw bytes.
         let clientDataHash = Data(SHA256.hash(data: challengeData))
         let attestation = try await appAttestService.attestKey(keyID, clientDataHash: clientDataHash)
+        print("🔐 [AppAttest] Generated attestation object, size: \(attestation.count) bytes")
 
-        try await remoteServer.sendAttestation(
-            keyId: keyID,
-            attestationObject: attestation,
-            challenge: challenge
-        )
+        do {
+            try await remoteServer.sendAttestation(
+                keyId: keyID,
+                attestationObject: attestation,
+                challenge: challenge
+            )
+            print("🔐 [AppAttest] ✅ Attestation sent successfully!")
+        } catch {
+            print("🔐 [AppAttest] ❌ Attestation failed: \(error)")
+            throw error
+        }
 
         try keyStore.saveKeyID(keyID)
+        print("🔐 [AppAttest] Saved keyID to store")
         return keyID
     }
 

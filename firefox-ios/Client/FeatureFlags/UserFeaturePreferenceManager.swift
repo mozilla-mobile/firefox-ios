@@ -42,6 +42,15 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         guard let key = flag.userPrefsKey else {
             return checkDefaultValue(for: flag)
         }
+        #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
+        if let debugKey = flag.debugKey,
+           let override = prefs.boolForKey(debugKey) {
+            return override
+        }
+        if let debugKey = flag.debugKey {
+            print("CYN \(debugKey) \(prefs.boolForKey(debugKey))")
+        }
+        #endif
         return prefs.boolForKey(key) ?? checkDefaultValue(for: flag)
     }
 

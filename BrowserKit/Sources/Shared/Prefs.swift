@@ -104,6 +104,7 @@ public struct PrefsKeys {
     public struct FeatureFlags {
         public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
+        public static let QuickAnswers = "QuickAnswersPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
         public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
@@ -154,6 +155,7 @@ public struct PrefsKeys {
 
     public struct MLPASettings {
         public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+        public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
     public struct UserFeatureFlagPrefs {

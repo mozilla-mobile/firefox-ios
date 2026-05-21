@@ -23,6 +23,8 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         self.environmentType = type
         self.urlSession = urlSession
         self.bundleIdentifier = bundleIdentifier
+        print("🌐 [MLPAServer] Initialized with environment: \(type.rawValue)")
+        print("🌐 [MLPAServer] Base URL: \(type.baseURL?.absoluteString ?? "nil")")
     }
 
     /// Fetches a random server-generated challenge for the given `keyId`.
@@ -45,9 +47,12 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
             throw AppAttestServiceError.invalidKeyID
         }
 
+        print("🌐 [MLPAServer] Fetching challenge from: \(url)")
         let (data, response) = try await urlSession.data(from: url)
         try Self.validate(response: response, data: data)
-        return try JSONDecoder().decode(ChallengeResponse.self, from: data).challenge
+        let challenge = try JSONDecoder().decode(ChallengeResponse.self, from: data).challenge
+        print("🌐 [MLPAServer] Challenge received successfully")
+        return challenge
     }
 
     /// Sends the attestation object to the server for one-time trust establishment.
@@ -62,6 +67,10 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         guard let attestEndpoint = MLPAConstants.attestEndpoint(with: environmentType) else {
             throw AppAttestServiceError.invalidURL(description: "attestEndpoint")
         }
+
+        print("🌐 [MLPAServer] Sending attestation to: \(attestEndpoint)")
+        print("🌐 [MLPAServer] Environment: \(environmentType.rawValue)")
+        print("🌐 [MLPAServer] Bundle ID: \(bundleIdentifier)")
 
         let jwt = try MLPAJWTPayload(
             keyId: keyId,
@@ -81,7 +90,9 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
         /// request.setValue("true", forHTTPHeaderField: "use-qa-certificates")
 
         let (data, response) = try await urlSession.data(from: request)
+        print("🌐 [MLPAServer] Attestation response received")
         try Self.validate(response: response, data: data)
+        print("🌐 [MLPAServer] ✅ Attestation validated successfully")
     }
 
     private static func validate(response: URLResponse, data: Data) throws {

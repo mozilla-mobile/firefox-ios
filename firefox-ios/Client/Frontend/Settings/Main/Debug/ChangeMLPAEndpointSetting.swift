@@ -22,6 +22,8 @@ final class ChangeMLPAEndpointSetting: HiddenSetting {
         let currentEnvRaw = prefs.stringForKey(prefsKey) ?? MLPAEnvironment.prod.rawValue
         let message = """
         Current: \(currentEnvRaw.capitalized)
+
+        Note: App Attest key will be automatically reset when switching environments.
         """
         let alert = UIAlertController(title: "MLPA Endpoint",
                                       message: message,
@@ -39,6 +41,7 @@ final class ChangeMLPAEndpointSetting: HiddenSetting {
             guard let self else { return }
             self.prefs.setString(MLPAEnvironment.dev.rawValue, forKey: self.prefsKey)
         }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         settings.present(alert, animated: true)
     }
 }
