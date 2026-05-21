@@ -266,15 +266,17 @@ class BaseTestCase: XCTestCase {
 
     func bookmark(isLockIconOff: Bool = true) {
         let browserScreen = BrowserScreen(app: app)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let mainMenu = MainMenuScreen(app: app)
         if isLockIconOff {
             browserScreen.assertAddressBar_LockIconOffExist()
         } else {
             browserScreen.assertAddressBar_LockIconExist()
         }
         browserScreen.tapSaveButtonIfExist()
-        waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.Bookmark)
+        toolbarScreen.assertTabsButtonExists()
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarkPage()
     }
 
     func enableBookmarksInSettings() {
@@ -298,8 +300,10 @@ class BaseTestCase: XCTestCase {
     }
 
     func unbookmark(url: String) {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(LibraryPanel_Bookmarks)
+        let toolbarScreen = ToolbarScreen(app: app)
+        let mainMenu = MainMenuScreen(app: app)
+        toolbarScreen.tapSettingsMenuButton()
+        mainMenu.tapBookmarks()
         app.buttons["Edit"].waitAndTap()
         if #available(iOS 17, *) {
             app.buttons["Remove " + url].waitAndTap()

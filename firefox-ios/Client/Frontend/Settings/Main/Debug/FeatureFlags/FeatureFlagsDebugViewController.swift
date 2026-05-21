@@ -102,6 +102,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 self?.reloadView()
             },
             FeatureFlagsBoolSetting(
+                with: .homepageAddShortcutTile,
+                titleText: format(string: "Homepage Add Shortcut"),
+                statusText: format(string: "Toggle to enable the homepage add shortcut tile")
+            ) { [weak self] _ in
+                self?.reloadView()
+            },
+            FeatureFlagsBoolSetting(
                 with: .homepagePinnedHeader,
                 titleText: format(string: "Homepage Pinned Header"),
                 statusText: format(string: "Toggle to enable the pinned homepage newsfeed header")
