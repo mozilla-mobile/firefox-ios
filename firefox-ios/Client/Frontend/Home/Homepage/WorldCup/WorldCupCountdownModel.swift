@@ -40,9 +40,13 @@ final class WorldCupCountdownModel {
     }()
 
     var onCountdownUpdated: ((WorldCupCountdown) -> Void)?
+    /// Called once when the countdown reaches zero (i.e. `now >= targetDate`).
+    /// The model stops its internal timer before invoking the callback.
+    var onWorldCupStarted: (() -> Void)?
 
     private var timer: Timer?
     private let now: () -> Date
+    private var hasNotifiedStart = false
 
     init(
         nimbusFeature: FeatureHolder<WorldCupWidgetFeature> = FxNimbus.shared.features.worldCupWidgetFeature,
@@ -55,6 +59,7 @@ final class WorldCupCountdownModel {
     func start() {
         stop()
         fire()
+        guard timer == nil, !hasReachedZero else { return }
         timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
                 self?.fire()
@@ -77,7 +82,15 @@ final class WorldCupCountdownModel {
         )
     }
 
+    private var hasReachedZero: Bool {
+        return now() >= targetDate
+    }
+
     private func fire() {
         onCountdownUpdated?(currentCountdown)
+        guard hasReachedZero, !hasNotifiedStart else { return }
+        hasNotifiedStart = true
+        stop()
+        onWorldCupStarted?()
     }
 }

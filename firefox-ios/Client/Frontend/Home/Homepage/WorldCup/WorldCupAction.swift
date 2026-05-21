@@ -48,6 +48,7 @@ enum WorldCupActionType: ActionType {
     case removeHomepageCard
     case selectTeam
     case retryMatchesFetch
+    case worldCupDidStart
 }
 
 enum WorldCupMiddlewareActionType: ActionType {

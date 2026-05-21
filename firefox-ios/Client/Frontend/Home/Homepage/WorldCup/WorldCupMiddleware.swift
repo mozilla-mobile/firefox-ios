@@ -48,6 +48,8 @@ final class WorldCupMiddleware {
             let countryId = (action as? WorldCupAction)?.selectedCountryId
             self.worldCupStore.setSelectedTeam(countryId: countryId)
             self.startFeed(windowUUID: action.windowUUID)
+        case WorldCupActionType.worldCupDidStart:
+            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         default:
             break
         }
