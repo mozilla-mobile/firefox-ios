@@ -84,7 +84,6 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernWelcomeScreen()
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2575175
     // https://mozilla.testrail.io/index.php?/cases/view/3129580
     func testModernOnboardingToolbarPlacementTop() throws {
         if iPad() {
