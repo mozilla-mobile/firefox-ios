@@ -51,19 +51,9 @@ final class UserFeaturePreferenceManager: UserFeaturePreferring, @unchecked Send
         // Even when this feature is on in Nimbus, the user preference default value should be false
         if flag == .aiKillSwitch {
             return false
+        } else if flag == .quickAnswers {
+            return true
         } else {
-            #if MOZ_CHANNEL_beta || MOZ_CHANNEL_developer
-            if let debugKey = flag.debugKey,
-               let override = prefs.boolForKey(debugKey) {
-                print("Cyn overide \(override)")
-                return override
-            }
-            print("Cyn debugKey \(flag.debugKey)")
-            if let debugKey = flag.debugKey {
-                print("Cyn value for debug key \(prefs.boolForKey(debugKey))")
-            }
-
-            #endif
             return backendLayer.checkNimbusConfigFor(flag)
         }
     }

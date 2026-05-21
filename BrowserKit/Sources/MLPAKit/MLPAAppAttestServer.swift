@@ -101,6 +101,5 @@ public struct MLPAAppAttestServer: AppAttestRemoteServerProtocol {
             throw AppAttestServiceError.serverError(description: "\(http.statusCode): \(message)")
         }
         print("🔐 [AppAttest] ✅ Attestation sent successfully!")
-
     }
 }

@@ -68,7 +68,6 @@ public struct AppAttestClient: Sendable {
         let attestation = try await appAttestService.attestKey(keyID, clientDataHash: clientDataHash)
         print("🔐 [AppAttest] Generated attestation object...")
 
-
         try await remoteServer.sendAttestation(
             keyId: keyID,
             attestationObject: attestation,
