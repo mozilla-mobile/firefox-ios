@@ -76,7 +76,7 @@ enum FeatureFlagID: String, CaseIterable {
         case .homepageBookmarksSectionDefault: return HomepageKeys.BookmarksSection
         case .homepageJumpBackinSectionDefault: return HomepageKeys.JumpBackInSection
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
-        case .quickAnswers: return FlagKeys.QuickAnswers
+        case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
         default: return nil

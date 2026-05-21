@@ -54,12 +54,38 @@ final class ErrorHandler {
 
     // MARK: - Search Errors
     func handleSearchError(_ error: ResultsServiceError) {
-        // TODO: - FXIOS-15573 Handle Search errors
+        let message: String
+        switch error {
+        case .invalidResponse(let statusCode):
+            message = "Received an invalid response (status code: \(statusCode)). Please try again."
+        case .noMessage:
+            message = "No response was received. Please try again."
+        case .rateLimited:
+            message = "Too many requests. Please wait a moment and try again."
+        case .requestCreationFailed:
+            message = "Failed to create the request. Please try again."
+        case .maxUsers:
+            message = "Service is currently at capacity. Please try again later."
+        case .payloadTooLarge:
+            message = "Your request is too large. Please try a shorter query."
+        case .unableToCreateService:
+            message = "Unable to initialize the service. Please try again."
+        case .unknown(let errorMessage):
+            message = "An error occurred: \(errorMessage)"
+        }
+
+        showErrorAlert(
+            title: "Quick Answers Error",
+            message: message
+        )
     }
 
     // MARK: - Other Errors
     func handleInitializationError() {
-        // TODO: - FXIOS-15573 Handle errors
+        showErrorAlert(
+            title: "Quick Answers Error",
+            message: "Failed to initialize Quick Answers. Please try again."
+        )
     }
 
     // MARK: - Private
@@ -81,6 +107,20 @@ final class ErrorHandler {
         )
         alertController.addAction(
             UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                self?.navigationHandler?.dismissQuickAnswers(with: nil)
+            }
+        )
+        presenter?.present(alertController, animated: true)
+    }
+
+    private func showErrorAlert(title: String, message: String) {
+        let alertController = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alertController.addAction(
+            UIAlertAction(title: "OK", style: .default) { [weak self] _ in
                 self?.navigationHandler?.dismissQuickAnswers(with: nil)
             }
         )

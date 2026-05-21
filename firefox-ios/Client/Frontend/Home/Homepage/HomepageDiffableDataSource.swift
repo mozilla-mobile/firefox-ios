@@ -112,7 +112,6 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
-
         if reconfigureHeader {
             snapshot.reconfigureItems([headerItem])
         }

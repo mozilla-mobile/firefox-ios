@@ -1165,8 +1165,10 @@ final class HomepageViewController: UIViewController,
     private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
         let hasWallpaperChanged = state.wallpaperState.wallpaperConfiguration.logoTextColor !=
         homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
+        print("hasWallpaperChanged: \(hasWallpaperChanged)")
         let hasQuickAnswersChange = state.headerState.showQuickAnswersButton !=
         homepageState.headerState.showQuickAnswersButton
+        print("hasQuickAnswersChange: \(hasQuickAnswersChange)")
         return hasWallpaperChanged || hasQuickAnswersChange
     }
 

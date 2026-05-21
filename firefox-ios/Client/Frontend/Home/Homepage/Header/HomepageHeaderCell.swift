@@ -81,7 +81,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     // MARK: - UI Setup
 
     private func setupView(headerState: HeaderState) {
-        if !hasConfiguredView {
+        if !hasConfiguredView || headerState.showQuickAnswersButton {
             contentView.backgroundColor = .clear
             logoStackView.addArrangedSubview(logoImage)
             logoStackView.addArrangedSubview(logoTextImage)
