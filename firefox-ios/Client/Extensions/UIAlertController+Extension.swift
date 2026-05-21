@@ -91,4 +91,43 @@ extension UIAlertController {
 
         return deleteAlert
     }
+
+    class func addShortcutAlert() -> UIAlertController {
+        let alert = UIAlertController(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle,
+            message: .FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription,
+            preferredStyle: .alert
+        )
+        alert.view.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.view
+
+        let cancelAction = UIAlertAction(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.CancelButtonTitle,
+            style: .cancel
+        )
+        let saveAction = UIAlertAction(
+            title: .FirefoxHomepage.Shortcuts.AddShortcut.SaveButtonTitle,
+            style: .default
+        )
+        saveAction.isEnabled = false
+
+        alert.addTextField { textField in
+            textField.placeholder = .FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder
+            textField.keyboardType = .URL
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.returnKeyType = .done
+            textField.clearButtonMode = .whileEditing
+            textField.accessibilityIdentifier =
+                AccessibilityIdentifiers.FirefoxHomepage.TopSites.AddShortcutAlert.urlTextField
+            textField.addAction(UIAction { [weak textField, weak saveAction] _ in
+                let text = textField?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                saveAction?.isEnabled = !text.isEmpty
+            }, for: .editingChanged)
+        }
+
+        alert.addAction(cancelAction)
+        alert.addAction(saveAction)
+
+        return alert
+    }
 }
