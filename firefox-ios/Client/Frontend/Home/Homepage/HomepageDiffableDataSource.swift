@@ -43,7 +43,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
     }
 
     enum HomeItem: Hashable, Sendable {
-        case header(HeaderState)
+        case header(HeaderState, TextColor?)
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
@@ -111,21 +111,17 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         state: HomepageState,
         selectedNewsfeedCategoryID: String? = nil,
         jumpBackInDisplayConfig: JumpBackInSectionLayoutConfiguration,
-        reconfigureHeader: Bool = false,
         animatingDifferences: Bool = true,
         completion: (() -> Void)? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         let textColor = state.wallpaperState.wallpaperConfiguration.textColor
-        let headerItem = HomeItem.header(state.headerState)
+        let headerItem = HomeItem.header(state.headerState,
+                                         state.wallpaperState.wallpaperConfiguration.logoTextColor)
 
         snapshot.appendSections([.header])
         snapshot.appendItems([headerItem], toSection: .header)
-
-        if reconfigureHeader {
-            snapshot.reconfigureItems([headerItem])
-        }
 
         if state.shouldShowPrivacyNotice {
             snapshot.appendSections([.privacyNotice])
