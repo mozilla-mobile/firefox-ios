@@ -226,9 +226,8 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     }
 
     func test_updateContentContainerTopConstraint_keepsSearchControllerAboveHomepage() throws {
-        let featureFlags = MockNimbusFeatureFlags()
-        featureFlags.enabledFlags = [.homepagePinnedHeader, .homepageStoryCategories]
-        let subject = createSubject(featureFlagProvider: featureFlags)
+        setupNimbusHomepagePinnedHeaderTesting(isEnabled: true)
+        let subject = createSubject()
         let homepage = MockHomepageContentViewController()
 
         subject.showSearchController()

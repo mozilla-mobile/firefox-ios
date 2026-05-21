@@ -16,6 +16,7 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
         tabManager = MockTabManager()
         DependencyHelperMock().bootstrapDependencies(injectedTabManager: tabManager)
         profile = MockProfile()
+        setupNimbusHomepagePinnedHeaderTesting(isEnabled: false)
     }
 
     override func tearDown() async throws {
@@ -27,20 +28,9 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     }
 
     // MARK: - Subject Creation
-    func createSubject(
-        isFeatureFlagEnabled: Bool = false,
-        isBottomSearchBar: Bool = true,
-        featureFlagProvider: FeatureFlagProviding? = nil
-    ) -> BrowserViewController {
+    func createSubject(isFeatureFlagEnabled: Bool = false, isBottomSearchBar: Bool = true) -> BrowserViewController {
         // Setup feature flag to disabled by default and override only in the test that need it
         setupNimbusSnapKitRemovalTesting(isEnabled: isFeatureFlagEnabled)
-        if let featureFlagProvider {
-            DependencyHelperMock().bootstrapDependencies(
-                injectedProfile: profile,
-                injectedTabManager: tabManager,
-                injectedFeatureFlagProvider: featureFlagProvider
-            )
-        }
         let subject = BrowserViewController(profile: profile,
                                             tabManager: tabManager)
         subject.isBottomSearchBar = isBottomSearchBar
@@ -60,6 +50,15 @@ class BrowserViewControllerConstraintTestsBase: XCTestCase {
     func setupNimbusSnapKitRemovalTesting(isEnabled: Bool) {
         FxNimbus.shared.features.snapkitRemovalRefactor.with { _, _ in
             return SnapkitRemovalRefactor(enabled: isEnabled)
+        }
+    }
+
+    func setupNimbusHomepagePinnedHeaderTesting(isEnabled: Bool) {
+        FxNimbus.shared.features.homepageRedesignFeature.with { _, _ in
+            return HomepageRedesignFeature(
+                categoriesEnabled: isEnabled,
+                pinnedHeaderEnabled: isEnabled
+            )
         }
     }
 
