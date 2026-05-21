@@ -19,7 +19,7 @@ final class PageRoute: TinyRoute {
         self.profile = profile
     }
 
-    // Always erros out for now, will actually handle in next PR
+    // Always errors out for now, will actually handle in next PR
     func handle(url: URL, components: URLComponents) async throws -> TinyHTTPReply? {
         _ = try extractArticleURL(from: components)
         throw TinyRouterError.badResponse

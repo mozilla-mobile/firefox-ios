@@ -84,12 +84,11 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
 
     // MARK: - Routing
 
-    func test_start_unknownBundleResource_failsViaDefaultRoute() {
-        // Path doesn't match the "page" prefix, so it falls through to the default route
-        // (`StaticFileRoute`), which attempts `Bundle.main.url(forResource:withExtension:)`
-        // for a resource that does not exist and throws `TinyRouterError.badURL`.
+    func test_start_realBundleFileNotOnAllowlist_rejectedByReaderFileRoute() {
+        // Info.plist exists in Bundle.main but isn't on ReaderFileRoute's allowlist.
+        // Verifies that the allowlist blocks access to arbitrary bundle resources.
         let task = MockWKURLSchemeTask(
-            request: URLRequest(url: URL(string: "readermode://app/nonexistent.xyz")!)
+            request: URLRequest(url: URL(string: "readermode://app/Info.plist")!)
         )
         let webView = makeWebView()
         let failExpectation = expectation(description: "onFail called")
@@ -98,14 +97,12 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         subject.webView(webView, start: task)
         wait(for: [failExpectation], timeout: 1.0)
 
+        XCTAssertTrue(task.receivedResponses.isEmpty)
         XCTAssertTrue(task.receivedBodies.isEmpty)
         XCTAssertEqual(task.finishCallCount, 0)
         XCTAssertEqual(task.failedErrors.count, 1)
-        XCTAssertTrue(task.receivedResponses.isEmpty)
-        // `StaticFileRoute` throws `.badURL` on Bundle.main miss; the handler wraps
-        // unrecognized errors as `.unknown`, but TinyRouterError passes through directly.
         let error = task.failedErrors.first as? TinyRouterError
-        XCTAssertEqual(error, .badURL)
+        XCTAssertEqual(error, .pathNotAllowed(path: "Info.plist"))
     }
 
     func test_start_incorrectURLComponents_failsWithExpectedErrors() {
@@ -182,6 +179,27 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         XCTAssertNotEqual(error, .unsupportedScheme(expected: ReaderModeSchemeHandler.scheme, found: "readermode"))
         XCTAssertNotEqual(error, .unsupportedHost(expected: ReaderModeSchemeHandler.host, found: "app"))
         XCTAssertNotEqual(error, .badURL)
+    }
+
+    // MARK: - ReaderFileRoute allowlist
+
+    func test_readerFileRoute_allowedFiles_serveSuccessfully() throws {
+        let route = ReaderFileRoute()
+        let allowedPaths = [
+            "reader-mode/styles/Reader.css",
+            "reader-mode/fonts/NewYorkMedium-Regular.otf",
+            "reader-mode/fonts/NewYorkMedium-Bold.otf",
+            "reader-mode/fonts/NewYorkMedium-RegularItalic.otf",
+            "reader-mode/fonts/NewYorkMedium-BoldItalic.otf",
+        ]
+
+        for path in allowedPaths {
+            let url = URL(string: "readermode://app/\(path)")!
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            let reply = try route.handle(url: url, components: components)
+            let unwrapped = try XCTUnwrap(reply, "Expected a reply for \(path)")
+            XCTAssertFalse(unwrapped.body.isEmpty, "Expected non-empty body for \(path)")
+        }
     }
 
     // MARK: - Helpers

@@ -56,14 +56,9 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
 
     init(profile: Profile,
          logger: Logger = DefaultLogger.shared) {
-        // `StaticFileRoute` is the same one Translations uses — given the path it strips
-        // the leading slash, separates the resource name + extension, and looks the file up
-        // via `Bundle.main.url(forResource:withExtension:)`. That covers the legacy paths
-        // `Reader.html` already references (`/reader-mode/styles/Reader.css` and
-        // `/reader-mode/fonts/*.otf`) without any template edits.
         self.router = TinyRouter()
             .register("page", PageRoute(profile: profile))
-            .setDefault(StaticFileRoute())
+            .setDefault(ReaderFileRoute())
         self.logger = logger
         super.init()
     }
