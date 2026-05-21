@@ -19,6 +19,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
     private var mockWindowManager: MockWindowManager!
     private var mockTabManager: MockTabManager!
     private var mockTranslationsTelemetry: MockTranslationsTelemetry!
+    private var mockNotificationCenter: MockNotificationCenter!
 
     override func setUp() async throws {
         try await super.setUp()
@@ -30,6 +31,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
             tabManager: mockTabManager
         )
         mockTranslationsTelemetry = MockTranslationsTelemetry()
+        mockNotificationCenter = MockNotificationCenter()
         DependencyHelperMock().bootstrapDependencies(
             injectedWindowManager: mockWindowManager,
             injectedTabManager: mockTabManager
@@ -43,6 +45,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockTabManager = nil
         mockWindowManager = nil
         mockTranslationsTelemetry = nil
+        mockNotificationCenter = nil
         DependencyHelperMock().reset()
         resetStore()
         try await super.tearDown()
@@ -1449,15 +1452,18 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         manager: PreferredTranslationLanguagesManager? = nil,
         localeProvider: LocaleProvider = MockLocaleProvider()
     ) -> TranslationsMiddleware {
-        return TranslationsMiddleware(
+        let subject = TranslationsMiddleware(
             profile: mockProfile,
             logger: mockLogger,
             windowManager: mockWindowManager,
             translationsService: translationsService,
             translationsTelemetry: mockTranslationsTelemetry,
             manager: manager,
-            localeProvider: localeProvider
+            localeProvider: localeProvider,
+            notificationCenter: mockNotificationCenter
         )
+        mockNotificationCenter.notifiableListener = subject
+        return subject
     }
 
     private func setupWebViewForTabManager() {
@@ -1690,15 +1696,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         wait(for: [loadingExpectation], timeout: 1.0)
         mockStore.dispatchedActions.removeAll()
 
-        let cancelExpectation = XCTestExpectation(
-            description: "loading icon and reloadWebsite dispatched on background"
-        )
-        cancelExpectation.expectedFulfillmentCount = 2
-        mockStore.dispatchCalled = { cancelExpectation.fulfill() }
-
-        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
-
-        wait(for: [cancelExpectation], timeout: 1.0)
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
 
@@ -1716,13 +1714,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
 
-        let expectation = XCTestExpectation(description: "no actions dispatched without in-flight translation")
-        expectation.isInverted = true
-        mockStore.dispatchCalled = { expectation.fulfill() }
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
 
-        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
-
-        wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         withExtendedLifetime(subject) {}
     }
@@ -1742,17 +1735,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         mockStore.state = setupAppStateWithTranslationConfig(for: .active)
         mockStore.dispatchedActions.removeAll()
 
-        let recoveryExpectation = XCTestExpectation(
-            description: "loading icon and reloadWebsite dispatched on foreground"
-        )
-        recoveryExpectation.expectedFulfillmentCount = 2
-        mockStore.dispatchCalled = { recoveryExpectation.fulfill() }
-
         subject.backgroundTimestamp = Date().addingTimeInterval(-5)
 
-        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
-
-        wait(for: [recoveryExpectation], timeout: 1.0)
+        mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
 
@@ -1770,15 +1755,9 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
 
-        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+        mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification)
 
-        let expectation = XCTestExpectation(description: "no recovery dispatched for brief background")
-        expectation.isInverted = true
-        mockStore.dispatchCalled = { expectation.fulfill() }
-
-        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
-
-        wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
         withExtendedLifetime(subject) {}
     }
