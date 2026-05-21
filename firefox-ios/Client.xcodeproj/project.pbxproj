@@ -2277,9 +2277,9 @@
 		F00CA4012F00000000000013 /* WorldCupTeamsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000014 /* WorldCupTeamsResponse.swift */; };
 		F00CA4012F00000000000015 /* WorldCupLoadError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000016 /* WorldCupLoadError.swift */; };
 		F00CA4012F00000000000017 /* WorldCupBaseHostOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */; };
-		F00CA4012F00000000000020 /* WorldCupFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000021 /* WorldCupFeed.swift */; };
-		F00CA4012F0000000000001E /* WorldCupPollIntervalOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */; };
 		F00CA4012F0000000000001C /* WorldCupPollingFetchStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */; };
+		F00CA4012F0000000000001E /* WorldCupPollIntervalOverrideSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */; };
+		F00CA4012F00000000000020 /* WorldCupFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4012F00000000000021 /* WorldCupFeed.swift */; };
 		F00CA4022F00000000000001 /* WorldCupMatchesResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */; };
 		F00CA4022F00000000000003 /* WorldCupLiveResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000004 /* WorldCupLiveResponseTests.swift */; };
 		F00CA4022F00000000000005 /* WorldCupFetchStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */; };
@@ -3616,6 +3616,7 @@
 		4300ECBC2A655AB700737B25 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/CustomizeFirefoxHome.strings; sourceTree = "<group>"; };
 		4300ECBD2A655AB700737B25 /* rm */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = rm; path = rm.lproj/SelectCreditCard.strings; sourceTree = "<group>"; };
 		4300F0392B1DED4300AD4D94 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/FirefoxHomepage.strings; sourceTree = "<group>"; };
+		43010A1A2FBF2F6500134AA1 /* ug */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ug; path = ug.lproj/WorldCup.strings; sourceTree = "<group>"; };
 		43010A4029C876B900EC5098 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Alert.strings; sourceTree = "<group>"; };
 		43010A4129C876B900EC5098 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/BiometricAuthentication.strings; sourceTree = "<group>"; };
 		43010A4229C876B900EC5098 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/EditCard.strings; sourceTree = "<group>"; };
@@ -8534,6 +8535,7 @@
 		43F77AB62DDB4A5300403ADF /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Shopping.strings; sourceTree = "<group>"; };
 		43F78D602A24BF6600E8A9EC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/DisplayCard.strings; sourceTree = "<group>"; };
 		43F7952425795F69005AEE40 /* SearchTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTelemetry.swift; sourceTree = "<group>"; };
+		43F7A0F52FBF2E08004E4FFF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/WorldCup.strings; sourceTree = "<group>"; };
 		43F7DAE62C20539100A29EA3 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/ActivityStream.strings"; sourceTree = "<group>"; };
 		43F7DAE72C20539100A29EA3 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/AddressToolbar.strings"; sourceTree = "<group>"; };
 		43F7EBEE2AC1A17D006465CB /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/TabLocation.strings; sourceTree = "<group>"; };
@@ -11680,9 +11682,9 @@
 		F00CA4012F00000000000014 /* WorldCupTeamsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupTeamsResponse.swift; sourceTree = "<group>"; };
 		F00CA4012F00000000000016 /* WorldCupLoadError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLoadError.swift; sourceTree = "<group>"; };
 		F00CA4012F00000000000018 /* WorldCupBaseHostOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupBaseHostOverrideSetting.swift; sourceTree = "<group>"; };
-		F00CA4012F00000000000021 /* WorldCupFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFeed.swift; sourceTree = "<group>"; };
-		F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollIntervalOverrideSetting.swift; sourceTree = "<group>"; };
 		F00CA4012F0000000000001D /* WorldCupPollingFetchStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollingFetchStrategy.swift; sourceTree = "<group>"; };
+		F00CA4012F0000000000001F /* WorldCupPollIntervalOverrideSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupPollIntervalOverrideSetting.swift; sourceTree = "<group>"; };
+		F00CA4012F00000000000021 /* WorldCupFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFeed.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000002 /* WorldCupMatchesResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupMatchesResponseTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000004 /* WorldCupLiveResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupLiveResponseTests.swift; sourceTree = "<group>"; };
 		F00CA4022F00000000000006 /* WorldCupFetchStrategyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldCupFetchStrategyTests.swift; sourceTree = "<group>"; };
@@ -21784,6 +21786,8 @@
 				4342B23C2FB5ECA800676B5E /* km */,
 				433DE2CD2FB5ECDB001CAC13 /* ml */,
 				43EFBADE2FB5EDA900982AFE /* sr */,
+				43F7A0F52FBF2E08004E4FFF /* ko */,
+				43010A1A2FBF2F6500134AA1 /* ug */,
 			);
 			name = WorldCup.strings;
 			sourceTree = "<group>";

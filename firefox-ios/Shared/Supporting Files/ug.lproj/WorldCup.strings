@@ -1,0 +1,66 @@
+/* Section header for the Africa region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Africa.v151" = "ئافرىقا";
+
+/* Section header for the Asia region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Asia.v151" = "ئاسىيا";
+
+/* Section header for the Europe region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.Europe.v151" = "ياۋروپا";
+
+/* Section header for the North America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.NorthAmerica.v151" = "شىمالىي ئامېرىكا";
+
+/* Section header for the South America region in the World Cup country picker. */
+"WorldCup.CountryPicker.Confederation.SouthAmerica.v151" = "جەنۇبىي ئامېرىكا";
+
+/* Country name for England in the World Cup country picker. England cannot be resolved with standard locale APIs so it needs an explicit string. */
+"WorldCup.CountryPicker.Country.England.v151" = "ئەنگلىيە";
+
+/* Label for the done button on the country picker for the World Cup widget. This allows users to confirm their selection of a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.DoneButtonTitle.v151" = "تامام";
+
+/* Label for the skip button on the country picker for the World Cup widget. This shows to the user that you could skip the selection of a country to follow. */
+"WorldCup.CountryPicker.SkipButton.Title.v151" = "ئاتلا";
+
+/* Title for the country picker for the World Cup widget. This is shown when the user clicks the widget on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.CountryPicker.Title.v151" = "كوماندىڭىزغا ئەگىشىڭ";
+
+/* The title of the Group A group in the World Cup Group Stage. */
+"WorldCup.GroupPhase.GroupA.Title.v151" = "A گۇرۇپپا";
+
+/* The label for the button that allows to change the team displayed in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ChangeTeamLabel.v151" = "كوماندا ئالماشتۇر";
+
+/* Label for the button that takes users to the World Cup schedule website on the countdown section. */
+"WorldCup.HomepageWidget.CountDown.ViewScheduleButtonLabel.v151" = "كۈنتەرتىپنى كۆرسەت";
+
+/* The accessibility labels for the button that allow to disable World Cup notifications. */
+"WorldCup.HomepageWidget.DisableNotificationButtonAccessibilityLabel.v151" = "ئۇقتۇرۇشنى چەكلە";
+
+/* The label for the button in the eliminated section that takes the user back to the team selection screen. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.ChooseTeamButtonLabel.v151" = "كوماندا تاللىنىدۇ";
+
+/* The label for the button in the eliminated section that removes the World Cup widget from the homepage. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.RemoveButtonLabel.v151" = "چىقىرىۋەت";
+
+/* The title of the section in the World Cup widget that shows when the selected team was eliminated. */
+"WorldCup.HomepageWidget.EliminatedTeamSection.Title.v151" = "ئەگىشىۋېرەمسىز؟";
+
+/* Call to action for the follow your team for the World Cup widget. This is shown on the Firefox homepage to allow users to select a team to follow for the World Cup event. */
+"WorldCup.HomepageWidget.FollowTeamCard.CTA.v151" = "كوماندىڭىزغا ئەگىشىڭ";
+
+/* Button label shown below the match unavailable message in the World Cup widget. Tapping it retries loading match data. */
+"WorldCup.HomepageWidget.MatchUnavailableRefreshButtonLabel.v151" = "يېڭىلا";
+
+/* The label for the button that allows to remove the World Cup widget from the home screen in the more options panel. */
+"WorldCup.HomepageWidget.RemoveLabel.v151" = "چىقىرىۋەت";
+
+/* The label for the button in the World Cup widget that refreshes the currently displayed match data when an error is displayed. */
+"WorldCup.HomepageWidget.RetryButtonLabel.v151" = "يېڭىلا";
+
+/* The accessibility label for the button that allows to see more options related to World Cup widget. */
+"WorldCup.HomepageWidget.SettingsButtonAccessibilityLabel.v151" = "تېخىمۇ كۆپ تاللانما";
+
+/* The label for the button that allows to share the selected match info in the World Cup widget more options panel. */
+"WorldCup.HomepageWidget.ShareLabel.v151" = "ھەمبەھىر";
+
