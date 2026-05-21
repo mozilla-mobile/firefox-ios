@@ -121,7 +121,6 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
-    // https://mozilla.testrail.io/index.php?/cases/view/2575176
     // https://mozilla.testrail.io/index.php?/cases/view/3129579
     func testModernOnboardingToolbarPlacementBottom() throws {
         if iPad() {
