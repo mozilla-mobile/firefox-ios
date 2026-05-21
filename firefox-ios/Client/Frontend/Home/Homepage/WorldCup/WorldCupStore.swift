@@ -70,13 +70,11 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     }
 
     var isMilestone2: Bool {
-        return true
         guard let enableDate = milestone2EnableDate else { return false }
         return dateProvider.now() >= enableDate
     }
 
     var hasWorldCupStarted: Bool {
-        return true
         guard let startDate = worldCupStartDate else { return false }
         return dateProvider.now() >= startDate
     }
