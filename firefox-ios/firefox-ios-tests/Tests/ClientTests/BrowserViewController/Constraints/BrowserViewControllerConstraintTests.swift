@@ -228,14 +228,19 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
     func test_updateContentContainerTopConstraint_keepsSearchControllerAboveHomepage() throws {
         setupNimbusHomepagePinnedHeaderTesting(isEnabled: true)
         let subject = createSubject()
+        let searchController = createSearchController()
         let homepage = MockHomepageContentViewController()
 
-        subject.showSearchController()
+        subject.searchController = searchController
+        subject.view.addSubview(searchController.view)
+        defer {
+            searchController.view.removeFromSuperview()
+            subject.searchController = nil
+        }
         subject.contentContainer.update(content: homepage)
         subject.updateContentContainerTopConstraint()
 
-        let searchView = try XCTUnwrap(subject.searchController?.view)
-        let searchIndex = try XCTUnwrap(subject.view.subviews.firstIndex(of: searchView))
+        let searchIndex = try XCTUnwrap(subject.view.subviews.firstIndex(of: searchController.view))
         let contentIndex = try XCTUnwrap(subject.view.subviews.firstIndex(of: subject.contentContainer))
         XCTAssertGreaterThan(searchIndex, contentIndex)
     }
@@ -293,6 +298,28 @@ final class BrowserViewControllerConstraintTests: BrowserViewControllerConstrain
             [.leading, .trailing, .bottom, .height].contains($0.firstAttribute)
         }
         return relevantConstraints.count
+    }
+
+    private func createSearchController() -> SearchViewController {
+        let searchEnginesManager = SearchEnginesManager(
+            prefs: profile.prefs,
+            files: profile.files,
+            engineProvider: MockSearchEngineProvider()
+        )
+        let searchViewModel = SearchViewModel(
+            isPrivate: false,
+            isBottomSearchBar: false,
+            profile: profile,
+            model: searchEnginesManager,
+            tabManager: tabManager,
+            trendingSearchClient: MockTrendingSearchClient(),
+            recentSearchProvider: MockRecentSearchProvider()
+        )
+        return SearchViewController(
+            profile: profile,
+            viewModel: searchViewModel,
+            tabManager: tabManager
+        )
     }
 
     /// Check if two sibling views are connected by a constraint
