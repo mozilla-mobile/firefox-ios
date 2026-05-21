@@ -627,7 +627,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
-    func test_initialize_noTeam_whenDevTimelineEnabled_defaultIndexUsesServerNow() throws {
+    func test_initialize_noTeam_dispatchesTimerAsDefaultPage() throws {
         mockWorldCupStore.isFeatureEnabled = true
         mockWorldCupStore.isHomepageSectionEnabled = true
         mockWorldCupStore.isMilestone2 = true
@@ -655,7 +655,7 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
 
         let dispatched = try XCTUnwrap(latestWorldCupAction())
         XCTAssertEqual(dispatched.matches.count, 2)
-        XCTAssertEqual(dispatched.defaultMatchIndex, 1)
+        XCTAssertEqual(dispatched.defaultMatchIndex, 0)
         subject.worldCupProvider = { _, _ in }
     }
 
