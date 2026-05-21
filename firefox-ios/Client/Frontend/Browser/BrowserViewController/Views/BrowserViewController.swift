@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController,
     var searchController: SearchViewController?
     var searchSessionState: SearchSessionState?
     var searchLoader: SearchLoader?
-    var findInPageBar: FindInPageBar?
+    var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
@@ -4444,7 +4444,7 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(isVisible: true, withSearchText: selection)
-        findInPageBar?.text = selection
+        iOS15FindInPageBar?.text = selection
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
@@ -5050,7 +5050,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
-                                              doesFindInPageBarExist: findInPageBar != nil)
+                                              doesFindInPageBarExist: iOS15FindInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
