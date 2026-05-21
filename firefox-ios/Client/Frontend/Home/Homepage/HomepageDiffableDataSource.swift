@@ -47,6 +47,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
@@ -93,6 +94,15 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return .worldCupWidget
             default:
                 return nil
+            }
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
             }
         }
     }
@@ -183,14 +193,22 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         and textColor: TextColor?
     ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
         return TopSitesSnapshotData(
-            items: topSites,
+            items: visibleItems,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
             shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
         )

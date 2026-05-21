@@ -24,6 +24,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(initialState.shortcuts, [])
+        XCTAssertFalse(initialState.shouldShowAddShortcutTile)
         XCTAssertFalse(initialState.shouldRecordImpressionTelemetry)
     }
 
@@ -80,6 +81,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
             initialState,
             TopSitesAction(
                 topSites: [exampleShortcut],
+                shouldShowAddShortcutTile: true,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
             )
@@ -88,6 +90,7 @@ final class ShortcutsLibraryStateTests: XCTestCase {
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertEqual(newState.shortcuts.count, 1)
         XCTAssertEqual(newState.shortcuts.compactMap { $0.title }, ["hello"])
+        XCTAssertTrue(newState.shouldShowAddShortcutTile)
     }
 
     @MainActor

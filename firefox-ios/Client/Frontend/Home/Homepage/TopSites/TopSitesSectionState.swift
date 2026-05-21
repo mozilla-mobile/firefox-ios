@@ -19,6 +19,7 @@ struct TopSitesSectionState: StateType, Equatable {
     let numberOfTilesPerRow: Int
     let shouldShowSection: Bool
     let shouldShowSectionHeader: Bool
+    let shouldShowAddShortcutTile: Bool
 
     struct Constants {
         static let sectionHeaderConfiguration = SectionHeaderConfiguration(
@@ -42,7 +43,8 @@ struct TopSitesSectionState: StateType, Equatable {
             numberOfRows: numberOfRows,
             numberOfTilesPerRow: TopSitesSectionLayoutProvider.UX.minCards,
             shouldShowSection: shouldShowSection,
-            shouldShowSectionHeader: false
+            shouldShowSectionHeader: false,
+            shouldShowAddShortcutTile: false
         )
     }
 
@@ -53,6 +55,7 @@ struct TopSitesSectionState: StateType, Equatable {
         numberOfTilesPerRow: Int,
         shouldShowSection: Bool,
         shouldShowSectionHeader: Bool,
+        shouldShowAddShortcutTile: Bool
     ) {
         self.windowUUID = windowUUID
         self.topSitesData = topSitesData
@@ -60,6 +63,7 @@ struct TopSitesSectionState: StateType, Equatable {
         self.numberOfTilesPerRow = numberOfTilesPerRow
         self.shouldShowSection = shouldShowSection
         self.shouldShowSectionHeader = shouldShowSectionHeader
+        self.shouldShowAddShortcutTile = shouldShowAddShortcutTile
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -89,11 +93,18 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let shouldShowSectionHeader = sites.count > state.numberOfRows * state.numberOfTilesPerRow
+        let shouldShowAddShortcutTile = topSitesAction.shouldShowAddShortcutTile ?? state.shouldShowAddShortcutTile
+        let shouldShowSectionHeader = getShouldShowSectionHeader(
+            siteCount: sites.count,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowAddShortcutTile: shouldShowAddShortcutTile
+        )
 
         return state.copyWithUpdates(
             topSitesData: sites,
-            shouldShowSectionHeader: shouldShowSectionHeader
+            shouldShowSectionHeader: shouldShowSectionHeader,
+            shouldShowAddShortcutTile: shouldShowAddShortcutTile
         )
     }
 
@@ -104,7 +115,12 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let shouldShowSectionHeader = state.topSitesData.count > numberOfRows * state.numberOfTilesPerRow
+        let shouldShowSectionHeader = getShouldShowSectionHeader(
+            siteCount: state.topSitesData.count,
+            numberOfRows: numberOfRows,
+            numberOfTilesPerRow: state.numberOfTilesPerRow,
+            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
+        )
 
         return state.copyWithUpdates(
             numberOfRows: numberOfRows,
@@ -119,7 +135,12 @@ struct TopSitesSectionState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        let shouldShowSectionHeader = state.topSitesData.count > state.numberOfRows * numberOfTilesPerRow
+        let shouldShowSectionHeader = getShouldShowSectionHeader(
+            siteCount: state.topSitesData.count,
+            numberOfRows: state.numberOfRows,
+            numberOfTilesPerRow: numberOfTilesPerRow,
+            shouldShowAddShortcutTile: state.shouldShowAddShortcutTile
+        )
 
         return state.copyWithUpdates(
             numberOfTilesPerRow: numberOfTilesPerRow,
@@ -141,5 +162,19 @@ struct TopSitesSectionState: StateType, Equatable {
 
     static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
         return state.copyWithUpdates()
+    }
+
+    /// Shows the shortcuts section header with shortcuts library affordance
+    /// when real shortcuts overflow the visible grid,
+    /// or when the Add Shortcut tile is displaced by a full visible grid.
+    private static func getShouldShowSectionHeader(siteCount: Int,
+                                                   numberOfRows: Int,
+                                                   numberOfTilesPerRow: Int,
+                                                   shouldShowAddShortcutTile: Bool) -> Bool {
+        let maxVisibleTileCount = numberOfRows * numberOfTilesPerRow
+        guard maxVisibleTileCount > 0 else { return false }
+
+        return siteCount > maxVisibleTileCount ||
+            (shouldShowAddShortcutTile && siteCount >= maxVisibleTileCount)
     }
 }

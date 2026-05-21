@@ -17,6 +17,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
+        static let addShortcutIconSize = CGSize(width: 24, height: 24)
         static let pinIconSize = CGSize(width: 8, height: 8)
         static let textSafeSpace: CGFloat = 6
         static let faviconCornerRadius: CGFloat = 16
@@ -36,6 +37,11 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+
+    private lazy var addShortcutImageView: UIImageView = .build { imageView in
+        imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
+        imageView.isHidden = true
+    }
 
     private lazy var descriptionWrapper: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
@@ -106,6 +112,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = nil
         sponsoredLabel.text = nil
         pinImageView.isHidden = true
+        imageView.isHidden = true
+        addShortcutImageView.isHidden = true
         imageViewConstraints.forEach { $0.constant = 0 }
     }
 
@@ -132,6 +140,8 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         self.theme = theme
         homeTopSite = topSite
         titleLabel.text = topSite.title
+        imageView.isHidden = false
+        addShortcutImageView.isHidden = true
         selectedOverlay.isHidden = true
         accessibilityLabel = topSite.accessibilityLabel
         accessibilityTraits = .link
@@ -173,6 +183,22 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         applyTheme(theme: theme)
     }
 
+    func configureAddShortcutTile(theme: Theme, textColor: UIColor?) {
+        self.theme = theme
+        self.textColor = textColor
+        homeTopSite = nil
+        titleLabel.text = .FirefoxHomepage.Shortcuts.AddShortcut.TileTitle
+        sponsoredLabel.text = nil
+        pinImageView.isHidden = true
+        imageView.isHidden = true
+        addShortcutImageView.isHidden = false
+        selectedOverlay.isHidden = true
+        accessibilityLabel = .FirefoxHomepage.Shortcuts.AddShortcut.TileTitle
+        accessibilityTraits = .button
+
+        applyTheme(theme: theme)
+    }
+
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
@@ -180,6 +206,7 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
 
         rootContainer.addSubview(imageView)
+        rootContainer.addSubview(addShortcutImageView)
         rootContainer.addSubview(selectedOverlay)
         rootContainer.addSubview(pinImageView)
         contentView.addSubview(rootContainer)
@@ -200,6 +227,11 @@ class TopSiteCell: UICollectionViewCell, ReusableCell {
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
             selectedOverlay.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor),
             selectedOverlay.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor),
+
+            addShortcutImageView.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
+            addShortcutImageView.centerYAnchor.constraint(equalTo: rootContainer.centerYAnchor),
+            addShortcutImageView.widthAnchor.constraint(equalToConstant: UX.addShortcutIconSize.width),
+            addShortcutImageView.heightAnchor.constraint(equalToConstant: UX.addShortcutIconSize.height),
 
             pinImageView.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             pinImageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
@@ -263,6 +295,7 @@ extension TopSiteCell: ThemeApplicable {
         sponsoredLabel.textColor = textColor ?? theme.colors.textPrimary
         selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
         pinImageView.tintColor = theme.colors.iconSecondary
+        addShortcutImageView.tintColor = theme.colors.iconPrimary
 
         adjustBlur(theme: theme)
     }

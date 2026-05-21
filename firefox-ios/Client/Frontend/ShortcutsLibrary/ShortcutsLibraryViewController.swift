@@ -254,6 +254,19 @@ class ShortcutsLibraryViewController: UIViewController,
             }
 
             return UICollectionViewCell()
+        case .addShortcutTile:
+            let cellType: ReusableCell.Type = TopSiteCell.self
+
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: cellType, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+
+            if let topSiteCell = topSiteCell as? TopSiteCell {
+                topSiteCell.configureAddShortcutTile(theme: currentTheme, textColor: nil)
+                return topSiteCell
+            }
+
+            return UICollectionViewCell()
         }
     }
 
@@ -333,6 +346,7 @@ class ShortcutsLibraryViewController: UIViewController,
             return
         }
 
+        guard item.canHandleLongPress else { return }
         navigateToContextMenu(for: item, sourceView: sourceView)
     }
 
