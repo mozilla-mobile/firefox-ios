@@ -2,9 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Redux
 import Shared
 import TestKit
+import UIKit
 import XCTest
 
 @testable import Client
@@ -1659,4 +1661,152 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(completedAction.translationConfiguration?.state, .active)
         XCTAssertEqual(completedAction.translationConfiguration?.sourceLanguage, "en")
     }
+
+    // MARK: - Background cancellation tests
+
+    func test_background_withInFlightTranslation_reloadsForAutoRetranslate() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        let stallingService = StallingTranslationsService()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
+        let subject = createSubject(translationsService: stallingService)
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+                loadingExpectation.fulfill()
+            }
+        }
+
+        subject.translationsProvider(mockStore.state, action)
+        wait(for: [loadingExpectation], timeout: 1.0)
+        mockStore.dispatchedActions.removeAll()
+
+        let cancelExpectation = XCTestExpectation(
+            description: "loading icon and reloadWebsite dispatched on background"
+        )
+        cancelExpectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { cancelExpectation.fulfill() }
+
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        wait(for: [cancelExpectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+
+        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? ToolbarAction)
+        XCTAssertEqual(loadingAction.actionType as? ToolbarActionType, .didStartTranslatingPage)
+        XCTAssertEqual(loadingAction.translationConfiguration?.state, .loading)
+
+        let reloadAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
+        XCTAssertEqual(reloadAction.actionType as? GeneralBrowserActionType, .reloadWebsite)
+
+        XCTAssertEqual(tab.translationConfiguration?.state, .loading)
+    }
+
+    func test_background_withNoInFlightTranslation_doesNotDispatchActions() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let subject = createSubject()
+
+        let expectation = XCTestExpectation(description: "no actions dispatched without in-flight translation")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        withExtendedLifetime(subject) {}
+    }
+
+    // MARK: - Foreground recovery tests
+
+    func test_foreground_afterLongBackground_withActiveTranslation_autoRetranslates() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
+        let subject = createSubject()
+
+        seedTargetLanguage(in: subject, successDispatchCount: 2)
+
+        mockStore.state = setupAppStateWithTranslationConfig(for: .active)
+        mockStore.dispatchedActions.removeAll()
+
+        let recoveryExpectation = XCTestExpectation(
+            description: "loading icon and reloadWebsite dispatched on foreground"
+        )
+        recoveryExpectation.expectedFulfillmentCount = 2
+        mockStore.dispatchCalled = { recoveryExpectation.fulfill() }
+
+        subject.backgroundTimestamp = Date().addingTimeInterval(-5)
+
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        wait(for: [recoveryExpectation], timeout: 1.0)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 2)
+
+        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? ToolbarAction)
+        XCTAssertEqual(loadingAction.actionType as? ToolbarActionType, .didStartTranslatingPage)
+        XCTAssertEqual(loadingAction.translationConfiguration?.state, .loading)
+
+        let reloadAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
+        XCTAssertEqual(reloadAction.actionType as? GeneralBrowserActionType, .reloadWebsite)
+
+        XCTAssertEqual(tab.translationConfiguration?.state, .loading)
+    }
+
+    func test_foreground_afterBriefBackground_doesNotRecover() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let subject = createSubject()
+
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        let expectation = XCTestExpectation(description: "no recovery dispatched for brief background")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 0)
+        withExtendedLifetime(subject) {}
+    }
+}
+
+// MARK: - StallingTranslationsService
+
+private final class StallingTranslationsService: TranslationsServiceProtocol {
+    func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
+        false
+    }
+
+    func translateCurrentPage(
+        for windowUUID: WindowUUID,
+        from sourceLanguage: String?,
+        to targetLanguage: String,
+        onLanguageIdentified: ((String, String) -> Void)?
+    ) async throws {
+        onLanguageIdentified?("en", targetLanguage)
+    }
+
+    func firstResponseReceived(for windowUUID: WindowUUID) async throws {
+        try await Task.sleep(nanoseconds: 60_000_000_000)
+    }
+
+    func discardTranslations(for windowUUID: WindowUUID) async throws {}
+
+    func fetchSupportedTargetLanguages() async -> [String] { [] }
+
+    func detectPageLanguage(for windowUUID: WindowUUID) async throws -> String { "en" }
 }
