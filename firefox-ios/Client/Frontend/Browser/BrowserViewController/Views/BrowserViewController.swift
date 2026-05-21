@@ -1484,7 +1484,12 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            updateViewConstraints()
+            if !isSnapKitRemovalEnabled {
+                updateViewConstraints()
+            } else {
+                updateConstraintsForKeyboard()
+                updateBottomContentStackViewConstraints()
+            }
             searchController?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
