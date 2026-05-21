@@ -454,6 +454,33 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - WorldCupActionType.worldCupDidStart
+
+    func test_worldCupDidStart_dispatchesDidUpdateWithHasWorldCupStarted() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.hasWorldCupStarted = true
+        let subject = createSubject(apiClient: nil)
+        let action = WorldCupAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WorldCupActionType.worldCupDidStart
+        )
+
+        let expectation = XCTestExpectation(description: "didUpdate dispatched")
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(mockStore.dispatchedActions.first as? WorldCupAction)
+        let actionType = try XCTUnwrap(dispatched.actionType as? WorldCupMiddlewareActionType)
+
+        XCTAssertEqual(actionType, .didUpdate)
+        XCTAssertTrue(dispatched.hasWorldCupStarted)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - Unhandled actions
 
     func test_unhandledAction_doesNotDispatch() {
