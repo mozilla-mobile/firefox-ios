@@ -92,8 +92,8 @@ struct WorldCupMatches: Equatable, Hashable {
     /// holds all matches on the same date. Each day's matches render in the
     /// compact `upcomingMatches` row — `featuredMatch` is left empty so a
     /// crowded day doesn't blow the card up vertically. Cards are ordered
-    /// chronologically (earliest day first); `defaultIndex` points at today's
-    /// card, or the next future day if today has no matches.
+    /// chronologically (earliest day first); `defaultIndex` is the page the
+    /// swipe view should land on first, with page 0 reserved for the timer.
     static func flattened(
         response: WorldCupMatchesResponse,
         liveIDs: Set<Int> = [],
@@ -117,11 +117,9 @@ struct WorldCupMatches: Equatable, Hashable {
                 upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
             )
         }
-        let today = calendar.startOfDay(for: now)
-        let liveCardIndex = cards.firstIndex(where: \.isLive)
-        let firstFutureIndex = groups.firstIndex(where: { $0.day >= today })
-        let defaultIndex = liveCardIndex ?? firstFutureIndex ?? max(cards.count - 1, 0)
-        return (cards, defaultIndex)
+        // The timer view always sits at page 0 when there's no selected team,
+        // and that's where the swipe view should land first.
+        return (cards, 0)
     }
 
     private static func dayLabel(for day: Date, locale: Locale) -> String {

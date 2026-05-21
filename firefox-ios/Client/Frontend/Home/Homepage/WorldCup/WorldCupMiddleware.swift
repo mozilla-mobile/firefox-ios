@@ -69,6 +69,7 @@ final class WorldCupMiddleware {
                 actionType: WorldCupMiddlewareActionType.didUpdate,
                 shouldShowHomepageWorldCupSection: worldCupStore.isFeatureEnabledAndSectionEnabled,
                 shouldShowMilestone2: worldCupStore.isMilestone2,
+                hasWorldCupStarted: worldCupStore.hasWorldCupStarted,
                 selectedCountryId: worldCupStore.selectedTeam,
                 matches: snapshot.matches,
                 apiError: snapshot.apiError,
