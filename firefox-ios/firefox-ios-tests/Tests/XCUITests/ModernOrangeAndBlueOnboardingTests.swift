@@ -70,6 +70,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Individual Screen Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3129572
     func testModernTermsOfServiceScreen() throws {
         launchApp()
 
@@ -84,6 +85,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575175
+    // https://mozilla.testrail.io/index.php?/cases/view/3129580
     func testModernOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -121,6 +123,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575176
+    // https://mozilla.testrail.io/index.php?/cases/view/3129579
     func testModernOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -251,6 +254,7 @@ class ModernOrangeAndBlueOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Navigation Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/3174469
     func testModernOnboardingSkipButton() throws {
         launchApp()
 
