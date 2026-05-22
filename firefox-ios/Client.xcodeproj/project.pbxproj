@@ -32907,10 +32907,10 @@
 		};
 		EDD590FE2FC0E95D0015EF9E /* XCRemoteSwiftPackageReference "ModifiedCopyMacro" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/WilhelmOks/ModifiedCopyMacro.git";
+			repositoryURL = "https://github.com/ih-codes/ModifiedCopyMacro.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
+				branch = "ih/bugfix-handle-static-properties";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

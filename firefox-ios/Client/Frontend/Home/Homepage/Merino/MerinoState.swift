@@ -3,13 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import CopyWithUpdates
+import ModifiedCopy
 import Foundation
 import Redux
 import Shared
 
 /// State for the Merino stories section that is used in the homepage
-@CopyWithUpdates
+@Copyable
 struct MerinoState: StateType, Equatable {
     var windowUUID: WindowUUID
     let merinoData: MerinoStoryResponse
@@ -22,6 +22,20 @@ struct MerinoState: StateType, Equatable {
             MerinoState.initializeSectionHeaderConfiguration()
         }
         static let footerURL = SupportUtils.URLForPocketLearnMore
+    }
+
+    var availableCategories: [MerinoCategoryConfiguration] {
+        (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
+    }
+
+    func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
+        if !availableCategories.isEmpty {
+            if let selectedNewsfeedCategoryID {
+                return availableCategories.first(where: { $0.feedID == selectedNewsfeedCategoryID })?.recommendations ?? []
+            }
+            return availableCategories.flatMap(\.recommendations)
+        }
+        return merinoData.stories ?? []
     }
 
     init(profile: Profile = AppContainer.shared.resolve(), windowUUID: WindowUUID) {
@@ -75,12 +89,10 @@ struct MerinoState: StateType, Equatable {
         let merinoContentExists = !(merinoResponse.stories?.isEmpty ?? true) ||
                                   !(merinoResponse.categories?.isEmpty ?? true)
 
-        return MerinoState(
-            windowUUID: state.windowUUID,
-            merinoData: merinoResponse,
-            hasMerinoResponseContent: merinoContentExists,
-            shouldShowSection: merinoContentExists && state.shouldShowSection
-        )
+        return state
+            .copy(merinoData: merinoResponse)
+            .copy(hasMerinoResponseContent: merinoContentExists)
+            .copy(shouldShowSection: merinoContentExists && state.shouldShowSection)
     }
 
     private static func handleSettingsToggleAction(_ action: Action, state: MerinoState) -> MerinoState {
@@ -90,13 +102,18 @@ struct MerinoState: StateType, Equatable {
             return defaultState(from: state)
         }
 
-        return state.copyWithUpdates(
+        return state.copy(
             shouldShowSection: isEnabled
         )
     }
 
     static func defaultState(from state: MerinoState) -> MerinoState {
-        return state.copyWithUpdates()
+        return MerinoState(
+            windowUUID: state.windowUUID,
+            merinoData: state.merinoData,
+            hasMerinoResponseContent: state.hasMerinoResponseContent,
+            shouldShowSection: state.shouldShowSection
+        )
     }
 
     private static func initializeSectionHeaderConfiguration() -> SectionHeaderConfiguration {
@@ -105,24 +122,5 @@ struct MerinoState: StateType, Equatable {
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.merino,
             style: .newsAffordance
         )
-    }
-}
-
-/// `@CopyWithUpdates` currently treats computed properties declared inside the struct as
-/// initializer/copy fields, which breaks generation with "extra arguments" errors.
-/// Keep derived accessors in this extension as a workaround.
-extension MerinoState {
-    var availableCategories: [MerinoCategoryConfiguration] {
-        (merinoData.categories ?? []).sorted { $0.rank < $1.rank }
-    }
-
-    func visibleStories(selectedNewsfeedCategoryID: String?) -> [MerinoStoryConfiguration] {
-        if !availableCategories.isEmpty {
-            if let selectedNewsfeedCategoryID {
-                return availableCategories.first(where: { $0.feedID == selectedNewsfeedCategoryID })?.recommendations ?? []
-            }
-            return availableCategories.flatMap(\.recommendations)
-        }
-        return merinoData.stories ?? []
     }
 }
