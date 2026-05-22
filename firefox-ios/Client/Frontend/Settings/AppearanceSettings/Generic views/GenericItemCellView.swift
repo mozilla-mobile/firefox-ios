@@ -44,6 +44,7 @@ struct GenericItemCellView: View {
                     Image(image)
                         .renderingMode(.template)
                         .foregroundColor(disclosureTintColor)
+                        .flipsForRightToLeftLayoutDirection(true)
                 }
             }
             .padding(.horizontal, UX.horizontalSpacing)
