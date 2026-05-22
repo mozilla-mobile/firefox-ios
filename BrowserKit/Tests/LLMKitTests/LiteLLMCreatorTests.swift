@@ -33,8 +33,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with prod environment")
@@ -51,8 +50,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with dev environment")
@@ -69,8 +67,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with stage environment")
@@ -85,8 +82,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
@@ -103,8 +99,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
@@ -121,8 +116,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         let result = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .s2s,
-            bundleIdentifier: "bundleId"
+            serviceType: .s2s
         )
 
         XCTAssertNotNil(result, "Should create LiteLLM client with s2s service type")
@@ -138,8 +132,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when environment changes")
@@ -158,8 +151,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when environment changes from prod to stage")
@@ -179,8 +171,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertEqual(
@@ -203,8 +194,7 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertEqual(
@@ -229,18 +219,15 @@ final class LiteLLMCreatorTests: XCTestCase {
         let subject = createSubject()
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
 
         XCTAssertEqual(
@@ -257,16 +244,14 @@ final class LiteLLMCreatorTests: XCTestCase {
         mockPrefs.setString(MLPAEnvironment.prod.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
         try mockKeyStore.saveKeyID(existingKeyID)
 
         mockPrefs.setString(MLPAEnvironment.dev.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when switching from prod to dev")
         try mockKeyStore.saveKeyID(existingKeyID)
@@ -274,13 +259,18 @@ final class LiteLLMCreatorTests: XCTestCase {
         mockPrefs.setString(MLPAEnvironment.stage.rawValue, forKey: PrefsKeys.MLPASettings.mlpaEndpointEnvironment)
         _ = subject.createAppAttestLiteLLM(
             using: mockPrefs,
-            serviceType: .quickAnswers,
-            bundleIdentifier: "bundleId"
+            serviceType: .quickAnswers
         )
         XCTAssertNil(mockKeyStore.loadKeyID(), "Should clear key when switching from dev to stage")
     }
 
     private func createSubject() -> LiteLLMCreator {
-        return LiteLLMCreator(keyStore: mockKeyStore, appAttestService: MockAppAttestService(isSupported: true))
+        return LiteLLMCreator(
+            keyStore: mockKeyStore,
+            appAttestService: MockAppAttestService(
+                isSupported: true
+            ),
+            bundleIdentifier: "testBundleId"
+        )
     }
 }

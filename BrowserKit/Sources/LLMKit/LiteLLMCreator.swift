@@ -9,37 +9,28 @@ import MLPAKit
 public protocol LiteLLMCreating {
     func createAppAttestLiteLLM(
         using prefs: Prefs,
-        serviceType: MLPAServiceType,
-        bundleIdentifier: String
+        serviceType: MLPAServiceType
     ) -> LiteLLMClientProtocol?
-}
-
-public extension LiteLLMCreating {
-    func createAppAttestLiteLLM(
-        using prefs: Prefs,
-        serviceType: MLPAServiceType,
-        bundleIdentifier: String = AppInfo.bundleIdentifier
-    ) -> LiteLLMClientProtocol? {
-        createAppAttestLiteLLM(using: prefs, serviceType: serviceType, bundleIdentifier: bundleIdentifier)
-    }
 }
 
 public struct LiteLLMCreator: LiteLLMCreating {
     private let keyStore: AppAttestKeyIDStore
     private let appAttestService: AppAttestServiceProtocol
+    private let bundleIdentifier: String
 
     public init(
         keyStore: AppAttestKeyIDStore = KeychainAppAttestKeyIDStore(),
-        appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared
+        appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
+        bundleIdentifier: String = AppInfo.bundleIdentifier
     ) {
         self.keyStore = keyStore
         self.appAttestService = appAttestService
+        self.bundleIdentifier = bundleIdentifier
     }
 
     public func createAppAttestLiteLLM(
         using prefs: Prefs,
-        serviceType: MLPAServiceType,
-        bundleIdentifier: String
+        serviceType: MLPAServiceType
     ) -> LiteLLMClientProtocol? {
         let mlpaEnvironmentKey = prefs.stringForKey(PrefsKeys.MLPASettings.mlpaEndpointEnvironment) ?? ""
         let mlpaEnvironment = MLPAEnvironment(rawValue: mlpaEnvironmentKey) ?? .prod
