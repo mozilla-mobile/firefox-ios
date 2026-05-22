@@ -37,7 +37,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with prod environment, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with prod environment")
         XCTAssertEqual(
             mockPrefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment),
             MLPAEnvironment.prod.rawValue,
@@ -55,7 +55,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with dev environment, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with dev environment")
         XCTAssertEqual(
             mockPrefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment),
             MLPAEnvironment.dev.rawValue,
@@ -73,7 +73,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with stage environment, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with stage environment")
         XCTAssertEqual(
             mockPrefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment),
             MLPAEnvironment.stage.rawValue,
@@ -89,7 +89,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
         XCTAssertEqual(
             mockPrefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment),
             MLPAEnvironment.prod.rawValue,
@@ -107,7 +107,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with default prod environment")
         XCTAssertEqual(
             mockPrefs.stringForKey(PrefsKeys.MLPASettings.lastUsedEnvironment),
             MLPAEnvironment.prod.rawValue,
@@ -125,7 +125,7 @@ final class LiteLLMCreatorTests: XCTestCase {
             bundleIdentifier: "bundleId"
         )
 
-        XCTAssertNotNil(result, "Should create LiteLLM client with s2s service type, instead got \(result)")
+        XCTAssertNotNil(result, "Should create LiteLLM client with s2s service type")
     }
 
     // MARK: - Environment Change Tests
