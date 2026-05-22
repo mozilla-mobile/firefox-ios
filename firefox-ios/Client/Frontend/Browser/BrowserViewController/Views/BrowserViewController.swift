@@ -5016,6 +5016,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         guard !isEditingBottomAddressBar else { return }
 
+        let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        let wasShowingAccessory = toolbarState?.addressToolbar.shouldShowKeyboard == true
+        if wasShowingAccessory {
+            store.dispatch(
+                ToolbarAction(
+                    scrollAlpha: 1,
+                    shouldShowKeyboard: false,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarActionType.keyboardStateDidChange
+                )
+            )
+        }
+
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
