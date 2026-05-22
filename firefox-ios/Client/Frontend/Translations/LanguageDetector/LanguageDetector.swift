@@ -18,9 +18,6 @@ final class LanguageDetector: LanguageDetectorProvider {
 
     private let htmlLangScript = "return document.documentElement.lang || null"
 
-    /// NLLanguageRecognizer hypotheses below this threshold are treated as unreliable.
-    static let minimumConfidence = 0.5
-
     func detectLanguage(from source: LanguageSampleSource) async throws -> String? {
         if let htmlLang = try await extractHTMLLangAttribute(from: source) {
             return htmlLang
@@ -51,12 +48,7 @@ final class LanguageDetector: LanguageDetectorProvider {
     private func getDominantLanguage(of text: String) -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-        let recognizer = NLLanguageRecognizer()
-        recognizer.processString(trimmed)
-        guard let dominant = recognizer.dominantLanguage else { return nil }
-        let confidence = recognizer.languageHypotheses(withMaximum: 1)[dominant] ?? 0
-        guard confidence >= Self.minimumConfidence else { return nil }
-        return dominant.rawValue
+        return NLLanguageRecognizer.dominantLanguage(for: trimmed)?.rawValue
     }
 
     /// Normalizes a raw HTML `lang` value to the format used by the translation models.
