@@ -29,9 +29,11 @@ struct ReaderFileRoute: TinyRoute {
         let resourceName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
 
+        let subdirectory = fileURL.deletingLastPathComponent().relativePath
         guard let bundleURL = Bundle.main.url(
             forResource: resourceName,
-            withExtension: fileExtension.isEmpty ? nil : fileExtension
+            withExtension: fileExtension.isEmpty ? nil : fileExtension,
+            subdirectory: subdirectory
         ) else { throw TinyRouterError.resourceNotFound(path: cleanPath) }
 
         let data = try Data(contentsOf: bundleURL)
