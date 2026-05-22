@@ -19,7 +19,7 @@ final class LanguageDetector: LanguageDetectorProvider {
     private let htmlLangScript = "return document.documentElement.lang || null"
 
     /// NLLanguageRecognizer hypotheses below this threshold are treated as unreliable.
-    static let minimumConfidence: Double = 0.5
+    static let minimumConfidence = 0.5
 
     func detectLanguage(from source: LanguageSampleSource) async throws -> String? {
         if let htmlLang = try await extractHTMLLangAttribute(from: source) {
