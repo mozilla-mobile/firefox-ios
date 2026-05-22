@@ -659,7 +659,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             ))
         }
     }
-    // We also want to display a toast.
+    // When we receive an error translating the page, we want to update the translation
+    // icon on the toolbar to be inactive. We also want to display a toast.
     private func handleErrorFromTranslatingPage(for action: Action, on tab: Tab? = nil) {
         dispatchAction(
             for: ToolbarActionType.didReceiveErrorTranslating,

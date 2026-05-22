@@ -1751,6 +1751,95 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(tab.translationConfiguration?.state, .loading)
     }
 
+    func test_background_cancelledTranslation_doesNotDispatchCompletion() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslatePromptShown)
+        let stallingService = StallingTranslationsService()
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
+        let subject = createSubject(translationsService: stallingService)
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+                loadingExpectation.fulfill()
+            }
+        }
+
+        subject.translationsProvider(mockStore.state, action)
+        wait(for: [loadingExpectation], timeout: 1.0)
+        mockStore.dispatchedActions.removeAll()
+
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+
+        let completionLeakExpectation = XCTestExpectation(description: "translationCompleted should not be dispatched")
+        completionLeakExpectation.isInverted = true
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .translationCompleted {
+                completionLeakExpectation.fulfill()
+            }
+        }
+
+        wait(for: [completionLeakExpectation], timeout: 1.0)
+
+        let completionActions = mockStore.dispatchedActions.filter {
+            ($0.actionType as? ToolbarActionType) == .translationCompleted
+        }
+        XCTAssertTrue(completionActions.isEmpty)
+    }
+
+    func test_background_cancelledTranslation_doesNotDispatchError() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let stallingService = StallingTranslationsService(
+            firstResponseReceivedBehavior: .throwAfterCancel
+        )
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        mockTabManager.selectedTab = tab
+        let subject = createSubject(translationsService: stallingService)
+
+        let action = TranslationLanguageSelectedAction(
+            windowUUID: .XCTestDefaultUUID,
+            targetLanguage: "de",
+            actionType: TranslationsActionType.didSelectTargetLanguage
+        )
+
+        let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+                loadingExpectation.fulfill()
+            }
+        }
+
+        subject.translationsProvider(mockStore.state, action)
+        wait(for: [loadingExpectation], timeout: 1.0)
+        mockStore.dispatchedActions.removeAll()
+
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
+
+        let errorLeakExpectation = XCTestExpectation(description: "didReceiveErrorTranslating should not be dispatched")
+        errorLeakExpectation.isInverted = true
+        mockStore.dispatchCalled = { [weak mockStore] in
+            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didReceiveErrorTranslating {
+                errorLeakExpectation.fulfill()
+            }
+        }
+
+        wait(for: [errorLeakExpectation], timeout: 1.0)
+
+        let errorActions = mockStore.dispatchedActions.filter {
+            ($0.actionType as? ToolbarActionType) == .didReceiveErrorTranslating
+        }
+        XCTAssertTrue(errorActions.isEmpty)
+    }
+
     func test_foreground_afterBriefBackground_doesNotRecover() throws {
         setTranslationsFeatureEnabled(enabled: true)
         let subject = createSubject()
@@ -1766,6 +1855,17 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 // MARK: - StallingTranslationsService
 
 private final class StallingTranslationsService: TranslationsServiceProtocol {
+    enum FirstResponseBehavior {
+        case stall
+        case throwAfterCancel
+    }
+
+    private let firstResponseReceivedBehavior: FirstResponseBehavior
+
+    init(firstResponseReceivedBehavior: FirstResponseBehavior = .stall) {
+        self.firstResponseReceivedBehavior = firstResponseReceivedBehavior
+    }
+
     func shouldOfferTranslation(for windowUUID: WindowUUID, using preferredLanguages: [String]) async throws -> Bool {
         false
     }
@@ -1780,7 +1880,15 @@ private final class StallingTranslationsService: TranslationsServiceProtocol {
     }
 
     func firstResponseReceived(for windowUUID: WindowUUID) async throws {
-        try await Task.sleep(nanoseconds: 60_000_000_000)
+        switch firstResponseReceivedBehavior {
+        case .stall:
+            try await Task.sleep(nanoseconds: 60_000_000_000)
+        case .throwAfterCancel:
+            while !Task.isCancelled {
+                try await Task.sleep(nanoseconds: 10_000_000)
+            }
+            throw CancellationError()
+        }
     }
 
     func discardTranslations(for windowUUID: WindowUUID) async throws {}
