@@ -31,8 +31,8 @@ class A11yOnboardingTests: BaseTestCase {
         var missingLabels: [A11yUtils.MissingAccessibilityElement] = []
         // swiftlint:enable large_tuple
         guard #available(iOS 17.0, *), !skipPlatform else { return }
-
-        // Screen 0: first tour screen, including close button and page control
+        // Complete the first run from first screen to the latest one
+        // Check that the first tour screen is shown as well as all it's elements
         onboardingScreen.waitForCurrentScreenElements(checkCloseButton: true, checkPageControl: true)
         try app.performAccessibilityAudit()
         checkMissingLabels(missingLabels: &missingLabels)
