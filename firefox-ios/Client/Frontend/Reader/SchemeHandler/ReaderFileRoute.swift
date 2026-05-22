@@ -3,13 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 /// Serves static assets (CSS, fonts) needed by the reader mode page.
 ///
-/// When the rendered article HTML loads, WebKit requests resources like
+/// When the rendered HTML loads, WebKit requests resources like
 /// `readermode://app/reader-mode/styles/Reader.css` and font files.
 /// These don't match the `"/app/page"` route, so they fall through to this default route.
 ///
-/// Only files on the allowlist are served. Reader mode content runs in the web view's
-/// content process, so arbitrary `readermode://` requests could be crafted — the
-/// allowlist prevents access to other bundle resources.
+/// Only files on the allowlist are served.
 
 struct ReaderFileRoute: TinyRoute {
     private static let allowedFiles: Set<String> = [

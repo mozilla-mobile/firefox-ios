@@ -28,7 +28,7 @@ public enum TinyRouterError: Error, Equatable {
     /// A catch-all wrapper for unexpected errors, storing a textual description
     /// for logging and debugging while keeping this enum Equatable.
     case unknown(_ description: String)
-    
+
     /// Normalizes any thrown `Error` into a `TinyRouterError`
     public static func mapError(_ error: Error) -> TinyRouterError {
         if let tinyError = error as? TinyRouterError {
