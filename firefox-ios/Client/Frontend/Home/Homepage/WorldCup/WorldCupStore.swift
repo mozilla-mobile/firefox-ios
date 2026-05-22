@@ -58,11 +58,20 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
     }
 
     var isFeatureEnabledAndSectionEnabled: Bool {
-        return isFeatureEnabled && isHomepageSectionEnabled
+        guard isFeatureEnabled else { return false }
+        if isMilestone2 && !hasTransitionedToMilestone2 {
+            setIsHomepageSectionEnabled(true)
+            profile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.WorldCupMilestone2Transitioned)
+        }
+        return isHomepageSectionEnabled
     }
 
     private var isHomepageSectionEnabled: Bool {
         return profile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection) ?? true
+    }
+
+    private var hasTransitionedToMilestone2: Bool {
+        return profile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupMilestone2Transitioned) ?? false
     }
 
     var selectedTeam: String? {

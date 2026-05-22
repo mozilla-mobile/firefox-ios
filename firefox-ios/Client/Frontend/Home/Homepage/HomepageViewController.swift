@@ -689,8 +689,9 @@ final class HomepageViewController: UIViewController,
     }
 
     private func relayoutForCellHeightChange() {
-        guard let collectionView else { return }
-        collectionView.collectionViewLayout.invalidateLayout()
+        DispatchQueue.main.async {
+            self.refreshHomepageDataSourceSnapshot()
+        }
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {

@@ -42,7 +42,7 @@ final class WorldCupStoreTests: XCTestCase {
     // MARK: - isFeatureEnabledAndSectionEnabled
 
     func test_isFeatureEnabledAndSectionEnabled_withFeatureOnAndSectionOn_returnsTrue() {
-        setNimbusFeature(enabled: true)
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2099-01-01T00:00:00Z")
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
         let subject = createSubject()
 
@@ -50,7 +50,7 @@ final class WorldCupStoreTests: XCTestCase {
     }
 
     func test_isFeatureEnabledAndSectionEnabled_withFeatureOffAndSectionOn_returnsFalse() {
-        setNimbusFeature(enabled: false)
+        setNimbusFeature(enabled: false, milestone2EnableDate: "2099-01-01T00:00:00Z")
         mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
         let subject = createSubject()
 
@@ -58,7 +58,7 @@ final class WorldCupStoreTests: XCTestCase {
     }
 
     func test_isFeatureEnabledAndSectionEnabled_withFeatureOnAndSectionOff_returnsFalse() {
-        setNimbusFeature(enabled: true)
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2099-01-01T00:00:00Z")
         mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
         let subject = createSubject()
 
@@ -66,10 +66,58 @@ final class WorldCupStoreTests: XCTestCase {
     }
 
     func test_isFeatureEnabledAndSectionEnabled_withoutSectionPref_defaultsToFeatureFlagValue() {
-        setNimbusFeature(enabled: true)
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2099-01-01T00:00:00Z")
         let subject = createSubject()
 
         XCTAssertTrue(subject.isFeatureEnabledAndSectionEnabled)
+    }
+
+    func test_isFeatureEnabledAndSectionEnabled_onMilestone2_whenSectionDisabled_forceEnablesSectionOnce() {
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2026-05-10T19:00:00Z")
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-11T00:00:00Z"))
+        )
+
+        XCTAssertTrue(subject.isFeatureEnabledAndSectionEnabled)
+        XCTAssertEqual(
+            mockProfile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection),
+            true
+        )
+        XCTAssertEqual(
+            mockProfile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupMilestone2Transitioned),
+            true
+        )
+    }
+
+    func test_isFeatureEnabledAndSectionEnabled_onMilestone2_afterTransition_respectsUserPreference() {
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2026-05-10T19:00:00Z")
+        mockProfile.prefs.setBool(true, forKey: PrefsKeys.HomepageSettings.WorldCupMilestone2Transitioned)
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-11T00:00:00Z"))
+        )
+
+        XCTAssertFalse(subject.isFeatureEnabledAndSectionEnabled)
+        XCTAssertEqual(
+            mockProfile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection),
+            false
+        )
+    }
+
+    func test_isFeatureEnabledAndSectionEnabled_beforeMilestone2_doesNotTransition() {
+        setNimbusFeature(enabled: true, milestone2EnableDate: "2026-05-10T19:00:00Z")
+        mockProfile.prefs.setBool(false, forKey: PrefsKeys.HomepageSettings.WorldCupSection)
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-05-10T18:59:59Z"))
+        )
+
+        XCTAssertFalse(subject.isFeatureEnabledAndSectionEnabled)
+        XCTAssertNil(mockProfile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupMilestone2Transitioned))
+        XCTAssertEqual(
+            mockProfile.prefs.boolForKey(PrefsKeys.HomepageSettings.WorldCupSection),
+            false
+        )
     }
 
     // MARK: - selectedTeam
