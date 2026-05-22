@@ -4985,6 +4985,7 @@ extension BrowserViewController {
 
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        guard presentedViewController == nil else { return }
         keyboardState = state
 
         if !isSnapKitRemovalEnabled {
@@ -5014,6 +5015,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        guard presentedViewController == nil else { return }
         guard !isEditingBottomAddressBar else { return }
 
         keyboardState = nil
@@ -5038,6 +5040,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        guard presentedViewController == nil else { return }
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5056,6 +5059,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+        guard presentedViewController == nil else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5066,6 +5070,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        guard presentedViewController == nil else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
