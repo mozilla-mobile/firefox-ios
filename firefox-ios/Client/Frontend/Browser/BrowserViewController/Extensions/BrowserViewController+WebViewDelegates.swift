@@ -517,6 +517,13 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // WKWebView's back/forward cache preserves the translated DOM, so
+        // keep the `.active` config so the toolbar icon stays in sync.
+        if navigationAction.navigationType == .backForward,
+           tab.translationConfiguration?.state == .active {
+            tab.onNextCommit = {}
+        }
+
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
