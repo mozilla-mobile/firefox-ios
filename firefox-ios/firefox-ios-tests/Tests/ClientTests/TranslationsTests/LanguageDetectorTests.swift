@@ -33,6 +33,13 @@ final class LanguageDetectorTests: XCTestCase {
         XCTAssertEqual(result, "zh-Hans")
     }
 
+    func test_detectLanguage_normalizesUppercaseHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = "EN-US"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
+    }
+
     func test_detectLanguage_fallsBackToTextWhenHTMLLangMissing() async throws {
         mockLanguageSampleSource.htmlLangResult = nil
         mockLanguageSampleSource.mockResult = "Bonjour le monde"
