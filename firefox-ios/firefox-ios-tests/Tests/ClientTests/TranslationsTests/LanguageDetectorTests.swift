@@ -9,6 +9,48 @@ import XCTest
 final class LanguageDetectorTests: XCTestCase {
     var mockLanguageSampleSource = MockLanguageSampleSource()
 
+    // MARK: - HTML lang attribute
+
+    func test_detectLanguage_prefersHTMLLangOverTextAnalysis() async throws {
+        mockLanguageSampleSource.htmlLangResult = "de"
+        mockLanguageSampleSource.mockResult = "Hello world, this is clearly an English sentence."
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "de")
+    }
+
+    func test_detectLanguage_normalizesHTMLLangWithRegion() async throws {
+        mockLanguageSampleSource.htmlLangResult = "en-US"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "en")
+    }
+
+    func test_detectLanguage_preservesScriptSubtag() async throws {
+        mockLanguageSampleSource.htmlLangResult = "zh-Hans-CN"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "zh-Hans")
+    }
+
+    func test_detectLanguage_fallsBackToTextWhenHTMLLangMissing() async throws {
+        mockLanguageSampleSource.htmlLangResult = nil
+        mockLanguageSampleSource.mockResult = "Bonjour le monde"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "fr")
+    }
+
+    func test_detectLanguage_ignoresEmptyHTMLLang() async throws {
+        mockLanguageSampleSource.htmlLangResult = ""
+        mockLanguageSampleSource.mockResult = "Bonjour le monde"
+        let subject = createSubject()
+        let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
+        XCTAssertEqual(result, "fr")
+    }
+
+    // MARK: - NLLanguageRecognizer text analysis
+
     func test_detectLanguage_withFrench_returnsProperLanguageCode() async throws {
         mockLanguageSampleSource.mockResult = "Bonjour le monde"
         let subject = createSubject()
@@ -81,6 +123,30 @@ final class LanguageDetectorTests: XCTestCase {
         let result = try await subject.detectLanguage(from: mockLanguageSampleSource)
         XCTAssertEqual(result, "en")
     }
+
+    // MARK: - normalizeLanguageCode
+
+    func test_normalizeLanguageCode_simpleCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("en"), "en")
+    }
+
+    func test_normalizeLanguageCode_regionCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("en-US"), "en")
+    }
+
+    func test_normalizeLanguageCode_scriptCode() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("zh-Hans"), "zh-Hans")
+    }
+
+    func test_normalizeLanguageCode_scriptAndRegion() {
+        XCTAssertEqual(LanguageDetector.normalizeLanguageCode("zh-Hans-CN"), "zh-Hans")
+    }
+
+    func test_normalizeLanguageCode_invalidCode() {
+        XCTAssertNil(LanguageDetector.normalizeLanguageCode(""))
+    }
+
+    // MARK: - Helpers
 
     private func createSubject() -> LanguageDetector {
         LanguageDetector()
