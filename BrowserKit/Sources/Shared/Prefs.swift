@@ -159,6 +159,7 @@ public struct PrefsKeys {
 
     public struct MLPASettings {
         public static let mlpaEndpointEnvironment = "mlpaEndpointEnvironment"
+        public static let lastUsedEnvironment = "mlpaLastUsedEnvironment"
     }
 
     public struct UserFeatureFlagPrefs {
