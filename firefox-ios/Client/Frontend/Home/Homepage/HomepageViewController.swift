@@ -431,11 +431,9 @@ final class HomepageViewController: UIViewController,
         // this is a quick workaround to avoid blocking the main thread by calling apply snapshot many times.
         if homepageState != state {
             let animatingDifferences = state.availableContentHeight == homepageState.availableContentHeight
-            let shouldReconfigureHeader = shouldReconfigureHomepageHeader(for: state)
             self.homepageState = state
 
             refreshHomepageDataSourceSnapshot(
-                reconfigureHeader: shouldReconfigureHeader,
                 animatingDifferences: animatingDifferences
             ) { [weak self] in
                 self?.collectionView?.layoutIfNeeded()
@@ -618,9 +616,9 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         switch item {
-        case .header(let state):
+        case .header(let state, let logoTextColor):
             return configuredCell(cellType: HomepageHeaderCell.self, at: indexPath) { cell in
-                cell.configure(headerState: state) { [weak self] in
+                cell.configure(headerState: state, logoTextColor: logoTextColor) { [weak self] in
                     self?.dispatchNavigationBrowserAction(
                         with: NavigationDestination(.quickAnswers),
                         actionType: NavigationBrowserActionType.tapOnQuickAnswersButton
@@ -1153,23 +1151,16 @@ final class HomepageViewController: UIViewController,
         }
     }
 
-    private func refreshHomepageDataSourceSnapshot(reconfigureHeader: Bool = false,
-                                                   animatingDifferences: Bool = true,
+    private func refreshHomepageDataSourceSnapshot(animatingDifferences: Bool = true,
                                                    completion: (() -> Void)? = nil) {
         dataSource?.updateSnapshot(
             state: homepageState,
             selectedNewsfeedCategoryID: currentHomepageTabState.selectedNewsfeedCategoryID,
             jumpBackInDisplayConfig: getJumpBackInDisplayConfig(),
-            reconfigureHeader: reconfigureHeader,
             animatingDifferences: animatingDifferences
         ) {
             completion?()
         }
-    }
-
-    private func shouldReconfigureHomepageHeader(for state: HomepageState) -> Bool {
-        return state.wallpaperState.wallpaperConfiguration.logoTextColor !=
-            homepageState.wallpaperState.wallpaperConfiguration.logoTextColor
     }
 
     /// Applies the active `HomepageTabState`'s relevant properties to the category picker without rebuilding the section.
