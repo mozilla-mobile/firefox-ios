@@ -4984,7 +4984,12 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
+    private var isModalPresentedOverBrowser: Bool {
+        presentedViewController != nil || navigationController?.presentedViewController != nil
+    }
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
 
         if !isSnapKitRemovalEnabled {
@@ -5014,8 +5019,10 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         guard !isEditingBottomAddressBar else { return }
 
+        restoreAddressBarFromMinimizedState()
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5038,6 +5045,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID)
         let isEditing = toolbarState?.addressToolbar.isEditing == true
         if !isEditing {
@@ -5056,6 +5064,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5066,6 +5075,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        guard !isModalPresentedOverBrowser else { return }
         keyboardState = state
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5078,6 +5088,20 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
+    }
+
+    private func restoreAddressBarFromMinimizedState() {
+        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              !toolbarState.addressToolbar.isEditing,
+              toolbarState.addressToolbar.shouldShowKeyboard,
+              toolbarState.scrollAlpha == 0 else { return }
+        store.dispatch(
+            ToolbarAction(
+                scrollAlpha: 1,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
+            )
+        )
     }
 
     private func cancelEditingMode() {
