@@ -7,7 +7,7 @@ import Common
 @testable import Client
 
 @MainActor
-final class EnhancedTrackingProtectionVCTests: XCTestCase {
+final class EnhancedTrackingProtectionMenuVCTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         await DependencyHelperMock().bootstrapDependencies()
@@ -18,30 +18,25 @@ final class EnhancedTrackingProtectionVCTests: XCTestCase {
         try await super.tearDown()
     }
 
-    /// Regression test: prior to the fix, `panGestureRecognizerAction` force-unwrapped `pointOrigin`,
-    /// which is only set inside `viewDidLayoutSubviews`. If the pan gesture fired before the first
-    /// layout pass (e.g. after a memory warning or a rapid present/dismiss cycle), the app crashed
-    /// with `EXC_BAD_INSTRUCTION`. The handler must now tolerate a nil `pointOrigin`.
-    func testPanGestureRecognizerAction_beforeLayoutPass_doesNotCrash() {
-        let subject = makeSUT()
-        subject.loadViewIfNeeded()
-        // Intentionally do NOT call viewDidLayoutSubviews -- pointOrigin stays nil.
+    func testPanGestureRecognizerAction_changedStateWhenPointOriginIsNil_updatesFrameOriginUsingViewOrigin() {
+        let subject = createSubject()
+        let initialOrigin = subject.view.frame.origin
+        let translationY: CGFloat = 50
 
         let mockGesture = MockPanGestureRecognizer()
         mockGesture.mockState = .changed
-        mockGesture.mockTranslation = CGPoint(x: 0, y: 50)
+        mockGesture.mockTranslation = CGPoint(x: 0, y: translationY)
         mockGesture.mockVelocity = .zero
 
         subject.panGestureRecognizerAction(sender: mockGesture)
 
-        XCTAssertNotNil(subject.view, "View should still exist after gesture without prior layout pass")
+        XCTAssertEqual(subject.view.frame.origin,
+                       CGPoint(x: initialOrigin.x, y: initialOrigin.y + translationY))
     }
 
-    /// The .ended branch should also be safe when pointOrigin is still nil — both unwrap sites
-    /// must handle the nil case consistently.
-    func testPanGestureRecognizerAction_endedStateBeforeLayout_doesNotCrash() {
-        let subject = makeSUT()
-        subject.loadViewIfNeeded()
+    func testPanGestureRecognizerAction_endedStateWhenPointOriginIsNil_restoresFrameToOriginalOrigin() {
+        let subject = createSubject()
+        let initialOrigin = subject.view.frame.origin
 
         let mockGesture = MockPanGestureRecognizer()
         mockGesture.mockState = .ended
@@ -50,12 +45,12 @@ final class EnhancedTrackingProtectionVCTests: XCTestCase {
 
         subject.panGestureRecognizerAction(sender: mockGesture)
 
-        XCTAssertNotNil(subject.view)
+        XCTAssertEqual(subject.view.frame.origin, initialOrigin)
     }
 
     // MARK: - Helpers
 
-    private func makeSUT() -> EnhancedTrackingProtectionMenuVC {
+    private func createSubject() -> EnhancedTrackingProtectionMenuVC {
         let viewModel = EnhancedTrackingProtectionMenuVM(
             url: URL(string: "https://example.com")!,
             displayTitle: "example.com",
@@ -70,7 +65,6 @@ final class EnhancedTrackingProtectionVCTests: XCTestCase {
     }
 }
 
-/// Test double allowing us to drive the pan gesture handler deterministically.
 private final class MockPanGestureRecognizer: UIPanGestureRecognizer {
     var mockState: UIGestureRecognizer.State = .began
     var mockTranslation: CGPoint = .zero

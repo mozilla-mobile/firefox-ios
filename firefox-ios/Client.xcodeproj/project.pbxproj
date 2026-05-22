@@ -1461,6 +1461,8 @@
 		AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */; };
 		AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */; };
 		AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */; };
+		A545CC0C21C148228C7EC0A1 /* EnhancedTrackingProtectionMenuVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E270802C896845E2B6624BCE /* EnhancedTrackingProtectionMenuVCTests.swift */; };
+		AE33D4D2A3E444FD9DCBA2E8 /* TrackingProtectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6741EF98F0E46D595EE4FA9 /* TrackingProtectionViewControllerTests.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
 		AB8EE2D32C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB8EE2D22C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift */; };
 		AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */; };
@@ -10163,6 +10165,8 @@
 		AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackerCell.swift; sourceTree = "<group>"; };
 		AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableView.swift; sourceTree = "<group>"; };
 		AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableViewControllerTests.swift; sourceTree = "<group>"; };
+		E270802C896845E2B6624BCE /* EnhancedTrackingProtectionMenuVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTrackingProtectionMenuVCTests.swift; sourceTree = "<group>"; };
+		C6741EF98F0E46D595EE4FA9 /* TrackingProtectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewControllerTests.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
 		AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgentTests.swift"; sourceTree = "<group>"; };
 		AB8EE2D22C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionVerifiedByView.swift; sourceTree = "<group>"; };
@@ -15102,6 +15106,8 @@
 				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
 				0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */,
 				AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */,
+				E270802C896845E2B6624BCE /* EnhancedTrackingProtectionMenuVCTests.swift */,
+				C6741EF98F0E46D595EE4FA9 /* TrackingProtectionViewControllerTests.swift */,
 			);
 			path = TrackingProtectionTests;
 			sourceTree = "<group>";
@@ -20636,6 +20642,8 @@
 				8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */,
 				213047E62F2153B1007ECEDA /* PageZoomSettingsViewModelTests.swift in Sources */,
 				AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */,
+				A545CC0C21C148228C7EC0A1 /* EnhancedTrackingProtectionMenuVCTests.swift in Sources */,
+				AE33D4D2A3E444FD9DCBA2E8 /* TrackingProtectionViewControllerTests.swift in Sources */,
 				8A6B79A02CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift in Sources */,
 				39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */,
 				8AD3AFC52D143F1200CFC887 /* HomepageDimensionCalculatorTests.swift in Sources */,
