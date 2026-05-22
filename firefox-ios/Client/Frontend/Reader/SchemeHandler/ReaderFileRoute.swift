@@ -36,6 +36,6 @@ struct ReaderFileRoute: TinyRoute {
 
         let data = try Data(contentsOf: bundleURL)
         let mime = MIMEType.mimeTypeFromFileExtension(fileExtension)
-        return try? TinyRouter.ok(data: data, contentType: mime, url: url)
+        return try TinyRouter.ok(data: data, contentType: mime, url: url)
     }
 }
