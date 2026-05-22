@@ -4,6 +4,7 @@
 /// Serves only the static assets that Reader.html and Reader.css reference.
 /// Restricted to an explicit allowlist so a compromised content process can't
 /// probe arbitrary bundle resources via the readermode:// scheme.
+
 struct ReaderFileRoute: TinyRoute {
     private static let allowedFiles: Set<String> = [
         "reader-mode/styles/Reader.css",
