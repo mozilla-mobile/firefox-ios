@@ -6,6 +6,9 @@ import UIKit
 import Common
 
 /// Helper utility that aims to detect potential bugs in production which could result in tab loss.
+/// Note that it's possible for this telemetry helper to be called during onboarding flow before
+/// any tab managers have been configured, we need to be sure to gracefully handle any
+/// nil return values when querying `tabManager(for:)`
 @MainActor
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
