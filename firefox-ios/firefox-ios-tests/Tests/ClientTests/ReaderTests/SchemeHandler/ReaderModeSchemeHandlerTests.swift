@@ -202,6 +202,47 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         }
     }
 
+    // MARK: - Path traversal
+
+    func test_readerFileRoute_pathTraversal_rejected() throws {
+        let route = ReaderFileRoute()
+        let traversalPaths = [
+            // Attempts to escape reader-mode/ and reach Info.plist via ../
+            "reader-mode/styles/../../../Info.plist",
+            // Valid file but accessed via traversal instead of its canonical path
+            "reader-mode/styles/../../fonts/NewYorkMedium-Regular.otf",
+        ]
+
+        for path in traversalPaths {
+            let url = URL(string: "readermode://app/\(path)")!
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            XCTAssertThrowsError(try route.handle(url: url, components: components),
+                                 "Expected rejection for traversal path: \(path)")
+        }
+    }
+
+    // MARK: - Encoding
+
+    func test_readerFileRoute_encodedPaths_rejected() throws {
+        let route = ReaderFileRoute()
+        let encodedPaths = [
+            // Encoded slashes — the real path would be reader-mode/styles/Reader.css
+            // but the URL encodes the slashes so url.path won't match the allowlist
+            "reader-mode%2Fstyles%2FReader.css",
+            // Encoded absolute path attempt
+            "%2Fetc%2Fpasswd",
+            // Null byte injection
+            "reader-mode/styles/Reader.css%00evil",
+        ]
+
+        for path in encodedPaths {
+            let url = URL(string: "readermode://app/\(path)")!
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            XCTAssertThrowsError(try route.handle(url: url, components: components),
+                                 "Expected rejection for encoded path: \(path)")
+        }
+    }
+
     // MARK: - Helpers
 
     private func makeWebView() -> WKWebView {
