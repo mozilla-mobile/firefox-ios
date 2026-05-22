@@ -51,6 +51,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
     }
 
     private lazy var logoTextImage: UIImageView = .build { imageView in
+        imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
+            .withRenderingMode(.alwaysTemplate)
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -161,8 +163,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable, F
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
-            .withRenderingMode(.alwaysTemplate)
         logoTextImage.tintColor = logoTextColor ?? theme.colors.textPrimary
 
         quickAnswersButton.configuration?.baseBackgroundColor = theme.colors.layer4
