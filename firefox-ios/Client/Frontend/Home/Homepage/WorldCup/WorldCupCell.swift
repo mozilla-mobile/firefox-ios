@@ -23,6 +23,7 @@ private final class PageContainer: UIView, ThemeApplicable {
         image.image = UIImage(named: UX.loadingImage)
         image.isAccessibilityElement = false
         image.contentMode = .scaleAspectFit
+        image.isHidden = true
     }
 
     init(content: UIView) {
@@ -51,13 +52,12 @@ private final class PageContainer: UIView, ThemeApplicable {
             loadingImageView.widthAnchor.constraint(equalToConstant: UX.loadingImageSize),
             loadingImageView.heightAnchor.constraint(equalToConstant: UX.loadingImageSize),
         ])
-        startSpinning()
     }
 
     /// Sets the Content visibility and hides the loading image in case the `isVisible` is set to true.
     func setContentVisibility(_ isVisible: Bool) {
         content.alpha = isVisible ? UX.visibleAlpha : UX.hiddenAlpha
-        loadingImageView.alpha = isVisible ? UX.hiddenAlpha : UX.visibleAlpha
+        loadingImageView.isHidden = isVisible
         if isVisible {
             stopSpinning()
         } else {
@@ -115,16 +115,19 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         scrollView.bounces = false
         scrollView.clipsToBounds = true
         scrollView.delegate = self
+        scrollView.semanticContentAttribute = .forceLeftToRight
     }
 
     private let pagesStack: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.semanticContentAttribute = .forceLeftToRight
     }
 
     private let pageControl: UIPageControl = .build { control in
         control.hidesForSinglePage = true
         control.isUserInteractionEnabled = false
+        control.semanticContentAttribute = .forceLeftToRight
     }
 
     private var pageConstraints: [NSLayoutConstraint] = []
@@ -245,17 +248,12 @@ final class WorldCupCell: UICollectionViewCell, UIScrollViewDelegate, ReusableCe
         goToPage(initialPage(for: state, pageCount: pages.count))
     }
 
-    /// Resolves which page the swipe view should display first. With no team
-    /// selected we land on the closest upcoming match (provided by the
-    /// middleware via `state.defaultMatchIndex`) rather than the
-    /// chronologically latest card. Page 0 is the timer view, so match cards
-    /// are offset by one.
+    /// Resolves which page the swipe view should display first. The middleware
+    /// hands us the page index directly via `state.defaultMatchIndex`; we just
+    /// clamp it into the valid page range.
     private func initialPage(for state: WorldCupSectionState, pageCount: Int) -> Int {
-        guard state.isMilestone2, !state.matches.isEmpty, pageCount > 1 else {
-            return pageCount - 1
-        }
-        let target = 1 + state.defaultMatchIndex
-        return min(max(target, 0), pageCount - 1)
+        guard pageCount > 0 else { return 0 }
+        return min(max(state.defaultMatchIndex, 0), pageCount - 1)
     }
 
     private func makePages(for state: WorldCupSectionState) -> [PageContainer] {

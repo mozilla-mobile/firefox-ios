@@ -21,6 +21,9 @@ protocol WorldCupStoreProtocol {
     /// milestone 2 enable date has been reached.
     var isMilestone2: Bool { get }
 
+    /// Returns true when the World Cup countdown target date has been reached.
+    var hasWorldCupStarted: Bool { get }
+
     /// Saves the world cup section selection in the preference
     func setIsHomepageSectionEnabled(_ isEnabled: Bool)
 
@@ -71,8 +74,18 @@ struct WorldCupStore: WorldCupStoreProtocol, FeatureFlaggable {
         return dateProvider.now() >= enableDate
     }
 
+    var hasWorldCupStarted: Bool {
+        guard let startDate = worldCupStartDate else { return false }
+        return dateProvider.now() >= startDate
+    }
+
     private var milestone2EnableDate: Date? {
         let dateString = nimbusFeature.value().milestone2EnableDate
+        return iso8601Formatter.date(from: dateString)
+    }
+
+    private var worldCupStartDate: Date? {
+        let dateString = nimbusFeature.value().countdownTargetDate
         return iso8601Formatter.date(from: dateString)
     }
 

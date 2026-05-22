@@ -11,11 +11,37 @@ struct WorldCupTelemetry {
         self.gleanWrapper = gleanWrapper
     }
 
-    func closeButtonTapped() {
+    func closeCountdownWidgetButtonTapped() {
        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupCountdownWidget.closeButton)
     }
 
     func viewScheduleTapped() {
         gleanWrapper.recordEvent(for: GleanMetrics.WorldCupCountdownWidget.viewSchedule)
+    }
+
+    func countrySelected(fifaCode: String) {
+        let extra = GleanMetrics.WorldCupWidget.CountrySelectedExtra(fifaCode: fifaCode)
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.countrySelected, extras: extra)
+    }
+
+    func countryDeselected() {
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.countryDeselected)
+    }
+
+    func widgetDismissed() {
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.widgetDismissed)
+    }
+
+    func errorRefreshButtonTapped() {
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.errorRefreshButton)
+    }
+
+    func matchClicked(match: String) {
+        let extra = GleanMetrics.WorldCupWidget.MatchClickedExtra(match: match)
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.matchClicked, extras: extra)
+    }
+
+    func countrySelectorDisplayed() {
+        gleanWrapper.recordEvent(for: GleanMetrics.WorldCupWidget.countrySelectorDisplayed)
     }
 }

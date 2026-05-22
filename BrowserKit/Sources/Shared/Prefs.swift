@@ -50,6 +50,7 @@ public struct PrefsKeys {
     public static let ShowClipboardBar = "showClipboardBar"
     public static let ShowRelayMaskSuggestions = "showRelayMaskSuggestions"
     public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
+    public static let BlockAds = "blockAds"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
@@ -113,9 +114,13 @@ public struct PrefsKeys {
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let WorldCupSection = "WorldCupSectionUserPrefsKey"
-        public static let WorldCupNowOverride = "worldCupNowOverrideKey"
         /// Override for the merino WCS base host
         public static let WorldCupBaseHost = "worldCupBaseHostKey"
+        /// Dev-only override for the World Cup `/matches` and `/live` polling
+        /// cadence in seconds. When set, both streams fire on this interval
+        /// regardless of result type — used to test live behavior without
+        /// waiting for the production cadence.
+        public static let WorldCupPollInterval = "worldCupPollIntervalKey"
     }
 
     public struct Homepage {

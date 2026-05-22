@@ -95,7 +95,7 @@ final class TranslationsMiddleware: FeatureFlaggable {
     }
 
     private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
-        if action.translationConfiguration?.isTranslationFeatureEnabled == false {
+        if action.isTranslationsEnabled == false {
             for uuid in translationFlowIds.keys {
                 let translationState = store.state.componentState(
                     ToolbarState.self,
@@ -114,7 +114,8 @@ final class TranslationsMiddleware: FeatureFlaggable {
         selectedTargetLanguages[windowUUID] = nil
         translationFlowIds[windowUUID] = nil
         restoringWindows.remove(windowUUID)
-        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        guard featureFlagsProvider.isEnabled(.translation),
+              action.isTranslationsEnabled ?? true else { return }
         checkTranslationsAreEligible(for: action)
     }
 
@@ -173,23 +174,26 @@ final class TranslationsMiddleware: FeatureFlaggable {
                 }
             }
         } else if translationConfiguration.state == .inactive {
-            guard let deviceLanguage = Locale.current.languageCode else { return }
             let originatingTab = selectedTab(for: action.windowUUID)
-            let newFlowId = UUID()
-            translationFlowIds[action.windowUUID] = newFlowId
-            selectedTargetLanguages[action.windowUUID] = deviceLanguage
-            translationsTelemetry.translateButtonTapped(
-                isPrivate: toolbarState.isPrivateMode,
-                actionType: .willTranslate,
-                translationFlowId: newFlowId
-            )
-            self.handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
-            self.retrieveTranslations(
-                for: action,
-                targetLanguage: deviceLanguage,
-                isPrivate: toolbarState.isPrivateMode,
-                on: originatingTab
-            )
+            let isPrivate = toolbarState.isPrivateMode
+            Task {
+                guard let deviceLanguage = await self.supportedDeviceLanguage() else { return }
+                let newFlowId = UUID()
+                self.translationFlowIds[action.windowUUID] = newFlowId
+                self.selectedTargetLanguages[action.windowUUID] = deviceLanguage
+                self.translationsTelemetry.translateButtonTapped(
+                    isPrivate: isPrivate,
+                    actionType: .willTranslate,
+                    translationFlowId: newFlowId
+                )
+                self.handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
+                self.retrieveTranslations(
+                    for: action,
+                    targetLanguage: deviceLanguage,
+                    isPrivate: isPrivate,
+                    on: originatingTab
+                )
+            }
         } else if translationConfiguration.state == .active {
             let originatingTab = selectedTab(for: action.windowUUID)
             translationsTelemetry.translateButtonTapped(
@@ -387,11 +391,34 @@ final class TranslationsMiddleware: FeatureFlaggable {
     /// When the language picker flag is ON, returns the user's full preferred list.
     /// When OFF, returns only the primary device language (preserving legacy behavior).
     private func targetLanguagesForEligibilityCheck() async -> [String] {
+        let supported = await translationsService.fetchSupportedTargetLanguages()
         if featureFlagsProvider.isEnabled(.translationLanguagePicker) {
-            let supported = await translationsService.fetchSupportedTargetLanguages()
             return manager.preferredLanguages(supportedTargetLanguages: supported)
         }
-        return [localeProvider.current.languageCode].compactMap { $0 }
+        return [matchedDeviceLanguage(supportedTargetLanguages: supported)].compactMap { $0 }
+    }
+
+    /// Resolves the device language to the most specific code present in the supported set.
+    /// Uses BCP-47 tags from `localeProvider.preferredLanguages` so script subtags like
+    /// `zh-Hans` survive the lookup (Locale.languageCode would reduce them to `zh`).
+    private func matchedDeviceLanguage(supportedTargetLanguages: [String]) -> String? {
+        let supportedSet = Set(supportedTargetLanguages)
+        for tag in localeProvider.preferredLanguages {
+            if let match = PreferredTranslationLanguagesManager.matchingSupportedCode(
+                for: tag,
+                in: supportedSet
+            ) {
+                return match
+            }
+        }
+        return nil
+    }
+
+    /// Convenience for callers (button taps, prewarm-style flows) that need just the
+    /// best-matching device language string after fetching supported languages.
+    private func supportedDeviceLanguage() async -> String? {
+        let supported = await translationsService.fetchSupportedTargetLanguages()
+        return matchedDeviceLanguage(supportedTargetLanguages: supported)
     }
 
     /// Checks whether the current page in the active tab is eligible for translation,
@@ -399,7 +426,19 @@ final class TranslationsMiddleware: FeatureFlaggable {
     private func checkTranslationsAreEligible(for action: ToolbarAction) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        guard action.translationConfiguration?.isTranslationFeatureEnabled == true else { return }
+        // action.isTranslationsEnabled carries the explicit new value for settings-change actions
+        // (where store.state hasn't been updated yet). For urlDidChange it is nil, so we fall back
+        // to ToolbarState which is always up-to-date by the time urlDidChange fires.
+        let translationsEnabled = action.isTranslationsEnabled ?? (store.state.componentState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: action.windowUUID
+        )?.isTranslationsEnabled ?? true)
+
+        guard featureFlagsProvider.isEnabled(.translation), translationsEnabled else {
+            dispatchClearTranslationIcon(windowUUID: action.windowUUID, on: originatingTab)
+            return
+        }
 
         // Translation requires a live HTML DOM. PDFs and images have no translatable
         // text structure, so suppress the icon without running language detection.

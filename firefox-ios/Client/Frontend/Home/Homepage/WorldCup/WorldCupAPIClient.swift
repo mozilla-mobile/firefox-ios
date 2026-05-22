@@ -3,11 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import MozillaAppServices
+import Shared
 
 /// Thin Swift wrapper around the FFI-generated `MozillaAppServices.WorldCupClient`.
 /// Exposes the merino WCS endpoints as parsed Swift values, isolating callers from
 /// raw JSON strings and from the FFI surface itself (which simplifies mocking in tests).
+///
+/// Matches and live default to `WorldCupPollingFetchStrategy` (5- / 3-min
+/// polling with 204 + error backoff, capped at 20 min). Teams stays one-shot
+/// via `WorldCupNormalFetchStrategy`. Pass overrides for tests or to disable
+/// polling.
 final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     static let emptyConfig = WorldCupConfig(baseHost: nil)
 
@@ -18,8 +25,8 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
     private let teamsStrategy: WorldCupFetchStrategyProtocol
 
     init(config: WorldCupConfig = WorldCupAPIClient.emptyConfig,
-         matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
-         liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+         matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
+         liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
          teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
         self.client = try WorldCupClient(config: config)
         let decoder = JSONDecoder()
@@ -32,10 +39,10 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     /// Convenience init that points the FFI at a custom host. Pass `nil` or
     /// an empty string to use the default merino host. Intended for local
-    /// dev/beta testing against a non-production merino instance. 
+    /// dev/beta testing against a non-production merino instance.
     convenience init(baseHost: String?,
-                     matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
-                     liveStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy(),
+                     matchesStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
+                     liveStrategy: WorldCupFetchStrategyProtocol = WorldCupPollingFetchStrategy(),
                      teamsStrategy: WorldCupFetchStrategyProtocol = WorldCupNormalFetchStrategy()) throws {
         let trimmed = baseHost?.trimmingCharacters(in: .whitespacesAndNewlines)
         let host = (trimmed?.isEmpty == false) ? trimmed : nil
@@ -47,39 +54,33 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
 
     /// Low-level sync matches fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
-    func fetch(_ query: WorldCupQuery, team: String? = nil) throws -> WorldCupMatchesResponse? {
-        let options = Self.options(forTeam: team)
-        let json = switch query {
-        case .matches: try client.getMatches(options: options)
-        case .live:    try client.getLive(options: options)
-        }
-        return try decode(json)
+    func fetchMatches(team: String? = nil) throws -> WorldCupMatchesResponse? {
+        let json = try client.getMatches(options: Self.options(forTeam: team))
+        return try decode(json, as: WorldCupMatchesResponse.self)
+    }
+
+    /// Low-level sync live fetch + decode. Throws on FFI error or decode failure.
+    /// Pass a 3-letter FIFA team key to filter the response to one team's fixtures.
+    func fetchLive(team: String? = nil) throws -> WorldCupLiveResponse? {
+        let json = try client.getLive(options: Self.options(forTeam: team))
+        return try decode(json, as: WorldCupLiveResponse.self)
     }
 
     /// Low-level sync teams fetch + decode. Throws on FFI error or decode failure.
     /// Pass a 3-letter FIFA team key to scope the roster response.
     func fetchTeams(team: String? = nil) throws -> WorldCupTeamsResponse? {
         let json = try client.getTeams(options: Self.options(forTeam: team))
-        return try decodeTeams(json)
+        return try decode(json, as: WorldCupTeamsResponse.self)
     }
 
-    /// High-level async loader: delegates to the strategy configured for the
-    /// given query (live vs non-live). The strategy decides how to call `fetch`
-    /// (single attempt, retry, etc.) and returns the decoded merino response
-    /// or a `WorldCupLoadError` the UI can pattern-match on.
-    /// Callers transform the success response into a view-model.
-    func loadMatches(query: WorldCupQuery,
-                     team: String? = nil) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        let strategy: WorldCupFetchStrategyProtocol = switch query {
-        case .matches: matchesStrategy
-        case .live:    liveStrategy
-        }
-        return await strategy.loadMatches(using: self, query: query, team: team)
+    func matchesStream(team: String? = nil) -> WorldCupMatchesStream {
+        matchesStrategy.matchesStream(using: self, team: team)
     }
 
-    /// High-level async teams loader. Delegates to the configured teams
-    /// strategy and returns either the decoded response or a
-    /// `WorldCupLoadError` the UI can pattern-match on.
+    func liveStream(team: String? = nil) -> WorldCupLiveStream {
+        liveStrategy.liveStream(using: self, team: team)
+    }
+
     func loadTeams(team: String? = nil) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
         await teamsStrategy.loadTeams(using: self, team: team)
     }
@@ -113,13 +114,32 @@ final class WorldCupAPIClient: WorldCupAPIClientProtocol, @unchecked Sendable {
         )
     }
 
-    private func decode(_ json: String?) throws -> WorldCupMatchesResponse? {
+    private func decode<T: Decodable>(_ json: String?, as type: T.Type) throws -> T? {
         guard let data = json?.data(using: .utf8) else { return nil }
-        return try decoder.decode(WorldCupMatchesResponse.self, from: data)
+        return try decoder.decode(type, from: data)
     }
 
-    private func decodeTeams(_ json: String?) throws -> WorldCupTeamsResponse? {
-        guard let data = json?.data(using: .utf8) else { return nil }
-        return try decoder.decode(WorldCupTeamsResponse.self, from: data)
+    /// Builds the production-default client honoring two dev-only prefs:
+    /// `WorldCupBaseHost` (custom merino host) and `WorldCupPollInterval`
+    /// (override poll cadence in seconds). Returns `nil` if the FFI fails
+    /// to initialize.
+    static func makeDefault() -> WorldCupAPIClientProtocol? {
+        let prefs = (AppContainer.shared.resolve() as Profile).prefs
+        let baseHost = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost)
+        let pollSeconds = prefs.intForKey(PrefsKeys.HomepageSettings.WorldCupPollInterval)
+            .flatMap { $0 > 0 ? TimeInterval($0) : nil }
+        let matchesConfig = pollSeconds
+            .map { WorldCupPollingFetchStrategy.Config.matches.devOverridden(everySeconds: $0) }
+            ?? .matches
+        let liveConfig = pollSeconds
+            .map { WorldCupPollingFetchStrategy.Config.live.devOverridden(everySeconds: $0) }
+            ?? .live
+        return try? WorldCupAPIClient(
+            baseHost: baseHost,
+            matchesStrategy: WorldCupPollingFetchStrategy(matchesConfig: matchesConfig,
+                                                          liveConfig: liveConfig),
+            liveStrategy: WorldCupPollingFetchStrategy(matchesConfig: matchesConfig,
+                                                       liveConfig: liveConfig)
+        )
     }
 }

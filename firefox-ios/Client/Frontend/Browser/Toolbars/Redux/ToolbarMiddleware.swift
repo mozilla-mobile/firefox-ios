@@ -96,6 +96,7 @@ final class ToolbarMiddleware {
                 addressBorderPosition: borderPosition,
                 displayNavBorder: displayBorder,
                 middleButton: middleButton,
+                isTranslationsEnabled: prefs.boolForKey(PrefsKeys.Settings.translationsFeature) ?? true,
                 windowUUID: uuid,
                 actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)

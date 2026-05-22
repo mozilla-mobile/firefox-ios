@@ -6,89 +6,194 @@ import Foundation
 import Shared
 
 struct WorldCupMatches: Equatable, Hashable {
-    /// Sentinel for the `limit` parameter on `flattened(response:limit:)`; means
-    /// "include every match in the response, no truncation".
-    static let unlimitedMatches = Int.max
-
     let phaseTitle: String
+    let dateLabel: String?
     let isLive: Bool
     let featuredMatch: [WorldCupMatch]
     let upcomingMatches: [WorldCupMatch]
 
     init(phaseTitle: String,
+         dateLabel: String? = nil,
          isLive: Bool,
          featuredMatch: [WorldCupMatch],
          upcomingMatches: [WorldCupMatch]) {
         self.phaseTitle = phaseTitle
+        self.dateLabel = dateLabel
         self.isLive = isLive
         self.featuredMatch = featuredMatch
         self.upcomingMatches = upcomingMatches
     }
 
+    /// How long a match stays in the prominent "hero" slot after kickoff
+    /// before falling to the compact row. Covers the ~110-min live window
+    /// plus a bit of post-FT result-viewing so a just-finished match doesn't
+    /// vanish the second it ends, but doesn't keep an hours-old result
+    /// occupying the hero spot when an upcoming match is closer in time.
+    private static let featuredWindow: TimeInterval = 2 * 60 * 60
+
     /// Single-card view used when a team is selected: the merino response is
-    /// already scoped to that team, so we put any past results plus the live
-    /// match (if any) into `featuredMatch` (the prominent top section), and
-    /// the next two scheduled matches into `upcomingMatches` (the compact
-    /// bottom list). If nothing has happened yet, the first scheduled match
-    /// is promoted to featured so the card never opens empty.
+    /// already scoped to that team. We don't trust the server's
+    /// `previous/current/next` labels for the featured/upcoming split — those
+    /// are anchored to whatever fetch date we sent (which is pinned to the
+    /// tournament-window floor so the API actually returns data
+    /// pre-tournament), not to the user's actual today.
+    ///
+    /// Bucketing rule: a match sits in `featuredMatch` (the hero) only while
+    /// `now ∈ [kickoff, kickoff + featuredWindow]`. Everything else lands in
+    /// `upcomingMatches` (the compact row) sorted chronologically and capped
+    /// at two. If nothing is currently in the featured window, the next
+    /// upcoming match is promoted so the hero never goes empty mid-tournament;
+    /// if everything is past, the most recent past is promoted instead.
+    ///
+    /// `liveIDs` is the set of `globalEventId`s reported by the `/live`
+    /// endpoint (after filtering to truly-live entries); `isLive` is set if
+    /// any of this card's matches is in that set.
     init(response: WorldCupMatchesResponse,
+         liveIDs: Set<Int> = [],
+         now: Date = Date(),
+         calendar: Calendar = .current,
          localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        let previous = response.previous ?? []
-        let live = response.current ?? []
-        let scheduled = response.next ?? []
+        let allMatches = (response.previous ?? []) + (response.current ?? []) + (response.next ?? [])
 
-        var featured = previous + live
-        var upcoming = scheduled
-        if featured.isEmpty, let firstScheduled = upcoming.first {
-            featured = [firstScheduled]
-            upcoming = Array(upcoming.dropFirst())
+        var inFeaturedZone: [WorldCupMatchesResponse.Match] = []
+        var others: [(date: Date, match: WorldCupMatchesResponse.Match)] = []
+        for match in allMatches {
+            guard let kickoff = WorldCupMatch.parseDate(match.date) else { continue }
+            let windowEnd = kickoff.addingTimeInterval(Self.featuredWindow)
+            if now >= kickoff && now <= windowEnd {
+                inFeaturedZone.append(match)
+            } else {
+                others.append((kickoff, match))
+            }
         }
-        upcoming = Array(upcoming.prefix(2))
+        others.sort { $0.date < $1.date }
 
-        self.phaseTitle = Self.phaseTitle(from: response)
-        self.isLive = !live.isEmpty
+        var featured = inFeaturedZone
+        if featured.isEmpty {
+            if let idx = others.firstIndex(where: { $0.date > now }) {
+                featured = [others.remove(at: idx).match]
+            } else if let last = others.last {
+                others.removeLast()
+                featured = [last.match]
+            }
+        }
+        let upcoming = others.prefix(2).map(\.match)
+
+        let allIDs = allMatches.map(\.globalEventId)
+        self.phaseTitle = Self.phaseTitle(from: featured.first)
+        self.dateLabel = nil
+        self.isLive = allIDs.contains(where: { liveIDs.contains($0) })
         self.featuredMatch = featured.map { WorldCupMatch($0, localeProvider: localeProvider) }
         self.upcomingMatches = upcoming.map { WorldCupMatch($0, localeProvider: localeProvider) }
     }
 
-    /// Multi-card view used when no team is selected: every match in the
-    /// response becomes its own one-match card (chronological: previous →
-    /// current → next), so swiping flips through the tournament one match at
-    /// a time. `limit` caps the count (default unlimited).
+    /// Multi-card view used when no team is selected: groups every match in
+    /// the response by calendar day (in `calendar`'s timezone) so each card
+    /// holds all matches on the same date. Each day's matches render in the
+    /// compact `upcomingMatches` row — `featuredMatch` is left empty so a
+    /// crowded day doesn't blow the card up vertically. Cards are ordered
+    /// chronologically (earliest day first); `defaultIndex` is the page the
+    /// swipe view should land on first, with page 0 reserved for the timer.
     static func flattened(
         response: WorldCupMatchesResponse,
-        limit: Int = unlimitedMatches,
+        liveIDs: Set<Int> = [],
+        now: Date = Date(),
+        calendar: Calendar = .current,
         localeProvider: LocaleProvider = SystemLocaleProvider()
-    ) -> [WorldCupMatches] {
-        let previous = response.previous ?? []
-        let live = response.current ?? []
-        let scheduled = response.next ?? []
-        let title = Self.phaseTitle(from: response)
-        let liveIDs = Set(live.map(\.globalEventId))
-        let ordered = previous + live + scheduled
-        return ordered.prefix(limit).map { match in
-            WorldCupMatches(
+    ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
+        let allMatches = ((response.previous ?? []) + (response.current ?? []) + (response.next ?? []))
+            .filter { $0.stage == "Group Stage" }
+        let groups = groupedByDay(allMatches, calendar: calendar)
+        let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        let cards = groups.map { group -> WorldCupMatches in
+            let liveMatches = group.matches.filter { liveIDs.contains($0.globalEventId) }
+            let nonLive = group.matches.filter { !liveIDs.contains($0.globalEventId) }
+            return WorldCupMatches(
                 phaseTitle: title,
-                isLive: liveIDs.contains(match.globalEventId),
-                featuredMatch: [WorldCupMatch(match, localeProvider: localeProvider)],
-                upcomingMatches: []
+                // Day shown once at top; rows render time-only.
+                dateLabel: dayLabel(for: group.day, locale: localeProvider.current),
+                isLive: !liveMatches.isEmpty,
+                featuredMatch: liveMatches.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) },
+                upcomingMatches: nonLive.map { WorldCupMatch($0, localeProvider: localeProvider, timeOnly: true) }
             )
+        }
+        // The timer view always sits at page 0 when there's no selected team,
+        // and that's where the swipe view should land first.
+        return (cards, 0)
+    }
+
+    private static func dayLabel(for day: Date, locale: Locale) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate("MMMd")
+        return formatter.string(from: day)
+    }
+
+    /// Maps a featured match to a localized phase label. For group-stage
+    /// matches we surface the group letter (e.g. "Group A") since both teams
+    /// in a group-stage fixture share a group. For knockout matches we use
+    /// the round label. Unknown or absent stages fall back to the generic
+    /// "Upcoming" label so a new merino stage string doesn't blank the title.
+    static func phaseTitle(from match: WorldCupMatchesResponse.Match?) -> String {
+        guard let match else {
+            return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        }
+        switch match.stage {
+        case "Group Stage":
+            let group = match.homeTeam?.group ?? match.awayTeam?.group
+            return Self.groupLabel(for: group)
+                ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
+        case "Round of 32":
+            return String.WorldCup.HomepageWidget.RoundPhase.Round32Label
+        case "Round of 16":
+            return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
+        case "Quarterfinals":
+            return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
+        case "Semifinals":
+            return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
+        case "Third Place":
+            return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
+        case "Final":
+            return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
+        default:
+            return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
         }
     }
 
-    /// Maps the merino response to a localized phase label. Currently the only
-    /// reliable signal in the API is `team.group`. If any featured/upcoming
-    /// team carries a group assignment we're in group play. For knockout
-    /// rounds the merino payload doesn't yet carry a round identifier, so we
-    /// fall back to the generic "Upcoming" label until that exists upstream
-    /// or we count surviving teams from the response.
-    static func phaseTitle(from response: WorldCupMatchesResponse) -> String {
-        let activeMatches = (response.current ?? []) + (response.next ?? [])
-        let isGroupStage = activeMatches.contains { match in
-            match.homeTeam.group != nil || match.awayTeam.group != nil
+    private static func groupLabel(for group: String?) -> String? {
+        switch group {
+        case "Group A": return String.WorldCup.HomepageWidget.GroupPhase.GroupA
+        case "Group B": return String.WorldCup.HomepageWidget.GroupPhase.GroupB
+        case "Group C": return String.WorldCup.HomepageWidget.GroupPhase.GroupC
+        case "Group D": return String.WorldCup.HomepageWidget.GroupPhase.GroupD
+        case "Group E": return String.WorldCup.HomepageWidget.GroupPhase.GroupE
+        case "Group F": return String.WorldCup.HomepageWidget.GroupPhase.GroupF
+        case "Group G": return String.WorldCup.HomepageWidget.GroupPhase.GroupG
+        case "Group H": return String.WorldCup.HomepageWidget.GroupPhase.GroupH
+        case "Group I": return String.WorldCup.HomepageWidget.GroupPhase.GroupI
+        case "Group J": return String.WorldCup.HomepageWidget.GroupPhase.GroupJ
+        case "Group K": return String.WorldCup.HomepageWidget.GroupPhase.GroupK
+        case "Group L": return String.WorldCup.HomepageWidget.GroupPhase.GroupL
+        default: return nil
         }
-        return isGroupStage
-            ? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-            : String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
+    }
+
+    /// Groups `matches` by calendar day (using `calendar`'s timezone). Matches
+    /// whose ISO date fails to parse are skipped. Returned groups are sorted
+    /// by day in ascending order; within each group, matches keep their input
+    /// order so equal-day matches stay in the response's chronological order.
+    private static func groupedByDay(
+        _ matches: [WorldCupMatchesResponse.Match],
+        calendar: Calendar
+    ) -> [(day: Date, matches: [WorldCupMatchesResponse.Match])] {
+        var byDay: [Date: [WorldCupMatchesResponse.Match]] = [:]
+        var order: [Date] = []
+        for match in matches {
+            guard let parsed = WorldCupMatch.parseDate(match.date) else { continue }
+            let day = calendar.startOfDay(for: parsed)
+            if byDay[day] == nil { order.append(day) }
+            byDay[day, default: []].append(match)
+        }
+        return order.sorted().map { ($0, byDay[$0]!) }
     }
 }

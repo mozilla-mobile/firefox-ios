@@ -15,6 +15,7 @@ struct HomepageTelemetry {
         case bookmark = "bookmark"
         case bookmarkShowAll = "bookmarks_show_all_button"
         case story = "story"
+        case worldCupWidget = "world_cup_widget"
 
         var sectionName: String {
             switch self {
@@ -26,6 +27,8 @@ struct HomepageTelemetry {
                 return "bookmarks"
             case .story:
                 return "stories"
+            case .worldCupWidget:
+                return self.rawValue
             }
         }
     }

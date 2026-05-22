@@ -34,26 +34,37 @@ struct WorldCupMatch: Equatable, Hashable {
     }
 
     init(_ match: WorldCupMatchesResponse.Match,
-         localeProvider: LocaleProvider = SystemLocaleProvider()) {
-        self.homeCode = match.homeTeam.key
-        self.awayCode = match.awayTeam.key
-        self.homeFlagAssetName = match.homeTeam.key
-        self.awayFlagAssetName = match.awayTeam.key
-        self.date = Self.formattedDate(match.date, locale: localeProvider.current)
+         localeProvider: LocaleProvider = SystemLocaleProvider(),
+         timeOnly: Bool = false) {
+        self.homeCode = match.homeTeam?.key ?? Self.missingTeamPlaceholder
+        self.awayCode = match.awayTeam?.key ?? Self.missingTeamPlaceholder
+        self.homeFlagAssetName = match.homeTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
+        self.awayFlagAssetName = match.awayTeam?.key ?? Self.missingTeamFlagAssetPlaceholder
+        self.date = Self.formattedDate(match.date, locale: localeProvider.current, timeOnly: timeOnly)
         self.score = Self.score(from: match)
     }
 
-    private static var isoFormatter: ISO8601DateFormatter {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        return formatter
+    static let missingTeamPlaceholder = "--"
+    static let missingTeamFlagAssetPlaceholder = "missingFlag"
+
+    /// Parses a merino-style ISO8601 match date (e.g. `2026-06-12T18:00:00+00:00`
+    /// or `2026-06-12T18:00:00.000Z`). Returns `nil` if neither formatter
+    /// accepts the string.
+    static func parseDate(_ iso: String) -> Date? {
+        let plain = ISO8601DateFormatter()
+        plain.formatOptions = [.withInternetDateTime]
+        if let date = plain.date(from: iso) { return date }
+
+        let frac = ISO8601DateFormatter()
+        frac.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return frac.date(from: iso)
     }
 
-    private static func formattedDate(_ iso: String, locale: Locale) -> String {
-        guard let date = isoFormatter.date(from: iso) else { return iso }
+    private static func formattedDate(_ iso: String, locale: Locale, timeOnly: Bool = false) -> String {
+        guard let date = parseDate(iso) else { return iso }
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.setLocalizedDateFormatFromTemplate("MMMdjmm")
+        formatter.setLocalizedDateFormatFromTemplate(timeOnly ? "jmm" : "MMMdjmm")
         return formatter.string(from: date)
     }
 

@@ -11,6 +11,73 @@ struct WorldCupCountry: Identifiable, Hashable {
     /// with a few API-specific overrides (e.g. "CDR" for DR Congo,
     /// "CVI" for Cabo Verde).
     let id: String
+
+    /// Returns the country name localized for the current locale, looked up
+    /// from the FIFA-style team code. ENG/SCO have no ISO alpha-2 of their
+    /// own (they're subdivisions of GB) — for those we use explicit
+    /// localized strings. Returns `nil` for unknown codes.
+    static func localizedName(forID id: String, localeProvider: LocaleProvider = SystemLocaleProvider()) -> String? {
+        switch id {
+        case "ENG":
+            return .WorldCup.CountryPicker.CountryName.England
+        case "SCO":
+            return .WorldCup.CountryPicker.CountryName.Scotland
+        default:
+            guard let isoCode = teamRegions[id] else { return nil }
+            return localeProvider.current.localizedString(forRegionCode: isoCode)
+        }
+    }
+
+    /// Map of FIFA team code → ISO 3166-1 alpha-2 region code, used to resolve
+    /// the localized country name via `Locale.localizedString(forRegionCode:)`.
+    private static let teamRegions: [String: String] = [
+        "ALG": "DZ",
+        "ARG": "AR",
+        "AUS": "AU",
+        "AUT": "AT",
+        "BEL": "BE",
+        "BIH": "BA",
+        "BRA": "BR",
+        "CAN": "CA",
+        "CDR": "CD",
+        "CHE": "CH",
+        "CIV": "CI",
+        "COL": "CO",
+        "CUW": "CW",
+        "CVI": "CV",
+        "CZE": "CZ",
+        "ECU": "EC",
+        "EGY": "EG",
+        "ESP": "ES",
+        "FRA": "FR",
+        "GER": "DE",
+        "GHA": "GH",
+        "HAI": "HT",
+        "HRV": "HR",
+        "IRN": "IR",
+        "IRQ": "IQ",
+        "JOR": "JO",
+        "JPN": "JP",
+        "KOR": "KR",
+        "KSA": "SA",
+        "MAR": "MA",
+        "MEX": "MX",
+        "NLD": "NL",
+        "NOR": "NO",
+        "NZL": "NZ",
+        "PAN": "PA",
+        "PAR": "PY",
+        "PRT": "PT",
+        "QAT": "QA",
+        "RSA": "ZA",
+        "SEN": "SN",
+        "SWE": "SE",
+        "TUN": "TN",
+        "TUR": "TR",
+        "URY": "UY",
+        "USA": "US",
+        "UZB": "UZ",
+    ]
 }
 
 struct WorldCupRegion: Identifiable {

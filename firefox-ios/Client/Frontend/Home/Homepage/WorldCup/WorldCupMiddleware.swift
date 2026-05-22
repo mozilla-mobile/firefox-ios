@@ -5,91 +5,89 @@
 import Foundation
 import Common
 import Redux
+import Shared
 
-/// The middleware responsible for all the actions related to the `WorldCup` feature.
-/// To keep it simple it dispatches only `WorldCupMiddlewareActionType.didUpdate`
-/// that is only reduced by `WorldCupSectionState`.
+/// Thin Redux adapter for the WorldCup feature. The polling lifecycle,
+/// `/matches` + `/live` plumbing, and view-model assembly live in
+/// `WorldCupFeed`. This middleware just routes Redux actions to the feed
+/// and dispatches the feed's `Snapshot` back into the store.
 @MainActor
 final class WorldCupMiddleware {
     private let worldCupStore: WorldCupStoreProtocol
-    private let apiClient: WorldCupAPIClientProtocol?
-    private var matchesFetchTask: Task<Void, Never>?
-    private var matches: [WorldCupMatches] = []
-    private var defaultMatchIndex = 0
+    private let feed: WorldCupFeed?
+    private var lastWindowUUID: WindowUUID?
 
-    init(
-        worldCupStore: WorldCupStoreProtocol = WorldCupStore(),
-        apiClient: WorldCupAPIClientProtocol? = try? WorldCupAPIClient()
-    ) {
+    convenience init() {
+        let store = WorldCupStore()
+        let feed = WorldCupMiddleware.makeDefaultFeed(store: store)
+        self.init(worldCupStore: store, feed: feed)
+    }
+
+    init(worldCupStore: WorldCupStoreProtocol, feed: WorldCupFeed?) {
         self.worldCupStore = worldCupStore
-        self.apiClient = apiClient
+        self.feed = feed
+        feed?.onUpdate = { [weak self] snapshot in
+            self?.dispatch(snapshot: snapshot)
+        }
     }
 
     lazy var worldCupProvider: Middleware<AppState> = { state, action in
+        self.lastWindowUUID = action.windowUUID
         switch action.actionType {
-        case HomepageActionType.initialize:
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+        case HomepageActionType.initialize,
+             HomepageMiddlewareActionType.enteredForeground,
+             WorldCupActionType.retryMatchesFetch:
+            self.startFeed(windowUUID: action.windowUUID)
         case WorldCupActionType.didChangeHomepageSettings:
-            self.dispatchUpdate(windowUUID: action.windowUUID)
+            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         case WorldCupActionType.removeHomepageCard:
             self.worldCupStore.setIsHomepageSectionEnabled(false)
-            self.dispatchUpdate(windowUUID: action.windowUUID)
+            self.feed?.stop()
+            self.dispatch(snapshot: .empty)
         case WorldCupActionType.selectTeam:
             let countryId = (action as? WorldCupAction)?.selectedCountryId
             self.worldCupStore.setSelectedTeam(countryId: countryId)
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
-        case WorldCupActionType.retryMatchesFetch:
-            self.scheduleMatchesFetch(windowUUID: action.windowUUID)
+            self.startFeed(windowUUID: action.windowUUID)
+        case WorldCupActionType.worldCupDidStart:
+            self.dispatch(snapshot: self.feed?.latestSnapshot ?? .empty)
         default:
             break
         }
     }
 
-    private func dispatchUpdate(
-        windowUUID: WindowUUID,
-        apiError: WorldCupLoadError? = nil
-    ) {
+    private func startFeed(windowUUID: WindowUUID) {
+        guard worldCupStore.isMilestone2, let feed else {
+            dispatch(snapshot: .empty)
+            return
+        }
+        feed.start()
+    }
+
+    private func dispatch(snapshot: WorldCupFeed.Snapshot) {
+        guard let windowUUID = lastWindowUUID else { return }
         store.dispatch(
             WorldCupAction(
                 windowUUID: windowUUID,
                 actionType: WorldCupMiddlewareActionType.didUpdate,
                 shouldShowHomepageWorldCupSection: worldCupStore.isFeatureEnabledAndSectionEnabled,
                 shouldShowMilestone2: worldCupStore.isMilestone2,
+                hasWorldCupStarted: worldCupStore.hasWorldCupStarted,
                 selectedCountryId: worldCupStore.selectedTeam,
-                matches: matches,
-                apiError: apiError,
-                defaultMatchIndex: defaultMatchIndex
+                matches: snapshot.matches,
+                apiError: snapshot.apiError,
+                defaultMatchIndex: snapshot.defaultMatchIndex
             )
         )
     }
 
-    private func scheduleMatchesFetch(windowUUID: WindowUUID) {
-        guard worldCupStore.isMilestone2, let apiClient else {
-            dispatchUpdate(windowUUID: windowUUID)
-            return
-        }
-        let selectedTeam = worldCupStore.selectedTeam
-        matchesFetchTask?.cancel()
-        matchesFetchTask = Task { [apiClient, weak self] in
-            let result = await apiClient.loadMatches(query: .matches, team: selectedTeam)
-            guard !Task.isCancelled else { return }
-            switch result {
-            case .success(let response):
-                guard let response else { return }
-                if selectedTeam != nil {
-                    self?.matches = [WorldCupMatches(response: response)]
-                    self?.defaultMatchIndex = 0
-                } else {
-                    let flattened = WorldCupMatches.flattened(response: response)
-                    self?.matches = flattened
-                    let previousCount = response.previous?.count ?? 0
-                    let liveCount = response.current?.count ?? 0
-                    self?.defaultMatchIndex = min(previousCount + liveCount, max(flattened.count - 1, 0))
-                }
-                self?.dispatchUpdate(windowUUID: windowUUID)
-            case .failure(let error):
-                self?.dispatchUpdate(windowUUID: windowUUID, apiError: error)
-            }
-        }
+    private static func makeDefaultFeed(store: WorldCupStoreProtocol) -> WorldCupFeed? {
+        guard let apiClient = WorldCupAPIClient.makeDefault() else { return nil }
+        let prefs = (AppContainer.shared.resolve() as Profile).prefs
+        let usesDevServerTimeline = prefs.stringForKey(PrefsKeys.HomepageSettings.WorldCupBaseHost) != nil
+        return WorldCupFeed(
+            apiClient: apiClient,
+            usesDevServerTimeline: usesDevServerTimeline,
+            selectedTeamProvider: { store.selectedTeam }
+        )
     }
 }

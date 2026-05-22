@@ -186,8 +186,12 @@ final class ASTranslationModelsFetcher: TranslationModelsFetcherProtocol {
     /// and model attachments for `Constants.pivotLanguage` -> deviceLanguage (e.g. `en` -> `fr`).
     /// NOTE: We don't fetch the reverse direction since for phase 1 we only support translating into device language.
     func prewarmResourcesForStartup() async {
-        guard let deviceLanguage = Locale.current.languageCode,
-          !deviceLanguage.isEmpty else {
+        let supported = Set(await fetchSupportedTargetLanguages())
+        let deviceLanguage = Locale.preferredLanguages.lazy.compactMap { tag in
+            PreferredTranslationLanguagesManager.matchingSupportedCode(for: tag, in: supported)
+        }.first
+
+        guard let deviceLanguage, !deviceLanguage.isEmpty else {
             logger.log("Device language code is unavailable.", level: .warning, category: .translations)
             return
         }

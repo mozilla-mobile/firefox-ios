@@ -27,6 +27,7 @@ enum BrowserNavigationDestination: Equatable {
     // Webpage views
     case link
     case newTab
+    case searchQuery(String)
 
     // System views
     case shareSheet(ShareSheetConfiguration)

@@ -90,6 +90,48 @@ final class WorldCupCellFactoryTests: XCTestCase {
         XCTAssertTrue(pages.first is WorldCupTimerView)
     }
 
+    func test_makePages_whenWorldCupStarted_withSelectedTeam_returnsOnlyMatchCards() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.hasWorldCupStarted = true
+        state.selectedCountryId = "FRA"
+        state.matches = [makeMatches(), makeMatches()]
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 2)
+        XCTAssertTrue(pages[0] is WorldCupMatchCardView)
+        XCTAssertTrue(pages[1] is WorldCupMatchCardView)
+    }
+
+    func test_makePages_whenWorldCupStarted_withoutSelectedTeam_returnsTimerFollowedByMatchCards() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.hasWorldCupStarted = true
+        state.selectedCountryId = nil
+        state.matches = [makeMatches()]
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 2)
+        XCTAssertTrue(pages[0] is WorldCupTimerView)
+        XCTAssertTrue(pages[1] is WorldCupMatchCardView)
+    }
+
+    func test_makePages_whenWorldCupNotStarted_withSelectedTeam_returnsTimerFollowedByMatchCards() {
+        var state = WorldCupSectionState(windowUUID: .XCTestDefaultUUID)
+        state.isMilestone2 = true
+        state.hasWorldCupStarted = false
+        state.selectedCountryId = "FRA"
+        state.matches = [makeMatches()]
+
+        let pages = WorldCupCellFactory.makePages(from: state)
+
+        XCTAssertEqual(pages.count, 2)
+        XCTAssertTrue(pages[0] is WorldCupTimerView)
+        XCTAssertTrue(pages[1] is WorldCupMatchCardView)
+    }
+
     private func makeMatches() -> WorldCupMatches {
         return WorldCupMatches(
             phaseTitle: "Group Stage",

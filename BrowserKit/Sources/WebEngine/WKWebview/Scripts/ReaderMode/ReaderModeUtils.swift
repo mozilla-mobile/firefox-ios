@@ -21,9 +21,9 @@ public struct ReaderModeUtils {
             .replacingOccurrences(of: "%READER-STYLE%", with: initialStyle.encode())
             .replacingOccurrences(of: "%READER-TITLE%", with: readabilityResult.title)
             .replacingOccurrences(of: "%READER-BYLINE%", with: readabilityResult.byline)
-            .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
             .replacingOccurrences(of: "%READER-LANGUAGE%", with: readabilityResult.language)
             .replacingOccurrences(of: "%READER-DIRECTION%", with: readabilityResult.direction.rawValue)
             .replacingOccurrences(of: "%READER-JSONLD%", with: readabilityResult.jsonld)
+            .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
     }
 }

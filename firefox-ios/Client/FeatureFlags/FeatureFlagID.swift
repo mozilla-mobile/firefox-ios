@@ -7,6 +7,7 @@ import Shared
 /// An enum describing the featureID of all features found in Nimbus.
 /// Please add new features alphabetically.
 enum FeatureFlagID: String, CaseIterable {
+    case adBlocker
     case addressAutofillEdit
     case addressBarMenu
     case adsClient
@@ -19,6 +20,7 @@ enum FeatureFlagID: String, CaseIterable {
     case firefoxJpGuideDefaultSite
     case firefoxSuggestFeature
     case hntSponsoredShortcuts
+    case homepageAddShortcutTile
     case homepageBookmarksSectionDefault
     case homepageJumpBackinSectionDefault
     case homepagePinnedHeader
@@ -76,6 +78,7 @@ enum FeatureFlagID: String, CaseIterable {
         case .hntSponsoredShortcuts: return FlagKeys.SponsoredShortcuts
         case .sentFromFirefox: return FlagKeys.SentFromFirefox
         case .startAtHome: return FlagKeys.StartAtHome
+        case .quickAnswers: return PrefsKeys.Settings.quickAnswersFeature
         default: return nil
         }
     }
@@ -84,7 +87,8 @@ enum FeatureFlagID: String, CaseIterable {
     // Add in alphabetical order.
     var debugKey: String? {
         switch self {
-        case    .addressBarMenu,
+        case    .adBlocker,
+                .addressBarMenu,
                 .adsClient,
                 .aiKillSwitch,
                 .appearanceMenu,
@@ -92,6 +96,7 @@ enum FeatureFlagID: String, CaseIterable {
                 .bookmarksSearchFeature,
                 .deeplinkOptimizationRefactor,
                 .downloadLiveActivities,
+                .homepageAddShortcutTile,
                 .homepagePinnedHeader,
                 .homepageSearchBar,
                 .homepageStoryCategories,

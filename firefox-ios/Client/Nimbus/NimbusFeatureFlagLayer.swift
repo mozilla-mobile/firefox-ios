@@ -21,6 +21,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
     public func checkNimbusConfigFor(_ featureID: FeatureFlagID) -> Bool {
         // For better code readability, please keep in alphabetical order by FeatureFlagID
         switch featureID {
+        case .adBlocker:
+            return checkAdBlockerFeature()
+
         case .addressAutofillEdit:
             return checkAddressAutofillEditing()
 
@@ -56,6 +59,9 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
         case .hntSponsoredShortcuts:
             return checkHNTSponsoredShortcutsFeature()
+
+        case .homepageAddShortcutTile:
+            return checkHomepageAddShortcutTile()
 
         case .homepageBookmarksSectionDefault:
             return checkHomepageBookmarksSectionDefault()
@@ -207,6 +213,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkHNTSponsoredShortcutsFeature() -> Bool {
         return nimbus.features.hntSponsoredShortcutsFeature.value().enabled
+    }
+
+    private func checkHomepageAddShortcutTile() -> Bool {
+        return nimbus.features.homepageRedesignFeature.value().addShortcutTile
     }
 
     private func checkHomepageBookmarksSectionDefault() -> Bool {
@@ -435,6 +445,10 @@ final class NimbusFeatureFlagLayer: NimbusFeatureFlagLayerProviding, Sendable {
 
     private func checkWorldCupWidgetFeature() -> Bool {
         return nimbus.features.worldCupWidgetFeature.value().enabled
+    }
+
+    private func checkAdBlockerFeature() -> Bool {
+        return nimbus.features.adBlockerFeature.value().enabled
     }
 
     func checkStartAtHomeConfiguration() -> StartAtHome {

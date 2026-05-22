@@ -23,6 +23,22 @@ final class WorldCupStoreTests: XCTestCase {
         try await super.tearDown()
     }
 
+    // MARK: - isFeatureEnabled
+
+    func test_isFeatureEnabled_whenNimbusFeatureEnabled_returnsTrue() {
+        setNimbusFeature(enabled: true)
+        let subject = createSubject()
+
+        XCTAssertTrue(subject.isFeatureEnabled)
+    }
+
+    func test_isFeatureEnabled_whenNimbusFeatureDisabled_returnsFalse() {
+        setNimbusFeature(enabled: false)
+        let subject = createSubject()
+
+        XCTAssertFalse(subject.isFeatureEnabled)
+    }
+
     // MARK: - isFeatureEnabledAndSectionEnabled
 
     func test_isFeatureEnabledAndSectionEnabled_withFeatureOnAndSectionOn_returnsTrue() {
@@ -98,6 +114,33 @@ final class WorldCupStoreTests: XCTestCase {
         XCTAssertFalse(subject.isMilestone2)
     }
 
+    // MARK: - hasWorldCupStarted
+
+    func test_hasWorldCupStarted_whenNowIsAfterStartDate_returnsTrue() {
+        setNimbusFeature(countdownTargetDate: "2026-06-11T19:00:00Z")
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-06-12T00:00:00Z"))
+        )
+
+        XCTAssertTrue(subject.hasWorldCupStarted)
+    }
+
+    func test_hasWorldCupStarted_whenNowIsBeforeStartDate_returnsFalse() {
+        setNimbusFeature(countdownTargetDate: "2026-06-11T19:00:00Z")
+        let subject = createSubject(
+            dateProvider: MockDateProvider(fixedDate: iso8601Date("2026-06-11T18:59:59Z"))
+        )
+
+        XCTAssertFalse(subject.hasWorldCupStarted)
+    }
+
+    func test_hasWorldCupStarted_whenStartDateIsInvalid_returnsFalse() {
+        setNimbusFeature(countdownTargetDate: "not-a-real-date")
+        let subject = createSubject(dateProvider: MockDateProvider(fixedDate: Date()))
+
+        XCTAssertFalse(subject.hasWorldCupStarted)
+    }
+
     // MARK: - setIsHomepageSectionEnabled
 
     func test_setIsHomepageSectionEnabled_writesToPrefs() {
@@ -124,6 +167,15 @@ final class WorldCupStoreTests: XCTestCase {
         )
     }
 
+    func test_setSelectedTeam_withNil_clearsPref() {
+        mockProfile.prefs.setString("ESP", forKey: PrefsKeys.Homepage.WorldCupSelectedCountry)
+        let subject = createSubject()
+
+        subject.setSelectedTeam(countryId: nil)
+
+        XCTAssertNil(mockProfile.prefs.stringForKey(PrefsKeys.Homepage.WorldCupSelectedCountry))
+    }
+
     // MARK: - Helpers
 
     private func createSubject(
@@ -138,10 +190,12 @@ final class WorldCupStoreTests: XCTestCase {
 
     private func setNimbusFeature(
         enabled: Bool = false,
-        milestone2EnableDate: String = "2026-05-10T19:00:00Z"
+        milestone2EnableDate: String = "2026-05-10T19:00:00Z",
+        countdownTargetDate: String = "2026-06-11T19:00:00Z"
     ) {
         FxNimbus.shared.features.worldCupWidgetFeature.with { _, _ in
             return WorldCupWidgetFeature(
+                countdownTargetDate: countdownTargetDate,
                 enabled: enabled,
                 milestone2EnableDate: milestone2EnableDate
             )

@@ -189,6 +189,110 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabled_appendsTileWhenThereIsRoom() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let stateWithRows = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                numberOfRows: 1,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+        let numberOfTilesPerRow = stateWithRows.topSitesState.numberOfTilesPerRow
+
+        let updatedState = HomepageState.reducer(
+            stateWithRows,
+            TopSitesAction(
+                topSites: createSites(count: numberOfTilesPerRow - 1),
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let section = HomepageSection.topSites(nil, numberOfTilesPerRow, false)
+        let items = dataSource.snapshot().itemIdentifiers(inSection: section)
+        XCTAssertEqual(items.count, numberOfTilesPerRow)
+        let expectedTopSiteTitles = (0..<max(numberOfTilesPerRow - 1, 0)).map { "Title \($0)" }
+        XCTAssertEqual(topSiteTitles(from: items), expectedTopSiteTitles)
+        guard case .addShortcutTile = items.last else {
+            return XCTFail("Expected Add Shortcut tile to be the last shortcut item")
+        }
+    }
+
+    @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabled_displacesTileWhenShortcutsFillVisibleSlots() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        let stateWithRows = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                numberOfRows: 1,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+        let numberOfTilesPerRow = stateWithRows.topSitesState.numberOfTilesPerRow
+
+        let updatedState = HomepageState.reducer(
+            stateWithRows,
+            TopSitesAction(
+                topSites: createSites(count: numberOfTilesPerRow),
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+
+        dataSource.updateSnapshot(state: updatedState, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let section = HomepageSection.topSites(nil, numberOfTilesPerRow, true)
+        let items = dataSource.snapshot().itemIdentifiers(inSection: section)
+        XCTAssertEqual(items.count, numberOfTilesPerRow)
+        XCTAssertEqual(topSiteTitles(from: items), (0..<numberOfTilesPerRow).map { "Title \($0)" })
+        XCTAssertFalse(items.contains { item in
+            guard case .addShortcutTile = item else { return false }
+            return true
+        })
+    }
+
+    @MainActor
+    func test_updateSnapshot_withAddShortcutTileFlagEnabledAndNoTopSites_showsAddShortcutTile() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+
+        var state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            TopSitesAction(
+                topSites: [],
+                shouldShowAddShortcutTile: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesMiddlewareActionType.retrievedUpdatedSites
+            )
+        )
+        state = HomepageState.reducer(
+            state,
+            TopSitesAction(
+                numberOfRows: 1,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: TopSitesActionType.updatedNumberOfRows
+            )
+        )
+
+        dataSource.updateSnapshot(state: state, jumpBackInDisplayConfig: mockSectionConfig)
+
+        let section = HomepageSection.topSites(nil, state.topSitesState.numberOfTilesPerRow, false)
+        let items = dataSource.snapshot().itemIdentifiers(inSection: section)
+        XCTAssertEqual(items.count, 1)
+        guard case .addShortcutTile = items.first else {
+            return XCTFail("Expected Add Shortcut tile to be the only shortcut item")
+        }
+    }
+
+    @MainActor
     func test_updateSnapshot_withValidState_returnPocketStories() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
@@ -470,6 +574,13 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         items.compactMap {
             guard case .merino(let story, _) = $0 else { return nil }
             return story.title
+        }
+    }
+
+    private func topSiteTitles(from items: [HomepageItem]) -> [String] {
+        items.compactMap {
+            guard case .topSite(let topSite, _) = $0 else { return nil }
+            return topSite.title
         }
     }
 

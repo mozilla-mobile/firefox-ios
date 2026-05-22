@@ -67,6 +67,12 @@ final class MainMenuScreen {
         bookmarks.waitAndTap()
     }
 
+    func tapBookmarkPage() {
+        let bookmarkPage = sel.BOOKMARK_PAGE.element(in: app)
+        BaseTestCase().mozWaitForElementToExist(bookmarkPage)
+        bookmarkPage.waitAndTap()
+    }
+
     func tapHistory() {
         let history = sel.HISTORY_BUTTON.element(in: app)
         BaseTestCase().mozWaitForElementToExist(history)

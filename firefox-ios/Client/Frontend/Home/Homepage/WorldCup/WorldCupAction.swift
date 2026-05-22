@@ -11,6 +11,7 @@ struct WorldCupAction: Action {
     let actionType: any ActionType
     let shouldShowHomepageWorldCupSection: Bool
     let shouldShowMilestone2: Bool
+    let hasWorldCupStarted: Bool
     let selectedCountryId: String?
     let matches: [WorldCupMatches]
     let apiError: WorldCupLoadError?
@@ -24,6 +25,7 @@ struct WorldCupAction: Action {
         actionType: any ActionType,
         shouldShowHomepageWorldCupSection: Bool = false,
         shouldShowMilestone2: Bool = false,
+        hasWorldCupStarted: Bool = false,
         selectedCountryId: String? = nil,
         matches: [WorldCupMatches] = [],
         apiError: WorldCupLoadError? = nil,
@@ -33,6 +35,7 @@ struct WorldCupAction: Action {
         self.actionType = actionType
         self.shouldShowHomepageWorldCupSection = shouldShowHomepageWorldCupSection
         self.shouldShowMilestone2 = shouldShowMilestone2
+        self.hasWorldCupStarted = hasWorldCupStarted
         self.selectedCountryId = selectedCountryId
         self.matches = matches
         self.apiError = apiError
@@ -45,6 +48,7 @@ enum WorldCupActionType: ActionType {
     case removeHomepageCard
     case selectTeam
     case retryMatchesFetch
+    case worldCupDidStart
 }
 
 enum WorldCupMiddlewareActionType: ActionType {

@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController,
     var searchController: SearchViewController?
     var searchSessionState: SearchSessionState?
     var searchLoader: SearchLoader?
-    var findInPageBar: FindInPageBar?
+    var iOS15FindInPageBar: FindInPageBar? /* TODO: Remove once we drop iOS 15 support */
     var zoomPageBar: ZoomPageBar?
     var addressBarPanGestureHandler: AddressBarPanGestureHandler?
     var microsurvey: MicrosurveyPromptView?
@@ -1484,6 +1484,13 @@ class BrowserViewController: UIViewController,
         coordinator.animate(alongsideTransition: { [self] context in
             legacyScrollController?.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
+            if !isSnapKitRemovalEnabled {
+                updateViewConstraints()
+            } else {
+                updateConstraintsForKeyboard()
+                updateBottomContentStackViewConstraints()
+            }
+            searchController?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
             legacyScrollController?.traitCollectionDidChange()
             legacyScrollController?.setMinimumZoom()
@@ -1629,6 +1636,9 @@ class BrowserViewController: UIViewController,
                 : [topBlurView, bottomBlurView, topTouchArea, statusBarOverlay, header,
                    bottomContentStackView, bottomContainer, overKeyboardContainer]
             frontViews.filter { $0.superview === view }.forEach(view.bringSubviewToFront)
+            if let searchView = searchController?.view, searchView.superview === view {
+                view.bringSubviewToFront(searchView)
+            }
         }
 
         guard let homepageViewController = contentContainer.contentController as? HomepageViewController else { return }
@@ -1726,14 +1736,14 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitOverKeyboardContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
+        let existingOffset = overKeyboardContainerConstraint?.layoutConstraint?.constant ?? 0
+
         overKeyboardContainer.snp.remakeConstraints { make in
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-                scrollController.overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
-            } else {
-                let constraint = make.bottom.equalTo(bottomContainer.snp.top).constraint
-                overKeyboardContainerConstraint = ConstraintReference(snapKit: constraint)
-            }
+            // Apply same constraints update we do in native path we 
+            let constraint = make.bottom.equalTo(bottomContainer.snp.top).offset(existingOffset).constraint
+            let reference = ConstraintReference(snapKit: constraint)
+            overKeyboardContainerConstraint = reference
+            (scrollController as? LegacyTabScrollProvider)?.overKeyboardContainerConstraint = reference
 
             if !isBottomSearchBar, zoomPageBar != nil {
                 make.height.greaterThanOrEqualTo(0)
@@ -1748,15 +1758,13 @@ class BrowserViewController: UIViewController,
     private func updateSnapKitBottomContainerConstraints() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        bottomContainer.snp.remakeConstraints { make in
-            let constraint = make.bottom.equalTo(view.snp.bottom).constraint
-            let constraintReference = ConstraintReference(snapKit: constraint)
+        let existingOffset = bottomContainerConstraint?.layoutConstraint?.constant ?? 0
 
-            if let scrollController = scrollController as? LegacyTabScrollProvider {
-                scrollController.bottomContainerConstraint = constraintReference
-            } else {
-                bottomContainerConstraint = constraintReference
-            }
+        bottomContainer.snp.remakeConstraints { make in
+            let constraint = make.bottom.equalTo(view.snp.bottom).offset(existingOffset).constraint
+            let reference = ConstraintReference(snapKit: constraint)
+            bottomContainerConstraint = reference
+            (scrollController as? LegacyTabScrollProvider)?.bottomContainerConstraint = reference
             make.leading.trailing.equalTo(view)
         }
     }
@@ -1776,9 +1784,7 @@ class BrowserViewController: UIViewController,
     private func updateSnapkitConstraintsForKeyboard() {
         guard !isSnapKitRemovalEnabled else { return }
 
-        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
-            scrollController.hideToolbars(animated: false)
-        } else {
+        if tabManager.selectedTab?.isFindInPageMode == false {
             adjustBottomSearchBarForKeyboard()
         }
     }
@@ -2658,7 +2664,14 @@ class BrowserViewController: UIViewController,
             lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
-            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(prefs: profile.prefs),
+            translationConfiguration: tab.translationConfiguration ?? TranslationConfiguration(
+                prefs: profile.prefs,
+                isUserSettingEnabled: store.state.componentState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: windowUUID
+                )?.isTranslationsEnabled ?? true
+            ),
             windowUUID: windowUUID,
             actionType: ToolbarActionType.urlDidChange)
         store.dispatch(action)
@@ -2761,6 +2774,8 @@ class BrowserViewController: UIViewController,
                 return
             }
             navigationHandler?.openInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
+        case .searchQuery(let query):
+            handle(query: query, isPrivate: type.isPrivate ?? false, shouldOpenNewTab: type.selectNewTab ?? true)
         case .shareSheet(let config):
             navigationHandler?.showShareSheet(
                 shareType: config.shareType,
@@ -3380,9 +3395,11 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Handle Deeplink open URL / query
 
-    func handle(query: String, isPrivate: Bool) {
+    func handle(query: String, isPrivate: Bool, shouldOpenNewTab: Bool = true) {
         cancelEditMode()
-        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        if shouldOpenNewTab {
+            openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        }
         openBrowser(searchTerm: query)
     }
 
@@ -4427,7 +4444,7 @@ extension BrowserViewController: LegacyTabDelegate {
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(isVisible: true, withSearchText: selection)
-        findInPageBar?.text = selection
+        iOS15FindInPageBar?.text = selection
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
@@ -4997,15 +5014,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        if #available(iOS 26.0, *), isBottomSearchBar {
-            store.dispatch(
-                ToolbarAction(
-                    scrollAlpha: 1,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-                )
-            )
-        }
+        guard !isEditingBottomAddressBar else { return }
+
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5040,7 +5050,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
             )
         }
         tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
-                                              doesFindInPageBarExist: findInPageBar != nil)
+                                              doesFindInPageBarExist: iOS15FindInPageBar != nil)
         guard isSwipingTabsEnabled else { return }
         addressBarPanGestureHandler?.enablePanGestureOnHomepageIfNeeded()
     }
@@ -5077,6 +5087,13 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
         guard shouldCancelEditing else { return }
         overlayManager.cancelEditing(shouldCancelLoading: false)
+    }
+
+    private var isEditingBottomAddressBar: Bool {
+        guard searchBarPosition == .bottom else { return false }
+        return store.state
+            .componentState(ToolbarState.self, for: .toolbar, window: windowUUID)?
+            .addressToolbar.isEditing ?? false
     }
 
     private var shouldCancelEditing: Bool {

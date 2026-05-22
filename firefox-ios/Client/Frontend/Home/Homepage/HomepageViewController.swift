@@ -640,6 +640,10 @@ final class HomepageViewController: UIViewController,
             return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
                 cell.configure(site, position: indexPath.row, theme: currentTheme, textColor: textColor)
             }
+        case .addShortcutTile(let textColor):
+            return configuredCell(cellType: TopSiteCell.self, at: indexPath) { cell in
+                cell.configureAddShortcutTile(theme: currentTheme, textColor: textColor)
+            }
         case .topSiteEmpty:
             return configuredCell(cellType: EmptyTopSiteCell.self, at: indexPath) { cell in
                 cell.applyTheme(theme: currentTheme)
@@ -660,9 +664,9 @@ final class HomepageViewController: UIViewController,
             }
         case .merino(let story, _):
             return configureMerinoCell(story, at: indexPath)
-        case .worldcupCard(let state):
+        case .worldcupCard:
             return configuredCell(cellType: WorldCupCell.self, at: indexPath) { cell in
-                cell.configure(with: state, theme: currentTheme) { [weak self] height in
+                cell.configure(with: homepageState.worldcupState, theme: currentTheme) { [weak self] height in
                     self?.sectionProvider.setWorldCupCellHeight(height)
                     self?.relayoutForCellHeightChange()
                 }
@@ -686,7 +690,7 @@ final class HomepageViewController: UIViewController,
 
     private func relayoutForCellHeightChange() {
         guard let collectionView else { return }
-        collectionView.performBatchUpdates(nil)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     private func configurePrivacyNoticeCell(cell: PrivacyNoticeCell) {
@@ -1001,7 +1005,7 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        if section.canHandleLongPress {
+        if section.canHandleLongPress && item.canHandleLongPress {
             navigateToContextMenu(for: item, sourceView: sourceView)
         }
     }
@@ -1264,9 +1268,9 @@ final class HomepageViewController: UIViewController,
             )
             return
         }
-        dispatchDidSelectCardItemAction(with: item)
         switch item {
         case .topSite(let config, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: config.site.url.asURL,
@@ -1280,11 +1284,13 @@ final class HomepageViewController: UIViewController,
                 actionType: TopSitesActionType.tapOnHomepageTopSitesCell
             )
         case .searchBar:
+            dispatchDidSelectCardItemAction(with: item)
             dispatchNavigationBrowserAction(
                 with: NavigationDestination(.homepageZeroSearch),
                 actionType: NavigationBrowserActionType.tapOnHomepageSearchBar
             )
         case .jumpBackIn(let config):
+            dispatchDidSelectCardItemAction(with: item)
             store.dispatch(
                 JumpBackInAction(
                     tab: config.tab,
@@ -1293,6 +1299,7 @@ final class HomepageViewController: UIViewController,
                 )
             )
         case .bookmark(let config):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: URIFixup.getURL(config.site.url),
@@ -1301,6 +1308,7 @@ final class HomepageViewController: UIViewController,
             )
             dispatchNavigationBrowserAction(with: destination, actionType: NavigationBrowserActionType.tapOnCell)
         case .merino(let story, _):
+            dispatchDidSelectCardItemAction(with: item)
             let destination = NavigationDestination(
                 .link,
                 url: story.url,

@@ -68,6 +68,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Individual Screen Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035806
     func testModernTermsOfServiceScreen() {
         launchApp()
 
@@ -81,6 +82,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         onboardingScreen.assertModernWelcomeScreen()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035645
     func testModernKitOnboardingToolbarPlacementTop() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -117,6 +119,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
         XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4038428
     func testModernKitOnboardingToolbarPlacementBottom() throws {
         if iPad() {
             throw XCTSkip("Toolbar customization is not available on iPad")
@@ -182,6 +185,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Sync Flow Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4036954
     func testModernKitOnboardingSyncFlow() throws {
         launchApp()
 
@@ -246,6 +250,7 @@ class ModernKitOnboardingTests: FeatureFlaggedTestSuite {
 
     // MARK: - Navigation Tests
 
+    // https://mozilla.testrail.io/index.php?/cases/view/4035643
     func testModernKitOnboardingSkipButton() {
         launchApp()
 

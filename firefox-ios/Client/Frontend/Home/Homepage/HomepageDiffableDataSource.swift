@@ -47,6 +47,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         case privacyNotice
         case messageCard(MessageCardConfiguration)
         case topSite(TopSiteConfiguration, TextColor?)
+        case addShortcutTile(TextColor?)
         case topSiteEmpty
         case searchBar
         case jumpBackIn(JumpBackInTabConfiguration)
@@ -57,7 +58,7 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         /// a filtered feed and in the full "All" feed as one continuous item, which causes it to preserve
         /// that story's on-screen position as stories are inserted above it.
         case merino(MerinoStoryConfiguration, String?)
-        case worldcupCard(WorldCupSectionState)
+        case worldcupCard
         case spacer
 
         static var cellTypes: [ReusableCell.Type] {
@@ -89,8 +90,19 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
                 return .bookmark
             case .merino:
                 return .story
+            case .worldcupCard:
+                return .worldCupWidget
             default:
                 return nil
+            }
+        }
+
+        var canHandleLongPress: Bool {
+            switch self {
+            case .addShortcutTile:
+                return false
+            default:
+                return true
             }
         }
     }
@@ -138,9 +150,10 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         if state.worldcupState.shouldShowSection {
             snapshot.appendSections([.worldcup(textColor)])
             snapshot.appendItems(
-                [.worldcupCard(state.worldcupState)],
+                [.worldcupCard],
                 toSection: .worldcup(textColor)
             )
+            snapshot.reconfigureItems([.worldcupCard])
         }
 
         if let (tabs, configuration) = getJumpBackInTabs(with: state.jumpBackInState, and: jumpBackInDisplayConfig) {
@@ -180,14 +193,22 @@ final class HomepageDiffableDataSource: UICollectionViewDiffableDataSource<Homep
         and textColor: TextColor?
     ) -> TopSitesSnapshotData? {
         guard topSitesState.shouldShowSection else { return nil }
-        let topSites: [HomeItem] = topSitesState.topSitesData.prefix(
-            topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        let maxVisibleItemCount = topSitesState.numberOfRows * topSitesState.numberOfTilesPerRow
+        guard maxVisibleItemCount > 0 else { return nil }
+
+        let topSitesItems: [HomeItem] = topSitesState.topSitesData.prefix(
+            maxVisibleItemCount
         ).compactMap {
             .topSite($0, textColor)
         }
-        guard !topSites.isEmpty else { return nil }
+        let allItems = topSitesState.shouldShowAddShortcutTile
+            ? topSitesItems + [.addShortcutTile(textColor)]
+            : topSitesItems
+        let visibleItems = Array(allItems.prefix(maxVisibleItemCount))
+        guard !visibleItems.isEmpty else { return nil }
+
         return TopSitesSnapshotData(
-            items: topSites,
+            items: visibleItems,
             numberOfTilesPerRow: topSitesState.numberOfTilesPerRow,
             shouldShowSectionHeader: topSitesState.shouldShowSectionHeader
         )

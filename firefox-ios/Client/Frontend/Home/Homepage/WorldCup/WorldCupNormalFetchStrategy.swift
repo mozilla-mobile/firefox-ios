@@ -4,29 +4,50 @@
 
 import Foundation
 
-/// Default fetch strategy. A single attempt with no retry. Maps any thrown
-/// error (FFI, decode, unexpected) into `WorldCupLoadError` so the UI can
-/// distinguish network failures from other failures.
+/// Single-attempt fetch strategy. Each stream yields exactly one result —
+/// success / empty / failure — and finishes. No retry, no backoff. Maps any
+/// thrown FFI/decode error into `WorldCupLoadError` so the UI can branch.
+///
+/// Useful for one-shot consumers (e.g. teams roster) and as a default in
+/// tests that don't want polling cadence in the way.
 struct WorldCupNormalFetchStrategy: WorldCupFetchStrategyProtocol {
-    func loadMatches(using client: WorldCupAPIClientProtocol,
-                     query: WorldCupQuery,
-                     team: String?) async -> Result<WorldCupMatchesResponse?, WorldCupLoadError> {
-        await Task.detached(priority: .userInitiated) {
-            () -> Result<WorldCupMatchesResponse?, WorldCupLoadError> in
-            do {
-                return .success(try client.fetch(query, team: team))
-            } catch {
-                return .failure(WorldCupLoadError.from(error))
-            }
-        }.value
+    func matchesStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupMatchesStream {
+        Self.singleShotStream { try client.fetchMatches(team: team) }
+    }
+
+    func liveStream(using client: WorldCupAPIClientProtocol, team: String?) -> WorldCupLiveStream {
+        Self.singleShotStream { try client.fetchLive(team: team) }
     }
 
     func loadTeams(using client: WorldCupAPIClientProtocol,
                    team: String?) async -> Result<WorldCupTeamsResponse?, WorldCupLoadError> {
+        await Self.singleAttempt { try client.fetchTeams(team: team) }
+    }
+
+    /// Runs the blocking FFI call off-main on a userInitiated detached task,
+    /// then yields the mapped result once and finishes the stream.
+    private static func singleShotStream<Response: Sendable>(
+        _ fetch: @escaping @Sendable () throws -> Response?
+    ) -> AsyncStream<Result<Response?, WorldCupLoadError>> {
+        AsyncStream { continuation in
+            let task = Task.detached(priority: .userInitiated) {
+                let result = await singleAttempt(fetch)
+                if !Task.isCancelled {
+                    continuation.yield(result)
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    static func singleAttempt<Response: Sendable>(
+        _ fetch: @escaping @Sendable () throws -> Response?
+    ) async -> Result<Response?, WorldCupLoadError> {
         await Task.detached(priority: .userInitiated) {
-            () -> Result<WorldCupTeamsResponse?, WorldCupLoadError> in
+            () -> Result<Response?, WorldCupLoadError> in
             do {
-                return .success(try client.fetchTeams(team: team))
+                return .success(try fetch())
             } catch {
                 return .failure(WorldCupLoadError.from(error))
             }

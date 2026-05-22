@@ -49,6 +49,29 @@ final class PreferredTranslationLanguagesManager {
         prefs.setString(languages.joined(separator: ","), forKey: PrefsKeys.Settings.translationPreferredLanguages)
     }
 
+    // MARK: - Language Matching
+
+    /// Returns the most specific code in `supported` that matches a BCP-47 tag.
+    /// Tries the full tag, then language + script subtag, then language alone.
+    /// Required for languages where the script is meaningful (e.g. `zh-Hans` vs `zh`):
+    /// Remote Settings stores `zh-Hans`, but `Locale(identifier:).languageCode` drops the script.
+    nonisolated static func matchingSupportedCode(
+        for bcp47Tag: String,
+        in supported: Set<String>
+    ) -> String? {
+        if supported.contains(bcp47Tag) { return bcp47Tag }
+        let parts = bcp47Tag.split(separator: "-")
+        // BCP-47 script subtags are exactly 4 characters (e.g. "Hans", "Latn").
+        if parts.count >= 2, parts[1].count == 4 {
+            let languageScript = "\(parts[0])-\(parts[1])"
+            if supported.contains(languageScript) { return languageScript }
+        }
+        if let language = parts.first, supported.contains(String(language)) {
+            return String(language)
+        }
+        return nil
+    }
+
     // MARK: - Private
 
     private func loadStoredLanguages() -> [String]? {
@@ -62,11 +85,9 @@ final class PreferredTranslationLanguagesManager {
     private func buildInitialLanguages(supportedTargetLanguages: [String]) -> [String] {
         let supportedSet = Set(supportedTargetLanguages)
 
-        // Extract base language codes (e.g. "en-US" → "en") and filter against supported list.
         let preferred = Locale.preferredLanguages
-            .compactMap { tag -> String? in
-                let base = Locale(identifier: tag).languageCode ?? tag
-                return supportedSet.contains(base) ? base : nil
+            .compactMap { tag in
+                PreferredTranslationLanguagesManager.matchingSupportedCode(for: tag, in: supportedSet)
             }
 
         // Deduplicate while preserving order.
