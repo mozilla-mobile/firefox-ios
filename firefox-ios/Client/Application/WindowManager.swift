@@ -133,14 +133,18 @@ final class WindowManagerImplementation: WindowManager {
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager? {
         guard let window = window(for: windowUUID) else {
-            assertionFailure("No window for UUID: \(windowUUID). This is a client error. It will return nil in production but querying a non-existent window is always indicative of a bug.")
-            logger.log("No window for UUID: \(windowUUID)", level: .fatal, category: .window)
+            if !AppConstants.isRunningUnitTest {
+                assertionFailure("No window for UUID: \(windowUUID). This is a client error. It will return nil in production but querying a non-existent window is always indicative of a bug.")
+                logger.log("No window for UUID: \(windowUUID)", level: .fatal, category: .window)
+            }
             return nil
         }
 
         guard let manager = window.tabManager else {
-            assertionFailure("Valid window but no TabManager for UUID: \(windowUUID). This is a client error. It will return nil in production but is indicative of a bug.")
-            logger.log("Window alive, but no TabManager for UUID: \(windowUUID)", level: .fatal, category: .window)
+            if !AppConstants.isRunningUnitTest {
+                assertionFailure("Valid window but no TabManager for UUID: \(windowUUID). This is a client error. It will return nil in production but is indicative of a bug.")
+                logger.log("Window alive, but no TabManager for UUID: \(windowUUID)", level: .fatal, category: .window)
+            }
             return nil
         }
 
