@@ -1478,14 +1478,14 @@ extension String {
                     value: "Add Shortcut",
                     comment: "The title for the tile on the Firefox homepage shortcuts section that lets users add a new website shortcut.")
                 public static let AlertTitle = MZLocalizedString(
-                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153",
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertTitle.v153.v2",
                     tableName: "FirefoxHomepage",
-                    value: "Enter a Website URL",
+                    value: "Add Shortcut",
                     comment: "The title for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
                 public static let AlertDescription = MZLocalizedString(
-                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153",
+                    key: "FirefoxHomepage.Shortcuts.AddShortcut.AlertDescription.v153.v2",
                     tableName: "FirefoxHomepage",
-                    value: "Enter the URL and name for the website.",
+                    value: "Enter the URL for the website.",
                     comment: "The description for the alert where users enter a website URL to add a new shortcut to the Firefox homepage shortcuts section.")
                 public static let URLTextFieldPlaceholder = MZLocalizedString(
                     key: "FirefoxHomepage.Shortcuts.AddShortcut.URLTextFieldPlaceholder.v153",
