@@ -31,7 +31,6 @@ final class GenericItemCellViewTests: XCTestCase {
         theme: Theme? = nil,
         onTap: @escaping () -> Void = {}
     ) -> GenericItemCellView {
-
         let subject = GenericItemCellView(
             title: title,
             image: image,
