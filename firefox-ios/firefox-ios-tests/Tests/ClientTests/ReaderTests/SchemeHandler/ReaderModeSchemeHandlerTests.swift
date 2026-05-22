@@ -174,7 +174,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         // PageRoute always throws an error in this PR,
         // but if the request passed scheme/host validation then it wasn't rejected as
         // unsupportedScheme, unsupportedHost, or badURL
-        // TODO: Update this test once PageRoute is properly implemented
+        // TODO: FXIOS-15783 Update this test once PageRoute is properly implemented
         let error = task.failedErrors.first as? TinyRouterError
         XCTAssertNotEqual(error, .unsupportedScheme(expected: ReaderModeSchemeHandler.scheme, found: "readermode"))
         XCTAssertNotEqual(error, .unsupportedHost(expected: ReaderModeSchemeHandler.host, found: "app"))

@@ -1,9 +1,15 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
-/// Serves only the static assets that Reader.html and Reader.css reference.
-/// Restricted to an explicit allowlist so a compromised content process can't
-/// probe arbitrary bundle resources via the readermode:// scheme.
+/// Serves static assets (CSS, fonts) needed by the reader mode page.
+///
+/// When the rendered article HTML loads, WebKit requests resources like
+/// `readermode://app/reader-mode/styles/Reader.css` and font files.
+/// These don't match the `"/app/page"` route, so they fall through to this default route.
+///
+/// Only files on the allowlist are served. Reader mode content runs in the web view's
+/// content process, so arbitrary `readermode://` requests could be crafted — the
+/// allowlist prevents access to other bundle resources.
 
 struct ReaderFileRoute: TinyRoute {
     private static let allowedFiles: Set<String> = [

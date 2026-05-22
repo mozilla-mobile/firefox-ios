@@ -81,10 +81,11 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
                                 level: .debug,
                                 category: .library)
             } catch {
-                urlSchemeTask.didFailWithError(mapError(error))
+                urlSchemeTask.didFailWithError(TinyRouterError.mapError(error))
                 self.logger.log("Reader-mode scheme task failed.",
-                                level: .debug,
-                                category: .library)
+                                level: .warning,
+                                category: .library,
+                                extra: ["error type": "\(TinyRouterError.mapError(error))"])
             }
         }
         requestTasks[id] = requestTask
@@ -104,14 +105,6 @@ final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
         task.didReceive(httpResponse)
         task.didReceive(reply.body)
         task.didFinish()
-    }
-
-    /// Normalizes any thrown `Error` into a `TinyRouterError`.
-    private func mapError(_ error: Error) -> TinyRouterError {
-        if let tinyError = error as? TinyRouterError {
-            return tinyError
-        }
-        return .unknown(String(describing: error))
     }
 
     /// Validates an incoming request and returns a well-formed URL,
