@@ -5,10 +5,10 @@
 import UIKit
 import Common
 
-enum DiskImageStoreErrorCase: Error {
-    case notFound(description: String)
-    case invalidImageData(description: String)
-    case cannotWrite(description: String)
+enum DiskImageStoreErrorCase: Error, Equatable {
+    case notFound
+    case invalidImageData
+    case cannotWrite
 }
 
 public protocol DiskImageStore: Sendable {
@@ -68,7 +68,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
     public func getImageForKey(_ key: String) async throws -> UIImage {
         if !keys.contains(key) {
-            throw DiskImageStoreErrorCase.notFound(description: "Image key not found")
+            throw DiskImageStoreErrorCase.notFound
         }
 
         let imagePath = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
@@ -76,7 +76,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         if let image = UIImage(data: data, scale: 1.0) {
             return image
         } else {
-            throw DiskImageStoreErrorCase.invalidImageData(description: "Invalid image data")
+            throw DiskImageStoreErrorCase.invalidImageData
         }
     }
 
@@ -84,7 +84,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
 
         guard let data = scaleImageFrom3xTo1x(image).jpegData(compressionQuality: quality) else {
-            throw DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file")
+            throw DiskImageStoreErrorCase.cannotWrite
         }
 
         try data.write(to: imageURL, options: .noFileProtection)
@@ -94,19 +94,22 @@ public actor DefaultDiskImageStore: DiskImageStore {
     private func scaleImageFrom3xTo1x(_ image: UIImage) -> UIImage {
         let targetScale: CGFloat = 1.0
 
-        if image.scale > targetScale {
-            let newSize = CGSize(
-                width: image.size.width * (targetScale / image.scale),
-                height: image.size.height * (targetScale / image.scale)
-            )
-
-            return UIGraphicsImageRenderer(size: newSize)
-                .image { context in
-                    image.draw(in: CGRect(origin: .zero, size: newSize))
-                }
+        // FXIOS-15902 - Guard against invalid images that would crash UIGraphicsImageRenderer
+        guard image.scale > targetScale,
+              image.size.width > 0,
+              image.size.height > 0,
+              image.cgImage != nil else {
+            return image
         }
 
-        return image
+        let newSize = CGSize(
+            width: image.size.width * (targetScale / image.scale),
+            height: image.size.height * (targetScale / image.scale)
+        )
+
+        return UIGraphicsImageRenderer(size: newSize).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
     }
 
     public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
