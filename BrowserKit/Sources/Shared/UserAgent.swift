@@ -128,6 +128,8 @@ struct CustomUserAgentConstant {
     static let customDesktopUAForDomain = [
         // FXIOS-10251: Do not appear as desktop/Safari for firefox.com/pair
         "firefox.com": defaultMobileUA,
+        // FXIOS-15905: Do not identify as (desktop) Safari on addons.m.o, bugzilla.m.o, support.m.o for correct info
+        "mozilla.org": defaultMobileUA,
         // TODO: FXIOS-15483 [webcompat] Docusign forms broken using desktop UA
         "docusign.com": defaultMobileUA,
         "docusign.net": defaultMobileUA
