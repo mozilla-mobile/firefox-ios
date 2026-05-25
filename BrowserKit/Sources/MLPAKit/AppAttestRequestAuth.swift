@@ -18,7 +18,7 @@ public struct AppAttestRequestAuth: RequestAuthProtocol {
 
     public init(
         appAttestClient: AppAttestClient,
-        bundleIdentifier: String = AppInfo.bundleIdentifier,
+        bundleIdentifier: String,
         serviceType: MLPAServiceType
     ) {
         self.appAttestClient = appAttestClient

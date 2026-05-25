@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import CryptoKit
-import DeviceCheck
+import Foundation
 
 /// Manages the App Attest attestation and assertion flows.
 ///
@@ -22,7 +22,7 @@ public struct AppAttestClient: Sendable {
     private let remoteServer: AppAttestRemoteServerProtocol
     private let keyStore: AppAttestKeyIDStore
 
-    public init(appAttestService: AppAttestServiceProtocol = DCAppAttestService.shared,
+    public init(appAttestService: AppAttestServiceProtocol,
                 remoteServer: AppAttestRemoteServerProtocol,
                 keyStore: AppAttestKeyIDStore = KeychainAppAttestKeyIDStore()) throws {
         guard appAttestService.isSupported else {
