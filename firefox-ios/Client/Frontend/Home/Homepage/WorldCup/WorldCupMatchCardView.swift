@@ -190,6 +190,14 @@ final class WorldCupMatchCardView: UIView, ThemeApplicable {
         liveLabelContainer.isHidden = !model.isLive
     }
 
+    /// Hardcoded test hook for the winner backdrop: returns `true` whenever any
+    /// featured match involves the USA, so we can preview the winner UI without
+    /// real data.
+    func hasWinner() -> Bool {
+        guard let model else { return false }
+        return model.upcomingMatches.contains { $0.homeCode == "USA" || $0.awayCode == "USA" }
+    }
+
     private func rebuildFeaturedMatches(matches: [WorldCupMatch]) {
         featuredMatchesStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         featuredDividers.forEach { $0.removeFromSuperview() }

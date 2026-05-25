@@ -18,7 +18,7 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
     }
 
     private struct UX {
-        static let cornerRadius: CGFloat = 26
+        static let backgroundImageViewCornerRadius: CGFloat = 16.0
         static let flagSize = CGSize(width: 90, height: 60)
         static let flagCornerRadius: CGFloat = 9
         static let flagBorderWidth: CGFloat = 1
@@ -35,7 +35,7 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
         view.image = UIImage(named: UX.backgroundImage)
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
-        view.layer.cornerRadius = UX.cornerRadius
+        view.layer.cornerRadius = UX.backgroundImageViewCornerRadius
         view.isAccessibilityElement = false
     }
 
@@ -63,24 +63,12 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
         label.lineBreakMode = .byTruncatingTail
     }
 
-    private let textStack: UIStackView = .build { stack in
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = UX.textSpacing
-    }
-
-    private let contentStack: UIStackView = .build { stack in
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = UX.flagToTextSpacing
-    }
-    
     private let contentBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = 16.0
     }
-    
+
     var contentViewBottomAnchor: NSLayoutYAxisAnchor {
-        return contentStack.bottomAnchor
+        return subtitleLabel.bottomAnchor
     }
 
     // MARK: - Init
@@ -98,33 +86,59 @@ final class WorldCupWinnerBackgroundView: UIView, ThemeApplicable {
     // MARK: - Layout
 
     private func setupLayout() {
-        textStack.addArrangedSubview(teamNameLabel)
-        textStack.addArrangedSubview(subtitleLabel)
-
-        contentStack.addArrangedSubview(flagView)
-        contentStack.addArrangedSubview(textStack)
-
-        addSubviews(backgroundImageView, contentBackgroundView, contentStack)
+        addSubviews(backgroundImageView, contentBackgroundView, flagView, teamNameLabel, subtitleLabel)
 
         NSLayoutConstraint.activate([
             backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
             backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
+
             contentBackgroundView.topAnchor.constraint(equalTo: flagView.centerYAnchor),
-            contentBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            contentBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8.0),
+            contentBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8.0),
+            contentBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8.0),
 
-            contentStack.topAnchor.constraint(equalTo: topAnchor, constant: UX.flagTopPadding),
-            contentStack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            contentStack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: UX.horizontalPadding),
-            contentStack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalPadding),
-
+            flagView.topAnchor.constraint(equalTo: topAnchor, constant: UX.flagTopPadding),
+            flagView.centerXAnchor.constraint(equalTo: centerXAnchor),
             flagView.widthAnchor.constraint(equalToConstant: UX.flagSize.width),
             flagView.heightAnchor.constraint(equalToConstant: UX.flagSize.height),
+
+            teamNameLabel.topAnchor.constraint(equalTo: flagView.bottomAnchor, constant: UX.flagToTextSpacing),
+            teamNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            teamNameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: UX.horizontalPadding),
+            teamNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalPadding),
+
+            subtitleLabel.topAnchor.constraint(equalTo: teamNameLabel.bottomAnchor, constant: UX.textSpacing),
+            subtitleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            subtitleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: UX.horizontalPadding),
+            subtitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalPadding),
         ])
+    }
+
+    /// Vertical distance from the view's top edge down to the bottom of the
+    /// content stack (i.e. the anchor exposed via `contentViewBottomAnchor`).
+    /// This is the offset the match card needs to be pushed down by when the
+    /// winner backdrop is visible, so the cell can size itself correctly.
+    func contentBottomOffset(fittingWidth width: CGFloat) -> CGFloat {
+        let availableWidth = max(width - UX.horizontalPadding * 2, 0)
+        let fittingSize = CGSize(width: availableWidth, height: UIView.layoutFittingCompressedSize.height)
+        let teamNameHeight = teamNameLabel.systemLayoutSizeFitting(
+            fittingSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        let subtitleHeight = subtitleLabel.systemLayoutSizeFitting(
+            fittingSize,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
+        return UX.flagTopPadding
+            + UX.flagSize.height
+            + UX.flagToTextSpacing
+            + teamNameHeight
+            + UX.textSpacing
+            + subtitleHeight
     }
 
     // MARK: - Configuration
