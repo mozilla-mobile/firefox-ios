@@ -15,7 +15,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
         static let timerHorizontalPadding: CGFloat = 64
         static let timerSegmentSpacing: CGFloat = 8.0
         static let actionButtonSize = CGSize(width: 24, height: 24)
-        static let heroImageWidth: CGFloat = 160
+        static let heroImageWidth: CGFloat = 80.0
         static let heroImageHeight: CGFloat = 140.0
         static let heroImageTrailingPadding: CGFloat = 12.0
         static let heroGifName = "kitHeroGif"
@@ -165,7 +165,7 @@ final class WorldCupTimerView: UIView, ThemeApplicable {
                 equalTo: actionButton.leadingAnchor,
                 constant: -UX.heroImageTrailingPadding
             ),
-            heroImageView.widthAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageWidth),
+            heroImageView.widthAnchor.constraint(equalToConstant: UX.heroImageWidth),
             heroImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.heroImageHeight),
             heroImageView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
             heroImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
