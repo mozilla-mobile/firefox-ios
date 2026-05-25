@@ -1861,6 +1861,11 @@ class BrowserViewController: UIViewController,
         let isKeyboardVisible = keyboardHeight > 0
 
         guard isBottomSearchBar, isKeyboardVisible else {
+            // Give the toolbar a chance to undo any prior minimization like after the user
+            // submits a form on a website and the keyboard dismisses. Without this call
+            // offsetForKeyboardAccessory never sees the accessory disappear, so scrollAlpha
+            // stays at 0 and the address bar remains in its minimized state.
+            _ = addressToolbarContainer.offsetForKeyboardAccessory(hasAccessoryView: false)
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -5022,7 +5027,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         guard !isModalPresentedOverBrowser else { return }
         guard !isEditingBottomAddressBar else { return }
 
-        restoreAddressBarFromMinimizedState()
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
@@ -5088,20 +5092,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             animations: {
                 self.bottomContentStackView.layoutIfNeeded()
             })
-    }
-
-    private func restoreAddressBarFromMinimizedState() {
-        guard let toolbarState = store.state.componentState(ToolbarState.self, for: .toolbar, window: windowUUID),
-              !toolbarState.addressToolbar.isEditing,
-              toolbarState.addressToolbar.shouldShowKeyboard,
-              toolbarState.scrollAlpha == 0 else { return }
-        store.dispatch(
-            ToolbarAction(
-                scrollAlpha: 1,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.scrollAlphaNeedsUpdate
-            )
-        )
     }
 
     private func cancelEditingMode() {
