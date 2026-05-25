@@ -114,8 +114,8 @@ class EditFolderViewController: UIViewController,
         }
         onViewWillDisappear?()
 
-        // Only save when clicking the back button, not when we swipe the view controller away
-        if isMovingFromParent {
+        // Only save when Save button is tapped, not when we swipe the view controller away
+        if isMovingFromParent, viewModel.isSaveTapped {
             viewModel.save()
         }
     }
@@ -135,6 +135,7 @@ class EditFolderViewController: UIViewController,
     @objc
     func saveButtonAction() {
         // Save will happen in viewWillDisappear
+        viewModel.isSaveTapped = true
         navigationController?.popViewController(animated: true)
     }
 

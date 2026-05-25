@@ -31,6 +31,8 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
     private(set) var folderStructures: [Folder] = []
     private(set) var selectedFolder: Folder?
 
+    var isSaveTapped = false
+
     var bookmarkTitle: String {
         return node?.title ?? ""
     }
