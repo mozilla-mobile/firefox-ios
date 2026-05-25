@@ -31,7 +31,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let stepperShadowOffset = CGSize(width: 0, height: 3)
         static let separatorWidth: CGFloat = 1
         static let separatorHeightMultiplier = 0.4
-        static let closButtonSize: CGFloat = 30
+        static let closButtonSize: CGFloat = 44
         static let closButtonLargeSize: CGFloat = 48
         static let shadowHeightOffset = 6
     }
@@ -329,11 +329,20 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
             return zoomOutButton?.state == .highlighted ? colors.iconDisabled : baseColor
         })
         zoomOutButton.configuration?.imageColorTransformer = zoomOutButtonImageColorTransformer
-        // Close button
+        closeButton.tintColor = colors.iconSecondary
+        #if canImport(FoundationModels)
+        if #unavailable(iOS 26.0) {
+            let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
+                .withTintColor(theme.colors.iconSecondary)
+            closeButton.setImage(buttonImage, for: .normal)
+            closeButton.backgroundColor = colors.layer4
+        }
+        #else
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         closeButton.backgroundColor = colors.layer4
+        #endif
 
         layer.shadowColor = colors.shadowDefault.cgColor
     }

@@ -18,7 +18,7 @@ public final class HeaderView: UIView, ThemeApplicable {
         static let horizontalMargin: CGFloat = 16
         static let headerLabelDistance: CGFloat = 2
         static let separatorHeight: CGFloat = 1
-        static let closeButtonSize: CGFloat = 30
+        static let closeButtonSize: CGFloat = 44
         static let warningIconSize: CGFloat = 24
     }
 
@@ -264,13 +264,23 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public func applyTheme(theme: Theme) {
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .withTintColor(theme.colors.iconSecondary)
         subtitleLabel.textColor = theme.colors.textSecondary
         titleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2
+        closeButton.tintColor = theme.colors.iconSecondary
+        #if canImport(FoundationModels)
+        if #unavailable(iOS 26.0) {
+            let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
+                .withTintColor(theme.colors.iconSecondary)
+            closeButton.setImage(buttonImage, for: .normal)
+            closeButton.backgroundColor = theme.colors.layer2
+        }
+        #else
+        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
+            .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         closeButton.backgroundColor = theme.colors.layer2
+        #endif
         horizontalLine.backgroundColor = theme.colors.borderPrimary
     }
 }

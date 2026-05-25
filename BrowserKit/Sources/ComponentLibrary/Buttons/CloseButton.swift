@@ -20,22 +20,28 @@ public class CloseButton: UIButton,
     }
 
     private struct UX {
-        static let closeButtonSize = CGSize(width: 30, height: 30)
+        static let closeButtonSize = CGSize(width: 44, height: 44)
         static let maxCloseButtonSize = CGSize(width: 44, height: 44)
-        static let crossCircleImage = StandardImageIdentifiers.ExtraLarge.crossCircleFill
+        static let legacyCrossCircleImage = StandardImageIdentifiers.ExtraLarge.crossCircleFill
+        static let glassCrossImage = StandardImageIdentifiers.Medium.cross
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setImage(UIImage(named: UX.crossCircleImage), for: .normal)
         adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            configuration = .glass()
+            var glassConfiguration = UIButton.Configuration.glass()
+            glassConfiguration.image = UIImage(named: UX.glassCrossImage)?.withRenderingMode(.alwaysTemplate)
+            configuration = glassConfiguration
+        } else {
+            setImage(UIImage(named: UX.legacyCrossCircleImage), for: .normal)
         }
+        #else
+        setImage(UIImage(named: UX.legacyCrossCircleImage), for: .normal)
         #endif
     }
 
