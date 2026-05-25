@@ -14,7 +14,7 @@ pytest = "*"
 pytest-html = "*"
 pytest-metadata = "*"
 requests = "*"
-pytest-fxa-mte = "==1.8.0b1"
+pytest-fxa-mte = "==1.8.0"
 
 [dev-packages]
 

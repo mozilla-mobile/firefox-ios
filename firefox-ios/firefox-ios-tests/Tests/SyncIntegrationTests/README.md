@@ -10,9 +10,9 @@ $ pipenv install --python 3.12
 $ pipenv run pytest
 ```
 
-`CI_WAF_TOKEN` can be obtained via the FxA team. This variable will be used
-in the `fxa-ci` header to bypass the Mozilla Accounts WAF challenges during
-automated testing (see [PyFxA CI WAF bypass][]).
+`CI_WAF_TOKEN` can be obtained via the FxA team or 1Password vault for Mobile Test Engineering.
+This variable will be used in the `fxa-ci` header to bypass the Mozilla Accounts WAF challenges
+during automated testing (see [PyFxA CI WAF bypass][]).
 
 [PyFxA CI WAF bypass]: https://github.com/mozilla/PyFxA/blob/main/README.rst#ci-waf-bypass
 
