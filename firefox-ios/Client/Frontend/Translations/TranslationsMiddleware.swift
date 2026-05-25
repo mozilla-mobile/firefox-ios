@@ -87,18 +87,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         switch action.actionType {
         case ToolbarActionType.urlDidChange:
             guard let action = (action as? ToolbarAction) else { return }
-
-            guard action.url?.isWebPage() == true else { return }
-            // Tab-tray round-trip OR mid-translation tab switch: the action carries the tab's
-            // persisted state. Skipping eligibility keeps Redux in sync with the WKWebView —
-            // re-running would dispatch `.inactive`/`nil` and clobber `.active` (translated DOM
-            // still on screen) or `.loading` (in-flight translation we'd otherwise race against).
-            // `.inactive`/restore-flow paths still run so `restoringWindows` is consumed and
-            // auto-translate behaves correctly.
-            let persistedState = action.translationConfiguration?.state
-            if persistedState == .active || persistedState == .loading { return }
-            self.clearFlowId(for: action)
-            self.checkTranslationsAreEligible(for: action)
+            self.handleUrlDidChange(action: action, windowUUID: windowUUID)
 
         case ToolbarMiddlewareActionType.didTapButton:
             guard let action = (action as? ToolbarMiddlewareAction) else { return }
@@ -143,9 +132,28 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         // rather than acting on cached flow data from before the settings change.
         selectedTargetLanguages[windowUUID] = nil
         translationFlowIds[windowUUID] = nil
+        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID] = nil
         restoringWindows.remove(windowUUID)
         guard featureFlagsProvider.isEnabled(.translation),
               action.isTranslationsEnabled ?? true else { return }
+        checkTranslationsAreEligible(for: action)
+    }
+
+    private func handleUrlDidChange(action: ToolbarAction, windowUUID: WindowUUID) {
+        guard action.url?.isWebPage() == true else { return }
+        // Tab-tray round-trip OR mid-translation tab switch: the action carries the tab's
+        // persisted state. Skipping eligibility keeps Redux in sync with the WKWebView —
+        // re-running would dispatch `.inactive`/`nil` and clobber `.active` (translated DOM
+        // still on screen) or `.loading` (in-flight translation we'd otherwise race against).
+        // `.inactive`/restore-flow paths still run so `restoringWindows` is consumed and
+        // auto-translate behaves correctly.
+        let persistedState = action.translationConfiguration?.state
+        if persistedState == .active || persistedState == .loading { return }
+
+        translationTasks[windowUUID]?.cancel()
+        translationTasks[windowUUID] = nil
+        clearFlowId(for: action)
         checkTranslationsAreEligible(for: action)
     }
 
