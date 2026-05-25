@@ -1861,11 +1861,6 @@ class BrowserViewController: UIViewController,
         let isKeyboardVisible = keyboardHeight > 0
 
         guard isBottomSearchBar, isKeyboardVisible else {
-            // Give the toolbar a chance to undo any prior minimization like after the user
-            // submits a form on a website and the keyboard dismisses. Without this call
-            // offsetForKeyboardAccessory never sees the accessory disappear, so scrollAlpha
-            // stays at 0 and the address bar remains in its minimized state.
-            _ = addressToolbarContainer.offsetForKeyboardAccessory(hasAccessoryView: false)
             overKeyboardContainer.removeKeyboardSpacer()
             return
         }
@@ -5026,6 +5021,12 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         guard !isModalPresentedOverBrowser else { return }
         guard !isEditingBottomAddressBar else { return }
+
+        // Give the toolbar a chance to undo any prior minimization (FXIOS-15910). Called
+        // here — once per keyboard transition — rather than from adjustBottomSearchBarForKeyboard,
+        // which fires on every layout pass and would dispatch stray shouldShowKeyboard updates
+        // mid-edit.
+        _ = addressToolbarContainer.offsetForKeyboardAccessory(hasAccessoryView: false)
 
         keyboardState = nil
         if !isSnapKitRemovalEnabled {

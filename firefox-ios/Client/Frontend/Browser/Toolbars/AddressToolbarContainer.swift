@@ -233,9 +233,13 @@ final class AddressToolbarContainer: UIView,
             accessoryViewGradient.frame = CGRect(width: bounds.width, height: height)
         }
 
-        // Undo a previous minimization. The accessory can disappear after redux state already flipped shouldShowKeyboard
-        // to false in keyboardDidHide
-        if !hasAccessoryView, state?.scrollAlpha == 0 {
+        // Undo a previous accessory-driven minimization. Gated on shouldShowKeyboard so we
+        // don't undo legitimate scroll-hides, and on !isEditingAddress so we don't dispatch
+        // while the user is mid-edit
+        if !hasAccessoryView,
+           !isEditingAddress,
+           shouldShowKeyboard == true,
+           state?.scrollAlpha == 0 {
             accessoryViewGradient.opacity = 0
             store.dispatch(
                 ToolbarAction(
