@@ -206,7 +206,7 @@ final class MainMenuConfigurationUtilityTests: XCTestCase {
         let allItems = sections.flatMap { $0.options }
         let title = String.MainMenu.ToolsSection.Translation.TranslatedPageTitle
         let translateItem = allItems.first { $0.title == title }
-        let expectedHint = locale.localizedString(forLanguageCode: "fr")
+        let expectedHint = locale.localizedString(forIdentifier: "fr")
 
         XCTAssertEqual(translateItem?.a11yHint, expectedHint)
     }
