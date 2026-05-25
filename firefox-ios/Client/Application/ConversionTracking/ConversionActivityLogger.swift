@@ -1,0 +1,46 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+import Shared
+
+/// Records per-day activity signals that are used for event calculation for conversion events.
+/// Each record is based on day-since-install so the activity log is independent of wall-clock date.
+final class ConversionActivityLogger {
+    private var dataManager: ConversionDataManager
+
+    init(dataManager: ConversionDataManager = ConversionDataManager()) {
+        self.dataManager = dataManager
+    }
+
+    func recordActiveToday(now: Timestamp = Date.now()) {
+        guard let dayIndex = dayIndex(at: now) else { return }
+        var indices = dataManager.activeDayIndices
+        indices.insert(dayIndex)
+        dataManager.activeDayIndices = indices
+    }
+
+    func recordSearchedToday(now: Timestamp = Date.now()) {
+        guard let dayIndex = dayIndex(at: now) else { return }
+        var indices = dataManager.searchedDayIndices
+        indices.insert(dayIndex)
+        dataManager.searchedDayIndices = indices
+    }
+
+    func recordDefaultBrowserToday(isDefault: Bool, now: Timestamp = Date.now()) {
+        guard isDefault, let dayIndex = dayIndex(at: now) else { return }
+        var indices = dataManager.defaultBrowserDayIndices
+        indices.insert(dayIndex)
+        dataManager.defaultBrowserDayIndices = indices
+    }
+
+    func recordInstallTimestampIfNeeded(now: Timestamp = Date.now()) {
+        if dataManager.installTimestamp == nil { dataManager.installTimestamp = now }
+    }
+
+    private func dayIndex(at now: Timestamp) -> Int? {
+        guard let install = dataManager.installTimestamp else { return nil }
+        return now.daysSince(timestamp: install)
+    }
+}
