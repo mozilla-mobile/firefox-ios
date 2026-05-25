@@ -64,7 +64,7 @@ class DiskImageStoreTests: XCTestCase {
             XCTFail("Expected saveImageForKey to throw for a zero-size image")
         } catch let error as DiskImageStoreErrorCase {
             // Expected: scaling is skipped and jpegData() returns nil, surfacing as cannotWrite.
-            XCTAssertEqual(DiskImageStoreErrorCase.cannotWrite, error)
+            XCTAssertEqual(DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file"), error)
         }
     }
 

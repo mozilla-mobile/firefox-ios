@@ -5,10 +5,10 @@
 import UIKit
 import Common
 
-enum DiskImageStoreErrorCase: Error, Equatable {
-    case notFound
-    case invalidImageData
-    case cannotWrite
+public enum DiskImageStoreErrorCase: Error, Equatable {
+    case notFound(description: String)
+    case invalidImageData(description: String)
+    case cannotWrite(description: String)
 }
 
 public protocol DiskImageStore: Sendable {
@@ -68,7 +68,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
 
     public func getImageForKey(_ key: String) async throws -> UIImage {
         if !keys.contains(key) {
-            throw DiskImageStoreErrorCase.notFound
+            throw DiskImageStoreErrorCase.notFound(description: "Image key not found")
         }
 
         let imagePath = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
@@ -76,7 +76,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         if let image = UIImage(data: data, scale: 1.0) {
             return image
         } else {
-            throw DiskImageStoreErrorCase.invalidImageData
+            throw DiskImageStoreErrorCase.invalidImageData(description: "Invalid image data")
         }
     }
 
@@ -84,7 +84,7 @@ public actor DefaultDiskImageStore: DiskImageStore {
         let imageURL = URL(fileURLWithPath: filesDir).appendingPathComponent(key)
 
         guard let data = scaleImageFrom3xTo1x(image).jpegData(compressionQuality: quality) else {
-            throw DiskImageStoreErrorCase.cannotWrite
+            throw DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file")
         }
 
         try data.write(to: imageURL, options: .noFileProtection)
