@@ -225,21 +225,30 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
 
     func test_readerFileRoute_encodedPaths_rejected() throws {
         let route = ReaderFileRoute()
-        let encodedPaths = [
-            // Encoded slashes — the real path would be reader-mode/styles/Reader.css
-            // but the URL encodes the slashes so url.path won't match the allowlist
-            "reader-mode%2Fstyles%2FReader.css",
-            // Encoded absolute path attempt
-            "%2Fetc%2Fpasswd",
-            // Null byte injection
-            "reader-mode/styles/Reader.css%00evil",
-        ]
 
-        for path in encodedPaths {
-            let url = URL(string: "readermode://app/\(path)")!
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-            XCTAssertThrowsError(try route.handle(url: url, components: components),
-                                 "Expected rejection for encoded path: \(path)")
+        let encodedSlashes = URL(string: "readermode://app/reader-mode%2Fstyles%2FReader.css")!
+        let encodedSlashesComponents = URLComponents(url: encodedSlashes, resolvingAgainstBaseURL: false)!
+        let reply = try route.handle(url: encodedSlashes, components: encodedSlashesComponents)
+        XCTAssertNotNil(reply, "Encoded slashes decode to the canonical path, so this serves the file")
+
+        // Encoded absolute path attempt
+        let etcPasswd = URL(string: "readermode://app/%2Fetc%2Fpasswd")!
+        let etcComponents = URLComponents(url: etcPasswd, resolvingAgainstBaseURL: false)!
+        do {
+            let reply = try route.handle(url: etcPasswd, components: etcComponents)
+            XCTFail("Expected pathNotAllowed error, got reply: \(String(describing: reply))")
+        } catch {
+            XCTAssertEqual(error as? TinyRouterError, .pathNotAllowed(path: "etc/passwd"))
+        }
+
+        // Null byte injection
+        let nullByte = URL(string: "readermode://app/reader-mode/styles/Reader.css%00evil")!
+        let nullComponents = URLComponents(url: nullByte, resolvingAgainstBaseURL: false)!
+        do {
+            let reply = try route.handle(url: nullByte, components: nullComponents)
+            XCTFail("Expected pathNotAllowed error, got reply: \(String(describing: reply))")
+        } catch {
+            XCTAssertEqual(error as? TinyRouterError, .pathNotAllowed(path: "reader-mode/styles/Reader.css\0evil"))
         }
     }
 

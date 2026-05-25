@@ -29,6 +29,13 @@ struct ReaderFileRoute: TinyRoute {
         let resourceName = fileURL.deletingPathExtension().lastPathComponent
         let fileExtension = fileURL.pathExtension
 
+        // There is a build phase script named "Populate reader-mode script"
+        // which moves the allowed files from Client/Assets/reader-mode/ into the app bundle at /reader-mode/ .
+
+        // The pre-existing files still exist and are still in the root of the bundle so legacy code doesn't break.
+        // the Client/Assets/reader-mode/ directory is NOT part of the xcode project, but should still be kept in the repo
+        // (doing this might be a no-no, I'm not sure)
+
         let subdirectory = fileURL.deletingLastPathComponent().relativePath
         guard let bundleURL = Bundle.main.url(
             forResource: resourceName,
