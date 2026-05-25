@@ -1580,6 +1580,10 @@ workflows:
             envman add --key BITRISE_BETA_VERSION --value "$version"
 
   Bitrise_Performance_Test:
+    envs:
+    - DEVICE_NAME: "iPhone 16"
+    - IOS_VERSION: "18.6"
+    - DEVICE_KEY: "iphone16-18-6"
     steps:
     - cache-pull@2:
         is_always_run: true
@@ -1587,13 +1591,7 @@ workflows:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 17,OS=26.5
-        - test_plan: PerformanceTestPlan
-    - xcode-test@6:
-        inputs:
-        - project_path: firefox-ios/Client.xcodeproj
-        - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.6
+        - destination: platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION
         - test_plan: PerformanceTestPlan
     - script@1:
         is_always_run: true
@@ -1616,7 +1614,7 @@ workflows:
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
             CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
-            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-test.xcresult
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec-${DEVICE_KEY}.xcresult
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
@@ -1628,7 +1626,7 @@ workflows:
             cat test.json
             python3 perfTestTransform.py
             mkdir -p "$BITRISE_DEPLOY_DIR"
-            mv perfherder-data.json $BITRISE_DEPLOY_DIR
+            mv perfherder-data.json "$BITRISE_DEPLOY_DIR/perfherder-data-${DEVICE_KEY}.json"
     - deploy-to-bitrise-io@2: {}
     before_run:
     - 1_git_clone_and_post_clone
