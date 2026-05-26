@@ -454,11 +454,6 @@ final class LocationView: UIView,
                 let scaledTransformation = CGAffineTransform(scaleX: UX.smallScale, y: UX.smallScale)
                     .translatedBy(x: 0, y: yOffset)
                 self.transform = scaledTransformation
-            }, completion: { [unowned self] didFinish in
-                if didFinish {
-                    urlTextField.isUserInteractionEnabled = false
-                    isUserInteractionEnabled = false
-                }
             })
     }
 
@@ -469,13 +464,7 @@ final class LocationView: UIView,
             options: [.curveEaseInOut],
             animations: { [unowned self] in
                 transform = .identity
-            }, completion: { [unowned self] didFinish in
-                if didFinish {
-                    urlTextField.isUserInteractionEnabled = true
-                    isUserInteractionEnabled = true
-                }
-            }
-        )
+            })
     }
 
     private func removeGlassEffectImmediately() {
