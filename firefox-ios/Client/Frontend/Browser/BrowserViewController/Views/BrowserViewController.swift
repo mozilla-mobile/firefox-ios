@@ -5012,10 +5012,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-<<<<<<< HEAD
-        guard !isEditingBottomAddressBar else { return }
-
-=======
         if #available(iOS 26.0, *), isBottomSearchBar {
             store.dispatch(
                 ToolbarAction(
@@ -5025,7 +5021,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
                 )
             )
         }
->>>>>>> 6721f5def (Revert FXIOS-15916 address bar fixes Bugfix for FXIOS-15917 frozen address bar  (#34020))
         keyboardState = nil
         if !isSnapKitRemovalEnabled {
             updateViewConstraints()
