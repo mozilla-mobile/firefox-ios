@@ -30,6 +30,22 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         self.next = next
     }
 
+    /// Returns a copy of this response with each bucket restricted to
+    /// matches that involve `team` (by 3-letter FIFA key) as home or away.
+    /// Used to derive the single-team card from the now-unfiltered
+    /// `/matches` payload — see `WorldCupFeed.buildSnapshot`.
+    func filtered(toTeam team: String) -> WorldCupMatchesResponse {
+        func involvesTeam(_ match: Match) -> Bool {
+            match.homeTeam?.key == team || match.awayTeam?.key == team
+        }
+        return WorldCupMatchesResponse(
+            now: now,
+            previous: previous?.filter(involvesTeam),
+            current: current?.filter(involvesTeam),
+            next: next?.filter(involvesTeam)
+        )
+    }
+
     struct Match: Decodable, Equatable, Sendable {
         let date: String
         let globalEventId: Int
@@ -96,7 +112,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         /// stage. Unknown strings decode into `.unknown(raw)` rather than
         /// failing the whole response so a new merino value can't blank the
         /// widget; the raw label is retained for logging.
-        enum Stage: Decodable, Equatable, Sendable {
+        enum Stage: Decodable, Hashable, Sendable {
             case groupStage
             case roundOf32
             case roundOf16
