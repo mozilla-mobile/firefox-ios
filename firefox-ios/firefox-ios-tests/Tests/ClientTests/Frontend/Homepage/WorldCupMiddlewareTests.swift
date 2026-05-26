@@ -454,6 +454,132 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         subject.worldCupProvider = { _, _ in }
     }
 
+    // MARK: - M3 elimination branching
+
+    func test_homepageInitialize_whenSelectedTeamNotEliminated_dispatchesSingleTeamCard() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                // BRA fixtures across two days — would split into two cards if
+                // the snapshot were flattened, but for a non-eliminated team
+                // we collapse them into one team card via the featured/upcoming
+                // bucketing.
+                makeMatch(id: 1, home: "BRA", away: "ARG", date: "2026-06-12T18:00:00+00:00"),
+                makeMatch(id: 2, home: "ENG", away: "BRA", date: "2026-06-15T21:00:00+00:00"),
+                // Unrelated match — should be filtered out by `filtered(toTeam:)`.
+                makeMatch(id: 3, home: "FRA", away: "GER", date: "2026-06-12T15:00:00+00:00")
+            ]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: [])),
+            teamsResult: .success(makeTeamsResponse(eliminated: ["ARG"]))
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = expectationForMatchesDispatch()
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.matches.count, 1)
+        // FRA-vs-GER was filtered out; only the two BRA fixtures remain.
+        let allShown = dispatched.matches[0].featuredMatch + dispatched.matches[0].upcomingMatches
+        XCTAssertEqual(allShown.count, 2)
+        XCTAssertEqual(apiClient.fetchTeamsCount, 1)
+        XCTAssertNil(apiClient.lastTeamsTeam, "teams call should be unfiltered")
+        XCTAssertNil(apiClient.lastMatchesTeam, "matches call should be unfiltered")
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_homepageInitialize_whenSelectedTeamEliminated_fallsBackToFlattenedPerDay() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [
+                makeMatch(id: 1, home: "ARG", away: "ENG", date: "2026-06-30T18:00:00+00:00",
+                          stage: .roundOf16),
+                makeMatch(id: 2, home: "FRA", away: "GER", date: "2026-07-04T18:00:00+00:00",
+                          stage: .quarterFinals)
+            ]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: [])),
+            teamsResult: .success(makeTeamsResponse(eliminated: ["BRA"]))
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        // Eliminated path requires waiting for the post-teams re-emit, so
+        // expect at least two dispatches with non-empty matches.
+        let expectation = expectationForMatchCardCount(2)
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.matches.count, 2)
+        XCTAssertEqual(dispatched.matches[0].phaseTitle,
+                       String.WorldCup.HomepageWidget.RoundPhase.Round16Label)
+        XCTAssertEqual(dispatched.matches[1].phaseTitle,
+                       String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel)
+        subject.worldCupProvider = { _, _ in }
+    }
+
+    func test_homepageInitialize_whenSelectedTeamNotInRoster_defaultsToSingleTeamCard() throws {
+        mockWorldCupStore.isFeatureEnabled = true
+        mockWorldCupStore.isHomepageSectionEnabled = true
+        mockWorldCupStore.isMilestone2 = true
+        mockWorldCupStore.selectedTeam = "BRA"
+        let response = WorldCupMatchesResponse(
+            previous: nil,
+            current: nil,
+            next: [makeMatch(id: 1, home: "BRA", away: "ARG")]
+        )
+        let apiClient = MockWorldCupAPIClient(
+            matchesResult: .success(response),
+            liveResult: .success(WorldCupLiveResponse(matches: [])),
+            // Empty roster — covers the "team not in response" case as well
+            // as the "teams hasn't loaded yet" case (same code path).
+            teamsResult: .success(WorldCupTeamsResponse(teams: []))
+        )
+        let subject = createSubject(apiClient: apiClient)
+        let action = HomepageAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: HomepageActionType.initialize
+        )
+
+        let expectation = expectationForMatchesDispatch()
+
+        subject.worldCupProvider(appState, action)
+
+        wait(for: [expectation])
+
+        let dispatched = try XCTUnwrap(latestWorldCupAction())
+        XCTAssertEqual(dispatched.matches.count, 1)
+        subject.worldCupProvider = { _, _ in }
+    }
+
     // MARK: - WorldCupActionType.worldCupDidStart
 
     func test_worldCupDidStart_dispatchesDidUpdateWithHasWorldCupStarted() throws {
@@ -724,6 +850,20 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
         return expectation
     }
 
+    /// Fires once a dispatch lands whose `matches` array has at least
+    /// `count` cards. Used by tests that need to wait past the initial
+    /// optimistic snapshot for a re-emit triggered by the teams response
+    /// landing (e.g. selected-team-eliminated path).
+    private func expectationForMatchCardCount(_ count: Int) -> XCTestExpectation {
+        let expectation = XCTestExpectation(description: "matches dispatch with \(count) cards")
+        expectation.assertForOverFulfill = false
+        mockStore.dispatchCalled = { [weak self] in
+            guard let action = self?.latestWorldCupAction() else { return }
+            if action.matches.count >= count { expectation.fulfill() }
+        }
+        return expectation
+    }
+
     private func latestWorldCupAction() -> WorldCupAction? {
         mockStore.dispatchedActions.last as? WorldCupAction
     }
@@ -741,6 +881,26 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                              away: "BRA",
                              statusType: liveStatus ? "live" : "scheduled")]
         )
+    }
+
+    /// Builds a teams roster where every team referenced by `makeMatch`
+    /// is present; the `eliminated` set marks which keys come back with
+    /// `eliminated == true`. Other teams are not-eliminated.
+    private func makeTeamsResponse(eliminated: Set<String> = []) -> WorldCupTeamsResponse {
+        let keys = ["BRA", "ARG", "ENG", "USA", "FRA", "GER"]
+        return WorldCupTeamsResponse(teams: keys.map { key in
+            WorldCupTeamsResponse.Team(
+                key: key,
+                globalTeamId: nil,
+                name: key,
+                region: nil,
+                colors: nil,
+                iconUrl: nil,
+                group: "Group A",
+                eliminated: eliminated.contains(key),
+                standing: nil
+            )
+        })
     }
 
     private func makeMatch(id: Int,
