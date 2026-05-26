@@ -1335,6 +1335,7 @@
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
 		8C196D512F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */; };
+		4C4717A4ED53927C65865D2D /* TranslationNavigationCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */; };
 		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
 		8C2447E82DFADF3D00BD2C91 /* ActivityEventHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */; };
 		8C2447EA2DFADF6300BD2C91 /* OnboardingServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */; };
@@ -9902,6 +9903,7 @@
 		8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillFooterView.swift; sourceTree = "<group>"; };
 		8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHeaderView.swift; sourceTree = "<group>"; };
 		8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoTranslatePromptStateTests.swift; sourceTree = "<group>"; };
+		4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationNavigationCacheTests.swift; sourceTree = "<group>"; };
 		8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8C2447E72DFADF3D00BD2C91 /* ActivityEventHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityEventHelper.swift; sourceTree = "<group>"; };
 		8C2447E92DFADF6300BD2C91 /* OnboardingServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingServiceDelegate.swift; sourceTree = "<group>"; };
@@ -15171,6 +15173,7 @@
 				AAD9D64A2EB25B3200BFECAF /* TranslationsMiddlewareTests.swift */,
 				8C50DD742F56E1D00020E5C4 /* PreferredTranslationLanguagesManagerTests.swift */,
 				8C196D502F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift */,
+				4C4717A4ED53927C65865D2C /* TranslationNavigationCacheTests.swift */,
 			);
 			path = TranslationsTests;
 			sourceTree = "<group>";
@@ -20654,6 +20657,7 @@
 				E1EAA5F32D4A705500D3039C /* ToolbarMiddlewareTests.swift in Sources */,
 				8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */,
 				8C196D512F7D2B74006EB316 /* AutoTranslatePromptStateTests.swift in Sources */,
+				4C4717A4ED53927C65865D2D /* TranslationNavigationCacheTests.swift in Sources */,
 				E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */,
 				C27484E02F558C2800920313 /* MockSummarizerLanguageProvider.swift in Sources */,
 				C2B31ECD2EDCEB1B00D53FF5 /* TranslationsVersionHelperTests.swift in Sources */,
