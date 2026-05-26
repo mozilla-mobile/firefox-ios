@@ -1687,7 +1687,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
         mockStore.dispatchCalled = { [weak mockStore] in
-            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didStartTranslatingPage {
                 loadingExpectation.fulfill()
             }
         }
@@ -1700,8 +1700,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
 
-        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? ToolbarAction)
-        XCTAssertEqual(loadingAction.actionType as? ToolbarActionType, .didStartTranslatingPage)
+        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? TranslationsAction)
+        XCTAssertEqual(loadingAction.actionType as? TranslationsActionType, .didStartTranslatingPage)
         XCTAssertEqual(loadingAction.translationConfiguration?.state, .loading)
 
         let reloadAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
@@ -1741,8 +1741,8 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 2)
 
-        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? ToolbarAction)
-        XCTAssertEqual(loadingAction.actionType as? ToolbarActionType, .didStartTranslatingPage)
+        let loadingAction = try XCTUnwrap(mockStore.dispatchedActions[0] as? TranslationsAction)
+        XCTAssertEqual(loadingAction.actionType as? TranslationsActionType, .didStartTranslatingPage)
         XCTAssertEqual(loadingAction.translationConfiguration?.state, .loading)
 
         let reloadAction = try XCTUnwrap(mockStore.dispatchedActions[1] as? GeneralBrowserAction)
@@ -1768,7 +1768,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
         mockStore.dispatchCalled = { [weak mockStore] in
-            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didStartTranslatingPage {
                 loadingExpectation.fulfill()
             }
         }
@@ -1782,7 +1782,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let completionLeakExpectation = XCTestExpectation(description: "translationCompleted should not be dispatched")
         completionLeakExpectation.isInverted = true
         mockStore.dispatchCalled = { [weak mockStore] in
-            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .translationCompleted {
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .translationCompleted {
                 completionLeakExpectation.fulfill()
             }
         }
@@ -1790,7 +1790,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         wait(for: [completionLeakExpectation], timeout: 1.0)
 
         let completionActions = mockStore.dispatchedActions.filter {
-            ($0.actionType as? ToolbarActionType) == .translationCompleted
+            ($0.actionType as? TranslationsActionType) == .translationCompleted
         }
         XCTAssertTrue(completionActions.isEmpty)
     }
@@ -1813,7 +1813,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
 
         let loadingExpectation = XCTestExpectation(description: "didStartTranslatingPage dispatched")
         mockStore.dispatchCalled = { [weak mockStore] in
-            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didStartTranslatingPage {
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didStartTranslatingPage {
                 loadingExpectation.fulfill()
             }
         }
@@ -1827,7 +1827,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         let errorLeakExpectation = XCTestExpectation(description: "didReceiveErrorTranslating should not be dispatched")
         errorLeakExpectation.isInverted = true
         mockStore.dispatchCalled = { [weak mockStore] in
-            if (mockStore?.dispatchedActions.last?.actionType as? ToolbarActionType) == .didReceiveErrorTranslating {
+            if (mockStore?.dispatchedActions.last?.actionType as? TranslationsActionType) == .didReceiveErrorTranslating {
                 errorLeakExpectation.fulfill()
             }
         }
@@ -1835,7 +1835,7 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         wait(for: [errorLeakExpectation], timeout: 1.0)
 
         let errorActions = mockStore.dispatchedActions.filter {
-            ($0.actionType as? ToolbarActionType) == .didReceiveErrorTranslating
+            ($0.actionType as? TranslationsActionType) == .didReceiveErrorTranslating
         }
         XCTAssertTrue(errorActions.isEmpty)
     }
