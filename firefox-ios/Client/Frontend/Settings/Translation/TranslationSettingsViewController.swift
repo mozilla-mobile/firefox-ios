@@ -42,8 +42,7 @@ final class TranslationSettingsViewController: SettingsTableViewController {
                     isTranslationsEnabled: isEnabled,
                     translationConfiguration: TranslationConfiguration(
                         prefs: self.prefs,
-                        isUserSettingEnabled: isEnabled,
-                        state: .inactive
+                        isUserSettingEnabled: isEnabled
                     ),
                     windowUUID: self.windowUUID,
                     actionType: TranslationsActionType.didTranslationSettingsChange
