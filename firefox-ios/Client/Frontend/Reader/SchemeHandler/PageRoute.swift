@@ -116,7 +116,7 @@ final class PageRoute: TinyRoute {
         }
         return TinyHTTPReply(httpResponse: response, body: body)
     }
-    
+
     // It would be nice to have a standard way of displaying error pages, but it seems that
     // mobile Firefox does not have this yet (?)
     func buildErrorReply(url: URL, originalURL: URL) throws -> TinyHTTPReply {
