@@ -115,8 +115,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         case TranslationsActionType.didTapEnableAutoTranslate:
             self.profile.prefs.setBool(true, forKey: PrefsKeys.Settings.translationAutoTranslate)
 
-        case ToolbarActionType.didTranslationSettingsChange:
-            guard let action = (action as? ToolbarAction) else { return }
+        case TranslationsActionType.didTranslationSettingsChange:
+            guard let action = (action as? TranslationsAction) else { return }
             self.handleTranslationSettingsChange(action: action, windowUUID: windowUUID)
 
         default:
@@ -124,7 +124,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         }
     }
 
-    private func handleTranslationSettingsChange(action: ToolbarAction, windowUUID: WindowUUID) {
+    private func handleTranslationSettingsChange(action: TranslationsAction, windowUUID: WindowUUID) {
         if action.isTranslationsEnabled == false {
             for uuid in translationFlowIds.keys {
                 let translationState = store.state.componentState(
@@ -216,9 +216,13 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                     actionType: .willTranslate,
                     translationFlowId: newFlowId
                 )
-                self.handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
+                self.handleUpdatingTranslationIcon(
+                    windowUUID: action.windowUUID,
+                    with: .loading,
+                    on: originatingTab
+                )
                 self.retrieveTranslations(
-                    for: action,
+                    windowUUID: action.windowUUID,
                     targetLanguage: deviceLanguage,
                     isPrivate: isPrivate,
                     on: originatingTab
@@ -231,7 +235,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 actionType: .willRestore,
                 translationFlowId: flowId(for: action.windowUUID)
             )
-            self.handleUpdatingTranslationIcon(for: action, with: .inactive, on: originatingTab)
+            self.handleUpdatingTranslationIcon(windowUUID: action.windowUUID, with: .inactive, on: originatingTab)
             restoringWindows.insert(action.windowUUID)
             // Mark the next same-URL reload as a restore-flow reload so `webView(_:didCommit:)`
             // keeps the just-dispatched `.inactive` (FXIOS-15227). Manual reloads, with this
@@ -312,8 +316,13 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             window: action.windowUUID
         )?.isPrivateMode ?? false
         let originatingTab = selectedTab(for: action.windowUUID)
-        self.handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
-        retrieveTranslations(for: action, targetLanguage: language, isPrivate: isPrivate, on: originatingTab)
+        self.handleUpdatingTranslationIcon(windowUUID: action.windowUUID, with: .loading, on: originatingTab)
+        retrieveTranslations(
+            windowUUID: action.windowUUID,
+            targetLanguage: language,
+            isPrivate: isPrivate,
+            on: originatingTab
+        )
     }
 
     private func handleLanguageSelected(for action: TranslationLanguageSelectedAction, and state: AppState) {
@@ -335,15 +344,15 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         )
         if isCurrentlyTranslated {
             pendingLanguageSwitchTargets[action.windowUUID] = action.targetLanguage
-            handleUpdatingTranslationIcon(for: action, with: .inactive, on: originatingTab)
+            handleUpdatingTranslationIcon(windowUUID: action.windowUUID, with: .inactive, on: originatingTab)
             store.dispatch(GeneralBrowserAction(
                 windowUUID: action.windowUUID,
                 actionType: GeneralBrowserActionType.reloadWebsite
             ))
         } else {
-            handleUpdatingTranslationIcon(for: action, with: .loading, on: originatingTab)
+            handleUpdatingTranslationIcon(windowUUID: action.windowUUID, with: .loading, on: originatingTab)
             retrieveTranslations(
-                for: action,
+                windowUUID: action.windowUUID,
                 targetLanguage: action.targetLanguage,
                 isPrivate: toolbarState.isPrivateMode,
                 on: originatingTab
@@ -352,18 +361,18 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func handleUpdatingTranslationIcon(
-        for action: Action,
+        windowUUID: WindowUUID,
         with state: TranslationConfiguration.IconState,
         on tab: Tab? = nil
     ) {
         let config = TranslationConfiguration(prefs: profile.prefs, state: state)
-        persistTranslationConfig(config, on: tab ?? selectedTab(for: action.windowUUID))
-        let toolbarAction = ToolbarAction(
+        persistTranslationConfig(config, on: tab ?? selectedTab(for: windowUUID))
+        let translationsAction = TranslationsAction(
             translationConfiguration: config,
-            windowUUID: action.windowUUID,
-            actionType: ToolbarActionType.didStartTranslatingPage
+            windowUUID: windowUUID,
+            actionType: TranslationsActionType.didStartTranslatingPage
         )
-        store.dispatch(toolbarAction)
+        store.dispatch(translationsAction)
     }
 
     /// Mirrors the dispatched translation config onto the originating tab so it survives tab-tray
@@ -380,20 +389,20 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
     /// If auto-translate is enabled, triggers translation to the user's top preferred language.
     /// Returns `true` if auto-translation was initiated (caller should skip manual offer).
-    private func tryAutoTranslate(for action: ToolbarAction, on tab: Tab?) async -> Bool {
-        if restoringWindows.remove(action.windowUUID) != nil { return false }
+    private func tryAutoTranslate(windowUUID: WindowUUID, on tab: Tab?) async -> Bool {
+        if restoringWindows.remove(windowUUID) != nil { return false }
 
-        if let pendingLanguage = pendingLanguageSwitchTargets.removeValue(forKey: action.windowUUID) {
+        if let pendingLanguage = pendingLanguageSwitchTargets.removeValue(forKey: windowUUID) {
             let isPrivate = store.state.componentState(
                 ToolbarState.self,
                 for: .toolbar,
-                window: action.windowUUID
+                window: windowUUID
             )?.isPrivateMode ?? false
             let newFlowId = UUID()
-            translationFlowIds[action.windowUUID] = newFlowId
-            selectedTargetLanguages[action.windowUUID] = pendingLanguage
-            handleUpdatingTranslationIcon(for: action, with: .loading, on: tab)
-            retrieveTranslations(for: action, targetLanguage: pendingLanguage, isPrivate: isPrivate, on: tab)
+            translationFlowIds[windowUUID] = newFlowId
+            selectedTargetLanguages[windowUUID] = pendingLanguage
+            handleUpdatingTranslationIcon(windowUUID: windowUUID, with: .loading, on: tab)
+            retrieveTranslations(windowUUID: windowUUID, targetLanguage: pendingLanguage, isPrivate: isPrivate, on: tab)
             return true
         }
 
@@ -401,19 +410,25 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         let manager = PreferredTranslationLanguagesManager(prefs: profile.prefs)
         let supported = await translationsService.fetchSupportedTargetLanguages()
         let preferred = manager.preferredLanguages(supportedTargetLanguages: supported)
-        let pageLanguage = try? await translationsService.detectPageLanguage(for: action.windowUUID)
+        let pageLanguage = try? await translationsService.detectPageLanguage(for: windowUUID)
         if let pageLanguage, preferred.contains(pageLanguage) { return false }
         guard let targetLanguage = preferred.first else { return false }
         let isPrivate = store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
-            window: action.windowUUID
+            window: windowUUID
         )?.isPrivateMode ?? false
         let newFlowId = UUID()
-        translationFlowIds[action.windowUUID] = newFlowId
-        selectedTargetLanguages[action.windowUUID] = targetLanguage
-        handleUpdatingTranslationIcon(for: action, with: .loading, on: tab)
-        retrieveTranslations(for: action, targetLanguage: targetLanguage, isPrivate: isPrivate, autoTranslate: true, on: tab)
+        translationFlowIds[windowUUID] = newFlowId
+        selectedTargetLanguages[windowUUID] = targetLanguage
+        handleUpdatingTranslationIcon(windowUUID: windowUUID, with: .loading, on: tab)
+        retrieveTranslations(
+            windowUUID: windowUUID,
+            targetLanguage: targetLanguage,
+            isPrivate: isPrivate,
+            autoTranslate: true,
+            on: tab
+        )
         return true
     }
 
@@ -452,14 +467,14 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     }
 
     /// Checks whether the current page in the active tab is eligible for translation,
-    /// and if so, dispatches a toolbar action to update the translation state.
-    private func checkTranslationsAreEligible(for action: ToolbarAction) {
+    /// and if so, dispatches a translation action to update the translation state.
+    private func checkTranslationsAreEligible(for action: Action) {
         // Pre-capture the tab so a tab switch mid-flight doesn't stomp the new active tab's state.
         let originatingTab = selectedTab(for: action.windowUUID)
-        // action.isTranslationsEnabled carries the explicit new value for settings-change actions
-        // (where store.state hasn't been updated yet). For urlDidChange it is nil, so we fall back
-        // to ToolbarState which is always up-to-date by the time urlDidChange fires.
-        let translationsEnabled = action.isTranslationsEnabled ?? (store.state.componentState(
+        // The action's `isTranslationsEnabled` carries the explicit new value for settings-change
+        // actions (where store.state hasn't been updated yet). For `urlDidChange` it is nil, so we
+        // fall back to ToolbarState which is always up-to-date by the time `urlDidChange` fires.
+        let translationsEnabled = isTranslationsEnabled(from: action) ?? (store.state.componentState(
             ToolbarState.self,
             for: .toolbar,
             window: action.windowUUID
@@ -490,17 +505,17 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 }
 
                 // Auto-translate handled the page load — skip the manual offer.
-                if await self.tryAutoTranslate(for: action, on: originatingTab) { return }
+                if await self.tryAutoTranslate(windowUUID: action.windowUUID, on: originatingTab) { return }
 
                 // Auto-translate didn't run; offer manual translation instead.
                 let config = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
                 self.persistTranslationConfig(config, on: originatingTab)
-                let toolbarAction = ToolbarAction(
+                let translationsAction = TranslationsAction(
                     translationConfiguration: config,
                     windowUUID: action.windowUUID,
-                    actionType: ToolbarActionType.receivedTranslationLanguage
+                    actionType: TranslationsActionType.receivedTranslationLanguage
                 )
-                store.dispatch(toolbarAction)
+                store.dispatch(translationsAction)
             } catch {
                 let serviceError = TranslationsServiceError.fromUnknown(error)
                 translationsTelemetry.pageLanguageIdentificationFailed(
@@ -518,25 +533,31 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
     private func dispatchClearTranslationIcon(windowUUID: WindowUUID, on tab: Tab? = nil) {
         persistTranslationConfig(nil, on: tab ?? selectedTab(for: windowUUID))
-        store.dispatch(ToolbarAction(
+        store.dispatch(TranslationsAction(
             translationConfiguration: nil,
             windowUUID: windowUUID,
-            actionType: ToolbarActionType.receivedTranslationLanguage
+            actionType: TranslationsActionType.receivedTranslationLanguage
         ))
     }
 
+    // Pulls the optional `isTranslationsEnabled` payload from whichever action carries it.
+    private func isTranslationsEnabled(from action: Action) -> Bool? {
+        if let toolbarAction = action as? ToolbarAction { return toolbarAction.isTranslationsEnabled }
+        if let translationsAction = action as? TranslationsAction { return translationsAction.isTranslationsEnabled }
+        return nil
+    }
+
     private func retrieveTranslations(
-        for action: Action,
+        windowUUID: WindowUUID,
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool = false,
         on tab: Tab? = nil
     ) {
-        let windowUUID = action.windowUUID
         translationTasks[windowUUID]?.cancel()
         translationTasks[windowUUID] = Task {
             await self.performTranslation(
-                for: action,
+                windowUUID: windowUUID,
                 targetLanguage: targetLanguage,
                 isPrivate: isPrivate,
                 autoTranslate: autoTranslate,
@@ -547,7 +568,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     }
 
     private func performTranslation(
-        for action: Action,
+        windowUUID: WindowUUID,
         targetLanguage: String,
         isPrivate: Bool,
         autoTranslate: Bool,
@@ -556,7 +577,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         do {
             var detectedSourceLanguage: String?
             try await translationsService.translateCurrentPage(
-                for: action.windowUUID,
+                for: windowUUID,
                 from: nil,
                 to: targetLanguage,
                 onLanguageIdentified: { identifiedLanguage, deviceLanguage in
@@ -567,29 +588,29 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                     )
                     self.translationsTelemetry.translationRequested(
                         isPrivate: isPrivate,
-                        translationFlowId: self.flowId(for: action.windowUUID),
+                        translationFlowId: self.flowId(for: windowUUID),
                         fromLanguage: identifiedLanguage,
                         toLanguage: targetLanguage,
                         autoTranslate: autoTranslate
                     )
                 }
             )
-            try await translationsService.firstResponseReceived(for: action.windowUUID)
+            try await translationsService.firstResponseReceived(for: windowUUID)
             guard !Task.isCancelled else { return }
             dispatchAction(
-                for: ToolbarActionType.translationCompleted,
+                for: TranslationsActionType.translationCompleted,
                 with: .active,
                 translatedToLanguage: targetLanguage,
                 sourceLanguage: detectedSourceLanguage,
-                and: action.windowUUID,
+                and: windowUUID,
                 on: tab
             )
-            maybeShowAutoTranslatePrompt(windowUUID: action.windowUUID)
+            maybeShowAutoTranslatePrompt(windowUUID: windowUUID)
         } catch {
             guard !Task.isCancelled else { return }
             let serviceError = TranslationsServiceError.fromUnknown(error)
             translationsTelemetry.translationFailed(
-                translationFlowId: flowId(for: action.windowUUID),
+                translationFlowId: flowId(for: windowUUID),
                 errorType: serviceError.telemetryDescription
             )
             logger.log(
@@ -598,7 +619,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 category: .translations,
                 extra: ["Translations error": "\(error.localizedDescription)"]
             )
-            self.handleErrorFromTranslatingPage(for: action, on: tab)
+            self.handleErrorFromTranslatingPage(windowUUID: windowUUID, on: tab)
         }
     }
 
@@ -620,11 +641,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             guard let targetLanguage = selectedTargetLanguages[windowUUID] else { continue }
             let tab = selectedTab(for: windowUUID)
             pendingLanguageSwitchTargets[windowUUID] = targetLanguage
-            let reloadAction = GeneralBrowserAction(
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsite
-            )
-            handleUpdatingTranslationIcon(for: reloadAction, with: .loading, on: tab)
+            handleUpdatingTranslationIcon(windowUUID: windowUUID, with: .loading, on: tab)
             store.dispatch(GeneralBrowserAction(
                 windowUUID: windowUUID,
                 actionType: GeneralBrowserActionType.reloadWebsite
@@ -648,32 +665,26 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
             let tab = selectedTab(for: uuid)
             pendingLanguageSwitchTargets[uuid] = targetLanguage
-            let reloadAction = GeneralBrowserAction(
-                windowUUID: uuid,
-                actionType: GeneralBrowserActionType.reloadWebsite
-            )
-            handleUpdatingTranslationIcon(for: reloadAction, with: .loading, on: tab)
+            handleUpdatingTranslationIcon(windowUUID: uuid, with: .loading, on: tab)
             store.dispatch(GeneralBrowserAction(
                 windowUUID: uuid,
                 actionType: GeneralBrowserActionType.reloadWebsite
             ))
         }
     }
-    // When we receive an error translating the page, we want to update the translation
-    // icon on the toolbar to be inactive.
-    // We also want to display a toast.
-    private func handleErrorFromTranslatingPage(for action: Action, on tab: Tab? = nil) {
+
+    private func handleErrorFromTranslatingPage(windowUUID: WindowUUID, on tab: Tab? = nil) {
         dispatchAction(
-            for: ToolbarActionType.didReceiveErrorTranslating,
+            for: TranslationsActionType.didReceiveErrorTranslating,
             with: .inactive,
-            and: action.windowUUID,
+            and: windowUUID,
             on: tab
         )
-        dispatchShowRetryTranslationToastAction(for: action.windowUUID)
+        dispatchShowRetryTranslationToastAction(for: windowUUID)
     }
 
     private func dispatchAction(
-        for actionType: ToolbarActionType,
+        for actionType: TranslationsActionType,
         with state: TranslationConfiguration.IconState,
         translatedToLanguage: String? = nil,
         sourceLanguage: String? = nil,
@@ -687,12 +698,12 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             sourceLanguage: sourceLanguage
         )
         persistTranslationConfig(config, on: tab ?? selectedTab(for: windowUUID))
-        let toolbarAction = ToolbarAction(
+        let translationsAction = TranslationsAction(
             translationConfiguration: config,
             windowUUID: windowUUID,
             actionType: actionType
         )
-        store.dispatch(toolbarAction)
+        store.dispatch(translationsAction)
     }
 
     private func dispatchShowRetryTranslationToastAction(
