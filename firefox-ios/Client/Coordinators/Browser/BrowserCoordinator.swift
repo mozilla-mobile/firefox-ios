@@ -670,14 +670,20 @@ final class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrintSheet() {
-        if let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = tab.displayTitle
-            let printController = UIPrintInteractionController.shared
+        guard let tab = browserViewController.tabManager.selectedTab, let webView = tab.webView else { return }
+
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = tab.displayTitle
+        let printController = UIPrintInteractionController.shared
+        printController.printInfo = printInfo
+
+        if tab.mimeType == MIMEType.PDF, let url = webView.url {
+            printController.printingItem = url
+        } else {
             printController.printFormatter = webView.viewPrintFormatter()
-            printController.printInfo = printInfo
-            printController.present(animated: true, completionHandler: nil)
         }
+
+        printController.present(animated: true, completionHandler: nil)
     }
 
     func showSignInView(fxaParameters: FxASignInViewParameters?) {
