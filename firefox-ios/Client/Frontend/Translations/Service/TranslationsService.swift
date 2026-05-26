@@ -157,7 +157,7 @@ final class TranslationsService: TranslationsServiceProtocol {
 
     /// Returns the current WebView for a given window, or throws if it is unavailable.
     private func currentWebView(for windowUUID: WindowUUID) throws -> WKWebView {
-        guard let tab = windowManager.tabManager(for: windowUUID).selectedTab,
+        guard let tab = windowManager.tabManager(for: windowUUID)?.selectedTab,
               let webView = tab.webView else {
             throw TranslationsServiceError.missingWebView
         }
