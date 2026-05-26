@@ -153,7 +153,7 @@ final class ReaderModeSchemeHandlerTests: XCTestCase {
         let paramExpectation = expectation(description: "missing param fails")
         paramTask.onFail = { paramExpectation.fulfill() }
         subject.webView(webView, start: paramTask)
-        wait(for: [paramExpectation], timeout: 5.0)
+        wait(for: [paramExpectation], timeout: 1.0)
         XCTAssertEqual(
             paramTask.failedErrors.first as? TinyRouterError,
             .missingParam("url")

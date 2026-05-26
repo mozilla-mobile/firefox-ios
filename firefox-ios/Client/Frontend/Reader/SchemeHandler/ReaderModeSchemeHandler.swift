@@ -36,8 +36,7 @@ import WebKit
 final class ReaderModeSchemeHandler: NSObject, WKURLSchemeHandler {
     // These are plain string constants and need to be readable from non-MainActor contexts
     // (e.g. `PageRoute.buildSuccessReply`, which constructs the CSP off the main actor).
-    // The class itself is @MainActor by virtue of conforming to `WKURLSchemeHandler`, which
-    // would otherwise propagate isolation to these statics.
+    // The class itself is @MainActor by virtue of conforming to `WKURLSchemeHandler`
 
     /// The custom scheme this handler is responsible for.
     nonisolated static let scheme = "readermode"

@@ -14,7 +14,6 @@ final class PageRoute: TinyRoute {
     // loads the URL in a hidden WKWebView, and waits for Readability.js to send a result.
     // None of that would work in the unit test runner (no app delegate, no WindowManager).
     // This closure lets tests provide a fake extraction result or throw a controlled error.
-    // Production code never passes this parameter, it uses the default.
     typealias Extractor = @Sendable (URL, ReaderModeCache, Profile) async throws -> ReadabilityResult
 
     private let cache: ReaderModeCache
@@ -117,7 +116,9 @@ final class PageRoute: TinyRoute {
         }
         return TinyHTTPReply(httpResponse: response, body: body)
     }
-
+    
+    // It would be nice to have a standard way of displaying error pages, but it seems that
+    // mobile Firefox does not have this yet (?)
     func buildErrorReply(url: URL, originalURL: URL) throws -> TinyHTTPReply {
         let safeHref = Self.htmlEscape(originalURL.absoluteString)
         let failureMessage = Self.htmlEscape(String.ReaderModeHandlerPageCantDisplay)
