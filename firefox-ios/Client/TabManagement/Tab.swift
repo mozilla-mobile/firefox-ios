@@ -410,25 +410,6 @@ class Tab: NSObject,
     /// Cleared on real navigation in `webView(_:didCommit:)`.
     var translationConfiguration: TranslationConfiguration?
 
-    /// Per-history-entry translation snapshots. Each entry pairs a `WKBackForwardListItem`
-    /// (identity, not URL) with the `.active` config that was on screen when translation
-    /// completed. `decidePolicyFor` looks up the destination item to decide whether to
-    /// restore the toolbar icon on a bfcache hit.
-    private var translatedPages: [(item: WKBackForwardListItem, configuration: TranslationConfiguration)] = []
-
-    func savedTranslation(for item: WKBackForwardListItem) -> TranslationConfiguration? {
-        translatedPages.first { $0.item === item }?.configuration
-    }
-
-    func saveTranslation(_ configuration: TranslationConfiguration, for item: WKBackForwardListItem) {
-        translatedPages.removeAll { $0.item === item }
-        translatedPages.append((item: item, configuration: configuration))
-    }
-
-    func clearTranslation(for item: WKBackForwardListItem) {
-        translatedPages.removeAll { $0.item === item }
-    }
-
     /// One-shot closure registered by a feature before a navigation it owns. `webView(_:didCommit:)`
     /// calls and clears it on the next commit; if nil the commit is treated as a regular navigation
     /// and any feature-owned state (e.g. `translationConfiguration`) is cleared.

@@ -18,6 +18,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     private let manager: PreferredTranslationLanguagesManager
     private let localeProvider: LocaleProvider
     private let notificationCenter: NotificationProtocol
+    private let navigationCache: TranslationNavigationCaching
 
     /// Multiple windows can be open simultaneously, so we track IDs in a map.
     /// On iPhone, only a single window exists, so this will contain at most one entry.
@@ -47,7 +48,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
          translationsTelemetry: TranslationsTelemetryProtocol = TranslationsTelemetry(),
          manager: PreferredTranslationLanguagesManager? = nil,
          localeProvider: LocaleProvider = SystemLocaleProvider(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         navigationCache: TranslationNavigationCaching = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.logger = logger
@@ -57,6 +59,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
         self.manager = manager ?? PreferredTranslationLanguagesManager(prefs: profile.prefs)
         self.localeProvider = localeProvider
         self.notificationCenter = notificationCenter
+        self.navigationCache = navigationCache
         startObservingNotifications(
             withNotificationCenter: notificationCenter,
             forObserver: self,
@@ -233,8 +236,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             }
         } else if translationConfiguration.state == .active {
             let originatingTab = selectedTab(for: action.windowUUID)
-            if let currentItem = originatingTab?.webView?.backForwardList.currentItem {
-                originatingTab?.clearTranslation(for: currentItem)
+            if let tabUUID = originatingTab?.tabUUID,
+               let currentItem = originatingTab?.webView?.backForwardList.currentItem {
+                navigationCache.clearTranslation(for: currentItem, tabUUID: tabUUID)
             }
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
@@ -387,8 +391,10 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// mid-flight does not stomp the new active tab's state.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
         tab?.translationConfiguration = config
-        if let config, config.state == .active, let currentItem = tab?.webView?.backForwardList.currentItem {
-            tab?.saveTranslation(config, for: currentItem)
+        if let config, config.state == .active,
+           let tabUUID = tab?.tabUUID,
+           let currentItem = tab?.webView?.backForwardList.currentItem {
+            navigationCache.saveTranslation(config, for: currentItem, tabUUID: tabUUID)
         }
     }
 

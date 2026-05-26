@@ -80,6 +80,9 @@ final class DependencyHelperMock {
         )
         AppContainer.shared.register(service: userFeatureProvider as UserFeaturePreferring)
 
+        let translationNavigationCache: TranslationNavigationCaching = TranslationNavigationCache()
+        AppContainer.shared.register(service: translationNavigationCache as TranslationNavigationCaching)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

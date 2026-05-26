@@ -519,7 +519,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if navigationAction.navigationType == .backForward,
            let currentItem = webView.backForwardList.currentItem {
-            let savedConfig = tab.savedTranslation(for: currentItem)
+            let navigationCache: TranslationNavigationCaching = AppContainer.shared.resolve()
+            let savedConfig = navigationCache.savedTranslation(for: currentItem, tabUUID: tab.tabUUID)
 
             if let savedConfig {
                 tab.onNextCommit = { [weak tab] in
