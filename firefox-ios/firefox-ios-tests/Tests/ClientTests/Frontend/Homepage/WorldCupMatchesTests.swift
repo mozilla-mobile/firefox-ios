@@ -441,7 +441,7 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_groupStage_usesGroupLetter() {
-        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: "Group C", stage: "Group Stage")
+        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: "Group C", stage: .groupStage)
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupC)
@@ -449,7 +449,7 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_groupStage_fallsBackToGenericLabel_whenGroupMissing() {
-        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: nil, stage: "Group Stage")
+        let match = makeMatch(id: 0, home: "ENG", away: "USA", group: nil, stage: .groupStage)
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel)
@@ -457,13 +457,13 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_knockoutStages_mapToLocalizedLabels() {
-        let mappings: [(String, String)] = [
-            ("Round of 32", String.WorldCup.HomepageWidget.RoundPhase.Round32Label),
-            ("Round of 16", String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
-            ("Quarterfinals", String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
-            ("Semifinals", String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
-            ("Third Place", String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel),
-            ("Final", String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
+        let mappings: [(WorldCupMatchesResponse.Match.Stage, String)] = [
+            (.roundOf32, String.WorldCup.HomepageWidget.RoundPhase.Round32Label),
+            (.roundOf16, String.WorldCup.HomepageWidget.RoundPhase.Round16Label),
+            (.quarterFinals, String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel),
+            (.semiFinals, String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel),
+            (.thirdPlace, String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel),
+            (.final, String.WorldCup.HomepageWidget.RoundPhase.FinalLabel)
         ]
         for (stage, expected) in mappings {
             let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil, stage: stage)
@@ -473,7 +473,8 @@ struct WorldCupMatchesTests {
 
     @Test
     func test_phaseTitle_unknownStage_fallsBackToUpcoming() {
-        let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil, stage: "Galactic Quarterfinals")
+        let match = makeMatch(id: 0, home: "BRA", away: "ARG", group: nil,
+                              stage: .unknown("Galactic Quarterfinals"))
 
         #expect(WorldCupMatches.phaseTitle(from: match)
                 == String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel)
@@ -499,7 +500,8 @@ struct WorldCupMatchesTests {
                            awayPenalty: Int? = nil,
                            clock: String? = nil,
                            group: String? = nil,
-                           stage: String? = "Group Stage") -> WorldCupMatchesResponse.Match {
+                           stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
+    -> WorldCupMatchesResponse.Match {
         let homeTeam = home.map {
             WorldCupMatchesResponse.Team(
                 key: $0,

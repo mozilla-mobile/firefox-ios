@@ -127,6 +127,54 @@ struct WorldCupMatchesResponseTests {
     }
 
     @Test
+    func test_decodesStageValues_intoTypedEnumCases() throws {
+        // Locks in the exact strings the merino /wcs endpoint emits (confirmed
+        // with the backend team). If merino renames a stage, this test breaks
+        // before the widget silently falls back to "Upcoming" in prod.
+        let mappings: [(String, WorldCupMatchesResponse.Match.Stage)] = [
+            ("Group Stage", .groupStage),
+            ("Round of 32", .roundOf32),
+            ("Round of 16", .roundOf16),
+            ("Quarter-Finals", .quarterFinals),
+            ("Semi-Finals", .semiFinals),
+            ("3rd Place", .thirdPlace),
+            ("Final", .final)
+        ]
+        for (raw, expected) in mappings {
+            let response = try decode(stageJSON(raw: "\"\(raw)\""))
+            #expect(response.current?.first?.stage == expected)
+        }
+    }
+
+    @Test
+    func test_decodesUnknownStage_intoUnknownCase_preservingRawValue() throws {
+        let response = try decode(stageJSON(raw: "\"Galactic Quarterfinals\""))
+        #expect(response.current?.first?.stage == .unknown("Galactic Quarterfinals"))
+    }
+
+    @Test
+    func test_decodesNullStage_asNil() throws {
+        let response = try decode(stageJSON(raw: "null"))
+        #expect(response.current?.first?.stage == nil)
+    }
+
+    private func stageJSON(raw: String) -> String {
+        """
+        {
+          "current": [{
+            "date": "2026-04-30T14:00:00+00:00",
+            "global_event_id": 1,
+            "home_team": { "key": "ENG", "name": "England", "icon_url": null,
+                           "group": "Group C", "eliminated": false },
+            "away_team": { "key": "USA", "name": "USA", "icon_url": null,
+                           "group": "Group C", "eliminated": false },
+            "stage": \(raw)
+          }]
+        }
+        """
+    }
+
+    @Test
     func test_decodesEmptyTopLevelObject() throws {
         let response = try decode("{}")
         #expect(response.previous == nil)

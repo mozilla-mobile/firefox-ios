@@ -748,7 +748,8 @@ final class WorldCupMiddlewareTests: XCTestCase, StoreTestUtility {
                            away: String,
                            date: String = "2026-06-12T18:00:00+00:00",
                            statusType: String = "scheduled",
-                           stage: String? = "Group Stage") -> WorldCupMatchesResponse.Match {
+                           stage: WorldCupMatchesResponse.Match.Stage? = .groupStage)
+    -> WorldCupMatchesResponse.Match {
         let homeTeam = WorldCupMatchesResponse.Team(
             key: home, name: home, iconUrl: nil, group: "Group A", eliminated: false
         )

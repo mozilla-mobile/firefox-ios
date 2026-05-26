@@ -102,7 +102,7 @@ struct WorldCupMatches: Equatable, Hashable {
         localeProvider: LocaleProvider = SystemLocaleProvider()
     ) -> (cards: [WorldCupMatches], defaultIndex: Int) {
         let allMatches = ((response.previous ?? []) + (response.current ?? []) + (response.next ?? []))
-            .filter { $0.stage == "Group Stage" }
+            .filter { $0.stage == .groupStage }
         let groups = groupedByDay(allMatches, calendar: calendar)
         let title = String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         let cards = groups.map { group -> WorldCupMatches in
@@ -139,23 +139,23 @@ struct WorldCupMatches: Equatable, Hashable {
             return String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
         }
         switch match.stage {
-        case "Group Stage":
+        case .groupStage:
             let group = match.homeTeam?.group ?? match.awayTeam?.group
             return Self.groupLabel(for: group)
                 ?? String.WorldCup.HomepageWidget.GroupPhase.GroupStageLabel
-        case "Round of 32":
+        case .roundOf32:
             return String.WorldCup.HomepageWidget.RoundPhase.Round32Label
-        case "Round of 16":
+        case .roundOf16:
             return String.WorldCup.HomepageWidget.RoundPhase.Round16Label
-        case "Quarterfinals":
+        case .quarterFinals:
             return String.WorldCup.HomepageWidget.RoundPhase.QuarterFinalsLabel
-        case "Semifinals":
+        case .semiFinals:
             return String.WorldCup.HomepageWidget.RoundPhase.SemiFinalsLabel
-        case "Third Place":
+        case .thirdPlace:
             return String.WorldCup.HomepageWidget.RoundPhase.ThirdPlaceLabel
-        case "Final":
+        case .final:
             return String.WorldCup.HomepageWidget.RoundPhase.FinalLabel
-        default:
+        case .unknown, .none:
             return String.WorldCup.HomepageWidget.RoundPhase.UpcomingLabel
         }
     }

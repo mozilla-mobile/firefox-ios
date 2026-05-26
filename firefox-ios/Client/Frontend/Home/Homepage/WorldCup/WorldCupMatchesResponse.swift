@@ -52,12 +52,11 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
         /// Not typing this since we don't want to couple the client too tightly to the API's exact status values,
         /// in case of future additions or changes.
         let statusType: String?
-        /// Tournament stage, e.g. "Group Stage", "Round of 32", "Round of 16",
-        /// "Quarterfinals", "Semifinals", "Third Place", "Final". Mapped to a
-        /// localized phase label by `WorldCupMatches.phaseTitle`. Untyped on
-        /// purpose so a new merino value doesn't fail decode — unknown values
-        /// fall back to a generic label.
-        let stage: String?
+        /// Tournament stage. Decoded from the merino `stage` string into a
+        /// closed set of known values; unrecognized strings fall through to
+        /// `.unknown(raw)` so a new merino value doesn't fail decode and the
+        /// raw label is still available for logging.
+        let stage: Stage?
 
         init(date: String,
              globalEventId: Int,
@@ -73,7 +72,7 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
              clock: String? = nil,
              updated: Int? = nil,
              statusType: String? = nil,
-             stage: String? = nil) {
+             stage: Stage? = nil) {
             self.date = date
             self.globalEventId = globalEventId
             self.homeTeam = homeTeam
@@ -89,6 +88,37 @@ struct WorldCupMatchesResponse: Decodable, Equatable, Sendable {
             self.updated = updated
             self.statusType = statusType
             self.stage = stage
+        }
+
+        /// Closed set of tournament stages emitted by merino's `stage` field.
+        /// Raw values mirror the exact strings the API returns (confirmed with
+        /// the merino team) — keep these in sync if the backend renames a
+        /// stage. Unknown strings decode into `.unknown(raw)` rather than
+        /// failing the whole response so a new merino value can't blank the
+        /// widget; the raw label is retained for logging.
+        enum Stage: Decodable, Equatable, Sendable {
+            case groupStage
+            case roundOf32
+            case roundOf16
+            case quarterFinals
+            case semiFinals
+            case thirdPlace
+            case final
+            case unknown(String)
+
+            init(from decoder: Decoder) throws {
+                let raw = try decoder.singleValueContainer().decode(String.self)
+                switch raw {
+                case "Group Stage": self = .groupStage
+                case "Round of 32": self = .roundOf32
+                case "Round of 16": self = .roundOf16
+                case "Quarter-Finals": self = .quarterFinals
+                case "Semi-Finals": self = .semiFinals
+                case "3rd Place": self = .thirdPlace
+                case "Final": self = .final
+                default: self = .unknown(raw)
+                }
+            }
         }
     }
 
