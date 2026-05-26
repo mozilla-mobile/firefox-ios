@@ -522,8 +522,8 @@ extension BrowserViewController: WKNavigationDelegate {
             let savedConfig = tab.savedTranslation(for: currentItem)
 
             if let savedConfig {
-                tab.onNextCommit = {
-                    tab.translationConfiguration = savedConfig
+                tab.onNextCommit = { [weak tab] in
+                    tab?.translationConfiguration = savedConfig
                 }
             } else {
                 tab.translationConfiguration = nil
@@ -1197,7 +1197,6 @@ extension BrowserViewController: WKNavigationDelegate {
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
-        let hadHandler = tab.onNextCommit != nil
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()

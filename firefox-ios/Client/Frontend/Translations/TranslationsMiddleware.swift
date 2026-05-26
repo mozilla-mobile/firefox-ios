@@ -387,8 +387,8 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// mid-flight does not stomp the new active tab's state.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
         tab?.translationConfiguration = config
-        if config?.state == .active, let currentItem = tab?.webView?.backForwardList.currentItem {
-            tab?.saveTranslation(config!, for: currentItem)
+        if let config, config.state == .active, let currentItem = tab?.webView?.backForwardList.currentItem {
+            tab?.saveTranslation(config, for: currentItem)
         }
     }
 
