@@ -142,12 +142,7 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
 
     private func handleUrlDidChange(action: ToolbarAction, windowUUID: WindowUUID) {
         guard action.url?.isWebPage() == true else { return }
-        // Tab-tray round-trip OR mid-translation tab switch: the action carries the tab's
-        // persisted state. Skipping eligibility keeps Redux in sync with the WKWebView —
-        // re-running would dispatch `.inactive`/`nil` and clobber `.active` (translated DOM
-        // still on screen) or `.loading` (in-flight translation we'd otherwise race against).
-        // `.inactive`/restore-flow paths still run so `restoringWindows` is consumed and
-        // auto-translate behaves correctly.
+
         let persistedState = action.translationConfiguration?.state
         if persistedState == .active || persistedState == .loading { return }
 
@@ -238,6 +233,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
             }
         } else if translationConfiguration.state == .active {
             let originatingTab = selectedTab(for: action.windowUUID)
+            if let currentItem = originatingTab?.webView?.backForwardList.currentItem {
+                originatingTab?.clearTranslation(for: currentItem)
+            }
             translationsTelemetry.translateButtonTapped(
                 isPrivate: toolbarState.isPrivateMode,
                 actionType: .willRestore,
@@ -389,6 +387,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
     /// mid-flight does not stomp the new active tab's state.
     private func persistTranslationConfig(_ config: TranslationConfiguration?, on tab: Tab?) {
         tab?.translationConfiguration = config
+        if config?.state == .active, let currentItem = tab?.webView?.backForwardList.currentItem {
+            tab?.saveTranslation(config!, for: currentItem)
+        }
     }
 
     private func selectedTab(for windowUUID: WindowUUID) -> Tab? {
@@ -516,6 +517,9 @@ final class TranslationsMiddleware: FeatureFlaggable, Notifiable {
                 if await self.tryAutoTranslate(windowUUID: action.windowUUID, on: originatingTab) { return }
 
                 // Auto-translate didn't run; offer manual translation instead.
+                // A bfcache restoration may have set `.active` between when this check
+                // started and now — don't clobber it.
+                guard originatingTab?.translationConfiguration?.state != .active else { return }
                 let config = TranslationConfiguration(prefs: profile.prefs, state: .inactive)
                 self.persistTranslationConfig(config, on: originatingTab)
                 let translationsAction = TranslationsAction(

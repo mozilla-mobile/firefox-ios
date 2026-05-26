@@ -484,6 +484,30 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         XCTAssertNotNil(tab.translationConfiguration)
     }
 
+    @MainActor
+    func testWebViewDidCommit_withOnNextCommit_restoresSavedTranslationConfig() {
+        let subject = createSubject()
+        let tab = createTab()
+        let savedConfig = TranslationConfiguration(
+            prefs: profile.prefs,
+            state: .active,
+            translatedToLanguage: "en",
+            sourceLanguage: "fr"
+        )
+        tab.translationConfiguration = nil
+        tab.onNextCommit = {
+            tab.translationConfiguration = savedConfig
+        }
+        (tab.webView as? MockTabWebView)?.loadedURL = URL(string: "https://example.com")
+        tabManager.tabs = [tab]
+
+        subject.webView(tab.webView!, didCommit: nil)
+
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+        XCTAssertEqual(tab.translationConfiguration?.translatedToLanguage, "en")
+        XCTAssertEqual(tab.translationConfiguration?.sourceLanguage, "fr")
+    }
+
     // This test is being skipped because there are some very strange side effects
     // in webView didFinish because the profile database is not being stubbed out
     // TODO: FXIOS-13435 to look in to this

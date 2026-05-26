@@ -517,6 +517,20 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        if navigationAction.navigationType == .backForward,
+           let currentItem = webView.backForwardList.currentItem {
+            let savedConfig = tab.savedTranslation(for: currentItem)
+
+            if let savedConfig {
+                tab.onNextCommit = {
+                    tab.translationConfiguration = savedConfig
+                }
+            } else {
+                tab.translationConfiguration = nil
+                tab.onNextCommit = {}
+            }
+        }
+
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
@@ -1183,6 +1197,7 @@ extension BrowserViewController: WKNavigationDelegate {
         searchTelemetry.trackTabAndTopSiteSAP(tab, webView: webView)
         webviewTelemetry.start()
         tab.url = webView.url
+        let hadHandler = tab.onNextCommit != nil
         if let handler = tab.onNextCommit {
             tab.onNextCommit = nil
             handler()

@@ -1669,6 +1669,40 @@ final class TranslationsMiddlewareIntegrationTests: XCTestCase, StoreTestUtility
         XCTAssertEqual(completedAction.translationConfiguration?.sourceLanguage, "en")
     }
 
+    // MARK: - Eligibility does not clobber active state
+
+    func test_urlDidChangeAction_eligibilityDoesNotClobberActiveConfig() throws {
+        setTranslationsFeatureEnabled(enabled: true)
+        let mockTranslationService = MockTranslationsService(
+            shouldOfferTranslationResult: .success(true)
+        )
+        let tab = MockTab(profile: MockProfile(), windowUUID: .XCTestDefaultUUID)
+        tab.webView = MockTabWebView(tab: tab)
+        tab.translationConfiguration = TranslationConfiguration(
+            prefs: mockProfile.prefs,
+            state: .active,
+            translatedToLanguage: "en"
+        )
+        mockTabManager.selectedTab = tab
+
+        let subject = createSubject(translationsService: mockTranslationService)
+        let action = ToolbarAction(
+            url: URL(string: "https://www.example.com"),
+            translationConfiguration: TranslationConfiguration(prefs: mockProfile.prefs),
+            windowUUID: .XCTestDefaultUUID,
+            actionType: ToolbarActionType.urlDidChange
+        )
+
+        let expectation = XCTestExpectation(description: "no dispatch should occur when active config is preserved")
+        expectation.isInverted = true
+        mockStore.dispatchCalled = { expectation.fulfill() }
+
+        subject.translationsProvider(mockStore.state, action)
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertEqual(tab.translationConfiguration?.state, .active)
+    }
+
     // MARK: - Background cancellation tests
 
     func test_background_withInFlightTranslation_reloadsForAutoRetranslate() throws {
