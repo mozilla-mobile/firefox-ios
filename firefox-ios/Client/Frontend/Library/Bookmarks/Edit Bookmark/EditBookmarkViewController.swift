@@ -124,9 +124,8 @@ class EditBookmarkViewController: UIViewController,
             navigationController?.setNavigationBarHidden(true, animated: false)
         }
         // Save when popping the view off the navigation stack (when in library)
-        // and only when Save button is tapped
-        if isMovingFromParent, viewModel.isSaveTapped {
-            viewModel.saveBookmark()
+        if isMovingFromParent {
+            viewModel.saveBookmarkIfNeeded()
         }
         onViewWillDisappear?()
     }

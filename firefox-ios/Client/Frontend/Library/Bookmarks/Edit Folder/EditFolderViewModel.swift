@@ -97,6 +97,11 @@ class EditFolderViewModel: @unchecked Sendable {
         }
     }
 
+    func saveFolderIfNeeded() {
+        guard isSaveTapped else { return }
+        save()
+    }
+
     @discardableResult
     func save() -> Task<Void, Never>? {
         guard let folder, !folder.title.isEmpty else { return nil }

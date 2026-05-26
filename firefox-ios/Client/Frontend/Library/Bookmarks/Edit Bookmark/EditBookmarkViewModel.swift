@@ -117,6 +117,11 @@ class EditBookmarkViewModel: ParentFolderSelector, @unchecked Sendable {
         node = node?.copy(with: bookmarkTitle, url: url)
     }
 
+    func saveBookmarkIfNeeded() {
+        guard isSaveTapped else { return }
+        saveBookmark()
+    }
+
     @discardableResult
     func saveBookmark() -> Task<Void, Never>? {
         guard let selectedFolder, let node else { return nil }
